@@ -26321,7 +26321,6 @@ export namespace Prisma {
     subjectVersion: number
     planTraining: number
     planTrainingDelay: number
-    subjectVersionHistory: number
   }
 
   export type TrainingObjectTypeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -26337,7 +26336,6 @@ export namespace Prisma {
     subjectVersion?: boolean | TrainingObjectTypeCountOutputTypeCountSubjectVersionArgs
     planTraining?: boolean | TrainingObjectTypeCountOutputTypeCountPlanTrainingArgs
     planTrainingDelay?: boolean | TrainingObjectTypeCountOutputTypeCountPlanTrainingDelayArgs
-    subjectVersionHistory?: boolean | TrainingObjectTypeCountOutputTypeCountSubjectVersionHistoryArgs
   }
 
   // Custom InputTypes
@@ -26433,13 +26431,6 @@ export namespace Prisma {
    */
   export type TrainingObjectTypeCountOutputTypeCountPlanTrainingDelayArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PlanTrainingDelayWhereInput
-  }
-
-  /**
-   * TrainingObjectTypeCountOutputType without action
-   */
-  export type TrainingObjectTypeCountOutputTypeCountSubjectVersionHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SubjectVersionHistoryWhereInput
   }
 
 
@@ -143552,7 +143543,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
-    locked: boolean | null
+    isLocked: boolean | null
     name: string | null
     codeTkb: string | null
     examType: $Enums.ExamType | null
@@ -143590,7 +143581,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
-    locked: boolean | null
+    isLocked: boolean | null
     name: string | null
     codeTkb: string | null
     examType: $Enums.ExamType | null
@@ -143628,7 +143619,7 @@ export namespace Prisma {
     deletedAt: number
     createdAt: number
     updatedAt: number
-    locked: number
+    isLocked: number
     name: number
     codeTkb: number
     examType: number
@@ -143696,7 +143687,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    locked?: true
+    isLocked?: true
     name?: true
     codeTkb?: true
     examType?: true
@@ -143734,7 +143725,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    locked?: true
+    isLocked?: true
     name?: true
     codeTkb?: true
     examType?: true
@@ -143772,7 +143763,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    locked?: true
+    isLocked?: true
     name?: true
     codeTkb?: true
     examType?: true
@@ -143897,7 +143888,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
-    locked: boolean
+    isLocked: boolean
     name: string
     codeTkb: string | null
     examType: $Enums.ExamType
@@ -143954,7 +143945,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    locked?: boolean
+    isLocked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -144012,7 +144003,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    locked?: boolean
+    isLocked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -144054,7 +144045,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    locked?: boolean
+    isLocked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -144096,7 +144087,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    locked?: boolean
+    isLocked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -144126,7 +144117,7 @@ export namespace Prisma {
     subjectVersionCategoryId?: boolean
   }
 
-  export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "locked" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId" | "trainingObjectTypeId" | "subjectVersionCategoryId", ExtArgs["result"]["subjectVersion"]>
+  export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "isLocked" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId" | "trainingObjectTypeId" | "subjectVersionCategoryId", ExtArgs["result"]["subjectVersion"]>
   export type SubjectVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
@@ -144199,7 +144190,7 @@ export namespace Prisma {
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
-      locked: boolean
+      isLocked: boolean
       name: string
       codeTkb: string | null
       examType: $Enums.ExamType
@@ -144685,7 +144676,7 @@ export namespace Prisma {
     readonly deletedAt: FieldRef<"SubjectVersion", 'DateTime'>
     readonly createdAt: FieldRef<"SubjectVersion", 'DateTime'>
     readonly updatedAt: FieldRef<"SubjectVersion", 'DateTime'>
-    readonly locked: FieldRef<"SubjectVersion", 'Boolean'>
+    readonly isLocked: FieldRef<"SubjectVersion", 'Boolean'>
     readonly name: FieldRef<"SubjectVersion", 'String'>
     readonly codeTkb: FieldRef<"SubjectVersion", 'String'>
     readonly examType: FieldRef<"SubjectVersion", 'ExamType'>
@@ -145531,38 +145522,8 @@ export namespace Prisma {
 
   export type AggregateSubjectVersionHistory = {
     _count: SubjectVersionHistoryCountAggregateOutputType | null
-    _avg: SubjectVersionHistoryAvgAggregateOutputType | null
-    _sum: SubjectVersionHistorySumAggregateOutputType | null
     _min: SubjectVersionHistoryMinAggregateOutputType | null
     _max: SubjectVersionHistoryMaxAggregateOutputType | null
-  }
-
-  export type SubjectVersionHistoryAvgAggregateOutputType = {
-    credit: number | null
-    week: number | null
-    period: number | null
-    schedulePeriod: number | null
-    numberOfTheory: number | null
-    numberOfPractical: number | null
-    numberOfSelfStudy: number | null
-    numberOfPractice: number | null
-    numberOfReview: number | null
-    numberOfExam: number | null
-    numberOfOther: number | null
-  }
-
-  export type SubjectVersionHistorySumAggregateOutputType = {
-    credit: number | null
-    week: number | null
-    period: number | null
-    schedulePeriod: number | null
-    numberOfTheory: number | null
-    numberOfPractical: number | null
-    numberOfSelfStudy: number | null
-    numberOfPractice: number | null
-    numberOfReview: number | null
-    numberOfExam: number | null
-    numberOfOther: number | null
   }
 
   export type SubjectVersionHistoryMinAggregateOutputType = {
@@ -145574,24 +145535,8 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     subjectVersionId: string | null
-    locked: boolean | null
-    name: string | null
-    codeTkb: string | null
-    examType: $Enums.ExamType | null
-    type: $Enums.SubjectVersionType | null
-    onePoint: boolean | null
-    credit: number | null
-    week: number | null
-    period: number | null
-    schedulePeriod: number | null
-    numberOfTheory: number | null
-    numberOfPractical: number | null
-    numberOfSelfStudy: number | null
-    numberOfPractice: number | null
-    numberOfReview: number | null
-    numberOfExam: number | null
-    numberOfOther: number | null
-    trainingObjectTypeId: string | null
+    content: string | null
+    action: string | null
     updatedById: string | null
   }
 
@@ -145604,24 +145549,8 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     subjectVersionId: string | null
-    locked: boolean | null
-    name: string | null
-    codeTkb: string | null
-    examType: $Enums.ExamType | null
-    type: $Enums.SubjectVersionType | null
-    onePoint: boolean | null
-    credit: number | null
-    week: number | null
-    period: number | null
-    schedulePeriod: number | null
-    numberOfTheory: number | null
-    numberOfPractical: number | null
-    numberOfSelfStudy: number | null
-    numberOfPractice: number | null
-    numberOfReview: number | null
-    numberOfExam: number | null
-    numberOfOther: number | null
-    trainingObjectTypeId: string | null
+    content: string | null
+    action: string | null
     updatedById: string | null
   }
 
@@ -145634,56 +145563,12 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     subjectVersionId: number
-    locked: number
-    name: number
-    codeTkb: number
-    examType: number
-    type: number
-    onePoint: number
-    credit: number
-    week: number
-    period: number
-    schedulePeriod: number
-    numberOfTheory: number
-    numberOfPractical: number
-    numberOfSelfStudy: number
-    numberOfPractice: number
-    numberOfReview: number
-    numberOfExam: number
-    numberOfOther: number
-    trainingObjectTypeId: number
+    content: number
+    action: number
     updatedById: number
     _all: number
   }
 
-
-  export type SubjectVersionHistoryAvgAggregateInputType = {
-    credit?: true
-    week?: true
-    period?: true
-    schedulePeriod?: true
-    numberOfTheory?: true
-    numberOfPractical?: true
-    numberOfSelfStudy?: true
-    numberOfPractice?: true
-    numberOfReview?: true
-    numberOfExam?: true
-    numberOfOther?: true
-  }
-
-  export type SubjectVersionHistorySumAggregateInputType = {
-    credit?: true
-    week?: true
-    period?: true
-    schedulePeriod?: true
-    numberOfTheory?: true
-    numberOfPractical?: true
-    numberOfSelfStudy?: true
-    numberOfPractice?: true
-    numberOfReview?: true
-    numberOfExam?: true
-    numberOfOther?: true
-  }
 
   export type SubjectVersionHistoryMinAggregateInputType = {
     id?: true
@@ -145694,24 +145579,8 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     subjectVersionId?: true
-    locked?: true
-    name?: true
-    codeTkb?: true
-    examType?: true
-    type?: true
-    onePoint?: true
-    credit?: true
-    week?: true
-    period?: true
-    schedulePeriod?: true
-    numberOfTheory?: true
-    numberOfPractical?: true
-    numberOfSelfStudy?: true
-    numberOfPractice?: true
-    numberOfReview?: true
-    numberOfExam?: true
-    numberOfOther?: true
-    trainingObjectTypeId?: true
+    content?: true
+    action?: true
     updatedById?: true
   }
 
@@ -145724,24 +145593,8 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     subjectVersionId?: true
-    locked?: true
-    name?: true
-    codeTkb?: true
-    examType?: true
-    type?: true
-    onePoint?: true
-    credit?: true
-    week?: true
-    period?: true
-    schedulePeriod?: true
-    numberOfTheory?: true
-    numberOfPractical?: true
-    numberOfSelfStudy?: true
-    numberOfPractice?: true
-    numberOfReview?: true
-    numberOfExam?: true
-    numberOfOther?: true
-    trainingObjectTypeId?: true
+    content?: true
+    action?: true
     updatedById?: true
   }
 
@@ -145754,24 +145607,8 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     subjectVersionId?: true
-    locked?: true
-    name?: true
-    codeTkb?: true
-    examType?: true
-    type?: true
-    onePoint?: true
-    credit?: true
-    week?: true
-    period?: true
-    schedulePeriod?: true
-    numberOfTheory?: true
-    numberOfPractical?: true
-    numberOfSelfStudy?: true
-    numberOfPractice?: true
-    numberOfReview?: true
-    numberOfExam?: true
-    numberOfOther?: true
-    trainingObjectTypeId?: true
+    content?: true
+    action?: true
     updatedById?: true
     _all?: true
   }
@@ -145814,18 +145651,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: SubjectVersionHistoryAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: SubjectVersionHistorySumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: SubjectVersionHistoryMinAggregateInputType
@@ -145856,8 +145681,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: SubjectVersionHistoryCountAggregateInputType | true
-    _avg?: SubjectVersionHistoryAvgAggregateInputType
-    _sum?: SubjectVersionHistorySumAggregateInputType
     _min?: SubjectVersionHistoryMinAggregateInputType
     _max?: SubjectVersionHistoryMaxAggregateInputType
   }
@@ -145871,28 +145694,10 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     subjectVersionId: string
-    locked: boolean | null
-    name: string | null
-    codeTkb: string | null
-    examType: $Enums.ExamType | null
-    type: $Enums.SubjectVersionType | null
-    onePoint: boolean | null
-    credit: number | null
-    week: number | null
-    period: number | null
-    schedulePeriod: number | null
-    numberOfTheory: number | null
-    numberOfPractical: number | null
-    numberOfSelfStudy: number | null
-    numberOfPractice: number | null
-    numberOfReview: number | null
-    numberOfExam: number | null
-    numberOfOther: number | null
-    trainingObjectTypeId: string | null
+    content: string
+    action: string
     updatedById: string
     _count: SubjectVersionHistoryCountAggregateOutputType | null
-    _avg: SubjectVersionHistoryAvgAggregateOutputType | null
-    _sum: SubjectVersionHistorySumAggregateOutputType | null
     _min: SubjectVersionHistoryMinAggregateOutputType | null
     _max: SubjectVersionHistoryMaxAggregateOutputType | null
   }
@@ -145920,27 +145725,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     subjectVersionId?: boolean
-    locked?: boolean
-    name?: boolean
-    codeTkb?: boolean
-    examType?: boolean
-    type?: boolean
-    onePoint?: boolean
-    credit?: boolean
-    week?: boolean
-    period?: boolean
-    schedulePeriod?: boolean
-    numberOfTheory?: boolean
-    numberOfPractical?: boolean
-    numberOfSelfStudy?: boolean
-    numberOfPractice?: boolean
-    numberOfReview?: boolean
-    numberOfExam?: boolean
-    numberOfOther?: boolean
-    trainingObjectTypeId?: boolean
+    content?: boolean
+    action?: boolean
     updatedById?: boolean
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
-    trainingObjectType?: boolean | SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs>
     updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subjectVersionHistory"]>
 
@@ -145953,27 +145741,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     subjectVersionId?: boolean
-    locked?: boolean
-    name?: boolean
-    codeTkb?: boolean
-    examType?: boolean
-    type?: boolean
-    onePoint?: boolean
-    credit?: boolean
-    week?: boolean
-    period?: boolean
-    schedulePeriod?: boolean
-    numberOfTheory?: boolean
-    numberOfPractical?: boolean
-    numberOfSelfStudy?: boolean
-    numberOfPractice?: boolean
-    numberOfReview?: boolean
-    numberOfExam?: boolean
-    numberOfOther?: boolean
-    trainingObjectTypeId?: boolean
+    content?: boolean
+    action?: boolean
     updatedById?: boolean
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
-    trainingObjectType?: boolean | SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs>
     updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subjectVersionHistory"]>
 
@@ -145986,27 +145757,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     subjectVersionId?: boolean
-    locked?: boolean
-    name?: boolean
-    codeTkb?: boolean
-    examType?: boolean
-    type?: boolean
-    onePoint?: boolean
-    credit?: boolean
-    week?: boolean
-    period?: boolean
-    schedulePeriod?: boolean
-    numberOfTheory?: boolean
-    numberOfPractical?: boolean
-    numberOfSelfStudy?: boolean
-    numberOfPractice?: boolean
-    numberOfReview?: boolean
-    numberOfExam?: boolean
-    numberOfOther?: boolean
-    trainingObjectTypeId?: boolean
+    content?: boolean
+    action?: boolean
     updatedById?: boolean
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
-    trainingObjectType?: boolean | SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs>
     updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subjectVersionHistory"]>
 
@@ -146019,41 +145773,22 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     subjectVersionId?: boolean
-    locked?: boolean
-    name?: boolean
-    codeTkb?: boolean
-    examType?: boolean
-    type?: boolean
-    onePoint?: boolean
-    credit?: boolean
-    week?: boolean
-    period?: boolean
-    schedulePeriod?: boolean
-    numberOfTheory?: boolean
-    numberOfPractical?: boolean
-    numberOfSelfStudy?: boolean
-    numberOfPractice?: boolean
-    numberOfReview?: boolean
-    numberOfExam?: boolean
-    numberOfOther?: boolean
-    trainingObjectTypeId?: boolean
+    content?: boolean
+    action?: boolean
     updatedById?: boolean
   }
 
-  export type SubjectVersionHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectVersionId" | "locked" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "trainingObjectTypeId" | "updatedById", ExtArgs["result"]["subjectVersionHistory"]>
+  export type SubjectVersionHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectVersionId" | "content" | "action" | "updatedById", ExtArgs["result"]["subjectVersionHistory"]>
   export type SubjectVersionHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
-    trainingObjectType?: boolean | SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs>
     updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
   export type SubjectVersionHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
-    trainingObjectType?: boolean | SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs>
     updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
   export type SubjectVersionHistoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
-    trainingObjectType?: boolean | SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs>
     updatedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
 
@@ -146061,7 +145796,6 @@ export namespace Prisma {
     name: "SubjectVersionHistory"
     objects: {
       subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>
-      trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs> | null
       updatedBy: Prisma.$UserProfilePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -146073,24 +145807,8 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       subjectVersionId: string
-      locked: boolean | null
-      name: string | null
-      codeTkb: string | null
-      examType: $Enums.ExamType | null
-      type: $Enums.SubjectVersionType | null
-      onePoint: boolean | null
-      credit: number | null
-      week: number | null
-      period: number | null
-      schedulePeriod: number | null
-      numberOfTheory: number | null
-      numberOfPractical: number | null
-      numberOfSelfStudy: number | null
-      numberOfPractice: number | null
-      numberOfReview: number | null
-      numberOfExam: number | null
-      numberOfOther: number | null
-      trainingObjectTypeId: string | null
+      content: string
+      action: string
       updatedById: string
     }, ExtArgs["result"]["subjectVersionHistory"]>
     composites: {}
@@ -146487,7 +146205,6 @@ export namespace Prisma {
   export interface Prisma__SubjectVersionHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     subjectVersion<T extends SubjectVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersionDefaultArgs<ExtArgs>>): Prisma__SubjectVersionClient<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    trainingObjectType<T extends SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     updatedBy<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -146526,24 +146243,8 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SubjectVersionHistory", 'DateTime'>
     readonly updatedAt: FieldRef<"SubjectVersionHistory", 'DateTime'>
     readonly subjectVersionId: FieldRef<"SubjectVersionHistory", 'String'>
-    readonly locked: FieldRef<"SubjectVersionHistory", 'Boolean'>
-    readonly name: FieldRef<"SubjectVersionHistory", 'String'>
-    readonly codeTkb: FieldRef<"SubjectVersionHistory", 'String'>
-    readonly examType: FieldRef<"SubjectVersionHistory", 'ExamType'>
-    readonly type: FieldRef<"SubjectVersionHistory", 'SubjectVersionType'>
-    readonly onePoint: FieldRef<"SubjectVersionHistory", 'Boolean'>
-    readonly credit: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly week: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly period: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly schedulePeriod: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly numberOfTheory: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly numberOfPractical: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly numberOfSelfStudy: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly numberOfPractice: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly numberOfReview: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly numberOfExam: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly numberOfOther: FieldRef<"SubjectVersionHistory", 'Int'>
-    readonly trainingObjectTypeId: FieldRef<"SubjectVersionHistory", 'String'>
+    readonly content: FieldRef<"SubjectVersionHistory", 'String'>
+    readonly action: FieldRef<"SubjectVersionHistory", 'String'>
     readonly updatedById: FieldRef<"SubjectVersionHistory", 'String'>
   }
     
@@ -146938,25 +146639,6 @@ export namespace Prisma {
      * Limit how many SubjectVersionHistories to delete.
      */
     limit?: number
-  }
-
-  /**
-   * SubjectVersionHistory.trainingObjectType
-   */
-  export type SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TrainingObjectType
-     */
-    select?: TrainingObjectTypeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the TrainingObjectType
-     */
-    omit?: TrainingObjectTypeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TrainingObjectTypeInclude<ExtArgs> | null
-    where?: TrainingObjectTypeWhereInput
   }
 
   /**
@@ -158711,7 +158393,6 @@ export namespace Prisma {
     subjectVersion?: boolean | TrainingObjectType$subjectVersionArgs<ExtArgs>
     planTraining?: boolean | TrainingObjectType$planTrainingArgs<ExtArgs>
     planTrainingDelay?: boolean | TrainingObjectType$planTrainingDelayArgs<ExtArgs>
-    subjectVersionHistory?: boolean | TrainingObjectType$subjectVersionHistoryArgs<ExtArgs>
     _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["trainingObjectType"]>
 
@@ -158777,7 +158458,6 @@ export namespace Prisma {
     subjectVersion?: boolean | TrainingObjectType$subjectVersionArgs<ExtArgs>
     planTraining?: boolean | TrainingObjectType$planTrainingArgs<ExtArgs>
     planTrainingDelay?: boolean | TrainingObjectType$planTrainingDelayArgs<ExtArgs>
-    subjectVersionHistory?: boolean | TrainingObjectType$subjectVersionHistoryArgs<ExtArgs>
     _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TrainingObjectTypeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -158806,7 +158486,6 @@ export namespace Prisma {
       subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>[]
       planTraining: Prisma.$PlanTrainingPayload<ExtArgs>[]
       planTrainingDelay: Prisma.$PlanTrainingDelayPayload<ExtArgs>[]
-      subjectVersionHistory: Prisma.$SubjectVersionHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -159228,7 +158907,6 @@ export namespace Prisma {
     subjectVersion<T extends TrainingObjectType$subjectVersionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$subjectVersionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     planTraining<T extends TrainingObjectType$planTrainingArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$planTrainingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     planTrainingDelay<T extends TrainingObjectType$planTrainingDelayArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$planTrainingDelayArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingDelayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    subjectVersionHistory<T extends TrainingObjectType$subjectVersionHistoryArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$subjectVersionHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -159988,30 +159666,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PlanTrainingDelayScalarFieldEnum | PlanTrainingDelayScalarFieldEnum[]
-  }
-
-  /**
-   * TrainingObjectType.subjectVersionHistory
-   */
-  export type TrainingObjectType$subjectVersionHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubjectVersionHistory
-     */
-    select?: SubjectVersionHistorySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SubjectVersionHistory
-     */
-    omit?: SubjectVersionHistoryOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: SubjectVersionHistoryInclude<ExtArgs> | null
-    where?: SubjectVersionHistoryWhereInput
-    orderBy?: SubjectVersionHistoryOrderByWithRelationInput | SubjectVersionHistoryOrderByWithRelationInput[]
-    cursor?: SubjectVersionHistoryWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: SubjectVersionHistoryScalarFieldEnum | SubjectVersionHistoryScalarFieldEnum[]
   }
 
   /**
@@ -330808,7 +330462,7 @@ export namespace Prisma {
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    locked: 'locked',
+    isLocked: 'isLocked',
     name: 'name',
     codeTkb: 'codeTkb',
     examType: 'examType',
@@ -330850,24 +330504,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     subjectVersionId: 'subjectVersionId',
-    locked: 'locked',
-    name: 'name',
-    codeTkb: 'codeTkb',
-    examType: 'examType',
-    type: 'type',
-    onePoint: 'onePoint',
-    credit: 'credit',
-    week: 'week',
-    period: 'period',
-    schedulePeriod: 'schedulePeriod',
-    numberOfTheory: 'numberOfTheory',
-    numberOfPractical: 'numberOfPractical',
-    numberOfSelfStudy: 'numberOfSelfStudy',
-    numberOfPractice: 'numberOfPractice',
-    numberOfReview: 'numberOfReview',
-    numberOfExam: 'numberOfExam',
-    numberOfOther: 'numberOfOther',
-    trainingObjectTypeId: 'trainingObjectTypeId',
+    content: 'content',
+    action: 'action',
     updatedById: 'updatedById'
   };
 
@@ -334916,9 +334554,8 @@ export namespace Prisma {
     code: 'code',
     description: 'description',
     subjectVersionId: 'subjectVersionId',
-    name: 'name',
-    codeTkb: 'codeTkb',
-    trainingObjectTypeId: 'trainingObjectTypeId',
+    content: 'content',
+    action: 'action',
     updatedById: 'updatedById'
   };
 
@@ -347713,7 +347350,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
-    locked?: BoolFilter<"SubjectVersion"> | boolean
+    isLocked?: BoolFilter<"SubjectVersion"> | boolean
     name?: StringFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
     examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
@@ -347770,7 +347407,7 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    locked?: SortOrder
+    isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrderInput | SortOrder
     examType?: SortOrder
@@ -347831,7 +347468,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
-    locked?: BoolFilter<"SubjectVersion"> | boolean
+    isLocked?: BoolFilter<"SubjectVersion"> | boolean
     name?: StringFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
     examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
@@ -347888,7 +347525,7 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    locked?: SortOrder
+    isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrderInput | SortOrder
     examType?: SortOrder
@@ -347934,7 +347571,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SubjectVersion"> | Date | string
-    locked?: BoolWithAggregatesFilter<"SubjectVersion"> | boolean
+    isLocked?: BoolWithAggregatesFilter<"SubjectVersion"> | boolean
     name?: StringWithAggregatesFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableWithAggregatesFilter<"SubjectVersion"> | string | null
     examType?: EnumExamTypeWithAggregatesFilter<"SubjectVersion"> | $Enums.ExamType
@@ -347976,27 +347613,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     subjectVersionId?: StringFilter<"SubjectVersionHistory"> | string
-    locked?: BoolNullableFilter<"SubjectVersionHistory"> | boolean | null
-    name?: StringNullableFilter<"SubjectVersionHistory"> | string | null
-    codeTkb?: StringNullableFilter<"SubjectVersionHistory"> | string | null
-    examType?: EnumExamTypeNullableFilter<"SubjectVersionHistory"> | $Enums.ExamType | null
-    type?: EnumSubjectVersionTypeNullableFilter<"SubjectVersionHistory"> | $Enums.SubjectVersionType | null
-    onePoint?: BoolNullableFilter<"SubjectVersionHistory"> | boolean | null
-    credit?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    week?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    period?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    schedulePeriod?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfTheory?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfPractical?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfSelfStudy?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfPractice?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfReview?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfExam?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfOther?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    trainingObjectTypeId?: StringNullableFilter<"SubjectVersionHistory"> | string | null
+    content?: StringFilter<"SubjectVersionHistory"> | string
+    action?: StringFilter<"SubjectVersionHistory"> | string
     updatedById?: StringFilter<"SubjectVersionHistory"> | string
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
-    trainingObjectType?: XOR<TrainingObjectTypeNullableScalarRelationFilter, TrainingObjectTypeWhereInput> | null
     updatedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -348009,27 +347629,10 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
-    locked?: SortOrderInput | SortOrder
-    name?: SortOrderInput | SortOrder
-    codeTkb?: SortOrderInput | SortOrder
-    examType?: SortOrderInput | SortOrder
-    type?: SortOrderInput | SortOrder
-    onePoint?: SortOrderInput | SortOrder
-    credit?: SortOrderInput | SortOrder
-    week?: SortOrderInput | SortOrder
-    period?: SortOrderInput | SortOrder
-    schedulePeriod?: SortOrderInput | SortOrder
-    numberOfTheory?: SortOrderInput | SortOrder
-    numberOfPractical?: SortOrderInput | SortOrder
-    numberOfSelfStudy?: SortOrderInput | SortOrder
-    numberOfPractice?: SortOrderInput | SortOrder
-    numberOfReview?: SortOrderInput | SortOrder
-    numberOfExam?: SortOrderInput | SortOrder
-    numberOfOther?: SortOrderInput | SortOrder
-    trainingObjectTypeId?: SortOrderInput | SortOrder
+    content?: SortOrder
+    action?: SortOrder
     updatedById?: SortOrder
     subjectVersion?: SubjectVersionOrderByWithRelationInput
-    trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
     updatedBy?: UserProfileOrderByWithRelationInput
     _relevance?: SubjectVersionHistoryOrderByRelevanceInput
   }
@@ -348046,27 +347649,10 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     subjectVersionId?: StringFilter<"SubjectVersionHistory"> | string
-    locked?: BoolNullableFilter<"SubjectVersionHistory"> | boolean | null
-    name?: StringNullableFilter<"SubjectVersionHistory"> | string | null
-    codeTkb?: StringNullableFilter<"SubjectVersionHistory"> | string | null
-    examType?: EnumExamTypeNullableFilter<"SubjectVersionHistory"> | $Enums.ExamType | null
-    type?: EnumSubjectVersionTypeNullableFilter<"SubjectVersionHistory"> | $Enums.SubjectVersionType | null
-    onePoint?: BoolNullableFilter<"SubjectVersionHistory"> | boolean | null
-    credit?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    week?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    period?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    schedulePeriod?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfTheory?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfPractical?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfSelfStudy?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfPractice?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfReview?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfExam?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfOther?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    trainingObjectTypeId?: StringNullableFilter<"SubjectVersionHistory"> | string | null
+    content?: StringFilter<"SubjectVersionHistory"> | string
+    action?: StringFilter<"SubjectVersionHistory"> | string
     updatedById?: StringFilter<"SubjectVersionHistory"> | string
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
-    trainingObjectType?: XOR<TrainingObjectTypeNullableScalarRelationFilter, TrainingObjectTypeWhereInput> | null
     updatedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
 
@@ -348079,30 +347665,12 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
-    locked?: SortOrderInput | SortOrder
-    name?: SortOrderInput | SortOrder
-    codeTkb?: SortOrderInput | SortOrder
-    examType?: SortOrderInput | SortOrder
-    type?: SortOrderInput | SortOrder
-    onePoint?: SortOrderInput | SortOrder
-    credit?: SortOrderInput | SortOrder
-    week?: SortOrderInput | SortOrder
-    period?: SortOrderInput | SortOrder
-    schedulePeriod?: SortOrderInput | SortOrder
-    numberOfTheory?: SortOrderInput | SortOrder
-    numberOfPractical?: SortOrderInput | SortOrder
-    numberOfSelfStudy?: SortOrderInput | SortOrder
-    numberOfPractice?: SortOrderInput | SortOrder
-    numberOfReview?: SortOrderInput | SortOrder
-    numberOfExam?: SortOrderInput | SortOrder
-    numberOfOther?: SortOrderInput | SortOrder
-    trainingObjectTypeId?: SortOrderInput | SortOrder
+    content?: SortOrder
+    action?: SortOrder
     updatedById?: SortOrder
     _count?: SubjectVersionHistoryCountOrderByAggregateInput
-    _avg?: SubjectVersionHistoryAvgOrderByAggregateInput
     _max?: SubjectVersionHistoryMaxOrderByAggregateInput
     _min?: SubjectVersionHistoryMinOrderByAggregateInput
-    _sum?: SubjectVersionHistorySumOrderByAggregateInput
   }
 
   export type SubjectVersionHistoryScalarWhereWithAggregatesInput = {
@@ -348117,24 +347685,8 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"SubjectVersionHistory"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SubjectVersionHistory"> | Date | string
     subjectVersionId?: StringWithAggregatesFilter<"SubjectVersionHistory"> | string
-    locked?: BoolNullableWithAggregatesFilter<"SubjectVersionHistory"> | boolean | null
-    name?: StringNullableWithAggregatesFilter<"SubjectVersionHistory"> | string | null
-    codeTkb?: StringNullableWithAggregatesFilter<"SubjectVersionHistory"> | string | null
-    examType?: EnumExamTypeNullableWithAggregatesFilter<"SubjectVersionHistory"> | $Enums.ExamType | null
-    type?: EnumSubjectVersionTypeNullableWithAggregatesFilter<"SubjectVersionHistory"> | $Enums.SubjectVersionType | null
-    onePoint?: BoolNullableWithAggregatesFilter<"SubjectVersionHistory"> | boolean | null
-    credit?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    week?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    period?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    schedulePeriod?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    numberOfTheory?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    numberOfPractical?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    numberOfSelfStudy?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    numberOfPractice?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    numberOfReview?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    numberOfExam?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    numberOfOther?: IntNullableWithAggregatesFilter<"SubjectVersionHistory"> | number | null
-    trainingObjectTypeId?: StringNullableWithAggregatesFilter<"SubjectVersionHistory"> | string | null
+    content?: StringWithAggregatesFilter<"SubjectVersionHistory"> | string
+    action?: StringWithAggregatesFilter<"SubjectVersionHistory"> | string
     updatedById?: StringWithAggregatesFilter<"SubjectVersionHistory"> | string
   }
 
@@ -349183,7 +348735,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionListRelationFilter
     planTraining?: PlanTrainingListRelationFilter
     planTrainingDelay?: PlanTrainingDelayListRelationFilter
-    subjectVersionHistory?: SubjectVersionHistoryListRelationFilter
   }
 
   export type TrainingObjectTypeOrderByWithRelationInput = {
@@ -349212,7 +348763,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionOrderByRelationAggregateInput
     planTraining?: PlanTrainingOrderByRelationAggregateInput
     planTrainingDelay?: PlanTrainingDelayOrderByRelationAggregateInput
-    subjectVersionHistory?: SubjectVersionHistoryOrderByRelationAggregateInput
     _relevance?: TrainingObjectTypeOrderByRelevanceInput
   }
 
@@ -349245,7 +348795,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionListRelationFilter
     planTraining?: PlanTrainingListRelationFilter
     planTrainingDelay?: PlanTrainingDelayListRelationFilter
-    subjectVersionHistory?: SubjectVersionHistoryListRelationFilter
   }, "id" | "code" | "name">
 
   export type TrainingObjectTypeOrderByWithAggregationInput = {
@@ -374581,7 +374130,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -374634,7 +374183,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -374687,7 +374236,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -374740,7 +374289,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -374793,7 +374342,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -374831,7 +374380,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -374865,7 +374414,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -374903,25 +374452,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
+    content: string
+    action: string
     subjectVersion: SubjectVersionCreateNestedOneWithoutSubjectVersionHistoryInput
-    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSubjectVersionHistoryInput
     updatedBy: UserProfileCreateNestedOneWithoutSubjectVersionHistoryInput
   }
 
@@ -374934,24 +374467,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    trainingObjectTypeId?: string | null
+    content: string
+    action: string
     updatedById: string
   }
 
@@ -374963,25 +374480,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutSubjectVersionHistoryNestedInput
-    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSubjectVersionHistoryNestedInput
     updatedBy?: UserProfileUpdateOneRequiredWithoutSubjectVersionHistoryNestedInput
   }
 
@@ -374994,24 +374495,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
   }
 
@@ -375024,24 +374509,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    trainingObjectTypeId?: string | null
+    content: string
+    action: string
     updatedById: string
   }
 
@@ -375053,23 +374522,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
   }
 
   export type SubjectVersionHistoryUncheckedUpdateManyInput = {
@@ -375081,24 +374535,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
   }
 
@@ -376244,7 +375682,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateInput = {
@@ -376271,7 +375708,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUpdateInput = {
@@ -376298,7 +375734,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateInput = {
@@ -376325,7 +375760,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeCreateManyInput = {
@@ -399109,7 +398543,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    locked?: SortOrder
+    isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
     examType?: SortOrder
@@ -399161,7 +398595,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    locked?: SortOrder
+    isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
     examType?: SortOrder
@@ -399199,7 +398633,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    locked?: SortOrder
+    isLocked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
     examType?: SortOrder
@@ -399263,25 +398697,6 @@ export namespace Prisma {
     _max?: NestedEnumSubjectVersionTypeFilter<$PrismaModel>
   }
 
-  export type EnumExamTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumExamTypeNullableFilter<$PrismaModel> | $Enums.ExamType | null
-  }
-
-  export type EnumSubjectVersionTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectVersionType | EnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.SubjectVersionType[] | ListEnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.SubjectVersionType[] | ListEnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumSubjectVersionTypeNullableFilter<$PrismaModel> | $Enums.SubjectVersionType | null
-  }
-
-  export type TrainingObjectTypeNullableScalarRelationFilter = {
-    is?: TrainingObjectTypeWhereInput | null
-    isNot?: TrainingObjectTypeWhereInput | null
-  }
-
   export type SubjectVersionHistoryOrderByRelevanceInput = {
     fields: SubjectVersionHistoryOrderByRelevanceFieldEnum | SubjectVersionHistoryOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -399297,39 +398712,9 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
-    locked?: SortOrder
-    name?: SortOrder
-    codeTkb?: SortOrder
-    examType?: SortOrder
-    type?: SortOrder
-    onePoint?: SortOrder
-    credit?: SortOrder
-    week?: SortOrder
-    period?: SortOrder
-    schedulePeriod?: SortOrder
-    numberOfTheory?: SortOrder
-    numberOfPractical?: SortOrder
-    numberOfSelfStudy?: SortOrder
-    numberOfPractice?: SortOrder
-    numberOfReview?: SortOrder
-    numberOfExam?: SortOrder
-    numberOfOther?: SortOrder
-    trainingObjectTypeId?: SortOrder
+    content?: SortOrder
+    action?: SortOrder
     updatedById?: SortOrder
-  }
-
-  export type SubjectVersionHistoryAvgOrderByAggregateInput = {
-    credit?: SortOrder
-    week?: SortOrder
-    period?: SortOrder
-    schedulePeriod?: SortOrder
-    numberOfTheory?: SortOrder
-    numberOfPractical?: SortOrder
-    numberOfSelfStudy?: SortOrder
-    numberOfPractice?: SortOrder
-    numberOfReview?: SortOrder
-    numberOfExam?: SortOrder
-    numberOfOther?: SortOrder
   }
 
   export type SubjectVersionHistoryMaxOrderByAggregateInput = {
@@ -399341,24 +398726,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
-    locked?: SortOrder
-    name?: SortOrder
-    codeTkb?: SortOrder
-    examType?: SortOrder
-    type?: SortOrder
-    onePoint?: SortOrder
-    credit?: SortOrder
-    week?: SortOrder
-    period?: SortOrder
-    schedulePeriod?: SortOrder
-    numberOfTheory?: SortOrder
-    numberOfPractical?: SortOrder
-    numberOfSelfStudy?: SortOrder
-    numberOfPractice?: SortOrder
-    numberOfReview?: SortOrder
-    numberOfExam?: SortOrder
-    numberOfOther?: SortOrder
-    trainingObjectTypeId?: SortOrder
+    content?: SortOrder
+    action?: SortOrder
     updatedById?: SortOrder
   }
 
@@ -399371,59 +398740,9 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
-    locked?: SortOrder
-    name?: SortOrder
-    codeTkb?: SortOrder
-    examType?: SortOrder
-    type?: SortOrder
-    onePoint?: SortOrder
-    credit?: SortOrder
-    week?: SortOrder
-    period?: SortOrder
-    schedulePeriod?: SortOrder
-    numberOfTheory?: SortOrder
-    numberOfPractical?: SortOrder
-    numberOfSelfStudy?: SortOrder
-    numberOfPractice?: SortOrder
-    numberOfReview?: SortOrder
-    numberOfExam?: SortOrder
-    numberOfOther?: SortOrder
-    trainingObjectTypeId?: SortOrder
+    content?: SortOrder
+    action?: SortOrder
     updatedById?: SortOrder
-  }
-
-  export type SubjectVersionHistorySumOrderByAggregateInput = {
-    credit?: SortOrder
-    week?: SortOrder
-    period?: SortOrder
-    schedulePeriod?: SortOrder
-    numberOfTheory?: SortOrder
-    numberOfPractical?: SortOrder
-    numberOfSelfStudy?: SortOrder
-    numberOfPractice?: SortOrder
-    numberOfReview?: SortOrder
-    numberOfExam?: SortOrder
-    numberOfOther?: SortOrder
-  }
-
-  export type EnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumExamTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ExamType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumExamTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnumExamTypeNullableFilter<$PrismaModel>
-  }
-
-  export type EnumSubjectVersionTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectVersionType | EnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.SubjectVersionType[] | ListEnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.SubjectVersionType[] | ListEnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumSubjectVersionTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.SubjectVersionType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumSubjectVersionTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnumSubjectVersionTypeNullableFilter<$PrismaModel>
   }
 
   export type EquivalencyGroupOrderByRelevanceInput = {
@@ -399837,6 +399156,13 @@ export namespace Prisma {
     not?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel> | $Enums.SubjectClassSchedule | null
   }
 
+  export type EnumExamTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExamTypeNullableFilter<$PrismaModel> | $Enums.ExamType | null
+  }
+
   export type ExamNullableScalarRelationFilter = {
     is?: ExamWhereInput | null
     isNot?: ExamWhereInput | null
@@ -400020,6 +399346,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
     _max?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
+  }
+
+  export type EnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExamTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ExamType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumExamTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumExamTypeNullableFilter<$PrismaModel>
   }
 
   export type SubjectClassTimeOrderByRelevanceInput = {
@@ -401290,6 +400626,11 @@ export namespace Prisma {
   export type FixedClassNullableScalarRelationFilter = {
     is?: FixedClassWhereInput | null
     isNot?: FixedClassWhereInput | null
+  }
+
+  export type TrainingObjectTypeNullableScalarRelationFilter = {
+    is?: TrainingObjectTypeWhereInput | null
+    isNot?: TrainingObjectTypeWhereInput | null
   }
 
   export type TrainingTypeNullableScalarRelationFilter = {
@@ -419488,24 +418829,10 @@ export namespace Prisma {
     connect?: SubjectVersionWhereUniqueInput
   }
 
-  export type TrainingObjectTypeCreateNestedOneWithoutSubjectVersionHistoryInput = {
-    create?: XOR<TrainingObjectTypeCreateWithoutSubjectVersionHistoryInput, TrainingObjectTypeUncheckedCreateWithoutSubjectVersionHistoryInput>
-    connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutSubjectVersionHistoryInput
-    connect?: TrainingObjectTypeWhereUniqueInput
-  }
-
   export type UserProfileCreateNestedOneWithoutSubjectVersionHistoryInput = {
     create?: XOR<UserProfileCreateWithoutSubjectVersionHistoryInput, UserProfileUncheckedCreateWithoutSubjectVersionHistoryInput>
     connectOrCreate?: UserProfileCreateOrConnectWithoutSubjectVersionHistoryInput
     connect?: UserProfileWhereUniqueInput
-  }
-
-  export type NullableEnumExamTypeFieldUpdateOperationsInput = {
-    set?: $Enums.ExamType | null
-  }
-
-  export type NullableEnumSubjectVersionTypeFieldUpdateOperationsInput = {
-    set?: $Enums.SubjectVersionType | null
   }
 
   export type SubjectVersionUpdateOneRequiredWithoutSubjectVersionHistoryNestedInput = {
@@ -419514,16 +418841,6 @@ export namespace Prisma {
     upsert?: SubjectVersionUpsertWithoutSubjectVersionHistoryInput
     connect?: SubjectVersionWhereUniqueInput
     update?: XOR<XOR<SubjectVersionUpdateToOneWithWhereWithoutSubjectVersionHistoryInput, SubjectVersionUpdateWithoutSubjectVersionHistoryInput>, SubjectVersionUncheckedUpdateWithoutSubjectVersionHistoryInput>
-  }
-
-  export type TrainingObjectTypeUpdateOneWithoutSubjectVersionHistoryNestedInput = {
-    create?: XOR<TrainingObjectTypeCreateWithoutSubjectVersionHistoryInput, TrainingObjectTypeUncheckedCreateWithoutSubjectVersionHistoryInput>
-    connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutSubjectVersionHistoryInput
-    upsert?: TrainingObjectTypeUpsertWithoutSubjectVersionHistoryInput
-    disconnect?: TrainingObjectTypeWhereInput | boolean
-    delete?: TrainingObjectTypeWhereInput | boolean
-    connect?: TrainingObjectTypeWhereUniqueInput
-    update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutSubjectVersionHistoryInput, TrainingObjectTypeUpdateWithoutSubjectVersionHistoryInput>, TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionHistoryInput>
   }
 
   export type UserProfileUpdateOneRequiredWithoutSubjectVersionHistoryNestedInput = {
@@ -420004,6 +419321,10 @@ export namespace Prisma {
 
   export type NullableEnumSubjectClassScheduleFieldUpdateOperationsInput = {
     set?: $Enums.SubjectClassSchedule | null
+  }
+
+  export type NullableEnumExamTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ExamType | null
   }
 
   export type SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput = {
@@ -420548,13 +419869,6 @@ export namespace Prisma {
     connect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
   }
 
-  export type SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput = {
-    create?: XOR<SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput, SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput> | SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput[] | SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput[]
-    connectOrCreate?: SubjectVersionHistoryCreateOrConnectWithoutTrainingObjectTypeInput | SubjectVersionHistoryCreateOrConnectWithoutTrainingObjectTypeInput[]
-    createMany?: SubjectVersionHistoryCreateManyTrainingObjectTypeInputEnvelope
-    connect?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
-  }
-
   export type TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
     create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
     connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -420637,13 +419951,6 @@ export namespace Prisma {
     connectOrCreate?: PlanTrainingDelayCreateOrConnectWithoutTrainingObjectTypeInput | PlanTrainingDelayCreateOrConnectWithoutTrainingObjectTypeInput[]
     createMany?: PlanTrainingDelayCreateManyTrainingObjectTypeInputEnvelope
     connect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
-  }
-
-  export type SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
-    create?: XOR<SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput, SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput> | SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput[] | SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput[]
-    connectOrCreate?: SubjectVersionHistoryCreateOrConnectWithoutTrainingObjectTypeInput | SubjectVersionHistoryCreateOrConnectWithoutTrainingObjectTypeInput[]
-    createMany?: SubjectVersionHistoryCreateManyTrainingObjectTypeInputEnvelope
-    connect?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
   }
 
   export type EnumTrainingObjectTypesFieldUpdateOperationsInput = {
@@ -420838,20 +420145,6 @@ export namespace Prisma {
     deleteMany?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
   }
 
-  export type SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput = {
-    create?: XOR<SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput, SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput> | SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput[] | SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput[]
-    connectOrCreate?: SubjectVersionHistoryCreateOrConnectWithoutTrainingObjectTypeInput | SubjectVersionHistoryCreateOrConnectWithoutTrainingObjectTypeInput[]
-    upsert?: SubjectVersionHistoryUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | SubjectVersionHistoryUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
-    createMany?: SubjectVersionHistoryCreateManyTrainingObjectTypeInputEnvelope
-    set?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
-    disconnect?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
-    delete?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
-    connect?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
-    update?: SubjectVersionHistoryUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | SubjectVersionHistoryUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
-    updateMany?: SubjectVersionHistoryUpdateManyWithWhereWithoutTrainingObjectTypeInput | SubjectVersionHistoryUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
-    deleteMany?: SubjectVersionHistoryScalarWhereInput | SubjectVersionHistoryScalarWhereInput[]
-  }
-
   export type TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
     create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
     connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -421018,20 +420311,6 @@ export namespace Prisma {
     update?: PlanTrainingDelayUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | PlanTrainingDelayUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
     updateMany?: PlanTrainingDelayUpdateManyWithWhereWithoutTrainingObjectTypeInput | PlanTrainingDelayUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
     deleteMany?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
-  }
-
-  export type SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
-    create?: XOR<SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput, SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput> | SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput[] | SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput[]
-    connectOrCreate?: SubjectVersionHistoryCreateOrConnectWithoutTrainingObjectTypeInput | SubjectVersionHistoryCreateOrConnectWithoutTrainingObjectTypeInput[]
-    upsert?: SubjectVersionHistoryUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | SubjectVersionHistoryUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
-    createMany?: SubjectVersionHistoryCreateManyTrainingObjectTypeInputEnvelope
-    set?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
-    disconnect?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
-    delete?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
-    connect?: SubjectVersionHistoryWhereUniqueInput | SubjectVersionHistoryWhereUniqueInput[]
-    update?: SubjectVersionHistoryUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | SubjectVersionHistoryUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
-    updateMany?: SubjectVersionHistoryUpdateManyWithWhereWithoutTrainingObjectTypeInput | SubjectVersionHistoryUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
-    deleteMany?: SubjectVersionHistoryScalarWhereInput | SubjectVersionHistoryScalarWhereInput[]
   }
 
   export type StudentCreateNestedManyWithoutPriorityObjectInput = {
@@ -433087,40 +432366,6 @@ export namespace Prisma {
     _max?: NestedEnumSubjectVersionTypeFilter<$PrismaModel>
   }
 
-  export type NestedEnumExamTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumExamTypeNullableFilter<$PrismaModel> | $Enums.ExamType | null
-  }
-
-  export type NestedEnumSubjectVersionTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectVersionType | EnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.SubjectVersionType[] | ListEnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.SubjectVersionType[] | ListEnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumSubjectVersionTypeNullableFilter<$PrismaModel> | $Enums.SubjectVersionType | null
-  }
-
-  export type NestedEnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumExamTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ExamType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumExamTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnumExamTypeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumSubjectVersionTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectVersionType | EnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.SubjectVersionType[] | ListEnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.SubjectVersionType[] | ListEnumSubjectVersionTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumSubjectVersionTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.SubjectVersionType | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumSubjectVersionTypeNullableFilter<$PrismaModel>
-    _max?: NestedEnumSubjectVersionTypeNullableFilter<$PrismaModel>
-  }
-
   export type NestedEnumEquivalencySideFilter<$PrismaModel = never> = {
     equals?: $Enums.EquivalencySide | EnumEquivalencySideFieldRefInput<$PrismaModel>
     in?: $Enums.EquivalencySide[] | ListEnumEquivalencySideFieldRefInput<$PrismaModel>
@@ -433179,6 +432424,13 @@ export namespace Prisma {
     not?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel> | $Enums.SubjectClassSchedule | null
   }
 
+  export type NestedEnumExamTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExamTypeNullableFilter<$PrismaModel> | $Enums.ExamType | null
+  }
+
   export type NestedEnumSubjectClassScheduleNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.SubjectClassSchedule | EnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
     in?: $Enums.SubjectClassSchedule[] | ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> | null
@@ -433187,6 +432439,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
     _max?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumExamTypeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ExamType | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumExamTypeNullableFilter<$PrismaModel>
+    _max?: NestedEnumExamTypeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumPeriodTypeFilter<$PrismaModel = never> = {
@@ -437658,25 +436920,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
+    content: string
+    action: string
     subjectVersion: SubjectVersionCreateNestedOneWithoutSubjectVersionHistoryInput
-    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSubjectVersionHistoryInput
   }
 
   export type SubjectVersionHistoryUncheckedCreateWithoutUpdatedByInput = {
@@ -437688,24 +436934,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    trainingObjectTypeId?: string | null
+    content: string
+    action: string
   }
 
   export type SubjectVersionHistoryCreateOrConnectWithoutUpdatedByInput = {
@@ -440924,24 +440154,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     subjectVersionId?: StringFilter<"SubjectVersionHistory"> | string
-    locked?: BoolNullableFilter<"SubjectVersionHistory"> | boolean | null
-    name?: StringNullableFilter<"SubjectVersionHistory"> | string | null
-    codeTkb?: StringNullableFilter<"SubjectVersionHistory"> | string | null
-    examType?: EnumExamTypeNullableFilter<"SubjectVersionHistory"> | $Enums.ExamType | null
-    type?: EnumSubjectVersionTypeNullableFilter<"SubjectVersionHistory"> | $Enums.SubjectVersionType | null
-    onePoint?: BoolNullableFilter<"SubjectVersionHistory"> | boolean | null
-    credit?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    week?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    period?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    schedulePeriod?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfTheory?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfPractical?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfSelfStudy?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfPractice?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfReview?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfExam?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    numberOfOther?: IntNullableFilter<"SubjectVersionHistory"> | number | null
-    trainingObjectTypeId?: StringNullableFilter<"SubjectVersionHistory"> | string | null
+    content?: StringFilter<"SubjectVersionHistory"> | string
+    action?: StringFilter<"SubjectVersionHistory"> | string
     updatedById?: StringFilter<"SubjectVersionHistory"> | string
   }
 
@@ -465771,7 +464985,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -465823,7 +465037,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -466531,7 +465745,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
-    locked?: BoolFilter<"SubjectVersion"> | boolean
+    isLocked?: BoolFilter<"SubjectVersion"> | boolean
     name?: StringFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
     examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
@@ -475394,7 +474608,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutPlanTrainingDelayInput = {
@@ -475420,7 +474633,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutPlanTrainingDelayInput = {
@@ -475494,7 +474706,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutPlanTrainingDelayInput = {
@@ -475520,7 +474731,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type PlanTrainingDelaySubjectUpsertWithWhereUniqueWithoutPlanTrainingDelayInput = {
@@ -475586,7 +474796,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -475638,7 +474848,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -475796,7 +475006,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -475848,7 +475058,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -475931,7 +475141,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutPlanTrainingInput = {
@@ -475957,7 +475166,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutPlanTrainingInput = {
@@ -476086,7 +475294,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutPlanTrainingInput = {
@@ -476112,7 +475319,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type SemesterUpsertWithoutPlanTrainingInput = {
@@ -476241,7 +475447,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -476293,7 +475499,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -476453,7 +475659,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -476505,7 +475711,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -477034,7 +476240,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -477086,7 +476292,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -477189,7 +476395,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -477241,7 +476447,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -477388,7 +476594,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -477440,7 +476646,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -477974,7 +477180,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -478026,7 +477232,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -481731,7 +480937,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingCourseInput = {
@@ -481757,7 +480962,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingCourseInput = {
@@ -482426,7 +481630,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingCourseInput = {
@@ -482452,7 +481655,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput = {
@@ -484805,7 +484007,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutCurriculumInput = {
@@ -484831,7 +484032,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutCurriculumInput = {
@@ -485221,7 +484421,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumInput = {
@@ -485247,7 +484446,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutCurriculumInput = {
@@ -485411,7 +484609,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutCurriculumVersionInput = {
@@ -485437,7 +484634,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutCurriculumVersionInput = {
@@ -486074,7 +485270,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumVersionInput = {
@@ -486100,7 +485295,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingLevelUpsertWithoutCurriculumVersionInput = {
@@ -486381,7 +485575,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486433,7 +485627,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486598,7 +485792,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486650,7 +485844,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486857,7 +486051,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutSubjectVersionInput = {
@@ -486883,7 +486076,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutSubjectVersionInput = {
@@ -486966,7 +486158,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487018,7 +486210,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487075,7 +486267,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487127,7 +486319,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487184,7 +486376,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487236,7 +486428,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487293,7 +486485,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487345,7 +486537,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487856,24 +487048,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutSubjectVersionHistoryInput
+    content: string
+    action: string
     updatedBy: UserProfileCreateNestedOneWithoutSubjectVersionHistoryInput
   }
 
@@ -487885,24 +487061,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    trainingObjectTypeId?: string | null
+    content: string
+    action: string
     updatedById: string
   }
 
@@ -488076,7 +487236,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionInput = {
@@ -488102,7 +487261,6 @@ export namespace Prisma {
     graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type SubjectVersionCategoryUpsertWithoutSubjectVersionsInput = {
@@ -488482,7 +487640,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -488534,7 +487692,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -488581,63 +487739,6 @@ export namespace Prisma {
   export type SubjectVersionCreateOrConnectWithoutSubjectVersionHistoryInput = {
     where: SubjectVersionWhereUniqueInput
     create: XOR<SubjectVersionCreateWithoutSubjectVersionHistoryInput, SubjectVersionUncheckedCreateWithoutSubjectVersionHistoryInput>
-  }
-
-  export type TrainingObjectTypeCreateWithoutSubjectVersionHistoryInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    name: string
-    type: $Enums.TrainingObjectTypes
-    trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
-    trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
-    trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
-    curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
-    curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
-    trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-    trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
-    students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
-    trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
-    graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
-    planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
-    planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-  }
-
-  export type TrainingObjectTypeUncheckedCreateWithoutSubjectVersionHistoryInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    name: string
-    type: $Enums.TrainingObjectTypes
-    trainingFormId?: string | null
-    trainingLevelId?: string | null
-    trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-  }
-
-  export type TrainingObjectTypeCreateOrConnectWithoutSubjectVersionHistoryInput = {
-    where: TrainingObjectTypeWhereUniqueInput
-    create: XOR<TrainingObjectTypeCreateWithoutSubjectVersionHistoryInput, TrainingObjectTypeUncheckedCreateWithoutSubjectVersionHistoryInput>
   }
 
   export type UserProfileCreateWithoutSubjectVersionHistoryInput = {
@@ -488976,7 +488077,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -489028,7 +488129,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -489070,69 +488171,6 @@ export namespace Prisma {
     subjectScoreConvert?: SubjectScoreConvertUncheckedUpdateManyWithoutSubjectVersionNestedInput
     planTrainingDelaySubject?: PlanTrainingDelaySubjectUncheckedUpdateManyWithoutSubjectVersionNestedInput
     planTrainingSubject?: PlanTrainingSubjectUncheckedUpdateManyWithoutSubjectVersionNestedInput
-  }
-
-  export type TrainingObjectTypeUpsertWithoutSubjectVersionHistoryInput = {
-    update: XOR<TrainingObjectTypeUpdateWithoutSubjectVersionHistoryInput, TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionHistoryInput>
-    create: XOR<TrainingObjectTypeCreateWithoutSubjectVersionHistoryInput, TrainingObjectTypeUncheckedCreateWithoutSubjectVersionHistoryInput>
-    where?: TrainingObjectTypeWhereInput
-  }
-
-  export type TrainingObjectTypeUpdateToOneWithWhereWithoutSubjectVersionHistoryInput = {
-    where?: TrainingObjectTypeWhereInput
-    data: XOR<TrainingObjectTypeUpdateWithoutSubjectVersionHistoryInput, TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionHistoryInput>
-  }
-
-  export type TrainingObjectTypeUpdateWithoutSubjectVersionHistoryInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
-    trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
-    trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
-    trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
-    curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
-    curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
-    trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-    trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
-    students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
-    trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
-    graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
-    planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
-    planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-  }
-
-  export type TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionHistoryInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    name?: StringFieldUpdateOperationsInput | string
-    type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
-    trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
-    trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type UserProfileUpsertWithoutSubjectVersionHistoryInput = {
@@ -489516,7 +488554,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -489568,7 +488606,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -489661,7 +488699,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -489713,7 +488751,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -489796,7 +488834,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -489848,7 +488886,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -489951,7 +488989,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -490003,7 +489041,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -491069,7 +490107,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -491121,7 +490159,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -491193,7 +490231,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutSubjectClassInput = {
@@ -491219,7 +490256,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutSubjectClassInput = {
@@ -492104,7 +491140,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -492156,7 +491192,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -492234,7 +491270,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutSubjectClassInput = {
@@ -492260,7 +491295,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type SemesterUpsertWithoutSubjectClassesInput = {
@@ -494531,7 +493565,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -494583,7 +493617,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -494696,74 +493730,6 @@ export namespace Prisma {
 
   export type PlanTrainingDelayCreateManyTrainingObjectTypeInputEnvelope = {
     data: PlanTrainingDelayCreateManyTrainingObjectTypeInput | PlanTrainingDelayCreateManyTrainingObjectTypeInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    subjectVersion: SubjectVersionCreateNestedOneWithoutSubjectVersionHistoryInput
-    updatedBy: UserProfileCreateNestedOneWithoutSubjectVersionHistoryInput
-  }
-
-  export type SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subjectVersionId: string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    updatedById: string
-  }
-
-  export type SubjectVersionHistoryCreateOrConnectWithoutTrainingObjectTypeInput = {
-    where: SubjectVersionHistoryWhereUniqueInput
-    create: XOR<SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput, SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput>
-  }
-
-  export type SubjectVersionHistoryCreateManyTrainingObjectTypeInputEnvelope = {
-    data: SubjectVersionHistoryCreateManyTrainingObjectTypeInput | SubjectVersionHistoryCreateManyTrainingObjectTypeInput[]
     skipDuplicates?: boolean
   }
 
@@ -495091,22 +494057,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
     updatedAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
     trainingObjectTypeId?: StringFilter<"PlanTrainingDelay"> | string
-  }
-
-  export type SubjectVersionHistoryUpsertWithWhereUniqueWithoutTrainingObjectTypeInput = {
-    where: SubjectVersionHistoryWhereUniqueInput
-    update: XOR<SubjectVersionHistoryUpdateWithoutTrainingObjectTypeInput, SubjectVersionHistoryUncheckedUpdateWithoutTrainingObjectTypeInput>
-    create: XOR<SubjectVersionHistoryCreateWithoutTrainingObjectTypeInput, SubjectVersionHistoryUncheckedCreateWithoutTrainingObjectTypeInput>
-  }
-
-  export type SubjectVersionHistoryUpdateWithWhereUniqueWithoutTrainingObjectTypeInput = {
-    where: SubjectVersionHistoryWhereUniqueInput
-    data: XOR<SubjectVersionHistoryUpdateWithoutTrainingObjectTypeInput, SubjectVersionHistoryUncheckedUpdateWithoutTrainingObjectTypeInput>
-  }
-
-  export type SubjectVersionHistoryUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
-    where: SubjectVersionHistoryScalarWhereInput
-    data: XOR<SubjectVersionHistoryUpdateManyMutationInput, SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeInput>
   }
 
   export type StudentCreateWithoutPriorityObjectInput = {
@@ -495615,7 +494565,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingLevelInput = {
@@ -495641,7 +494590,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingLevelInput = {
@@ -495864,7 +494812,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingFormInput = {
@@ -495890,7 +494837,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingFormInput = {
@@ -497664,7 +496610,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput = {
@@ -497690,7 +496635,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput = {
@@ -497779,7 +496723,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFieldsInput = {
@@ -497805,7 +496748,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type DM_DonViCreateWithoutTrainingMajorsInput = {
@@ -498823,7 +497765,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingMajorsInput = {
@@ -498849,7 +497790,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingMajorsInput = {
@@ -498950,7 +497890,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingMajorsInput = {
@@ -498976,7 +497915,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingBlockCreateWithoutChildrenInput = {
@@ -500745,7 +499683,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutStudentsInput = {
@@ -500771,7 +499708,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutStudentsInput = {
@@ -502636,7 +501572,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutStudentsInput = {
@@ -502662,7 +501597,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingTypeUpsertWithoutStudentsInput = {
@@ -505007,7 +503941,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -505059,7 +503993,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -506004,7 +504938,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -506056,7 +504990,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -507945,7 +506879,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutTrainingScoreSessionInput = {
@@ -507971,7 +506904,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutTrainingScoreSessionInput = {
@@ -508110,7 +507042,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingScoreSessionInput = {
@@ -508136,7 +507067,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type StudentTrainingScoreUpsertWithWhereUniqueWithoutTrainingScoreSessionInput = {
@@ -526378,7 +525308,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeUncheckedCreateWithoutGraduationSessionInput = {
@@ -526404,7 +525333,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
   }
 
   export type TrainingObjectTypeCreateOrConnectWithoutGraduationSessionInput = {
@@ -526490,7 +525418,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutGraduationSessionInput = {
@@ -526516,7 +525443,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutSessionInput = {
@@ -530803,7 +529729,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -530855,7 +529781,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -531039,7 +529965,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -531091,7 +530017,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -531266,7 +530192,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -531318,7 +530244,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -531478,7 +530404,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -531530,7 +530456,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -538882,24 +537808,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    trainingObjectTypeId?: string | null
+    content: string
+    action: string
   }
 
   export type ChangeLogCreateManyUserProfileInput = {
@@ -540620,25 +539530,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutSubjectVersionHistoryNestedInput
-    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSubjectVersionHistoryNestedInput
   }
 
   export type SubjectVersionHistoryUncheckedUpdateWithoutUpdatedByInput = {
@@ -540650,24 +539544,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
   }
 
   export type SubjectVersionHistoryUncheckedUpdateManyWithoutUpdatedByInput = {
@@ -540679,24 +539557,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
   }
 
   export type ChangeLogUpdateWithoutUserProfileInput = {
@@ -545745,7 +544607,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -546265,7 +545127,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -546317,7 +545179,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -546369,7 +545231,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565121,7 +563983,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -565158,7 +564020,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565210,7 +564072,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565262,7 +564124,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565299,7 +564161,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -565336,7 +564198,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565388,7 +564250,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565440,7 +564302,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565653,24 +564515,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    trainingObjectTypeId?: string | null
+    content: string
+    action: string
     updatedById: string
   }
 
@@ -565727,7 +564573,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565779,7 +564625,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565831,7 +564677,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565869,7 +564715,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565921,7 +564767,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565973,7 +564819,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566011,7 +564857,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566063,7 +564909,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566115,7 +564961,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566153,7 +564999,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566205,7 +565051,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566257,7 +565103,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566820,24 +565666,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    trainingObjectType?: TrainingObjectTypeUpdateOneWithoutSubjectVersionHistoryNestedInput
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
     updatedBy?: UserProfileUpdateOneRequiredWithoutSubjectVersionHistoryNestedInput
   }
 
@@ -566849,24 +565679,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
   }
 
@@ -566878,24 +565692,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
     updatedById?: StringFieldUpdateOperationsInput | string
   }
 
@@ -568122,7 +566920,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    locked?: boolean
+    isLocked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -568168,35 +566966,6 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type SubjectVersionHistoryCreateManyTrainingObjectTypeInput = {
-    id?: string
-    code?: string | null
-    active?: boolean
-    description?: string | null
-    deletedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    subjectVersionId: string
-    locked?: boolean | null
-    name?: string | null
-    codeTkb?: string | null
-    examType?: $Enums.ExamType | null
-    type?: $Enums.SubjectVersionType | null
-    onePoint?: boolean | null
-    credit?: number | null
-    week?: number | null
-    period?: number | null
-    schedulePeriod?: number | null
-    numberOfTheory?: number | null
-    numberOfPractical?: number | null
-    numberOfSelfStudy?: number | null
-    numberOfPractice?: number | null
-    numberOfReview?: number | null
-    numberOfExam?: number | null
-    numberOfOther?: number | null
-    updatedById: string
   }
 
   export type TrainingCourseUpdateWithoutTrainingObjectTypeInput = {
@@ -568931,7 +567700,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -568983,7 +567752,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -569035,7 +567804,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: BoolFieldUpdateOperationsInput | boolean
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -569123,93 +567892,6 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SubjectVersionHistoryUpdateWithoutTrainingObjectTypeInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    subjectVersion?: SubjectVersionUpdateOneRequiredWithoutSubjectVersionHistoryNestedInput
-    updatedBy?: UserProfileUpdateOneRequiredWithoutSubjectVersionHistoryNestedInput
-  }
-
-  export type SubjectVersionHistoryUncheckedUpdateWithoutTrainingObjectTypeInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subjectVersionId?: StringFieldUpdateOperationsInput | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    updatedById?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    code?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subjectVersionId?: StringFieldUpdateOperationsInput | string
-    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
-    examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
-    type?: NullableEnumSubjectVersionTypeFieldUpdateOperationsInput | $Enums.SubjectVersionType | null
-    onePoint?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    credit?: NullableIntFieldUpdateOperationsInput | number | null
-    week?: NullableIntFieldUpdateOperationsInput | number | null
-    period?: NullableIntFieldUpdateOperationsInput | number | null
-    schedulePeriod?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfTheory?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractical?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfSelfStudy?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfPractice?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfReview?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfExam?: NullableIntFieldUpdateOperationsInput | number | null
-    numberOfOther?: NullableIntFieldUpdateOperationsInput | number | null
-    updatedById?: StringFieldUpdateOperationsInput | string
   }
 
   export type StudentUpdateWithoutPriorityObjectInput = {
@@ -569900,7 +568582,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingLevelInput = {
@@ -569926,7 +568607,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingLevelInput = {
@@ -570156,7 +568836,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFormInput = {
@@ -570182,7 +568861,6 @@ export namespace Prisma {
     subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
-    subjectVersionHistory?: SubjectVersionHistoryUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
   }
 
   export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFormInput = {

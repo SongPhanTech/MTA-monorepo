@@ -21,28 +21,27 @@ enum TrainingObjectTypes {
 
 /// Đối tượng đào tạo
 model TrainingObjectType extends Base {
-  name                  String                              @unique
-  type                  TrainingObjectTypes
+  name                 String                              @unique
+  type                 TrainingObjectTypes
 
-  trainingForm          TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
-  trainingFormId        String?
+  trainingForm         TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
+  trainingFormId       String?
 
-  trainingLevel         TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId       String?
+  trainingLevel        TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId      String?
 
-  trainingCourse        TrainingCourse[]
-  curriculum            Curriculum[]
-  curriculumVersion     CurriculumVersion[]
-  trainingMajors        TrainingMajorOnTrainingObjectType[]
-  trainingFields        TrainingFieldOnTrainingObjectType[]
-  students              Student[]
-  trainingScoreSession  TrainingScoreSession[]
-  subjectClass          SubjectClass[]
-  graduationSession     GraduationSession[]
-  subjectVersion        SubjectVersion[]
-  planTraining          PlanTraining[]
-  planTrainingDelay     PlanTrainingDelay[]
-  subjectVersionHistory SubjectVersionHistory[]
+  trainingCourse       TrainingCourse[]
+  curriculum           Curriculum[]
+  curriculumVersion    CurriculumVersion[]
+  trainingMajors       TrainingMajorOnTrainingObjectType[]
+  trainingFields       TrainingFieldOnTrainingObjectType[]
+  students             Student[]
+  trainingScoreSession TrainingScoreSession[]
+  subjectClass         SubjectClass[]
+  graduationSession    GraduationSession[]
+  subjectVersion       SubjectVersion[]
+  planTraining         PlanTraining[]
+  planTrainingDelay    PlanTrainingDelay[]
 
   @@schema("ql-dao-tao")
 }

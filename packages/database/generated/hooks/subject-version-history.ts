@@ -327,9 +327,8 @@ export function useSuspenseCountSubjectVersionHistory<TArgs extends Prisma.Subje
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SubjectVersionHistory', `${endpoint}/subjectVersionHistory/count`, args, options, fetch);
 }
-import type { ExamType, SubjectVersionType } from '../zenstack/models';
 
-export function useCheckSubjectVersionHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; subjectVersionId?: string; locked?: boolean; name?: string; codeTkb?: string; examType?: ExamType; type?: SubjectVersionType; onePoint?: boolean; credit?: number; week?: number; period?: number; schedulePeriod?: number; numberOfTheory?: number; numberOfPractical?: number; numberOfSelfStudy?: number; numberOfPractice?: number; numberOfReview?: number; numberOfExam?: number; numberOfOther?: number; trainingObjectTypeId?: string; updatedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectVersionHistory<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; subjectVersionId?: string; content?: string; action?: string; updatedById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectVersionHistory', `${endpoint}/subjectVersionHistory/check`, args, options, fetch);
 }

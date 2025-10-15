@@ -16667,7 +16667,7 @@ declare const metadata: {
                         }[];
                     }[];
                 };
-                locked: {
+                isLocked: {
                     name: string;
                     type: string;
                     attributes: {
@@ -17156,115 +17156,13 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                locked: {
+                content: {
                     name: string;
                     type: string;
-                    isOptional: boolean;
                 };
-                name: {
+                action: {
                     name: string;
                     type: string;
-                    isOptional: boolean;
-                };
-                codeTkb: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                examType: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                type: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                onePoint: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                credit: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                week: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                period: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                schedulePeriod: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                numberOfTheory: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                numberOfPractical: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                numberOfSelfStudy: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                numberOfPractice: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                numberOfReview: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                numberOfExam: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                numberOfOther: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                trainingObjectType: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                trainingObjectTypeId: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    isForeignKey: boolean;
-                    relationField: string;
                 };
                 updatedBy: {
                     name: string;
@@ -19311,13 +19209,6 @@ declare const metadata: {
                     backLink: string;
                 };
                 planTrainingDelay: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                subjectVersionHistory: {
                     name: string;
                     type: string;
                     isDataModel: boolean;

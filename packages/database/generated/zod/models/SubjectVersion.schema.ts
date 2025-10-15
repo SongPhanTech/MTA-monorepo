@@ -17,7 +17,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    locked: z.boolean().default(false),
+    isLocked: z.boolean().default(false),
     name: z.string(),
     codeTkb: z.string().nullish(),
     examType: ExamTypeSchema,
@@ -104,7 +104,7 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    locked: z.boolean().default(false),
+    isLocked: z.boolean().default(false),
     name: z.string(),
     codeTkb: z.string().nullish(),
     examType: ExamTypeSchema,
@@ -135,7 +135,7 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
  * `SubjectVersion` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectVersionCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, locked: true, type: true, onePoint: true, period: true
+    id: true, active: true, createdAt: true, updatedAt: true, isLocked: true, type: true, onePoint: true, period: true
 });
 
 

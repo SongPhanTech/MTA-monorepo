@@ -2980,7 +2980,7 @@ model SubjectVersion {
   deletedAt                DateTime?
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @default(now()) @updatedAt()
-  locked                   Boolean                    @default(false)
+  isLocked                 Boolean                    @default(false)
   name                     String
   codeTkb                  String?
   examType                 ExamType
@@ -3040,36 +3040,19 @@ model SubjectVersion {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model SubjectVersionHistory {
-  id                   String              @id() @default(cuid())
-  code                 String?             @unique()
-  active               Boolean             @default(true)
-  description          String?             @db.Text()
-  deletedAt            DateTime?
-  createdAt            DateTime            @default(now())
-  updatedAt            DateTime            @default(now()) @updatedAt()
-  subjectVersion       SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId     String
-  locked               Boolean?
-  name                 String?
-  codeTkb              String?
-  examType             ExamType?
-  type                 SubjectVersionType?
-  onePoint             Boolean?
-  credit               Int?
-  week                 Int?
-  period               Int?
-  schedulePeriod       Int?
-  numberOfTheory       Int?
-  numberOfPractical    Int?
-  numberOfSelfStudy    Int?
-  numberOfPractice     Int?
-  numberOfReview       Int?
-  numberOfExam         Int?
-  numberOfOther        Int?
-  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String?
-  updatedBy            UserProfile         @relation(fields: [updatedById], references: [id])
-  updatedById          String
+  id               String         @id() @default(cuid())
+  code             String?        @unique()
+  active           Boolean        @default(true)
+  description      String?        @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now()) @updatedAt()
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
+  content          String
+  action           String
+  updatedBy        UserProfile    @relation(fields: [updatedById], references: [id])
+  updatedById      String
 
   @@schema("ql-dao-tao")
 }
@@ -3329,32 +3312,31 @@ model ClassSchedule {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model TrainingObjectType {
-  id                    String                              @id() @default(cuid())
-  code                  String?                             @unique()
-  active                Boolean                             @default(true)
-  description           String?                             @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime                            @default(now())
-  updatedAt             DateTime                            @default(now()) @updatedAt()
-  name                  String                              @unique()
-  type                  TrainingObjectTypes
-  trainingForm          TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
-  trainingFormId        String?
-  trainingLevel         TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId       String?
-  trainingCourse        TrainingCourse[]
-  curriculum            Curriculum[]
-  curriculumVersion     CurriculumVersion[]
-  trainingMajors        TrainingMajorOnTrainingObjectType[]
-  trainingFields        TrainingFieldOnTrainingObjectType[]
-  students              Student[]
-  trainingScoreSession  TrainingScoreSession[]
-  subjectClass          SubjectClass[]
-  graduationSession     GraduationSession[]
-  subjectVersion        SubjectVersion[]
-  planTraining          PlanTraining[]
-  planTrainingDelay     PlanTrainingDelay[]
-  subjectVersionHistory SubjectVersionHistory[]
+  id                   String                              @id() @default(cuid())
+  code                 String?                             @unique()
+  active               Boolean                             @default(true)
+  description          String?                             @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime                            @default(now())
+  updatedAt            DateTime                            @default(now()) @updatedAt()
+  name                 String                              @unique()
+  type                 TrainingObjectTypes
+  trainingForm         TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
+  trainingFormId       String?
+  trainingLevel        TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId      String?
+  trainingCourse       TrainingCourse[]
+  curriculum           Curriculum[]
+  curriculumVersion    CurriculumVersion[]
+  trainingMajors       TrainingMajorOnTrainingObjectType[]
+  trainingFields       TrainingFieldOnTrainingObjectType[]
+  students             Student[]
+  trainingScoreSession TrainingScoreSession[]
+  subjectClass         SubjectClass[]
+  graduationSession    GraduationSession[]
+  subjectVersion       SubjectVersion[]
+  planTraining         PlanTraining[]
+  planTrainingDelay    PlanTrainingDelay[]
 
   @@schema("ql-dao-tao")
 }

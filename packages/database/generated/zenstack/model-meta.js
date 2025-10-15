@@ -9451,8 +9451,8 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, locked: {
-                    name: "locked",
+                }, isLocked: {
+                    name: "isLocked",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, name: {
@@ -9753,89 +9753,12 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'subjectVersion',
-                }, locked: {
-                    name: "locked",
-                    type: "Boolean",
-                    isOptional: true,
-                }, name: {
-                    name: "name",
+                }, content: {
+                    name: "content",
                     type: "String",
-                    isOptional: true,
-                }, codeTkb: {
-                    name: "codeTkb",
+                }, action: {
+                    name: "action",
                     type: "String",
-                    isOptional: true,
-                }, examType: {
-                    name: "examType",
-                    type: "ExamType",
-                    isOptional: true,
-                }, type: {
-                    name: "type",
-                    type: "SubjectVersionType",
-                    isOptional: true,
-                }, onePoint: {
-                    name: "onePoint",
-                    type: "Boolean",
-                    isOptional: true,
-                }, credit: {
-                    name: "credit",
-                    type: "Int",
-                    isOptional: true,
-                }, week: {
-                    name: "week",
-                    type: "Int",
-                    isOptional: true,
-                }, period: {
-                    name: "period",
-                    type: "Int",
-                    isOptional: true,
-                }, schedulePeriod: {
-                    name: "schedulePeriod",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfTheory: {
-                    name: "numberOfTheory",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfPractical: {
-                    name: "numberOfPractical",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfSelfStudy: {
-                    name: "numberOfSelfStudy",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfPractice: {
-                    name: "numberOfPractice",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfReview: {
-                    name: "numberOfReview",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfExam: {
-                    name: "numberOfExam",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfOther: {
-                    name: "numberOfOther",
-                    type: "Int",
-                    isOptional: true,
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
-                    backLink: 'subjectVersionHistory',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
                 }, updatedBy: {
                     name: "updatedBy",
                     type: "UserProfile",
@@ -10971,12 +10894,6 @@ const metadata = {
                 }, planTrainingDelay: {
                     name: "planTrainingDelay",
                     type: "PlanTrainingDelay",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, subjectVersionHistory: {
-                    name: "subjectVersionHistory",
-                    type: "SubjectVersionHistory",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',

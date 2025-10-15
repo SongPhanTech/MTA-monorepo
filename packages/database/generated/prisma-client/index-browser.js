@@ -1743,7 +1743,7 @@ exports.Prisma.SubjectVersionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  locked: 'locked',
+  isLocked: 'isLocked',
   name: 'name',
   codeTkb: 'codeTkb',
   examType: 'examType',
@@ -1782,24 +1782,8 @@ exports.Prisma.SubjectVersionHistoryScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   subjectVersionId: 'subjectVersionId',
-  locked: 'locked',
-  name: 'name',
-  codeTkb: 'codeTkb',
-  examType: 'examType',
-  type: 'type',
-  onePoint: 'onePoint',
-  credit: 'credit',
-  week: 'week',
-  period: 'period',
-  schedulePeriod: 'schedulePeriod',
-  numberOfTheory: 'numberOfTheory',
-  numberOfPractical: 'numberOfPractical',
-  numberOfSelfStudy: 'numberOfSelfStudy',
-  numberOfPractice: 'numberOfPractice',
-  numberOfReview: 'numberOfReview',
-  numberOfExam: 'numberOfExam',
-  numberOfOther: 'numberOfOther',
-  trainingObjectTypeId: 'trainingObjectTypeId',
+  content: 'content',
+  action: 'action',
   updatedById: 'updatedById'
 };
 
@@ -5110,9 +5094,8 @@ exports.Prisma.SubjectVersionHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   subjectVersionId: 'subjectVersionId',
-  name: 'name',
-  codeTkb: 'codeTkb',
-  trainingObjectTypeId: 'trainingObjectTypeId',
+  content: 'content',
+  action: 'action',
   updatedById: 'updatedById'
 };
 

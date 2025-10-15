@@ -550,7 +550,7 @@ enum SubjectVersionType {
 
 /// Phiên bản môn học
 model SubjectVersion extends Base {
-  locked                   Boolean                    @default(false)
+  isLocked                 Boolean                    @default(false)
   name                     String
   codeTkb                  String?
   examType                 ExamType
@@ -621,33 +621,14 @@ model SubjectVersion extends Base {
 }
 
 model SubjectVersionHistory extends Base {
-  subjectVersion       SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId     String
+  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId String
 
-  locked               Boolean?
+  content          String
+  action           String
 
-  name                 String?
-  codeTkb              String?
-  examType             ExamType?
-  type                 SubjectVersionType?
-  onePoint             Boolean?
-  credit               Int?
-  week                 Int?
-  period               Int?
-  schedulePeriod       Int?
-  numberOfTheory       Int? // số tiết lý thuyết
-  numberOfPractical    Int? // số tiết bài tập
-  numberOfSelfStudy    Int? // số tiết thảo luận/tự học
-  numberOfPractice     Int? // số tiết thí nghiệm/thực hành
-  numberOfReview       Int? // số tiết ôn tập
-  numberOfExam         Int? // số tiết KT/thi
-  numberOfOther        Int? // số tiết khác
-
-  trainingObjectType   TrainingObjectType? @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId String?
-
-  updatedBy            UserProfile         @relation(fields: [updatedById], references: [id])
-  updatedById          String
+  updatedBy        UserProfile    @relation(fields: [updatedById], references: [id])
+  updatedById      String
 
   @@schema("ql-dao-tao")
 }
