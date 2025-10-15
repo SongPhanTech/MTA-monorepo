@@ -23,6 +23,8 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     managementOrganization: z.record(z.unknown()),
     trainingMajor: z.record(z.unknown()),
+    trainingObjectType: z.record(z.unknown()),
+    trainingBlocks: z.array(z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
     curriculumVersion: z.array(z.unknown()).optional(),
 }
@@ -30,6 +32,7 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     managementOrganizationId: z.string().uuid(),
     trainingMajorId: z.string(),
+    trainingObjectTypeId: z.string(),
 }
 );
 

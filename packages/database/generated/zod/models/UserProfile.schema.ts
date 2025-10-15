@@ -162,6 +162,8 @@ const relationSchema = z.object({
     faqsUploaded: z.array(z.unknown()).optional(),
     faqsApproved: z.array(z.unknown()).optional(),
     conversations: z.array(z.unknown()).optional(),
+    subjectVersionHistory: z.array(z.unknown()).optional(),
+    changeLog: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

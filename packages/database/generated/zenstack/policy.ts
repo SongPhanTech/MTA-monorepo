@@ -9,8 +9,10 @@ import { type QueryContext, type CrudContract, type PermissionCheckerContext } f
 import { allFieldsEqual } from "@zenstackhq/runtime/validation";
 import { type PolicyDef, type PermissionCheckerConstraint } from "@zenstackhq/runtime/enhancements/node";
 import { ConfigKey } from "../prisma-client";
-import { QuestionType } from "../prisma-client";
-import { ExamStatus } from "../prisma-client";
+import { RelativeType } from "../prisma-client";
+import { PermissionType } from "../prisma-client";
+import { MessageSender } from "../prisma-client";
+import { DocumentStatus } from "../prisma-client";
 import { ScoreConvertStatus } from "../prisma-client";
 import { SemesterType } from "../prisma-client";
 import { ExamType } from "../prisma-client";
@@ -26,10 +28,9 @@ import { AcademicRankingBaseType } from "../prisma-client";
 import { StudentStatus } from "../prisma-client";
 import { NotificationType } from "../prisma-client";
 import { NotificationPriority } from "../prisma-client";
-import { PermissionType } from "../prisma-client";
-import { MessageSender } from "../prisma-client";
-import { DocumentStatus } from "../prisma-client";
-import { RelativeType } from "../prisma-client";
+import { AcademicActionType } from "../prisma-client";
+import { DecisionStatus } from "../prisma-client";
+import { StudentTrainingType } from "../prisma-client";
 import { ResearchProjectStatus } from "../prisma-client";
 import { RegistrationStatus } from "../prisma-client";
 import { ThesisProjectStatus } from "../prisma-client";
@@ -38,9 +39,10 @@ import { DecisionType } from "../prisma-client";
 import { CouncilProposalStatus } from "../prisma-client";
 import { CouncilRole } from "../prisma-client";
 import { PaymentStatus } from "../prisma-client";
-import { AcademicActionType } from "../prisma-client";
-import { DecisionStatus } from "../prisma-client";
-import { StudentTrainingType } from "../prisma-client";
+import { EvaluationMemberRole } from "../prisma-client";
+import { EvaluationSecretaryMemberRole } from "../prisma-client";
+import { SurveyQuestionType } from "../prisma-client";
+import { SurveyObject } from "../prisma-client";
 import { CriteriaField } from "../prisma-client";
 import { CriteriaOperator } from "../prisma-client";
 import { GraduationSessionStatus } from "../prisma-client";
@@ -48,10 +50,8 @@ import { ApplicationStatus } from "../prisma-client";
 import { RankingContext } from "../prisma-client";
 import { DiplomaVerificationStatus } from "../prisma-client";
 import { ReminderRepeatType } from "../prisma-client";
-import { EvaluationMemberRole } from "../prisma-client";
-import { EvaluationSecretaryMemberRole } from "../prisma-client";
-import { SurveyQuestionType } from "../prisma-client";
-import { SurveyObject } from "../prisma-client";
+import { QuestionType } from "../prisma-client";
+import { ExamStatus } from "../prisma-client";
 import { FeedbackStatus } from "../prisma-client";
 import { Satisfaction } from "../prisma-client";
 import { TemplateFileType } from "../prisma-client";
@@ -78,13 +78,13 @@ const policy: PolicyDef = {
             },
 
         },
-        questionBank: {
+        changeLog: {
             modelLevel: {
-                read: { guard: QuestionBank_read, },
-                create: { guard: QuestionBank_create, inputChecker: QuestionBank_create_input, },
-                update: { guard: QuestionBank_update, },
-                postUpdate: { guard: QuestionBank_postUpdate, },
-                delete: { guard: QuestionBank_delete, }
+                read: { guard: ChangeLog_read, },
+                create: { guard: ChangeLog_create, inputChecker: ChangeLog_create_input, },
+                update: { guard: ChangeLog_update, },
+                postUpdate: { guard: ChangeLog_postUpdate, },
+                delete: { guard: ChangeLog_delete, }
             },
             fieldLevel: {
                 read:
@@ -98,13 +98,13 @@ const policy: PolicyDef = {
             },
 
         },
-        difficulty: {
+        userProfile: {
             modelLevel: {
-                read: { guard: Difficulty_read, },
-                create: { guard: Difficulty_create, inputChecker: Difficulty_create_input, },
-                update: { guard: Difficulty_update, },
-                postUpdate: { guard: Difficulty_postUpdate, },
-                delete: { guard: Difficulty_delete, }
+                read: { guard: UserProfile_read, },
+                create: { guard: UserProfile_create, inputChecker: UserProfile_create_input, },
+                update: { guard: UserProfile_update, },
+                postUpdate: { guard: UserProfile_postUpdate, },
+                delete: { guard: UserProfile_delete, }
             },
             fieldLevel: {
                 read:
@@ -118,13 +118,13 @@ const policy: PolicyDef = {
             },
 
         },
-        knowledgeBlock: {
+        hocHam: {
             modelLevel: {
-                read: { guard: KnowledgeBlock_read, },
-                create: { guard: KnowledgeBlock_create, inputChecker: KnowledgeBlock_create_input, },
-                update: { guard: KnowledgeBlock_update, },
-                postUpdate: { guard: KnowledgeBlock_postUpdate, },
-                delete: { guard: KnowledgeBlock_delete, }
+                read: { guard: HocHam_read, },
+                create: { guard: HocHam_create, inputChecker: HocHam_create_input, },
+                update: { guard: HocHam_update, },
+                postUpdate: { guard: HocHam_postUpdate, },
+                delete: { guard: HocHam_delete, }
             },
             fieldLevel: {
                 read:
@@ -138,13 +138,13 @@ const policy: PolicyDef = {
             },
 
         },
-        question: {
+        hocVi: {
             modelLevel: {
-                read: { guard: Question_read, },
-                create: { guard: Question_create, inputChecker: Question_create_input, },
-                update: { guard: Question_update, },
-                postUpdate: { guard: Question_postUpdate, },
-                delete: { guard: Question_delete, }
+                read: { guard: HocVi_read, },
+                create: { guard: HocVi_create, inputChecker: HocVi_create_input, },
+                update: { guard: HocVi_update, },
+                postUpdate: { guard: HocVi_postUpdate, },
+                delete: { guard: HocVi_delete, }
             },
             fieldLevel: {
                 read:
@@ -158,13 +158,13 @@ const policy: PolicyDef = {
             },
 
         },
-        multipleChoiceOption: {
+        relative: {
             modelLevel: {
-                read: { guard: MultipleChoiceOption_read, },
-                create: { guard: MultipleChoiceOption_create, inputChecker: MultipleChoiceOption_create_input, },
-                update: { guard: MultipleChoiceOption_update, },
-                postUpdate: { guard: MultipleChoiceOption_postUpdate, },
-                delete: { guard: MultipleChoiceOption_delete, }
+                read: { guard: Relative_read, },
+                create: { guard: Relative_create, inputChecker: Relative_create_input, },
+                update: { guard: Relative_update, },
+                postUpdate: { guard: Relative_postUpdate, },
+                delete: { guard: Relative_delete, }
             },
             fieldLevel: {
                 read:
@@ -178,13 +178,13 @@ const policy: PolicyDef = {
             },
 
         },
-        fillInBlankSlot: {
+        trinhDoLyLuanChinhTri: {
             modelLevel: {
-                read: { guard: FillInBlankSlot_read, },
-                create: { guard: FillInBlankSlot_create, inputChecker: FillInBlankSlot_create_input, },
-                update: { guard: FillInBlankSlot_update, },
-                postUpdate: { guard: FillInBlankSlot_postUpdate, },
-                delete: { guard: FillInBlankSlot_delete, }
+                read: { guard: TrinhDoLyLuanChinhTri_read, },
+                create: { guard: TrinhDoLyLuanChinhTri_create, inputChecker: TrinhDoLyLuanChinhTri_create_input, },
+                update: { guard: TrinhDoLyLuanChinhTri_update, },
+                postUpdate: { guard: TrinhDoLyLuanChinhTri_postUpdate, },
+                delete: { guard: TrinhDoLyLuanChinhTri_delete, }
             },
             fieldLevel: {
                 read:
@@ -198,13 +198,13 @@ const policy: PolicyDef = {
             },
 
         },
-        orderingItem: {
+        trinhDoQuanLyNhaNuoc: {
             modelLevel: {
-                read: { guard: OrderingItem_read, },
-                create: { guard: OrderingItem_create, inputChecker: OrderingItem_create_input, },
-                update: { guard: OrderingItem_update, },
-                postUpdate: { guard: OrderingItem_postUpdate, },
-                delete: { guard: OrderingItem_delete, }
+                read: { guard: TrinhDoQuanLyNhaNuoc_read, },
+                create: { guard: TrinhDoQuanLyNhaNuoc_create, inputChecker: TrinhDoQuanLyNhaNuoc_create_input, },
+                update: { guard: TrinhDoQuanLyNhaNuoc_update, },
+                postUpdate: { guard: TrinhDoQuanLyNhaNuoc_postUpdate, },
+                delete: { guard: TrinhDoQuanLyNhaNuoc_delete, }
             },
             fieldLevel: {
                 read:
@@ -218,13 +218,13 @@ const policy: PolicyDef = {
             },
 
         },
-        answer: {
+        ngoaiNgu: {
             modelLevel: {
-                read: { guard: Answer_read, },
-                create: { guard: Answer_create, inputChecker: Answer_create_input, },
-                update: { guard: Answer_update, },
-                postUpdate: { guard: Answer_postUpdate, },
-                delete: { guard: Answer_delete, }
+                read: { guard: NgoaiNgu_read, },
+                create: { guard: NgoaiNgu_create, inputChecker: NgoaiNgu_create_input, },
+                update: { guard: NgoaiNgu_update, },
+                postUpdate: { guard: NgoaiNgu_postUpdate, },
+                delete: { guard: NgoaiNgu_delete, }
             },
             fieldLevel: {
                 read:
@@ -238,13 +238,13 @@ const policy: PolicyDef = {
             },
 
         },
-        exam: {
+        tinHoc: {
             modelLevel: {
-                read: { guard: Exam_read, },
-                create: { guard: Exam_create, inputChecker: Exam_create_input, },
-                update: { guard: Exam_update, },
-                postUpdate: { guard: Exam_postUpdate, },
-                delete: { guard: Exam_delete, }
+                read: { guard: TinHoc_read, },
+                create: { guard: TinHoc_create, inputChecker: TinHoc_create_input, },
+                update: { guard: TinHoc_update, },
+                postUpdate: { guard: TinHoc_postUpdate, },
+                delete: { guard: TinHoc_delete, }
             },
             fieldLevel: {
                 read:
@@ -258,13 +258,13 @@ const policy: PolicyDef = {
             },
 
         },
-        testStructureRule: {
+        boiDuongQuocPhongAnNinh: {
             modelLevel: {
-                read: { guard: TestStructureRule_read, },
-                create: { guard: TestStructureRule_create, inputChecker: TestStructureRule_create_input, },
-                update: { guard: TestStructureRule_update, },
-                postUpdate: { guard: TestStructureRule_postUpdate, },
-                delete: { guard: TestStructureRule_delete, }
+                read: { guard: BoiDuongQuocPhongAnNinh_read, },
+                create: { guard: BoiDuongQuocPhongAnNinh_create, inputChecker: BoiDuongQuocPhongAnNinh_create_input, },
+                update: { guard: BoiDuongQuocPhongAnNinh_update, },
+                postUpdate: { guard: BoiDuongQuocPhongAnNinh_postUpdate, },
+                delete: { guard: BoiDuongQuocPhongAnNinh_delete, }
             },
             fieldLevel: {
                 read:
@@ -278,13 +278,13 @@ const policy: PolicyDef = {
             },
 
         },
-        examBank: {
+        capBac: {
             modelLevel: {
-                read: { guard: ExamBank_read, },
-                create: { guard: ExamBank_create, inputChecker: ExamBank_create_input, },
-                update: { guard: ExamBank_update, },
-                postUpdate: { guard: ExamBank_postUpdate, },
-                delete: { guard: ExamBank_delete, }
+                read: { guard: CapBac_read, },
+                create: { guard: CapBac_create, inputChecker: CapBac_create_input, },
+                update: { guard: CapBac_update, },
+                postUpdate: { guard: CapBac_postUpdate, },
+                delete: { guard: CapBac_delete, }
             },
             fieldLevel: {
                 read:
@@ -298,13 +298,13 @@ const policy: PolicyDef = {
             },
 
         },
-        examBankQuestion: {
+        quaTrinhCongTac: {
             modelLevel: {
-                read: { guard: ExamBankQuestion_read, },
-                create: { guard: ExamBankQuestion_create, inputChecker: ExamBankQuestion_create_input, },
-                update: { guard: ExamBankQuestion_update, },
-                postUpdate: { guard: ExamBankQuestion_postUpdate, },
-                delete: { guard: ExamBankQuestion_delete, }
+                read: { guard: QuaTrinhCongTac_read, },
+                create: { guard: QuaTrinhCongTac_create, inputChecker: QuaTrinhCongTac_create_input, },
+                update: { guard: QuaTrinhCongTac_update, },
+                postUpdate: { guard: QuaTrinhCongTac_postUpdate, },
+                delete: { guard: QuaTrinhCongTac_delete, }
             },
             fieldLevel: {
                 read:
@@ -318,13 +318,13 @@ const policy: PolicyDef = {
             },
 
         },
-        examFax: {
+        quaTrinhCuDiCongTac: {
             modelLevel: {
-                read: { guard: ExamFax_read, },
-                create: { guard: ExamFax_create, inputChecker: ExamFax_create_input, },
-                update: { guard: ExamFax_update, },
-                postUpdate: { guard: ExamFax_postUpdate, },
-                delete: { guard: ExamFax_delete, }
+                read: { guard: QuaTrinhCuDiCongTac_read, },
+                create: { guard: QuaTrinhCuDiCongTac_create, inputChecker: QuaTrinhCuDiCongTac_create_input, },
+                update: { guard: QuaTrinhCuDiCongTac_update, },
+                postUpdate: { guard: QuaTrinhCuDiCongTac_postUpdate, },
+                delete: { guard: QuaTrinhCuDiCongTac_delete, }
             },
             fieldLevel: {
                 read:
@@ -338,13 +338,13 @@ const policy: PolicyDef = {
             },
 
         },
-        examSession: {
+        quaTrinhCuDiDaoTao: {
             modelLevel: {
-                read: { guard: ExamSession_read, },
-                create: { guard: ExamSession_create, inputChecker: ExamSession_create_input, },
-                update: { guard: ExamSession_update, },
-                postUpdate: { guard: ExamSession_postUpdate, },
-                delete: { guard: ExamSession_delete, }
+                read: { guard: QuaTrinhCuDiDaoTao_read, },
+                create: { guard: QuaTrinhCuDiDaoTao_create, inputChecker: QuaTrinhCuDiDaoTao_create_input, },
+                update: { guard: QuaTrinhCuDiDaoTao_update, },
+                postUpdate: { guard: QuaTrinhCuDiDaoTao_postUpdate, },
+                delete: { guard: QuaTrinhCuDiDaoTao_delete, }
             },
             fieldLevel: {
                 read:
@@ -358,13 +358,13 @@ const policy: PolicyDef = {
             },
 
         },
-        planTrainingDelay: {
+        khenThuong: {
             modelLevel: {
-                read: { guard: PlanTrainingDelay_read, },
-                create: { guard: PlanTrainingDelay_create, inputChecker: PlanTrainingDelay_create_input, },
-                update: { guard: PlanTrainingDelay_update, },
-                postUpdate: { guard: PlanTrainingDelay_postUpdate, },
-                delete: { guard: PlanTrainingDelay_delete, }
+                read: { guard: KhenThuong_read, },
+                create: { guard: KhenThuong_create, inputChecker: KhenThuong_create_input, },
+                update: { guard: KhenThuong_update, },
+                postUpdate: { guard: KhenThuong_postUpdate, },
+                delete: { guard: KhenThuong_delete, }
             },
             fieldLevel: {
                 read:
@@ -378,13 +378,13 @@ const policy: PolicyDef = {
             },
 
         },
-        planTrainingDelaySubject: {
+        kyLuat: {
             modelLevel: {
-                read: { guard: PlanTrainingDelaySubject_read, },
-                create: { guard: PlanTrainingDelaySubject_create, inputChecker: PlanTrainingDelaySubject_create_input, },
-                update: { guard: PlanTrainingDelaySubject_update, },
-                postUpdate: { guard: PlanTrainingDelaySubject_postUpdate, },
-                delete: { guard: PlanTrainingDelaySubject_delete, }
+                read: { guard: KyLuat_read, },
+                create: { guard: KyLuat_create, inputChecker: KyLuat_create_input, },
+                update: { guard: KyLuat_update, },
+                postUpdate: { guard: KyLuat_postUpdate, },
+                delete: { guard: KyLuat_delete, }
             },
             fieldLevel: {
                 read:
@@ -398,13 +398,13 @@ const policy: PolicyDef = {
             },
 
         },
-        planTraining: {
+        doiTuongChinhSach: {
             modelLevel: {
-                read: { guard: PlanTraining_read, },
-                create: { guard: PlanTraining_create, inputChecker: PlanTraining_create_input, },
-                update: { guard: PlanTraining_update, },
-                postUpdate: { guard: PlanTraining_postUpdate, },
-                delete: { guard: PlanTraining_delete, }
+                read: { guard: DoiTuongChinhSach_read, },
+                create: { guard: DoiTuongChinhSach_create, inputChecker: DoiTuongChinhSach_create_input, },
+                update: { guard: DoiTuongChinhSach_update, },
+                postUpdate: { guard: DoiTuongChinhSach_postUpdate, },
+                delete: { guard: DoiTuongChinhSach_delete, }
             },
             fieldLevel: {
                 read:
@@ -418,13 +418,13 @@ const policy: PolicyDef = {
             },
 
         },
-        planTrainingSubject: {
+        keKhaiTaiSan: {
             modelLevel: {
-                read: { guard: PlanTrainingSubject_read, },
-                create: { guard: PlanTrainingSubject_create, inputChecker: PlanTrainingSubject_create_input, },
-                update: { guard: PlanTrainingSubject_update, },
-                postUpdate: { guard: PlanTrainingSubject_postUpdate, },
-                delete: { guard: PlanTrainingSubject_delete, }
+                read: { guard: KeKhaiTaiSan_read, },
+                create: { guard: KeKhaiTaiSan_create, inputChecker: KeKhaiTaiSan_create_input, },
+                update: { guard: KeKhaiTaiSan_update, },
+                postUpdate: { guard: KeKhaiTaiSan_postUpdate, },
+                delete: { guard: KeKhaiTaiSan_delete, }
             },
             fieldLevel: {
                 read:
@@ -438,13 +438,13 @@ const policy: PolicyDef = {
             },
 
         },
-        studentScoreConvert: {
+        tiengDanToc: {
             modelLevel: {
-                read: { guard: StudentScoreConvert_read, },
-                create: { guard: StudentScoreConvert_create, inputChecker: StudentScoreConvert_create_input, },
-                update: { guard: StudentScoreConvert_update, },
-                postUpdate: { guard: StudentScoreConvert_postUpdate, },
-                delete: { guard: StudentScoreConvert_delete, }
+                read: { guard: TiengDanToc_read, },
+                create: { guard: TiengDanToc_create, inputChecker: TiengDanToc_create_input, },
+                update: { guard: TiengDanToc_update, },
+                postUpdate: { guard: TiengDanToc_postUpdate, },
+                delete: { guard: TiengDanToc_delete, }
             },
             fieldLevel: {
                 read:
@@ -458,13 +458,13 @@ const policy: PolicyDef = {
             },
 
         },
-        subjectScoreConvert: {
+        chienDau: {
             modelLevel: {
-                read: { guard: SubjectScoreConvert_read, },
-                create: { guard: SubjectScoreConvert_create, inputChecker: SubjectScoreConvert_create_input, },
-                update: { guard: SubjectScoreConvert_update, },
-                postUpdate: { guard: SubjectScoreConvert_postUpdate, },
-                delete: { guard: SubjectScoreConvert_delete, }
+                read: { guard: ChienDau_read, },
+                create: { guard: ChienDau_create, inputChecker: ChienDau_create_input, },
+                update: { guard: ChienDau_update, },
+                postUpdate: { guard: ChienDau_postUpdate, },
+                delete: { guard: ChienDau_delete, }
             },
             fieldLevel: {
                 read:
@@ -478,13 +478,13 @@ const policy: PolicyDef = {
             },
 
         },
-        studentSubjectScore: {
+        nuocNgoai: {
             modelLevel: {
-                read: { guard: StudentSubjectScore_read, },
-                create: { guard: StudentSubjectScore_create, inputChecker: StudentSubjectScore_create_input, },
-                update: { guard: StudentSubjectScore_update, },
-                postUpdate: { guard: StudentSubjectScore_postUpdate, },
-                delete: { guard: StudentSubjectScore_delete, }
+                read: { guard: NuocNgoai_read, },
+                create: { guard: NuocNgoai_create, inputChecker: NuocNgoai_create_input, },
+                update: { guard: NuocNgoai_update, },
+                postUpdate: { guard: NuocNgoai_postUpdate, },
+                delete: { guard: NuocNgoai_delete, }
             },
             fieldLevel: {
                 read:
@@ -498,13 +498,13 @@ const policy: PolicyDef = {
             },
 
         },
-        studentSubjectScoreHistory: {
+        thuongTat: {
             modelLevel: {
-                read: { guard: StudentSubjectScoreHistory_read, },
-                create: { guard: StudentSubjectScoreHistory_create, inputChecker: StudentSubjectScoreHistory_create_input, },
-                update: { guard: StudentSubjectScoreHistory_update, },
-                postUpdate: { guard: StudentSubjectScoreHistory_postUpdate, },
-                delete: { guard: StudentSubjectScoreHistory_delete, }
+                read: { guard: ThuongTat_read, },
+                create: { guard: ThuongTat_create, inputChecker: ThuongTat_create_input, },
+                update: { guard: ThuongTat_update, },
+                postUpdate: { guard: ThuongTat_postUpdate, },
+                delete: { guard: ThuongTat_delete, }
             },
             fieldLevel: {
                 read:
@@ -518,13 +518,13 @@ const policy: PolicyDef = {
             },
 
         },
-        archivedCertificateOnStudentSubjectScore: {
+        danhHieu: {
             modelLevel: {
-                read: { guard: ArchivedCertificateOnStudentSubjectScore_read, },
-                create: { guard: ArchivedCertificateOnStudentSubjectScore_create, inputChecker: ArchivedCertificateOnStudentSubjectScore_create_input, },
-                update: { guard: ArchivedCertificateOnStudentSubjectScore_update, },
-                postUpdate: { guard: ArchivedCertificateOnStudentSubjectScore_postUpdate, },
-                delete: { guard: ArchivedCertificateOnStudentSubjectScore_delete, }
+                read: { guard: DanhHieu_read, },
+                create: { guard: DanhHieu_create, inputChecker: DanhHieu_create_input, },
+                update: { guard: DanhHieu_update, },
+                postUpdate: { guard: DanhHieu_postUpdate, },
+                delete: { guard: DanhHieu_delete, }
             },
             fieldLevel: {
                 read:
@@ -538,13 +538,13 @@ const policy: PolicyDef = {
             },
 
         },
-        archivedCertificate: {
+        quaTrinhHocTap: {
             modelLevel: {
-                read: { guard: ArchivedCertificate_read, },
-                create: { guard: ArchivedCertificate_create, inputChecker: ArchivedCertificate_create_input, },
-                update: { guard: ArchivedCertificate_update, },
-                postUpdate: { guard: ArchivedCertificate_postUpdate, },
-                delete: { guard: ArchivedCertificate_delete, }
+                read: { guard: QuaTrinhHocTap_read, },
+                create: { guard: QuaTrinhHocTap_create, inputChecker: QuaTrinhHocTap_create_input, },
+                update: { guard: QuaTrinhHocTap_update, },
+                postUpdate: { guard: QuaTrinhHocTap_postUpdate, },
+                delete: { guard: QuaTrinhHocTap_delete, }
             },
             fieldLevel: {
                 read:
@@ -558,13 +558,13 @@ const policy: PolicyDef = {
             },
 
         },
-        archivedAwardOnStudentSubjectScore: {
+        toChucXaHoi: {
             modelLevel: {
-                read: { guard: ArchivedAwardOnStudentSubjectScore_read, },
-                create: { guard: ArchivedAwardOnStudentSubjectScore_create, inputChecker: ArchivedAwardOnStudentSubjectScore_create_input, },
-                update: { guard: ArchivedAwardOnStudentSubjectScore_update, },
-                postUpdate: { guard: ArchivedAwardOnStudentSubjectScore_postUpdate, },
-                delete: { guard: ArchivedAwardOnStudentSubjectScore_delete, }
+                read: { guard: ToChucXaHoi_read, },
+                create: { guard: ToChucXaHoi_create, inputChecker: ToChucXaHoi_create_input, },
+                update: { guard: ToChucXaHoi_update, },
+                postUpdate: { guard: ToChucXaHoi_postUpdate, },
+                delete: { guard: ToChucXaHoi_delete, }
             },
             fieldLevel: {
                 read:
@@ -578,873 +578,13 @@ const policy: PolicyDef = {
             },
 
         },
-        archivedAward: {
+        quaTrinhLuong: {
             modelLevel: {
-                read: { guard: ArchivedAward_read, },
-                create: { guard: ArchivedAward_create, inputChecker: ArchivedAward_create_input, },
-                update: { guard: ArchivedAward_update, },
-                postUpdate: { guard: ArchivedAward_postUpdate, },
-                delete: { guard: ArchivedAward_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        schoolYear: {
-            modelLevel: {
-                read: { guard: SchoolYear_read, },
-                create: { guard: SchoolYear_create, inputChecker: SchoolYear_create_input, },
-                update: { guard: SchoolYear_update, },
-                postUpdate: { guard: SchoolYear_postUpdate, },
-                delete: { guard: SchoolYear_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        semester: {
-            modelLevel: {
-                read: { guard: Semester_read, },
-                create: { guard: Semester_create, inputChecker: Semester_create_input, },
-                update: { guard: Semester_update, },
-                postUpdate: { guard: Semester_postUpdate, },
-                delete: { guard: Semester_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        milestone: {
-            modelLevel: {
-                read: { guard: Milestone_read, },
-                create: { guard: Milestone_create, inputChecker: Milestone_create_input, },
-                update: { guard: Milestone_update, },
-                postUpdate: { guard: Milestone_postUpdate, },
-                delete: { guard: Milestone_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingLanguage: {
-            modelLevel: {
-                read: { guard: TrainingLanguage_read, },
-                create: { guard: TrainingLanguage_create, inputChecker: TrainingLanguage_create_input, },
-                update: { guard: TrainingLanguage_update, },
-                postUpdate: { guard: TrainingLanguage_postUpdate, },
-                delete: { guard: TrainingLanguage_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingCourse: {
-            modelLevel: {
-                read: { guard: TrainingCourse_read, },
-                create: { guard: TrainingCourse_create, inputChecker: TrainingCourse_create_input, },
-                update: { guard: TrainingCourse_update, },
-                postUpdate: { guard: TrainingCourse_postUpdate, },
-                delete: { guard: TrainingCourse_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingCourseRegulation: {
-            modelLevel: {
-                read: { guard: TrainingCourseRegulation_read, },
-                create: { guard: TrainingCourseRegulation_create, inputChecker: TrainingCourseRegulation_create_input, },
-                update: { guard: TrainingCourseRegulation_update, },
-                postUpdate: { guard: TrainingCourseRegulation_postUpdate, },
-                delete: { guard: TrainingCourseRegulation_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        fixedClass: {
-            modelLevel: {
-                read: { guard: FixedClass_read, },
-                create: { guard: FixedClass_create, inputChecker: FixedClass_create_input, },
-                update: { guard: FixedClass_update, },
-                postUpdate: { guard: FixedClass_postUpdate, },
-                delete: { guard: FixedClass_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        curriculum: {
-            modelLevel: {
-                read: { guard: Curriculum_read, },
-                create: { guard: Curriculum_create, inputChecker: Curriculum_create_input, },
-                update: { guard: Curriculum_update, },
-                postUpdate: { guard: Curriculum_postUpdate, },
-                delete: { guard: Curriculum_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        curriculumVersion: {
-            modelLevel: {
-                read: { guard: CurriculumVersion_read, },
-                create: { guard: CurriculumVersion_create, inputChecker: CurriculumVersion_create_input, },
-                update: { guard: CurriculumVersion_update, },
-                postUpdate: { guard: CurriculumVersion_postUpdate, },
-                delete: { guard: CurriculumVersion_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        subject: {
-            modelLevel: {
-                read: { guard: Subject_read, },
-                create: { guard: Subject_create, inputChecker: Subject_create_input, },
-                update: { guard: Subject_update, },
-                postUpdate: { guard: Subject_postUpdate, },
-                delete: { guard: Subject_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        subjectVersionCategory: {
-            modelLevel: {
-                read: { guard: SubjectVersionCategory_read, },
-                create: { guard: SubjectVersionCategory_create, inputChecker: SubjectVersionCategory_create_input, },
-                update: { guard: SubjectVersionCategory_update, },
-                postUpdate: { guard: SubjectVersionCategory_postUpdate, },
-                delete: { guard: SubjectVersionCategory_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        subjectVersion: {
-            modelLevel: {
-                read: { guard: SubjectVersion_read, },
-                create: { guard: SubjectVersion_create, inputChecker: SubjectVersion_create_input, },
-                update: { guard: SubjectVersion_update, },
-                postUpdate: { guard: SubjectVersion_postUpdate, },
-                delete: { guard: SubjectVersion_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        equivalencyGroup: {
-            modelLevel: {
-                read: { guard: EquivalencyGroup_read, },
-                create: { guard: EquivalencyGroup_create, inputChecker: EquivalencyGroup_create_input, },
-                update: { guard: EquivalencyGroup_update, },
-                postUpdate: { guard: EquivalencyGroup_postUpdate, },
-                delete: { guard: EquivalencyGroup_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        subjectInGroup: {
-            modelLevel: {
-                read: { guard: SubjectInGroup_read, },
-                create: { guard: SubjectInGroup_create, inputChecker: SubjectInGroup_create_input, },
-                update: { guard: SubjectInGroup_update, },
-                postUpdate: { guard: SubjectInGroup_postUpdate, },
-                delete: { guard: SubjectInGroup_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingBlockSubject: {
-            modelLevel: {
-                read: { guard: TrainingBlockSubject_read, },
-                create: { guard: TrainingBlockSubject_create, inputChecker: TrainingBlockSubject_create_input, },
-                update: { guard: TrainingBlockSubject_update, },
-                postUpdate: { guard: TrainingBlockSubject_postUpdate, },
-                delete: { guard: TrainingBlockSubject_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        classRegisterSessionCredit: {
-            modelLevel: {
-                read: { guard: ClassRegisterSessionCredit_read, },
-                create: { guard: ClassRegisterSessionCredit_create, inputChecker: ClassRegisterSessionCredit_create_input, },
-                update: { guard: ClassRegisterSessionCredit_update, },
-                postUpdate: { guard: ClassRegisterSessionCredit_postUpdate, },
-                delete: { guard: ClassRegisterSessionCredit_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        classRegisterSession: {
-            modelLevel: {
-                read: { guard: ClassRegisterSession_read, },
-                create: { guard: ClassRegisterSession_create, inputChecker: ClassRegisterSession_create_input, },
-                update: { guard: ClassRegisterSession_update, },
-                postUpdate: { guard: ClassRegisterSession_postUpdate, },
-                delete: { guard: ClassRegisterSession_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        classRegisterLogs: {
-            modelLevel: {
-                read: { guard: ClassRegisterLogs_read, },
-                create: { guard: ClassRegisterLogs_create, inputChecker: ClassRegisterLogs_create_input, },
-                update: { guard: ClassRegisterLogs_update, },
-                postUpdate: { guard: ClassRegisterLogs_postUpdate, },
-                delete: { guard: ClassRegisterLogs_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        subjectClass: {
-            modelLevel: {
-                read: { guard: SubjectClass_read, },
-                create: { guard: SubjectClass_create, inputChecker: SubjectClass_create_input, },
-                update: { guard: SubjectClass_update, },
-                postUpdate: { guard: SubjectClass_postUpdate, },
-                delete: { guard: SubjectClass_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        subjectClassTime: {
-            modelLevel: {
-                read: { guard: SubjectClassTime_read, },
-                create: { guard: SubjectClassTime_create, inputChecker: SubjectClassTime_create_input, },
-                update: { guard: SubjectClassTime_update, },
-                postUpdate: { guard: SubjectClassTime_postUpdate, },
-                delete: { guard: SubjectClassTime_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        classSchedule: {
-            modelLevel: {
-                read: { guard: ClassSchedule_read, },
-                create: { guard: ClassSchedule_create, inputChecker: ClassSchedule_create_input, },
-                update: { guard: ClassSchedule_update, },
-                postUpdate: { guard: ClassSchedule_postUpdate, },
-                delete: { guard: ClassSchedule_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingObjectType: {
-            modelLevel: {
-                read: { guard: TrainingObjectType_read, },
-                create: { guard: TrainingObjectType_create, inputChecker: TrainingObjectType_create_input, },
-                update: { guard: TrainingObjectType_update, },
-                postUpdate: { guard: TrainingObjectType_postUpdate, },
-                delete: { guard: TrainingObjectType_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        priorityObject: {
-            modelLevel: {
-                read: { guard: PriorityObject_read, },
-                create: { guard: PriorityObject_create, inputChecker: PriorityObject_create_input, },
-                update: { guard: PriorityObject_update, },
-                postUpdate: { guard: PriorityObject_postUpdate, },
-                delete: { guard: PriorityObject_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingType: {
-            modelLevel: {
-                read: { guard: TrainingType_read, },
-                create: { guard: TrainingType_create, inputChecker: TrainingType_create_input, },
-                update: { guard: TrainingType_update, },
-                postUpdate: { guard: TrainingType_postUpdate, },
-                delete: { guard: TrainingType_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingLevel: {
-            modelLevel: {
-                read: { guard: TrainingLevel_read, },
-                create: { guard: TrainingLevel_create, inputChecker: TrainingLevel_create_input, },
-                update: { guard: TrainingLevel_update, },
-                postUpdate: { guard: TrainingLevel_postUpdate, },
-                delete: { guard: TrainingLevel_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingForm: {
-            modelLevel: {
-                read: { guard: TrainingForm_read, },
-                create: { guard: TrainingForm_create, inputChecker: TrainingForm_create_input, },
-                update: { guard: TrainingForm_update, },
-                postUpdate: { guard: TrainingForm_postUpdate, },
-                delete: { guard: TrainingForm_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingLocation: {
-            modelLevel: {
-                read: { guard: TrainingLocation_read, },
-                create: { guard: TrainingLocation_create, inputChecker: TrainingLocation_create_input, },
-                update: { guard: TrainingLocation_update, },
-                postUpdate: { guard: TrainingLocation_postUpdate, },
-                delete: { guard: TrainingLocation_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        building: {
-            modelLevel: {
-                read: { guard: Building_read, },
-                create: { guard: Building_create, inputChecker: Building_create_input, },
-                update: { guard: Building_update, },
-                postUpdate: { guard: Building_postUpdate, },
-                delete: { guard: Building_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        room: {
-            modelLevel: {
-                read: { guard: Room_read, },
-                create: { guard: Room_create, inputChecker: Room_create_input, },
-                update: { guard: Room_update, },
-                postUpdate: { guard: Room_postUpdate, },
-                delete: { guard: Room_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingField: {
-            modelLevel: {
-                read: { guard: TrainingField_read, },
-                create: { guard: TrainingField_create, inputChecker: TrainingField_create_input, },
-                update: { guard: TrainingField_update, },
-                postUpdate: { guard: TrainingField_postUpdate, },
-                delete: { guard: TrainingField_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingFieldOnTrainingObjectType: {
-            modelLevel: {
-                read: { guard: TrainingFieldOnTrainingObjectType_read, },
-                create: { guard: TrainingFieldOnTrainingObjectType_create, inputChecker: TrainingFieldOnTrainingObjectType_create_input, },
-                update: { guard: TrainingFieldOnTrainingObjectType_update, },
-                postUpdate: { guard: TrainingFieldOnTrainingObjectType_postUpdate, },
-                delete: { guard: TrainingFieldOnTrainingObjectType_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingMajor: {
-            modelLevel: {
-                read: { guard: TrainingMajor_read, },
-                create: { guard: TrainingMajor_create, inputChecker: TrainingMajor_create_input, },
-                update: { guard: TrainingMajor_update, },
-                postUpdate: { guard: TrainingMajor_postUpdate, },
-                delete: { guard: TrainingMajor_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingMajorOnTrainingObjectType: {
-            modelLevel: {
-                read: { guard: TrainingMajorOnTrainingObjectType_read, },
-                create: { guard: TrainingMajorOnTrainingObjectType_create, inputChecker: TrainingMajorOnTrainingObjectType_create_input, },
-                update: { guard: TrainingMajorOnTrainingObjectType_update, },
-                postUpdate: { guard: TrainingMajorOnTrainingObjectType_postUpdate, },
-                delete: { guard: TrainingMajorOnTrainingObjectType_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingBlock: {
-            modelLevel: {
-                read: { guard: TrainingBlock_read, },
-                create: { guard: TrainingBlock_create, inputChecker: TrainingBlock_create_input, },
-                update: { guard: TrainingBlock_update, },
-                postUpdate: { guard: TrainingBlock_postUpdate, },
-                delete: { guard: TrainingBlock_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingBlockOnCurriculumVersion: {
-            modelLevel: {
-                read: { guard: TrainingBlockOnCurriculumVersion_read, },
-                create: { guard: TrainingBlockOnCurriculumVersion_create, inputChecker: TrainingBlockOnCurriculumVersion_create_input, },
-                update: { guard: TrainingBlockOnCurriculumVersion_update, },
-                postUpdate: { guard: TrainingBlockOnCurriculumVersion_postUpdate, },
-                delete: { guard: TrainingBlockOnCurriculumVersion_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingTime: {
-            modelLevel: {
-                read: { guard: TrainingTime_read, },
-                create: { guard: TrainingTime_create, inputChecker: TrainingTime_create_input, },
-                update: { guard: TrainingTime_update, },
-                postUpdate: { guard: TrainingTime_postUpdate, },
-                delete: { guard: TrainingTime_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        diplomaType: {
-            modelLevel: {
-                read: { guard: DiplomaType_read, },
-                create: { guard: DiplomaType_create, inputChecker: DiplomaType_create_input, },
-                update: { guard: DiplomaType_update, },
-                postUpdate: { guard: DiplomaType_postUpdate, },
-                delete: { guard: DiplomaType_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        scoreConvert: {
-            modelLevel: {
-                read: { guard: ScoreConvert_read, },
-                create: { guard: ScoreConvert_create, inputChecker: ScoreConvert_create_input, },
-                update: { guard: ScoreConvert_update, },
-                postUpdate: { guard: ScoreConvert_postUpdate, },
-                delete: { guard: ScoreConvert_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingKPI: {
-            modelLevel: {
-                read: { guard: TrainingKPI_read, },
-                create: { guard: TrainingKPI_create, inputChecker: TrainingKPI_create_input, },
-                update: { guard: TrainingKPI_update, },
-                postUpdate: { guard: TrainingKPI_postUpdate, },
-                delete: { guard: TrainingKPI_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        student: {
-            modelLevel: {
-                read: { guard: Student_read, },
-                create: { guard: Student_create, inputChecker: Student_create_input, },
-                update: { guard: Student_update, },
-                postUpdate: { guard: Student_postUpdate, },
-                delete: { guard: Student_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        studentSemesterResult: {
-            modelLevel: {
-                read: { guard: StudentSemesterResult_read, },
-                create: { guard: StudentSemesterResult_create, inputChecker: StudentSemesterResult_create_input, },
-                update: { guard: StudentSemesterResult_update, },
-                postUpdate: { guard: StudentSemesterResult_postUpdate, },
-                delete: { guard: StudentSemesterResult_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        studentYearResult: {
-            modelLevel: {
-                read: { guard: StudentYearResult_read, },
-                create: { guard: StudentYearResult_create, inputChecker: StudentYearResult_create_input, },
-                update: { guard: StudentYearResult_update, },
-                postUpdate: { guard: StudentYearResult_postUpdate, },
-                delete: { guard: StudentYearResult_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        notification: {
-            modelLevel: {
-                read: { guard: Notification_read, },
-                create: { guard: Notification_create, inputChecker: Notification_create_input, },
-                update: { guard: Notification_update, },
-                postUpdate: { guard: Notification_postUpdate, },
-                delete: { guard: Notification_delete, }
+                read: { guard: QuaTrinhLuong_read, },
+                create: { guard: QuaTrinhLuong_create, inputChecker: QuaTrinhLuong_create_input, },
+                update: { guard: QuaTrinhLuong_update, },
+                postUpdate: { guard: QuaTrinhLuong_postUpdate, },
+                delete: { guard: QuaTrinhLuong_delete, }
             },
             fieldLevel: {
                 read:
@@ -2238,13 +1378,13 @@ const policy: PolicyDef = {
             },
 
         },
-        userProfile: {
+        planTrainingDelay: {
             modelLevel: {
-                read: { guard: UserProfile_read, },
-                create: { guard: UserProfile_create, inputChecker: UserProfile_create_input, },
-                update: { guard: UserProfile_update, },
-                postUpdate: { guard: UserProfile_postUpdate, },
-                delete: { guard: UserProfile_delete, }
+                read: { guard: PlanTrainingDelay_read, },
+                create: { guard: PlanTrainingDelay_create, inputChecker: PlanTrainingDelay_create_input, },
+                update: { guard: PlanTrainingDelay_update, },
+                postUpdate: { guard: PlanTrainingDelay_postUpdate, },
+                delete: { guard: PlanTrainingDelay_delete, }
             },
             fieldLevel: {
                 read:
@@ -2258,13 +1398,13 @@ const policy: PolicyDef = {
             },
 
         },
-        hocHam: {
+        planTrainingDelaySubject: {
             modelLevel: {
-                read: { guard: HocHam_read, },
-                create: { guard: HocHam_create, inputChecker: HocHam_create_input, },
-                update: { guard: HocHam_update, },
-                postUpdate: { guard: HocHam_postUpdate, },
-                delete: { guard: HocHam_delete, }
+                read: { guard: PlanTrainingDelaySubject_read, },
+                create: { guard: PlanTrainingDelaySubject_create, inputChecker: PlanTrainingDelaySubject_create_input, },
+                update: { guard: PlanTrainingDelaySubject_update, },
+                postUpdate: { guard: PlanTrainingDelaySubject_postUpdate, },
+                delete: { guard: PlanTrainingDelaySubject_delete, }
             },
             fieldLevel: {
                 read:
@@ -2278,13 +1418,13 @@ const policy: PolicyDef = {
             },
 
         },
-        hocVi: {
+        planTraining: {
             modelLevel: {
-                read: { guard: HocVi_read, },
-                create: { guard: HocVi_create, inputChecker: HocVi_create_input, },
-                update: { guard: HocVi_update, },
-                postUpdate: { guard: HocVi_postUpdate, },
-                delete: { guard: HocVi_delete, }
+                read: { guard: PlanTraining_read, },
+                create: { guard: PlanTraining_create, inputChecker: PlanTraining_create_input, },
+                update: { guard: PlanTraining_update, },
+                postUpdate: { guard: PlanTraining_postUpdate, },
+                delete: { guard: PlanTraining_delete, }
             },
             fieldLevel: {
                 read:
@@ -2298,13 +1438,13 @@ const policy: PolicyDef = {
             },
 
         },
-        relative: {
+        planTrainingSubject: {
             modelLevel: {
-                read: { guard: Relative_read, },
-                create: { guard: Relative_create, inputChecker: Relative_create_input, },
-                update: { guard: Relative_update, },
-                postUpdate: { guard: Relative_postUpdate, },
-                delete: { guard: Relative_delete, }
+                read: { guard: PlanTrainingSubject_read, },
+                create: { guard: PlanTrainingSubject_create, inputChecker: PlanTrainingSubject_create_input, },
+                update: { guard: PlanTrainingSubject_update, },
+                postUpdate: { guard: PlanTrainingSubject_postUpdate, },
+                delete: { guard: PlanTrainingSubject_delete, }
             },
             fieldLevel: {
                 read:
@@ -2318,13 +1458,13 @@ const policy: PolicyDef = {
             },
 
         },
-        trinhDoLyLuanChinhTri: {
+        studentScoreConvert: {
             modelLevel: {
-                read: { guard: TrinhDoLyLuanChinhTri_read, },
-                create: { guard: TrinhDoLyLuanChinhTri_create, inputChecker: TrinhDoLyLuanChinhTri_create_input, },
-                update: { guard: TrinhDoLyLuanChinhTri_update, },
-                postUpdate: { guard: TrinhDoLyLuanChinhTri_postUpdate, },
-                delete: { guard: TrinhDoLyLuanChinhTri_delete, }
+                read: { guard: StudentScoreConvert_read, },
+                create: { guard: StudentScoreConvert_create, inputChecker: StudentScoreConvert_create_input, },
+                update: { guard: StudentScoreConvert_update, },
+                postUpdate: { guard: StudentScoreConvert_postUpdate, },
+                delete: { guard: StudentScoreConvert_delete, }
             },
             fieldLevel: {
                 read:
@@ -2338,13 +1478,13 @@ const policy: PolicyDef = {
             },
 
         },
-        trinhDoQuanLyNhaNuoc: {
+        subjectScoreConvert: {
             modelLevel: {
-                read: { guard: TrinhDoQuanLyNhaNuoc_read, },
-                create: { guard: TrinhDoQuanLyNhaNuoc_create, inputChecker: TrinhDoQuanLyNhaNuoc_create_input, },
-                update: { guard: TrinhDoQuanLyNhaNuoc_update, },
-                postUpdate: { guard: TrinhDoQuanLyNhaNuoc_postUpdate, },
-                delete: { guard: TrinhDoQuanLyNhaNuoc_delete, }
+                read: { guard: SubjectScoreConvert_read, },
+                create: { guard: SubjectScoreConvert_create, inputChecker: SubjectScoreConvert_create_input, },
+                update: { guard: SubjectScoreConvert_update, },
+                postUpdate: { guard: SubjectScoreConvert_postUpdate, },
+                delete: { guard: SubjectScoreConvert_delete, }
             },
             fieldLevel: {
                 read:
@@ -2358,13 +1498,13 @@ const policy: PolicyDef = {
             },
 
         },
-        ngoaiNgu: {
+        studentSubjectScore: {
             modelLevel: {
-                read: { guard: NgoaiNgu_read, },
-                create: { guard: NgoaiNgu_create, inputChecker: NgoaiNgu_create_input, },
-                update: { guard: NgoaiNgu_update, },
-                postUpdate: { guard: NgoaiNgu_postUpdate, },
-                delete: { guard: NgoaiNgu_delete, }
+                read: { guard: StudentSubjectScore_read, },
+                create: { guard: StudentSubjectScore_create, inputChecker: StudentSubjectScore_create_input, },
+                update: { guard: StudentSubjectScore_update, },
+                postUpdate: { guard: StudentSubjectScore_postUpdate, },
+                delete: { guard: StudentSubjectScore_delete, }
             },
             fieldLevel: {
                 read:
@@ -2378,13 +1518,13 @@ const policy: PolicyDef = {
             },
 
         },
-        tinHoc: {
+        studentSubjectScoreHistory: {
             modelLevel: {
-                read: { guard: TinHoc_read, },
-                create: { guard: TinHoc_create, inputChecker: TinHoc_create_input, },
-                update: { guard: TinHoc_update, },
-                postUpdate: { guard: TinHoc_postUpdate, },
-                delete: { guard: TinHoc_delete, }
+                read: { guard: StudentSubjectScoreHistory_read, },
+                create: { guard: StudentSubjectScoreHistory_create, inputChecker: StudentSubjectScoreHistory_create_input, },
+                update: { guard: StudentSubjectScoreHistory_update, },
+                postUpdate: { guard: StudentSubjectScoreHistory_postUpdate, },
+                delete: { guard: StudentSubjectScoreHistory_delete, }
             },
             fieldLevel: {
                 read:
@@ -2398,13 +1538,13 @@ const policy: PolicyDef = {
             },
 
         },
-        boiDuongQuocPhongAnNinh: {
+        archivedCertificateOnStudentSubjectScore: {
             modelLevel: {
-                read: { guard: BoiDuongQuocPhongAnNinh_read, },
-                create: { guard: BoiDuongQuocPhongAnNinh_create, inputChecker: BoiDuongQuocPhongAnNinh_create_input, },
-                update: { guard: BoiDuongQuocPhongAnNinh_update, },
-                postUpdate: { guard: BoiDuongQuocPhongAnNinh_postUpdate, },
-                delete: { guard: BoiDuongQuocPhongAnNinh_delete, }
+                read: { guard: ArchivedCertificateOnStudentSubjectScore_read, },
+                create: { guard: ArchivedCertificateOnStudentSubjectScore_create, inputChecker: ArchivedCertificateOnStudentSubjectScore_create_input, },
+                update: { guard: ArchivedCertificateOnStudentSubjectScore_update, },
+                postUpdate: { guard: ArchivedCertificateOnStudentSubjectScore_postUpdate, },
+                delete: { guard: ArchivedCertificateOnStudentSubjectScore_delete, }
             },
             fieldLevel: {
                 read:
@@ -2418,13 +1558,13 @@ const policy: PolicyDef = {
             },
 
         },
-        capBac: {
+        archivedCertificate: {
             modelLevel: {
-                read: { guard: CapBac_read, },
-                create: { guard: CapBac_create, inputChecker: CapBac_create_input, },
-                update: { guard: CapBac_update, },
-                postUpdate: { guard: CapBac_postUpdate, },
-                delete: { guard: CapBac_delete, }
+                read: { guard: ArchivedCertificate_read, },
+                create: { guard: ArchivedCertificate_create, inputChecker: ArchivedCertificate_create_input, },
+                update: { guard: ArchivedCertificate_update, },
+                postUpdate: { guard: ArchivedCertificate_postUpdate, },
+                delete: { guard: ArchivedCertificate_delete, }
             },
             fieldLevel: {
                 read:
@@ -2438,13 +1578,13 @@ const policy: PolicyDef = {
             },
 
         },
-        quaTrinhCongTac: {
+        archivedAwardOnStudentSubjectScore: {
             modelLevel: {
-                read: { guard: QuaTrinhCongTac_read, },
-                create: { guard: QuaTrinhCongTac_create, inputChecker: QuaTrinhCongTac_create_input, },
-                update: { guard: QuaTrinhCongTac_update, },
-                postUpdate: { guard: QuaTrinhCongTac_postUpdate, },
-                delete: { guard: QuaTrinhCongTac_delete, }
+                read: { guard: ArchivedAwardOnStudentSubjectScore_read, },
+                create: { guard: ArchivedAwardOnStudentSubjectScore_create, inputChecker: ArchivedAwardOnStudentSubjectScore_create_input, },
+                update: { guard: ArchivedAwardOnStudentSubjectScore_update, },
+                postUpdate: { guard: ArchivedAwardOnStudentSubjectScore_postUpdate, },
+                delete: { guard: ArchivedAwardOnStudentSubjectScore_delete, }
             },
             fieldLevel: {
                 read:
@@ -2458,13 +1598,13 @@ const policy: PolicyDef = {
             },
 
         },
-        quaTrinhCuDiCongTac: {
+        archivedAward: {
             modelLevel: {
-                read: { guard: QuaTrinhCuDiCongTac_read, },
-                create: { guard: QuaTrinhCuDiCongTac_create, inputChecker: QuaTrinhCuDiCongTac_create_input, },
-                update: { guard: QuaTrinhCuDiCongTac_update, },
-                postUpdate: { guard: QuaTrinhCuDiCongTac_postUpdate, },
-                delete: { guard: QuaTrinhCuDiCongTac_delete, }
+                read: { guard: ArchivedAward_read, },
+                create: { guard: ArchivedAward_create, inputChecker: ArchivedAward_create_input, },
+                update: { guard: ArchivedAward_update, },
+                postUpdate: { guard: ArchivedAward_postUpdate, },
+                delete: { guard: ArchivedAward_delete, }
             },
             fieldLevel: {
                 read:
@@ -2478,13 +1618,13 @@ const policy: PolicyDef = {
             },
 
         },
-        quaTrinhCuDiDaoTao: {
+        schoolYear: {
             modelLevel: {
-                read: { guard: QuaTrinhCuDiDaoTao_read, },
-                create: { guard: QuaTrinhCuDiDaoTao_create, inputChecker: QuaTrinhCuDiDaoTao_create_input, },
-                update: { guard: QuaTrinhCuDiDaoTao_update, },
-                postUpdate: { guard: QuaTrinhCuDiDaoTao_postUpdate, },
-                delete: { guard: QuaTrinhCuDiDaoTao_delete, }
+                read: { guard: SchoolYear_read, },
+                create: { guard: SchoolYear_create, inputChecker: SchoolYear_create_input, },
+                update: { guard: SchoolYear_update, },
+                postUpdate: { guard: SchoolYear_postUpdate, },
+                delete: { guard: SchoolYear_delete, }
             },
             fieldLevel: {
                 read:
@@ -2498,13 +1638,13 @@ const policy: PolicyDef = {
             },
 
         },
-        khenThuong: {
+        semester: {
             modelLevel: {
-                read: { guard: KhenThuong_read, },
-                create: { guard: KhenThuong_create, inputChecker: KhenThuong_create_input, },
-                update: { guard: KhenThuong_update, },
-                postUpdate: { guard: KhenThuong_postUpdate, },
-                delete: { guard: KhenThuong_delete, }
+                read: { guard: Semester_read, },
+                create: { guard: Semester_create, inputChecker: Semester_create_input, },
+                update: { guard: Semester_update, },
+                postUpdate: { guard: Semester_postUpdate, },
+                delete: { guard: Semester_delete, }
             },
             fieldLevel: {
                 read:
@@ -2518,13 +1658,13 @@ const policy: PolicyDef = {
             },
 
         },
-        kyLuat: {
+        milestone: {
             modelLevel: {
-                read: { guard: KyLuat_read, },
-                create: { guard: KyLuat_create, inputChecker: KyLuat_create_input, },
-                update: { guard: KyLuat_update, },
-                postUpdate: { guard: KyLuat_postUpdate, },
-                delete: { guard: KyLuat_delete, }
+                read: { guard: Milestone_read, },
+                create: { guard: Milestone_create, inputChecker: Milestone_create_input, },
+                update: { guard: Milestone_update, },
+                postUpdate: { guard: Milestone_postUpdate, },
+                delete: { guard: Milestone_delete, }
             },
             fieldLevel: {
                 read:
@@ -2538,13 +1678,13 @@ const policy: PolicyDef = {
             },
 
         },
-        doiTuongChinhSach: {
+        trainingLanguage: {
             modelLevel: {
-                read: { guard: DoiTuongChinhSach_read, },
-                create: { guard: DoiTuongChinhSach_create, inputChecker: DoiTuongChinhSach_create_input, },
-                update: { guard: DoiTuongChinhSach_update, },
-                postUpdate: { guard: DoiTuongChinhSach_postUpdate, },
-                delete: { guard: DoiTuongChinhSach_delete, }
+                read: { guard: TrainingLanguage_read, },
+                create: { guard: TrainingLanguage_create, inputChecker: TrainingLanguage_create_input, },
+                update: { guard: TrainingLanguage_update, },
+                postUpdate: { guard: TrainingLanguage_postUpdate, },
+                delete: { guard: TrainingLanguage_delete, }
             },
             fieldLevel: {
                 read:
@@ -2558,13 +1698,13 @@ const policy: PolicyDef = {
             },
 
         },
-        keKhaiTaiSan: {
+        trainingCourse: {
             modelLevel: {
-                read: { guard: KeKhaiTaiSan_read, },
-                create: { guard: KeKhaiTaiSan_create, inputChecker: KeKhaiTaiSan_create_input, },
-                update: { guard: KeKhaiTaiSan_update, },
-                postUpdate: { guard: KeKhaiTaiSan_postUpdate, },
-                delete: { guard: KeKhaiTaiSan_delete, }
+                read: { guard: TrainingCourse_read, },
+                create: { guard: TrainingCourse_create, inputChecker: TrainingCourse_create_input, },
+                update: { guard: TrainingCourse_update, },
+                postUpdate: { guard: TrainingCourse_postUpdate, },
+                delete: { guard: TrainingCourse_delete, }
             },
             fieldLevel: {
                 read:
@@ -2578,13 +1718,13 @@ const policy: PolicyDef = {
             },
 
         },
-        tiengDanToc: {
+        trainingCourseRegulation: {
             modelLevel: {
-                read: { guard: TiengDanToc_read, },
-                create: { guard: TiengDanToc_create, inputChecker: TiengDanToc_create_input, },
-                update: { guard: TiengDanToc_update, },
-                postUpdate: { guard: TiengDanToc_postUpdate, },
-                delete: { guard: TiengDanToc_delete, }
+                read: { guard: TrainingCourseRegulation_read, },
+                create: { guard: TrainingCourseRegulation_create, inputChecker: TrainingCourseRegulation_create_input, },
+                update: { guard: TrainingCourseRegulation_update, },
+                postUpdate: { guard: TrainingCourseRegulation_postUpdate, },
+                delete: { guard: TrainingCourseRegulation_delete, }
             },
             fieldLevel: {
                 read:
@@ -2598,13 +1738,13 @@ const policy: PolicyDef = {
             },
 
         },
-        chienDau: {
+        fixedClass: {
             modelLevel: {
-                read: { guard: ChienDau_read, },
-                create: { guard: ChienDau_create, inputChecker: ChienDau_create_input, },
-                update: { guard: ChienDau_update, },
-                postUpdate: { guard: ChienDau_postUpdate, },
-                delete: { guard: ChienDau_delete, }
+                read: { guard: FixedClass_read, },
+                create: { guard: FixedClass_create, inputChecker: FixedClass_create_input, },
+                update: { guard: FixedClass_update, },
+                postUpdate: { guard: FixedClass_postUpdate, },
+                delete: { guard: FixedClass_delete, }
             },
             fieldLevel: {
                 read:
@@ -2618,13 +1758,13 @@ const policy: PolicyDef = {
             },
 
         },
-        nuocNgoai: {
+        curriculum: {
             modelLevel: {
-                read: { guard: NuocNgoai_read, },
-                create: { guard: NuocNgoai_create, inputChecker: NuocNgoai_create_input, },
-                update: { guard: NuocNgoai_update, },
-                postUpdate: { guard: NuocNgoai_postUpdate, },
-                delete: { guard: NuocNgoai_delete, }
+                read: { guard: Curriculum_read, },
+                create: { guard: Curriculum_create, inputChecker: Curriculum_create_input, },
+                update: { guard: Curriculum_update, },
+                postUpdate: { guard: Curriculum_postUpdate, },
+                delete: { guard: Curriculum_delete, }
             },
             fieldLevel: {
                 read:
@@ -2638,13 +1778,13 @@ const policy: PolicyDef = {
             },
 
         },
-        thuongTat: {
+        curriculumVersion: {
             modelLevel: {
-                read: { guard: ThuongTat_read, },
-                create: { guard: ThuongTat_create, inputChecker: ThuongTat_create_input, },
-                update: { guard: ThuongTat_update, },
-                postUpdate: { guard: ThuongTat_postUpdate, },
-                delete: { guard: ThuongTat_delete, }
+                read: { guard: CurriculumVersion_read, },
+                create: { guard: CurriculumVersion_create, inputChecker: CurriculumVersion_create_input, },
+                update: { guard: CurriculumVersion_update, },
+                postUpdate: { guard: CurriculumVersion_postUpdate, },
+                delete: { guard: CurriculumVersion_delete, }
             },
             fieldLevel: {
                 read:
@@ -2658,13 +1798,13 @@ const policy: PolicyDef = {
             },
 
         },
-        danhHieu: {
+        subject: {
             modelLevel: {
-                read: { guard: DanhHieu_read, },
-                create: { guard: DanhHieu_create, inputChecker: DanhHieu_create_input, },
-                update: { guard: DanhHieu_update, },
-                postUpdate: { guard: DanhHieu_postUpdate, },
-                delete: { guard: DanhHieu_delete, }
+                read: { guard: Subject_read, },
+                create: { guard: Subject_create, inputChecker: Subject_create_input, },
+                update: { guard: Subject_update, },
+                postUpdate: { guard: Subject_postUpdate, },
+                delete: { guard: Subject_delete, }
             },
             fieldLevel: {
                 read:
@@ -2678,13 +1818,13 @@ const policy: PolicyDef = {
             },
 
         },
-        quaTrinhHocTap: {
+        subjectVersionCategory: {
             modelLevel: {
-                read: { guard: QuaTrinhHocTap_read, },
-                create: { guard: QuaTrinhHocTap_create, inputChecker: QuaTrinhHocTap_create_input, },
-                update: { guard: QuaTrinhHocTap_update, },
-                postUpdate: { guard: QuaTrinhHocTap_postUpdate, },
-                delete: { guard: QuaTrinhHocTap_delete, }
+                read: { guard: SubjectVersionCategory_read, },
+                create: { guard: SubjectVersionCategory_create, inputChecker: SubjectVersionCategory_create_input, },
+                update: { guard: SubjectVersionCategory_update, },
+                postUpdate: { guard: SubjectVersionCategory_postUpdate, },
+                delete: { guard: SubjectVersionCategory_delete, }
             },
             fieldLevel: {
                 read:
@@ -2698,13 +1838,13 @@ const policy: PolicyDef = {
             },
 
         },
-        toChucXaHoi: {
+        subjectVersion: {
             modelLevel: {
-                read: { guard: ToChucXaHoi_read, },
-                create: { guard: ToChucXaHoi_create, inputChecker: ToChucXaHoi_create_input, },
-                update: { guard: ToChucXaHoi_update, },
-                postUpdate: { guard: ToChucXaHoi_postUpdate, },
-                delete: { guard: ToChucXaHoi_delete, }
+                read: { guard: SubjectVersion_read, },
+                create: { guard: SubjectVersion_create, inputChecker: SubjectVersion_create_input, },
+                update: { guard: SubjectVersion_update, },
+                postUpdate: { guard: SubjectVersion_postUpdate, },
+                delete: { guard: SubjectVersion_delete, }
             },
             fieldLevel: {
                 read:
@@ -2718,13 +1858,773 @@ const policy: PolicyDef = {
             },
 
         },
-        quaTrinhLuong: {
+        subjectVersionHistory: {
             modelLevel: {
-                read: { guard: QuaTrinhLuong_read, },
-                create: { guard: QuaTrinhLuong_create, inputChecker: QuaTrinhLuong_create_input, },
-                update: { guard: QuaTrinhLuong_update, },
-                postUpdate: { guard: QuaTrinhLuong_postUpdate, },
-                delete: { guard: QuaTrinhLuong_delete, }
+                read: { guard: SubjectVersionHistory_read, },
+                create: { guard: SubjectVersionHistory_create, inputChecker: SubjectVersionHistory_create_input, },
+                update: { guard: SubjectVersionHistory_update, },
+                postUpdate: { guard: SubjectVersionHistory_postUpdate, },
+                delete: { guard: SubjectVersionHistory_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        equivalencyGroup: {
+            modelLevel: {
+                read: { guard: EquivalencyGroup_read, },
+                create: { guard: EquivalencyGroup_create, inputChecker: EquivalencyGroup_create_input, },
+                update: { guard: EquivalencyGroup_update, },
+                postUpdate: { guard: EquivalencyGroup_postUpdate, },
+                delete: { guard: EquivalencyGroup_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        subjectInGroup: {
+            modelLevel: {
+                read: { guard: SubjectInGroup_read, },
+                create: { guard: SubjectInGroup_create, inputChecker: SubjectInGroup_create_input, },
+                update: { guard: SubjectInGroup_update, },
+                postUpdate: { guard: SubjectInGroup_postUpdate, },
+                delete: { guard: SubjectInGroup_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingBlockSubject: {
+            modelLevel: {
+                read: { guard: TrainingBlockSubject_read, },
+                create: { guard: TrainingBlockSubject_create, inputChecker: TrainingBlockSubject_create_input, },
+                update: { guard: TrainingBlockSubject_update, },
+                postUpdate: { guard: TrainingBlockSubject_postUpdate, },
+                delete: { guard: TrainingBlockSubject_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        classRegisterSessionCredit: {
+            modelLevel: {
+                read: { guard: ClassRegisterSessionCredit_read, },
+                create: { guard: ClassRegisterSessionCredit_create, inputChecker: ClassRegisterSessionCredit_create_input, },
+                update: { guard: ClassRegisterSessionCredit_update, },
+                postUpdate: { guard: ClassRegisterSessionCredit_postUpdate, },
+                delete: { guard: ClassRegisterSessionCredit_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        classRegisterSession: {
+            modelLevel: {
+                read: { guard: ClassRegisterSession_read, },
+                create: { guard: ClassRegisterSession_create, inputChecker: ClassRegisterSession_create_input, },
+                update: { guard: ClassRegisterSession_update, },
+                postUpdate: { guard: ClassRegisterSession_postUpdate, },
+                delete: { guard: ClassRegisterSession_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        classRegisterLogs: {
+            modelLevel: {
+                read: { guard: ClassRegisterLogs_read, },
+                create: { guard: ClassRegisterLogs_create, inputChecker: ClassRegisterLogs_create_input, },
+                update: { guard: ClassRegisterLogs_update, },
+                postUpdate: { guard: ClassRegisterLogs_postUpdate, },
+                delete: { guard: ClassRegisterLogs_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        subjectClass: {
+            modelLevel: {
+                read: { guard: SubjectClass_read, },
+                create: { guard: SubjectClass_create, inputChecker: SubjectClass_create_input, },
+                update: { guard: SubjectClass_update, },
+                postUpdate: { guard: SubjectClass_postUpdate, },
+                delete: { guard: SubjectClass_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        subjectClassTime: {
+            modelLevel: {
+                read: { guard: SubjectClassTime_read, },
+                create: { guard: SubjectClassTime_create, inputChecker: SubjectClassTime_create_input, },
+                update: { guard: SubjectClassTime_update, },
+                postUpdate: { guard: SubjectClassTime_postUpdate, },
+                delete: { guard: SubjectClassTime_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        classSchedule: {
+            modelLevel: {
+                read: { guard: ClassSchedule_read, },
+                create: { guard: ClassSchedule_create, inputChecker: ClassSchedule_create_input, },
+                update: { guard: ClassSchedule_update, },
+                postUpdate: { guard: ClassSchedule_postUpdate, },
+                delete: { guard: ClassSchedule_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingObjectType: {
+            modelLevel: {
+                read: { guard: TrainingObjectType_read, },
+                create: { guard: TrainingObjectType_create, inputChecker: TrainingObjectType_create_input, },
+                update: { guard: TrainingObjectType_update, },
+                postUpdate: { guard: TrainingObjectType_postUpdate, },
+                delete: { guard: TrainingObjectType_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        priorityObject: {
+            modelLevel: {
+                read: { guard: PriorityObject_read, },
+                create: { guard: PriorityObject_create, inputChecker: PriorityObject_create_input, },
+                update: { guard: PriorityObject_update, },
+                postUpdate: { guard: PriorityObject_postUpdate, },
+                delete: { guard: PriorityObject_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingType: {
+            modelLevel: {
+                read: { guard: TrainingType_read, },
+                create: { guard: TrainingType_create, inputChecker: TrainingType_create_input, },
+                update: { guard: TrainingType_update, },
+                postUpdate: { guard: TrainingType_postUpdate, },
+                delete: { guard: TrainingType_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingLevel: {
+            modelLevel: {
+                read: { guard: TrainingLevel_read, },
+                create: { guard: TrainingLevel_create, inputChecker: TrainingLevel_create_input, },
+                update: { guard: TrainingLevel_update, },
+                postUpdate: { guard: TrainingLevel_postUpdate, },
+                delete: { guard: TrainingLevel_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingForm: {
+            modelLevel: {
+                read: { guard: TrainingForm_read, },
+                create: { guard: TrainingForm_create, inputChecker: TrainingForm_create_input, },
+                update: { guard: TrainingForm_update, },
+                postUpdate: { guard: TrainingForm_postUpdate, },
+                delete: { guard: TrainingForm_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingLocation: {
+            modelLevel: {
+                read: { guard: TrainingLocation_read, },
+                create: { guard: TrainingLocation_create, inputChecker: TrainingLocation_create_input, },
+                update: { guard: TrainingLocation_update, },
+                postUpdate: { guard: TrainingLocation_postUpdate, },
+                delete: { guard: TrainingLocation_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        building: {
+            modelLevel: {
+                read: { guard: Building_read, },
+                create: { guard: Building_create, inputChecker: Building_create_input, },
+                update: { guard: Building_update, },
+                postUpdate: { guard: Building_postUpdate, },
+                delete: { guard: Building_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        room: {
+            modelLevel: {
+                read: { guard: Room_read, },
+                create: { guard: Room_create, inputChecker: Room_create_input, },
+                update: { guard: Room_update, },
+                postUpdate: { guard: Room_postUpdate, },
+                delete: { guard: Room_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingField: {
+            modelLevel: {
+                read: { guard: TrainingField_read, },
+                create: { guard: TrainingField_create, inputChecker: TrainingField_create_input, },
+                update: { guard: TrainingField_update, },
+                postUpdate: { guard: TrainingField_postUpdate, },
+                delete: { guard: TrainingField_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingFieldOnTrainingObjectType: {
+            modelLevel: {
+                read: { guard: TrainingFieldOnTrainingObjectType_read, },
+                create: { guard: TrainingFieldOnTrainingObjectType_create, inputChecker: TrainingFieldOnTrainingObjectType_create_input, },
+                update: { guard: TrainingFieldOnTrainingObjectType_update, },
+                postUpdate: { guard: TrainingFieldOnTrainingObjectType_postUpdate, },
+                delete: { guard: TrainingFieldOnTrainingObjectType_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingMajor: {
+            modelLevel: {
+                read: { guard: TrainingMajor_read, },
+                create: { guard: TrainingMajor_create, inputChecker: TrainingMajor_create_input, },
+                update: { guard: TrainingMajor_update, },
+                postUpdate: { guard: TrainingMajor_postUpdate, },
+                delete: { guard: TrainingMajor_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingMajorOnTrainingObjectType: {
+            modelLevel: {
+                read: { guard: TrainingMajorOnTrainingObjectType_read, },
+                create: { guard: TrainingMajorOnTrainingObjectType_create, inputChecker: TrainingMajorOnTrainingObjectType_create_input, },
+                update: { guard: TrainingMajorOnTrainingObjectType_update, },
+                postUpdate: { guard: TrainingMajorOnTrainingObjectType_postUpdate, },
+                delete: { guard: TrainingMajorOnTrainingObjectType_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingBlock: {
+            modelLevel: {
+                read: { guard: TrainingBlock_read, },
+                create: { guard: TrainingBlock_create, inputChecker: TrainingBlock_create_input, },
+                update: { guard: TrainingBlock_update, },
+                postUpdate: { guard: TrainingBlock_postUpdate, },
+                delete: { guard: TrainingBlock_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingBlockOnCurriculumVersion: {
+            modelLevel: {
+                read: { guard: TrainingBlockOnCurriculumVersion_read, },
+                create: { guard: TrainingBlockOnCurriculumVersion_create, inputChecker: TrainingBlockOnCurriculumVersion_create_input, },
+                update: { guard: TrainingBlockOnCurriculumVersion_update, },
+                postUpdate: { guard: TrainingBlockOnCurriculumVersion_postUpdate, },
+                delete: { guard: TrainingBlockOnCurriculumVersion_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingTime: {
+            modelLevel: {
+                read: { guard: TrainingTime_read, },
+                create: { guard: TrainingTime_create, inputChecker: TrainingTime_create_input, },
+                update: { guard: TrainingTime_update, },
+                postUpdate: { guard: TrainingTime_postUpdate, },
+                delete: { guard: TrainingTime_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        diplomaType: {
+            modelLevel: {
+                read: { guard: DiplomaType_read, },
+                create: { guard: DiplomaType_create, inputChecker: DiplomaType_create_input, },
+                update: { guard: DiplomaType_update, },
+                postUpdate: { guard: DiplomaType_postUpdate, },
+                delete: { guard: DiplomaType_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        scoreConvert: {
+            modelLevel: {
+                read: { guard: ScoreConvert_read, },
+                create: { guard: ScoreConvert_create, inputChecker: ScoreConvert_create_input, },
+                update: { guard: ScoreConvert_update, },
+                postUpdate: { guard: ScoreConvert_postUpdate, },
+                delete: { guard: ScoreConvert_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingKPI: {
+            modelLevel: {
+                read: { guard: TrainingKPI_read, },
+                create: { guard: TrainingKPI_create, inputChecker: TrainingKPI_create_input, },
+                update: { guard: TrainingKPI_update, },
+                postUpdate: { guard: TrainingKPI_postUpdate, },
+                delete: { guard: TrainingKPI_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        student: {
+            modelLevel: {
+                read: { guard: Student_read, },
+                create: { guard: Student_create, inputChecker: Student_create_input, },
+                update: { guard: Student_update, },
+                postUpdate: { guard: Student_postUpdate, },
+                delete: { guard: Student_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        studentSemesterResult: {
+            modelLevel: {
+                read: { guard: StudentSemesterResult_read, },
+                create: { guard: StudentSemesterResult_create, inputChecker: StudentSemesterResult_create_input, },
+                update: { guard: StudentSemesterResult_update, },
+                postUpdate: { guard: StudentSemesterResult_postUpdate, },
+                delete: { guard: StudentSemesterResult_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        studentYearResult: {
+            modelLevel: {
+                read: { guard: StudentYearResult_read, },
+                create: { guard: StudentYearResult_create, inputChecker: StudentYearResult_create_input, },
+                update: { guard: StudentYearResult_update, },
+                postUpdate: { guard: StudentYearResult_postUpdate, },
+                delete: { guard: StudentYearResult_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        notification: {
+            modelLevel: {
+                read: { guard: Notification_read, },
+                create: { guard: Notification_create, inputChecker: Notification_create_input, },
+                update: { guard: Notification_update, },
+                postUpdate: { guard: Notification_postUpdate, },
+                delete: { guard: Notification_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        documentFile: {
+            modelLevel: {
+                read: { guard: DocumentFile_read, },
+                create: { guard: DocumentFile_create, inputChecker: DocumentFile_create_input, },
+                update: { guard: DocumentFile_update, },
+                postUpdate: { guard: DocumentFile_postUpdate, },
+                delete: { guard: DocumentFile_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        academicActionConfig: {
+            modelLevel: {
+                read: { guard: AcademicActionConfig_read, },
+                create: { guard: AcademicActionConfig_create, inputChecker: AcademicActionConfig_create_input, },
+                update: { guard: AcademicActionConfig_update, },
+                postUpdate: { guard: AcademicActionConfig_postUpdate, },
+                delete: { guard: AcademicActionConfig_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        academicActionRuleSet: {
+            modelLevel: {
+                read: { guard: AcademicActionRuleSet_read, },
+                create: { guard: AcademicActionRuleSet_create, inputChecker: AcademicActionRuleSet_create_input, },
+                update: { guard: AcademicActionRuleSet_update, },
+                postUpdate: { guard: AcademicActionRuleSet_postUpdate, },
+                delete: { guard: AcademicActionRuleSet_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        academicActionCondition: {
+            modelLevel: {
+                read: { guard: AcademicActionCondition_read, },
+                create: { guard: AcademicActionCondition_create, inputChecker: AcademicActionCondition_create_input, },
+                update: { guard: AcademicActionCondition_update, },
+                postUpdate: { guard: AcademicActionCondition_postUpdate, },
+                delete: { guard: AcademicActionCondition_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        studentAcademicDecision: {
+            modelLevel: {
+                read: { guard: StudentAcademicDecision_read, },
+                create: { guard: StudentAcademicDecision_create, inputChecker: StudentAcademicDecision_create_input, },
+                update: { guard: StudentAcademicDecision_update, },
+                postUpdate: { guard: StudentAcademicDecision_postUpdate, },
+                delete: { guard: StudentAcademicDecision_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        trainingScoreSession: {
+            modelLevel: {
+                read: { guard: TrainingScoreSession_read, },
+                create: { guard: TrainingScoreSession_create, inputChecker: TrainingScoreSession_create_input, },
+                update: { guard: TrainingScoreSession_update, },
+                postUpdate: { guard: TrainingScoreSession_postUpdate, },
+                delete: { guard: TrainingScoreSession_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        studentTrainingScore: {
+            modelLevel: {
+                read: { guard: StudentTrainingScore_read, },
+                create: { guard: StudentTrainingScore_create, inputChecker: StudentTrainingScore_create_input, },
+                update: { guard: StudentTrainingScore_update, },
+                postUpdate: { guard: StudentTrainingScore_postUpdate, },
+                delete: { guard: StudentTrainingScore_delete, }
             },
             fieldLevel: {
                 read:
@@ -3125,466 +3025,6 @@ const policy: PolicyDef = {
                 update: { guard: SupervisorPaymentRecord_update, },
                 postUpdate: { guard: SupervisorPaymentRecord_postUpdate, },
                 delete: { guard: SupervisorPaymentRecord_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        documentFile: {
-            modelLevel: {
-                read: { guard: DocumentFile_read, },
-                create: { guard: DocumentFile_create, inputChecker: DocumentFile_create_input, },
-                update: { guard: DocumentFile_update, },
-                postUpdate: { guard: DocumentFile_postUpdate, },
-                delete: { guard: DocumentFile_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        academicActionConfig: {
-            modelLevel: {
-                read: { guard: AcademicActionConfig_read, },
-                create: { guard: AcademicActionConfig_create, inputChecker: AcademicActionConfig_create_input, },
-                update: { guard: AcademicActionConfig_update, },
-                postUpdate: { guard: AcademicActionConfig_postUpdate, },
-                delete: { guard: AcademicActionConfig_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        academicActionRuleSet: {
-            modelLevel: {
-                read: { guard: AcademicActionRuleSet_read, },
-                create: { guard: AcademicActionRuleSet_create, inputChecker: AcademicActionRuleSet_create_input, },
-                update: { guard: AcademicActionRuleSet_update, },
-                postUpdate: { guard: AcademicActionRuleSet_postUpdate, },
-                delete: { guard: AcademicActionRuleSet_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        academicActionCondition: {
-            modelLevel: {
-                read: { guard: AcademicActionCondition_read, },
-                create: { guard: AcademicActionCondition_create, inputChecker: AcademicActionCondition_create_input, },
-                update: { guard: AcademicActionCondition_update, },
-                postUpdate: { guard: AcademicActionCondition_postUpdate, },
-                delete: { guard: AcademicActionCondition_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        studentAcademicDecision: {
-            modelLevel: {
-                read: { guard: StudentAcademicDecision_read, },
-                create: { guard: StudentAcademicDecision_create, inputChecker: StudentAcademicDecision_create_input, },
-                update: { guard: StudentAcademicDecision_update, },
-                postUpdate: { guard: StudentAcademicDecision_postUpdate, },
-                delete: { guard: StudentAcademicDecision_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        trainingScoreSession: {
-            modelLevel: {
-                read: { guard: TrainingScoreSession_read, },
-                create: { guard: TrainingScoreSession_create, inputChecker: TrainingScoreSession_create_input, },
-                update: { guard: TrainingScoreSession_update, },
-                postUpdate: { guard: TrainingScoreSession_postUpdate, },
-                delete: { guard: TrainingScoreSession_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        studentTrainingScore: {
-            modelLevel: {
-                read: { guard: StudentTrainingScore_read, },
-                create: { guard: StudentTrainingScore_create, inputChecker: StudentTrainingScore_create_input, },
-                update: { guard: StudentTrainingScore_update, },
-                postUpdate: { guard: StudentTrainingScore_postUpdate, },
-                delete: { guard: StudentTrainingScore_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        scholarship: {
-            modelLevel: {
-                read: { guard: Scholarship_read, },
-                create: { guard: Scholarship_create, inputChecker: Scholarship_create_input, },
-                update: { guard: Scholarship_update, },
-                postUpdate: { guard: Scholarship_postUpdate, },
-                delete: { guard: Scholarship_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        scholarshipCriteria: {
-            modelLevel: {
-                read: { guard: ScholarshipCriteria_read, },
-                create: { guard: ScholarshipCriteria_create, inputChecker: ScholarshipCriteria_create_input, },
-                update: { guard: ScholarshipCriteria_update, },
-                postUpdate: { guard: ScholarshipCriteria_postUpdate, },
-                delete: { guard: ScholarshipCriteria_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        scholarshipAward: {
-            modelLevel: {
-                read: { guard: ScholarshipAward_read, },
-                create: { guard: ScholarshipAward_create, inputChecker: ScholarshipAward_create_input, },
-                update: { guard: ScholarshipAward_update, },
-                postUpdate: { guard: ScholarshipAward_postUpdate, },
-                delete: { guard: ScholarshipAward_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        graduationSession: {
-            modelLevel: {
-                read: { guard: GraduationSession_read, },
-                create: { guard: GraduationSession_create, inputChecker: GraduationSession_create_input, },
-                update: { guard: GraduationSession_update, },
-                postUpdate: { guard: GraduationSession_postUpdate, },
-                delete: { guard: GraduationSession_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        studentGraduationApplication: {
-            modelLevel: {
-                read: { guard: StudentGraduationApplication_read, },
-                create: { guard: StudentGraduationApplication_create, inputChecker: StudentGraduationApplication_create_input, },
-                update: { guard: StudentGraduationApplication_update, },
-                postUpdate: { guard: StudentGraduationApplication_postUpdate, },
-                delete: { guard: StudentGraduationApplication_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        applicationCheckResult: {
-            modelLevel: {
-                read: { guard: ApplicationCheckResult_read, },
-                create: { guard: ApplicationCheckResult_create, inputChecker: ApplicationCheckResult_create_input, },
-                update: { guard: ApplicationCheckResult_update, },
-                postUpdate: { guard: ApplicationCheckResult_postUpdate, },
-                delete: { guard: ApplicationCheckResult_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        graduationDecision: {
-            modelLevel: {
-                read: { guard: GraduationDecision_read, },
-                create: { guard: GraduationDecision_create, inputChecker: GraduationDecision_create_input, },
-                update: { guard: GraduationDecision_update, },
-                postUpdate: { guard: GraduationDecision_postUpdate, },
-                delete: { guard: GraduationDecision_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        academicRankingConvert: {
-            modelLevel: {
-                read: { guard: AcademicRankingConvert_read, },
-                create: { guard: AcademicRankingConvert_create, inputChecker: AcademicRankingConvert_create_input, },
-                update: { guard: AcademicRankingConvert_update, },
-                postUpdate: { guard: AcademicRankingConvert_postUpdate, },
-                delete: { guard: AcademicRankingConvert_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        graduationRankDowngradeRule: {
-            modelLevel: {
-                read: { guard: GraduationRankDowngradeRule_read, },
-                create: { guard: GraduationRankDowngradeRule_create, inputChecker: GraduationRankDowngradeRule_create_input, },
-                update: { guard: GraduationRankDowngradeRule_update, },
-                postUpdate: { guard: GraduationRankDowngradeRule_postUpdate, },
-                delete: { guard: GraduationRankDowngradeRule_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        graduationRankDowngradeCondition: {
-            modelLevel: {
-                read: { guard: GraduationRankDowngradeCondition_read, },
-                create: { guard: GraduationRankDowngradeCondition_create, inputChecker: GraduationRankDowngradeCondition_create_input, },
-                update: { guard: GraduationRankDowngradeCondition_update, },
-                postUpdate: { guard: GraduationRankDowngradeCondition_postUpdate, },
-                delete: { guard: GraduationRankDowngradeCondition_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        rankingCondition: {
-            modelLevel: {
-                read: { guard: RankingCondition_read, },
-                create: { guard: RankingCondition_create, inputChecker: RankingCondition_create_input, },
-                update: { guard: RankingCondition_update, },
-                postUpdate: { guard: RankingCondition_postUpdate, },
-                delete: { guard: RankingCondition_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        diplomaVerificationApplication: {
-            modelLevel: {
-                read: { guard: DiplomaVerificationApplication_read, },
-                create: { guard: DiplomaVerificationApplication_create, inputChecker: DiplomaVerificationApplication_create_input, },
-                update: { guard: DiplomaVerificationApplication_update, },
-                postUpdate: { guard: DiplomaVerificationApplication_postUpdate, },
-                delete: { guard: DiplomaVerificationApplication_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        note: {
-            modelLevel: {
-                read: { guard: Note_read, },
-                create: { guard: Note_create, inputChecker: Note_create_input, },
-                update: { guard: Note_update, },
-                postUpdate: { guard: Note_postUpdate, },
-                delete: { guard: Note_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        noteFolder: {
-            modelLevel: {
-                read: { guard: NoteFolder_read, },
-                create: { guard: NoteFolder_create, inputChecker: NoteFolder_create_input, },
-                update: { guard: NoteFolder_update, },
-                postUpdate: { guard: NoteFolder_postUpdate, },
-                delete: { guard: NoteFolder_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        noteTag: {
-            modelLevel: {
-                read: { guard: NoteTag_read, },
-                create: { guard: NoteTag_create, inputChecker: NoteTag_create_input, },
-                update: { guard: NoteTag_update, },
-                postUpdate: { guard: NoteTag_postUpdate, },
-                delete: { guard: NoteTag_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        noteReminder: {
-            modelLevel: {
-                read: { guard: NoteReminder_read, },
-                create: { guard: NoteReminder_create, inputChecker: NoteReminder_create_input, },
-                update: { guard: NoteReminder_update, },
-                postUpdate: { guard: NoteReminder_postUpdate, },
-                delete: { guard: NoteReminder_delete, }
             },
             fieldLevel: {
                 read:
@@ -4125,6 +3565,706 @@ const policy: PolicyDef = {
                 update: { guard: StaffHistory_update, },
                 postUpdate: { guard: StaffHistory_postUpdate, },
                 delete: { guard: StaffHistory_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        scholarship: {
+            modelLevel: {
+                read: { guard: Scholarship_read, },
+                create: { guard: Scholarship_create, inputChecker: Scholarship_create_input, },
+                update: { guard: Scholarship_update, },
+                postUpdate: { guard: Scholarship_postUpdate, },
+                delete: { guard: Scholarship_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        scholarshipCriteria: {
+            modelLevel: {
+                read: { guard: ScholarshipCriteria_read, },
+                create: { guard: ScholarshipCriteria_create, inputChecker: ScholarshipCriteria_create_input, },
+                update: { guard: ScholarshipCriteria_update, },
+                postUpdate: { guard: ScholarshipCriteria_postUpdate, },
+                delete: { guard: ScholarshipCriteria_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        scholarshipAward: {
+            modelLevel: {
+                read: { guard: ScholarshipAward_read, },
+                create: { guard: ScholarshipAward_create, inputChecker: ScholarshipAward_create_input, },
+                update: { guard: ScholarshipAward_update, },
+                postUpdate: { guard: ScholarshipAward_postUpdate, },
+                delete: { guard: ScholarshipAward_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        graduationSession: {
+            modelLevel: {
+                read: { guard: GraduationSession_read, },
+                create: { guard: GraduationSession_create, inputChecker: GraduationSession_create_input, },
+                update: { guard: GraduationSession_update, },
+                postUpdate: { guard: GraduationSession_postUpdate, },
+                delete: { guard: GraduationSession_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        studentGraduationApplication: {
+            modelLevel: {
+                read: { guard: StudentGraduationApplication_read, },
+                create: { guard: StudentGraduationApplication_create, inputChecker: StudentGraduationApplication_create_input, },
+                update: { guard: StudentGraduationApplication_update, },
+                postUpdate: { guard: StudentGraduationApplication_postUpdate, },
+                delete: { guard: StudentGraduationApplication_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        applicationCheckResult: {
+            modelLevel: {
+                read: { guard: ApplicationCheckResult_read, },
+                create: { guard: ApplicationCheckResult_create, inputChecker: ApplicationCheckResult_create_input, },
+                update: { guard: ApplicationCheckResult_update, },
+                postUpdate: { guard: ApplicationCheckResult_postUpdate, },
+                delete: { guard: ApplicationCheckResult_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        graduationDecision: {
+            modelLevel: {
+                read: { guard: GraduationDecision_read, },
+                create: { guard: GraduationDecision_create, inputChecker: GraduationDecision_create_input, },
+                update: { guard: GraduationDecision_update, },
+                postUpdate: { guard: GraduationDecision_postUpdate, },
+                delete: { guard: GraduationDecision_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        academicRankingConvert: {
+            modelLevel: {
+                read: { guard: AcademicRankingConvert_read, },
+                create: { guard: AcademicRankingConvert_create, inputChecker: AcademicRankingConvert_create_input, },
+                update: { guard: AcademicRankingConvert_update, },
+                postUpdate: { guard: AcademicRankingConvert_postUpdate, },
+                delete: { guard: AcademicRankingConvert_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        graduationRankDowngradeRule: {
+            modelLevel: {
+                read: { guard: GraduationRankDowngradeRule_read, },
+                create: { guard: GraduationRankDowngradeRule_create, inputChecker: GraduationRankDowngradeRule_create_input, },
+                update: { guard: GraduationRankDowngradeRule_update, },
+                postUpdate: { guard: GraduationRankDowngradeRule_postUpdate, },
+                delete: { guard: GraduationRankDowngradeRule_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        graduationRankDowngradeCondition: {
+            modelLevel: {
+                read: { guard: GraduationRankDowngradeCondition_read, },
+                create: { guard: GraduationRankDowngradeCondition_create, inputChecker: GraduationRankDowngradeCondition_create_input, },
+                update: { guard: GraduationRankDowngradeCondition_update, },
+                postUpdate: { guard: GraduationRankDowngradeCondition_postUpdate, },
+                delete: { guard: GraduationRankDowngradeCondition_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        rankingCondition: {
+            modelLevel: {
+                read: { guard: RankingCondition_read, },
+                create: { guard: RankingCondition_create, inputChecker: RankingCondition_create_input, },
+                update: { guard: RankingCondition_update, },
+                postUpdate: { guard: RankingCondition_postUpdate, },
+                delete: { guard: RankingCondition_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        diplomaVerificationApplication: {
+            modelLevel: {
+                read: { guard: DiplomaVerificationApplication_read, },
+                create: { guard: DiplomaVerificationApplication_create, inputChecker: DiplomaVerificationApplication_create_input, },
+                update: { guard: DiplomaVerificationApplication_update, },
+                postUpdate: { guard: DiplomaVerificationApplication_postUpdate, },
+                delete: { guard: DiplomaVerificationApplication_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        note: {
+            modelLevel: {
+                read: { guard: Note_read, },
+                create: { guard: Note_create, inputChecker: Note_create_input, },
+                update: { guard: Note_update, },
+                postUpdate: { guard: Note_postUpdate, },
+                delete: { guard: Note_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        noteFolder: {
+            modelLevel: {
+                read: { guard: NoteFolder_read, },
+                create: { guard: NoteFolder_create, inputChecker: NoteFolder_create_input, },
+                update: { guard: NoteFolder_update, },
+                postUpdate: { guard: NoteFolder_postUpdate, },
+                delete: { guard: NoteFolder_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        noteTag: {
+            modelLevel: {
+                read: { guard: NoteTag_read, },
+                create: { guard: NoteTag_create, inputChecker: NoteTag_create_input, },
+                update: { guard: NoteTag_update, },
+                postUpdate: { guard: NoteTag_postUpdate, },
+                delete: { guard: NoteTag_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        noteReminder: {
+            modelLevel: {
+                read: { guard: NoteReminder_read, },
+                create: { guard: NoteReminder_create, inputChecker: NoteReminder_create_input, },
+                update: { guard: NoteReminder_update, },
+                postUpdate: { guard: NoteReminder_postUpdate, },
+                delete: { guard: NoteReminder_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        questionBank: {
+            modelLevel: {
+                read: { guard: QuestionBank_read, },
+                create: { guard: QuestionBank_create, inputChecker: QuestionBank_create_input, },
+                update: { guard: QuestionBank_update, },
+                postUpdate: { guard: QuestionBank_postUpdate, },
+                delete: { guard: QuestionBank_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        difficulty: {
+            modelLevel: {
+                read: { guard: Difficulty_read, },
+                create: { guard: Difficulty_create, inputChecker: Difficulty_create_input, },
+                update: { guard: Difficulty_update, },
+                postUpdate: { guard: Difficulty_postUpdate, },
+                delete: { guard: Difficulty_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        knowledgeBlock: {
+            modelLevel: {
+                read: { guard: KnowledgeBlock_read, },
+                create: { guard: KnowledgeBlock_create, inputChecker: KnowledgeBlock_create_input, },
+                update: { guard: KnowledgeBlock_update, },
+                postUpdate: { guard: KnowledgeBlock_postUpdate, },
+                delete: { guard: KnowledgeBlock_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        question: {
+            modelLevel: {
+                read: { guard: Question_read, },
+                create: { guard: Question_create, inputChecker: Question_create_input, },
+                update: { guard: Question_update, },
+                postUpdate: { guard: Question_postUpdate, },
+                delete: { guard: Question_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        multipleChoiceOption: {
+            modelLevel: {
+                read: { guard: MultipleChoiceOption_read, },
+                create: { guard: MultipleChoiceOption_create, inputChecker: MultipleChoiceOption_create_input, },
+                update: { guard: MultipleChoiceOption_update, },
+                postUpdate: { guard: MultipleChoiceOption_postUpdate, },
+                delete: { guard: MultipleChoiceOption_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        fillInBlankSlot: {
+            modelLevel: {
+                read: { guard: FillInBlankSlot_read, },
+                create: { guard: FillInBlankSlot_create, inputChecker: FillInBlankSlot_create_input, },
+                update: { guard: FillInBlankSlot_update, },
+                postUpdate: { guard: FillInBlankSlot_postUpdate, },
+                delete: { guard: FillInBlankSlot_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        orderingItem: {
+            modelLevel: {
+                read: { guard: OrderingItem_read, },
+                create: { guard: OrderingItem_create, inputChecker: OrderingItem_create_input, },
+                update: { guard: OrderingItem_update, },
+                postUpdate: { guard: OrderingItem_postUpdate, },
+                delete: { guard: OrderingItem_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        answer: {
+            modelLevel: {
+                read: { guard: Answer_read, },
+                create: { guard: Answer_create, inputChecker: Answer_create_input, },
+                update: { guard: Answer_update, },
+                postUpdate: { guard: Answer_postUpdate, },
+                delete: { guard: Answer_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        exam: {
+            modelLevel: {
+                read: { guard: Exam_read, },
+                create: { guard: Exam_create, inputChecker: Exam_create_input, },
+                update: { guard: Exam_update, },
+                postUpdate: { guard: Exam_postUpdate, },
+                delete: { guard: Exam_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        testStructureRule: {
+            modelLevel: {
+                read: { guard: TestStructureRule_read, },
+                create: { guard: TestStructureRule_create, inputChecker: TestStructureRule_create_input, },
+                update: { guard: TestStructureRule_update, },
+                postUpdate: { guard: TestStructureRule_postUpdate, },
+                delete: { guard: TestStructureRule_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        examBank: {
+            modelLevel: {
+                read: { guard: ExamBank_read, },
+                create: { guard: ExamBank_create, inputChecker: ExamBank_create_input, },
+                update: { guard: ExamBank_update, },
+                postUpdate: { guard: ExamBank_postUpdate, },
+                delete: { guard: ExamBank_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        examBankQuestion: {
+            modelLevel: {
+                read: { guard: ExamBankQuestion_read, },
+                create: { guard: ExamBankQuestion_create, inputChecker: ExamBankQuestion_create_input, },
+                update: { guard: ExamBankQuestion_update, },
+                postUpdate: { guard: ExamBankQuestion_postUpdate, },
+                delete: { guard: ExamBankQuestion_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        examFax: {
+            modelLevel: {
+                read: { guard: ExamFax_read, },
+                create: { guard: ExamFax_create, inputChecker: ExamFax_create_input, },
+                update: { guard: ExamFax_update, },
+                postUpdate: { guard: ExamFax_postUpdate, },
+                delete: { guard: ExamFax_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        examSession: {
+            modelLevel: {
+                read: { guard: ExamSession_read, },
+                create: { guard: ExamSession_create, inputChecker: ExamSession_create_input, },
+                update: { guard: ExamSession_update, },
+                postUpdate: { guard: ExamSession_postUpdate, },
+                delete: { guard: ExamSession_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        academicWarningRule: {
+            modelLevel: {
+                read: { guard: AcademicWarningRule_read, },
+                create: { guard: AcademicWarningRule_create, inputChecker: AcademicWarningRule_create_input, },
+                update: { guard: AcademicWarningRule_update, },
+                postUpdate: { guard: AcademicWarningRule_postUpdate, },
+                delete: { guard: AcademicWarningRule_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        academicWarning: {
+            modelLevel: {
+                read: { guard: AcademicWarning_read, },
+                create: { guard: AcademicWarning_create, inputChecker: AcademicWarning_create_input, },
+                update: { guard: AcademicWarning_update, },
+                postUpdate: { guard: AcademicWarning_postUpdate, },
+                delete: { guard: AcademicWarning_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        disciplinaryWarning: {
+            modelLevel: {
+                read: { guard: DisciplinaryWarning_read, },
+                create: { guard: DisciplinaryWarning_create, inputChecker: DisciplinaryWarning_create_input, },
+                update: { guard: DisciplinaryWarning_update, },
+                postUpdate: { guard: DisciplinaryWarning_postUpdate, },
+                delete: { guard: DisciplinaryWarning_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        disciplinaryWarningReason: {
+            modelLevel: {
+                read: { guard: DisciplinaryWarningReason_read, },
+                create: { guard: DisciplinaryWarningReason_create, inputChecker: DisciplinaryWarningReason_create_input, },
+                update: { guard: DisciplinaryWarningReason_update, },
+                postUpdate: { guard: DisciplinaryWarningReason_postUpdate, },
+                delete: { guard: DisciplinaryWarningReason_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        feedback: {
+            modelLevel: {
+                read: { guard: Feedback_read, },
+                create: { guard: Feedback_create, inputChecker: Feedback_create_input, },
+                update: { guard: Feedback_update, },
+                postUpdate: { guard: Feedback_postUpdate, },
+                delete: { guard: Feedback_delete, }
             },
             fieldLevel: {
                 read:
@@ -4698,106 +4838,6 @@ const policy: PolicyDef = {
             },
 
         },
-        feedback: {
-            modelLevel: {
-                read: { guard: Feedback_read, },
-                create: { guard: Feedback_create, inputChecker: Feedback_create_input, },
-                update: { guard: Feedback_update, },
-                postUpdate: { guard: Feedback_postUpdate, },
-                delete: { guard: Feedback_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        academicWarningRule: {
-            modelLevel: {
-                read: { guard: AcademicWarningRule_read, },
-                create: { guard: AcademicWarningRule_create, inputChecker: AcademicWarningRule_create_input, },
-                update: { guard: AcademicWarningRule_update, },
-                postUpdate: { guard: AcademicWarningRule_postUpdate, },
-                delete: { guard: AcademicWarningRule_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        academicWarning: {
-            modelLevel: {
-                read: { guard: AcademicWarning_read, },
-                create: { guard: AcademicWarning_create, inputChecker: AcademicWarning_create_input, },
-                update: { guard: AcademicWarning_update, },
-                postUpdate: { guard: AcademicWarning_postUpdate, },
-                delete: { guard: AcademicWarning_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        disciplinaryWarning: {
-            modelLevel: {
-                read: { guard: DisciplinaryWarning_read, },
-                create: { guard: DisciplinaryWarning_create, inputChecker: DisciplinaryWarning_create_input, },
-                update: { guard: DisciplinaryWarning_update, },
-                postUpdate: { guard: DisciplinaryWarning_postUpdate, },
-                delete: { guard: DisciplinaryWarning_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        disciplinaryWarningReason: {
-            modelLevel: {
-                read: { guard: DisciplinaryWarningReason_read, },
-                create: { guard: DisciplinaryWarningReason_create, inputChecker: DisciplinaryWarningReason_create_input, },
-                update: { guard: DisciplinaryWarningReason_update, },
-                postUpdate: { guard: DisciplinaryWarningReason_postUpdate, },
-                delete: { guard: DisciplinaryWarningReason_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
         templateFile: {
             modelLevel: {
                 read: { guard: TemplateFile_read, },
@@ -4841,75 +4881,32 @@ const policy: PolicyDef = {
     },
     validation: {
         config: { hasValidation: false },
-        questionBank: { hasValidation: false },
-        difficulty: { hasValidation: false },
-        knowledgeBlock: { hasValidation: false },
-        question: { hasValidation: false },
-        multipleChoiceOption: { hasValidation: false },
-        fillInBlankSlot: { hasValidation: false },
-        orderingItem: { hasValidation: false },
-        answer: { hasValidation: false },
-        exam: { hasValidation: false },
-        testStructureRule: { hasValidation: false },
-        examBank: { hasValidation: false },
-        examBankQuestion: { hasValidation: false },
-        examFax: { hasValidation: false },
-        examSession: { hasValidation: false },
-        planTrainingDelay: { hasValidation: false },
-        planTrainingDelaySubject: { hasValidation: false },
-        planTraining: { hasValidation: false },
-        planTrainingSubject: { hasValidation: false },
-        studentScoreConvert: { hasValidation: false },
-        subjectScoreConvert: { hasValidation: false },
-        studentSubjectScore: { hasValidation: true },
-        studentSubjectScoreHistory: { hasValidation: true },
-        archivedCertificateOnStudentSubjectScore: { hasValidation: false },
-        archivedCertificate: { hasValidation: true },
-        archivedAwardOnStudentSubjectScore: { hasValidation: false },
-        archivedAward: { hasValidation: false },
-        schoolYear: { hasValidation: false },
-        semester: { hasValidation: false },
-        milestone: { hasValidation: false },
-        trainingLanguage: { hasValidation: false },
-        trainingCourse: { hasValidation: false },
-        trainingCourseRegulation: { hasValidation: false },
-        fixedClass: { hasValidation: false },
-        curriculum: { hasValidation: false },
-        curriculumVersion: { hasValidation: false },
-        subject: { hasValidation: false },
-        subjectVersionCategory: { hasValidation: false },
-        subjectVersion: { hasValidation: false },
-        equivalencyGroup: { hasValidation: false },
-        subjectInGroup: { hasValidation: false },
-        trainingBlockSubject: { hasValidation: false },
-        classRegisterSessionCredit: { hasValidation: false },
-        classRegisterSession: { hasValidation: false },
-        classRegisterLogs: { hasValidation: false },
-        subjectClass: { hasValidation: false },
-        subjectClassTime: { hasValidation: false },
-        classSchedule: { hasValidation: false },
-        trainingObjectType: { hasValidation: false },
-        priorityObject: { hasValidation: false },
-        trainingType: { hasValidation: false },
-        trainingLevel: { hasValidation: false },
-        trainingForm: { hasValidation: false },
-        trainingLocation: { hasValidation: false },
-        building: { hasValidation: false },
-        room: { hasValidation: false },
-        trainingField: { hasValidation: false },
-        trainingFieldOnTrainingObjectType: { hasValidation: false },
-        trainingMajor: { hasValidation: false },
-        trainingMajorOnTrainingObjectType: { hasValidation: false },
-        trainingBlock: { hasValidation: false },
-        trainingBlockOnCurriculumVersion: { hasValidation: false },
-        trainingTime: { hasValidation: false },
-        diplomaType: { hasValidation: false },
-        scoreConvert: { hasValidation: false },
-        trainingKPI: { hasValidation: false },
-        student: { hasValidation: false },
-        studentSemesterResult: { hasValidation: false },
-        studentYearResult: { hasValidation: false },
-        notification: { hasValidation: false },
+        changeLog: { hasValidation: false },
+        userProfile: { hasValidation: false },
+        hocHam: { hasValidation: false },
+        hocVi: { hasValidation: false },
+        relative: { hasValidation: false },
+        trinhDoLyLuanChinhTri: { hasValidation: false },
+        trinhDoQuanLyNhaNuoc: { hasValidation: false },
+        ngoaiNgu: { hasValidation: false },
+        tinHoc: { hasValidation: false },
+        boiDuongQuocPhongAnNinh: { hasValidation: false },
+        capBac: { hasValidation: false },
+        quaTrinhCongTac: { hasValidation: false },
+        quaTrinhCuDiCongTac: { hasValidation: false },
+        quaTrinhCuDiDaoTao: { hasValidation: false },
+        khenThuong: { hasValidation: false },
+        kyLuat: { hasValidation: false },
+        doiTuongChinhSach: { hasValidation: false },
+        keKhaiTaiSan: { hasValidation: false },
+        tiengDanToc: { hasValidation: false },
+        chienDau: { hasValidation: false },
+        nuocNgoai: { hasValidation: false },
+        thuongTat: { hasValidation: false },
+        danhHieu: { hasValidation: false },
+        quaTrinhHocTap: { hasValidation: false },
+        toChucXaHoi: { hasValidation: false },
+        quaTrinhLuong: { hasValidation: false },
         group: { hasValidation: false },
         role: { hasValidation: false },
         permission: { hasValidation: false },
@@ -4949,31 +4946,69 @@ const policy: PolicyDef = {
         dM_XaPhuong: { hasValidation: false },
         dM_XaPhuong_New: { hasValidation: false },
         dM_ViTriCongViec: { hasValidation: false },
-        userProfile: { hasValidation: false },
-        hocHam: { hasValidation: false },
-        hocVi: { hasValidation: false },
-        relative: { hasValidation: false },
-        trinhDoLyLuanChinhTri: { hasValidation: false },
-        trinhDoQuanLyNhaNuoc: { hasValidation: false },
-        ngoaiNgu: { hasValidation: false },
-        tinHoc: { hasValidation: false },
-        boiDuongQuocPhongAnNinh: { hasValidation: false },
-        capBac: { hasValidation: false },
-        quaTrinhCongTac: { hasValidation: false },
-        quaTrinhCuDiCongTac: { hasValidation: false },
-        quaTrinhCuDiDaoTao: { hasValidation: false },
-        khenThuong: { hasValidation: false },
-        kyLuat: { hasValidation: false },
-        doiTuongChinhSach: { hasValidation: false },
-        keKhaiTaiSan: { hasValidation: false },
-        tiengDanToc: { hasValidation: false },
-        chienDau: { hasValidation: false },
-        nuocNgoai: { hasValidation: false },
-        thuongTat: { hasValidation: false },
-        danhHieu: { hasValidation: false },
-        quaTrinhHocTap: { hasValidation: false },
-        toChucXaHoi: { hasValidation: false },
-        quaTrinhLuong: { hasValidation: false },
+        planTrainingDelay: { hasValidation: false },
+        planTrainingDelaySubject: { hasValidation: false },
+        planTraining: { hasValidation: false },
+        planTrainingSubject: { hasValidation: false },
+        studentScoreConvert: { hasValidation: false },
+        subjectScoreConvert: { hasValidation: false },
+        studentSubjectScore: { hasValidation: true },
+        studentSubjectScoreHistory: { hasValidation: true },
+        archivedCertificateOnStudentSubjectScore: { hasValidation: false },
+        archivedCertificate: { hasValidation: true },
+        archivedAwardOnStudentSubjectScore: { hasValidation: false },
+        archivedAward: { hasValidation: false },
+        schoolYear: { hasValidation: false },
+        semester: { hasValidation: false },
+        milestone: { hasValidation: false },
+        trainingLanguage: { hasValidation: false },
+        trainingCourse: { hasValidation: false },
+        trainingCourseRegulation: { hasValidation: false },
+        fixedClass: { hasValidation: false },
+        curriculum: { hasValidation: false },
+        curriculumVersion: { hasValidation: false },
+        subject: { hasValidation: false },
+        subjectVersionCategory: { hasValidation: false },
+        subjectVersion: { hasValidation: false },
+        subjectVersionHistory: { hasValidation: false },
+        equivalencyGroup: { hasValidation: false },
+        subjectInGroup: { hasValidation: false },
+        trainingBlockSubject: { hasValidation: false },
+        classRegisterSessionCredit: { hasValidation: false },
+        classRegisterSession: { hasValidation: false },
+        classRegisterLogs: { hasValidation: false },
+        subjectClass: { hasValidation: false },
+        subjectClassTime: { hasValidation: false },
+        classSchedule: { hasValidation: false },
+        trainingObjectType: { hasValidation: false },
+        priorityObject: { hasValidation: false },
+        trainingType: { hasValidation: false },
+        trainingLevel: { hasValidation: false },
+        trainingForm: { hasValidation: false },
+        trainingLocation: { hasValidation: false },
+        building: { hasValidation: false },
+        room: { hasValidation: false },
+        trainingField: { hasValidation: false },
+        trainingFieldOnTrainingObjectType: { hasValidation: false },
+        trainingMajor: { hasValidation: false },
+        trainingMajorOnTrainingObjectType: { hasValidation: false },
+        trainingBlock: { hasValidation: false },
+        trainingBlockOnCurriculumVersion: { hasValidation: false },
+        trainingTime: { hasValidation: false },
+        diplomaType: { hasValidation: false },
+        scoreConvert: { hasValidation: false },
+        trainingKPI: { hasValidation: false },
+        student: { hasValidation: false },
+        studentSemesterResult: { hasValidation: false },
+        studentYearResult: { hasValidation: false },
+        notification: { hasValidation: false },
+        documentFile: { hasValidation: false },
+        academicActionConfig: { hasValidation: false },
+        academicActionRuleSet: { hasValidation: false },
+        academicActionCondition: { hasValidation: false },
+        studentAcademicDecision: { hasValidation: false },
+        trainingScoreSession: { hasValidation: false },
+        studentTrainingScore: { hasValidation: false },
         lecturerType: { hasValidation: false },
         staffType: { hasValidation: false },
         staffPosition: { hasValidation: false },
@@ -4994,29 +5029,6 @@ const policy: PolicyDef = {
         defaultCouncilRolePayAmount: { hasValidation: false },
         paymentRecord: { hasValidation: false },
         supervisorPaymentRecord: { hasValidation: false },
-        documentFile: { hasValidation: false },
-        academicActionConfig: { hasValidation: false },
-        academicActionRuleSet: { hasValidation: false },
-        academicActionCondition: { hasValidation: false },
-        studentAcademicDecision: { hasValidation: false },
-        trainingScoreSession: { hasValidation: false },
-        studentTrainingScore: { hasValidation: false },
-        scholarship: { hasValidation: false },
-        scholarshipCriteria: { hasValidation: false },
-        scholarshipAward: { hasValidation: false },
-        graduationSession: { hasValidation: false },
-        studentGraduationApplication: { hasValidation: false },
-        applicationCheckResult: { hasValidation: false },
-        graduationDecision: { hasValidation: false },
-        academicRankingConvert: { hasValidation: true },
-        graduationRankDowngradeRule: { hasValidation: false },
-        graduationRankDowngradeCondition: { hasValidation: false },
-        rankingCondition: { hasValidation: false },
-        diplomaVerificationApplication: { hasValidation: false },
-        note: { hasValidation: false },
-        noteFolder: { hasValidation: false },
-        noteTag: { hasValidation: false },
-        noteReminder: { hasValidation: false },
         evaluationPeriod: { hasValidation: false },
         standardCatalog: { hasValidation: false },
         criterionCatalog: { hasValidation: false },
@@ -5044,6 +5056,41 @@ const policy: PolicyDef = {
         surveyResponse: { hasValidation: false },
         staff: { hasValidation: false },
         staffHistory: { hasValidation: false },
+        scholarship: { hasValidation: false },
+        scholarshipCriteria: { hasValidation: false },
+        scholarshipAward: { hasValidation: false },
+        graduationSession: { hasValidation: false },
+        studentGraduationApplication: { hasValidation: false },
+        applicationCheckResult: { hasValidation: false },
+        graduationDecision: { hasValidation: false },
+        academicRankingConvert: { hasValidation: true },
+        graduationRankDowngradeRule: { hasValidation: false },
+        graduationRankDowngradeCondition: { hasValidation: false },
+        rankingCondition: { hasValidation: false },
+        diplomaVerificationApplication: { hasValidation: false },
+        note: { hasValidation: false },
+        noteFolder: { hasValidation: false },
+        noteTag: { hasValidation: false },
+        noteReminder: { hasValidation: false },
+        questionBank: { hasValidation: false },
+        difficulty: { hasValidation: false },
+        knowledgeBlock: { hasValidation: false },
+        question: { hasValidation: false },
+        multipleChoiceOption: { hasValidation: false },
+        fillInBlankSlot: { hasValidation: false },
+        orderingItem: { hasValidation: false },
+        answer: { hasValidation: false },
+        exam: { hasValidation: false },
+        testStructureRule: { hasValidation: false },
+        examBank: { hasValidation: false },
+        examBankQuestion: { hasValidation: false },
+        examFax: { hasValidation: false },
+        examSession: { hasValidation: false },
+        academicWarningRule: { hasValidation: false },
+        academicWarning: { hasValidation: false },
+        disciplinaryWarning: { hasValidation: false },
+        disciplinaryWarningReason: { hasValidation: false },
+        feedback: { hasValidation: false },
         dM_TrinhDoHocVan: { hasValidation: false },
         dM_TrinhDoLyLuanChinhTri: { hasValidation: false },
         dM_TrinhDoQuanLyNhaNuoc: { hasValidation: false },
@@ -5072,11 +5119,6 @@ const policy: PolicyDef = {
         dM_ToChucXaHoi: { hasValidation: false },
         dM_Ngach: { hasValidation: false },
         dM_BacLuong: { hasValidation: false },
-        feedback: { hasValidation: false },
-        academicWarningRule: { hasValidation: false },
-        academicWarning: { hasValidation: false },
-        disciplinaryWarning: { hasValidation: false },
-        disciplinaryWarningReason: { hasValidation: false },
         templateFile: { hasValidation: false },
         blockedIp: { hasValidation: true },
     },
@@ -5148,2872 +5190,56 @@ function $check_Config_delete(input: any, context: QueryContext): any {
     return false;
 }
 
-function QuestionBank_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_QuestionBank_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function QuestionBank_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_QuestionBank_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function QuestionBank_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function QuestionBank_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_QuestionBank_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function QuestionBank_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_QuestionBank_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function QuestionBank_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_QuestionBank_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Difficulty_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Difficulty_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Difficulty_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Difficulty_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Difficulty_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Difficulty_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Difficulty_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Difficulty_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Difficulty_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Difficulty_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Difficulty_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function KnowledgeBlock_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_KnowledgeBlock_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function KnowledgeBlock_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_KnowledgeBlock_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function KnowledgeBlock_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function KnowledgeBlock_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_KnowledgeBlock_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function KnowledgeBlock_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_KnowledgeBlock_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function KnowledgeBlock_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_KnowledgeBlock_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Question_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Question_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Question_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Question_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Question_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Question_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Question_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Question_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Question_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Question_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Question_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function MultipleChoiceOption_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_MultipleChoiceOption_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function MultipleChoiceOption_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_MultipleChoiceOption_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function MultipleChoiceOption_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function MultipleChoiceOption_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_MultipleChoiceOption_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function MultipleChoiceOption_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_MultipleChoiceOption_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function MultipleChoiceOption_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_MultipleChoiceOption_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function FillInBlankSlot_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_FillInBlankSlot_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function FillInBlankSlot_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_FillInBlankSlot_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function FillInBlankSlot_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function FillInBlankSlot_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_FillInBlankSlot_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function FillInBlankSlot_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_FillInBlankSlot_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function FillInBlankSlot_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_FillInBlankSlot_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function OrderingItem_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_OrderingItem_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function OrderingItem_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_OrderingItem_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function OrderingItem_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function OrderingItem_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_OrderingItem_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function OrderingItem_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_OrderingItem_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function OrderingItem_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_OrderingItem_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Answer_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Answer_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Answer_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Answer_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Answer_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Answer_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Answer_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Answer_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Answer_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Answer_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Answer_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Exam_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Exam_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Exam_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Exam_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Exam_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Exam_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Exam_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Exam_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Exam_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Exam_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Exam_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TestStructureRule_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_TestStructureRule_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TestStructureRule_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TestStructureRule_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TestStructureRule_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function TestStructureRule_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TestStructureRule_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TestStructureRule_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_TestStructureRule_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function TestStructureRule_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TestStructureRule_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamBank_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ExamBank_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamBank_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamBank_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamBank_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ExamBank_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamBank_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamBank_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ExamBank_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ExamBank_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamBank_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamBankQuestion_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ExamBankQuestion_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamBankQuestion_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamBankQuestion_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamBankQuestion_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ExamBankQuestion_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamBankQuestion_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamBankQuestion_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ExamBankQuestion_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ExamBankQuestion_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamBankQuestion_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamFax_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ExamFax_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamFax_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamFax_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamFax_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ExamFax_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamFax_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamFax_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ExamFax_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ExamFax_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamFax_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamSession_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ExamSession_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamSession_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamSession_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamSession_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ExamSession_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamSession_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamSession_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ExamSession_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ExamSession_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamSession_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingDelay_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_PlanTrainingDelay_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingDelay_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTrainingDelay_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingDelay_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function PlanTrainingDelay_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTrainingDelay_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingDelay_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_PlanTrainingDelay_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function PlanTrainingDelay_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTrainingDelay_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingDelaySubject_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_PlanTrainingDelaySubject_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingDelaySubject_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTrainingDelaySubject_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingDelaySubject_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function PlanTrainingDelaySubject_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTrainingDelaySubject_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingDelaySubject_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_PlanTrainingDelaySubject_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function PlanTrainingDelaySubject_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTrainingDelaySubject_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTraining_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_PlanTraining_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTraining_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTraining_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTraining_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function PlanTraining_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTraining_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTraining_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_PlanTraining_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function PlanTraining_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTraining_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingSubject_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_PlanTrainingSubject_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingSubject_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTrainingSubject_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingSubject_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function PlanTrainingSubject_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTrainingSubject_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function PlanTrainingSubject_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_PlanTrainingSubject_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function PlanTrainingSubject_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_PlanTrainingSubject_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentScoreConvert_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_StudentScoreConvert_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentScoreConvert_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentScoreConvert_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentScoreConvert_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function StudentScoreConvert_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentScoreConvert_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentScoreConvert_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_StudentScoreConvert_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function StudentScoreConvert_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentScoreConvert_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectScoreConvert_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_SubjectScoreConvert_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectScoreConvert_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectScoreConvert_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectScoreConvert_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function SubjectScoreConvert_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectScoreConvert_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectScoreConvert_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_SubjectScoreConvert_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function SubjectScoreConvert_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectScoreConvert_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentSubjectScore_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_StudentSubjectScore_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentSubjectScore_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentSubjectScore_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentSubjectScore_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function StudentSubjectScore_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentSubjectScore_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentSubjectScore_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_StudentSubjectScore_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function StudentSubjectScore_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentSubjectScore_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentSubjectScoreHistory_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_StudentSubjectScoreHistory_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentSubjectScoreHistory_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentSubjectScoreHistory_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentSubjectScoreHistory_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function StudentSubjectScoreHistory_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentSubjectScoreHistory_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentSubjectScoreHistory_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_StudentSubjectScoreHistory_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function StudentSubjectScoreHistory_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentSubjectScoreHistory_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedCertificateOnStudentSubjectScore_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ArchivedCertificateOnStudentSubjectScore_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedCertificateOnStudentSubjectScore_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedCertificateOnStudentSubjectScore_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedCertificateOnStudentSubjectScore_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ArchivedCertificateOnStudentSubjectScore_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedCertificateOnStudentSubjectScore_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedCertificateOnStudentSubjectScore_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ArchivedCertificateOnStudentSubjectScore_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ArchivedCertificateOnStudentSubjectScore_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedCertificateOnStudentSubjectScore_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedCertificate_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ArchivedCertificate_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedCertificate_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedCertificate_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedCertificate_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ArchivedCertificate_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedCertificate_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedCertificate_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ArchivedCertificate_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ArchivedCertificate_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedCertificate_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedAwardOnStudentSubjectScore_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ArchivedAwardOnStudentSubjectScore_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedAwardOnStudentSubjectScore_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedAwardOnStudentSubjectScore_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedAwardOnStudentSubjectScore_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ArchivedAwardOnStudentSubjectScore_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedAwardOnStudentSubjectScore_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedAwardOnStudentSubjectScore_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ArchivedAwardOnStudentSubjectScore_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ArchivedAwardOnStudentSubjectScore_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedAwardOnStudentSubjectScore_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedAward_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ArchivedAward_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedAward_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedAward_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedAward_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ArchivedAward_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedAward_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ArchivedAward_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ArchivedAward_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ArchivedAward_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ArchivedAward_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SchoolYear_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_SchoolYear_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SchoolYear_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SchoolYear_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SchoolYear_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function SchoolYear_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SchoolYear_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SchoolYear_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_SchoolYear_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function SchoolYear_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SchoolYear_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Semester_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Semester_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Semester_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Semester_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Semester_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Semester_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Semester_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Semester_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Semester_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Semester_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Semester_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Milestone_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Milestone_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Milestone_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Milestone_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Milestone_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Milestone_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Milestone_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Milestone_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Milestone_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Milestone_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Milestone_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingLanguage_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_TrainingLanguage_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingLanguage_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingLanguage_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingLanguage_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function TrainingLanguage_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingLanguage_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingLanguage_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_TrainingLanguage_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function TrainingLanguage_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingLanguage_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingCourse_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_TrainingCourse_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingCourse_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingCourse_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingCourse_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function TrainingCourse_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingCourse_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingCourse_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_TrainingCourse_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function TrainingCourse_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingCourse_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingCourseRegulation_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_TrainingCourseRegulation_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingCourseRegulation_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingCourseRegulation_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingCourseRegulation_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function TrainingCourseRegulation_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingCourseRegulation_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingCourseRegulation_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_TrainingCourseRegulation_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function TrainingCourseRegulation_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingCourseRegulation_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function FixedClass_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_FixedClass_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function FixedClass_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_FixedClass_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function FixedClass_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function FixedClass_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_FixedClass_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function FixedClass_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_FixedClass_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function FixedClass_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_FixedClass_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Curriculum_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Curriculum_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Curriculum_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Curriculum_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Curriculum_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Curriculum_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Curriculum_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Curriculum_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Curriculum_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Curriculum_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Curriculum_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function CurriculumVersion_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_CurriculumVersion_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function CurriculumVersion_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_CurriculumVersion_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function CurriculumVersion_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function CurriculumVersion_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_CurriculumVersion_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function CurriculumVersion_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_CurriculumVersion_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function CurriculumVersion_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_CurriculumVersion_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Subject_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Subject_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Subject_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Subject_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Subject_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Subject_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Subject_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Subject_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Subject_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Subject_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Subject_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectVersionCategory_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_SubjectVersionCategory_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectVersionCategory_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectVersionCategory_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectVersionCategory_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function SubjectVersionCategory_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectVersionCategory_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectVersionCategory_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_SubjectVersionCategory_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function SubjectVersionCategory_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectVersionCategory_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectVersion_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_SubjectVersion_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectVersion_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectVersion_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectVersion_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function SubjectVersion_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectVersion_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectVersion_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_SubjectVersion_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function SubjectVersion_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectVersion_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function EquivalencyGroup_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_EquivalencyGroup_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function EquivalencyGroup_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_EquivalencyGroup_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function EquivalencyGroup_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function EquivalencyGroup_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_EquivalencyGroup_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function EquivalencyGroup_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_EquivalencyGroup_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function EquivalencyGroup_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_EquivalencyGroup_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectInGroup_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_SubjectInGroup_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectInGroup_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectInGroup_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectInGroup_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function SubjectInGroup_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectInGroup_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function SubjectInGroup_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_SubjectInGroup_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function SubjectInGroup_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_SubjectInGroup_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingBlockSubject_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_TrainingBlockSubject_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingBlockSubject_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingBlockSubject_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingBlockSubject_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function TrainingBlockSubject_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingBlockSubject_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingBlockSubject_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_TrainingBlockSubject_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function TrainingBlockSubject_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingBlockSubject_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterSessionCredit_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ClassRegisterSessionCredit_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterSessionCredit_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ClassRegisterSessionCredit_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterSessionCredit_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ClassRegisterSessionCredit_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ClassRegisterSessionCredit_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterSessionCredit_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ClassRegisterSessionCredit_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ClassRegisterSessionCredit_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ClassRegisterSessionCredit_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterSession_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ClassRegisterSession_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterSession_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ClassRegisterSession_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterSession_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ClassRegisterSession_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ClassRegisterSession_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ClassRegisterSession_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ClassRegisterSession_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ClassRegisterSession_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+function ChangeLog_read(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
 }
 
-function $check_ClassRegisterSession_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
+function $check_ChangeLog_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function ClassRegisterLogs_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+function ChangeLog_create(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
 }
-
-function $check_ClassRegisterLogs_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
 
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
+function $check_ChangeLog_create(input: any, context: QueryContext): any {
     return false;
-}
-
-function ClassRegisterLogs_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ClassRegisterLogs_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
+function ChangeLog_create_input(input: any, context: QueryContext): boolean {
     return false;
-}
-
-function ClassRegisterLogs_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
 }
 
-function ClassRegisterLogs_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+function ChangeLog_update(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
 }
-
-function $check_ClassRegisterLogs_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
 
+function $check_ChangeLog_update(input: any, context: QueryContext): any {
     return false;
 }
 
-function ClassRegisterLogs_postUpdate(context: QueryContext, db: CrudContract): any {
+function ChangeLog_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_ClassRegisterLogs_postUpdate(input: any, context: QueryContext): any {
+function $check_ChangeLog_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function ClassRegisterLogs_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+function ChangeLog_delete(context: QueryContext, db: CrudContract): any {
+    return { OR: [] };
 }
-
-function $check_ClassRegisterLogs_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
 
+function $check_ChangeLog_delete(input: any, context: QueryContext): any {
     return false;
 }
 
-function SubjectClass_read(context: QueryContext, db: CrudContract): any {
+function UserProfile_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_SubjectClass_read(input: any, context: QueryContext): any {
+function $check_UserProfile_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8024,61 +5250,61 @@ function $check_SubjectClass_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function SubjectClass_create(context: QueryContext, db: CrudContract): any {
+function UserProfile_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_SubjectClass_create(input: any, context: QueryContext): any {
+function $check_UserProfile_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function SubjectClass_create_input(input: any, context: QueryContext): boolean {
+function UserProfile_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function SubjectClass_update(context: QueryContext, db: CrudContract): any {
+function UserProfile_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_SubjectClass_update(input: any, context: QueryContext): any {
+function $check_UserProfile_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function SubjectClass_postUpdate(context: QueryContext, db: CrudContract): any {
+function UserProfile_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_SubjectClass_postUpdate(input: any, context: QueryContext): any {
+function $check_UserProfile_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function SubjectClass_delete(context: QueryContext, db: CrudContract): any {
+function UserProfile_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_SubjectClass_delete(input: any, context: QueryContext): any {
+function $check_UserProfile_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function SubjectClassTime_read(context: QueryContext, db: CrudContract): any {
+function HocHam_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_SubjectClassTime_read(input: any, context: QueryContext): any {
+function $check_HocHam_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8089,61 +5315,61 @@ function $check_SubjectClassTime_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function SubjectClassTime_create(context: QueryContext, db: CrudContract): any {
+function HocHam_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_SubjectClassTime_create(input: any, context: QueryContext): any {
+function $check_HocHam_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function SubjectClassTime_create_input(input: any, context: QueryContext): boolean {
+function HocHam_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function SubjectClassTime_update(context: QueryContext, db: CrudContract): any {
+function HocHam_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_SubjectClassTime_update(input: any, context: QueryContext): any {
+function $check_HocHam_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function SubjectClassTime_postUpdate(context: QueryContext, db: CrudContract): any {
+function HocHam_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_SubjectClassTime_postUpdate(input: any, context: QueryContext): any {
+function $check_HocHam_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function SubjectClassTime_delete(context: QueryContext, db: CrudContract): any {
+function HocHam_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_SubjectClassTime_delete(input: any, context: QueryContext): any {
+function $check_HocHam_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ClassSchedule_read(context: QueryContext, db: CrudContract): any {
+function HocVi_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_ClassSchedule_read(input: any, context: QueryContext): any {
+function $check_HocVi_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8154,61 +5380,61 @@ function $check_ClassSchedule_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function ClassSchedule_create(context: QueryContext, db: CrudContract): any {
+function HocVi_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ClassSchedule_create(input: any, context: QueryContext): any {
+function $check_HocVi_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ClassSchedule_create_input(input: any, context: QueryContext): boolean {
+function HocVi_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function ClassSchedule_update(context: QueryContext, db: CrudContract): any {
+function HocVi_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ClassSchedule_update(input: any, context: QueryContext): any {
+function $check_HocVi_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ClassSchedule_postUpdate(context: QueryContext, db: CrudContract): any {
+function HocVi_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_ClassSchedule_postUpdate(input: any, context: QueryContext): any {
+function $check_HocVi_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function ClassSchedule_delete(context: QueryContext, db: CrudContract): any {
+function HocVi_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ClassSchedule_delete(input: any, context: QueryContext): any {
+function $check_HocVi_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingObjectType_read(context: QueryContext, db: CrudContract): any {
+function Relative_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingObjectType_read(input: any, context: QueryContext): any {
+function $check_Relative_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8219,61 +5445,61 @@ function $check_TrainingObjectType_read(input: any, context: QueryContext): any 
     return false;
 }
 
-function TrainingObjectType_create(context: QueryContext, db: CrudContract): any {
+function Relative_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingObjectType_create(input: any, context: QueryContext): any {
+function $check_Relative_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingObjectType_create_input(input: any, context: QueryContext): boolean {
+function Relative_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingObjectType_update(context: QueryContext, db: CrudContract): any {
+function Relative_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingObjectType_update(input: any, context: QueryContext): any {
+function $check_Relative_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingObjectType_postUpdate(context: QueryContext, db: CrudContract): any {
+function Relative_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingObjectType_postUpdate(input: any, context: QueryContext): any {
+function $check_Relative_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingObjectType_delete(context: QueryContext, db: CrudContract): any {
+function Relative_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingObjectType_delete(input: any, context: QueryContext): any {
+function $check_Relative_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function PriorityObject_read(context: QueryContext, db: CrudContract): any {
+function TrinhDoLyLuanChinhTri_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_PriorityObject_read(input: any, context: QueryContext): any {
+function $check_TrinhDoLyLuanChinhTri_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8284,61 +5510,61 @@ function $check_PriorityObject_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function PriorityObject_create(context: QueryContext, db: CrudContract): any {
+function TrinhDoLyLuanChinhTri_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_PriorityObject_create(input: any, context: QueryContext): any {
+function $check_TrinhDoLyLuanChinhTri_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function PriorityObject_create_input(input: any, context: QueryContext): boolean {
+function TrinhDoLyLuanChinhTri_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function PriorityObject_update(context: QueryContext, db: CrudContract): any {
+function TrinhDoLyLuanChinhTri_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_PriorityObject_update(input: any, context: QueryContext): any {
+function $check_TrinhDoLyLuanChinhTri_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function PriorityObject_postUpdate(context: QueryContext, db: CrudContract): any {
+function TrinhDoLyLuanChinhTri_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_PriorityObject_postUpdate(input: any, context: QueryContext): any {
+function $check_TrinhDoLyLuanChinhTri_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function PriorityObject_delete(context: QueryContext, db: CrudContract): any {
+function TrinhDoLyLuanChinhTri_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_PriorityObject_delete(input: any, context: QueryContext): any {
+function $check_TrinhDoLyLuanChinhTri_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingType_read(context: QueryContext, db: CrudContract): any {
+function TrinhDoQuanLyNhaNuoc_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingType_read(input: any, context: QueryContext): any {
+function $check_TrinhDoQuanLyNhaNuoc_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8349,61 +5575,61 @@ function $check_TrainingType_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingType_create(context: QueryContext, db: CrudContract): any {
+function TrinhDoQuanLyNhaNuoc_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingType_create(input: any, context: QueryContext): any {
+function $check_TrinhDoQuanLyNhaNuoc_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingType_create_input(input: any, context: QueryContext): boolean {
+function TrinhDoQuanLyNhaNuoc_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingType_update(context: QueryContext, db: CrudContract): any {
+function TrinhDoQuanLyNhaNuoc_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingType_update(input: any, context: QueryContext): any {
+function $check_TrinhDoQuanLyNhaNuoc_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingType_postUpdate(context: QueryContext, db: CrudContract): any {
+function TrinhDoQuanLyNhaNuoc_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingType_postUpdate(input: any, context: QueryContext): any {
+function $check_TrinhDoQuanLyNhaNuoc_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingType_delete(context: QueryContext, db: CrudContract): any {
+function TrinhDoQuanLyNhaNuoc_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingType_delete(input: any, context: QueryContext): any {
+function $check_TrinhDoQuanLyNhaNuoc_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingLevel_read(context: QueryContext, db: CrudContract): any {
+function NgoaiNgu_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingLevel_read(input: any, context: QueryContext): any {
+function $check_NgoaiNgu_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8414,61 +5640,61 @@ function $check_TrainingLevel_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingLevel_create(context: QueryContext, db: CrudContract): any {
+function NgoaiNgu_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingLevel_create(input: any, context: QueryContext): any {
+function $check_NgoaiNgu_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingLevel_create_input(input: any, context: QueryContext): boolean {
+function NgoaiNgu_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingLevel_update(context: QueryContext, db: CrudContract): any {
+function NgoaiNgu_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingLevel_update(input: any, context: QueryContext): any {
+function $check_NgoaiNgu_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingLevel_postUpdate(context: QueryContext, db: CrudContract): any {
+function NgoaiNgu_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingLevel_postUpdate(input: any, context: QueryContext): any {
+function $check_NgoaiNgu_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingLevel_delete(context: QueryContext, db: CrudContract): any {
+function NgoaiNgu_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingLevel_delete(input: any, context: QueryContext): any {
+function $check_NgoaiNgu_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingForm_read(context: QueryContext, db: CrudContract): any {
+function TinHoc_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingForm_read(input: any, context: QueryContext): any {
+function $check_TinHoc_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8479,61 +5705,61 @@ function $check_TrainingForm_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingForm_create(context: QueryContext, db: CrudContract): any {
+function TinHoc_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingForm_create(input: any, context: QueryContext): any {
+function $check_TinHoc_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingForm_create_input(input: any, context: QueryContext): boolean {
+function TinHoc_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingForm_update(context: QueryContext, db: CrudContract): any {
+function TinHoc_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingForm_update(input: any, context: QueryContext): any {
+function $check_TinHoc_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingForm_postUpdate(context: QueryContext, db: CrudContract): any {
+function TinHoc_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingForm_postUpdate(input: any, context: QueryContext): any {
+function $check_TinHoc_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingForm_delete(context: QueryContext, db: CrudContract): any {
+function TinHoc_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingForm_delete(input: any, context: QueryContext): any {
+function $check_TinHoc_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingLocation_read(context: QueryContext, db: CrudContract): any {
+function BoiDuongQuocPhongAnNinh_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingLocation_read(input: any, context: QueryContext): any {
+function $check_BoiDuongQuocPhongAnNinh_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8544,61 +5770,61 @@ function $check_TrainingLocation_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingLocation_create(context: QueryContext, db: CrudContract): any {
+function BoiDuongQuocPhongAnNinh_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingLocation_create(input: any, context: QueryContext): any {
+function $check_BoiDuongQuocPhongAnNinh_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingLocation_create_input(input: any, context: QueryContext): boolean {
+function BoiDuongQuocPhongAnNinh_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingLocation_update(context: QueryContext, db: CrudContract): any {
+function BoiDuongQuocPhongAnNinh_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingLocation_update(input: any, context: QueryContext): any {
+function $check_BoiDuongQuocPhongAnNinh_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingLocation_postUpdate(context: QueryContext, db: CrudContract): any {
+function BoiDuongQuocPhongAnNinh_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingLocation_postUpdate(input: any, context: QueryContext): any {
+function $check_BoiDuongQuocPhongAnNinh_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingLocation_delete(context: QueryContext, db: CrudContract): any {
+function BoiDuongQuocPhongAnNinh_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingLocation_delete(input: any, context: QueryContext): any {
+function $check_BoiDuongQuocPhongAnNinh_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Building_read(context: QueryContext, db: CrudContract): any {
+function CapBac_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_Building_read(input: any, context: QueryContext): any {
+function $check_CapBac_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8609,61 +5835,61 @@ function $check_Building_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function Building_create(context: QueryContext, db: CrudContract): any {
+function CapBac_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Building_create(input: any, context: QueryContext): any {
+function $check_CapBac_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Building_create_input(input: any, context: QueryContext): boolean {
+function CapBac_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function Building_update(context: QueryContext, db: CrudContract): any {
+function CapBac_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Building_update(input: any, context: QueryContext): any {
+function $check_CapBac_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Building_postUpdate(context: QueryContext, db: CrudContract): any {
+function CapBac_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_Building_postUpdate(input: any, context: QueryContext): any {
+function $check_CapBac_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function Building_delete(context: QueryContext, db: CrudContract): any {
+function CapBac_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Building_delete(input: any, context: QueryContext): any {
+function $check_CapBac_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Room_read(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCongTac_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_Room_read(input: any, context: QueryContext): any {
+function $check_QuaTrinhCongTac_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8674,61 +5900,61 @@ function $check_Room_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function Room_create(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCongTac_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Room_create(input: any, context: QueryContext): any {
+function $check_QuaTrinhCongTac_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Room_create_input(input: any, context: QueryContext): boolean {
+function QuaTrinhCongTac_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function Room_update(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCongTac_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Room_update(input: any, context: QueryContext): any {
+function $check_QuaTrinhCongTac_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Room_postUpdate(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCongTac_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_Room_postUpdate(input: any, context: QueryContext): any {
+function $check_QuaTrinhCongTac_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function Room_delete(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCongTac_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Room_delete(input: any, context: QueryContext): any {
+function $check_QuaTrinhCongTac_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingField_read(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiCongTac_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingField_read(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiCongTac_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8739,61 +5965,61 @@ function $check_TrainingField_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingField_create(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiCongTac_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingField_create(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiCongTac_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingField_create_input(input: any, context: QueryContext): boolean {
+function QuaTrinhCuDiCongTac_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingField_update(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiCongTac_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingField_update(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiCongTac_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingField_postUpdate(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiCongTac_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingField_postUpdate(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiCongTac_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingField_delete(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiCongTac_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingField_delete(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiCongTac_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingFieldOnTrainingObjectType_read(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiDaoTao_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingFieldOnTrainingObjectType_read(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiDaoTao_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8804,61 +6030,61 @@ function $check_TrainingFieldOnTrainingObjectType_read(input: any, context: Quer
     return false;
 }
 
-function TrainingFieldOnTrainingObjectType_create(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiDaoTao_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingFieldOnTrainingObjectType_create(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiDaoTao_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingFieldOnTrainingObjectType_create_input(input: any, context: QueryContext): boolean {
+function QuaTrinhCuDiDaoTao_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingFieldOnTrainingObjectType_update(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiDaoTao_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingFieldOnTrainingObjectType_update(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiDaoTao_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingFieldOnTrainingObjectType_postUpdate(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiDaoTao_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingFieldOnTrainingObjectType_postUpdate(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiDaoTao_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingFieldOnTrainingObjectType_delete(context: QueryContext, db: CrudContract): any {
+function QuaTrinhCuDiDaoTao_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingFieldOnTrainingObjectType_delete(input: any, context: QueryContext): any {
+function $check_QuaTrinhCuDiDaoTao_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingMajor_read(context: QueryContext, db: CrudContract): any {
+function KhenThuong_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingMajor_read(input: any, context: QueryContext): any {
+function $check_KhenThuong_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8869,61 +6095,61 @@ function $check_TrainingMajor_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingMajor_create(context: QueryContext, db: CrudContract): any {
+function KhenThuong_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingMajor_create(input: any, context: QueryContext): any {
+function $check_KhenThuong_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingMajor_create_input(input: any, context: QueryContext): boolean {
+function KhenThuong_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingMajor_update(context: QueryContext, db: CrudContract): any {
+function KhenThuong_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingMajor_update(input: any, context: QueryContext): any {
+function $check_KhenThuong_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingMajor_postUpdate(context: QueryContext, db: CrudContract): any {
+function KhenThuong_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingMajor_postUpdate(input: any, context: QueryContext): any {
+function $check_KhenThuong_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingMajor_delete(context: QueryContext, db: CrudContract): any {
+function KhenThuong_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingMajor_delete(input: any, context: QueryContext): any {
+function $check_KhenThuong_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingMajorOnTrainingObjectType_read(context: QueryContext, db: CrudContract): any {
+function KyLuat_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingMajorOnTrainingObjectType_read(input: any, context: QueryContext): any {
+function $check_KyLuat_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8934,61 +6160,61 @@ function $check_TrainingMajorOnTrainingObjectType_read(input: any, context: Quer
     return false;
 }
 
-function TrainingMajorOnTrainingObjectType_create(context: QueryContext, db: CrudContract): any {
+function KyLuat_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingMajorOnTrainingObjectType_create(input: any, context: QueryContext): any {
+function $check_KyLuat_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingMajorOnTrainingObjectType_create_input(input: any, context: QueryContext): boolean {
+function KyLuat_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingMajorOnTrainingObjectType_update(context: QueryContext, db: CrudContract): any {
+function KyLuat_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingMajorOnTrainingObjectType_update(input: any, context: QueryContext): any {
+function $check_KyLuat_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingMajorOnTrainingObjectType_postUpdate(context: QueryContext, db: CrudContract): any {
+function KyLuat_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingMajorOnTrainingObjectType_postUpdate(input: any, context: QueryContext): any {
+function $check_KyLuat_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingMajorOnTrainingObjectType_delete(context: QueryContext, db: CrudContract): any {
+function KyLuat_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingMajorOnTrainingObjectType_delete(input: any, context: QueryContext): any {
+function $check_KyLuat_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingBlock_read(context: QueryContext, db: CrudContract): any {
+function DoiTuongChinhSach_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingBlock_read(input: any, context: QueryContext): any {
+function $check_DoiTuongChinhSach_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -8999,61 +6225,61 @@ function $check_TrainingBlock_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingBlock_create(context: QueryContext, db: CrudContract): any {
+function DoiTuongChinhSach_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingBlock_create(input: any, context: QueryContext): any {
+function $check_DoiTuongChinhSach_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingBlock_create_input(input: any, context: QueryContext): boolean {
+function DoiTuongChinhSach_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingBlock_update(context: QueryContext, db: CrudContract): any {
+function DoiTuongChinhSach_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingBlock_update(input: any, context: QueryContext): any {
+function $check_DoiTuongChinhSach_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingBlock_postUpdate(context: QueryContext, db: CrudContract): any {
+function DoiTuongChinhSach_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingBlock_postUpdate(input: any, context: QueryContext): any {
+function $check_DoiTuongChinhSach_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingBlock_delete(context: QueryContext, db: CrudContract): any {
+function DoiTuongChinhSach_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingBlock_delete(input: any, context: QueryContext): any {
+function $check_DoiTuongChinhSach_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingBlockOnCurriculumVersion_read(context: QueryContext, db: CrudContract): any {
+function KeKhaiTaiSan_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingBlockOnCurriculumVersion_read(input: any, context: QueryContext): any {
+function $check_KeKhaiTaiSan_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -9064,61 +6290,61 @@ function $check_TrainingBlockOnCurriculumVersion_read(input: any, context: Query
     return false;
 }
 
-function TrainingBlockOnCurriculumVersion_create(context: QueryContext, db: CrudContract): any {
+function KeKhaiTaiSan_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingBlockOnCurriculumVersion_create(input: any, context: QueryContext): any {
+function $check_KeKhaiTaiSan_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingBlockOnCurriculumVersion_create_input(input: any, context: QueryContext): boolean {
+function KeKhaiTaiSan_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingBlockOnCurriculumVersion_update(context: QueryContext, db: CrudContract): any {
+function KeKhaiTaiSan_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingBlockOnCurriculumVersion_update(input: any, context: QueryContext): any {
+function $check_KeKhaiTaiSan_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingBlockOnCurriculumVersion_postUpdate(context: QueryContext, db: CrudContract): any {
+function KeKhaiTaiSan_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingBlockOnCurriculumVersion_postUpdate(input: any, context: QueryContext): any {
+function $check_KeKhaiTaiSan_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingBlockOnCurriculumVersion_delete(context: QueryContext, db: CrudContract): any {
+function KeKhaiTaiSan_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingBlockOnCurriculumVersion_delete(input: any, context: QueryContext): any {
+function $check_KeKhaiTaiSan_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingTime_read(context: QueryContext, db: CrudContract): any {
+function TiengDanToc_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingTime_read(input: any, context: QueryContext): any {
+function $check_TiengDanToc_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -9129,61 +6355,61 @@ function $check_TrainingTime_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingTime_create(context: QueryContext, db: CrudContract): any {
+function TiengDanToc_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingTime_create(input: any, context: QueryContext): any {
+function $check_TiengDanToc_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingTime_create_input(input: any, context: QueryContext): boolean {
+function TiengDanToc_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingTime_update(context: QueryContext, db: CrudContract): any {
+function TiengDanToc_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingTime_update(input: any, context: QueryContext): any {
+function $check_TiengDanToc_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingTime_postUpdate(context: QueryContext, db: CrudContract): any {
+function TiengDanToc_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingTime_postUpdate(input: any, context: QueryContext): any {
+function $check_TiengDanToc_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingTime_delete(context: QueryContext, db: CrudContract): any {
+function TiengDanToc_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingTime_delete(input: any, context: QueryContext): any {
+function $check_TiengDanToc_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function DiplomaType_read(context: QueryContext, db: CrudContract): any {
+function ChienDau_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_DiplomaType_read(input: any, context: QueryContext): any {
+function $check_ChienDau_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -9194,61 +6420,61 @@ function $check_DiplomaType_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function DiplomaType_create(context: QueryContext, db: CrudContract): any {
+function ChienDau_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_DiplomaType_create(input: any, context: QueryContext): any {
+function $check_ChienDau_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function DiplomaType_create_input(input: any, context: QueryContext): boolean {
+function ChienDau_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function DiplomaType_update(context: QueryContext, db: CrudContract): any {
+function ChienDau_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_DiplomaType_update(input: any, context: QueryContext): any {
+function $check_ChienDau_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function DiplomaType_postUpdate(context: QueryContext, db: CrudContract): any {
+function ChienDau_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_DiplomaType_postUpdate(input: any, context: QueryContext): any {
+function $check_ChienDau_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function DiplomaType_delete(context: QueryContext, db: CrudContract): any {
+function ChienDau_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_DiplomaType_delete(input: any, context: QueryContext): any {
+function $check_ChienDau_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ScoreConvert_read(context: QueryContext, db: CrudContract): any {
+function NuocNgoai_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_ScoreConvert_read(input: any, context: QueryContext): any {
+function $check_NuocNgoai_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -9259,61 +6485,61 @@ function $check_ScoreConvert_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function ScoreConvert_create(context: QueryContext, db: CrudContract): any {
+function NuocNgoai_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ScoreConvert_create(input: any, context: QueryContext): any {
+function $check_NuocNgoai_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ScoreConvert_create_input(input: any, context: QueryContext): boolean {
+function NuocNgoai_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function ScoreConvert_update(context: QueryContext, db: CrudContract): any {
+function NuocNgoai_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ScoreConvert_update(input: any, context: QueryContext): any {
+function $check_NuocNgoai_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ScoreConvert_postUpdate(context: QueryContext, db: CrudContract): any {
+function NuocNgoai_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_ScoreConvert_postUpdate(input: any, context: QueryContext): any {
+function $check_NuocNgoai_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function ScoreConvert_delete(context: QueryContext, db: CrudContract): any {
+function NuocNgoai_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ScoreConvert_delete(input: any, context: QueryContext): any {
+function $check_NuocNgoai_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingKPI_read(context: QueryContext, db: CrudContract): any {
+function ThuongTat_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrainingKPI_read(input: any, context: QueryContext): any {
+function $check_ThuongTat_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -9324,61 +6550,61 @@ function $check_TrainingKPI_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TrainingKPI_create(context: QueryContext, db: CrudContract): any {
+function ThuongTat_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingKPI_create(input: any, context: QueryContext): any {
+function $check_ThuongTat_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingKPI_create_input(input: any, context: QueryContext): boolean {
+function ThuongTat_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrainingKPI_update(context: QueryContext, db: CrudContract): any {
+function ThuongTat_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingKPI_update(input: any, context: QueryContext): any {
+function $check_ThuongTat_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrainingKPI_postUpdate(context: QueryContext, db: CrudContract): any {
+function ThuongTat_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrainingKPI_postUpdate(input: any, context: QueryContext): any {
+function $check_ThuongTat_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrainingKPI_delete(context: QueryContext, db: CrudContract): any {
+function ThuongTat_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrainingKPI_delete(input: any, context: QueryContext): any {
+function $check_ThuongTat_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Student_read(context: QueryContext, db: CrudContract): any {
+function DanhHieu_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_Student_read(input: any, context: QueryContext): any {
+function $check_DanhHieu_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -9389,61 +6615,61 @@ function $check_Student_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function Student_create(context: QueryContext, db: CrudContract): any {
+function DanhHieu_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Student_create(input: any, context: QueryContext): any {
+function $check_DanhHieu_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Student_create_input(input: any, context: QueryContext): boolean {
+function DanhHieu_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function Student_update(context: QueryContext, db: CrudContract): any {
+function DanhHieu_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Student_update(input: any, context: QueryContext): any {
+function $check_DanhHieu_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Student_postUpdate(context: QueryContext, db: CrudContract): any {
+function DanhHieu_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_Student_postUpdate(input: any, context: QueryContext): any {
+function $check_DanhHieu_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function Student_delete(context: QueryContext, db: CrudContract): any {
+function DanhHieu_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Student_delete(input: any, context: QueryContext): any {
+function $check_DanhHieu_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function StudentSemesterResult_read(context: QueryContext, db: CrudContract): any {
+function QuaTrinhHocTap_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_StudentSemesterResult_read(input: any, context: QueryContext): any {
+function $check_QuaTrinhHocTap_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -9454,61 +6680,61 @@ function $check_StudentSemesterResult_read(input: any, context: QueryContext): a
     return false;
 }
 
-function StudentSemesterResult_create(context: QueryContext, db: CrudContract): any {
+function QuaTrinhHocTap_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_StudentSemesterResult_create(input: any, context: QueryContext): any {
+function $check_QuaTrinhHocTap_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function StudentSemesterResult_create_input(input: any, context: QueryContext): boolean {
+function QuaTrinhHocTap_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function StudentSemesterResult_update(context: QueryContext, db: CrudContract): any {
+function QuaTrinhHocTap_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_StudentSemesterResult_update(input: any, context: QueryContext): any {
+function $check_QuaTrinhHocTap_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function StudentSemesterResult_postUpdate(context: QueryContext, db: CrudContract): any {
+function QuaTrinhHocTap_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_StudentSemesterResult_postUpdate(input: any, context: QueryContext): any {
+function $check_QuaTrinhHocTap_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function StudentSemesterResult_delete(context: QueryContext, db: CrudContract): any {
+function QuaTrinhHocTap_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_StudentSemesterResult_delete(input: any, context: QueryContext): any {
+function $check_QuaTrinhHocTap_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function StudentYearResult_read(context: QueryContext, db: CrudContract): any {
+function ToChucXaHoi_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_StudentYearResult_read(input: any, context: QueryContext): any {
+function $check_ToChucXaHoi_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -9519,61 +6745,61 @@ function $check_StudentYearResult_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function StudentYearResult_create(context: QueryContext, db: CrudContract): any {
+function ToChucXaHoi_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_StudentYearResult_create(input: any, context: QueryContext): any {
+function $check_ToChucXaHoi_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function StudentYearResult_create_input(input: any, context: QueryContext): boolean {
+function ToChucXaHoi_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function StudentYearResult_update(context: QueryContext, db: CrudContract): any {
+function ToChucXaHoi_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_StudentYearResult_update(input: any, context: QueryContext): any {
+function $check_ToChucXaHoi_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function StudentYearResult_postUpdate(context: QueryContext, db: CrudContract): any {
+function ToChucXaHoi_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_StudentYearResult_postUpdate(input: any, context: QueryContext): any {
+function $check_ToChucXaHoi_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function StudentYearResult_delete(context: QueryContext, db: CrudContract): any {
+function ToChucXaHoi_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_StudentYearResult_delete(input: any, context: QueryContext): any {
+function $check_ToChucXaHoi_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Notification_read(context: QueryContext, db: CrudContract): any {
+function QuaTrinhLuong_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_Notification_read(input: any, context: QueryContext): any {
+function $check_QuaTrinhLuong_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -9584,49 +6810,49 @@ function $check_Notification_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function Notification_create(context: QueryContext, db: CrudContract): any {
+function QuaTrinhLuong_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Notification_create(input: any, context: QueryContext): any {
+function $check_QuaTrinhLuong_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Notification_create_input(input: any, context: QueryContext): boolean {
+function QuaTrinhLuong_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function Notification_update(context: QueryContext, db: CrudContract): any {
+function QuaTrinhLuong_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Notification_update(input: any, context: QueryContext): any {
+function $check_QuaTrinhLuong_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Notification_postUpdate(context: QueryContext, db: CrudContract): any {
+function QuaTrinhLuong_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_Notification_postUpdate(input: any, context: QueryContext): any {
+function $check_QuaTrinhLuong_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function Notification_delete(context: QueryContext, db: CrudContract): any {
+function QuaTrinhLuong_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Notification_delete(input: any, context: QueryContext): any {
+function $check_QuaTrinhLuong_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
@@ -12168,12 +9394,12 @@ function $check_DM_ViTriCongViec_delete(input: any, context: QueryContext): any 
     return false;
 }
 
-function UserProfile_read(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelay_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_UserProfile_read(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelay_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12184,61 +9410,61 @@ function $check_UserProfile_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function UserProfile_create(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelay_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_UserProfile_create(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelay_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function UserProfile_create_input(input: any, context: QueryContext): boolean {
+function PlanTrainingDelay_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function UserProfile_update(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelay_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_UserProfile_update(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelay_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function UserProfile_postUpdate(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelay_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_UserProfile_postUpdate(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelay_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function UserProfile_delete(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelay_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_UserProfile_delete(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelay_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function HocHam_read(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelaySubject_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_HocHam_read(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelaySubject_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12249,61 +9475,61 @@ function $check_HocHam_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function HocHam_create(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelaySubject_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_HocHam_create(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelaySubject_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function HocHam_create_input(input: any, context: QueryContext): boolean {
+function PlanTrainingDelaySubject_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function HocHam_update(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelaySubject_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_HocHam_update(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelaySubject_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function HocHam_postUpdate(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelaySubject_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_HocHam_postUpdate(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelaySubject_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function HocHam_delete(context: QueryContext, db: CrudContract): any {
+function PlanTrainingDelaySubject_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_HocHam_delete(input: any, context: QueryContext): any {
+function $check_PlanTrainingDelaySubject_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function HocVi_read(context: QueryContext, db: CrudContract): any {
+function PlanTraining_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_HocVi_read(input: any, context: QueryContext): any {
+function $check_PlanTraining_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12314,61 +9540,61 @@ function $check_HocVi_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function HocVi_create(context: QueryContext, db: CrudContract): any {
+function PlanTraining_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_HocVi_create(input: any, context: QueryContext): any {
+function $check_PlanTraining_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function HocVi_create_input(input: any, context: QueryContext): boolean {
+function PlanTraining_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function HocVi_update(context: QueryContext, db: CrudContract): any {
+function PlanTraining_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_HocVi_update(input: any, context: QueryContext): any {
+function $check_PlanTraining_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function HocVi_postUpdate(context: QueryContext, db: CrudContract): any {
+function PlanTraining_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_HocVi_postUpdate(input: any, context: QueryContext): any {
+function $check_PlanTraining_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function HocVi_delete(context: QueryContext, db: CrudContract): any {
+function PlanTraining_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_HocVi_delete(input: any, context: QueryContext): any {
+function $check_PlanTraining_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Relative_read(context: QueryContext, db: CrudContract): any {
+function PlanTrainingSubject_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_Relative_read(input: any, context: QueryContext): any {
+function $check_PlanTrainingSubject_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12379,61 +9605,61 @@ function $check_Relative_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function Relative_create(context: QueryContext, db: CrudContract): any {
+function PlanTrainingSubject_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Relative_create(input: any, context: QueryContext): any {
+function $check_PlanTrainingSubject_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Relative_create_input(input: any, context: QueryContext): boolean {
+function PlanTrainingSubject_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function Relative_update(context: QueryContext, db: CrudContract): any {
+function PlanTrainingSubject_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Relative_update(input: any, context: QueryContext): any {
+function $check_PlanTrainingSubject_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function Relative_postUpdate(context: QueryContext, db: CrudContract): any {
+function PlanTrainingSubject_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_Relative_postUpdate(input: any, context: QueryContext): any {
+function $check_PlanTrainingSubject_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function Relative_delete(context: QueryContext, db: CrudContract): any {
+function PlanTrainingSubject_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_Relative_delete(input: any, context: QueryContext): any {
+function $check_PlanTrainingSubject_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrinhDoLyLuanChinhTri_read(context: QueryContext, db: CrudContract): any {
+function StudentScoreConvert_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrinhDoLyLuanChinhTri_read(input: any, context: QueryContext): any {
+function $check_StudentScoreConvert_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12444,61 +9670,61 @@ function $check_TrinhDoLyLuanChinhTri_read(input: any, context: QueryContext): a
     return false;
 }
 
-function TrinhDoLyLuanChinhTri_create(context: QueryContext, db: CrudContract): any {
+function StudentScoreConvert_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrinhDoLyLuanChinhTri_create(input: any, context: QueryContext): any {
+function $check_StudentScoreConvert_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrinhDoLyLuanChinhTri_create_input(input: any, context: QueryContext): boolean {
+function StudentScoreConvert_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrinhDoLyLuanChinhTri_update(context: QueryContext, db: CrudContract): any {
+function StudentScoreConvert_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrinhDoLyLuanChinhTri_update(input: any, context: QueryContext): any {
+function $check_StudentScoreConvert_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrinhDoLyLuanChinhTri_postUpdate(context: QueryContext, db: CrudContract): any {
+function StudentScoreConvert_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrinhDoLyLuanChinhTri_postUpdate(input: any, context: QueryContext): any {
+function $check_StudentScoreConvert_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrinhDoLyLuanChinhTri_delete(context: QueryContext, db: CrudContract): any {
+function StudentScoreConvert_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrinhDoLyLuanChinhTri_delete(input: any, context: QueryContext): any {
+function $check_StudentScoreConvert_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrinhDoQuanLyNhaNuoc_read(context: QueryContext, db: CrudContract): any {
+function SubjectScoreConvert_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TrinhDoQuanLyNhaNuoc_read(input: any, context: QueryContext): any {
+function $check_SubjectScoreConvert_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12509,61 +9735,61 @@ function $check_TrinhDoQuanLyNhaNuoc_read(input: any, context: QueryContext): an
     return false;
 }
 
-function TrinhDoQuanLyNhaNuoc_create(context: QueryContext, db: CrudContract): any {
+function SubjectScoreConvert_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrinhDoQuanLyNhaNuoc_create(input: any, context: QueryContext): any {
+function $check_SubjectScoreConvert_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrinhDoQuanLyNhaNuoc_create_input(input: any, context: QueryContext): boolean {
+function SubjectScoreConvert_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TrinhDoQuanLyNhaNuoc_update(context: QueryContext, db: CrudContract): any {
+function SubjectScoreConvert_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrinhDoQuanLyNhaNuoc_update(input: any, context: QueryContext): any {
+function $check_SubjectScoreConvert_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TrinhDoQuanLyNhaNuoc_postUpdate(context: QueryContext, db: CrudContract): any {
+function SubjectScoreConvert_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TrinhDoQuanLyNhaNuoc_postUpdate(input: any, context: QueryContext): any {
+function $check_SubjectScoreConvert_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TrinhDoQuanLyNhaNuoc_delete(context: QueryContext, db: CrudContract): any {
+function SubjectScoreConvert_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TrinhDoQuanLyNhaNuoc_delete(input: any, context: QueryContext): any {
+function $check_SubjectScoreConvert_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function NgoaiNgu_read(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScore_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_NgoaiNgu_read(input: any, context: QueryContext): any {
+function $check_StudentSubjectScore_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12574,61 +9800,61 @@ function $check_NgoaiNgu_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function NgoaiNgu_create(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScore_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_NgoaiNgu_create(input: any, context: QueryContext): any {
+function $check_StudentSubjectScore_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function NgoaiNgu_create_input(input: any, context: QueryContext): boolean {
+function StudentSubjectScore_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function NgoaiNgu_update(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScore_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_NgoaiNgu_update(input: any, context: QueryContext): any {
+function $check_StudentSubjectScore_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function NgoaiNgu_postUpdate(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScore_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_NgoaiNgu_postUpdate(input: any, context: QueryContext): any {
+function $check_StudentSubjectScore_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function NgoaiNgu_delete(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScore_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_NgoaiNgu_delete(input: any, context: QueryContext): any {
+function $check_StudentSubjectScore_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TinHoc_read(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScoreHistory_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TinHoc_read(input: any, context: QueryContext): any {
+function $check_StudentSubjectScoreHistory_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12639,61 +9865,61 @@ function $check_TinHoc_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TinHoc_create(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScoreHistory_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TinHoc_create(input: any, context: QueryContext): any {
+function $check_StudentSubjectScoreHistory_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TinHoc_create_input(input: any, context: QueryContext): boolean {
+function StudentSubjectScoreHistory_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TinHoc_update(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScoreHistory_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TinHoc_update(input: any, context: QueryContext): any {
+function $check_StudentSubjectScoreHistory_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TinHoc_postUpdate(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScoreHistory_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TinHoc_postUpdate(input: any, context: QueryContext): any {
+function $check_StudentSubjectScoreHistory_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TinHoc_delete(context: QueryContext, db: CrudContract): any {
+function StudentSubjectScoreHistory_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TinHoc_delete(input: any, context: QueryContext): any {
+function $check_StudentSubjectScoreHistory_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function BoiDuongQuocPhongAnNinh_read(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificateOnStudentSubjectScore_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_BoiDuongQuocPhongAnNinh_read(input: any, context: QueryContext): any {
+function $check_ArchivedCertificateOnStudentSubjectScore_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12704,61 +9930,61 @@ function $check_BoiDuongQuocPhongAnNinh_read(input: any, context: QueryContext):
     return false;
 }
 
-function BoiDuongQuocPhongAnNinh_create(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificateOnStudentSubjectScore_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_BoiDuongQuocPhongAnNinh_create(input: any, context: QueryContext): any {
+function $check_ArchivedCertificateOnStudentSubjectScore_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function BoiDuongQuocPhongAnNinh_create_input(input: any, context: QueryContext): boolean {
+function ArchivedCertificateOnStudentSubjectScore_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function BoiDuongQuocPhongAnNinh_update(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificateOnStudentSubjectScore_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_BoiDuongQuocPhongAnNinh_update(input: any, context: QueryContext): any {
+function $check_ArchivedCertificateOnStudentSubjectScore_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function BoiDuongQuocPhongAnNinh_postUpdate(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificateOnStudentSubjectScore_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_BoiDuongQuocPhongAnNinh_postUpdate(input: any, context: QueryContext): any {
+function $check_ArchivedCertificateOnStudentSubjectScore_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function BoiDuongQuocPhongAnNinh_delete(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificateOnStudentSubjectScore_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_BoiDuongQuocPhongAnNinh_delete(input: any, context: QueryContext): any {
+function $check_ArchivedCertificateOnStudentSubjectScore_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function CapBac_read(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificate_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_CapBac_read(input: any, context: QueryContext): any {
+function $check_ArchivedCertificate_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12769,61 +9995,61 @@ function $check_CapBac_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function CapBac_create(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificate_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_CapBac_create(input: any, context: QueryContext): any {
+function $check_ArchivedCertificate_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function CapBac_create_input(input: any, context: QueryContext): boolean {
+function ArchivedCertificate_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function CapBac_update(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificate_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_CapBac_update(input: any, context: QueryContext): any {
+function $check_ArchivedCertificate_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function CapBac_postUpdate(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificate_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_CapBac_postUpdate(input: any, context: QueryContext): any {
+function $check_ArchivedCertificate_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function CapBac_delete(context: QueryContext, db: CrudContract): any {
+function ArchivedCertificate_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_CapBac_delete(input: any, context: QueryContext): any {
+function $check_ArchivedCertificate_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhCongTac_read(context: QueryContext, db: CrudContract): any {
+function ArchivedAwardOnStudentSubjectScore_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_QuaTrinhCongTac_read(input: any, context: QueryContext): any {
+function $check_ArchivedAwardOnStudentSubjectScore_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12834,61 +10060,61 @@ function $check_QuaTrinhCongTac_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function QuaTrinhCongTac_create(context: QueryContext, db: CrudContract): any {
+function ArchivedAwardOnStudentSubjectScore_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhCongTac_create(input: any, context: QueryContext): any {
+function $check_ArchivedAwardOnStudentSubjectScore_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhCongTac_create_input(input: any, context: QueryContext): boolean {
+function ArchivedAwardOnStudentSubjectScore_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function QuaTrinhCongTac_update(context: QueryContext, db: CrudContract): any {
+function ArchivedAwardOnStudentSubjectScore_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhCongTac_update(input: any, context: QueryContext): any {
+function $check_ArchivedAwardOnStudentSubjectScore_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhCongTac_postUpdate(context: QueryContext, db: CrudContract): any {
+function ArchivedAwardOnStudentSubjectScore_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_QuaTrinhCongTac_postUpdate(input: any, context: QueryContext): any {
+function $check_ArchivedAwardOnStudentSubjectScore_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function QuaTrinhCongTac_delete(context: QueryContext, db: CrudContract): any {
+function ArchivedAwardOnStudentSubjectScore_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhCongTac_delete(input: any, context: QueryContext): any {
+function $check_ArchivedAwardOnStudentSubjectScore_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhCuDiCongTac_read(context: QueryContext, db: CrudContract): any {
+function ArchivedAward_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_QuaTrinhCuDiCongTac_read(input: any, context: QueryContext): any {
+function $check_ArchivedAward_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12899,61 +10125,61 @@ function $check_QuaTrinhCuDiCongTac_read(input: any, context: QueryContext): any
     return false;
 }
 
-function QuaTrinhCuDiCongTac_create(context: QueryContext, db: CrudContract): any {
+function ArchivedAward_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhCuDiCongTac_create(input: any, context: QueryContext): any {
+function $check_ArchivedAward_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhCuDiCongTac_create_input(input: any, context: QueryContext): boolean {
+function ArchivedAward_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function QuaTrinhCuDiCongTac_update(context: QueryContext, db: CrudContract): any {
+function ArchivedAward_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhCuDiCongTac_update(input: any, context: QueryContext): any {
+function $check_ArchivedAward_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhCuDiCongTac_postUpdate(context: QueryContext, db: CrudContract): any {
+function ArchivedAward_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_QuaTrinhCuDiCongTac_postUpdate(input: any, context: QueryContext): any {
+function $check_ArchivedAward_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function QuaTrinhCuDiCongTac_delete(context: QueryContext, db: CrudContract): any {
+function ArchivedAward_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhCuDiCongTac_delete(input: any, context: QueryContext): any {
+function $check_ArchivedAward_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhCuDiDaoTao_read(context: QueryContext, db: CrudContract): any {
+function SchoolYear_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_QuaTrinhCuDiDaoTao_read(input: any, context: QueryContext): any {
+function $check_SchoolYear_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -12964,61 +10190,61 @@ function $check_QuaTrinhCuDiDaoTao_read(input: any, context: QueryContext): any 
     return false;
 }
 
-function QuaTrinhCuDiDaoTao_create(context: QueryContext, db: CrudContract): any {
+function SchoolYear_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhCuDiDaoTao_create(input: any, context: QueryContext): any {
+function $check_SchoolYear_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhCuDiDaoTao_create_input(input: any, context: QueryContext): boolean {
+function SchoolYear_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function QuaTrinhCuDiDaoTao_update(context: QueryContext, db: CrudContract): any {
+function SchoolYear_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhCuDiDaoTao_update(input: any, context: QueryContext): any {
+function $check_SchoolYear_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhCuDiDaoTao_postUpdate(context: QueryContext, db: CrudContract): any {
+function SchoolYear_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_QuaTrinhCuDiDaoTao_postUpdate(input: any, context: QueryContext): any {
+function $check_SchoolYear_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function QuaTrinhCuDiDaoTao_delete(context: QueryContext, db: CrudContract): any {
+function SchoolYear_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhCuDiDaoTao_delete(input: any, context: QueryContext): any {
+function $check_SchoolYear_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function KhenThuong_read(context: QueryContext, db: CrudContract): any {
+function Semester_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_KhenThuong_read(input: any, context: QueryContext): any {
+function $check_Semester_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13029,61 +10255,61 @@ function $check_KhenThuong_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function KhenThuong_create(context: QueryContext, db: CrudContract): any {
+function Semester_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_KhenThuong_create(input: any, context: QueryContext): any {
+function $check_Semester_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function KhenThuong_create_input(input: any, context: QueryContext): boolean {
+function Semester_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function KhenThuong_update(context: QueryContext, db: CrudContract): any {
+function Semester_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_KhenThuong_update(input: any, context: QueryContext): any {
+function $check_Semester_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function KhenThuong_postUpdate(context: QueryContext, db: CrudContract): any {
+function Semester_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_KhenThuong_postUpdate(input: any, context: QueryContext): any {
+function $check_Semester_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function KhenThuong_delete(context: QueryContext, db: CrudContract): any {
+function Semester_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_KhenThuong_delete(input: any, context: QueryContext): any {
+function $check_Semester_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function KyLuat_read(context: QueryContext, db: CrudContract): any {
+function Milestone_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_KyLuat_read(input: any, context: QueryContext): any {
+function $check_Milestone_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13094,61 +10320,61 @@ function $check_KyLuat_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function KyLuat_create(context: QueryContext, db: CrudContract): any {
+function Milestone_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_KyLuat_create(input: any, context: QueryContext): any {
+function $check_Milestone_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function KyLuat_create_input(input: any, context: QueryContext): boolean {
+function Milestone_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function KyLuat_update(context: QueryContext, db: CrudContract): any {
+function Milestone_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_KyLuat_update(input: any, context: QueryContext): any {
+function $check_Milestone_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function KyLuat_postUpdate(context: QueryContext, db: CrudContract): any {
+function Milestone_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_KyLuat_postUpdate(input: any, context: QueryContext): any {
+function $check_Milestone_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function KyLuat_delete(context: QueryContext, db: CrudContract): any {
+function Milestone_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_KyLuat_delete(input: any, context: QueryContext): any {
+function $check_Milestone_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function DoiTuongChinhSach_read(context: QueryContext, db: CrudContract): any {
+function TrainingLanguage_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_DoiTuongChinhSach_read(input: any, context: QueryContext): any {
+function $check_TrainingLanguage_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13159,61 +10385,61 @@ function $check_DoiTuongChinhSach_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function DoiTuongChinhSach_create(context: QueryContext, db: CrudContract): any {
+function TrainingLanguage_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_DoiTuongChinhSach_create(input: any, context: QueryContext): any {
+function $check_TrainingLanguage_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function DoiTuongChinhSach_create_input(input: any, context: QueryContext): boolean {
+function TrainingLanguage_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function DoiTuongChinhSach_update(context: QueryContext, db: CrudContract): any {
+function TrainingLanguage_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_DoiTuongChinhSach_update(input: any, context: QueryContext): any {
+function $check_TrainingLanguage_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function DoiTuongChinhSach_postUpdate(context: QueryContext, db: CrudContract): any {
+function TrainingLanguage_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_DoiTuongChinhSach_postUpdate(input: any, context: QueryContext): any {
+function $check_TrainingLanguage_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function DoiTuongChinhSach_delete(context: QueryContext, db: CrudContract): any {
+function TrainingLanguage_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_DoiTuongChinhSach_delete(input: any, context: QueryContext): any {
+function $check_TrainingLanguage_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function KeKhaiTaiSan_read(context: QueryContext, db: CrudContract): any {
+function TrainingCourse_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_KeKhaiTaiSan_read(input: any, context: QueryContext): any {
+function $check_TrainingCourse_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13224,61 +10450,61 @@ function $check_KeKhaiTaiSan_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function KeKhaiTaiSan_create(context: QueryContext, db: CrudContract): any {
+function TrainingCourse_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_KeKhaiTaiSan_create(input: any, context: QueryContext): any {
+function $check_TrainingCourse_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function KeKhaiTaiSan_create_input(input: any, context: QueryContext): boolean {
+function TrainingCourse_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function KeKhaiTaiSan_update(context: QueryContext, db: CrudContract): any {
+function TrainingCourse_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_KeKhaiTaiSan_update(input: any, context: QueryContext): any {
+function $check_TrainingCourse_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function KeKhaiTaiSan_postUpdate(context: QueryContext, db: CrudContract): any {
+function TrainingCourse_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_KeKhaiTaiSan_postUpdate(input: any, context: QueryContext): any {
+function $check_TrainingCourse_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function KeKhaiTaiSan_delete(context: QueryContext, db: CrudContract): any {
+function TrainingCourse_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_KeKhaiTaiSan_delete(input: any, context: QueryContext): any {
+function $check_TrainingCourse_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TiengDanToc_read(context: QueryContext, db: CrudContract): any {
+function TrainingCourseRegulation_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_TiengDanToc_read(input: any, context: QueryContext): any {
+function $check_TrainingCourseRegulation_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13289,61 +10515,61 @@ function $check_TiengDanToc_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function TiengDanToc_create(context: QueryContext, db: CrudContract): any {
+function TrainingCourseRegulation_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TiengDanToc_create(input: any, context: QueryContext): any {
+function $check_TrainingCourseRegulation_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TiengDanToc_create_input(input: any, context: QueryContext): boolean {
+function TrainingCourseRegulation_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function TiengDanToc_update(context: QueryContext, db: CrudContract): any {
+function TrainingCourseRegulation_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TiengDanToc_update(input: any, context: QueryContext): any {
+function $check_TrainingCourseRegulation_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function TiengDanToc_postUpdate(context: QueryContext, db: CrudContract): any {
+function TrainingCourseRegulation_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_TiengDanToc_postUpdate(input: any, context: QueryContext): any {
+function $check_TrainingCourseRegulation_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function TiengDanToc_delete(context: QueryContext, db: CrudContract): any {
+function TrainingCourseRegulation_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_TiengDanToc_delete(input: any, context: QueryContext): any {
+function $check_TrainingCourseRegulation_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ChienDau_read(context: QueryContext, db: CrudContract): any {
+function FixedClass_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_ChienDau_read(input: any, context: QueryContext): any {
+function $check_FixedClass_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13354,61 +10580,61 @@ function $check_ChienDau_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function ChienDau_create(context: QueryContext, db: CrudContract): any {
+function FixedClass_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ChienDau_create(input: any, context: QueryContext): any {
+function $check_FixedClass_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ChienDau_create_input(input: any, context: QueryContext): boolean {
+function FixedClass_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function ChienDau_update(context: QueryContext, db: CrudContract): any {
+function FixedClass_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ChienDau_update(input: any, context: QueryContext): any {
+function $check_FixedClass_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ChienDau_postUpdate(context: QueryContext, db: CrudContract): any {
+function FixedClass_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_ChienDau_postUpdate(input: any, context: QueryContext): any {
+function $check_FixedClass_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function ChienDau_delete(context: QueryContext, db: CrudContract): any {
+function FixedClass_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ChienDau_delete(input: any, context: QueryContext): any {
+function $check_FixedClass_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function NuocNgoai_read(context: QueryContext, db: CrudContract): any {
+function Curriculum_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_NuocNgoai_read(input: any, context: QueryContext): any {
+function $check_Curriculum_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13419,61 +10645,61 @@ function $check_NuocNgoai_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function NuocNgoai_create(context: QueryContext, db: CrudContract): any {
+function Curriculum_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_NuocNgoai_create(input: any, context: QueryContext): any {
+function $check_Curriculum_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function NuocNgoai_create_input(input: any, context: QueryContext): boolean {
+function Curriculum_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function NuocNgoai_update(context: QueryContext, db: CrudContract): any {
+function Curriculum_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_NuocNgoai_update(input: any, context: QueryContext): any {
+function $check_Curriculum_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function NuocNgoai_postUpdate(context: QueryContext, db: CrudContract): any {
+function Curriculum_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_NuocNgoai_postUpdate(input: any, context: QueryContext): any {
+function $check_Curriculum_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function NuocNgoai_delete(context: QueryContext, db: CrudContract): any {
+function Curriculum_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_NuocNgoai_delete(input: any, context: QueryContext): any {
+function $check_Curriculum_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ThuongTat_read(context: QueryContext, db: CrudContract): any {
+function CurriculumVersion_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_ThuongTat_read(input: any, context: QueryContext): any {
+function $check_CurriculumVersion_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13484,61 +10710,61 @@ function $check_ThuongTat_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function ThuongTat_create(context: QueryContext, db: CrudContract): any {
+function CurriculumVersion_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ThuongTat_create(input: any, context: QueryContext): any {
+function $check_CurriculumVersion_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ThuongTat_create_input(input: any, context: QueryContext): boolean {
+function CurriculumVersion_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function ThuongTat_update(context: QueryContext, db: CrudContract): any {
+function CurriculumVersion_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ThuongTat_update(input: any, context: QueryContext): any {
+function $check_CurriculumVersion_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ThuongTat_postUpdate(context: QueryContext, db: CrudContract): any {
+function CurriculumVersion_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_ThuongTat_postUpdate(input: any, context: QueryContext): any {
+function $check_CurriculumVersion_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function ThuongTat_delete(context: QueryContext, db: CrudContract): any {
+function CurriculumVersion_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ThuongTat_delete(input: any, context: QueryContext): any {
+function $check_CurriculumVersion_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function DanhHieu_read(context: QueryContext, db: CrudContract): any {
+function Subject_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_DanhHieu_read(input: any, context: QueryContext): any {
+function $check_Subject_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13549,61 +10775,61 @@ function $check_DanhHieu_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function DanhHieu_create(context: QueryContext, db: CrudContract): any {
+function Subject_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_DanhHieu_create(input: any, context: QueryContext): any {
+function $check_Subject_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function DanhHieu_create_input(input: any, context: QueryContext): boolean {
+function Subject_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function DanhHieu_update(context: QueryContext, db: CrudContract): any {
+function Subject_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_DanhHieu_update(input: any, context: QueryContext): any {
+function $check_Subject_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function DanhHieu_postUpdate(context: QueryContext, db: CrudContract): any {
+function Subject_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_DanhHieu_postUpdate(input: any, context: QueryContext): any {
+function $check_Subject_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function DanhHieu_delete(context: QueryContext, db: CrudContract): any {
+function Subject_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_DanhHieu_delete(input: any, context: QueryContext): any {
+function $check_Subject_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhHocTap_read(context: QueryContext, db: CrudContract): any {
+function SubjectVersionCategory_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_QuaTrinhHocTap_read(input: any, context: QueryContext): any {
+function $check_SubjectVersionCategory_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13614,61 +10840,61 @@ function $check_QuaTrinhHocTap_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function QuaTrinhHocTap_create(context: QueryContext, db: CrudContract): any {
+function SubjectVersionCategory_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhHocTap_create(input: any, context: QueryContext): any {
+function $check_SubjectVersionCategory_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhHocTap_create_input(input: any, context: QueryContext): boolean {
+function SubjectVersionCategory_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function QuaTrinhHocTap_update(context: QueryContext, db: CrudContract): any {
+function SubjectVersionCategory_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhHocTap_update(input: any, context: QueryContext): any {
+function $check_SubjectVersionCategory_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhHocTap_postUpdate(context: QueryContext, db: CrudContract): any {
+function SubjectVersionCategory_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_QuaTrinhHocTap_postUpdate(input: any, context: QueryContext): any {
+function $check_SubjectVersionCategory_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function QuaTrinhHocTap_delete(context: QueryContext, db: CrudContract): any {
+function SubjectVersionCategory_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhHocTap_delete(input: any, context: QueryContext): any {
+function $check_SubjectVersionCategory_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ToChucXaHoi_read(context: QueryContext, db: CrudContract): any {
+function SubjectVersion_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_ToChucXaHoi_read(input: any, context: QueryContext): any {
+function $check_SubjectVersion_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13679,61 +10905,61 @@ function $check_ToChucXaHoi_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function ToChucXaHoi_create(context: QueryContext, db: CrudContract): any {
+function SubjectVersion_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ToChucXaHoi_create(input: any, context: QueryContext): any {
+function $check_SubjectVersion_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ToChucXaHoi_create_input(input: any, context: QueryContext): boolean {
+function SubjectVersion_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function ToChucXaHoi_update(context: QueryContext, db: CrudContract): any {
+function SubjectVersion_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ToChucXaHoi_update(input: any, context: QueryContext): any {
+function $check_SubjectVersion_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ToChucXaHoi_postUpdate(context: QueryContext, db: CrudContract): any {
+function SubjectVersion_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_ToChucXaHoi_postUpdate(input: any, context: QueryContext): any {
+function $check_SubjectVersion_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function ToChucXaHoi_delete(context: QueryContext, db: CrudContract): any {
+function SubjectVersion_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ToChucXaHoi_delete(input: any, context: QueryContext): any {
+function $check_SubjectVersion_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhLuong_read(context: QueryContext, db: CrudContract): any {
+function SubjectVersionHistory_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_QuaTrinhLuong_read(input: any, context: QueryContext): any {
+function $check_SubjectVersionHistory_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -13744,49 +10970,2519 @@ function $check_QuaTrinhLuong_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function QuaTrinhLuong_create(context: QueryContext, db: CrudContract): any {
+function SubjectVersionHistory_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhLuong_create(input: any, context: QueryContext): any {
+function $check_SubjectVersionHistory_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhLuong_create_input(input: any, context: QueryContext): boolean {
+function SubjectVersionHistory_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function QuaTrinhLuong_update(context: QueryContext, db: CrudContract): any {
+function SubjectVersionHistory_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhLuong_update(input: any, context: QueryContext): any {
+function $check_SubjectVersionHistory_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function QuaTrinhLuong_postUpdate(context: QueryContext, db: CrudContract): any {
+function SubjectVersionHistory_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_QuaTrinhLuong_postUpdate(input: any, context: QueryContext): any {
+function $check_SubjectVersionHistory_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function QuaTrinhLuong_delete(context: QueryContext, db: CrudContract): any {
+function SubjectVersionHistory_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_QuaTrinhLuong_delete(input: any, context: QueryContext): any {
+function $check_SubjectVersionHistory_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function EquivalencyGroup_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_EquivalencyGroup_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function EquivalencyGroup_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_EquivalencyGroup_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function EquivalencyGroup_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function EquivalencyGroup_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_EquivalencyGroup_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function EquivalencyGroup_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_EquivalencyGroup_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function EquivalencyGroup_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_EquivalencyGroup_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectInGroup_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SubjectInGroup_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectInGroup_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectInGroup_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectInGroup_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SubjectInGroup_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectInGroup_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectInGroup_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SubjectInGroup_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SubjectInGroup_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectInGroup_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlockSubject_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingBlockSubject_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlockSubject_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingBlockSubject_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlockSubject_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingBlockSubject_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingBlockSubject_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlockSubject_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingBlockSubject_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingBlockSubject_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingBlockSubject_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterSessionCredit_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ClassRegisterSessionCredit_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterSessionCredit_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassRegisterSessionCredit_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterSessionCredit_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ClassRegisterSessionCredit_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassRegisterSessionCredit_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterSessionCredit_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ClassRegisterSessionCredit_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ClassRegisterSessionCredit_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassRegisterSessionCredit_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterSession_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ClassRegisterSession_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterSession_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassRegisterSession_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterSession_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ClassRegisterSession_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassRegisterSession_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterSession_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ClassRegisterSession_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ClassRegisterSession_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassRegisterSession_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterLogs_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ClassRegisterLogs_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterLogs_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassRegisterLogs_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterLogs_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ClassRegisterLogs_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassRegisterLogs_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassRegisterLogs_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ClassRegisterLogs_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ClassRegisterLogs_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassRegisterLogs_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClass_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SubjectClass_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClass_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClass_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClass_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SubjectClass_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClass_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClass_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SubjectClass_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SubjectClass_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClass_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassTime_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SubjectClassTime_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassTime_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassTime_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassTime_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SubjectClassTime_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassTime_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassTime_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SubjectClassTime_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SubjectClassTime_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassTime_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassSchedule_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ClassSchedule_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassSchedule_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassSchedule_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassSchedule_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ClassSchedule_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassSchedule_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ClassSchedule_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ClassSchedule_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ClassSchedule_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ClassSchedule_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingObjectType_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingObjectType_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingObjectType_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingObjectType_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingObjectType_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingObjectType_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingObjectType_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingObjectType_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingObjectType_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingObjectType_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingObjectType_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PriorityObject_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_PriorityObject_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PriorityObject_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PriorityObject_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PriorityObject_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function PriorityObject_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PriorityObject_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function PriorityObject_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_PriorityObject_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function PriorityObject_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_PriorityObject_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingType_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingType_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingType_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingType_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingType_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingType_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingType_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingType_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingType_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingType_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingType_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLevel_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingLevel_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLevel_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingLevel_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLevel_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingLevel_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingLevel_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLevel_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingLevel_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingLevel_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingLevel_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingForm_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingForm_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingForm_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingForm_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingForm_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingForm_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingForm_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingForm_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingForm_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingForm_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingForm_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLocation_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingLocation_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLocation_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingLocation_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLocation_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingLocation_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingLocation_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingLocation_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingLocation_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingLocation_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingLocation_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Building_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Building_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Building_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Building_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Building_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Building_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Building_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Building_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Building_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Building_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Building_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Room_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Room_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Room_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Room_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Room_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Room_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Room_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Room_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Room_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Room_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Room_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingField_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingField_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingField_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingField_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingField_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingField_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingField_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingField_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingField_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingField_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingField_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingFieldOnTrainingObjectType_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingFieldOnTrainingObjectType_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingFieldOnTrainingObjectType_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingFieldOnTrainingObjectType_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingFieldOnTrainingObjectType_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingFieldOnTrainingObjectType_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingFieldOnTrainingObjectType_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingFieldOnTrainingObjectType_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingFieldOnTrainingObjectType_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingFieldOnTrainingObjectType_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingFieldOnTrainingObjectType_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingMajor_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingMajor_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingMajor_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingMajor_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingMajor_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingMajor_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingMajor_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingMajor_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingMajor_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingMajor_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingMajor_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingMajorOnTrainingObjectType_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingMajorOnTrainingObjectType_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingMajorOnTrainingObjectType_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingMajorOnTrainingObjectType_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingMajorOnTrainingObjectType_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingMajorOnTrainingObjectType_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingMajorOnTrainingObjectType_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingMajorOnTrainingObjectType_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingMajorOnTrainingObjectType_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingMajorOnTrainingObjectType_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingMajorOnTrainingObjectType_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlock_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingBlock_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlock_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingBlock_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlock_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingBlock_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingBlock_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlock_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingBlock_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingBlock_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingBlock_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlockOnCurriculumVersion_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingBlockOnCurriculumVersion_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlockOnCurriculumVersion_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingBlockOnCurriculumVersion_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlockOnCurriculumVersion_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingBlockOnCurriculumVersion_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingBlockOnCurriculumVersion_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingBlockOnCurriculumVersion_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingBlockOnCurriculumVersion_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingBlockOnCurriculumVersion_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingBlockOnCurriculumVersion_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingTime_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingTime_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingTime_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingTime_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingTime_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingTime_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingTime_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingTime_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingTime_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingTime_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingTime_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DiplomaType_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DiplomaType_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DiplomaType_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DiplomaType_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DiplomaType_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DiplomaType_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DiplomaType_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DiplomaType_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DiplomaType_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DiplomaType_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DiplomaType_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreConvert_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ScoreConvert_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreConvert_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScoreConvert_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreConvert_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ScoreConvert_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScoreConvert_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScoreConvert_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ScoreConvert_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ScoreConvert_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScoreConvert_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingKPI_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingKPI_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingKPI_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingKPI_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingKPI_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingKPI_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingKPI_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingKPI_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingKPI_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingKPI_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingKPI_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Student_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Student_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Student_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Student_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Student_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Student_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Student_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Student_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Student_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Student_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Student_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentSemesterResult_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_StudentSemesterResult_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentSemesterResult_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentSemesterResult_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentSemesterResult_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function StudentSemesterResult_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentSemesterResult_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentSemesterResult_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StudentSemesterResult_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StudentSemesterResult_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentSemesterResult_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentYearResult_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_StudentYearResult_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentYearResult_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentYearResult_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentYearResult_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function StudentYearResult_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentYearResult_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentYearResult_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StudentYearResult_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StudentYearResult_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentYearResult_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Notification_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Notification_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Notification_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Notification_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Notification_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Notification_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Notification_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Notification_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Notification_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Notification_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Notification_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentFile_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DocumentFile_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentFile_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DocumentFile_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentFile_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DocumentFile_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DocumentFile_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentFile_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DocumentFile_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DocumentFile_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DocumentFile_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionConfig_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_AcademicActionConfig_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionConfig_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicActionConfig_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionConfig_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function AcademicActionConfig_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicActionConfig_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionConfig_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_AcademicActionConfig_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function AcademicActionConfig_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicActionConfig_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionRuleSet_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_AcademicActionRuleSet_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionRuleSet_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicActionRuleSet_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionRuleSet_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function AcademicActionRuleSet_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicActionRuleSet_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionRuleSet_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_AcademicActionRuleSet_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function AcademicActionRuleSet_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicActionRuleSet_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionCondition_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_AcademicActionCondition_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionCondition_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicActionCondition_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionCondition_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function AcademicActionCondition_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicActionCondition_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicActionCondition_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_AcademicActionCondition_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function AcademicActionCondition_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicActionCondition_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentAcademicDecision_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_StudentAcademicDecision_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentAcademicDecision_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentAcademicDecision_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentAcademicDecision_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function StudentAcademicDecision_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentAcademicDecision_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentAcademicDecision_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StudentAcademicDecision_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StudentAcademicDecision_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentAcademicDecision_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingScoreSession_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TrainingScoreSession_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingScoreSession_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingScoreSession_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingScoreSession_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TrainingScoreSession_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingScoreSession_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TrainingScoreSession_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TrainingScoreSession_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TrainingScoreSession_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TrainingScoreSession_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentTrainingScore_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_StudentTrainingScore_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentTrainingScore_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentTrainingScore_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentTrainingScore_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function StudentTrainingScore_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentTrainingScore_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentTrainingScore_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StudentTrainingScore_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StudentTrainingScore_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentTrainingScore_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
@@ -15087,1501 +14783,6 @@ function SupervisorPaymentRecord_delete(context: QueryContext, db: CrudContract)
 }
 
 function $check_SupervisorPaymentRecord_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DocumentFile_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_DocumentFile_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DocumentFile_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DocumentFile_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DocumentFile_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function DocumentFile_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DocumentFile_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DocumentFile_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_DocumentFile_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function DocumentFile_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DocumentFile_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionConfig_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_AcademicActionConfig_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionConfig_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicActionConfig_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionConfig_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function AcademicActionConfig_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicActionConfig_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionConfig_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_AcademicActionConfig_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function AcademicActionConfig_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicActionConfig_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionRuleSet_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_AcademicActionRuleSet_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionRuleSet_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicActionRuleSet_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionRuleSet_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function AcademicActionRuleSet_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicActionRuleSet_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionRuleSet_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_AcademicActionRuleSet_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function AcademicActionRuleSet_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicActionRuleSet_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionCondition_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_AcademicActionCondition_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionCondition_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicActionCondition_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionCondition_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function AcademicActionCondition_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicActionCondition_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicActionCondition_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_AcademicActionCondition_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function AcademicActionCondition_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicActionCondition_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentAcademicDecision_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_StudentAcademicDecision_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentAcademicDecision_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentAcademicDecision_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentAcademicDecision_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function StudentAcademicDecision_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentAcademicDecision_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentAcademicDecision_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_StudentAcademicDecision_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function StudentAcademicDecision_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentAcademicDecision_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingScoreSession_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_TrainingScoreSession_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingScoreSession_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingScoreSession_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingScoreSession_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function TrainingScoreSession_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingScoreSession_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function TrainingScoreSession_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_TrainingScoreSession_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function TrainingScoreSession_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_TrainingScoreSession_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentTrainingScore_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_StudentTrainingScore_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentTrainingScore_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentTrainingScore_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentTrainingScore_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function StudentTrainingScore_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentTrainingScore_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentTrainingScore_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_StudentTrainingScore_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function StudentTrainingScore_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentTrainingScore_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Scholarship_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Scholarship_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Scholarship_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Scholarship_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Scholarship_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Scholarship_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Scholarship_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Scholarship_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Scholarship_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Scholarship_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Scholarship_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ScholarshipCriteria_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ScholarshipCriteria_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ScholarshipCriteria_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ScholarshipCriteria_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ScholarshipCriteria_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ScholarshipCriteria_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ScholarshipCriteria_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ScholarshipCriteria_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ScholarshipCriteria_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ScholarshipCriteria_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ScholarshipCriteria_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ScholarshipAward_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ScholarshipAward_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ScholarshipAward_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ScholarshipAward_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ScholarshipAward_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ScholarshipAward_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ScholarshipAward_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ScholarshipAward_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ScholarshipAward_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ScholarshipAward_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ScholarshipAward_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationSession_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_GraduationSession_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationSession_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationSession_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationSession_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function GraduationSession_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationSession_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationSession_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_GraduationSession_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function GraduationSession_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationSession_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentGraduationApplication_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_StudentGraduationApplication_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentGraduationApplication_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentGraduationApplication_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentGraduationApplication_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function StudentGraduationApplication_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentGraduationApplication_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function StudentGraduationApplication_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_StudentGraduationApplication_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function StudentGraduationApplication_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_StudentGraduationApplication_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ApplicationCheckResult_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ApplicationCheckResult_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ApplicationCheckResult_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ApplicationCheckResult_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ApplicationCheckResult_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ApplicationCheckResult_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ApplicationCheckResult_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ApplicationCheckResult_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ApplicationCheckResult_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ApplicationCheckResult_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ApplicationCheckResult_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationDecision_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_GraduationDecision_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationDecision_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationDecision_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationDecision_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function GraduationDecision_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationDecision_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationDecision_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_GraduationDecision_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function GraduationDecision_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationDecision_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicRankingConvert_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_AcademicRankingConvert_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicRankingConvert_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicRankingConvert_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicRankingConvert_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function AcademicRankingConvert_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicRankingConvert_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicRankingConvert_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_AcademicRankingConvert_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function AcademicRankingConvert_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicRankingConvert_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationRankDowngradeRule_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_GraduationRankDowngradeRule_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationRankDowngradeRule_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationRankDowngradeRule_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationRankDowngradeRule_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function GraduationRankDowngradeRule_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationRankDowngradeRule_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationRankDowngradeRule_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_GraduationRankDowngradeRule_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function GraduationRankDowngradeRule_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationRankDowngradeRule_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationRankDowngradeCondition_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_GraduationRankDowngradeCondition_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationRankDowngradeCondition_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationRankDowngradeCondition_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationRankDowngradeCondition_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function GraduationRankDowngradeCondition_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationRankDowngradeCondition_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function GraduationRankDowngradeCondition_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_GraduationRankDowngradeCondition_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function GraduationRankDowngradeCondition_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_GraduationRankDowngradeCondition_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function RankingCondition_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_RankingCondition_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function RankingCondition_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_RankingCondition_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function RankingCondition_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function RankingCondition_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_RankingCondition_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function RankingCondition_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_RankingCondition_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function RankingCondition_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_RankingCondition_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DiplomaVerificationApplication_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_DiplomaVerificationApplication_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DiplomaVerificationApplication_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DiplomaVerificationApplication_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DiplomaVerificationApplication_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function DiplomaVerificationApplication_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DiplomaVerificationApplication_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DiplomaVerificationApplication_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_DiplomaVerificationApplication_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function DiplomaVerificationApplication_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DiplomaVerificationApplication_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Note_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Note_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Note_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Note_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Note_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Note_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Note_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Note_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Note_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Note_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Note_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteFolder_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_NoteFolder_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteFolder_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_NoteFolder_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteFolder_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function NoteFolder_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_NoteFolder_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteFolder_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_NoteFolder_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function NoteFolder_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_NoteFolder_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteTag_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_NoteTag_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteTag_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_NoteTag_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteTag_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function NoteTag_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_NoteTag_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteTag_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_NoteTag_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function NoteTag_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_NoteTag_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteReminder_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_NoteReminder_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteReminder_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_NoteReminder_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteReminder_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function NoteReminder_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_NoteReminder_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function NoteReminder_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_NoteReminder_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function NoteReminder_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_NoteReminder_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
@@ -18337,6 +16538,2283 @@ function StaffHistory_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_StaffHistory_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Scholarship_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Scholarship_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Scholarship_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Scholarship_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Scholarship_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Scholarship_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Scholarship_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Scholarship_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Scholarship_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Scholarship_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Scholarship_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScholarshipCriteria_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ScholarshipCriteria_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScholarshipCriteria_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScholarshipCriteria_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScholarshipCriteria_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ScholarshipCriteria_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScholarshipCriteria_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScholarshipCriteria_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ScholarshipCriteria_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ScholarshipCriteria_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScholarshipCriteria_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScholarshipAward_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ScholarshipAward_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScholarshipAward_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScholarshipAward_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScholarshipAward_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ScholarshipAward_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScholarshipAward_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ScholarshipAward_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ScholarshipAward_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ScholarshipAward_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ScholarshipAward_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationSession_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_GraduationSession_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationSession_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationSession_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationSession_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function GraduationSession_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationSession_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationSession_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_GraduationSession_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function GraduationSession_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationSession_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentGraduationApplication_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_StudentGraduationApplication_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentGraduationApplication_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentGraduationApplication_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentGraduationApplication_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function StudentGraduationApplication_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentGraduationApplication_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function StudentGraduationApplication_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_StudentGraduationApplication_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function StudentGraduationApplication_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_StudentGraduationApplication_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ApplicationCheckResult_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ApplicationCheckResult_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ApplicationCheckResult_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ApplicationCheckResult_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ApplicationCheckResult_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ApplicationCheckResult_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ApplicationCheckResult_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ApplicationCheckResult_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ApplicationCheckResult_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ApplicationCheckResult_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ApplicationCheckResult_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationDecision_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_GraduationDecision_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationDecision_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationDecision_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationDecision_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function GraduationDecision_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationDecision_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationDecision_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_GraduationDecision_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function GraduationDecision_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationDecision_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicRankingConvert_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_AcademicRankingConvert_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicRankingConvert_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicRankingConvert_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicRankingConvert_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function AcademicRankingConvert_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicRankingConvert_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicRankingConvert_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_AcademicRankingConvert_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function AcademicRankingConvert_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicRankingConvert_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationRankDowngradeRule_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_GraduationRankDowngradeRule_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationRankDowngradeRule_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationRankDowngradeRule_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationRankDowngradeRule_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function GraduationRankDowngradeRule_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationRankDowngradeRule_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationRankDowngradeRule_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_GraduationRankDowngradeRule_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function GraduationRankDowngradeRule_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationRankDowngradeRule_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationRankDowngradeCondition_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_GraduationRankDowngradeCondition_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationRankDowngradeCondition_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationRankDowngradeCondition_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationRankDowngradeCondition_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function GraduationRankDowngradeCondition_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationRankDowngradeCondition_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function GraduationRankDowngradeCondition_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_GraduationRankDowngradeCondition_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function GraduationRankDowngradeCondition_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_GraduationRankDowngradeCondition_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function RankingCondition_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_RankingCondition_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function RankingCondition_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_RankingCondition_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function RankingCondition_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function RankingCondition_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_RankingCondition_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function RankingCondition_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_RankingCondition_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function RankingCondition_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_RankingCondition_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DiplomaVerificationApplication_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DiplomaVerificationApplication_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DiplomaVerificationApplication_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DiplomaVerificationApplication_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DiplomaVerificationApplication_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DiplomaVerificationApplication_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DiplomaVerificationApplication_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DiplomaVerificationApplication_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DiplomaVerificationApplication_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DiplomaVerificationApplication_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DiplomaVerificationApplication_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Note_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Note_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Note_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Note_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Note_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Note_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Note_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Note_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Note_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Note_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Note_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteFolder_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_NoteFolder_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteFolder_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_NoteFolder_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteFolder_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function NoteFolder_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_NoteFolder_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteFolder_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_NoteFolder_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function NoteFolder_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_NoteFolder_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteTag_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_NoteTag_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteTag_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_NoteTag_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteTag_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function NoteTag_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_NoteTag_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteTag_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_NoteTag_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function NoteTag_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_NoteTag_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteReminder_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_NoteReminder_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteReminder_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_NoteReminder_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteReminder_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function NoteReminder_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_NoteReminder_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function NoteReminder_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_NoteReminder_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function NoteReminder_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_NoteReminder_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function QuestionBank_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_QuestionBank_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function QuestionBank_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_QuestionBank_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function QuestionBank_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function QuestionBank_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_QuestionBank_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function QuestionBank_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_QuestionBank_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function QuestionBank_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_QuestionBank_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Difficulty_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Difficulty_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Difficulty_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Difficulty_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Difficulty_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Difficulty_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Difficulty_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Difficulty_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Difficulty_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Difficulty_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Difficulty_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function KnowledgeBlock_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_KnowledgeBlock_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function KnowledgeBlock_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_KnowledgeBlock_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function KnowledgeBlock_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function KnowledgeBlock_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_KnowledgeBlock_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function KnowledgeBlock_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_KnowledgeBlock_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function KnowledgeBlock_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_KnowledgeBlock_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Question_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Question_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Question_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Question_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Question_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Question_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Question_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Question_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Question_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Question_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Question_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function MultipleChoiceOption_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_MultipleChoiceOption_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function MultipleChoiceOption_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_MultipleChoiceOption_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function MultipleChoiceOption_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function MultipleChoiceOption_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_MultipleChoiceOption_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function MultipleChoiceOption_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_MultipleChoiceOption_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function MultipleChoiceOption_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_MultipleChoiceOption_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function FillInBlankSlot_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_FillInBlankSlot_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function FillInBlankSlot_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_FillInBlankSlot_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function FillInBlankSlot_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function FillInBlankSlot_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_FillInBlankSlot_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function FillInBlankSlot_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_FillInBlankSlot_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function FillInBlankSlot_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_FillInBlankSlot_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OrderingItem_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_OrderingItem_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OrderingItem_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OrderingItem_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OrderingItem_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function OrderingItem_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OrderingItem_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function OrderingItem_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_OrderingItem_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function OrderingItem_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_OrderingItem_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Answer_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Answer_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Answer_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Answer_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Answer_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Answer_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Answer_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Answer_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Answer_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Answer_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Answer_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Exam_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Exam_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Exam_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Exam_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Exam_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Exam_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Exam_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Exam_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Exam_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Exam_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Exam_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TestStructureRule_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_TestStructureRule_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TestStructureRule_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TestStructureRule_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TestStructureRule_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function TestStructureRule_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TestStructureRule_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function TestStructureRule_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_TestStructureRule_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function TestStructureRule_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_TestStructureRule_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamBank_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ExamBank_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamBank_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamBank_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamBank_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ExamBank_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamBank_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamBank_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ExamBank_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ExamBank_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamBank_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamBankQuestion_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ExamBankQuestion_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamBankQuestion_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamBankQuestion_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamBankQuestion_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ExamBankQuestion_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamBankQuestion_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamBankQuestion_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ExamBankQuestion_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ExamBankQuestion_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamBankQuestion_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamFax_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ExamFax_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamFax_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamFax_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamFax_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ExamFax_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamFax_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamFax_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ExamFax_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ExamFax_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamFax_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamSession_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ExamSession_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamSession_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamSession_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamSession_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ExamSession_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamSession_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamSession_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ExamSession_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ExamSession_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamSession_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicWarningRule_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_AcademicWarningRule_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicWarningRule_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicWarningRule_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicWarningRule_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function AcademicWarningRule_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicWarningRule_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicWarningRule_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_AcademicWarningRule_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function AcademicWarningRule_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicWarningRule_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicWarning_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_AcademicWarning_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicWarning_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicWarning_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicWarning_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function AcademicWarning_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicWarning_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function AcademicWarning_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_AcademicWarning_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function AcademicWarning_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_AcademicWarning_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DisciplinaryWarning_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DisciplinaryWarning_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DisciplinaryWarning_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DisciplinaryWarning_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DisciplinaryWarning_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DisciplinaryWarning_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DisciplinaryWarning_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DisciplinaryWarning_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DisciplinaryWarning_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DisciplinaryWarning_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DisciplinaryWarning_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DisciplinaryWarningReason_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DisciplinaryWarningReason_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DisciplinaryWarningReason_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DisciplinaryWarningReason_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DisciplinaryWarningReason_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DisciplinaryWarningReason_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DisciplinaryWarningReason_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DisciplinaryWarningReason_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DisciplinaryWarningReason_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DisciplinaryWarningReason_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DisciplinaryWarningReason_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Feedback_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Feedback_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Feedback_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Feedback_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Feedback_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null) || (user != null)
+}
+
+function Feedback_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Feedback_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Feedback_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Feedback_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Feedback_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Feedback_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
@@ -20157,333 +20635,6 @@ function DM_BacLuong_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_DM_BacLuong_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Feedback_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Feedback_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Feedback_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Feedback_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Feedback_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null) || (user != null)
-}
-
-function Feedback_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Feedback_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Feedback_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Feedback_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Feedback_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Feedback_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicWarningRule_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_AcademicWarningRule_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicWarningRule_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicWarningRule_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicWarningRule_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function AcademicWarningRule_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicWarningRule_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicWarningRule_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_AcademicWarningRule_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function AcademicWarningRule_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicWarningRule_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicWarning_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_AcademicWarning_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicWarning_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicWarning_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicWarning_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function AcademicWarning_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicWarning_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function AcademicWarning_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_AcademicWarning_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function AcademicWarning_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_AcademicWarning_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DisciplinaryWarning_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_DisciplinaryWarning_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DisciplinaryWarning_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DisciplinaryWarning_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DisciplinaryWarning_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function DisciplinaryWarning_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DisciplinaryWarning_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DisciplinaryWarning_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_DisciplinaryWarning_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function DisciplinaryWarning_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DisciplinaryWarning_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DisciplinaryWarningReason_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_DisciplinaryWarningReason_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DisciplinaryWarningReason_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DisciplinaryWarningReason_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DisciplinaryWarningReason_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function DisciplinaryWarningReason_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DisciplinaryWarningReason_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function DisciplinaryWarningReason_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_DisciplinaryWarningReason_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function DisciplinaryWarningReason_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_DisciplinaryWarningReason_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
