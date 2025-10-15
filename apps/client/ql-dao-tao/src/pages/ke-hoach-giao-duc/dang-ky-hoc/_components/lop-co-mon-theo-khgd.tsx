@@ -11,7 +11,7 @@ import { enrollFixedClassOnSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -28,7 +28,6 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [isOnlyBySemester, setIsOnlyBySemester] = useState(true)
     const { id: semesterId } = useSemesterStore()
     const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -66,6 +65,13 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                     planTraining: {
                         semesterId: semesterId as string,
                         trainingObjectTypeId: trainingObjectTypeId as string,
+                    },
+                    subjectVersion: {
+                        subjectClass: {
+                            some: {
+                                id: subjectClassId as string,
+                            },
+                        },
                     },
                 },
             },
@@ -189,7 +195,7 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
             <Row gutter={[12, 12]} align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>
-                        <Col span={12}>
+                        <Col span={20}>
                             <Form.Item name="searchText">
                                 <Input
                                     id="search"
@@ -210,19 +216,6 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
-                            <Form.Item name="isShowAllFixedClass">
-                                <Checkbox
-                                    checked={isOnlyBySemester}
-                                    onChange={(e) => {
-                                        setIsOnlyBySemester(e.target.checked)
-                                        setCurrentPage(1)
-                                    }}
-                                >
-                                    Theo kỳ học dự kiến
-                                </Checkbox>
-                            </Form.Item>
-                        </Col>
                         <Col span={4} className="text-right">
                             {can(
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
@@ -232,6 +225,7 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                                     type="primary"
                                     className="h-[32px] px-4"
                                     onClick={handleSave}
+                                    disabled={!subjectClassId}
                                 >
                                     Lưu
                                 </Button>
@@ -250,6 +244,7 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                             record.subjectClasses.length > 0 &&
                             record.subjectClasses?.[0].id !== subjectClassId,
                     }),
+                    columnWidth: 35,
                 }}
                 rowClassName={(record) =>
                     record.subjectClasses.length > 0 &&
