@@ -1,5 +1,4 @@
 import Tabs from '@components/commons/tabar'
-import DiemTrungBinhKyHoc from '@components/sub-pages/diem-trung-binh-ky-hoc'
 import XetCanhCaoHocDuong from '@components/sub-pages/xet-canh-cao-hoc-duong'
 import XetCanhCaoHocTap from '@components/sub-pages/xet-canh-cao-hoc-tap'
 import XetHocBong from '@components/sub-pages/xet-hoc-bong'
@@ -38,15 +37,10 @@ export default function CanhCaoHocBong() {
             </Divider>
             <Tabs
                 items={[
-                    {
-                        key: '1',
-                        label: 'Điểm trung bình kỳ học',
-                        children: <DiemTrungBinhKyHoc semesterId={semesterId} />,
-                    },
                     ...(initialValue?.semesterType
                         ? [
                               {
-                                  key: '2',
+                                  key: '1',
                                   label: 'Xét học bổng',
                                   children: <XetHocBong semesterId={semesterId} />,
                               },
