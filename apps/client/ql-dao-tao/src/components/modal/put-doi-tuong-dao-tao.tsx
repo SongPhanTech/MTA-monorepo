@@ -6,6 +6,8 @@ import useSpinner from '@hooks/spinner'
 import type { TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingObjectType,
+    useFindManyTrainingForm,
+    useFindManyTrainingLevel,
     useFindUniqueTrainingObjectType,
     useUpdateTrainingObjectType,
 } from '@workspace/db/hooks'
@@ -31,6 +33,15 @@ const PutTrainingObjectTypeModal = () => {
 
     const { mutateAsync: createTrainingObjectType } = useCreateTrainingObjectType()
     const { mutateAsync: updateTrainingObjectType } = useUpdateTrainingObjectType()
+    const { data: trainingLevels } = useFindManyTrainingLevel(
+        { select: { id: true, name: true } },
+        { enabled: isOpen }
+    )
+    const { data: trainingForms } = useFindManyTrainingForm(
+        { select: { id: true, name: true } },
+        { enabled: isOpen }
+    )
+    //TODO: lưu thêm bậc đào tạo và hình thức đào tạo
     async function onOk({ ...rest }: TrainingObjectType) {
         try {
             showSpinner()
@@ -114,6 +125,28 @@ const PutTrainingObjectTypeModal = () => {
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên đối tượng đào tạo" required>
                     <Input placeholder="Nhập tên đối tượng đào tạo" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="trainingFormId" label="Hình thức đào tạo" required>
+                    <Select
+                        placeholder="Chọn hình thức đào tạo"
+                        options={trainingForms?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="trainingLevelId" label="Bậc đào tạo" required>
+                    <Select
+                        placeholder="Chọn bậc đào tạo"
+                        options={trainingLevels?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
+                    />
                 </FormItem>
             </Col>
             <Col span={24}>

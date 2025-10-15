@@ -4,6 +4,7 @@ import CopyPlusIcon from '@components/icons/copyPlus'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import LockPlusIcon from '@components/icons/lockPlus'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useCloneCurriculumVersion } from '@hooks/copyCurriculumVersion'
@@ -36,12 +37,13 @@ import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Input, message, Row, Select, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
-import { BookPlus, Search } from 'lucide-react'
+import { BookPlus, Download, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
+import { env } from '@/env'
 export default function TrainingProgramCatalog() {
     const { can, canSome } = useAbility()
     const router = useRouter()
@@ -82,6 +84,7 @@ export default function TrainingProgramCatalog() {
         }
 
         return {
+            trainingObjectTypeId,
             ...(filters.managementOrganizationId && {
                 managementOrganizationId: filters.managementOrganizationId,
             }),
@@ -109,6 +112,7 @@ export default function TrainingProgramCatalog() {
             }),
         }
     }, [
+        trainingObjectTypeId,
         filters.searchText,
         filters.name,
         filters.trainingTime,
@@ -220,9 +224,7 @@ export default function TrainingProgramCatalog() {
 
     const { data: count } = useCountCurriculum({ where: { ...where, deletedAt: null } })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: {
-            name: 'asc',
-        },
+        orderBy: { name: 'asc' },
         where: {
             trainingObjectTypeId,
             active: true,
@@ -241,6 +243,11 @@ export default function TrainingProgramCatalog() {
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
+        where: {
+            ...(trainingObjectTypeId
+                ? { trainingObjectTypes: { some: { trainingObjectTypeId } } }
+                : {}),
+        },
     })
 
     const { onOpen: onOpenCurriculum } = useDisclosure<string>({
@@ -299,6 +306,25 @@ export default function TrainingProgramCatalog() {
                 message.error(error?.info?.message)
                 return
             }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleToggleLock = async (id: string, isLocked: boolean) => {
+        try {
+            showSpinner()
+            await updateCurriculumVersion({
+                where: {
+                    id,
+                },
+                data: {
+                    isLock: !isLocked,
+                },
+            })
+            message.success(isLocked ? 'Mở khoá thành công' : 'Khoá thành công')
+        } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -389,15 +415,24 @@ export default function TrainingProgramCatalog() {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end">
+                            <Flex justify="end" className="gap-2">
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                     'THEM'
                                 ) && (
-                                    <Button onClick={handleModal} type="primary">
-                                        <BookPlus />
-                                        Thêm chương trình
-                                    </Button>
+                                    <>
+                                        <Button
+                                            href={`${env.NEXT_PUBLIC_BASE_PATH}/templates/Mẫu nhập CTĐT.xlsx`}
+                                            type="primary"
+                                        >
+                                            <Download />
+                                            Mẫu nhập CTĐT
+                                        </Button>
+                                        <Button onClick={handleModal} type="primary">
+                                            <BookPlus />
+                                            Thêm chương trình
+                                        </Button>
+                                    </>
                                 )}
                             </Flex>
                         </Col>
@@ -472,7 +507,7 @@ export default function TrainingProgramCatalog() {
                                 type: 'input',
                             },
                             {
-                                title: 'Tên phiên bản CTĐT',
+                                title: 'Tên CTĐT toàn khoá',
                                 dataIndex: 'name',
                                 align: 'center',
                                 fixed: 'left',
@@ -633,7 +668,7 @@ export default function TrainingProgramCatalog() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 120,
+                                width: 150,
                                 fixed: 'right',
                                 align: 'center',
                                 hidden: !canSome(
@@ -645,6 +680,8 @@ export default function TrainingProgramCatalog() {
                                 ),
                                 render: (_, record) => {
                                     if (record?.id) {
+                                        const isLocked = (record as CurriculumVersion)?.isLock
+
                                         return (
                                             <Row className="justify-center gap-2">
                                                 {can(
@@ -668,6 +705,9 @@ export default function TrainingProgramCatalog() {
                                                     <CopyPlusIcon
                                                         onClick={(e) => {
                                                             e.stopPropagation()
+                                                            if (isLocked) {
+                                                                return
+                                                            }
                                                             handleCloneCurriculumVersion(
                                                                 record as CurriculumVersion & {
                                                                     trainingBlocks: TrainingBlockOnCurriculumVersion[]
@@ -685,6 +725,9 @@ export default function TrainingProgramCatalog() {
                                                         title="Sửa thông tin chung"
                                                         onClick={(e) => {
                                                             e.stopPropagation()
+                                                            if (isLocked) {
+                                                                return
+                                                            }
                                                             onOpenCurriculumVersion({
                                                                 curriculumId: (
                                                                     record as CurriculumVersion
@@ -695,6 +738,24 @@ export default function TrainingProgramCatalog() {
                                                         className="text-sm text-blue-700 cursor-pointer"
                                                     />
                                                 )}
+                                                {/* TODO: CẦN THÊM MỘT QUYỀN ĐỂ LOCK/UNLOCK*/}
+                                                <LockPlusIcon
+                                                    isLocked={isLocked}
+                                                    popConfirm={{
+                                                        onConfirm: (e) => {
+                                                            handleToggleLock(
+                                                                record?.id,
+                                                                (record as CurriculumVersion)
+                                                                    ?.isLock || false
+                                                            )
+                                                            e?.stopPropagation()
+                                                        },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
                                                 {can(
                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                                     'XOA'
@@ -702,6 +763,10 @@ export default function TrainingProgramCatalog() {
                                                     <DeleteIcon
                                                         popConfirm={{
                                                             onConfirm: (e) => {
+                                                                if (isLocked) {
+                                                                    e?.stopPropagation()
+                                                                    return
+                                                                }
                                                                 handleDeleteCurriculumVersion(
                                                                     record?.id
                                                                 )
@@ -709,6 +774,9 @@ export default function TrainingProgramCatalog() {
                                                             },
                                                             onCancel: (e) => {
                                                                 e?.stopPropagation()
+                                                            },
+                                                            okButtonProps: {
+                                                                disabled: isLocked,
                                                             },
                                                         }}
                                                         onClick={(e) => e.stopPropagation()}
@@ -735,7 +803,7 @@ export default function TrainingProgramCatalog() {
                                                 versionId: '',
                                             })
                                         }}
-                                        title="Thêm mới phiên bản"
+                                        title="Thêm mới CTĐT toàn khoá"
                                     />
                                 )}
                                 {can(

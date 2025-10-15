@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode'
 import type { Session } from '..'
 
-const auth = async (token?: string): Promise<Session | null> => {
+const auth = async (token: string, cookie: string): Promise<Session | null> => {
     if (!token) {
         return null
     }
@@ -10,7 +10,7 @@ const auth = async (token?: string): Promise<Session | null> => {
         throw new Error('AUTH_ISSUER environment variable is not set')
     }
     const response = await fetch(`${issuer}/authsso/me`, {
-        headers: { Cookie: `x-token=${token}` },
+        headers: { Cookie: cookie },
     })
 
     if (!response.ok) {

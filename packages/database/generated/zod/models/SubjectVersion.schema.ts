@@ -17,10 +17,12 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    isLocked: z.boolean().default(false),
     name: z.string(),
     codeTkb: z.string().nullish(),
     examType: ExamTypeSchema,
     type: SubjectVersionTypeSchema,
+    onePoint: z.boolean().default(false),
     credit: z.number(),
     week: z.number().nullish(),
     period: z.number().default(0),
@@ -44,6 +46,7 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     managementOrganization: z.record(z.unknown()).optional(),
     subject: z.record(z.unknown()),
+    trainingObjectType: z.record(z.unknown()),
     subjectVersionCategory: z.record(z.unknown()).optional(),
     trainingBlocks: z.array(z.unknown()).optional(),
     prerequisiteSubject: z.array(z.unknown()).optional(),
@@ -56,11 +59,16 @@ const relationSchema = z.object({
     studentSubjectScore: z.array(z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
     questionBanks: z.array(z.unknown()).optional(),
+    subjectScoreConvert: z.array(z.unknown()).optional(),
+    planTrainingDelaySubject: z.array(z.unknown()).optional(),
+    planTrainingSubject: z.array(z.unknown()).optional(),
+    subjectVersionHistory: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     managementOrganizationId: z.string().uuid().nullish(),
     subjectId: z.string(),
+    trainingObjectTypeId: z.string(),
     subjectVersionCategoryId: z.string().nullish(),
 }
 );
@@ -96,10 +104,12 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    isLocked: z.boolean().default(false),
     name: z.string(),
     codeTkb: z.string().nullish(),
     examType: ExamTypeSchema,
     type: SubjectVersionTypeSchema,
+    onePoint: z.boolean().default(false),
     credit: z.union([z.number(), z.record(z.unknown())]),
     week: z.union([z.number().nullish(), z.record(z.unknown())]),
     period: z.union([z.number().default(0), z.record(z.unknown())]),
@@ -125,7 +135,7 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
  * `SubjectVersion` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectVersionCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, type: true, period: true
+    id: true, active: true, createdAt: true, updatedAt: true, isLocked: true, type: true, onePoint: true, period: true
 });
 
 

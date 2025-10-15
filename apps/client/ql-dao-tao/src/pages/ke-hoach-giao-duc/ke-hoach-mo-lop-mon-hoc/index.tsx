@@ -1,63 +1,178 @@
-import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse, TrainingMajor } from '@workspace/db'
-import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
-import { useOpenSubjectClass } from '@workspace/libs/api/training'
+import { type TrainingMajor } from '@workspace/db'
+import {
+    useFindFirstPlanTraining,
+    useFindManyTrainingCourse,
+    useFindManyTrainingMajor,
+} from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Flex, Form, Input, Row } from 'antd'
+import { cn } from '@workspace/ui/lib/utils'
+import { Button, Col, Flex, Form, Input, InputNumber, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
-import { CalendarPlus } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-interface FilterProps {
+interface OpenSubjectClassForm {
     searchText?: string
     trainingCourseId?: string
     trainingMajorId?: string
+    subjectClassNumber?: Record<
+        string,
+        {
+            count: number
+            name: string | null
+            code: string | null
+            maxStudent: number
+            countOld: number
+        }
+    >
 }
 
 export default function SubjectOpeningPlan() {
-    const { can, canSome } = useAbility()
-    const [form] = Form.useForm<FilterProps>()
+    const { canSome } = useAbility()
+    const [form] = Form.useForm<OpenSubjectClassForm>()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
+    const subjectClassNumber = Form.useWatch('subjectClassNumber', form) || {}
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: res, refetch } = useOpenSubjectClass(
+    const { data: res, refetch } = useFindFirstPlanTraining(
         {
-            page: `${currentPage}`,
-            pageSize: `${numberOfPages}`,
-            semesterId: semesterId as string,
-            search: searchText,
-            trainingCourseId,
-            trainingMajorId,
-            trainingObjectTypeId: trainingObjectTypeId || '',
+            // page: `${currentPage}`,
+            // pageSize: `${numberOfPages}`,
+            // semesterId: semesterId as string,
+            // search: searchText,
+            // trainingCourseId,
+            // trainingMajorId,
+            // trainingObjectTypeId: trainingObjectTypeId || '',
+            where: {
+                semesterId: semesterId as string,
+                trainingObjectTypeId: trainingObjectTypeId || '',
+                ...(searchText
+                    ? {
+                          planTrainingSubjects: {
+                              some: {
+                                  subjectVersion: {
+                                      OR: [
+                                          {
+                                              name: { contains: searchText, mode: 'insensitive' },
+                                          },
+                                          {
+                                              code: { contains: searchText, mode: 'insensitive' },
+                                          },
+                                      ],
+                                  },
+                                  fixedClasses: {
+                                      some: {
+                                          trainingCourseId: trainingCourseId || undefined,
+                                          curriculumVersion: {
+                                              curriculum: {
+                                                  trainingMajorId: trainingMajorId || undefined,
+                                              },
+                                          },
+                                      },
+                                  },
+                              },
+                          },
+                      }
+                    : {}),
+            },
+            include: {
+                planTrainingSubjects: {
+                    include: {
+                        subjectVersion: {
+                            include: {
+                                subjectClass: {
+                                    where: {
+                                        semesterId: semesterId as string,
+                                        trainingObjectTypeId: trainingObjectTypeId || '',
+                                    },
+                                },
+                                managementOrganization: {
+                                    select: {
+                                        sMa: true,
+                                    },
+                                },
+                            },
+                        },
+                        fixedClasses: {
+                            include: {
+                                _count: {
+                                    select: {
+                                        students: {
+                                            where: {
+                                                deletedAt: null,
+                                                active: true,
+                                                status: 'ENROLLED',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    take: numberOfPages,
+                    skip: (currentPage - 1) * numberOfPages,
+                },
+                _count: {
+                    select: {
+                        planTrainingSubjects: true,
+                    },
+                },
+            },
         },
-        { query: { enabled: !!semesterId } },
-        queryClient
+        { enabled: !!semesterId && !!trainingObjectTypeId, refetchOnWindowFocus: false }
     )
 
-    const data = useMemo(
-        () =>
-            res?.status === 200
-                ? res?.data?.data.map((subjectVersion) => ({
-                      id: subjectVersion.subjectVersionId,
-                      ...subjectVersion,
-                  }))
-                : [],
-        [res]
-    )
+    const data = useMemo(() => res?.planTrainingSubjects, [res])
+
+    useEffect(() => {
+        if (data) {
+            form.setFieldValue(
+                'subjectClassNumber',
+                data.reduce(
+                    (acc, cur) => {
+                        if (!acc) {
+                            return {
+                                [cur.subjectVersionId]: {
+                                    count: cur.subjectVersion.subjectClass.length ?? 0,
+                                    name: cur.subjectVersion?.name,
+                                    code: cur.subjectVersion?.code,
+                                    maxStudent: cur.fixedClasses.reduce(
+                                        (sum, fc) => sum + (fc._count?.students ?? 0),
+                                        0
+                                    ),
+                                    countOld: cur.subjectVersion.subjectClass.length ?? 0,
+                                },
+                            }
+                        }
+                        acc[cur.subjectVersionId] = {
+                            count: cur.subjectVersion.subjectClass.length ?? 0,
+                            name: cur.subjectVersion?.name,
+                            code: cur.subjectVersion?.code,
+                            maxStudent: cur.fixedClasses.reduce(
+                                (sum, fc) => sum + (fc._count?.students ?? 0),
+                                0
+                            ),
+                            countOld: cur.subjectVersion.subjectClass.length ?? 0,
+                        }
+                        return acc
+                    },
+                    {} as OpenSubjectClassForm['subjectClassNumber']
+                )
+            )
+        }
+    }, [data, form])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -65,15 +180,6 @@ export default function SubjectOpeningPlan() {
         }, 500),
         []
     )
-
-    const { onOpen } = useDisclosure<string>({
-        tag: 'PutOpenClassModal',
-        onClose: refetch,
-    })
-
-    const { onOpen: onOpenXuatFileMoLop } = useDisclosure<string>({
-        tag: 'ModalExportFileSubjectClass',
-    })
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
@@ -84,18 +190,107 @@ export default function SubjectOpeningPlan() {
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
+    const onSubmit = async () => {
+        try {
+            if (!semesterId || !trainingObjectTypeId) return
+            const listSubjectVersionIds = Object.entries(subjectClassNumber)
+                .filter(([, subjectVersion]) => subjectVersion.count !== subjectVersion.countOld)
+                .map(([key]) => key)
+
+            await sqlTransaction([
+                {
+                    model: 'ClassRegisterLogs',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            subjectClass: {
+                                semesterId,
+                                trainingObjectTypeId,
+                                subjectId: {
+                                    in: listSubjectVersionIds,
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'SubjectClassTime',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            subjectClass: {
+                                semesterId,
+                                trainingObjectTypeId,
+                                subjectId: {
+                                    in: listSubjectVersionIds,
+                                },
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'SubjectClass',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            semesterId: semesterId,
+                            trainingObjectTypeId: trainingObjectTypeId,
+                            subjectId: {
+                                in: listSubjectVersionIds,
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'SubjectClass',
+                    operation: 'createMany',
+                    data: {
+                        data: Object.entries(subjectClassNumber)
+                            .filter(
+                                ([, subjectVersion]) =>
+                                    subjectVersion.count !== subjectVersion.countOld
+                            )
+                            .flatMap(([subjectVersionId, subjectVersion]) =>
+                                new Array(subjectVersion.count).fill(0).map((_, index) => ({
+                                    subjectId: subjectVersionId,
+                                    semesterId: semesterId,
+                                    trainingObjectTypeId: trainingObjectTypeId,
+                                    code: `${subjectVersion.code} ${String(index + 1)}`,
+                                    name: subjectVersion.name,
+                                    maxStudent: Math.ceil(
+                                        subjectVersion.maxStudent / subjectVersion.count
+                                    ),
+                                }))
+                            ),
+                    },
+                },
+            ])
+            message.success('Lưu kế hoạch mở lớp thành công')
+            form.resetFields()
+            debouncedRefetch()
+        } catch (error) {
+            message.error('Lưu kế hoạch mở lớp thất bại')
+            console.error(error)
+        }
+    }
+
     return (
         <div>
-            <Row gutter={[16, 0]}>
-                <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Form
-                                form={form}
-                                onValuesChange={(filter: FilterProps) => {
-                                    debouncedRefetch()
-                                }}
-                            >
+            <Row gutter={[0, 0]}>
+                <Form
+                    className="w-full"
+                    form={form}
+                    onValuesChange={(filter: OpenSubjectClassForm) => {
+                        if (!filter.subjectClassNumber) {
+                            debouncedRefetch()
+                        } else {
+                            console.log(filter.subjectClassNumber)
+                        }
+                    }}
+                >
+                    <Col span={24}>
+                        <Row gutter={[16, 16]} align="top" justify="space-between">
+                            <Col span={12}>
                                 <Flex>
                                     <Col span={8}>
                                         <Form.Item name="searchText">
@@ -133,23 +328,31 @@ export default function SubjectOpeningPlan() {
                                         >
                                             <Select
                                                 placeholder="Khoá đào tạo"
-                                                options={trainingCourseData.map(
-                                                    (i: TrainingCourse) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
+                                                options={trainingCourseData.map((i) => ({
+                                                    value: i.id,
+                                                    label: i.name,
+                                                }))}
                                                 allowClear
                                             />
                                         </Form.Item>
                                     </Col>
                                 </Flex>
-                            </Form>
-                        </Col>
-                        <Col span={6}>
-                            <Flex justify="end" gap={4}>
-                                {/* <Button type="primary">Thêm mới</Button> */}
-                                {/* {can(
+                            </Col>
+                            <Col span={6}>
+                                <Flex justify="end" gap={4}>
+                                    <Popconfirm
+                                        onConfirm={onSubmit}
+                                        title="Xác nhận lưu kế hoạch mở lớp?"
+                                        okText="Xác nhận"
+                                        cancelText="Hủy"
+                                        description={
+                                            'Sau khi lưu kế hoạch mở lớp, các môn học sẽ được tạo mới lại hoàn toàn theo kế hoạch.\nCác lớp học và lịch học đã được tạo trước đó sẽ bị xoá.\nBạn có chắc chắn muốn tiếp tục?'
+                                        }
+                                    >
+                                        <Button type="primary">Lưu kế hoạch</Button>
+                                    </Popconfirm>
+                                    {/* <Button type="primary">Thêm mới</Button> */}
+                                    {/* {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
                                     'XUAT_EXCEL'
                                 ) && (
@@ -161,7 +364,7 @@ export default function SubjectOpeningPlan() {
                                         Xuất file mẫu
                                     </Button>
                                 )} */}
-                                {/* {can(
+                                    {/* {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
                                     'NHAP_EXCEL'
                                 ) && (
@@ -173,177 +376,248 @@ export default function SubjectOpeningPlan() {
                                         Nhập từ file TKB
                                     </Button>
                                 )} */}
-                            </Flex>
-                        </Col>
-                    </Row>
-                </Col>
-
-                <Col span={24}>
-                    <Table
-                        rowKey="subjectVersionId"
-                        data={data}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 50,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã MH',
-                                // TODO: dataIndex: 'code'
-                                dataIndex: 'subjectVersionCode',
-                                align: 'center',
-                                width: 100,
-                                fixed: 'left',
-                            },
-                            {
-                                title: 'Tên môn học',
-                                dataIndex: 'subjectVersionName',
-                                width: 150,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (__, record) => {
-                                    return (
-                                        `${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Danh sách lớp MH',
-                                dataIndex: 'subjectClass',
-                                width: 250,
-                                align: 'left',
-                                render: (__, record) => {
-                                    return record?.subjectClass.length ? (
-                                        <TextTruncate
-                                            arr={record?.subjectClass.map((i: any) => {
-                                                return {
-                                                    key: i?.subjectClassId,
-                                                    label: `${i.subjectClassName} ${i?.subjectClassCode}`,
-                                                }
-                                            })}
-                                            key="subjectClass"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Danh sách lớp quản lý',
-                                dataIndex: 'fixedClass',
-                                width: 250,
-                                align: 'left',
-                                render: (__, record) => {
-                                    return record?.fixedClass.length ? (
-                                        <TextTruncate
-                                            arr={record?.fixedClass.map((i: any) => {
-                                                return {
-                                                    key: i?.fixedClassId,
-                                                    label: i.fixedClassName,
-                                                }
-                                            })}
-                                            key="fixedClass"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-
-                            {
-                                title: 'Chương trình đào tạo',
-                                dataIndex: 'curriculumVersion',
-                                width: 200,
-                                align: 'center',
-                                render: (__, record) => {
-                                    return record?.curriculumVersion.length ? (
-                                        <TextTruncate
-                                            arr={record?.curriculumVersion.map((i: any) => {
-                                                return {
-                                                    key: i?.curriculumVersionId,
-                                                    label: i.curriculumVersionName,
-                                                }
-                                            })}
-                                            key="curriculumVersion"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-
-                            {
-                                title: 'SV nợ',
-                                dataIndex: 'svNo',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tổng SV',
-                                dataIndex: 'countStudent',
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Số lớp MH',
-                                dataIndex: ['subjectClass', 'length'],
-                                width: 100,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Đơn vị phụ trách',
-                                dataIndex: 'managementOrganizationName',
-                                width: 200,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                fixed: 'right',
-                                hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
-                                    'THEM'
-                                ),
-                                render: (record) => {
-                                    if (record?.id) {
-                                        return (
-                                            <Row
-                                                className="flex justify-center items-center gap-2 text-[#028850]"
-                                                onClick={onOpen.bind(null, {
-                                                    ...record,
-                                                    semester: semesterId,
-                                                })}
-                                            >
-                                                <CalendarPlus size={16} strokeWidth={2} />
-                                                Mở Lớp
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
-                                },
-                            },
-                        ]}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: res?.data?.count ?? 0,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
+                                </Flex>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col span={24}>
+                        <Table
+                            rowKey="subjectVersionId"
+                            data={data}
+                            onRow={(record) => {
+                                return {
+                                    className: cn(
+                                        subjectClassNumber?.[record.subjectVersionId]?.count
+                                            ? ''
+                                            : 'bg-red-100',
+                                        subjectClassNumber?.[record.subjectVersionId]?.count ===
+                                            subjectClassNumber?.[record.subjectVersionId]?.countOld
+                                            ? ''
+                                            : 'bg-yellow-100'
+                                    ),
                                 }
-                            },
-                        }}
-                    />
-                </Col>
+                            }}
+                            columns={[
+                                {
+                                    title: 'TT',
+                                    width: 35,
+                                    align: 'center',
+                                    render: (_, __, index) =>
+                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                },
+                                {
+                                    title: 'Mã MH',
+                                    dataIndex: ['subjectVersion', 'code'],
+                                    align: 'center',
+                                    width: 100,
+                                },
+                                {
+                                    title: 'Tên môn học',
+                                    dataIndex: ['subjectVersion', 'name'],
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        return (
+                                            `${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
+                                            ''
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Danh sách lớp MH',
+                                    dataIndex: 'subjectClass',
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        return record?.subjectVersion?.subjectClass?.length ? (
+                                            <TextTruncate
+                                                arr={record?.subjectVersion?.subjectClass.map(
+                                                    (i: any) => {
+                                                        return {
+                                                            key: i?.id,
+                                                            label: `${i?.code}`,
+                                                        }
+                                                    }
+                                                )}
+                                                key="subjectClass"
+                                            />
+                                        ) : (
+                                            ''
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Danh sách lớp quản lý',
+                                    dataIndex: 'fixedClass',
+                                    align: 'center',
+                                    render: (__, record) => {
+                                        return record?.fixedClasses?.length ? (
+                                            <TextTruncate
+                                                arr={record?.fixedClasses.map((i: any) => {
+                                                    return {
+                                                        key: i?.id,
+                                                        label: `${i?.code} (${i?._count?.students || 0})`,
+                                                    }
+                                                })}
+                                                key="fixedClass"
+                                            />
+                                        ) : (
+                                            ''
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Tổng SV',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (__, record) =>
+                                        record?.fixedClasses?.reduce(
+                                            (sum: number, fc: any) =>
+                                                sum + (fc._count?.students ?? 0),
+                                            0
+                                        ) || 0,
+                                },
+                                {
+                                    title: 'Đơn vị phụ trách',
+                                    dataIndex: ['subjectVersion', 'managementOrganization', 'sMa'],
+                                    width: 150,
+                                    align: 'center',
+                                },
+                                {
+                                    title: 'Số lớp MH',
+                                    width: 80,
+                                    align: 'center',
+                                    render: (__, record, idx) => (
+                                        <>
+                                            <Form.Item
+                                                name={[
+                                                    'subjectClassNumber',
+                                                    record?.subjectVersionId,
+                                                    'count',
+                                                ]}
+                                                required
+                                            >
+                                                <InputNumber
+                                                    step={0}
+                                                    id={`lmh-${record?.subjectVersionId}`}
+                                                    controls={false}
+                                                    onKeyDown={(e) => {
+                                                        if (
+                                                            e.key === 'ArrowUp' ||
+                                                            e.key === 'ArrowDown'
+                                                        ) {
+                                                            e.preventDefault()
+                                                            e.stopPropagation()
+                                                            if (!data) return
+                                                            const nextId =
+                                                                data[
+                                                                    idx +
+                                                                        (e.key === 'ArrowUp'
+                                                                            ? -1
+                                                                            : 1)
+                                                                ]?.subjectVersionId
+                                                            document
+                                                                .getElementById(`lmh-${nextId}`)
+                                                                ?.focus()
+                                                            return
+                                                            // Handle the logic for ArrowUp key press
+                                                        }
+
+                                                        const allowedKeys = [
+                                                            'Backspace',
+                                                            'Delete',
+                                                            'ArrowLeft',
+                                                            'ArrowRight',
+                                                            'Tab',
+                                                            'Meta',
+                                                            'Control',
+                                                        ]
+                                                        if (
+                                                            !/[0-9]/.test(e.key) &&
+                                                            !allowedKeys.includes(e.key)
+                                                        ) {
+                                                            e.preventDefault()
+                                                        }
+                                                    }}
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                name={[
+                                                    'subjectClassNumber',
+                                                    record?.subjectVersionId,
+                                                    'name',
+                                                ]}
+                                                hidden
+                                            />
+                                            <Form.Item
+                                                name={[
+                                                    'subjectClassNumber',
+                                                    record?.subjectVersionId,
+                                                    'code',
+                                                ]}
+                                                hidden
+                                            />
+                                            <Form.Item
+                                                name={[
+                                                    'subjectClassNumber',
+                                                    record?.subjectVersionId,
+                                                    'maxStudent',
+                                                ]}
+                                                hidden
+                                            />
+                                            <Form.Item
+                                                name={[
+                                                    'subjectClassNumber',
+                                                    record?.subjectVersionId,
+                                                    'countOld',
+                                                ]}
+                                                hidden
+                                            />
+                                        </>
+                                    ),
+                                },
+                                // {
+                                //     title: 'Thao tác',
+                                //     width: 100,
+                                //     align: 'center',
+                                //     fixed: 'right',
+                                //     hidden: !canSome(
+                                //         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
+                                //         'THEM'
+                                //     ),
+                                //     render: (record) => {
+                                //         if (record?.id) {
+                                //             return (
+                                //                 <Row
+                                //                     className="flex justify-center items-center gap-2 text-[#028850]"
+                                //                     onClick={onOpen.bind(null, {
+                                //                         ...record,
+                                //                         semester: semesterId,
+                                //                     })}
+                                //                 >
+                                //                     <CalendarPlus size={16} strokeWidth={2} />
+                                //                     Mở Lớp
+                                //                 </Row>
+                                //             )
+                                //         }
+                                //         return ''
+                                //     },
+                                // },
+                            ]}
+                            pagination={{
+                                current: currentPage,
+                                pageSize: numberOfPages,
+                                total: res?._count?.planTrainingSubjects ?? 0,
+                                onChange: (page, pageSize) => {
+                                    if (numberOfPages === pageSize) {
+                                        setCurrentPage(page)
+                                    } else {
+                                        setCurrentPage(1)
+                                        setNumberOfPages(pageSize)
+                                    }
+                                },
+                            }}
+                        />
+                    </Col>
+                </Form>
             </Row>
         </div>
     )

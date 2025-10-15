@@ -1,6 +1,5 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { useScoreConverter } from '@hooks/scoreConverter'
-import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 import { SubjectRequirementType } from '@workspace/db'
 import { useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
 import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankingConvert'
@@ -102,8 +101,6 @@ const ModalPrintToKQHT = () => {
       `,
     })
 
-    const { getTrainingLanguageLabel } = useTrainingLanguageOptions()
-
     const basicInfoCol1 = [
         {
             title: 'Họ và tên:',
@@ -115,13 +112,7 @@ const ModalPrintToKQHT = () => {
         },
         {
             title: 'Ngôn ngữ đào tạo:',
-            value: (
-                <span>
-                    {getTrainingLanguageLabel(
-                        input?.dataStudent?.curriculumVersion?.trainingLanguage
-                    )}
-                </span>
-            ),
+            value: <span>{input?.dataStudent?.curriculumVersion?.trainingLanguage?.name}</span>,
         },
         {
             title: 'Ngành đào tạo:',
@@ -171,7 +162,7 @@ const ModalPrintToKQHT = () => {
             ),
         },
         {
-            title: 'Trình độ đào tạo:',
+            title: 'Bậc đào tạo:',
             value: <span>{input?.dataStudent?.curriculumVersion?.trainingLevel?.name}</span>,
         },
         {
@@ -186,7 +177,8 @@ const ModalPrintToKQHT = () => {
                 .flatMap((block) => block.subjects)
                 .filter(
                     (subjectItem) =>
-                        subjectItem.print === true && subjectItem.useForFinalScore === true
+                        // subjectItem.print === true &&
+                        subjectItem.useForFinalScore === true
                 ) || []
 
         let totalWeightedScore = 0
@@ -332,7 +324,7 @@ const ModalPrintToKQHT = () => {
 
                                 subjectScoreData?.trainingBlocks.forEach((block) => {
                                     block.subjects
-                                        ?.filter((subjectItem) => subjectItem.print === true)
+                                        // ?.filter((subjectItem) => subjectItem.print === true)
                                         ?.forEach((subjectItem, index: number) => {
                                             if (subjectItem.graduation) {
                                                 graduationSubjects.push({
@@ -458,7 +450,7 @@ const ModalPrintToKQHT = () => {
                                         .flatMap((block) => block.subjects)
                                         .filter(
                                             (subjectItem) =>
-                                                subjectItem.print === true &&
+                                                // subjectItem.print === true &&
                                                 subjectItem.useForFinalScore === true
                                         )
                                         ?.reduce(
@@ -472,7 +464,7 @@ const ModalPrintToKQHT = () => {
                             </span>
                         </div>
                         <div>
-                            <span>Điểm trung bình chung tích lũy toàn khóa (Thanh điểm 4): </span>
+                            <span>Điểm trung bình chung tích lũy toàn khoá (Thanh điểm 4): </span>
                             <span className="font-bold">{gpaScore.toFixed(2)}</span>
                         </div>
                         <div className="flex">

@@ -5,10 +5,12 @@ import useSpinner from '@hooks/spinner'
 import type { TrainingLocation } from '@workspace/db'
 import {
     useCreateTrainingLocation,
+    useFindManyDM_Tinh,
+    useFindManyDM_Tinh_New,
     useFindUniqueTrainingLocation,
     useUpdateTrainingLocation,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio } from 'antd'
+import { Col, Form, Input, message, Radio, Select } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutTrainingLocation = TrainingLocation
@@ -26,7 +28,26 @@ const PutTrainingLocationModal = () => {
 
     const { mutateAsync: createTrainingLocation } = useCreateTrainingLocation()
     const { mutateAsync: updateTrainingLocation } = useUpdateTrainingLocation()
+    const { data: dM_Tinh } = useFindManyDM_Tinh(
+        {
+            select: {
+                Id: true,
+                sTen: true,
+            },
+        },
+        { enabled: isOpen }
+    )
+    const { data: dM_Tinh_New } = useFindManyDM_Tinh_New(
+        {
+            select: {
+                Id: true,
+                sTen: true,
+            },
+        },
+        { enabled: isOpen }
+    )
     async function onOk(value: PutTrainingLocation) {
+        console.log('value', value)
         try {
             showSpinner()
             if (id) {
@@ -102,6 +123,30 @@ const PutTrainingLocationModal = () => {
                     <Input placeholder="Nhập tên khu vực đào tạo" />
                 </FormItem>
             </Col>
+            <Col span={12}>
+                <FormItem form={form} name="dM_TinhId" label="Tên tỉnh/thành phố cũ" required>
+                    <Select
+                        placeholder="Chọn tỉnh/thành phố cũ"
+                        options={dM_Tinh?.map((item) => ({
+                            label: item.sTen,
+                            value: item.Id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+
+            <Col span={12}>
+                <FormItem form={form} name="dM_Tinh_NewId" label="Tên tỉnh/thành phố mới" required>
+                    <Select
+                        placeholder="Chọn tỉnh/thành phố mới"
+                        options={dM_Tinh_New?.map((item) => ({
+                            label: item.sTen,
+                            value: item.Id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />

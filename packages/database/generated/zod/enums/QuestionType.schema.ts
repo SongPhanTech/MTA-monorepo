@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const QuestionTypeSchema = z.enum(["ESSAY", "ORAL"])
+export const QuestionTypeSchema = z.enum(["ESSAY", "ORAL", "SINGLE_CHOICE", "MULTIPLE_CHOICE", "FILL_IN_BLANK", "ORDERING"])

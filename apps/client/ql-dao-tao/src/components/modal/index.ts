@@ -58,6 +58,7 @@ import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
 import PutSubjectTienQuyetSongHanh from './put-mon-hoc-tien-quyet-song-hanh'
 import PutSchoolYearModal from './put-nam-hoc'
 import PutTrainingFieldModal from './put-nganh'
+import PutTrainingLanguage from './put-ngon-ngu-dao-tao'
 import PutSubjectGroupModal from './put-nhom-mon-hoc'
 import PutOneSubjectClassModal from './put-one-subject-class'
 import PutCurriculumVersion from './put-phien-ban-danh-muc-ctdt'
@@ -89,6 +90,8 @@ import PutDisciplinaryWarning from './put-xet-canh-cao-hoc-duong'
 import PutAcademicActionConfig from './put-xu-ly-hoc-tap'
 import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
+import ModalChuyenLop from './modal-chuyen-lop'
+import ModalPreviewUpload from './modal-preview-upload-ctdt'
 export {
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -181,4 +184,7 @@ export {
     NhapDiemThuCong,
     PutChuanDauRaModal,
     MoKhoaNhapDiem,
+    PutTrainingLanguage,
+    ModalChuyenLop,
+    ModalPreviewUpload,
 }

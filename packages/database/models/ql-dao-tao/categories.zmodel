@@ -23,18 +23,27 @@ enum TrainingObjectTypes {
 model TrainingObjectType extends Base {
   name                 String                              @unique
   type                 TrainingObjectTypes
+
+  trainingForm         TrainingForm?                       @relation(fields: [trainingFormId], references: [id])
+  trainingFormId       String?
+
+  trainingLevel        TrainingLevel?                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId      String?
+
   trainingCourse       TrainingCourse[]
+  curriculum           Curriculum[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
   trainingFields       TrainingFieldOnTrainingObjectType[]
   students             Student[]
   trainingScoreSession TrainingScoreSession[]
+  subjectClass         SubjectClass[]
+  graduationSession    GraduationSession[]
+  subjectVersion       SubjectVersion[]
+  planTraining         PlanTraining[]
+  planTrainingDelay    PlanTrainingDelay[]
 
   @@schema("ql-dao-tao")
-
-  subjectClass         SubjectClass[]
-
-  graduationSession    GraduationSession[]
 }
 
 /// đối tượng ưu tiên
@@ -56,19 +65,21 @@ model TrainingType extends Base {
 
 /// Bậc đào tạo (Đại học, thạc sĩ, tiến sĩ)
 model TrainingLevel extends Base {
-  name              String              @unique
+  name               String               @unique
 
-  curriculumVersion CurriculumVersion[]
-  students          Student[]
+  curriculumVersion  CurriculumVersion[]
+  students           Student[]
+  trainingObjectType TrainingObjectType[]
 
   @@schema("ql-dao-tao")
 }
 
-/// hình thức đào tạo (Trực tiếp, trực tuyến, kết hợp)
+/// hình thức đào tạo/hình thức huấn luyện (Trực tiếp, trực tuyến, kết hợp)
 model TrainingForm extends Base {
-  name     String    @unique
+  name               String               @unique
 
-  students Student[]
+  students           Student[]
+  trainingObjectType TrainingObjectType[]
   @@schema("ql-dao-tao")
 }
 
@@ -77,20 +88,14 @@ model TrainingLocation extends Base {
   name          String       @unique
 
   dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId     String?
+  dM_TinhId     String?      @db.Uuid
 
   dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
-  dM_Tinh_NewId String?
-  name          String       @unique
-
-  dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId     String?
-
-  dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
-  dM_Tinh_NewId String?
+  dM_Tinh_NewId String?      @db.Uuid
 
   students      Student[]
   buildings     Building[]
+
   @@schema("ql-dao-tao")
 }
 
@@ -204,6 +209,10 @@ model TrainingBlock extends Base {
   /// ưu tiên sắp xếp
   priority           Int                                @default(0)
 
+  parent             TrainingBlock?                     @relation("ParentChild", fields: [parentId], references: [id])
+  parentId           String?
+  children           TrainingBlock[]                    @relation("ParentChild")
+
   curriculumVersions TrainingBlockOnCurriculumVersion[]
   @@schema("ql-dao-tao")
 }
@@ -211,13 +220,17 @@ model TrainingBlock extends Base {
 model TrainingBlockOnCurriculumVersion extends Base {
   trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId         String
-  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId     String
+  curriculumVersion       CurriculumVersion?     @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId     String?
+
+  curriculum              Curriculum?            @relation(fields: [curriculumId], references: [id])
+  curriculumId            String?
 
   /// ưu tiên sắp xếp
   priority                Int                    @default(0)
   electiveCreditsRequired Int                    @default(0)
   subjects                TrainingBlockSubject[]
+
 
   @@unique([trainingBlockId, curriculumVersionId])
   @@schema("ql-dao-tao")

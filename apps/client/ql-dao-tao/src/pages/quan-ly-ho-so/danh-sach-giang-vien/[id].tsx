@@ -124,7 +124,7 @@ export default function StudentDetailPage() {
                                     render: (value) => (value?.sTen ? value?.sTen : ''),
                                 },
                                 {
-                                    title: 'Khóa',
+                                    title: 'Khoá',
                                     dataIndex: 'trainingCourse',
                                     align: 'center',
                                     width: 150,
@@ -140,7 +140,7 @@ export default function StudentDetailPage() {
                                 },
 
                                 {
-                                    title: 'Trình độ đào tạo',
+                                    title: 'Bậc đào tạo',
                                     align: 'center',
                                     width: 150,
                                     dataIndex: 'trainingLevel',
@@ -227,9 +227,9 @@ export default function StudentDetailPage() {
                                 {
                                     title: 'Đơn vị phụ trách',
                                     dataIndex: 'subject',
-                                    width: 200,
+                                    width: 130,
                                     align: 'center',
-                                    render: (value) => value?.managementOrganization?.sTen || '',
+                                    render: (value) => value?.managementOrganization?.sMa || '',
                                 },
                             ]}
                             data={lecturerData?.mainSubjectClasses || []}
@@ -295,9 +295,9 @@ export default function StudentDetailPage() {
                                 {
                                     title: 'Đơn vị phụ trách',
                                     dataIndex: 'subject',
-                                    width: 200,
+                                    width: 130,
                                     align: 'center',
-                                    render: (value) => value?.managementOrganization?.sTen || '',
+                                    render: (value) => value?.managementOrganization?.sMa || '',
                                 },
                             ]}
                             data={lecturerData?.extraSubjectClasses || []}

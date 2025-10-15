@@ -44,7 +44,7 @@ const PutAcademicWarningRule = () => {
         try {
             showSpinner()
             if (!input?.trainingCourseId) {
-                message.error('Thiếu mã khóa học')
+                message.error('Thiếu mã khoá học')
                 hideSpinner()
                 return
             }

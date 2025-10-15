@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@workspace/db'
+import type { $Enums, PrismaClient } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
 
 export function parseDate(input?: number | string | Date): Date | null {
@@ -279,80 +279,121 @@ export const buildTrainingBlockMapOrThrow = async (prisma: PrismaClient, names: 
     // return result
 }
 
+type SubjectData = {
+    trainingObjectTypeId: string
+    name: string
+    code?: string
+    organizationCode?: string
+    credit: number
+    examType: $Enums.ExamType
+    type: $Enums.SubjectVersionType
+    onePoint?: boolean
+    schedulePeriod?: number
+    numberOfTheory?: number
+    numberOfPractical?: number
+    numberOfSelfStudy?: number
+    numberOfPractice?: number
+    numberOfReview?: number
+    numberOfExam?: number
+}
+
 export const buildSubjectMapOrThrow = async (
     prisma: PrismaClient,
-    subjects: { name: string; organizationCode?: string; credit?: number }[]
+    subjects: SubjectData[],
+    createNewSubject = false
 ) => {
-    const subjectSet = new Set<string>(
-        subjects.map((s) => JSON.stringify([s.name, s.organizationCode ?? null, s.credit ?? null]))
-    )
-
-    const uniqueTuples = Array.from(subjectSet).map(
-        (s) => JSON.parse(s) as [string, string | null, number | null]
-    )
+    const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(s)))
+    const uniqueSubject = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
 
     const existing = await prisma.subjectVersion.findMany({
         where: {
-            OR: uniqueTuples.map(([name, organizationCode, credit]) => ({
-                name,
-
-                ...(organizationCode
+            OR: uniqueSubject.map((s) => ({
+                name: s.name,
+                trainingObjectTypeId: s.trainingObjectTypeId,
+                ...(s.code ? { code: s.code } : {}),
+                ...(s.organizationCode
                     ? {
                           subject: {
                               managementOrganization: {
-                                  sMa: organizationCode,
+                                  sMa: s.organizationCode,
                               },
                           },
                       }
                     : {}),
-                ...(credit ? { credit } : {}),
+                credit: s.credit,
+                examType: s.examType,
+                type: s.type,
+                ...(s.schedulePeriod ? { schedulePeriod: s.schedulePeriod } : {}),
+                ...(s.numberOfTheory ? { numberOfTheory: s.numberOfTheory } : {}),
+                ...(s.numberOfPractical ? { numberOfPractical: s.numberOfPractical } : {}),
+                ...(s.numberOfSelfStudy ? { numberOfSelfStudy: s.numberOfSelfStudy } : {}),
+                ...(s.numberOfPractice ? { numberOfPractice: s.numberOfPractice } : {}),
+                ...(s.numberOfReview ? { numberOfReview: s.numberOfReview } : {}),
+                ...(s.numberOfExam ? { numberOfExam: s.numberOfExam } : {}),
             })),
         },
         select: { id: true, name: true },
     })
 
-    const missing = uniqueTuples.filter(
-        ([name]) => !existing.some((version) => version.name === name)
+    const missing = uniqueSubject.filter(
+        ({ name }) => !existing.some((version) => version.name === name)
     )
 
-    // const orgMap = await buildOrgCodeMapOrThrow(
-    //     prisma,
-    //     subjects.map((s) => s.organizationCode || null)
-    // )
+    if (missing.length && createNewSubject) {
+        const orgMap = await buildOrgCodeMapOrThrow(
+            prisma,
+            subjects.map((s) => s.organizationCode || null)
+        )
 
-    if (missing.length) {
-        // for (const subject of missing) {
-        //     console.log(subject[0], subject[1], subject[2], orgMap.get(subject[1]))
+        console.log(missing)
 
-        //     const managementOrganizationId = orgMap.get(subject[1]) || null
+        const newSubjects = []
+        for (const subject of missing) {
+            const managementOrganizationId = orgMap.get(subject.organizationCode || null)
 
-        //     const a = await prisma.subjectVersion.create({
-        //         data: {
-        //             name: subject[0],
-        //             examType: $Enums.ExamType.OfflineWritten,
-        //             credit: subject[2] as number,
-        //             ...(managementOrganizationId
-        //                 ? {
-        //                       managementOrganization: {
-        //                           connect: { Id: managementOrganizationId },
-        //                       },
-        //                   }
-        //                 : {}),
-        //             subject: {
-        //                 connectOrCreate: {
-        //                     where: { name: subject[0] },
-        //                     create: { name: subject[0], managementOrganizationId },
-        //                 },
-        //             },
-        //         },
-        //         select: { id: true, name: true },
-        //     })
-        // }
+            const newSubject = await prisma.subjectVersion.create({
+                data: {
+                    name: subject.name,
+                    trainingObjectType: { connect: { id: subject.trainingObjectTypeId } },
+                    credit: subject.credit,
+                    code: subject.code,
+                    examType: subject.examType,
+                    type: subject.type,
+                    onePoint: subject.onePoint,
+                    schedulePeriod: subject.schedulePeriod,
+                    numberOfTheory: subject.numberOfTheory,
+                    numberOfPractical: subject.numberOfPractical,
+                    numberOfSelfStudy: subject.numberOfSelfStudy,
+                    numberOfPractice: subject.numberOfPractice,
+                    numberOfReview: subject.numberOfReview,
+                    numberOfExam: subject.numberOfExam,
+                    ...(managementOrganizationId
+                        ? {
+                              managementOrganization: {
+                                  connect: { Id: managementOrganizationId },
+                              },
+                          }
+                        : {}),
+                    subject: {
+                        connectOrCreate: {
+                            where: { name: subject.name },
+                            create: { name: subject.name, managementOrganizationId },
+                        },
+                    },
+                },
+                select: { id: true, name: true },
+            })
 
+            newSubjects.push(newSubject)
+        }
+        return new Map([...existing, ...newSubjects].map(({ name, id }) => [name, id]))
+    }
+
+    if (missing.length && !createNewSubject) {
         throw new HTTPException(400, {
             message: `Phiên bản môn học không tồn tại: ${missing
                 .map(
-                    ([name, organizationCode, credit]) =>
+                    ({ name, organizationCode, credit }) =>
                         `${name}${` (${credit})` || ''}${organizationCode ? ` - ${organizationCode}` : ''}`
                 )
                 .join('; ')}`,

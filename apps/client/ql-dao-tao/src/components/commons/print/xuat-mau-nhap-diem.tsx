@@ -6,9 +6,10 @@ import { FileDown } from 'lucide-react'
 interface ExportScoreTemplateProps {
     selectedFixedClass: string | undefined
     dataTable: any[]
+    type: string
 }
 
-const ExportScoreTemplate = ({ selectedFixedClass, dataTable }: ExportScoreTemplateProps) => {
+const ExportScoreTemplate = ({ selectedFixedClass, dataTable, type }: ExportScoreTemplateProps) => {
     const exportTemplate = async () => {
         if (!selectedFixedClass || dataTable.length === 0) return
 
@@ -207,6 +208,7 @@ const ExportScoreTemplate = ({ selectedFixedClass, dataTable }: ExportScoreTempl
             'Điểm TX',
             'Điểm thi',
         ]
+
         headerRow.eachCell((cell: any) => {
             cell.style = tableHeaderStyle
         })
@@ -279,6 +281,21 @@ const ExportScoreTemplate = ({ selectedFixedClass, dataTable }: ExportScoreTempl
             { width: 15 }, // Điểm TX
             { width: 15 }, // Điểm Thi
         ]
+        if (type !== 'thi') {
+            worksheet.eachRow((row, rowNumber) => {
+                row.eachCell((cell, colNumber) => {
+                    // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
+                    cell.protection = { locked: colNumber === 8 }
+                })
+            })
+        } else {
+            worksheet.eachRow((row, rowNumber) => {
+                row.eachCell((cell, colNumber) => {
+                    // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
+                    cell.protection = { locked: colNumber === 7 || colNumber === 6 }
+                })
+            })
+        }
 
         // Xuất file
         const buffer = await workbook.xlsx.writeBuffer()

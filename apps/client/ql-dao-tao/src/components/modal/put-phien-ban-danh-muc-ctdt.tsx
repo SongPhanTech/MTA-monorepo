@@ -1,7 +1,11 @@
+import { CloseCircleOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
+import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import { RichTextEditor } from '@components/commons/rich-text-editor'
 import Select from '@components/commons/select'
+import Tabs from '@components/commons/tabar'
 import useSpinner from '@hooks/spinner'
 import type {
     CurriculumVersion,
@@ -11,28 +15,31 @@ import type {
     TrainingObjectType,
     TrainingTime,
 } from '@workspace/db'
-import { TrainingLanguage } from '@workspace/db'
 import {
     useCreateCurriculumVersion,
+    useDeleteCurriculumVersion,
     useFindManyDiplomaType,
+    useFindManyTrainingLanguage,
     useFindManyTrainingLevel,
     useFindManyTrainingObjectType,
     useFindManyTrainingTime,
     useFindUniqueCurriculumVersion,
     useUpdateCurriculumVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
+import { importPhienBanCTDTSubject } from '@workspace/libs/api/training'
+import type { SubjectResult } from '@workspace/libs/parseExcel'
+import { parseSheetSubject } from '@workspace/libs/parseExcel'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Form, Input, InputNumber, message, Radio, Row } from 'antd'
 import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
 import './index.css'
-import DocumentPaths from '@components/commons/documentPaths'
-import { RichTextEditor } from '@components/commons/rich-text-editor'
-import Tabs from '@components/commons/tabar'
-import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
+
 export type PutCurriculumVersion = CurriculumVersion & {
     documentFiles?: DocumentFile[]
+    file?: any
 }
 dayjs.locale('vi')
 
@@ -41,15 +48,35 @@ type CurriculumVersionInput = {
     versionId: string
 }
 
+type ModalPreviewUploadInput = {
+    previewData: SubjectResult[]
+    errorData: any[]
+}
+
 const PutCurriculumVersion = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutCurriculumVersion>()
-    const { options: trainingLanguageOptions } = useTrainingLanguageOptions()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    // Import Excel states
+    const [importFileName, setImportFileName] = useState<string>('')
+    const [filteredSubjects, setFilteredSubjects] = useState<SubjectResult[]>([])
+    const [importFile, setImportFile] = useState<File | null>(null)
 
     const { isOpen, onClose, input } = useDisclosure<CurriculumVersionInput>({
         tag: 'PutCurriculumVersion',
         onClose: form.resetFields,
     })
+
+    const { onOpen: openPreviewModal, input: previewInput } =
+        useDisclosure<ModalPreviewUploadInput>({
+            tag: 'ModalPreviewUpload',
+        })
+
+    useEffect(() => {
+        if (previewInput?.previewData) {
+            setFilteredSubjects(previewInput.previewData)
+        }
+    }, [previewInput?.previewData])
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -61,8 +88,38 @@ const PutCurriculumVersion = () => {
 
     const { data: diplomaTypeData = [] } = useFindManyDiplomaType()
 
+    const { data: trainingLanguageData = [] } = useFindManyTrainingLanguage({
+        where: { active: true },
+        orderBy: { name: 'asc' },
+    })
+
     const { mutateAsync: createCurriculumVersion } = useCreateCurriculumVersion()
     const { mutateAsync: updateCurriculumVersion } = useUpdateCurriculumVersion()
+    const { mutateAsync: deleteCurriculumVersion } = useDeleteCurriculumVersion()
+
+    const handleFileSelect = () => {
+        const fileInput = window.document.createElement('input')
+        fileInput.type = 'file'
+        fileInput.accept = '.xlsx,.xls'
+        fileInput.onchange = async (e: Event) => {
+            const file = (e.target as HTMLInputElement).files?.[0]
+            if (!file) return
+            setImportFileName(file.name)
+            setImportFile(file)
+            const { subjects, errors } = parseSheetSubject(
+                (await file.arrayBuffer()) as ArrayBuffer
+            )
+            openPreviewModal({
+                previewData: subjects,
+                errorData: errors,
+            })
+            // const reader = new FileReader()
+            // reader.onload = async (e) => {}
+            // reader.readAsArrayBuffer(file)
+        }
+        fileInput.click()
+    }
+
     async function onOk(output?: PutCurriculumVersion) {
         if (!output) return
         try {
@@ -73,7 +130,7 @@ const PutCurriculumVersion = () => {
                 name: output.name.trim(),
                 shortName: output?.shortName,
                 englishName: output.englishName,
-                trainingLanguage: output.trainingLanguage,
+                trainingLanguageId: output.trainingLanguageId,
                 yearCreation: output.yearCreation,
                 yearApplication: output.yearApplication,
                 trainingObjectTypeId: output.trainingObjectTypeId,
@@ -148,10 +205,11 @@ const PutCurriculumVersion = () => {
                 message.success('Cập nhật thành công')
             } else {
                 if (!input?.curriculumId) {
-                    message.error('Thiếu curriculumId, không thể tạo phiên bản CTĐT')
+                    message.error('Thiếu curriculumId, không thể tạo CTĐT toàn khoá')
                     return
                 }
-                await createCurriculumVersion({
+
+                const newCurriculumVersion = await createCurriculumVersion({
                     data: {
                         ...baseData,
                         documentFiles: {
@@ -164,6 +222,28 @@ const PutCurriculumVersion = () => {
                         },
                     },
                 })
+
+                if (
+                    filteredSubjects.length > 0 &&
+                    newCurriculumVersion?.id &&
+                    output.trainingObjectTypeId &&
+                    importFile
+                ) {
+                    // TODO: call api here
+                    const res = await importPhienBanCTDTSubject({
+                        curriculumVersionId: newCurriculumVersion.id,
+                        trainingObjectTypeId: output.trainingObjectTypeId,
+                        file: importFile,
+                        createNewSubjects: true,
+                    })
+                    if (res.status !== 200) {
+                        await deleteCurriculumVersion({
+                            where: { id: newCurriculumVersion.id },
+                        })
+                        throw new Error(res.data?.message || 'Lỗi khi nhập dữ liệu từ file')
+                    }
+                }
+
                 message.success('Thêm mới thành công')
             }
             queryClient.invalidateQueries({
@@ -171,8 +251,8 @@ const PutCurriculumVersion = () => {
             })
             onClose()
         } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
+            if (error?.info?.message || error?.message) {
+                message.error(error?.info?.message || error?.message)
                 return
             }
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -214,9 +294,14 @@ const PutCurriculumVersion = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={input?.versionId ? 'Sửa phiên bản CTĐT' : 'Thêm phiên bản CTĐT'}
+            title={input?.versionId ? 'Sửa CTĐT toàn khoá' : 'Thêm CTĐT toàn khoá'}
             className="w-[60vw]"
             style={{ top: 20 }}
+            formProps={{
+                initialValues: {
+                    trainingObjectTypeId,
+                },
+            }}
         >
             <Tabs
                 className="w-full"
@@ -231,29 +316,29 @@ const PutCurriculumVersion = () => {
                                         <FormItem
                                             form={form}
                                             name="code"
-                                            label="Mã phiên bản"
+                                            label="Mã CTĐT toàn khoá"
                                             required
                                         >
-                                            <Input placeholder="Nhập mã phiên bản CTĐT" />
+                                            <Input placeholder="Nhập mã CTĐT toàn khoá" />
                                         </FormItem>
                                     </Col>
                                     <Col span={12}>
                                         <FormItem
                                             form={form}
                                             name="name"
-                                            label="Tên phiên bản (tiếng việt)"
+                                            label="Tên CTĐT toàn khoá (tiếng việt)"
                                             required
                                         >
-                                            <Input placeholder="Nhập tên phiên bản (tiếng việt)" />
+                                            <Input placeholder="Nhập tên CTĐT toàn khoá (tiếng việt)" />
                                         </FormItem>
                                     </Col>
                                     <Col span={12}>
                                         <FormItem
                                             form={form}
                                             name="englishName"
-                                            label="Tên phiên bản (tiếng anh)"
+                                            label="Tên CTĐT toàn khoá (tiếng anh)"
                                         >
-                                            <Input placeholder="Nhập tên phiên bản (tiếng anh)" />
+                                            <Input placeholder="Nhập tên CTĐT toàn khoá (tiếng anh)" />
                                         </FormItem>
                                     </Col>
                                     <Col span={12}>
@@ -265,13 +350,15 @@ const PutCurriculumVersion = () => {
                                         <FormItem
                                             form={form}
                                             label="Ngôn ngữ đào tạo"
-                                            name="trainingLanguage"
+                                            name="trainingLanguageId"
                                         >
                                             <Select
                                                 placeholder="Chọn ngôn ngữ đào tạo"
-                                                options={trainingLanguageOptions}
+                                                options={trainingLanguageData.map((item) => ({
+                                                    label: item.name,
+                                                    value: item.id,
+                                                }))}
                                                 allowClear
-                                                defaultValue={TrainingLanguage.Vietnamese}
                                             />
                                         </FormItem>
                                     </Col>
@@ -338,12 +425,12 @@ const PutCurriculumVersion = () => {
                                     <Col span={12}>
                                         <FormItem
                                             form={form}
-                                            label="Trình độ đào tạo"
+                                            label="Bậc đào tạo"
                                             name="trainingLevelId"
                                             required
                                         >
                                             <Select
-                                                placeholder="Chọn trình độ đào tạo"
+                                                placeholder="Chọn bậc đào tạo"
                                                 options={trainingLevelData.map(
                                                     (i: TrainingForm) => ({
                                                         value: i.id,
@@ -378,11 +465,11 @@ const PutCurriculumVersion = () => {
                                         <FormItem
                                             form={form}
                                             name="diplomaTypeId"
-                                            label="Bậc đào tạo"
+                                            label="Loại văn bằng"
                                             required
                                         >
                                             <Select
-                                                placeholder="Chọn bậc đào tạo"
+                                                placeholder="Chọn loại văn bằng"
                                                 options={diplomaTypeData.map((i: DiplomaType) => ({
                                                     value: i.id,
                                                     label: i.name,
@@ -442,6 +529,48 @@ const PutCurriculumVersion = () => {
                                             </FormItem>
                                         </Col>
                                     )}
+
+                                    <Col span={12}>
+                                        <FormItem
+                                            label="Nhập dữ liệu môn học từ file Excel"
+                                            form={form}
+                                            name="file"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <Button type="primary" onClick={handleFileSelect}>
+                                                    Chọn file Excel
+                                                </Button>
+                                                {importFileName && (
+                                                    <span
+                                                        className="text-sm text-primary cursor-pointer flex items-center gap-1"
+                                                        onClick={async () => {
+                                                            if (!importFile) return
+                                                            const { subjects, errors } =
+                                                                parseSheetSubject(
+                                                                    (await importFile.arrayBuffer()) as ArrayBuffer
+                                                                )
+                                                            openPreviewModal({
+                                                                previewData: subjects,
+                                                                errorData: errors,
+                                                            })
+                                                        }}
+                                                    >
+                                                        {importFileName}
+                                                        <CloseCircleOutlined
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                setImportFileName('')
+                                                                setImportFile(null)
+                                                                setFilteredSubjects([])
+                                                            }}
+                                                            className="text-red-500"
+                                                        />
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </FormItem>
+                                    </Col>
+
                                     <Col span={24}>
                                         <FormItem
                                             form={form}
@@ -502,11 +631,11 @@ const PutCurriculumVersion = () => {
                     },
                     {
                         key: '6',
-                        label: 'Thời gian toàn khóa',
+                        label: 'Thời gian toàn khoá',
                         children: (
-                            <FormItem form={form} name="time" label="Thời gian toàn khóa">
+                            <FormItem form={form} name="time" label="Thời gian toàn khoá">
                                 <RichTextEditor />
-                                {/* <Input.TextArea placeholder="Nhập thời gian toàn khóa" /> */}
+                                {/* <Input.TextArea placeholder="Nhập thời gian toàn khoá" /> */}
                             </FormItem>
                         ),
                     },

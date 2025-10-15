@@ -38,7 +38,7 @@ const PutAcademicActionConfig = () => {
         try {
             showSpinner()
             if (!input?.trainingCourseId) {
-                message.error('Thiếu mã khóa đào tạo')
+                message.error('Thiếu mã khoá đào tạo')
                 hideSpinner()
                 return
             }

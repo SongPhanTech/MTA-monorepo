@@ -19,143 +19,923 @@ const policy = {
                 update: {},
             },
         },
-        questionBank: {
+        changeLog: {
             modelLevel: {
-                read: { guard: QuestionBank_read, },
-                create: { guard: QuestionBank_create, inputChecker: QuestionBank_create_input, },
-                update: { guard: QuestionBank_update, },
-                postUpdate: { guard: QuestionBank_postUpdate, },
-                delete: { guard: QuestionBank_delete, }
+                read: { guard: ChangeLog_read, },
+                create: { guard: ChangeLog_create, inputChecker: ChangeLog_create_input, },
+                update: { guard: ChangeLog_update, },
+                postUpdate: { guard: ChangeLog_postUpdate, },
+                delete: { guard: ChangeLog_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        difficulty: {
+        userProfile: {
             modelLevel: {
-                read: { guard: Difficulty_read, },
-                create: { guard: Difficulty_create, inputChecker: Difficulty_create_input, },
-                update: { guard: Difficulty_update, },
-                postUpdate: { guard: Difficulty_postUpdate, },
-                delete: { guard: Difficulty_delete, }
+                read: { guard: UserProfile_read, },
+                create: { guard: UserProfile_create, inputChecker: UserProfile_create_input, },
+                update: { guard: UserProfile_update, },
+                postUpdate: { guard: UserProfile_postUpdate, },
+                delete: { guard: UserProfile_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        knowledgeBlock: {
+        hocHam: {
             modelLevel: {
-                read: { guard: KnowledgeBlock_read, },
-                create: { guard: KnowledgeBlock_create, inputChecker: KnowledgeBlock_create_input, },
-                update: { guard: KnowledgeBlock_update, },
-                postUpdate: { guard: KnowledgeBlock_postUpdate, },
-                delete: { guard: KnowledgeBlock_delete, }
+                read: { guard: HocHam_read, },
+                create: { guard: HocHam_create, inputChecker: HocHam_create_input, },
+                update: { guard: HocHam_update, },
+                postUpdate: { guard: HocHam_postUpdate, },
+                delete: { guard: HocHam_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        question: {
+        hocVi: {
             modelLevel: {
-                read: { guard: Question_read, },
-                create: { guard: Question_create, inputChecker: Question_create_input, },
-                update: { guard: Question_update, },
-                postUpdate: { guard: Question_postUpdate, },
-                delete: { guard: Question_delete, }
+                read: { guard: HocVi_read, },
+                create: { guard: HocVi_create, inputChecker: HocVi_create_input, },
+                update: { guard: HocVi_update, },
+                postUpdate: { guard: HocVi_postUpdate, },
+                delete: { guard: HocVi_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        answer: {
+        relative: {
             modelLevel: {
-                read: { guard: Answer_read, },
-                create: { guard: Answer_create, inputChecker: Answer_create_input, },
-                update: { guard: Answer_update, },
-                postUpdate: { guard: Answer_postUpdate, },
-                delete: { guard: Answer_delete, }
+                read: { guard: Relative_read, },
+                create: { guard: Relative_create, inputChecker: Relative_create_input, },
+                update: { guard: Relative_update, },
+                postUpdate: { guard: Relative_postUpdate, },
+                delete: { guard: Relative_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        exam: {
+        trinhDoLyLuanChinhTri: {
             modelLevel: {
-                read: { guard: Exam_read, },
-                create: { guard: Exam_create, inputChecker: Exam_create_input, },
-                update: { guard: Exam_update, },
-                postUpdate: { guard: Exam_postUpdate, },
-                delete: { guard: Exam_delete, }
+                read: { guard: TrinhDoLyLuanChinhTri_read, },
+                create: { guard: TrinhDoLyLuanChinhTri_create, inputChecker: TrinhDoLyLuanChinhTri_create_input, },
+                update: { guard: TrinhDoLyLuanChinhTri_update, },
+                postUpdate: { guard: TrinhDoLyLuanChinhTri_postUpdate, },
+                delete: { guard: TrinhDoLyLuanChinhTri_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        testStructureRule: {
+        trinhDoQuanLyNhaNuoc: {
             modelLevel: {
-                read: { guard: TestStructureRule_read, },
-                create: { guard: TestStructureRule_create, inputChecker: TestStructureRule_create_input, },
-                update: { guard: TestStructureRule_update, },
-                postUpdate: { guard: TestStructureRule_postUpdate, },
-                delete: { guard: TestStructureRule_delete, }
+                read: { guard: TrinhDoQuanLyNhaNuoc_read, },
+                create: { guard: TrinhDoQuanLyNhaNuoc_create, inputChecker: TrinhDoQuanLyNhaNuoc_create_input, },
+                update: { guard: TrinhDoQuanLyNhaNuoc_update, },
+                postUpdate: { guard: TrinhDoQuanLyNhaNuoc_postUpdate, },
+                delete: { guard: TrinhDoQuanLyNhaNuoc_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        examBank: {
+        ngoaiNgu: {
             modelLevel: {
-                read: { guard: ExamBank_read, },
-                create: { guard: ExamBank_create, inputChecker: ExamBank_create_input, },
-                update: { guard: ExamBank_update, },
-                postUpdate: { guard: ExamBank_postUpdate, },
-                delete: { guard: ExamBank_delete, }
+                read: { guard: NgoaiNgu_read, },
+                create: { guard: NgoaiNgu_create, inputChecker: NgoaiNgu_create_input, },
+                update: { guard: NgoaiNgu_update, },
+                postUpdate: { guard: NgoaiNgu_postUpdate, },
+                delete: { guard: NgoaiNgu_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        examBankQuestion: {
+        tinHoc: {
             modelLevel: {
-                read: { guard: ExamBankQuestion_read, },
-                create: { guard: ExamBankQuestion_create, inputChecker: ExamBankQuestion_create_input, },
-                update: { guard: ExamBankQuestion_update, },
-                postUpdate: { guard: ExamBankQuestion_postUpdate, },
-                delete: { guard: ExamBankQuestion_delete, }
+                read: { guard: TinHoc_read, },
+                create: { guard: TinHoc_create, inputChecker: TinHoc_create_input, },
+                update: { guard: TinHoc_update, },
+                postUpdate: { guard: TinHoc_postUpdate, },
+                delete: { guard: TinHoc_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        examFax: {
+        boiDuongQuocPhongAnNinh: {
             modelLevel: {
-                read: { guard: ExamFax_read, },
-                create: { guard: ExamFax_create, inputChecker: ExamFax_create_input, },
-                update: { guard: ExamFax_update, },
-                postUpdate: { guard: ExamFax_postUpdate, },
-                delete: { guard: ExamFax_delete, }
+                read: { guard: BoiDuongQuocPhongAnNinh_read, },
+                create: { guard: BoiDuongQuocPhongAnNinh_create, inputChecker: BoiDuongQuocPhongAnNinh_create_input, },
+                update: { guard: BoiDuongQuocPhongAnNinh_update, },
+                postUpdate: { guard: BoiDuongQuocPhongAnNinh_postUpdate, },
+                delete: { guard: BoiDuongQuocPhongAnNinh_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        examSession: {
+        capBac: {
             modelLevel: {
-                read: { guard: ExamSession_read, },
-                create: { guard: ExamSession_create, inputChecker: ExamSession_create_input, },
-                update: { guard: ExamSession_update, },
-                postUpdate: { guard: ExamSession_postUpdate, },
-                delete: { guard: ExamSession_delete, }
+                read: { guard: CapBac_read, },
+                create: { guard: CapBac_create, inputChecker: CapBac_create_input, },
+                update: { guard: CapBac_update, },
+                postUpdate: { guard: CapBac_postUpdate, },
+                delete: { guard: CapBac_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        quaTrinhCongTac: {
+            modelLevel: {
+                read: { guard: QuaTrinhCongTac_read, },
+                create: { guard: QuaTrinhCongTac_create, inputChecker: QuaTrinhCongTac_create_input, },
+                update: { guard: QuaTrinhCongTac_update, },
+                postUpdate: { guard: QuaTrinhCongTac_postUpdate, },
+                delete: { guard: QuaTrinhCongTac_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        quaTrinhCuDiCongTac: {
+            modelLevel: {
+                read: { guard: QuaTrinhCuDiCongTac_read, },
+                create: { guard: QuaTrinhCuDiCongTac_create, inputChecker: QuaTrinhCuDiCongTac_create_input, },
+                update: { guard: QuaTrinhCuDiCongTac_update, },
+                postUpdate: { guard: QuaTrinhCuDiCongTac_postUpdate, },
+                delete: { guard: QuaTrinhCuDiCongTac_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        quaTrinhCuDiDaoTao: {
+            modelLevel: {
+                read: { guard: QuaTrinhCuDiDaoTao_read, },
+                create: { guard: QuaTrinhCuDiDaoTao_create, inputChecker: QuaTrinhCuDiDaoTao_create_input, },
+                update: { guard: QuaTrinhCuDiDaoTao_update, },
+                postUpdate: { guard: QuaTrinhCuDiDaoTao_postUpdate, },
+                delete: { guard: QuaTrinhCuDiDaoTao_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        khenThuong: {
+            modelLevel: {
+                read: { guard: KhenThuong_read, },
+                create: { guard: KhenThuong_create, inputChecker: KhenThuong_create_input, },
+                update: { guard: KhenThuong_update, },
+                postUpdate: { guard: KhenThuong_postUpdate, },
+                delete: { guard: KhenThuong_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        kyLuat: {
+            modelLevel: {
+                read: { guard: KyLuat_read, },
+                create: { guard: KyLuat_create, inputChecker: KyLuat_create_input, },
+                update: { guard: KyLuat_update, },
+                postUpdate: { guard: KyLuat_postUpdate, },
+                delete: { guard: KyLuat_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        doiTuongChinhSach: {
+            modelLevel: {
+                read: { guard: DoiTuongChinhSach_read, },
+                create: { guard: DoiTuongChinhSach_create, inputChecker: DoiTuongChinhSach_create_input, },
+                update: { guard: DoiTuongChinhSach_update, },
+                postUpdate: { guard: DoiTuongChinhSach_postUpdate, },
+                delete: { guard: DoiTuongChinhSach_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        keKhaiTaiSan: {
+            modelLevel: {
+                read: { guard: KeKhaiTaiSan_read, },
+                create: { guard: KeKhaiTaiSan_create, inputChecker: KeKhaiTaiSan_create_input, },
+                update: { guard: KeKhaiTaiSan_update, },
+                postUpdate: { guard: KeKhaiTaiSan_postUpdate, },
+                delete: { guard: KeKhaiTaiSan_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        tiengDanToc: {
+            modelLevel: {
+                read: { guard: TiengDanToc_read, },
+                create: { guard: TiengDanToc_create, inputChecker: TiengDanToc_create_input, },
+                update: { guard: TiengDanToc_update, },
+                postUpdate: { guard: TiengDanToc_postUpdate, },
+                delete: { guard: TiengDanToc_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        chienDau: {
+            modelLevel: {
+                read: { guard: ChienDau_read, },
+                create: { guard: ChienDau_create, inputChecker: ChienDau_create_input, },
+                update: { guard: ChienDau_update, },
+                postUpdate: { guard: ChienDau_postUpdate, },
+                delete: { guard: ChienDau_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        nuocNgoai: {
+            modelLevel: {
+                read: { guard: NuocNgoai_read, },
+                create: { guard: NuocNgoai_create, inputChecker: NuocNgoai_create_input, },
+                update: { guard: NuocNgoai_update, },
+                postUpdate: { guard: NuocNgoai_postUpdate, },
+                delete: { guard: NuocNgoai_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        thuongTat: {
+            modelLevel: {
+                read: { guard: ThuongTat_read, },
+                create: { guard: ThuongTat_create, inputChecker: ThuongTat_create_input, },
+                update: { guard: ThuongTat_update, },
+                postUpdate: { guard: ThuongTat_postUpdate, },
+                delete: { guard: ThuongTat_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        danhHieu: {
+            modelLevel: {
+                read: { guard: DanhHieu_read, },
+                create: { guard: DanhHieu_create, inputChecker: DanhHieu_create_input, },
+                update: { guard: DanhHieu_update, },
+                postUpdate: { guard: DanhHieu_postUpdate, },
+                delete: { guard: DanhHieu_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        quaTrinhHocTap: {
+            modelLevel: {
+                read: { guard: QuaTrinhHocTap_read, },
+                create: { guard: QuaTrinhHocTap_create, inputChecker: QuaTrinhHocTap_create_input, },
+                update: { guard: QuaTrinhHocTap_update, },
+                postUpdate: { guard: QuaTrinhHocTap_postUpdate, },
+                delete: { guard: QuaTrinhHocTap_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        toChucXaHoi: {
+            modelLevel: {
+                read: { guard: ToChucXaHoi_read, },
+                create: { guard: ToChucXaHoi_create, inputChecker: ToChucXaHoi_create_input, },
+                update: { guard: ToChucXaHoi_update, },
+                postUpdate: { guard: ToChucXaHoi_postUpdate, },
+                delete: { guard: ToChucXaHoi_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        quaTrinhLuong: {
+            modelLevel: {
+                read: { guard: QuaTrinhLuong_read, },
+                create: { guard: QuaTrinhLuong_create, inputChecker: QuaTrinhLuong_create_input, },
+                update: { guard: QuaTrinhLuong_update, },
+                postUpdate: { guard: QuaTrinhLuong_postUpdate, },
+                delete: { guard: QuaTrinhLuong_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        group: {
+            modelLevel: {
+                read: { guard: Group_read, },
+                create: { guard: Group_create, inputChecker: Group_create_input, },
+                update: { guard: Group_update, },
+                postUpdate: { guard: Group_postUpdate, },
+                delete: { guard: Group_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        role: {
+            modelLevel: {
+                read: { guard: Role_read, },
+                create: { guard: Role_create, inputChecker: Role_create_input, },
+                update: { guard: Role_update, },
+                postUpdate: { guard: Role_postUpdate, },
+                delete: { guard: Role_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        permission: {
+            modelLevel: {
+                read: { guard: Permission_read, },
+                create: { guard: Permission_create, inputChecker: Permission_create_input, },
+                update: { guard: Permission_update, },
+                postUpdate: { guard: Permission_postUpdate, },
+                delete: { guard: Permission_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        chatBotConfig: {
+            modelLevel: {
+                read: { guard: ChatBotConfig_read, },
+                create: { guard: ChatBotConfig_create, inputChecker: ChatBotConfig_create_input, },
+                update: { guard: ChatBotConfig_update, },
+                postUpdate: { guard: ChatBotConfig_postUpdate, },
+                delete: { guard: ChatBotConfig_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        userSession: {
+            modelLevel: {
+                read: { guard: UserSession_read, },
+                create: { guard: UserSession_create, inputChecker: UserSession_create_input, },
+                update: { guard: UserSession_update, },
+                postUpdate: { guard: UserSession_postUpdate, },
+                delete: { guard: UserSession_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        document: {
+            modelLevel: {
+                read: { guard: Document_read, },
+                create: { guard: Document_create, inputChecker: Document_create_input, },
+                update: { guard: Document_update, },
+                postUpdate: { guard: Document_postUpdate, },
+                delete: { guard: Document_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        fAQ: {
+            modelLevel: {
+                read: { guard: FAQ_read, },
+                create: { guard: FAQ_create, inputChecker: FAQ_create_input, },
+                update: { guard: FAQ_update, },
+                postUpdate: { guard: FAQ_postUpdate, },
+                delete: { guard: FAQ_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        prompt: {
+            modelLevel: {
+                read: { guard: Prompt_read, },
+                create: { guard: Prompt_create, inputChecker: Prompt_create_input, },
+                update: { guard: Prompt_update, },
+                postUpdate: { guard: Prompt_postUpdate, },
+                delete: { guard: Prompt_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        conversation: {
+            modelLevel: {
+                read: { guard: Conversation_read, },
+                create: { guard: Conversation_create, inputChecker: Conversation_create_input, },
+                update: { guard: Conversation_update, },
+                postUpdate: { guard: Conversation_postUpdate, },
+                delete: { guard: Conversation_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        message: {
+            modelLevel: {
+                read: { guard: Message_read, },
+                create: { guard: Message_create, inputChecker: Message_create_input, },
+                update: { guard: Message_update, },
+                postUpdate: { guard: Message_postUpdate, },
+                delete: { guard: Message_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        citationMessage: {
+            modelLevel: {
+                read: { guard: CitationMessage_read, },
+                create: { guard: CitationMessage_create, inputChecker: CitationMessage_create_input, },
+                update: { guard: CitationMessage_update, },
+                postUpdate: { guard: CitationMessage_postUpdate, },
+                delete: { guard: CitationMessage_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        topic: {
+            modelLevel: {
+                read: { guard: Topic_read, },
+                create: { guard: Topic_create, inputChecker: Topic_create_input, },
+                update: { guard: Topic_update, },
+                postUpdate: { guard: Topic_postUpdate, },
+                delete: { guard: Topic_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_CapBac: {
+            modelLevel: {
+                read: { guard: DM_CapBac_read, },
+                create: { guard: DM_CapBac_create, inputChecker: DM_CapBac_create_input, },
+                update: { guard: DM_CapBac_update, },
+                postUpdate: { guard: DM_CapBac_postUpdate, },
+                delete: { guard: DM_CapBac_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_ChucDanh: {
+            modelLevel: {
+                read: { guard: DM_ChucDanh_read, },
+                create: { guard: DM_ChucDanh_create, inputChecker: DM_ChucDanh_create_input, },
+                update: { guard: DM_ChucDanh_update, },
+                postUpdate: { guard: DM_ChucDanh_postUpdate, },
+                delete: { guard: DM_ChucDanh_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_ChucVu: {
+            modelLevel: {
+                read: { guard: DM_ChucVu_read, },
+                create: { guard: DM_ChucVu_create, inputChecker: DM_ChucVu_create_input, },
+                update: { guard: DM_ChucVu_update, },
+                postUpdate: { guard: DM_ChucVu_postUpdate, },
+                delete: { guard: DM_ChucVu_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_HocHam: {
+            modelLevel: {
+                read: { guard: DM_HocHam_read, },
+                create: { guard: DM_HocHam_create, inputChecker: DM_HocHam_create_input, },
+                update: { guard: DM_HocHam_update, },
+                postUpdate: { guard: DM_HocHam_postUpdate, },
+                delete: { guard: DM_HocHam_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_HocVi: {
+            modelLevel: {
+                read: { guard: DM_HocVi_read, },
+                create: { guard: DM_HocVi_create, inputChecker: DM_HocVi_create_input, },
+                update: { guard: DM_HocVi_update, },
+                postUpdate: { guard: DM_HocVi_postUpdate, },
+                delete: { guard: DM_HocVi_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_ChungChiTinHoc: {
+            modelLevel: {
+                read: { guard: DM_ChungChiTinHoc_read, },
+                create: { guard: DM_ChungChiTinHoc_create, inputChecker: DM_ChungChiTinHoc_create_input, },
+                update: { guard: DM_ChungChiTinHoc_update, },
+                postUpdate: { guard: DM_ChungChiTinHoc_postUpdate, },
+                delete: { guard: DM_ChungChiTinHoc_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_DanToc: {
+            modelLevel: {
+                read: { guard: DM_DanToc_read, },
+                create: { guard: DM_DanToc_create, inputChecker: DM_DanToc_create_input, },
+                update: { guard: DM_DanToc_update, },
+                postUpdate: { guard: DM_DanToc_postUpdate, },
+                delete: { guard: DM_DanToc_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_DonVi: {
+            modelLevel: {
+                read: { guard: DM_DonVi_read, },
+                create: { guard: DM_DonVi_create, inputChecker: DM_DonVi_create_input, },
+                update: { guard: DM_DonVi_update, },
+                postUpdate: { guard: DM_DonVi_postUpdate, },
+                delete: { guard: DM_DonVi_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_DonViHanhChinh: {
+            modelLevel: {
+                read: { guard: DM_DonViHanhChinh_read, },
+                create: { guard: DM_DonViHanhChinh_create, inputChecker: DM_DonViHanhChinh_create_input, },
+                update: { guard: DM_DonViHanhChinh_update, },
+                postUpdate: { guard: DM_DonViHanhChinh_postUpdate, },
+                delete: { guard: DM_DonViHanhChinh_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_KhuVuc_DiaLy: {
+            modelLevel: {
+                read: { guard: DM_KhuVuc_DiaLy_read, },
+                create: { guard: DM_KhuVuc_DiaLy_create, inputChecker: DM_KhuVuc_DiaLy_create_input, },
+                update: { guard: DM_KhuVuc_DiaLy_update, },
+                postUpdate: { guard: DM_KhuVuc_DiaLy_postUpdate, },
+                delete: { guard: DM_KhuVuc_DiaLy_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_NgoaiNgu: {
+            modelLevel: {
+                read: { guard: DM_NgoaiNgu_read, },
+                create: { guard: DM_NgoaiNgu_create, inputChecker: DM_NgoaiNgu_create_input, },
+                update: { guard: DM_NgoaiNgu_update, },
+                postUpdate: { guard: DM_NgoaiNgu_postUpdate, },
+                delete: { guard: DM_NgoaiNgu_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_TonGiao: {
+            modelLevel: {
+                read: { guard: DM_TonGiao_read, },
+                create: { guard: DM_TonGiao_create, inputChecker: DM_TonGiao_create_input, },
+                update: { guard: DM_TonGiao_update, },
+                postUpdate: { guard: DM_TonGiao_postUpdate, },
+                delete: { guard: DM_TonGiao_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_TrinhDoNgoaiNgu: {
+            modelLevel: {
+                read: { guard: DM_TrinhDoNgoaiNgu_read, },
+                create: { guard: DM_TrinhDoNgoaiNgu_create, inputChecker: DM_TrinhDoNgoaiNgu_create_input, },
+                update: { guard: DM_TrinhDoNgoaiNgu_update, },
+                postUpdate: { guard: DM_TrinhDoNgoaiNgu_postUpdate, },
+                delete: { guard: DM_TrinhDoNgoaiNgu_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_TrinhDoTinHoc: {
+            modelLevel: {
+                read: { guard: DM_TrinhDoTinHoc_read, },
+                create: { guard: DM_TrinhDoTinHoc_create, inputChecker: DM_TrinhDoTinHoc_create_input, },
+                update: { guard: DM_TrinhDoTinHoc_update, },
+                postUpdate: { guard: DM_TrinhDoTinHoc_postUpdate, },
+                delete: { guard: DM_TrinhDoTinHoc_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_GioiTinh: {
+            modelLevel: {
+                read: { guard: DM_GioiTinh_read, },
+                create: { guard: DM_GioiTinh_create, inputChecker: DM_GioiTinh_create_input, },
+                update: { guard: DM_GioiTinh_update, },
+                postUpdate: { guard: DM_GioiTinh_postUpdate, },
+                delete: { guard: DM_GioiTinh_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_NhanVien: {
+            modelLevel: {
+                read: { guard: DM_NhanVien_read, },
+                create: { guard: DM_NhanVien_create, inputChecker: DM_NhanVien_create_input, },
+                update: { guard: DM_NhanVien_update, },
+                postUpdate: { guard: DM_NhanVien_postUpdate, },
+                delete: { guard: DM_NhanVien_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_PhanCap_ChatLuong_TrangThietBi: {
+            modelLevel: {
+                read: { guard: DM_PhanCap_ChatLuong_TrangThietBi_read, },
+                create: { guard: DM_PhanCap_ChatLuong_TrangThietBi_create, inputChecker: DM_PhanCap_ChatLuong_TrangThietBi_create_input, },
+                update: { guard: DM_PhanCap_ChatLuong_TrangThietBi_update, },
+                postUpdate: { guard: DM_PhanCap_ChatLuong_TrangThietBi_postUpdate, },
+                delete: { guard: DM_PhanCap_ChatLuong_TrangThietBi_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_PhanLoai_CSKT: {
+            modelLevel: {
+                read: { guard: DM_PhanLoai_CSKT_read, },
+                create: { guard: DM_PhanLoai_CSKT_create, inputChecker: DM_PhanLoai_CSKT_create_input, },
+                update: { guard: DM_PhanLoai_CSKT_update, },
+                postUpdate: { guard: DM_PhanLoai_CSKT_postUpdate, },
+                delete: { guard: DM_PhanLoai_CSKT_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_NhomNguoiDung: {
+            modelLevel: {
+                read: { guard: DM_NhomNguoiDung_read, },
+                create: { guard: DM_NhomNguoiDung_create, inputChecker: DM_NhomNguoiDung_create_input, },
+                update: { guard: DM_NhomNguoiDung_update, },
+                postUpdate: { guard: DM_NhomNguoiDung_postUpdate, },
+                delete: { guard: DM_NhomNguoiDung_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_NhomUngDung: {
+            modelLevel: {
+                read: { guard: DM_NhomUngDung_read, },
+                create: { guard: DM_NhomUngDung_create, inputChecker: DM_NhomUngDung_create_input, },
+                update: { guard: DM_NhomUngDung_update, },
+                postUpdate: { guard: DM_NhomUngDung_postUpdate, },
+                delete: { guard: DM_NhomUngDung_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_QuocGia: {
+            modelLevel: {
+                read: { guard: DM_QuocGia_read, },
+                create: { guard: DM_QuocGia_create, inputChecker: DM_QuocGia_create_input, },
+                update: { guard: DM_QuocGia_update, },
+                postUpdate: { guard: DM_QuocGia_postUpdate, },
+                delete: { guard: DM_QuocGia_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_Tinh: {
+            modelLevel: {
+                read: { guard: DM_Tinh_read, },
+                create: { guard: DM_Tinh_create, inputChecker: DM_Tinh_create_input, },
+                update: { guard: DM_Tinh_update, },
+                postUpdate: { guard: DM_Tinh_postUpdate, },
+                delete: { guard: DM_Tinh_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_Tinh_New: {
+            modelLevel: {
+                read: { guard: DM_Tinh_New_read, },
+                create: { guard: DM_Tinh_New_create, inputChecker: DM_Tinh_New_create_input, },
+                update: { guard: DM_Tinh_New_update, },
+                postUpdate: { guard: DM_Tinh_New_postUpdate, },
+                delete: { guard: DM_Tinh_New_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_QuanHuyen: {
+            modelLevel: {
+                read: { guard: DM_QuanHuyen_read, },
+                create: { guard: DM_QuanHuyen_create, inputChecker: DM_QuanHuyen_create_input, },
+                update: { guard: DM_QuanHuyen_update, },
+                postUpdate: { guard: DM_QuanHuyen_postUpdate, },
+                delete: { guard: DM_QuanHuyen_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_XaPhuong: {
+            modelLevel: {
+                read: { guard: DM_XaPhuong_read, },
+                create: { guard: DM_XaPhuong_create, inputChecker: DM_XaPhuong_create_input, },
+                update: { guard: DM_XaPhuong_update, },
+                postUpdate: { guard: DM_XaPhuong_postUpdate, },
+                delete: { guard: DM_XaPhuong_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_XaPhuong_New: {
+            modelLevel: {
+                read: { guard: DM_XaPhuong_New_read, },
+                create: { guard: DM_XaPhuong_New_create, inputChecker: DM_XaPhuong_New_create_input, },
+                update: { guard: DM_XaPhuong_New_update, },
+                postUpdate: { guard: DM_XaPhuong_New_postUpdate, },
+                delete: { guard: DM_XaPhuong_New_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        dM_ViTriCongViec: {
+            modelLevel: {
+                read: { guard: DM_ViTriCongViec_read, },
+                create: { guard: DM_ViTriCongViec_create, inputChecker: DM_ViTriCongViec_create_input, },
+                update: { guard: DM_ViTriCongViec_update, },
+                postUpdate: { guard: DM_ViTriCongViec_postUpdate, },
+                delete: { guard: DM_ViTriCongViec_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        planTrainingDelay: {
+            modelLevel: {
+                read: { guard: PlanTrainingDelay_read, },
+                create: { guard: PlanTrainingDelay_create, inputChecker: PlanTrainingDelay_create_input, },
+                update: { guard: PlanTrainingDelay_update, },
+                postUpdate: { guard: PlanTrainingDelay_postUpdate, },
+                delete: { guard: PlanTrainingDelay_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        planTrainingDelaySubject: {
+            modelLevel: {
+                read: { guard: PlanTrainingDelaySubject_read, },
+                create: { guard: PlanTrainingDelaySubject_create, inputChecker: PlanTrainingDelaySubject_create_input, },
+                update: { guard: PlanTrainingDelaySubject_update, },
+                postUpdate: { guard: PlanTrainingDelaySubject_postUpdate, },
+                delete: { guard: PlanTrainingDelaySubject_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        planTraining: {
+            modelLevel: {
+                read: { guard: PlanTraining_read, },
+                create: { guard: PlanTraining_create, inputChecker: PlanTraining_create_input, },
+                update: { guard: PlanTraining_update, },
+                postUpdate: { guard: PlanTraining_postUpdate, },
+                delete: { guard: PlanTraining_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        planTrainingSubject: {
+            modelLevel: {
+                read: { guard: PlanTrainingSubject_read, },
+                create: { guard: PlanTrainingSubject_create, inputChecker: PlanTrainingSubject_create_input, },
+                update: { guard: PlanTrainingSubject_update, },
+                postUpdate: { guard: PlanTrainingSubject_postUpdate, },
+                delete: { guard: PlanTrainingSubject_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        studentScoreConvert: {
+            modelLevel: {
+                read: { guard: StudentScoreConvert_read, },
+                create: { guard: StudentScoreConvert_create, inputChecker: StudentScoreConvert_create_input, },
+                update: { guard: StudentScoreConvert_update, },
+                postUpdate: { guard: StudentScoreConvert_postUpdate, },
+                delete: { guard: StudentScoreConvert_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        subjectScoreConvert: {
+            modelLevel: {
+                read: { guard: SubjectScoreConvert_read, },
+                create: { guard: SubjectScoreConvert_create, inputChecker: SubjectScoreConvert_create_input, },
+                update: { guard: SubjectScoreConvert_update, },
+                postUpdate: { guard: SubjectScoreConvert_postUpdate, },
+                delete: { guard: SubjectScoreConvert_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -169,6 +949,19 @@ const policy = {
                 update: { guard: StudentSubjectScore_update, },
                 postUpdate: { guard: StudentSubjectScore_postUpdate, },
                 delete: { guard: StudentSubjectScore_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        studentSubjectScoreHistory: {
+            modelLevel: {
+                read: { guard: StudentSubjectScoreHistory_read, },
+                create: { guard: StudentSubjectScoreHistory_create, inputChecker: StudentSubjectScoreHistory_create_input, },
+                update: { guard: StudentSubjectScoreHistory_update, },
+                postUpdate: { guard: StudentSubjectScoreHistory_postUpdate, },
+                delete: { guard: StudentSubjectScoreHistory_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -260,6 +1053,19 @@ const policy = {
                 update: { guard: Milestone_update, },
                 postUpdate: { guard: Milestone_postUpdate, },
                 delete: { guard: Milestone_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        trainingLanguage: {
+            modelLevel: {
+                read: { guard: TrainingLanguage_read, },
+                create: { guard: TrainingLanguage_create, inputChecker: TrainingLanguage_create_input, },
+                update: { guard: TrainingLanguage_update, },
+                postUpdate: { guard: TrainingLanguage_postUpdate, },
+                delete: { guard: TrainingLanguage_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -364,6 +1170,19 @@ const policy = {
                 update: { guard: SubjectVersion_update, },
                 postUpdate: { guard: SubjectVersion_postUpdate, },
                 delete: { guard: SubjectVersion_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        subjectVersionHistory: {
+            modelLevel: {
+                read: { guard: SubjectVersionHistory_read, },
+                create: { guard: SubjectVersionHistory_create, inputChecker: SubjectVersionHistory_create_input, },
+                update: { guard: SubjectVersionHistory_update, },
+                postUpdate: { guard: SubjectVersionHistory_postUpdate, },
+                delete: { guard: SubjectVersionHistory_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -773,819 +1592,91 @@ const policy = {
                 update: {},
             },
         },
-        group: {
+        documentFile: {
             modelLevel: {
-                read: { guard: Group_read, },
-                create: { guard: Group_create, inputChecker: Group_create_input, },
-                update: { guard: Group_update, },
-                postUpdate: { guard: Group_postUpdate, },
-                delete: { guard: Group_delete, }
+                read: { guard: DocumentFile_read, },
+                create: { guard: DocumentFile_create, inputChecker: DocumentFile_create_input, },
+                update: { guard: DocumentFile_update, },
+                postUpdate: { guard: DocumentFile_postUpdate, },
+                delete: { guard: DocumentFile_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        role: {
+        academicActionConfig: {
             modelLevel: {
-                read: { guard: Role_read, },
-                create: { guard: Role_create, inputChecker: Role_create_input, },
-                update: { guard: Role_update, },
-                postUpdate: { guard: Role_postUpdate, },
-                delete: { guard: Role_delete, }
+                read: { guard: AcademicActionConfig_read, },
+                create: { guard: AcademicActionConfig_create, inputChecker: AcademicActionConfig_create_input, },
+                update: { guard: AcademicActionConfig_update, },
+                postUpdate: { guard: AcademicActionConfig_postUpdate, },
+                delete: { guard: AcademicActionConfig_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        permission: {
+        academicActionRuleSet: {
             modelLevel: {
-                read: { guard: Permission_read, },
-                create: { guard: Permission_create, inputChecker: Permission_create_input, },
-                update: { guard: Permission_update, },
-                postUpdate: { guard: Permission_postUpdate, },
-                delete: { guard: Permission_delete, }
+                read: { guard: AcademicActionRuleSet_read, },
+                create: { guard: AcademicActionRuleSet_create, inputChecker: AcademicActionRuleSet_create_input, },
+                update: { guard: AcademicActionRuleSet_update, },
+                postUpdate: { guard: AcademicActionRuleSet_postUpdate, },
+                delete: { guard: AcademicActionRuleSet_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        chatBotConfig: {
+        academicActionCondition: {
             modelLevel: {
-                read: { guard: ChatBotConfig_read, },
-                create: { guard: ChatBotConfig_create, inputChecker: ChatBotConfig_create_input, },
-                update: { guard: ChatBotConfig_update, },
-                postUpdate: { guard: ChatBotConfig_postUpdate, },
-                delete: { guard: ChatBotConfig_delete, }
+                read: { guard: AcademicActionCondition_read, },
+                create: { guard: AcademicActionCondition_create, inputChecker: AcademicActionCondition_create_input, },
+                update: { guard: AcademicActionCondition_update, },
+                postUpdate: { guard: AcademicActionCondition_postUpdate, },
+                delete: { guard: AcademicActionCondition_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        userSession: {
+        studentAcademicDecision: {
             modelLevel: {
-                read: { guard: UserSession_read, },
-                create: { guard: UserSession_create, inputChecker: UserSession_create_input, },
-                update: { guard: UserSession_update, },
-                postUpdate: { guard: UserSession_postUpdate, },
-                delete: { guard: UserSession_delete, }
+                read: { guard: StudentAcademicDecision_read, },
+                create: { guard: StudentAcademicDecision_create, inputChecker: StudentAcademicDecision_create_input, },
+                update: { guard: StudentAcademicDecision_update, },
+                postUpdate: { guard: StudentAcademicDecision_postUpdate, },
+                delete: { guard: StudentAcademicDecision_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        document: {
+        trainingScoreSession: {
             modelLevel: {
-                read: { guard: Document_read, },
-                create: { guard: Document_create, inputChecker: Document_create_input, },
-                update: { guard: Document_update, },
-                postUpdate: { guard: Document_postUpdate, },
-                delete: { guard: Document_delete, }
+                read: { guard: TrainingScoreSession_read, },
+                create: { guard: TrainingScoreSession_create, inputChecker: TrainingScoreSession_create_input, },
+                update: { guard: TrainingScoreSession_update, },
+                postUpdate: { guard: TrainingScoreSession_postUpdate, },
+                delete: { guard: TrainingScoreSession_delete, }
             },
             fieldLevel: {
                 read: {},
                 update: {},
             },
         },
-        fAQ: {
+        studentTrainingScore: {
             modelLevel: {
-                read: { guard: FAQ_read, },
-                create: { guard: FAQ_create, inputChecker: FAQ_create_input, },
-                update: { guard: FAQ_update, },
-                postUpdate: { guard: FAQ_postUpdate, },
-                delete: { guard: FAQ_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        prompt: {
-            modelLevel: {
-                read: { guard: Prompt_read, },
-                create: { guard: Prompt_create, inputChecker: Prompt_create_input, },
-                update: { guard: Prompt_update, },
-                postUpdate: { guard: Prompt_postUpdate, },
-                delete: { guard: Prompt_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        conversation: {
-            modelLevel: {
-                read: { guard: Conversation_read, },
-                create: { guard: Conversation_create, inputChecker: Conversation_create_input, },
-                update: { guard: Conversation_update, },
-                postUpdate: { guard: Conversation_postUpdate, },
-                delete: { guard: Conversation_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        message: {
-            modelLevel: {
-                read: { guard: Message_read, },
-                create: { guard: Message_create, inputChecker: Message_create_input, },
-                update: { guard: Message_update, },
-                postUpdate: { guard: Message_postUpdate, },
-                delete: { guard: Message_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        topic: {
-            modelLevel: {
-                read: { guard: Topic_read, },
-                create: { guard: Topic_create, inputChecker: Topic_create_input, },
-                update: { guard: Topic_update, },
-                postUpdate: { guard: Topic_postUpdate, },
-                delete: { guard: Topic_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_CapBac: {
-            modelLevel: {
-                read: { guard: DM_CapBac_read, },
-                create: { guard: DM_CapBac_create, inputChecker: DM_CapBac_create_input, },
-                update: { guard: DM_CapBac_update, },
-                postUpdate: { guard: DM_CapBac_postUpdate, },
-                delete: { guard: DM_CapBac_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_ChucDanh: {
-            modelLevel: {
-                read: { guard: DM_ChucDanh_read, },
-                create: { guard: DM_ChucDanh_create, inputChecker: DM_ChucDanh_create_input, },
-                update: { guard: DM_ChucDanh_update, },
-                postUpdate: { guard: DM_ChucDanh_postUpdate, },
-                delete: { guard: DM_ChucDanh_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_ChucVu: {
-            modelLevel: {
-                read: { guard: DM_ChucVu_read, },
-                create: { guard: DM_ChucVu_create, inputChecker: DM_ChucVu_create_input, },
-                update: { guard: DM_ChucVu_update, },
-                postUpdate: { guard: DM_ChucVu_postUpdate, },
-                delete: { guard: DM_ChucVu_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_HocHam: {
-            modelLevel: {
-                read: { guard: DM_HocHam_read, },
-                create: { guard: DM_HocHam_create, inputChecker: DM_HocHam_create_input, },
-                update: { guard: DM_HocHam_update, },
-                postUpdate: { guard: DM_HocHam_postUpdate, },
-                delete: { guard: DM_HocHam_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_HocVi: {
-            modelLevel: {
-                read: { guard: DM_HocVi_read, },
-                create: { guard: DM_HocVi_create, inputChecker: DM_HocVi_create_input, },
-                update: { guard: DM_HocVi_update, },
-                postUpdate: { guard: DM_HocVi_postUpdate, },
-                delete: { guard: DM_HocVi_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_ChungChiTinHoc: {
-            modelLevel: {
-                read: { guard: DM_ChungChiTinHoc_read, },
-                create: { guard: DM_ChungChiTinHoc_create, inputChecker: DM_ChungChiTinHoc_create_input, },
-                update: { guard: DM_ChungChiTinHoc_update, },
-                postUpdate: { guard: DM_ChungChiTinHoc_postUpdate, },
-                delete: { guard: DM_ChungChiTinHoc_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_DanToc: {
-            modelLevel: {
-                read: { guard: DM_DanToc_read, },
-                create: { guard: DM_DanToc_create, inputChecker: DM_DanToc_create_input, },
-                update: { guard: DM_DanToc_update, },
-                postUpdate: { guard: DM_DanToc_postUpdate, },
-                delete: { guard: DM_DanToc_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_DonVi: {
-            modelLevel: {
-                read: { guard: DM_DonVi_read, },
-                create: { guard: DM_DonVi_create, inputChecker: DM_DonVi_create_input, },
-                update: { guard: DM_DonVi_update, },
-                postUpdate: { guard: DM_DonVi_postUpdate, },
-                delete: { guard: DM_DonVi_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_DonViHanhChinh: {
-            modelLevel: {
-                read: { guard: DM_DonViHanhChinh_read, },
-                create: { guard: DM_DonViHanhChinh_create, inputChecker: DM_DonViHanhChinh_create_input, },
-                update: { guard: DM_DonViHanhChinh_update, },
-                postUpdate: { guard: DM_DonViHanhChinh_postUpdate, },
-                delete: { guard: DM_DonViHanhChinh_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_KhuVuc_DiaLy: {
-            modelLevel: {
-                read: { guard: DM_KhuVuc_DiaLy_read, },
-                create: { guard: DM_KhuVuc_DiaLy_create, inputChecker: DM_KhuVuc_DiaLy_create_input, },
-                update: { guard: DM_KhuVuc_DiaLy_update, },
-                postUpdate: { guard: DM_KhuVuc_DiaLy_postUpdate, },
-                delete: { guard: DM_KhuVuc_DiaLy_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_NgoaiNgu: {
-            modelLevel: {
-                read: { guard: DM_NgoaiNgu_read, },
-                create: { guard: DM_NgoaiNgu_create, inputChecker: DM_NgoaiNgu_create_input, },
-                update: { guard: DM_NgoaiNgu_update, },
-                postUpdate: { guard: DM_NgoaiNgu_postUpdate, },
-                delete: { guard: DM_NgoaiNgu_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_TonGiao: {
-            modelLevel: {
-                read: { guard: DM_TonGiao_read, },
-                create: { guard: DM_TonGiao_create, inputChecker: DM_TonGiao_create_input, },
-                update: { guard: DM_TonGiao_update, },
-                postUpdate: { guard: DM_TonGiao_postUpdate, },
-                delete: { guard: DM_TonGiao_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_TrinhDoNgoaiNgu: {
-            modelLevel: {
-                read: { guard: DM_TrinhDoNgoaiNgu_read, },
-                create: { guard: DM_TrinhDoNgoaiNgu_create, inputChecker: DM_TrinhDoNgoaiNgu_create_input, },
-                update: { guard: DM_TrinhDoNgoaiNgu_update, },
-                postUpdate: { guard: DM_TrinhDoNgoaiNgu_postUpdate, },
-                delete: { guard: DM_TrinhDoNgoaiNgu_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_TrinhDoTinHoc: {
-            modelLevel: {
-                read: { guard: DM_TrinhDoTinHoc_read, },
-                create: { guard: DM_TrinhDoTinHoc_create, inputChecker: DM_TrinhDoTinHoc_create_input, },
-                update: { guard: DM_TrinhDoTinHoc_update, },
-                postUpdate: { guard: DM_TrinhDoTinHoc_postUpdate, },
-                delete: { guard: DM_TrinhDoTinHoc_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_GioiTinh: {
-            modelLevel: {
-                read: { guard: DM_GioiTinh_read, },
-                create: { guard: DM_GioiTinh_create, inputChecker: DM_GioiTinh_create_input, },
-                update: { guard: DM_GioiTinh_update, },
-                postUpdate: { guard: DM_GioiTinh_postUpdate, },
-                delete: { guard: DM_GioiTinh_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_NhanVien: {
-            modelLevel: {
-                read: { guard: DM_NhanVien_read, },
-                create: { guard: DM_NhanVien_create, inputChecker: DM_NhanVien_create_input, },
-                update: { guard: DM_NhanVien_update, },
-                postUpdate: { guard: DM_NhanVien_postUpdate, },
-                delete: { guard: DM_NhanVien_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_PhanCap_ChatLuong_TrangThietBi: {
-            modelLevel: {
-                read: { guard: DM_PhanCap_ChatLuong_TrangThietBi_read, },
-                create: { guard: DM_PhanCap_ChatLuong_TrangThietBi_create, inputChecker: DM_PhanCap_ChatLuong_TrangThietBi_create_input, },
-                update: { guard: DM_PhanCap_ChatLuong_TrangThietBi_update, },
-                postUpdate: { guard: DM_PhanCap_ChatLuong_TrangThietBi_postUpdate, },
-                delete: { guard: DM_PhanCap_ChatLuong_TrangThietBi_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_PhanLoai_CSKT: {
-            modelLevel: {
-                read: { guard: DM_PhanLoai_CSKT_read, },
-                create: { guard: DM_PhanLoai_CSKT_create, inputChecker: DM_PhanLoai_CSKT_create_input, },
-                update: { guard: DM_PhanLoai_CSKT_update, },
-                postUpdate: { guard: DM_PhanLoai_CSKT_postUpdate, },
-                delete: { guard: DM_PhanLoai_CSKT_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_NhomNguoiDung: {
-            modelLevel: {
-                read: { guard: DM_NhomNguoiDung_read, },
-                create: { guard: DM_NhomNguoiDung_create, inputChecker: DM_NhomNguoiDung_create_input, },
-                update: { guard: DM_NhomNguoiDung_update, },
-                postUpdate: { guard: DM_NhomNguoiDung_postUpdate, },
-                delete: { guard: DM_NhomNguoiDung_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_NhomUngDung: {
-            modelLevel: {
-                read: { guard: DM_NhomUngDung_read, },
-                create: { guard: DM_NhomUngDung_create, inputChecker: DM_NhomUngDung_create_input, },
-                update: { guard: DM_NhomUngDung_update, },
-                postUpdate: { guard: DM_NhomUngDung_postUpdate, },
-                delete: { guard: DM_NhomUngDung_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_QuocGia: {
-            modelLevel: {
-                read: { guard: DM_QuocGia_read, },
-                create: { guard: DM_QuocGia_create, inputChecker: DM_QuocGia_create_input, },
-                update: { guard: DM_QuocGia_update, },
-                postUpdate: { guard: DM_QuocGia_postUpdate, },
-                delete: { guard: DM_QuocGia_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_Tinh: {
-            modelLevel: {
-                read: { guard: DM_Tinh_read, },
-                create: { guard: DM_Tinh_create, inputChecker: DM_Tinh_create_input, },
-                update: { guard: DM_Tinh_update, },
-                postUpdate: { guard: DM_Tinh_postUpdate, },
-                delete: { guard: DM_Tinh_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_Tinh_New: {
-            modelLevel: {
-                read: { guard: DM_Tinh_New_read, },
-                create: { guard: DM_Tinh_New_create, inputChecker: DM_Tinh_New_create_input, },
-                update: { guard: DM_Tinh_New_update, },
-                postUpdate: { guard: DM_Tinh_New_postUpdate, },
-                delete: { guard: DM_Tinh_New_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_QuanHuyen: {
-            modelLevel: {
-                read: { guard: DM_QuanHuyen_read, },
-                create: { guard: DM_QuanHuyen_create, inputChecker: DM_QuanHuyen_create_input, },
-                update: { guard: DM_QuanHuyen_update, },
-                postUpdate: { guard: DM_QuanHuyen_postUpdate, },
-                delete: { guard: DM_QuanHuyen_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_XaPhuong: {
-            modelLevel: {
-                read: { guard: DM_XaPhuong_read, },
-                create: { guard: DM_XaPhuong_create, inputChecker: DM_XaPhuong_create_input, },
-                update: { guard: DM_XaPhuong_update, },
-                postUpdate: { guard: DM_XaPhuong_postUpdate, },
-                delete: { guard: DM_XaPhuong_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_XaPhuong_New: {
-            modelLevel: {
-                read: { guard: DM_XaPhuong_New_read, },
-                create: { guard: DM_XaPhuong_New_create, inputChecker: DM_XaPhuong_New_create_input, },
-                update: { guard: DM_XaPhuong_New_update, },
-                postUpdate: { guard: DM_XaPhuong_New_postUpdate, },
-                delete: { guard: DM_XaPhuong_New_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        dM_ViTriCongViec: {
-            modelLevel: {
-                read: { guard: DM_ViTriCongViec_read, },
-                create: { guard: DM_ViTriCongViec_create, inputChecker: DM_ViTriCongViec_create_input, },
-                update: { guard: DM_ViTriCongViec_update, },
-                postUpdate: { guard: DM_ViTriCongViec_postUpdate, },
-                delete: { guard: DM_ViTriCongViec_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        userProfile: {
-            modelLevel: {
-                read: { guard: UserProfile_read, },
-                create: { guard: UserProfile_create, inputChecker: UserProfile_create_input, },
-                update: { guard: UserProfile_update, },
-                postUpdate: { guard: UserProfile_postUpdate, },
-                delete: { guard: UserProfile_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        hocHam: {
-            modelLevel: {
-                read: { guard: HocHam_read, },
-                create: { guard: HocHam_create, inputChecker: HocHam_create_input, },
-                update: { guard: HocHam_update, },
-                postUpdate: { guard: HocHam_postUpdate, },
-                delete: { guard: HocHam_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        hocVi: {
-            modelLevel: {
-                read: { guard: HocVi_read, },
-                create: { guard: HocVi_create, inputChecker: HocVi_create_input, },
-                update: { guard: HocVi_update, },
-                postUpdate: { guard: HocVi_postUpdate, },
-                delete: { guard: HocVi_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        relative: {
-            modelLevel: {
-                read: { guard: Relative_read, },
-                create: { guard: Relative_create, inputChecker: Relative_create_input, },
-                update: { guard: Relative_update, },
-                postUpdate: { guard: Relative_postUpdate, },
-                delete: { guard: Relative_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        trinhDoLyLuanChinhTri: {
-            modelLevel: {
-                read: { guard: TrinhDoLyLuanChinhTri_read, },
-                create: { guard: TrinhDoLyLuanChinhTri_create, inputChecker: TrinhDoLyLuanChinhTri_create_input, },
-                update: { guard: TrinhDoLyLuanChinhTri_update, },
-                postUpdate: { guard: TrinhDoLyLuanChinhTri_postUpdate, },
-                delete: { guard: TrinhDoLyLuanChinhTri_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        trinhDoQuanLyNhaNuoc: {
-            modelLevel: {
-                read: { guard: TrinhDoQuanLyNhaNuoc_read, },
-                create: { guard: TrinhDoQuanLyNhaNuoc_create, inputChecker: TrinhDoQuanLyNhaNuoc_create_input, },
-                update: { guard: TrinhDoQuanLyNhaNuoc_update, },
-                postUpdate: { guard: TrinhDoQuanLyNhaNuoc_postUpdate, },
-                delete: { guard: TrinhDoQuanLyNhaNuoc_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        ngoaiNgu: {
-            modelLevel: {
-                read: { guard: NgoaiNgu_read, },
-                create: { guard: NgoaiNgu_create, inputChecker: NgoaiNgu_create_input, },
-                update: { guard: NgoaiNgu_update, },
-                postUpdate: { guard: NgoaiNgu_postUpdate, },
-                delete: { guard: NgoaiNgu_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        tinHoc: {
-            modelLevel: {
-                read: { guard: TinHoc_read, },
-                create: { guard: TinHoc_create, inputChecker: TinHoc_create_input, },
-                update: { guard: TinHoc_update, },
-                postUpdate: { guard: TinHoc_postUpdate, },
-                delete: { guard: TinHoc_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        boiDuongQuocPhongAnNinh: {
-            modelLevel: {
-                read: { guard: BoiDuongQuocPhongAnNinh_read, },
-                create: { guard: BoiDuongQuocPhongAnNinh_create, inputChecker: BoiDuongQuocPhongAnNinh_create_input, },
-                update: { guard: BoiDuongQuocPhongAnNinh_update, },
-                postUpdate: { guard: BoiDuongQuocPhongAnNinh_postUpdate, },
-                delete: { guard: BoiDuongQuocPhongAnNinh_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        capBac: {
-            modelLevel: {
-                read: { guard: CapBac_read, },
-                create: { guard: CapBac_create, inputChecker: CapBac_create_input, },
-                update: { guard: CapBac_update, },
-                postUpdate: { guard: CapBac_postUpdate, },
-                delete: { guard: CapBac_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        quaTrinhCongTac: {
-            modelLevel: {
-                read: { guard: QuaTrinhCongTac_read, },
-                create: { guard: QuaTrinhCongTac_create, inputChecker: QuaTrinhCongTac_create_input, },
-                update: { guard: QuaTrinhCongTac_update, },
-                postUpdate: { guard: QuaTrinhCongTac_postUpdate, },
-                delete: { guard: QuaTrinhCongTac_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        quaTrinhCuDiCongTac: {
-            modelLevel: {
-                read: { guard: QuaTrinhCuDiCongTac_read, },
-                create: { guard: QuaTrinhCuDiCongTac_create, inputChecker: QuaTrinhCuDiCongTac_create_input, },
-                update: { guard: QuaTrinhCuDiCongTac_update, },
-                postUpdate: { guard: QuaTrinhCuDiCongTac_postUpdate, },
-                delete: { guard: QuaTrinhCuDiCongTac_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        quaTrinhCuDiDaoTao: {
-            modelLevel: {
-                read: { guard: QuaTrinhCuDiDaoTao_read, },
-                create: { guard: QuaTrinhCuDiDaoTao_create, inputChecker: QuaTrinhCuDiDaoTao_create_input, },
-                update: { guard: QuaTrinhCuDiDaoTao_update, },
-                postUpdate: { guard: QuaTrinhCuDiDaoTao_postUpdate, },
-                delete: { guard: QuaTrinhCuDiDaoTao_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        khenThuong: {
-            modelLevel: {
-                read: { guard: KhenThuong_read, },
-                create: { guard: KhenThuong_create, inputChecker: KhenThuong_create_input, },
-                update: { guard: KhenThuong_update, },
-                postUpdate: { guard: KhenThuong_postUpdate, },
-                delete: { guard: KhenThuong_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        kyLuat: {
-            modelLevel: {
-                read: { guard: KyLuat_read, },
-                create: { guard: KyLuat_create, inputChecker: KyLuat_create_input, },
-                update: { guard: KyLuat_update, },
-                postUpdate: { guard: KyLuat_postUpdate, },
-                delete: { guard: KyLuat_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        doiTuongChinhSach: {
-            modelLevel: {
-                read: { guard: DoiTuongChinhSach_read, },
-                create: { guard: DoiTuongChinhSach_create, inputChecker: DoiTuongChinhSach_create_input, },
-                update: { guard: DoiTuongChinhSach_update, },
-                postUpdate: { guard: DoiTuongChinhSach_postUpdate, },
-                delete: { guard: DoiTuongChinhSach_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        keKhaiTaiSan: {
-            modelLevel: {
-                read: { guard: KeKhaiTaiSan_read, },
-                create: { guard: KeKhaiTaiSan_create, inputChecker: KeKhaiTaiSan_create_input, },
-                update: { guard: KeKhaiTaiSan_update, },
-                postUpdate: { guard: KeKhaiTaiSan_postUpdate, },
-                delete: { guard: KeKhaiTaiSan_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        tiengDanToc: {
-            modelLevel: {
-                read: { guard: TiengDanToc_read, },
-                create: { guard: TiengDanToc_create, inputChecker: TiengDanToc_create_input, },
-                update: { guard: TiengDanToc_update, },
-                postUpdate: { guard: TiengDanToc_postUpdate, },
-                delete: { guard: TiengDanToc_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        chienDau: {
-            modelLevel: {
-                read: { guard: ChienDau_read, },
-                create: { guard: ChienDau_create, inputChecker: ChienDau_create_input, },
-                update: { guard: ChienDau_update, },
-                postUpdate: { guard: ChienDau_postUpdate, },
-                delete: { guard: ChienDau_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        nuocNgoai: {
-            modelLevel: {
-                read: { guard: NuocNgoai_read, },
-                create: { guard: NuocNgoai_create, inputChecker: NuocNgoai_create_input, },
-                update: { guard: NuocNgoai_update, },
-                postUpdate: { guard: NuocNgoai_postUpdate, },
-                delete: { guard: NuocNgoai_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        thuongTat: {
-            modelLevel: {
-                read: { guard: ThuongTat_read, },
-                create: { guard: ThuongTat_create, inputChecker: ThuongTat_create_input, },
-                update: { guard: ThuongTat_update, },
-                postUpdate: { guard: ThuongTat_postUpdate, },
-                delete: { guard: ThuongTat_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        danhHieu: {
-            modelLevel: {
-                read: { guard: DanhHieu_read, },
-                create: { guard: DanhHieu_create, inputChecker: DanhHieu_create_input, },
-                update: { guard: DanhHieu_update, },
-                postUpdate: { guard: DanhHieu_postUpdate, },
-                delete: { guard: DanhHieu_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        quaTrinhHocTap: {
-            modelLevel: {
-                read: { guard: QuaTrinhHocTap_read, },
-                create: { guard: QuaTrinhHocTap_create, inputChecker: QuaTrinhHocTap_create_input, },
-                update: { guard: QuaTrinhHocTap_update, },
-                postUpdate: { guard: QuaTrinhHocTap_postUpdate, },
-                delete: { guard: QuaTrinhHocTap_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        toChucXaHoi: {
-            modelLevel: {
-                read: { guard: ToChucXaHoi_read, },
-                create: { guard: ToChucXaHoi_create, inputChecker: ToChucXaHoi_create_input, },
-                update: { guard: ToChucXaHoi_update, },
-                postUpdate: { guard: ToChucXaHoi_postUpdate, },
-                delete: { guard: ToChucXaHoi_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        quaTrinhLuong: {
-            modelLevel: {
-                read: { guard: QuaTrinhLuong_read, },
-                create: { guard: QuaTrinhLuong_create, inputChecker: QuaTrinhLuong_create_input, },
-                update: { guard: QuaTrinhLuong_update, },
-                postUpdate: { guard: QuaTrinhLuong_postUpdate, },
-                delete: { guard: QuaTrinhLuong_delete, }
+                read: { guard: StudentTrainingScore_read, },
+                create: { guard: StudentTrainingScore_create, inputChecker: StudentTrainingScore_create_input, },
+                update: { guard: StudentTrainingScore_update, },
+                postUpdate: { guard: StudentTrainingScore_postUpdate, },
+                delete: { guard: StudentTrainingScore_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -1846,305 +1937,6 @@ const policy = {
                 update: { guard: SupervisorPaymentRecord_update, },
                 postUpdate: { guard: SupervisorPaymentRecord_postUpdate, },
                 delete: { guard: SupervisorPaymentRecord_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        documentFile: {
-            modelLevel: {
-                read: { guard: DocumentFile_read, },
-                create: { guard: DocumentFile_create, inputChecker: DocumentFile_create_input, },
-                update: { guard: DocumentFile_update, },
-                postUpdate: { guard: DocumentFile_postUpdate, },
-                delete: { guard: DocumentFile_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        academicActionConfig: {
-            modelLevel: {
-                read: { guard: AcademicActionConfig_read, },
-                create: { guard: AcademicActionConfig_create, inputChecker: AcademicActionConfig_create_input, },
-                update: { guard: AcademicActionConfig_update, },
-                postUpdate: { guard: AcademicActionConfig_postUpdate, },
-                delete: { guard: AcademicActionConfig_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        academicActionRuleSet: {
-            modelLevel: {
-                read: { guard: AcademicActionRuleSet_read, },
-                create: { guard: AcademicActionRuleSet_create, inputChecker: AcademicActionRuleSet_create_input, },
-                update: { guard: AcademicActionRuleSet_update, },
-                postUpdate: { guard: AcademicActionRuleSet_postUpdate, },
-                delete: { guard: AcademicActionRuleSet_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        academicActionCondition: {
-            modelLevel: {
-                read: { guard: AcademicActionCondition_read, },
-                create: { guard: AcademicActionCondition_create, inputChecker: AcademicActionCondition_create_input, },
-                update: { guard: AcademicActionCondition_update, },
-                postUpdate: { guard: AcademicActionCondition_postUpdate, },
-                delete: { guard: AcademicActionCondition_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        studentAcademicDecision: {
-            modelLevel: {
-                read: { guard: StudentAcademicDecision_read, },
-                create: { guard: StudentAcademicDecision_create, inputChecker: StudentAcademicDecision_create_input, },
-                update: { guard: StudentAcademicDecision_update, },
-                postUpdate: { guard: StudentAcademicDecision_postUpdate, },
-                delete: { guard: StudentAcademicDecision_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        trainingScoreSession: {
-            modelLevel: {
-                read: { guard: TrainingScoreSession_read, },
-                create: { guard: TrainingScoreSession_create, inputChecker: TrainingScoreSession_create_input, },
-                update: { guard: TrainingScoreSession_update, },
-                postUpdate: { guard: TrainingScoreSession_postUpdate, },
-                delete: { guard: TrainingScoreSession_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        studentTrainingScore: {
-            modelLevel: {
-                read: { guard: StudentTrainingScore_read, },
-                create: { guard: StudentTrainingScore_create, inputChecker: StudentTrainingScore_create_input, },
-                update: { guard: StudentTrainingScore_update, },
-                postUpdate: { guard: StudentTrainingScore_postUpdate, },
-                delete: { guard: StudentTrainingScore_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        scholarship: {
-            modelLevel: {
-                read: { guard: Scholarship_read, },
-                create: { guard: Scholarship_create, inputChecker: Scholarship_create_input, },
-                update: { guard: Scholarship_update, },
-                postUpdate: { guard: Scholarship_postUpdate, },
-                delete: { guard: Scholarship_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        scholarshipCriteria: {
-            modelLevel: {
-                read: { guard: ScholarshipCriteria_read, },
-                create: { guard: ScholarshipCriteria_create, inputChecker: ScholarshipCriteria_create_input, },
-                update: { guard: ScholarshipCriteria_update, },
-                postUpdate: { guard: ScholarshipCriteria_postUpdate, },
-                delete: { guard: ScholarshipCriteria_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        scholarshipAward: {
-            modelLevel: {
-                read: { guard: ScholarshipAward_read, },
-                create: { guard: ScholarshipAward_create, inputChecker: ScholarshipAward_create_input, },
-                update: { guard: ScholarshipAward_update, },
-                postUpdate: { guard: ScholarshipAward_postUpdate, },
-                delete: { guard: ScholarshipAward_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        graduationSession: {
-            modelLevel: {
-                read: { guard: GraduationSession_read, },
-                create: { guard: GraduationSession_create, inputChecker: GraduationSession_create_input, },
-                update: { guard: GraduationSession_update, },
-                postUpdate: { guard: GraduationSession_postUpdate, },
-                delete: { guard: GraduationSession_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        studentGraduationApplication: {
-            modelLevel: {
-                read: { guard: StudentGraduationApplication_read, },
-                create: { guard: StudentGraduationApplication_create, inputChecker: StudentGraduationApplication_create_input, },
-                update: { guard: StudentGraduationApplication_update, },
-                postUpdate: { guard: StudentGraduationApplication_postUpdate, },
-                delete: { guard: StudentGraduationApplication_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        applicationCheckResult: {
-            modelLevel: {
-                read: { guard: ApplicationCheckResult_read, },
-                create: { guard: ApplicationCheckResult_create, inputChecker: ApplicationCheckResult_create_input, },
-                update: { guard: ApplicationCheckResult_update, },
-                postUpdate: { guard: ApplicationCheckResult_postUpdate, },
-                delete: { guard: ApplicationCheckResult_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        graduationDecision: {
-            modelLevel: {
-                read: { guard: GraduationDecision_read, },
-                create: { guard: GraduationDecision_create, inputChecker: GraduationDecision_create_input, },
-                update: { guard: GraduationDecision_update, },
-                postUpdate: { guard: GraduationDecision_postUpdate, },
-                delete: { guard: GraduationDecision_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        academicRankingConvert: {
-            modelLevel: {
-                read: { guard: AcademicRankingConvert_read, },
-                create: { guard: AcademicRankingConvert_create, inputChecker: AcademicRankingConvert_create_input, },
-                update: { guard: AcademicRankingConvert_update, },
-                postUpdate: { guard: AcademicRankingConvert_postUpdate, },
-                delete: { guard: AcademicRankingConvert_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        graduationRankDowngradeRule: {
-            modelLevel: {
-                read: { guard: GraduationRankDowngradeRule_read, },
-                create: { guard: GraduationRankDowngradeRule_create, inputChecker: GraduationRankDowngradeRule_create_input, },
-                update: { guard: GraduationRankDowngradeRule_update, },
-                postUpdate: { guard: GraduationRankDowngradeRule_postUpdate, },
-                delete: { guard: GraduationRankDowngradeRule_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        graduationRankDowngradeCondition: {
-            modelLevel: {
-                read: { guard: GraduationRankDowngradeCondition_read, },
-                create: { guard: GraduationRankDowngradeCondition_create, inputChecker: GraduationRankDowngradeCondition_create_input, },
-                update: { guard: GraduationRankDowngradeCondition_update, },
-                postUpdate: { guard: GraduationRankDowngradeCondition_postUpdate, },
-                delete: { guard: GraduationRankDowngradeCondition_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        rankingCondition: {
-            modelLevel: {
-                read: { guard: RankingCondition_read, },
-                create: { guard: RankingCondition_create, inputChecker: RankingCondition_create_input, },
-                update: { guard: RankingCondition_update, },
-                postUpdate: { guard: RankingCondition_postUpdate, },
-                delete: { guard: RankingCondition_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        diplomaVerificationApplication: {
-            modelLevel: {
-                read: { guard: DiplomaVerificationApplication_read, },
-                create: { guard: DiplomaVerificationApplication_create, inputChecker: DiplomaVerificationApplication_create_input, },
-                update: { guard: DiplomaVerificationApplication_update, },
-                postUpdate: { guard: DiplomaVerificationApplication_postUpdate, },
-                delete: { guard: DiplomaVerificationApplication_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        note: {
-            modelLevel: {
-                read: { guard: Note_read, },
-                create: { guard: Note_create, inputChecker: Note_create_input, },
-                update: { guard: Note_update, },
-                postUpdate: { guard: Note_postUpdate, },
-                delete: { guard: Note_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        noteFolder: {
-            modelLevel: {
-                read: { guard: NoteFolder_read, },
-                create: { guard: NoteFolder_create, inputChecker: NoteFolder_create_input, },
-                update: { guard: NoteFolder_update, },
-                postUpdate: { guard: NoteFolder_postUpdate, },
-                delete: { guard: NoteFolder_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        noteTag: {
-            modelLevel: {
-                read: { guard: NoteTag_read, },
-                create: { guard: NoteTag_create, inputChecker: NoteTag_create_input, },
-                update: { guard: NoteTag_update, },
-                postUpdate: { guard: NoteTag_postUpdate, },
-                delete: { guard: NoteTag_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        noteReminder: {
-            modelLevel: {
-                read: { guard: NoteReminder_read, },
-                create: { guard: NoteReminder_create, inputChecker: NoteReminder_create_input, },
-                update: { guard: NoteReminder_update, },
-                postUpdate: { guard: NoteReminder_postUpdate, },
-                delete: { guard: NoteReminder_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -2496,6 +2288,461 @@ const policy = {
                 update: { guard: StaffHistory_update, },
                 postUpdate: { guard: StaffHistory_postUpdate, },
                 delete: { guard: StaffHistory_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        scholarship: {
+            modelLevel: {
+                read: { guard: Scholarship_read, },
+                create: { guard: Scholarship_create, inputChecker: Scholarship_create_input, },
+                update: { guard: Scholarship_update, },
+                postUpdate: { guard: Scholarship_postUpdate, },
+                delete: { guard: Scholarship_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        scholarshipCriteria: {
+            modelLevel: {
+                read: { guard: ScholarshipCriteria_read, },
+                create: { guard: ScholarshipCriteria_create, inputChecker: ScholarshipCriteria_create_input, },
+                update: { guard: ScholarshipCriteria_update, },
+                postUpdate: { guard: ScholarshipCriteria_postUpdate, },
+                delete: { guard: ScholarshipCriteria_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        scholarshipAward: {
+            modelLevel: {
+                read: { guard: ScholarshipAward_read, },
+                create: { guard: ScholarshipAward_create, inputChecker: ScholarshipAward_create_input, },
+                update: { guard: ScholarshipAward_update, },
+                postUpdate: { guard: ScholarshipAward_postUpdate, },
+                delete: { guard: ScholarshipAward_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        graduationSession: {
+            modelLevel: {
+                read: { guard: GraduationSession_read, },
+                create: { guard: GraduationSession_create, inputChecker: GraduationSession_create_input, },
+                update: { guard: GraduationSession_update, },
+                postUpdate: { guard: GraduationSession_postUpdate, },
+                delete: { guard: GraduationSession_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        studentGraduationApplication: {
+            modelLevel: {
+                read: { guard: StudentGraduationApplication_read, },
+                create: { guard: StudentGraduationApplication_create, inputChecker: StudentGraduationApplication_create_input, },
+                update: { guard: StudentGraduationApplication_update, },
+                postUpdate: { guard: StudentGraduationApplication_postUpdate, },
+                delete: { guard: StudentGraduationApplication_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        applicationCheckResult: {
+            modelLevel: {
+                read: { guard: ApplicationCheckResult_read, },
+                create: { guard: ApplicationCheckResult_create, inputChecker: ApplicationCheckResult_create_input, },
+                update: { guard: ApplicationCheckResult_update, },
+                postUpdate: { guard: ApplicationCheckResult_postUpdate, },
+                delete: { guard: ApplicationCheckResult_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        graduationDecision: {
+            modelLevel: {
+                read: { guard: GraduationDecision_read, },
+                create: { guard: GraduationDecision_create, inputChecker: GraduationDecision_create_input, },
+                update: { guard: GraduationDecision_update, },
+                postUpdate: { guard: GraduationDecision_postUpdate, },
+                delete: { guard: GraduationDecision_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        academicRankingConvert: {
+            modelLevel: {
+                read: { guard: AcademicRankingConvert_read, },
+                create: { guard: AcademicRankingConvert_create, inputChecker: AcademicRankingConvert_create_input, },
+                update: { guard: AcademicRankingConvert_update, },
+                postUpdate: { guard: AcademicRankingConvert_postUpdate, },
+                delete: { guard: AcademicRankingConvert_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        graduationRankDowngradeRule: {
+            modelLevel: {
+                read: { guard: GraduationRankDowngradeRule_read, },
+                create: { guard: GraduationRankDowngradeRule_create, inputChecker: GraduationRankDowngradeRule_create_input, },
+                update: { guard: GraduationRankDowngradeRule_update, },
+                postUpdate: { guard: GraduationRankDowngradeRule_postUpdate, },
+                delete: { guard: GraduationRankDowngradeRule_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        graduationRankDowngradeCondition: {
+            modelLevel: {
+                read: { guard: GraduationRankDowngradeCondition_read, },
+                create: { guard: GraduationRankDowngradeCondition_create, inputChecker: GraduationRankDowngradeCondition_create_input, },
+                update: { guard: GraduationRankDowngradeCondition_update, },
+                postUpdate: { guard: GraduationRankDowngradeCondition_postUpdate, },
+                delete: { guard: GraduationRankDowngradeCondition_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        rankingCondition: {
+            modelLevel: {
+                read: { guard: RankingCondition_read, },
+                create: { guard: RankingCondition_create, inputChecker: RankingCondition_create_input, },
+                update: { guard: RankingCondition_update, },
+                postUpdate: { guard: RankingCondition_postUpdate, },
+                delete: { guard: RankingCondition_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        diplomaVerificationApplication: {
+            modelLevel: {
+                read: { guard: DiplomaVerificationApplication_read, },
+                create: { guard: DiplomaVerificationApplication_create, inputChecker: DiplomaVerificationApplication_create_input, },
+                update: { guard: DiplomaVerificationApplication_update, },
+                postUpdate: { guard: DiplomaVerificationApplication_postUpdate, },
+                delete: { guard: DiplomaVerificationApplication_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        note: {
+            modelLevel: {
+                read: { guard: Note_read, },
+                create: { guard: Note_create, inputChecker: Note_create_input, },
+                update: { guard: Note_update, },
+                postUpdate: { guard: Note_postUpdate, },
+                delete: { guard: Note_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        noteFolder: {
+            modelLevel: {
+                read: { guard: NoteFolder_read, },
+                create: { guard: NoteFolder_create, inputChecker: NoteFolder_create_input, },
+                update: { guard: NoteFolder_update, },
+                postUpdate: { guard: NoteFolder_postUpdate, },
+                delete: { guard: NoteFolder_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        noteTag: {
+            modelLevel: {
+                read: { guard: NoteTag_read, },
+                create: { guard: NoteTag_create, inputChecker: NoteTag_create_input, },
+                update: { guard: NoteTag_update, },
+                postUpdate: { guard: NoteTag_postUpdate, },
+                delete: { guard: NoteTag_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        noteReminder: {
+            modelLevel: {
+                read: { guard: NoteReminder_read, },
+                create: { guard: NoteReminder_create, inputChecker: NoteReminder_create_input, },
+                update: { guard: NoteReminder_update, },
+                postUpdate: { guard: NoteReminder_postUpdate, },
+                delete: { guard: NoteReminder_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        questionBank: {
+            modelLevel: {
+                read: { guard: QuestionBank_read, },
+                create: { guard: QuestionBank_create, inputChecker: QuestionBank_create_input, },
+                update: { guard: QuestionBank_update, },
+                postUpdate: { guard: QuestionBank_postUpdate, },
+                delete: { guard: QuestionBank_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        difficulty: {
+            modelLevel: {
+                read: { guard: Difficulty_read, },
+                create: { guard: Difficulty_create, inputChecker: Difficulty_create_input, },
+                update: { guard: Difficulty_update, },
+                postUpdate: { guard: Difficulty_postUpdate, },
+                delete: { guard: Difficulty_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        knowledgeBlock: {
+            modelLevel: {
+                read: { guard: KnowledgeBlock_read, },
+                create: { guard: KnowledgeBlock_create, inputChecker: KnowledgeBlock_create_input, },
+                update: { guard: KnowledgeBlock_update, },
+                postUpdate: { guard: KnowledgeBlock_postUpdate, },
+                delete: { guard: KnowledgeBlock_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        question: {
+            modelLevel: {
+                read: { guard: Question_read, },
+                create: { guard: Question_create, inputChecker: Question_create_input, },
+                update: { guard: Question_update, },
+                postUpdate: { guard: Question_postUpdate, },
+                delete: { guard: Question_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        multipleChoiceOption: {
+            modelLevel: {
+                read: { guard: MultipleChoiceOption_read, },
+                create: { guard: MultipleChoiceOption_create, inputChecker: MultipleChoiceOption_create_input, },
+                update: { guard: MultipleChoiceOption_update, },
+                postUpdate: { guard: MultipleChoiceOption_postUpdate, },
+                delete: { guard: MultipleChoiceOption_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        fillInBlankSlot: {
+            modelLevel: {
+                read: { guard: FillInBlankSlot_read, },
+                create: { guard: FillInBlankSlot_create, inputChecker: FillInBlankSlot_create_input, },
+                update: { guard: FillInBlankSlot_update, },
+                postUpdate: { guard: FillInBlankSlot_postUpdate, },
+                delete: { guard: FillInBlankSlot_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        orderingItem: {
+            modelLevel: {
+                read: { guard: OrderingItem_read, },
+                create: { guard: OrderingItem_create, inputChecker: OrderingItem_create_input, },
+                update: { guard: OrderingItem_update, },
+                postUpdate: { guard: OrderingItem_postUpdate, },
+                delete: { guard: OrderingItem_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        answer: {
+            modelLevel: {
+                read: { guard: Answer_read, },
+                create: { guard: Answer_create, inputChecker: Answer_create_input, },
+                update: { guard: Answer_update, },
+                postUpdate: { guard: Answer_postUpdate, },
+                delete: { guard: Answer_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        exam: {
+            modelLevel: {
+                read: { guard: Exam_read, },
+                create: { guard: Exam_create, inputChecker: Exam_create_input, },
+                update: { guard: Exam_update, },
+                postUpdate: { guard: Exam_postUpdate, },
+                delete: { guard: Exam_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        testStructureRule: {
+            modelLevel: {
+                read: { guard: TestStructureRule_read, },
+                create: { guard: TestStructureRule_create, inputChecker: TestStructureRule_create_input, },
+                update: { guard: TestStructureRule_update, },
+                postUpdate: { guard: TestStructureRule_postUpdate, },
+                delete: { guard: TestStructureRule_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        examBank: {
+            modelLevel: {
+                read: { guard: ExamBank_read, },
+                create: { guard: ExamBank_create, inputChecker: ExamBank_create_input, },
+                update: { guard: ExamBank_update, },
+                postUpdate: { guard: ExamBank_postUpdate, },
+                delete: { guard: ExamBank_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        examBankQuestion: {
+            modelLevel: {
+                read: { guard: ExamBankQuestion_read, },
+                create: { guard: ExamBankQuestion_create, inputChecker: ExamBankQuestion_create_input, },
+                update: { guard: ExamBankQuestion_update, },
+                postUpdate: { guard: ExamBankQuestion_postUpdate, },
+                delete: { guard: ExamBankQuestion_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        examFax: {
+            modelLevel: {
+                read: { guard: ExamFax_read, },
+                create: { guard: ExamFax_create, inputChecker: ExamFax_create_input, },
+                update: { guard: ExamFax_update, },
+                postUpdate: { guard: ExamFax_postUpdate, },
+                delete: { guard: ExamFax_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        examSession: {
+            modelLevel: {
+                read: { guard: ExamSession_read, },
+                create: { guard: ExamSession_create, inputChecker: ExamSession_create_input, },
+                update: { guard: ExamSession_update, },
+                postUpdate: { guard: ExamSession_postUpdate, },
+                delete: { guard: ExamSession_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        academicWarningRule: {
+            modelLevel: {
+                read: { guard: AcademicWarningRule_read, },
+                create: { guard: AcademicWarningRule_create, inputChecker: AcademicWarningRule_create_input, },
+                update: { guard: AcademicWarningRule_update, },
+                postUpdate: { guard: AcademicWarningRule_postUpdate, },
+                delete: { guard: AcademicWarningRule_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        academicWarning: {
+            modelLevel: {
+                read: { guard: AcademicWarning_read, },
+                create: { guard: AcademicWarning_create, inputChecker: AcademicWarning_create_input, },
+                update: { guard: AcademicWarning_update, },
+                postUpdate: { guard: AcademicWarning_postUpdate, },
+                delete: { guard: AcademicWarning_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        disciplinaryWarning: {
+            modelLevel: {
+                read: { guard: DisciplinaryWarning_read, },
+                create: { guard: DisciplinaryWarning_create, inputChecker: DisciplinaryWarning_create_input, },
+                update: { guard: DisciplinaryWarning_update, },
+                postUpdate: { guard: DisciplinaryWarning_postUpdate, },
+                delete: { guard: DisciplinaryWarning_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        disciplinaryWarningReason: {
+            modelLevel: {
+                read: { guard: DisciplinaryWarningReason_read, },
+                create: { guard: DisciplinaryWarningReason_create, inputChecker: DisciplinaryWarningReason_create_input, },
+                update: { guard: DisciplinaryWarningReason_update, },
+                postUpdate: { guard: DisciplinaryWarningReason_postUpdate, },
+                delete: { guard: DisciplinaryWarningReason_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        feedback: {
+            modelLevel: {
+                read: { guard: Feedback_read, },
+                create: { guard: Feedback_create, inputChecker: Feedback_create_input, },
+                update: { guard: Feedback_update, },
+                postUpdate: { guard: Feedback_postUpdate, },
+                delete: { guard: Feedback_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -2866,71 +3113,6 @@ const policy = {
                 update: {},
             },
         },
-        feedback: {
-            modelLevel: {
-                read: { guard: Feedback_read, },
-                create: { guard: Feedback_create, inputChecker: Feedback_create_input, },
-                update: { guard: Feedback_update, },
-                postUpdate: { guard: Feedback_postUpdate, },
-                delete: { guard: Feedback_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        academicWarningRule: {
-            modelLevel: {
-                read: { guard: AcademicWarningRule_read, },
-                create: { guard: AcademicWarningRule_create, inputChecker: AcademicWarningRule_create_input, },
-                update: { guard: AcademicWarningRule_update, },
-                postUpdate: { guard: AcademicWarningRule_postUpdate, },
-                delete: { guard: AcademicWarningRule_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        academicWarning: {
-            modelLevel: {
-                read: { guard: AcademicWarning_read, },
-                create: { guard: AcademicWarning_create, inputChecker: AcademicWarning_create_input, },
-                update: { guard: AcademicWarning_update, },
-                postUpdate: { guard: AcademicWarning_postUpdate, },
-                delete: { guard: AcademicWarning_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        disciplinaryWarning: {
-            modelLevel: {
-                read: { guard: DisciplinaryWarning_read, },
-                create: { guard: DisciplinaryWarning_create, inputChecker: DisciplinaryWarning_create_input, },
-                update: { guard: DisciplinaryWarning_update, },
-                postUpdate: { guard: DisciplinaryWarning_postUpdate, },
-                delete: { guard: DisciplinaryWarning_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        disciplinaryWarningReason: {
-            modelLevel: {
-                read: { guard: DisciplinaryWarningReason_read, },
-                create: { guard: DisciplinaryWarningReason_create, inputChecker: DisciplinaryWarningReason_create_input, },
-                update: { guard: DisciplinaryWarningReason_update, },
-                postUpdate: { guard: DisciplinaryWarningReason_postUpdate, },
-                delete: { guard: DisciplinaryWarningReason_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
         templateFile: {
             modelLevel: {
                 read: { guard: TemplateFile_read, },
@@ -2960,18 +3142,79 @@ const policy = {
     },
     validation: {
         config: { hasValidation: false },
-        questionBank: { hasValidation: false },
-        difficulty: { hasValidation: false },
-        knowledgeBlock: { hasValidation: false },
-        question: { hasValidation: false },
-        answer: { hasValidation: false },
-        exam: { hasValidation: false },
-        testStructureRule: { hasValidation: false },
-        examBank: { hasValidation: false },
-        examBankQuestion: { hasValidation: false },
-        examFax: { hasValidation: false },
-        examSession: { hasValidation: false },
+        changeLog: { hasValidation: false },
+        userProfile: { hasValidation: false },
+        hocHam: { hasValidation: false },
+        hocVi: { hasValidation: false },
+        relative: { hasValidation: false },
+        trinhDoLyLuanChinhTri: { hasValidation: false },
+        trinhDoQuanLyNhaNuoc: { hasValidation: false },
+        ngoaiNgu: { hasValidation: false },
+        tinHoc: { hasValidation: false },
+        boiDuongQuocPhongAnNinh: { hasValidation: false },
+        capBac: { hasValidation: false },
+        quaTrinhCongTac: { hasValidation: false },
+        quaTrinhCuDiCongTac: { hasValidation: false },
+        quaTrinhCuDiDaoTao: { hasValidation: false },
+        khenThuong: { hasValidation: false },
+        kyLuat: { hasValidation: false },
+        doiTuongChinhSach: { hasValidation: false },
+        keKhaiTaiSan: { hasValidation: false },
+        tiengDanToc: { hasValidation: false },
+        chienDau: { hasValidation: false },
+        nuocNgoai: { hasValidation: false },
+        thuongTat: { hasValidation: false },
+        danhHieu: { hasValidation: false },
+        quaTrinhHocTap: { hasValidation: false },
+        toChucXaHoi: { hasValidation: false },
+        quaTrinhLuong: { hasValidation: false },
+        group: { hasValidation: false },
+        role: { hasValidation: false },
+        permission: { hasValidation: false },
+        chatBotConfig: { hasValidation: false },
+        userSession: { hasValidation: false },
+        document: { hasValidation: false },
+        fAQ: { hasValidation: false },
+        prompt: { hasValidation: false },
+        conversation: { hasValidation: false },
+        message: { hasValidation: false },
+        citationMessage: { hasValidation: false },
+        topic: { hasValidation: false },
+        dM_CapBac: { hasValidation: false },
+        dM_ChucDanh: { hasValidation: false },
+        dM_ChucVu: { hasValidation: false },
+        dM_HocHam: { hasValidation: false },
+        dM_HocVi: { hasValidation: false },
+        dM_ChungChiTinHoc: { hasValidation: false },
+        dM_DanToc: { hasValidation: false },
+        dM_DonVi: { hasValidation: false },
+        dM_DonViHanhChinh: { hasValidation: false },
+        dM_KhuVuc_DiaLy: { hasValidation: false },
+        dM_NgoaiNgu: { hasValidation: false },
+        dM_TonGiao: { hasValidation: false },
+        dM_TrinhDoNgoaiNgu: { hasValidation: false },
+        dM_TrinhDoTinHoc: { hasValidation: false },
+        dM_GioiTinh: { hasValidation: false },
+        dM_NhanVien: { hasValidation: false },
+        dM_PhanCap_ChatLuong_TrangThietBi: { hasValidation: false },
+        dM_PhanLoai_CSKT: { hasValidation: false },
+        dM_NhomNguoiDung: { hasValidation: false },
+        dM_NhomUngDung: { hasValidation: false },
+        dM_QuocGia: { hasValidation: false },
+        dM_Tinh: { hasValidation: false },
+        dM_Tinh_New: { hasValidation: false },
+        dM_QuanHuyen: { hasValidation: false },
+        dM_XaPhuong: { hasValidation: false },
+        dM_XaPhuong_New: { hasValidation: false },
+        dM_ViTriCongViec: { hasValidation: false },
+        planTrainingDelay: { hasValidation: false },
+        planTrainingDelaySubject: { hasValidation: false },
+        planTraining: { hasValidation: false },
+        planTrainingSubject: { hasValidation: false },
+        studentScoreConvert: { hasValidation: false },
+        subjectScoreConvert: { hasValidation: false },
         studentSubjectScore: { hasValidation: true },
+        studentSubjectScoreHistory: { hasValidation: true },
         archivedCertificateOnStudentSubjectScore: { hasValidation: false },
         archivedCertificate: { hasValidation: true },
         archivedAwardOnStudentSubjectScore: { hasValidation: false },
@@ -2979,6 +3222,7 @@ const policy = {
         schoolYear: { hasValidation: false },
         semester: { hasValidation: false },
         milestone: { hasValidation: false },
+        trainingLanguage: { hasValidation: false },
         trainingCourse: { hasValidation: false },
         trainingCourseRegulation: { hasValidation: false },
         fixedClass: { hasValidation: false },
@@ -2987,6 +3231,7 @@ const policy = {
         subject: { hasValidation: false },
         subjectVersionCategory: { hasValidation: false },
         subjectVersion: { hasValidation: false },
+        subjectVersionHistory: { hasValidation: false },
         equivalencyGroup: { hasValidation: false },
         subjectInGroup: { hasValidation: false },
         trainingBlockSubject: { hasValidation: false },
@@ -3018,69 +3263,13 @@ const policy = {
         studentSemesterResult: { hasValidation: false },
         studentYearResult: { hasValidation: false },
         notification: { hasValidation: false },
-        group: { hasValidation: false },
-        role: { hasValidation: false },
-        permission: { hasValidation: false },
-        chatBotConfig: { hasValidation: false },
-        userSession: { hasValidation: false },
-        document: { hasValidation: false },
-        fAQ: { hasValidation: false },
-        prompt: { hasValidation: false },
-        conversation: { hasValidation: false },
-        message: { hasValidation: false },
-        topic: { hasValidation: false },
-        dM_CapBac: { hasValidation: false },
-        dM_ChucDanh: { hasValidation: false },
-        dM_ChucVu: { hasValidation: false },
-        dM_HocHam: { hasValidation: false },
-        dM_HocVi: { hasValidation: false },
-        dM_ChungChiTinHoc: { hasValidation: false },
-        dM_DanToc: { hasValidation: false },
-        dM_DonVi: { hasValidation: false },
-        dM_DonViHanhChinh: { hasValidation: false },
-        dM_KhuVuc_DiaLy: { hasValidation: false },
-        dM_NgoaiNgu: { hasValidation: false },
-        dM_TonGiao: { hasValidation: false },
-        dM_TrinhDoNgoaiNgu: { hasValidation: false },
-        dM_TrinhDoTinHoc: { hasValidation: false },
-        dM_GioiTinh: { hasValidation: false },
-        dM_NhanVien: { hasValidation: false },
-        dM_PhanCap_ChatLuong_TrangThietBi: { hasValidation: false },
-        dM_PhanLoai_CSKT: { hasValidation: false },
-        dM_NhomNguoiDung: { hasValidation: false },
-        dM_NhomUngDung: { hasValidation: false },
-        dM_QuocGia: { hasValidation: false },
-        dM_Tinh: { hasValidation: false },
-        dM_Tinh_New: { hasValidation: false },
-        dM_QuanHuyen: { hasValidation: false },
-        dM_XaPhuong: { hasValidation: false },
-        dM_XaPhuong_New: { hasValidation: false },
-        dM_ViTriCongViec: { hasValidation: false },
-        userProfile: { hasValidation: false },
-        hocHam: { hasValidation: false },
-        hocVi: { hasValidation: false },
-        relative: { hasValidation: false },
-        trinhDoLyLuanChinhTri: { hasValidation: false },
-        trinhDoQuanLyNhaNuoc: { hasValidation: false },
-        ngoaiNgu: { hasValidation: false },
-        tinHoc: { hasValidation: false },
-        boiDuongQuocPhongAnNinh: { hasValidation: false },
-        capBac: { hasValidation: false },
-        quaTrinhCongTac: { hasValidation: false },
-        quaTrinhCuDiCongTac: { hasValidation: false },
-        quaTrinhCuDiDaoTao: { hasValidation: false },
-        khenThuong: { hasValidation: false },
-        kyLuat: { hasValidation: false },
-        doiTuongChinhSach: { hasValidation: false },
-        keKhaiTaiSan: { hasValidation: false },
-        tiengDanToc: { hasValidation: false },
-        chienDau: { hasValidation: false },
-        nuocNgoai: { hasValidation: false },
-        thuongTat: { hasValidation: false },
-        danhHieu: { hasValidation: false },
-        quaTrinhHocTap: { hasValidation: false },
-        toChucXaHoi: { hasValidation: false },
-        quaTrinhLuong: { hasValidation: false },
+        documentFile: { hasValidation: false },
+        academicActionConfig: { hasValidation: false },
+        academicActionRuleSet: { hasValidation: false },
+        academicActionCondition: { hasValidation: false },
+        studentAcademicDecision: { hasValidation: false },
+        trainingScoreSession: { hasValidation: false },
+        studentTrainingScore: { hasValidation: false },
         lecturerType: { hasValidation: false },
         staffType: { hasValidation: false },
         staffPosition: { hasValidation: false },
@@ -3101,29 +3290,6 @@ const policy = {
         defaultCouncilRolePayAmount: { hasValidation: false },
         paymentRecord: { hasValidation: false },
         supervisorPaymentRecord: { hasValidation: false },
-        documentFile: { hasValidation: false },
-        academicActionConfig: { hasValidation: false },
-        academicActionRuleSet: { hasValidation: false },
-        academicActionCondition: { hasValidation: false },
-        studentAcademicDecision: { hasValidation: false },
-        trainingScoreSession: { hasValidation: false },
-        studentTrainingScore: { hasValidation: false },
-        scholarship: { hasValidation: false },
-        scholarshipCriteria: { hasValidation: false },
-        scholarshipAward: { hasValidation: false },
-        graduationSession: { hasValidation: false },
-        studentGraduationApplication: { hasValidation: false },
-        applicationCheckResult: { hasValidation: false },
-        graduationDecision: { hasValidation: false },
-        academicRankingConvert: { hasValidation: true },
-        graduationRankDowngradeRule: { hasValidation: false },
-        graduationRankDowngradeCondition: { hasValidation: false },
-        rankingCondition: { hasValidation: false },
-        diplomaVerificationApplication: { hasValidation: false },
-        note: { hasValidation: false },
-        noteFolder: { hasValidation: false },
-        noteTag: { hasValidation: false },
-        noteReminder: { hasValidation: false },
         evaluationPeriod: { hasValidation: false },
         standardCatalog: { hasValidation: false },
         criterionCatalog: { hasValidation: false },
@@ -3151,6 +3317,41 @@ const policy = {
         surveyResponse: { hasValidation: false },
         staff: { hasValidation: false },
         staffHistory: { hasValidation: false },
+        scholarship: { hasValidation: false },
+        scholarshipCriteria: { hasValidation: false },
+        scholarshipAward: { hasValidation: false },
+        graduationSession: { hasValidation: false },
+        studentGraduationApplication: { hasValidation: false },
+        applicationCheckResult: { hasValidation: false },
+        graduationDecision: { hasValidation: false },
+        academicRankingConvert: { hasValidation: true },
+        graduationRankDowngradeRule: { hasValidation: false },
+        graduationRankDowngradeCondition: { hasValidation: false },
+        rankingCondition: { hasValidation: false },
+        diplomaVerificationApplication: { hasValidation: false },
+        note: { hasValidation: false },
+        noteFolder: { hasValidation: false },
+        noteTag: { hasValidation: false },
+        noteReminder: { hasValidation: false },
+        questionBank: { hasValidation: false },
+        difficulty: { hasValidation: false },
+        knowledgeBlock: { hasValidation: false },
+        question: { hasValidation: false },
+        multipleChoiceOption: { hasValidation: false },
+        fillInBlankSlot: { hasValidation: false },
+        orderingItem: { hasValidation: false },
+        answer: { hasValidation: false },
+        exam: { hasValidation: false },
+        testStructureRule: { hasValidation: false },
+        examBank: { hasValidation: false },
+        examBankQuestion: { hasValidation: false },
+        examFax: { hasValidation: false },
+        examSession: { hasValidation: false },
+        academicWarningRule: { hasValidation: false },
+        academicWarning: { hasValidation: false },
+        disciplinaryWarning: { hasValidation: false },
+        disciplinaryWarningReason: { hasValidation: false },
+        feedback: { hasValidation: false },
         dM_TrinhDoHocVan: { hasValidation: false },
         dM_TrinhDoLyLuanChinhTri: { hasValidation: false },
         dM_TrinhDoQuanLyNhaNuoc: { hasValidation: false },
@@ -3179,11 +3380,6 @@ const policy = {
         dM_ToChucXaHoi: { hasValidation: false },
         dM_Ngach: { hasValidation: false },
         dM_BacLuong: { hasValidation: false },
-        feedback: { hasValidation: false },
-        academicWarningRule: { hasValidation: false },
-        academicWarning: { hasValidation: false },
-        disciplinaryWarning: { hasValidation: false },
-        disciplinaryWarningReason: { hasValidation: false },
         templateFile: { hasValidation: false },
         blockedIp: { hasValidation: true },
     },
@@ -3266,12 +3462,45 @@ function $check_Config_delete(input, context) {
     }
     return false;
 }
-function QuestionBank_read(context, db) {
+function ChangeLog_read(context, db) {
+    return { OR: [] };
+}
+function $check_ChangeLog_read(input, context) {
+    return false;
+}
+function ChangeLog_create(context, db) {
+    return { OR: [] };
+}
+function $check_ChangeLog_create(input, context) {
+    return false;
+}
+function ChangeLog_create_input(input, context) {
+    return false;
+}
+function ChangeLog_update(context, db) {
+    return { OR: [] };
+}
+function $check_ChangeLog_update(input, context) {
+    return false;
+}
+function ChangeLog_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ChangeLog_postUpdate(input, context) {
+    return true;
+}
+function ChangeLog_delete(context, db) {
+    return { OR: [] };
+}
+function $check_ChangeLog_delete(input, context) {
+    return false;
+}
+function UserProfile_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_QuestionBank_read(input, context) {
+function $check_UserProfile_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3285,7 +3514,7 @@ function $check_QuestionBank_read(input, context) {
     }
     return false;
 }
-function QuestionBank_create(context, db) {
+function UserProfile_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3293,7 +3522,7 @@ function QuestionBank_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_QuestionBank_create(input, context) {
+function $check_UserProfile_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3301,12 +3530,12 @@ function $check_QuestionBank_create(input, context) {
     }
     return false;
 }
-function QuestionBank_create_input(input, context) {
+function UserProfile_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function QuestionBank_update(context, db) {
+function UserProfile_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3314,7 +3543,7 @@ function QuestionBank_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_QuestionBank_update(input, context) {
+function $check_UserProfile_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3322,13 +3551,13 @@ function $check_QuestionBank_update(input, context) {
     }
     return false;
 }
-function QuestionBank_postUpdate(context, db) {
+function UserProfile_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_QuestionBank_postUpdate(input, context) {
+function $check_UserProfile_postUpdate(input, context) {
     return true;
 }
-function QuestionBank_delete(context, db) {
+function UserProfile_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3336,7 +3565,7 @@ function QuestionBank_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_QuestionBank_delete(input, context) {
+function $check_UserProfile_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3344,12 +3573,12 @@ function $check_QuestionBank_delete(input, context) {
     }
     return false;
 }
-function Difficulty_read(context, db) {
+function HocHam_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_Difficulty_read(input, context) {
+function $check_HocHam_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3363,7 +3592,7 @@ function $check_Difficulty_read(input, context) {
     }
     return false;
 }
-function Difficulty_create(context, db) {
+function HocHam_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3371,7 +3600,7 @@ function Difficulty_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_Difficulty_create(input, context) {
+function $check_HocHam_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3379,12 +3608,12 @@ function $check_Difficulty_create(input, context) {
     }
     return false;
 }
-function Difficulty_create_input(input, context) {
+function HocHam_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function Difficulty_update(context, db) {
+function HocHam_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3392,7 +3621,7 @@ function Difficulty_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_Difficulty_update(input, context) {
+function $check_HocHam_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3400,13 +3629,13 @@ function $check_Difficulty_update(input, context) {
     }
     return false;
 }
-function Difficulty_postUpdate(context, db) {
+function HocHam_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Difficulty_postUpdate(input, context) {
+function $check_HocHam_postUpdate(input, context) {
     return true;
 }
-function Difficulty_delete(context, db) {
+function HocHam_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3414,7 +3643,7 @@ function Difficulty_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_Difficulty_delete(input, context) {
+function $check_HocHam_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3422,12 +3651,12 @@ function $check_Difficulty_delete(input, context) {
     }
     return false;
 }
-function KnowledgeBlock_read(context, db) {
+function HocVi_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_KnowledgeBlock_read(input, context) {
+function $check_HocVi_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3441,7 +3670,7 @@ function $check_KnowledgeBlock_read(input, context) {
     }
     return false;
 }
-function KnowledgeBlock_create(context, db) {
+function HocVi_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3449,7 +3678,7 @@ function KnowledgeBlock_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_KnowledgeBlock_create(input, context) {
+function $check_HocVi_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3457,12 +3686,12 @@ function $check_KnowledgeBlock_create(input, context) {
     }
     return false;
 }
-function KnowledgeBlock_create_input(input, context) {
+function HocVi_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function KnowledgeBlock_update(context, db) {
+function HocVi_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3470,7 +3699,7 @@ function KnowledgeBlock_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_KnowledgeBlock_update(input, context) {
+function $check_HocVi_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3478,13 +3707,13 @@ function $check_KnowledgeBlock_update(input, context) {
     }
     return false;
 }
-function KnowledgeBlock_postUpdate(context, db) {
+function HocVi_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_KnowledgeBlock_postUpdate(input, context) {
+function $check_HocVi_postUpdate(input, context) {
     return true;
 }
-function KnowledgeBlock_delete(context, db) {
+function HocVi_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3492,7 +3721,7 @@ function KnowledgeBlock_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_KnowledgeBlock_delete(input, context) {
+function $check_HocVi_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3500,12 +3729,12 @@ function $check_KnowledgeBlock_delete(input, context) {
     }
     return false;
 }
-function Question_read(context, db) {
+function Relative_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_Question_read(input, context) {
+function $check_Relative_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3519,7 +3748,7 @@ function $check_Question_read(input, context) {
     }
     return false;
 }
-function Question_create(context, db) {
+function Relative_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3527,7 +3756,7 @@ function Question_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_Question_create(input, context) {
+function $check_Relative_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3535,12 +3764,12 @@ function $check_Question_create(input, context) {
     }
     return false;
 }
-function Question_create_input(input, context) {
+function Relative_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function Question_update(context, db) {
+function Relative_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3548,7 +3777,7 @@ function Question_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_Question_update(input, context) {
+function $check_Relative_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3556,13 +3785,13 @@ function $check_Question_update(input, context) {
     }
     return false;
 }
-function Question_postUpdate(context, db) {
+function Relative_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Question_postUpdate(input, context) {
+function $check_Relative_postUpdate(input, context) {
     return true;
 }
-function Question_delete(context, db) {
+function Relative_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3570,7 +3799,7 @@ function Question_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_Question_delete(input, context) {
+function $check_Relative_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3578,12 +3807,12 @@ function $check_Question_delete(input, context) {
     }
     return false;
 }
-function Answer_read(context, db) {
+function TrinhDoLyLuanChinhTri_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_Answer_read(input, context) {
+function $check_TrinhDoLyLuanChinhTri_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3597,7 +3826,7 @@ function $check_Answer_read(input, context) {
     }
     return false;
 }
-function Answer_create(context, db) {
+function TrinhDoLyLuanChinhTri_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3605,7 +3834,7 @@ function Answer_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_Answer_create(input, context) {
+function $check_TrinhDoLyLuanChinhTri_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3613,12 +3842,12 @@ function $check_Answer_create(input, context) {
     }
     return false;
 }
-function Answer_create_input(input, context) {
+function TrinhDoLyLuanChinhTri_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function Answer_update(context, db) {
+function TrinhDoLyLuanChinhTri_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3626,7 +3855,7 @@ function Answer_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_Answer_update(input, context) {
+function $check_TrinhDoLyLuanChinhTri_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3634,13 +3863,13 @@ function $check_Answer_update(input, context) {
     }
     return false;
 }
-function Answer_postUpdate(context, db) {
+function TrinhDoLyLuanChinhTri_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Answer_postUpdate(input, context) {
+function $check_TrinhDoLyLuanChinhTri_postUpdate(input, context) {
     return true;
 }
-function Answer_delete(context, db) {
+function TrinhDoLyLuanChinhTri_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3648,7 +3877,7 @@ function Answer_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_Answer_delete(input, context) {
+function $check_TrinhDoLyLuanChinhTri_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3656,12 +3885,12 @@ function $check_Answer_delete(input, context) {
     }
     return false;
 }
-function Exam_read(context, db) {
+function TrinhDoQuanLyNhaNuoc_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_Exam_read(input, context) {
+function $check_TrinhDoQuanLyNhaNuoc_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3675,7 +3904,7 @@ function $check_Exam_read(input, context) {
     }
     return false;
 }
-function Exam_create(context, db) {
+function TrinhDoQuanLyNhaNuoc_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3683,7 +3912,7 @@ function Exam_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_Exam_create(input, context) {
+function $check_TrinhDoQuanLyNhaNuoc_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3691,12 +3920,12 @@ function $check_Exam_create(input, context) {
     }
     return false;
 }
-function Exam_create_input(input, context) {
+function TrinhDoQuanLyNhaNuoc_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function Exam_update(context, db) {
+function TrinhDoQuanLyNhaNuoc_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3704,7 +3933,7 @@ function Exam_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_Exam_update(input, context) {
+function $check_TrinhDoQuanLyNhaNuoc_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3712,13 +3941,13 @@ function $check_Exam_update(input, context) {
     }
     return false;
 }
-function Exam_postUpdate(context, db) {
+function TrinhDoQuanLyNhaNuoc_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Exam_postUpdate(input, context) {
+function $check_TrinhDoQuanLyNhaNuoc_postUpdate(input, context) {
     return true;
 }
-function Exam_delete(context, db) {
+function TrinhDoQuanLyNhaNuoc_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3726,7 +3955,7 @@ function Exam_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_Exam_delete(input, context) {
+function $check_TrinhDoQuanLyNhaNuoc_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3734,12 +3963,12 @@ function $check_Exam_delete(input, context) {
     }
     return false;
 }
-function TestStructureRule_read(context, db) {
+function NgoaiNgu_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_TestStructureRule_read(input, context) {
+function $check_NgoaiNgu_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3753,7 +3982,7 @@ function $check_TestStructureRule_read(input, context) {
     }
     return false;
 }
-function TestStructureRule_create(context, db) {
+function NgoaiNgu_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3761,7 +3990,7 @@ function TestStructureRule_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_TestStructureRule_create(input, context) {
+function $check_NgoaiNgu_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3769,12 +3998,12 @@ function $check_TestStructureRule_create(input, context) {
     }
     return false;
 }
-function TestStructureRule_create_input(input, context) {
+function NgoaiNgu_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function TestStructureRule_update(context, db) {
+function NgoaiNgu_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3782,7 +4011,7 @@ function TestStructureRule_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_TestStructureRule_update(input, context) {
+function $check_NgoaiNgu_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3790,13 +4019,13 @@ function $check_TestStructureRule_update(input, context) {
     }
     return false;
 }
-function TestStructureRule_postUpdate(context, db) {
+function NgoaiNgu_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_TestStructureRule_postUpdate(input, context) {
+function $check_NgoaiNgu_postUpdate(input, context) {
     return true;
 }
-function TestStructureRule_delete(context, db) {
+function NgoaiNgu_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3804,7 +4033,7 @@ function TestStructureRule_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_TestStructureRule_delete(input, context) {
+function $check_NgoaiNgu_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3812,12 +4041,12 @@ function $check_TestStructureRule_delete(input, context) {
     }
     return false;
 }
-function ExamBank_read(context, db) {
+function TinHoc_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_ExamBank_read(input, context) {
+function $check_TinHoc_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3831,7 +4060,7 @@ function $check_ExamBank_read(input, context) {
     }
     return false;
 }
-function ExamBank_create(context, db) {
+function TinHoc_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3839,7 +4068,7 @@ function ExamBank_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamBank_create(input, context) {
+function $check_TinHoc_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3847,12 +4076,12 @@ function $check_ExamBank_create(input, context) {
     }
     return false;
 }
-function ExamBank_create_input(input, context) {
+function TinHoc_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function ExamBank_update(context, db) {
+function TinHoc_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3860,7 +4089,7 @@ function ExamBank_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamBank_update(input, context) {
+function $check_TinHoc_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3868,13 +4097,13 @@ function $check_ExamBank_update(input, context) {
     }
     return false;
 }
-function ExamBank_postUpdate(context, db) {
+function TinHoc_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_ExamBank_postUpdate(input, context) {
+function $check_TinHoc_postUpdate(input, context) {
     return true;
 }
-function ExamBank_delete(context, db) {
+function TinHoc_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3882,7 +4111,7 @@ function ExamBank_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamBank_delete(input, context) {
+function $check_TinHoc_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3890,12 +4119,12 @@ function $check_ExamBank_delete(input, context) {
     }
     return false;
 }
-function ExamBankQuestion_read(context, db) {
+function BoiDuongQuocPhongAnNinh_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_ExamBankQuestion_read(input, context) {
+function $check_BoiDuongQuocPhongAnNinh_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3909,7 +4138,7 @@ function $check_ExamBankQuestion_read(input, context) {
     }
     return false;
 }
-function ExamBankQuestion_create(context, db) {
+function BoiDuongQuocPhongAnNinh_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3917,7 +4146,7 @@ function ExamBankQuestion_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamBankQuestion_create(input, context) {
+function $check_BoiDuongQuocPhongAnNinh_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3925,12 +4154,12 @@ function $check_ExamBankQuestion_create(input, context) {
     }
     return false;
 }
-function ExamBankQuestion_create_input(input, context) {
+function BoiDuongQuocPhongAnNinh_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function ExamBankQuestion_update(context, db) {
+function BoiDuongQuocPhongAnNinh_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3938,7 +4167,7 @@ function ExamBankQuestion_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamBankQuestion_update(input, context) {
+function $check_BoiDuongQuocPhongAnNinh_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3946,13 +4175,13 @@ function $check_ExamBankQuestion_update(input, context) {
     }
     return false;
 }
-function ExamBankQuestion_postUpdate(context, db) {
+function BoiDuongQuocPhongAnNinh_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_ExamBankQuestion_postUpdate(input, context) {
+function $check_BoiDuongQuocPhongAnNinh_postUpdate(input, context) {
     return true;
 }
-function ExamBankQuestion_delete(context, db) {
+function BoiDuongQuocPhongAnNinh_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3960,7 +4189,7 @@ function ExamBankQuestion_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamBankQuestion_delete(input, context) {
+function $check_BoiDuongQuocPhongAnNinh_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3968,12 +4197,12 @@ function $check_ExamBankQuestion_delete(input, context) {
     }
     return false;
 }
-function ExamFax_read(context, db) {
+function CapBac_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_ExamFax_read(input, context) {
+function $check_CapBac_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -3987,7 +4216,7 @@ function $check_ExamFax_read(input, context) {
     }
     return false;
 }
-function ExamFax_create(context, db) {
+function CapBac_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -3995,7 +4224,7 @@ function ExamFax_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamFax_create(input, context) {
+function $check_CapBac_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4003,12 +4232,12 @@ function $check_ExamFax_create(input, context) {
     }
     return false;
 }
-function ExamFax_create_input(input, context) {
+function CapBac_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function ExamFax_update(context, db) {
+function CapBac_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4016,7 +4245,7 @@ function ExamFax_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamFax_update(input, context) {
+function $check_CapBac_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4024,13 +4253,13 @@ function $check_ExamFax_update(input, context) {
     }
     return false;
 }
-function ExamFax_postUpdate(context, db) {
+function CapBac_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_ExamFax_postUpdate(input, context) {
+function $check_CapBac_postUpdate(input, context) {
     return true;
 }
-function ExamFax_delete(context, db) {
+function CapBac_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4038,7 +4267,7 @@ function ExamFax_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamFax_delete(input, context) {
+function $check_CapBac_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4046,12 +4275,12 @@ function $check_ExamFax_delete(input, context) {
     }
     return false;
 }
-function ExamSession_read(context, db) {
+function QuaTrinhCongTac_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_ExamSession_read(input, context) {
+function $check_QuaTrinhCongTac_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -4065,7 +4294,7 @@ function $check_ExamSession_read(input, context) {
     }
     return false;
 }
-function ExamSession_create(context, db) {
+function QuaTrinhCongTac_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4073,7 +4302,7 @@ function ExamSession_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamSession_create(input, context) {
+function $check_QuaTrinhCongTac_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4081,12 +4310,12 @@ function $check_ExamSession_create(input, context) {
     }
     return false;
 }
-function ExamSession_create_input(input, context) {
+function QuaTrinhCongTac_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function ExamSession_update(context, db) {
+function QuaTrinhCongTac_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4094,7 +4323,7 @@ function ExamSession_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamSession_update(input, context) {
+function $check_QuaTrinhCongTac_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4102,13 +4331,13 @@ function $check_ExamSession_update(input, context) {
     }
     return false;
 }
-function ExamSession_postUpdate(context, db) {
+function QuaTrinhCongTac_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_ExamSession_postUpdate(input, context) {
+function $check_QuaTrinhCongTac_postUpdate(input, context) {
     return true;
 }
-function ExamSession_delete(context, db) {
+function QuaTrinhCongTac_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4116,7 +4345,4609 @@ function ExamSession_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_ExamSession_delete(input, context) {
+function $check_QuaTrinhCongTac_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhCuDiCongTac_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_QuaTrinhCuDiCongTac_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhCuDiCongTac_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhCuDiCongTac_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhCuDiCongTac_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function QuaTrinhCuDiCongTac_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhCuDiCongTac_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhCuDiCongTac_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_QuaTrinhCuDiCongTac_postUpdate(input, context) {
+    return true;
+}
+function QuaTrinhCuDiCongTac_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhCuDiCongTac_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhCuDiDaoTao_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_QuaTrinhCuDiDaoTao_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhCuDiDaoTao_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhCuDiDaoTao_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhCuDiDaoTao_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function QuaTrinhCuDiDaoTao_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhCuDiDaoTao_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhCuDiDaoTao_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_QuaTrinhCuDiDaoTao_postUpdate(input, context) {
+    return true;
+}
+function QuaTrinhCuDiDaoTao_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhCuDiDaoTao_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KhenThuong_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_KhenThuong_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KhenThuong_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KhenThuong_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KhenThuong_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function KhenThuong_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KhenThuong_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KhenThuong_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_KhenThuong_postUpdate(input, context) {
+    return true;
+}
+function KhenThuong_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KhenThuong_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KyLuat_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_KyLuat_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KyLuat_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KyLuat_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KyLuat_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function KyLuat_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KyLuat_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KyLuat_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_KyLuat_postUpdate(input, context) {
+    return true;
+}
+function KyLuat_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KyLuat_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DoiTuongChinhSach_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DoiTuongChinhSach_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DoiTuongChinhSach_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DoiTuongChinhSach_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DoiTuongChinhSach_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DoiTuongChinhSach_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DoiTuongChinhSach_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DoiTuongChinhSach_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DoiTuongChinhSach_postUpdate(input, context) {
+    return true;
+}
+function DoiTuongChinhSach_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DoiTuongChinhSach_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KeKhaiTaiSan_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_KeKhaiTaiSan_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KeKhaiTaiSan_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KeKhaiTaiSan_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KeKhaiTaiSan_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function KeKhaiTaiSan_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KeKhaiTaiSan_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KeKhaiTaiSan_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_KeKhaiTaiSan_postUpdate(input, context) {
+    return true;
+}
+function KeKhaiTaiSan_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KeKhaiTaiSan_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TiengDanToc_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_TiengDanToc_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TiengDanToc_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TiengDanToc_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TiengDanToc_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function TiengDanToc_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TiengDanToc_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TiengDanToc_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_TiengDanToc_postUpdate(input, context) {
+    return true;
+}
+function TiengDanToc_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TiengDanToc_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChienDau_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ChienDau_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChienDau_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChienDau_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChienDau_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ChienDau_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChienDau_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChienDau_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ChienDau_postUpdate(input, context) {
+    return true;
+}
+function ChienDau_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChienDau_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NuocNgoai_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_NuocNgoai_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NuocNgoai_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NuocNgoai_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NuocNgoai_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function NuocNgoai_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NuocNgoai_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NuocNgoai_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_NuocNgoai_postUpdate(input, context) {
+    return true;
+}
+function NuocNgoai_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NuocNgoai_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ThuongTat_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ThuongTat_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ThuongTat_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ThuongTat_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ThuongTat_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ThuongTat_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ThuongTat_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ThuongTat_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ThuongTat_postUpdate(input, context) {
+    return true;
+}
+function ThuongTat_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ThuongTat_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DanhHieu_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DanhHieu_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DanhHieu_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DanhHieu_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DanhHieu_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DanhHieu_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DanhHieu_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DanhHieu_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DanhHieu_postUpdate(input, context) {
+    return true;
+}
+function DanhHieu_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DanhHieu_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhHocTap_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_QuaTrinhHocTap_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhHocTap_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhHocTap_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhHocTap_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function QuaTrinhHocTap_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhHocTap_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhHocTap_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_QuaTrinhHocTap_postUpdate(input, context) {
+    return true;
+}
+function QuaTrinhHocTap_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhHocTap_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ToChucXaHoi_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ToChucXaHoi_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ToChucXaHoi_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ToChucXaHoi_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ToChucXaHoi_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ToChucXaHoi_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ToChucXaHoi_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ToChucXaHoi_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ToChucXaHoi_postUpdate(input, context) {
+    return true;
+}
+function ToChucXaHoi_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ToChucXaHoi_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhLuong_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_QuaTrinhLuong_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhLuong_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhLuong_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhLuong_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function QuaTrinhLuong_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhLuong_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuaTrinhLuong_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_QuaTrinhLuong_postUpdate(input, context) {
+    return true;
+}
+function QuaTrinhLuong_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuaTrinhLuong_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Group_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Group_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Group_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Group_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Group_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Group_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Group_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Group_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Group_postUpdate(input, context) {
+    return true;
+}
+function Group_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Group_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Role_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Role_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Role_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Role_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Role_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Role_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Role_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Role_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Role_postUpdate(input, context) {
+    return true;
+}
+function Role_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Role_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Permission_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Permission_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Permission_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Permission_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Permission_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Permission_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Permission_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Permission_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Permission_postUpdate(input, context) {
+    return true;
+}
+function Permission_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Permission_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChatBotConfig_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ChatBotConfig_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChatBotConfig_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChatBotConfig_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChatBotConfig_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ChatBotConfig_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChatBotConfig_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ChatBotConfig_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ChatBotConfig_postUpdate(input, context) {
+    return true;
+}
+function ChatBotConfig_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ChatBotConfig_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function UserSession_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_UserSession_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function UserSession_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_UserSession_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function UserSession_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function UserSession_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_UserSession_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function UserSession_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_UserSession_postUpdate(input, context) {
+    return true;
+}
+function UserSession_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_UserSession_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Document_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Document_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Document_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Document_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Document_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Document_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Document_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Document_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Document_postUpdate(input, context) {
+    return true;
+}
+function Document_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Document_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function FAQ_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_FAQ_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function FAQ_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_FAQ_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function FAQ_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function FAQ_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_FAQ_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function FAQ_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_FAQ_postUpdate(input, context) {
+    return true;
+}
+function FAQ_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_FAQ_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Prompt_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Prompt_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Prompt_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Prompt_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Prompt_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Prompt_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Prompt_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Prompt_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Prompt_postUpdate(input, context) {
+    return true;
+}
+function Prompt_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Prompt_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Conversation_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Conversation_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Conversation_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Conversation_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Conversation_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Conversation_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Conversation_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Conversation_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Conversation_postUpdate(input, context) {
+    return true;
+}
+function Conversation_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Conversation_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Message_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Message_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Message_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Message_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Message_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Message_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Message_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Message_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Message_postUpdate(input, context) {
+    return true;
+}
+function Message_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Message_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CitationMessage_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_CitationMessage_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CitationMessage_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CitationMessage_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CitationMessage_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function CitationMessage_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CitationMessage_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function CitationMessage_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_CitationMessage_postUpdate(input, context) {
+    return true;
+}
+function CitationMessage_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_CitationMessage_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Topic_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Topic_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Topic_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Topic_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Topic_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Topic_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Topic_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Topic_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Topic_postUpdate(input, context) {
+    return true;
+}
+function Topic_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Topic_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_CapBac_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_CapBac_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_CapBac_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_CapBac_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_CapBac_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_CapBac_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_CapBac_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_CapBac_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_CapBac_postUpdate(input, context) {
+    return true;
+}
+function DM_CapBac_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_CapBac_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChucDanh_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_ChucDanh_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChucDanh_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ChucDanh_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChucDanh_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_ChucDanh_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ChucDanh_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChucDanh_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_ChucDanh_postUpdate(input, context) {
+    return true;
+}
+function DM_ChucDanh_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ChucDanh_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChucVu_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_ChucVu_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChucVu_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ChucVu_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChucVu_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_ChucVu_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ChucVu_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChucVu_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_ChucVu_postUpdate(input, context) {
+    return true;
+}
+function DM_ChucVu_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ChucVu_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_HocHam_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_HocHam_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_HocHam_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_HocHam_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_HocHam_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_HocHam_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_HocHam_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_HocHam_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_HocHam_postUpdate(input, context) {
+    return true;
+}
+function DM_HocHam_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_HocHam_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_HocVi_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_HocVi_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_HocVi_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_HocVi_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_HocVi_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_HocVi_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_HocVi_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_HocVi_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_HocVi_postUpdate(input, context) {
+    return true;
+}
+function DM_HocVi_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_HocVi_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChungChiTinHoc_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_ChungChiTinHoc_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChungChiTinHoc_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ChungChiTinHoc_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChungChiTinHoc_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_ChungChiTinHoc_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ChungChiTinHoc_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ChungChiTinHoc_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_ChungChiTinHoc_postUpdate(input, context) {
+    return true;
+}
+function DM_ChungChiTinHoc_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ChungChiTinHoc_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DanToc_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_DanToc_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DanToc_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_DanToc_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DanToc_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_DanToc_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_DanToc_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DanToc_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_DanToc_postUpdate(input, context) {
+    return true;
+}
+function DM_DanToc_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_DanToc_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DonVi_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_DonVi_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DonVi_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_DonVi_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DonVi_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_DonVi_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_DonVi_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DonVi_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_DonVi_postUpdate(input, context) {
+    return true;
+}
+function DM_DonVi_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_DonVi_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DonViHanhChinh_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_DonViHanhChinh_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DonViHanhChinh_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_DonViHanhChinh_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DonViHanhChinh_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_DonViHanhChinh_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_DonViHanhChinh_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_DonViHanhChinh_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_DonViHanhChinh_postUpdate(input, context) {
+    return true;
+}
+function DM_DonViHanhChinh_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_DonViHanhChinh_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_KhuVuc_DiaLy_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_KhuVuc_DiaLy_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_KhuVuc_DiaLy_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_KhuVuc_DiaLy_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_KhuVuc_DiaLy_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_KhuVuc_DiaLy_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_KhuVuc_DiaLy_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_KhuVuc_DiaLy_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_KhuVuc_DiaLy_postUpdate(input, context) {
+    return true;
+}
+function DM_KhuVuc_DiaLy_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_KhuVuc_DiaLy_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NgoaiNgu_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_NgoaiNgu_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NgoaiNgu_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NgoaiNgu_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NgoaiNgu_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_NgoaiNgu_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NgoaiNgu_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NgoaiNgu_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_NgoaiNgu_postUpdate(input, context) {
+    return true;
+}
+function DM_NgoaiNgu_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NgoaiNgu_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TonGiao_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_TonGiao_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TonGiao_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_TonGiao_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TonGiao_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_TonGiao_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_TonGiao_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TonGiao_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_TonGiao_postUpdate(input, context) {
+    return true;
+}
+function DM_TonGiao_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_TonGiao_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TrinhDoNgoaiNgu_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_TrinhDoNgoaiNgu_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TrinhDoNgoaiNgu_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_TrinhDoNgoaiNgu_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TrinhDoNgoaiNgu_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_TrinhDoNgoaiNgu_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_TrinhDoNgoaiNgu_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TrinhDoNgoaiNgu_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_TrinhDoNgoaiNgu_postUpdate(input, context) {
+    return true;
+}
+function DM_TrinhDoNgoaiNgu_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_TrinhDoNgoaiNgu_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TrinhDoTinHoc_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_TrinhDoTinHoc_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TrinhDoTinHoc_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_TrinhDoTinHoc_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TrinhDoTinHoc_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_TrinhDoTinHoc_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_TrinhDoTinHoc_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_TrinhDoTinHoc_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_TrinhDoTinHoc_postUpdate(input, context) {
+    return true;
+}
+function DM_TrinhDoTinHoc_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_TrinhDoTinHoc_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_GioiTinh_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_GioiTinh_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_GioiTinh_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_GioiTinh_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_GioiTinh_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_GioiTinh_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_GioiTinh_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_GioiTinh_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_GioiTinh_postUpdate(input, context) {
+    return true;
+}
+function DM_GioiTinh_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_GioiTinh_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhanVien_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_NhanVien_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhanVien_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NhanVien_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhanVien_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_NhanVien_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NhanVien_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhanVien_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_NhanVien_postUpdate(input, context) {
+    return true;
+}
+function DM_NhanVien_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NhanVien_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_PhanCap_ChatLuong_TrangThietBi_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_PhanCap_ChatLuong_TrangThietBi_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_PhanCap_ChatLuong_TrangThietBi_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_PhanCap_ChatLuong_TrangThietBi_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_PhanCap_ChatLuong_TrangThietBi_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_PhanCap_ChatLuong_TrangThietBi_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_PhanCap_ChatLuong_TrangThietBi_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_PhanCap_ChatLuong_TrangThietBi_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_PhanCap_ChatLuong_TrangThietBi_postUpdate(input, context) {
+    return true;
+}
+function DM_PhanCap_ChatLuong_TrangThietBi_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_PhanCap_ChatLuong_TrangThietBi_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_PhanLoai_CSKT_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_PhanLoai_CSKT_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_PhanLoai_CSKT_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_PhanLoai_CSKT_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_PhanLoai_CSKT_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_PhanLoai_CSKT_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_PhanLoai_CSKT_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_PhanLoai_CSKT_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_PhanLoai_CSKT_postUpdate(input, context) {
+    return true;
+}
+function DM_PhanLoai_CSKT_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_PhanLoai_CSKT_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhomNguoiDung_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_NhomNguoiDung_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhomNguoiDung_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NhomNguoiDung_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhomNguoiDung_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_NhomNguoiDung_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NhomNguoiDung_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhomNguoiDung_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_NhomNguoiDung_postUpdate(input, context) {
+    return true;
+}
+function DM_NhomNguoiDung_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NhomNguoiDung_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhomUngDung_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_NhomUngDung_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhomUngDung_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NhomUngDung_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhomUngDung_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_NhomUngDung_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NhomUngDung_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_NhomUngDung_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_NhomUngDung_postUpdate(input, context) {
+    return true;
+}
+function DM_NhomUngDung_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_NhomUngDung_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuocGia_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_QuocGia_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuocGia_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_QuocGia_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuocGia_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_QuocGia_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_QuocGia_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuocGia_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_QuocGia_postUpdate(input, context) {
+    return true;
+}
+function DM_QuocGia_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_QuocGia_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_Tinh_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_Tinh_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_Tinh_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_Tinh_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_Tinh_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_Tinh_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_Tinh_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_Tinh_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_Tinh_postUpdate(input, context) {
+    return true;
+}
+function DM_Tinh_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_Tinh_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_Tinh_New_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_Tinh_New_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_Tinh_New_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_Tinh_New_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_Tinh_New_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_Tinh_New_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_Tinh_New_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_Tinh_New_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_Tinh_New_postUpdate(input, context) {
+    return true;
+}
+function DM_Tinh_New_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_Tinh_New_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuanHuyen_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_QuanHuyen_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuanHuyen_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_QuanHuyen_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuanHuyen_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_QuanHuyen_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_QuanHuyen_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_QuanHuyen_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_QuanHuyen_postUpdate(input, context) {
+    return true;
+}
+function DM_QuanHuyen_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_QuanHuyen_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_XaPhuong_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_XaPhuong_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_XaPhuong_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_XaPhuong_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_XaPhuong_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_XaPhuong_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_XaPhuong_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_XaPhuong_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_XaPhuong_postUpdate(input, context) {
+    return true;
+}
+function DM_XaPhuong_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_XaPhuong_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_XaPhuong_New_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_XaPhuong_New_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_XaPhuong_New_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_XaPhuong_New_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_XaPhuong_New_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_XaPhuong_New_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_XaPhuong_New_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_XaPhuong_New_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_XaPhuong_New_postUpdate(input, context) {
+    return true;
+}
+function DM_XaPhuong_New_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_XaPhuong_New_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ViTriCongViec_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DM_ViTriCongViec_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ViTriCongViec_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ViTriCongViec_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ViTriCongViec_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DM_ViTriCongViec_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ViTriCongViec_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DM_ViTriCongViec_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DM_ViTriCongViec_postUpdate(input, context) {
+    return true;
+}
+function DM_ViTriCongViec_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DM_ViTriCongViec_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelay_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_PlanTrainingDelay_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelay_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingDelay_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelay_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function PlanTrainingDelay_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingDelay_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelay_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_PlanTrainingDelay_postUpdate(input, context) {
+    return true;
+}
+function PlanTrainingDelay_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingDelay_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelaySubject_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_PlanTrainingDelaySubject_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelaySubject_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingDelaySubject_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelaySubject_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function PlanTrainingDelaySubject_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingDelaySubject_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingDelaySubject_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_PlanTrainingDelaySubject_postUpdate(input, context) {
+    return true;
+}
+function PlanTrainingDelaySubject_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingDelaySubject_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTraining_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_PlanTraining_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTraining_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTraining_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTraining_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function PlanTraining_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTraining_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTraining_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_PlanTraining_postUpdate(input, context) {
+    return true;
+}
+function PlanTraining_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTraining_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingSubject_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_PlanTrainingSubject_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingSubject_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingSubject_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingSubject_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function PlanTrainingSubject_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingSubject_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function PlanTrainingSubject_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_PlanTrainingSubject_postUpdate(input, context) {
+    return true;
+}
+function PlanTrainingSubject_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_PlanTrainingSubject_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentScoreConvert_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_StudentScoreConvert_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentScoreConvert_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentScoreConvert_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentScoreConvert_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function StudentScoreConvert_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentScoreConvert_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentScoreConvert_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_StudentScoreConvert_postUpdate(input, context) {
+    return true;
+}
+function StudentScoreConvert_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentScoreConvert_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectScoreConvert_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_SubjectScoreConvert_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectScoreConvert_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectScoreConvert_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectScoreConvert_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function SubjectScoreConvert_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectScoreConvert_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectScoreConvert_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SubjectScoreConvert_postUpdate(input, context) {
+    return true;
+}
+function SubjectScoreConvert_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectScoreConvert_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4195,6 +9026,84 @@ function StudentSubjectScore_delete(context, db) {
     return { OR: [] };
 }
 function $check_StudentSubjectScore_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentSubjectScoreHistory_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_StudentSubjectScoreHistory_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentSubjectScoreHistory_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentSubjectScoreHistory_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentSubjectScoreHistory_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function StudentSubjectScoreHistory_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentSubjectScoreHistory_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentSubjectScoreHistory_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_StudentSubjectScoreHistory_postUpdate(input, context) {
+    return true;
+}
+function StudentSubjectScoreHistory_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentSubjectScoreHistory_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -4741,6 +9650,84 @@ function Milestone_delete(context, db) {
     return { OR: [] };
 }
 function $check_Milestone_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingLanguage_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_TrainingLanguage_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingLanguage_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TrainingLanguage_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingLanguage_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function TrainingLanguage_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TrainingLanguage_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TrainingLanguage_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_TrainingLanguage_postUpdate(input, context) {
+    return true;
+}
+function TrainingLanguage_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TrainingLanguage_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -5365,6 +10352,84 @@ function SubjectVersion_delete(context, db) {
     return { OR: [] };
 }
 function $check_SubjectVersion_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectVersionHistory_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_SubjectVersionHistory_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectVersionHistory_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectVersionHistory_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectVersionHistory_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function SubjectVersionHistory_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectVersionHistory_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function SubjectVersionHistory_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_SubjectVersionHistory_postUpdate(input, context) {
+    return true;
+}
+function SubjectVersionHistory_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_SubjectVersionHistory_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7790,12 +12855,12 @@ function $check_Notification_delete(input, context) {
     }
     return false;
 }
-function Group_read(context, db) {
+function DocumentFile_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_Group_read(input, context) {
+function $check_DocumentFile_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -7809,7 +12874,7 @@ function $check_Group_read(input, context) {
     }
     return false;
 }
-function Group_create(context, db) {
+function DocumentFile_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7817,7 +12882,7 @@ function Group_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_Group_create(input, context) {
+function $check_DocumentFile_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7825,12 +12890,12 @@ function $check_Group_create(input, context) {
     }
     return false;
 }
-function Group_create_input(input, context) {
+function DocumentFile_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function Group_update(context, db) {
+function DocumentFile_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7838,7 +12903,7 @@ function Group_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_Group_update(input, context) {
+function $check_DocumentFile_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7846,13 +12911,13 @@ function $check_Group_update(input, context) {
     }
     return false;
 }
-function Group_postUpdate(context, db) {
+function DocumentFile_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Group_postUpdate(input, context) {
+function $check_DocumentFile_postUpdate(input, context) {
     return true;
 }
-function Group_delete(context, db) {
+function DocumentFile_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7860,7 +12925,7 @@ function Group_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_Group_delete(input, context) {
+function $check_DocumentFile_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7868,12 +12933,12 @@ function $check_Group_delete(input, context) {
     }
     return false;
 }
-function Role_read(context, db) {
+function AcademicActionConfig_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_Role_read(input, context) {
+function $check_AcademicActionConfig_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -7887,7 +12952,7 @@ function $check_Role_read(input, context) {
     }
     return false;
 }
-function Role_create(context, db) {
+function AcademicActionConfig_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7895,7 +12960,7 @@ function Role_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_Role_create(input, context) {
+function $check_AcademicActionConfig_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7903,12 +12968,12 @@ function $check_Role_create(input, context) {
     }
     return false;
 }
-function Role_create_input(input, context) {
+function AcademicActionConfig_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function Role_update(context, db) {
+function AcademicActionConfig_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7916,7 +12981,7 @@ function Role_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_Role_update(input, context) {
+function $check_AcademicActionConfig_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7924,13 +12989,13 @@ function $check_Role_update(input, context) {
     }
     return false;
 }
-function Role_postUpdate(context, db) {
+function AcademicActionConfig_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Role_postUpdate(input, context) {
+function $check_AcademicActionConfig_postUpdate(input, context) {
     return true;
 }
-function Role_delete(context, db) {
+function AcademicActionConfig_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7938,7 +13003,7 @@ function Role_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_Role_delete(input, context) {
+function $check_AcademicActionConfig_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7946,12 +13011,12 @@ function $check_Role_delete(input, context) {
     }
     return false;
 }
-function Permission_read(context, db) {
+function AcademicActionRuleSet_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_Permission_read(input, context) {
+function $check_AcademicActionRuleSet_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -7965,7 +13030,7 @@ function $check_Permission_read(input, context) {
     }
     return false;
 }
-function Permission_create(context, db) {
+function AcademicActionRuleSet_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7973,7 +13038,7 @@ function Permission_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_Permission_create(input, context) {
+function $check_AcademicActionRuleSet_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7981,12 +13046,12 @@ function $check_Permission_create(input, context) {
     }
     return false;
 }
-function Permission_create_input(input, context) {
+function AcademicActionRuleSet_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function Permission_update(context, db) {
+function AcademicActionRuleSet_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -7994,7 +13059,7 @@ function Permission_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_Permission_update(input, context) {
+function $check_AcademicActionRuleSet_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8002,13 +13067,13 @@ function $check_Permission_update(input, context) {
     }
     return false;
 }
-function Permission_postUpdate(context, db) {
+function AcademicActionRuleSet_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Permission_postUpdate(input, context) {
+function $check_AcademicActionRuleSet_postUpdate(input, context) {
     return true;
 }
-function Permission_delete(context, db) {
+function AcademicActionRuleSet_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8016,7 +13081,7 @@ function Permission_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_Permission_delete(input, context) {
+function $check_AcademicActionRuleSet_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8024,12 +13089,12 @@ function $check_Permission_delete(input, context) {
     }
     return false;
 }
-function ChatBotConfig_read(context, db) {
+function AcademicActionCondition_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_ChatBotConfig_read(input, context) {
+function $check_AcademicActionCondition_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -8043,7 +13108,7 @@ function $check_ChatBotConfig_read(input, context) {
     }
     return false;
 }
-function ChatBotConfig_create(context, db) {
+function AcademicActionCondition_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8051,7 +13116,7 @@ function ChatBotConfig_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_ChatBotConfig_create(input, context) {
+function $check_AcademicActionCondition_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8059,12 +13124,12 @@ function $check_ChatBotConfig_create(input, context) {
     }
     return false;
 }
-function ChatBotConfig_create_input(input, context) {
+function AcademicActionCondition_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function ChatBotConfig_update(context, db) {
+function AcademicActionCondition_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8072,7 +13137,7 @@ function ChatBotConfig_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_ChatBotConfig_update(input, context) {
+function $check_AcademicActionCondition_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8080,13 +13145,13 @@ function $check_ChatBotConfig_update(input, context) {
     }
     return false;
 }
-function ChatBotConfig_postUpdate(context, db) {
+function AcademicActionCondition_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_ChatBotConfig_postUpdate(input, context) {
+function $check_AcademicActionCondition_postUpdate(input, context) {
     return true;
 }
-function ChatBotConfig_delete(context, db) {
+function AcademicActionCondition_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8094,7 +13159,7 @@ function ChatBotConfig_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_ChatBotConfig_delete(input, context) {
+function $check_AcademicActionCondition_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8102,12 +13167,12 @@ function $check_ChatBotConfig_delete(input, context) {
     }
     return false;
 }
-function UserSession_read(context, db) {
+function StudentAcademicDecision_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_UserSession_read(input, context) {
+function $check_StudentAcademicDecision_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -8121,7 +13186,7 @@ function $check_UserSession_read(input, context) {
     }
     return false;
 }
-function UserSession_create(context, db) {
+function StudentAcademicDecision_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8129,7 +13194,7 @@ function UserSession_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_UserSession_create(input, context) {
+function $check_StudentAcademicDecision_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8137,12 +13202,12 @@ function $check_UserSession_create(input, context) {
     }
     return false;
 }
-function UserSession_create_input(input, context) {
+function StudentAcademicDecision_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function UserSession_update(context, db) {
+function StudentAcademicDecision_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8150,7 +13215,7 @@ function UserSession_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_UserSession_update(input, context) {
+function $check_StudentAcademicDecision_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8158,13 +13223,13 @@ function $check_UserSession_update(input, context) {
     }
     return false;
 }
-function UserSession_postUpdate(context, db) {
+function StudentAcademicDecision_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_UserSession_postUpdate(input, context) {
+function $check_StudentAcademicDecision_postUpdate(input, context) {
     return true;
 }
-function UserSession_delete(context, db) {
+function StudentAcademicDecision_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8172,7 +13237,7 @@ function UserSession_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_UserSession_delete(input, context) {
+function $check_StudentAcademicDecision_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8180,12 +13245,12 @@ function $check_UserSession_delete(input, context) {
     }
     return false;
 }
-function Document_read(context, db) {
+function TrainingScoreSession_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_Document_read(input, context) {
+function $check_TrainingScoreSession_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -8199,7 +13264,7 @@ function $check_Document_read(input, context) {
     }
     return false;
 }
-function Document_create(context, db) {
+function TrainingScoreSession_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8207,7 +13272,7 @@ function Document_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_Document_create(input, context) {
+function $check_TrainingScoreSession_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8215,12 +13280,12 @@ function $check_Document_create(input, context) {
     }
     return false;
 }
-function Document_create_input(input, context) {
+function TrainingScoreSession_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function Document_update(context, db) {
+function TrainingScoreSession_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8228,7 +13293,7 @@ function Document_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_Document_update(input, context) {
+function $check_TrainingScoreSession_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8236,13 +13301,13 @@ function $check_Document_update(input, context) {
     }
     return false;
 }
-function Document_postUpdate(context, db) {
+function TrainingScoreSession_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Document_postUpdate(input, context) {
+function $check_TrainingScoreSession_postUpdate(input, context) {
     return true;
 }
-function Document_delete(context, db) {
+function TrainingScoreSession_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8250,7 +13315,7 @@ function Document_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_Document_delete(input, context) {
+function $check_TrainingScoreSession_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8258,12 +13323,12 @@ function $check_Document_delete(input, context) {
     }
     return false;
 }
-function FAQ_read(context, db) {
+function StudentTrainingScore_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
-function $check_FAQ_read(input, context) {
+function $check_StudentTrainingScore_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
@@ -8277,7 +13342,7 @@ function $check_FAQ_read(input, context) {
     }
     return false;
 }
-function FAQ_create(context, db) {
+function StudentTrainingScore_create(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8285,7 +13350,7 @@ function FAQ_create(context, db) {
     }
     return { OR: [] };
 }
-function $check_FAQ_create(input, context) {
+function $check_StudentTrainingScore_create(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8293,90 +13358,12 @@ function $check_FAQ_create(input, context) {
     }
     return false;
 }
-function FAQ_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function FAQ_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_FAQ_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function FAQ_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_FAQ_postUpdate(input, context) {
-    return true;
-}
-function FAQ_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_FAQ_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Prompt_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Prompt_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Prompt_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Prompt_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Prompt_create_input(input, context) {
+function StudentTrainingScore_create_input(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     return (user != null);
 }
-function Prompt_update(context, db) {
+function StudentTrainingScore_update(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8384,7 +13371,7 @@ function Prompt_update(context, db) {
     }
     return { OR: [] };
 }
-function $check_Prompt_update(input, context) {
+function $check_StudentTrainingScore_update(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8392,13 +13379,13 @@ function $check_Prompt_update(input, context) {
     }
     return false;
 }
-function Prompt_postUpdate(context, db) {
+function StudentTrainingScore_postUpdate(context, db) {
     return { AND: [] };
 }
-function $check_Prompt_postUpdate(input, context) {
+function $check_StudentTrainingScore_postUpdate(input, context) {
     return true;
 }
-function Prompt_delete(context, db) {
+function StudentTrainingScore_delete(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -8406,4297 +13393,7 @@ function Prompt_delete(context, db) {
     }
     return { OR: [] };
 }
-function $check_Prompt_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Conversation_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Conversation_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Conversation_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Conversation_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Conversation_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function Conversation_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Conversation_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Conversation_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_Conversation_postUpdate(input, context) {
-    return true;
-}
-function Conversation_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Conversation_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Message_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Message_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Message_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Message_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Message_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function Message_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Message_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Message_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_Message_postUpdate(input, context) {
-    return true;
-}
-function Message_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Message_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Topic_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Topic_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Topic_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Topic_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Topic_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function Topic_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Topic_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Topic_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_Topic_postUpdate(input, context) {
-    return true;
-}
-function Topic_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Topic_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_CapBac_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_CapBac_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_CapBac_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_CapBac_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_CapBac_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_CapBac_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_CapBac_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_CapBac_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_CapBac_postUpdate(input, context) {
-    return true;
-}
-function DM_CapBac_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_CapBac_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChucDanh_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_ChucDanh_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChucDanh_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ChucDanh_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChucDanh_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_ChucDanh_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ChucDanh_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChucDanh_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_ChucDanh_postUpdate(input, context) {
-    return true;
-}
-function DM_ChucDanh_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ChucDanh_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChucVu_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_ChucVu_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChucVu_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ChucVu_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChucVu_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_ChucVu_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ChucVu_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChucVu_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_ChucVu_postUpdate(input, context) {
-    return true;
-}
-function DM_ChucVu_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ChucVu_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_HocHam_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_HocHam_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_HocHam_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_HocHam_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_HocHam_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_HocHam_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_HocHam_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_HocHam_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_HocHam_postUpdate(input, context) {
-    return true;
-}
-function DM_HocHam_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_HocHam_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_HocVi_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_HocVi_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_HocVi_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_HocVi_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_HocVi_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_HocVi_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_HocVi_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_HocVi_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_HocVi_postUpdate(input, context) {
-    return true;
-}
-function DM_HocVi_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_HocVi_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChungChiTinHoc_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_ChungChiTinHoc_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChungChiTinHoc_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ChungChiTinHoc_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChungChiTinHoc_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_ChungChiTinHoc_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ChungChiTinHoc_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ChungChiTinHoc_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_ChungChiTinHoc_postUpdate(input, context) {
-    return true;
-}
-function DM_ChungChiTinHoc_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ChungChiTinHoc_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DanToc_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_DanToc_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DanToc_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_DanToc_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DanToc_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_DanToc_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_DanToc_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DanToc_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_DanToc_postUpdate(input, context) {
-    return true;
-}
-function DM_DanToc_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_DanToc_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DonVi_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_DonVi_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DonVi_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_DonVi_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DonVi_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_DonVi_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_DonVi_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DonVi_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_DonVi_postUpdate(input, context) {
-    return true;
-}
-function DM_DonVi_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_DonVi_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DonViHanhChinh_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_DonViHanhChinh_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DonViHanhChinh_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_DonViHanhChinh_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DonViHanhChinh_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_DonViHanhChinh_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_DonViHanhChinh_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_DonViHanhChinh_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_DonViHanhChinh_postUpdate(input, context) {
-    return true;
-}
-function DM_DonViHanhChinh_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_DonViHanhChinh_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_KhuVuc_DiaLy_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_KhuVuc_DiaLy_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_KhuVuc_DiaLy_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_KhuVuc_DiaLy_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_KhuVuc_DiaLy_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_KhuVuc_DiaLy_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_KhuVuc_DiaLy_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_KhuVuc_DiaLy_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_KhuVuc_DiaLy_postUpdate(input, context) {
-    return true;
-}
-function DM_KhuVuc_DiaLy_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_KhuVuc_DiaLy_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NgoaiNgu_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_NgoaiNgu_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NgoaiNgu_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NgoaiNgu_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NgoaiNgu_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_NgoaiNgu_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NgoaiNgu_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NgoaiNgu_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_NgoaiNgu_postUpdate(input, context) {
-    return true;
-}
-function DM_NgoaiNgu_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NgoaiNgu_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TonGiao_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_TonGiao_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TonGiao_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_TonGiao_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TonGiao_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_TonGiao_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_TonGiao_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TonGiao_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_TonGiao_postUpdate(input, context) {
-    return true;
-}
-function DM_TonGiao_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_TonGiao_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TrinhDoNgoaiNgu_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_TrinhDoNgoaiNgu_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TrinhDoNgoaiNgu_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_TrinhDoNgoaiNgu_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TrinhDoNgoaiNgu_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_TrinhDoNgoaiNgu_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_TrinhDoNgoaiNgu_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TrinhDoNgoaiNgu_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_TrinhDoNgoaiNgu_postUpdate(input, context) {
-    return true;
-}
-function DM_TrinhDoNgoaiNgu_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_TrinhDoNgoaiNgu_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TrinhDoTinHoc_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_TrinhDoTinHoc_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TrinhDoTinHoc_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_TrinhDoTinHoc_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TrinhDoTinHoc_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_TrinhDoTinHoc_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_TrinhDoTinHoc_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_TrinhDoTinHoc_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_TrinhDoTinHoc_postUpdate(input, context) {
-    return true;
-}
-function DM_TrinhDoTinHoc_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_TrinhDoTinHoc_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_GioiTinh_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_GioiTinh_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_GioiTinh_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_GioiTinh_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_GioiTinh_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_GioiTinh_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_GioiTinh_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_GioiTinh_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_GioiTinh_postUpdate(input, context) {
-    return true;
-}
-function DM_GioiTinh_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_GioiTinh_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhanVien_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_NhanVien_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhanVien_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NhanVien_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhanVien_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_NhanVien_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NhanVien_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhanVien_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_NhanVien_postUpdate(input, context) {
-    return true;
-}
-function DM_NhanVien_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NhanVien_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_PhanCap_ChatLuong_TrangThietBi_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_PhanCap_ChatLuong_TrangThietBi_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_PhanCap_ChatLuong_TrangThietBi_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_PhanCap_ChatLuong_TrangThietBi_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_PhanCap_ChatLuong_TrangThietBi_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_PhanCap_ChatLuong_TrangThietBi_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_PhanCap_ChatLuong_TrangThietBi_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_PhanCap_ChatLuong_TrangThietBi_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_PhanCap_ChatLuong_TrangThietBi_postUpdate(input, context) {
-    return true;
-}
-function DM_PhanCap_ChatLuong_TrangThietBi_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_PhanCap_ChatLuong_TrangThietBi_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_PhanLoai_CSKT_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_PhanLoai_CSKT_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_PhanLoai_CSKT_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_PhanLoai_CSKT_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_PhanLoai_CSKT_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_PhanLoai_CSKT_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_PhanLoai_CSKT_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_PhanLoai_CSKT_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_PhanLoai_CSKT_postUpdate(input, context) {
-    return true;
-}
-function DM_PhanLoai_CSKT_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_PhanLoai_CSKT_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhomNguoiDung_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_NhomNguoiDung_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhomNguoiDung_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NhomNguoiDung_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhomNguoiDung_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_NhomNguoiDung_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NhomNguoiDung_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhomNguoiDung_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_NhomNguoiDung_postUpdate(input, context) {
-    return true;
-}
-function DM_NhomNguoiDung_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NhomNguoiDung_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhomUngDung_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_NhomUngDung_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhomUngDung_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NhomUngDung_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhomUngDung_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_NhomUngDung_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NhomUngDung_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_NhomUngDung_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_NhomUngDung_postUpdate(input, context) {
-    return true;
-}
-function DM_NhomUngDung_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_NhomUngDung_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_QuocGia_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_QuocGia_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_QuocGia_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_QuocGia_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_QuocGia_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_QuocGia_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_QuocGia_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_QuocGia_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_QuocGia_postUpdate(input, context) {
-    return true;
-}
-function DM_QuocGia_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_QuocGia_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_Tinh_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_Tinh_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_Tinh_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_Tinh_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_Tinh_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_Tinh_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_Tinh_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_Tinh_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_Tinh_postUpdate(input, context) {
-    return true;
-}
-function DM_Tinh_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_Tinh_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_Tinh_New_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_Tinh_New_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_Tinh_New_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_Tinh_New_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_Tinh_New_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_Tinh_New_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_Tinh_New_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_Tinh_New_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_Tinh_New_postUpdate(input, context) {
-    return true;
-}
-function DM_Tinh_New_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_Tinh_New_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_QuanHuyen_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_QuanHuyen_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_QuanHuyen_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_QuanHuyen_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_QuanHuyen_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_QuanHuyen_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_QuanHuyen_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_QuanHuyen_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_QuanHuyen_postUpdate(input, context) {
-    return true;
-}
-function DM_QuanHuyen_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_QuanHuyen_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_XaPhuong_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_XaPhuong_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_XaPhuong_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_XaPhuong_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_XaPhuong_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_XaPhuong_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_XaPhuong_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_XaPhuong_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_XaPhuong_postUpdate(input, context) {
-    return true;
-}
-function DM_XaPhuong_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_XaPhuong_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_XaPhuong_New_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_XaPhuong_New_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_XaPhuong_New_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_XaPhuong_New_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_XaPhuong_New_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_XaPhuong_New_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_XaPhuong_New_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_XaPhuong_New_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_XaPhuong_New_postUpdate(input, context) {
-    return true;
-}
-function DM_XaPhuong_New_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_XaPhuong_New_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ViTriCongViec_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { bDeleted: { equals: true } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DM_ViTriCongViec_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.bDeleted) == true)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ViTriCongViec_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ViTriCongViec_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ViTriCongViec_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DM_ViTriCongViec_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ViTriCongViec_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DM_ViTriCongViec_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DM_ViTriCongViec_postUpdate(input, context) {
-    return true;
-}
-function DM_ViTriCongViec_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DM_ViTriCongViec_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function UserProfile_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_UserProfile_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function UserProfile_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_UserProfile_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function UserProfile_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function UserProfile_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_UserProfile_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function UserProfile_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_UserProfile_postUpdate(input, context) {
-    return true;
-}
-function UserProfile_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_UserProfile_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function HocHam_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_HocHam_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function HocHam_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_HocHam_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function HocHam_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function HocHam_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_HocHam_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function HocHam_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_HocHam_postUpdate(input, context) {
-    return true;
-}
-function HocHam_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_HocHam_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function HocVi_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_HocVi_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function HocVi_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_HocVi_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function HocVi_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function HocVi_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_HocVi_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function HocVi_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_HocVi_postUpdate(input, context) {
-    return true;
-}
-function HocVi_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_HocVi_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Relative_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Relative_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Relative_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Relative_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Relative_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function Relative_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Relative_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Relative_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_Relative_postUpdate(input, context) {
-    return true;
-}
-function Relative_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Relative_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrinhDoLyLuanChinhTri_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_TrinhDoLyLuanChinhTri_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrinhDoLyLuanChinhTri_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TrinhDoLyLuanChinhTri_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrinhDoLyLuanChinhTri_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function TrinhDoLyLuanChinhTri_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TrinhDoLyLuanChinhTri_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrinhDoLyLuanChinhTri_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_TrinhDoLyLuanChinhTri_postUpdate(input, context) {
-    return true;
-}
-function TrinhDoLyLuanChinhTri_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TrinhDoLyLuanChinhTri_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrinhDoQuanLyNhaNuoc_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_TrinhDoQuanLyNhaNuoc_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrinhDoQuanLyNhaNuoc_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TrinhDoQuanLyNhaNuoc_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrinhDoQuanLyNhaNuoc_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function TrinhDoQuanLyNhaNuoc_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TrinhDoQuanLyNhaNuoc_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrinhDoQuanLyNhaNuoc_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_TrinhDoQuanLyNhaNuoc_postUpdate(input, context) {
-    return true;
-}
-function TrinhDoQuanLyNhaNuoc_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TrinhDoQuanLyNhaNuoc_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NgoaiNgu_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_NgoaiNgu_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NgoaiNgu_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NgoaiNgu_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NgoaiNgu_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function NgoaiNgu_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NgoaiNgu_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NgoaiNgu_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_NgoaiNgu_postUpdate(input, context) {
-    return true;
-}
-function NgoaiNgu_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NgoaiNgu_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TinHoc_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_TinHoc_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TinHoc_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TinHoc_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TinHoc_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function TinHoc_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TinHoc_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TinHoc_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_TinHoc_postUpdate(input, context) {
-    return true;
-}
-function TinHoc_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TinHoc_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function BoiDuongQuocPhongAnNinh_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_BoiDuongQuocPhongAnNinh_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function BoiDuongQuocPhongAnNinh_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_BoiDuongQuocPhongAnNinh_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function BoiDuongQuocPhongAnNinh_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function BoiDuongQuocPhongAnNinh_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_BoiDuongQuocPhongAnNinh_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function BoiDuongQuocPhongAnNinh_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_BoiDuongQuocPhongAnNinh_postUpdate(input, context) {
-    return true;
-}
-function BoiDuongQuocPhongAnNinh_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_BoiDuongQuocPhongAnNinh_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CapBac_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_CapBac_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CapBac_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_CapBac_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CapBac_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function CapBac_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_CapBac_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function CapBac_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_CapBac_postUpdate(input, context) {
-    return true;
-}
-function CapBac_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_CapBac_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCongTac_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_QuaTrinhCongTac_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCongTac_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhCongTac_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCongTac_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function QuaTrinhCongTac_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhCongTac_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCongTac_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_QuaTrinhCongTac_postUpdate(input, context) {
-    return true;
-}
-function QuaTrinhCongTac_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhCongTac_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCuDiCongTac_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_QuaTrinhCuDiCongTac_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCuDiCongTac_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhCuDiCongTac_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCuDiCongTac_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function QuaTrinhCuDiCongTac_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhCuDiCongTac_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCuDiCongTac_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_QuaTrinhCuDiCongTac_postUpdate(input, context) {
-    return true;
-}
-function QuaTrinhCuDiCongTac_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhCuDiCongTac_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCuDiDaoTao_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_QuaTrinhCuDiDaoTao_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCuDiDaoTao_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhCuDiDaoTao_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCuDiDaoTao_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function QuaTrinhCuDiDaoTao_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhCuDiDaoTao_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhCuDiDaoTao_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_QuaTrinhCuDiDaoTao_postUpdate(input, context) {
-    return true;
-}
-function QuaTrinhCuDiDaoTao_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhCuDiDaoTao_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KhenThuong_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_KhenThuong_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KhenThuong_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KhenThuong_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KhenThuong_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function KhenThuong_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KhenThuong_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KhenThuong_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_KhenThuong_postUpdate(input, context) {
-    return true;
-}
-function KhenThuong_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KhenThuong_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KyLuat_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_KyLuat_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KyLuat_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KyLuat_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KyLuat_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function KyLuat_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KyLuat_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KyLuat_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_KyLuat_postUpdate(input, context) {
-    return true;
-}
-function KyLuat_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KyLuat_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DoiTuongChinhSach_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DoiTuongChinhSach_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DoiTuongChinhSach_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DoiTuongChinhSach_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DoiTuongChinhSach_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DoiTuongChinhSach_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DoiTuongChinhSach_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DoiTuongChinhSach_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DoiTuongChinhSach_postUpdate(input, context) {
-    return true;
-}
-function DoiTuongChinhSach_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DoiTuongChinhSach_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KeKhaiTaiSan_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_KeKhaiTaiSan_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KeKhaiTaiSan_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KeKhaiTaiSan_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KeKhaiTaiSan_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function KeKhaiTaiSan_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KeKhaiTaiSan_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function KeKhaiTaiSan_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_KeKhaiTaiSan_postUpdate(input, context) {
-    return true;
-}
-function KeKhaiTaiSan_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_KeKhaiTaiSan_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TiengDanToc_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_TiengDanToc_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TiengDanToc_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TiengDanToc_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TiengDanToc_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function TiengDanToc_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TiengDanToc_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TiengDanToc_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_TiengDanToc_postUpdate(input, context) {
-    return true;
-}
-function TiengDanToc_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TiengDanToc_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ChienDau_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_ChienDau_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ChienDau_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ChienDau_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ChienDau_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function ChienDau_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ChienDau_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ChienDau_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ChienDau_postUpdate(input, context) {
-    return true;
-}
-function ChienDau_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ChienDau_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NuocNgoai_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_NuocNgoai_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NuocNgoai_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NuocNgoai_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NuocNgoai_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function NuocNgoai_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NuocNgoai_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NuocNgoai_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_NuocNgoai_postUpdate(input, context) {
-    return true;
-}
-function NuocNgoai_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NuocNgoai_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ThuongTat_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_ThuongTat_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ThuongTat_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ThuongTat_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ThuongTat_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function ThuongTat_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ThuongTat_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ThuongTat_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ThuongTat_postUpdate(input, context) {
-    return true;
-}
-function ThuongTat_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ThuongTat_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DanhHieu_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DanhHieu_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DanhHieu_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DanhHieu_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DanhHieu_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DanhHieu_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DanhHieu_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DanhHieu_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DanhHieu_postUpdate(input, context) {
-    return true;
-}
-function DanhHieu_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DanhHieu_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhHocTap_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_QuaTrinhHocTap_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhHocTap_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhHocTap_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhHocTap_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function QuaTrinhHocTap_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhHocTap_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhHocTap_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_QuaTrinhHocTap_postUpdate(input, context) {
-    return true;
-}
-function QuaTrinhHocTap_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhHocTap_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ToChucXaHoi_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_ToChucXaHoi_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ToChucXaHoi_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ToChucXaHoi_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ToChucXaHoi_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function ToChucXaHoi_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ToChucXaHoi_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ToChucXaHoi_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ToChucXaHoi_postUpdate(input, context) {
-    return true;
-}
-function ToChucXaHoi_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ToChucXaHoi_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhLuong_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_QuaTrinhLuong_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhLuong_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhLuong_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhLuong_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function QuaTrinhLuong_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhLuong_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function QuaTrinhLuong_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_QuaTrinhLuong_postUpdate(input, context) {
-    return true;
-}
-function QuaTrinhLuong_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_QuaTrinhLuong_delete(input, context) {
+function $check_StudentTrainingScore_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -14257,1800 +14954,6 @@ function SupervisorPaymentRecord_delete(context, db) {
     return { OR: [] };
 }
 function $check_SupervisorPaymentRecord_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DocumentFile_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DocumentFile_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DocumentFile_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DocumentFile_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DocumentFile_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DocumentFile_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DocumentFile_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DocumentFile_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DocumentFile_postUpdate(input, context) {
-    return true;
-}
-function DocumentFile_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DocumentFile_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionConfig_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_AcademicActionConfig_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionConfig_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicActionConfig_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionConfig_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function AcademicActionConfig_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicActionConfig_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionConfig_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_AcademicActionConfig_postUpdate(input, context) {
-    return true;
-}
-function AcademicActionConfig_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicActionConfig_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionRuleSet_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_AcademicActionRuleSet_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionRuleSet_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicActionRuleSet_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionRuleSet_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function AcademicActionRuleSet_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicActionRuleSet_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionRuleSet_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_AcademicActionRuleSet_postUpdate(input, context) {
-    return true;
-}
-function AcademicActionRuleSet_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicActionRuleSet_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionCondition_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_AcademicActionCondition_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionCondition_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicActionCondition_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionCondition_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function AcademicActionCondition_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicActionCondition_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicActionCondition_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_AcademicActionCondition_postUpdate(input, context) {
-    return true;
-}
-function AcademicActionCondition_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicActionCondition_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentAcademicDecision_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_StudentAcademicDecision_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentAcademicDecision_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_StudentAcademicDecision_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentAcademicDecision_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function StudentAcademicDecision_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_StudentAcademicDecision_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentAcademicDecision_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_StudentAcademicDecision_postUpdate(input, context) {
-    return true;
-}
-function StudentAcademicDecision_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_StudentAcademicDecision_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrainingScoreSession_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_TrainingScoreSession_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrainingScoreSession_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TrainingScoreSession_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrainingScoreSession_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function TrainingScoreSession_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TrainingScoreSession_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function TrainingScoreSession_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_TrainingScoreSession_postUpdate(input, context) {
-    return true;
-}
-function TrainingScoreSession_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_TrainingScoreSession_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentTrainingScore_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_StudentTrainingScore_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentTrainingScore_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_StudentTrainingScore_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentTrainingScore_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function StudentTrainingScore_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_StudentTrainingScore_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentTrainingScore_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_StudentTrainingScore_postUpdate(input, context) {
-    return true;
-}
-function StudentTrainingScore_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_StudentTrainingScore_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Scholarship_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Scholarship_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Scholarship_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Scholarship_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Scholarship_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function Scholarship_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Scholarship_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Scholarship_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_Scholarship_postUpdate(input, context) {
-    return true;
-}
-function Scholarship_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Scholarship_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScholarshipCriteria_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_ScholarshipCriteria_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScholarshipCriteria_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ScholarshipCriteria_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScholarshipCriteria_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function ScholarshipCriteria_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ScholarshipCriteria_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScholarshipCriteria_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ScholarshipCriteria_postUpdate(input, context) {
-    return true;
-}
-function ScholarshipCriteria_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ScholarshipCriteria_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScholarshipAward_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_ScholarshipAward_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScholarshipAward_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ScholarshipAward_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScholarshipAward_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function ScholarshipAward_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ScholarshipAward_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ScholarshipAward_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ScholarshipAward_postUpdate(input, context) {
-    return true;
-}
-function ScholarshipAward_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ScholarshipAward_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationSession_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_GraduationSession_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationSession_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationSession_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationSession_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function GraduationSession_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationSession_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationSession_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_GraduationSession_postUpdate(input, context) {
-    return true;
-}
-function GraduationSession_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationSession_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentGraduationApplication_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_StudentGraduationApplication_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentGraduationApplication_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_StudentGraduationApplication_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentGraduationApplication_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function StudentGraduationApplication_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_StudentGraduationApplication_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function StudentGraduationApplication_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_StudentGraduationApplication_postUpdate(input, context) {
-    return true;
-}
-function StudentGraduationApplication_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_StudentGraduationApplication_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ApplicationCheckResult_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_ApplicationCheckResult_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ApplicationCheckResult_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ApplicationCheckResult_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ApplicationCheckResult_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function ApplicationCheckResult_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ApplicationCheckResult_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ApplicationCheckResult_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ApplicationCheckResult_postUpdate(input, context) {
-    return true;
-}
-function ApplicationCheckResult_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ApplicationCheckResult_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationDecision_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_GraduationDecision_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationDecision_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationDecision_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationDecision_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function GraduationDecision_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationDecision_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationDecision_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_GraduationDecision_postUpdate(input, context) {
-    return true;
-}
-function GraduationDecision_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationDecision_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicRankingConvert_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_AcademicRankingConvert_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicRankingConvert_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicRankingConvert_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicRankingConvert_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function AcademicRankingConvert_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicRankingConvert_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicRankingConvert_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_AcademicRankingConvert_postUpdate(input, context) {
-    return true;
-}
-function AcademicRankingConvert_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicRankingConvert_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationRankDowngradeRule_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_GraduationRankDowngradeRule_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationRankDowngradeRule_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationRankDowngradeRule_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationRankDowngradeRule_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function GraduationRankDowngradeRule_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationRankDowngradeRule_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationRankDowngradeRule_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_GraduationRankDowngradeRule_postUpdate(input, context) {
-    return true;
-}
-function GraduationRankDowngradeRule_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationRankDowngradeRule_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationRankDowngradeCondition_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_GraduationRankDowngradeCondition_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationRankDowngradeCondition_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationRankDowngradeCondition_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationRankDowngradeCondition_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function GraduationRankDowngradeCondition_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationRankDowngradeCondition_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function GraduationRankDowngradeCondition_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_GraduationRankDowngradeCondition_postUpdate(input, context) {
-    return true;
-}
-function GraduationRankDowngradeCondition_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_GraduationRankDowngradeCondition_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function RankingCondition_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_RankingCondition_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function RankingCondition_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_RankingCondition_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function RankingCondition_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function RankingCondition_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_RankingCondition_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function RankingCondition_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_RankingCondition_postUpdate(input, context) {
-    return true;
-}
-function RankingCondition_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_RankingCondition_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DiplomaVerificationApplication_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DiplomaVerificationApplication_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DiplomaVerificationApplication_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DiplomaVerificationApplication_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DiplomaVerificationApplication_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DiplomaVerificationApplication_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DiplomaVerificationApplication_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DiplomaVerificationApplication_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DiplomaVerificationApplication_postUpdate(input, context) {
-    return true;
-}
-function DiplomaVerificationApplication_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DiplomaVerificationApplication_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Note_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Note_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Note_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Note_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Note_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function Note_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Note_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Note_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_Note_postUpdate(input, context) {
-    return true;
-}
-function Note_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Note_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteFolder_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_NoteFolder_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteFolder_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NoteFolder_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteFolder_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function NoteFolder_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NoteFolder_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteFolder_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_NoteFolder_postUpdate(input, context) {
-    return true;
-}
-function NoteFolder_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NoteFolder_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteTag_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_NoteTag_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteTag_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NoteTag_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteTag_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function NoteTag_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NoteTag_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteTag_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_NoteTag_postUpdate(input, context) {
-    return true;
-}
-function NoteTag_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NoteTag_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteReminder_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_NoteReminder_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteReminder_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NoteReminder_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteReminder_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function NoteReminder_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NoteReminder_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function NoteReminder_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_NoteReminder_postUpdate(input, context) {
-    return true;
-}
-function NoteReminder_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_NoteReminder_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -18157,6 +17060,2742 @@ function StaffHistory_delete(context, db) {
     return { OR: [] };
 }
 function $check_StaffHistory_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Scholarship_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Scholarship_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Scholarship_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Scholarship_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Scholarship_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Scholarship_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Scholarship_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Scholarship_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Scholarship_postUpdate(input, context) {
+    return true;
+}
+function Scholarship_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Scholarship_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScholarshipCriteria_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ScholarshipCriteria_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScholarshipCriteria_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScholarshipCriteria_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScholarshipCriteria_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ScholarshipCriteria_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScholarshipCriteria_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScholarshipCriteria_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ScholarshipCriteria_postUpdate(input, context) {
+    return true;
+}
+function ScholarshipCriteria_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScholarshipCriteria_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScholarshipAward_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ScholarshipAward_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScholarshipAward_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScholarshipAward_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScholarshipAward_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ScholarshipAward_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScholarshipAward_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ScholarshipAward_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ScholarshipAward_postUpdate(input, context) {
+    return true;
+}
+function ScholarshipAward_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ScholarshipAward_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationSession_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_GraduationSession_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationSession_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationSession_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationSession_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function GraduationSession_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationSession_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationSession_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_GraduationSession_postUpdate(input, context) {
+    return true;
+}
+function GraduationSession_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationSession_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentGraduationApplication_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_StudentGraduationApplication_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentGraduationApplication_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentGraduationApplication_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentGraduationApplication_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function StudentGraduationApplication_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentGraduationApplication_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function StudentGraduationApplication_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_StudentGraduationApplication_postUpdate(input, context) {
+    return true;
+}
+function StudentGraduationApplication_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_StudentGraduationApplication_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ApplicationCheckResult_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ApplicationCheckResult_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ApplicationCheckResult_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ApplicationCheckResult_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ApplicationCheckResult_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ApplicationCheckResult_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ApplicationCheckResult_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ApplicationCheckResult_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ApplicationCheckResult_postUpdate(input, context) {
+    return true;
+}
+function ApplicationCheckResult_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ApplicationCheckResult_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationDecision_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_GraduationDecision_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationDecision_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationDecision_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationDecision_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function GraduationDecision_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationDecision_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationDecision_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_GraduationDecision_postUpdate(input, context) {
+    return true;
+}
+function GraduationDecision_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationDecision_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicRankingConvert_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_AcademicRankingConvert_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicRankingConvert_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AcademicRankingConvert_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicRankingConvert_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function AcademicRankingConvert_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AcademicRankingConvert_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicRankingConvert_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_AcademicRankingConvert_postUpdate(input, context) {
+    return true;
+}
+function AcademicRankingConvert_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AcademicRankingConvert_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationRankDowngradeRule_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_GraduationRankDowngradeRule_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationRankDowngradeRule_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationRankDowngradeRule_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationRankDowngradeRule_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function GraduationRankDowngradeRule_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationRankDowngradeRule_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationRankDowngradeRule_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_GraduationRankDowngradeRule_postUpdate(input, context) {
+    return true;
+}
+function GraduationRankDowngradeRule_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationRankDowngradeRule_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationRankDowngradeCondition_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_GraduationRankDowngradeCondition_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationRankDowngradeCondition_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationRankDowngradeCondition_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationRankDowngradeCondition_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function GraduationRankDowngradeCondition_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationRankDowngradeCondition_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function GraduationRankDowngradeCondition_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_GraduationRankDowngradeCondition_postUpdate(input, context) {
+    return true;
+}
+function GraduationRankDowngradeCondition_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_GraduationRankDowngradeCondition_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function RankingCondition_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_RankingCondition_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function RankingCondition_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_RankingCondition_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function RankingCondition_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function RankingCondition_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_RankingCondition_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function RankingCondition_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_RankingCondition_postUpdate(input, context) {
+    return true;
+}
+function RankingCondition_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_RankingCondition_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DiplomaVerificationApplication_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DiplomaVerificationApplication_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DiplomaVerificationApplication_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DiplomaVerificationApplication_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DiplomaVerificationApplication_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DiplomaVerificationApplication_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DiplomaVerificationApplication_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DiplomaVerificationApplication_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DiplomaVerificationApplication_postUpdate(input, context) {
+    return true;
+}
+function DiplomaVerificationApplication_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DiplomaVerificationApplication_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Note_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Note_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Note_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Note_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Note_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Note_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Note_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Note_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Note_postUpdate(input, context) {
+    return true;
+}
+function Note_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Note_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteFolder_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_NoteFolder_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteFolder_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NoteFolder_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteFolder_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function NoteFolder_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NoteFolder_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteFolder_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_NoteFolder_postUpdate(input, context) {
+    return true;
+}
+function NoteFolder_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NoteFolder_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteTag_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_NoteTag_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteTag_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NoteTag_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteTag_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function NoteTag_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NoteTag_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteTag_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_NoteTag_postUpdate(input, context) {
+    return true;
+}
+function NoteTag_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NoteTag_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteReminder_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_NoteReminder_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteReminder_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NoteReminder_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteReminder_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function NoteReminder_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NoteReminder_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function NoteReminder_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_NoteReminder_postUpdate(input, context) {
+    return true;
+}
+function NoteReminder_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_NoteReminder_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuestionBank_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_QuestionBank_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuestionBank_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuestionBank_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuestionBank_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function QuestionBank_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuestionBank_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function QuestionBank_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_QuestionBank_postUpdate(input, context) {
+    return true;
+}
+function QuestionBank_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_QuestionBank_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Difficulty_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Difficulty_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Difficulty_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Difficulty_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Difficulty_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Difficulty_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Difficulty_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Difficulty_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Difficulty_postUpdate(input, context) {
+    return true;
+}
+function Difficulty_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Difficulty_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KnowledgeBlock_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_KnowledgeBlock_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KnowledgeBlock_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KnowledgeBlock_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KnowledgeBlock_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function KnowledgeBlock_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KnowledgeBlock_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function KnowledgeBlock_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_KnowledgeBlock_postUpdate(input, context) {
+    return true;
+}
+function KnowledgeBlock_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_KnowledgeBlock_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Question_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Question_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Question_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Question_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Question_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Question_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Question_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Question_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Question_postUpdate(input, context) {
+    return true;
+}
+function Question_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Question_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function MultipleChoiceOption_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_MultipleChoiceOption_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function MultipleChoiceOption_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_MultipleChoiceOption_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function MultipleChoiceOption_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function MultipleChoiceOption_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_MultipleChoiceOption_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function MultipleChoiceOption_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_MultipleChoiceOption_postUpdate(input, context) {
+    return true;
+}
+function MultipleChoiceOption_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_MultipleChoiceOption_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function FillInBlankSlot_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_FillInBlankSlot_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function FillInBlankSlot_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_FillInBlankSlot_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function FillInBlankSlot_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function FillInBlankSlot_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_FillInBlankSlot_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function FillInBlankSlot_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_FillInBlankSlot_postUpdate(input, context) {
+    return true;
+}
+function FillInBlankSlot_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_FillInBlankSlot_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OrderingItem_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_OrderingItem_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OrderingItem_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_OrderingItem_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OrderingItem_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function OrderingItem_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_OrderingItem_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function OrderingItem_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_OrderingItem_postUpdate(input, context) {
+    return true;
+}
+function OrderingItem_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_OrderingItem_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Answer_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Answer_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Answer_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Answer_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Answer_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Answer_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Answer_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Answer_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Answer_postUpdate(input, context) {
+    return true;
+}
+function Answer_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Answer_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Exam_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Exam_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Exam_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Exam_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Exam_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function Exam_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Exam_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Exam_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Exam_postUpdate(input, context) {
+    return true;
+}
+function Exam_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Exam_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TestStructureRule_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_TestStructureRule_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TestStructureRule_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TestStructureRule_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TestStructureRule_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function TestStructureRule_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TestStructureRule_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function TestStructureRule_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_TestStructureRule_postUpdate(input, context) {
+    return true;
+}
+function TestStructureRule_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_TestStructureRule_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamBank_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ExamBank_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamBank_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamBank_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamBank_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ExamBank_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamBank_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamBank_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ExamBank_postUpdate(input, context) {
+    return true;
+}
+function ExamBank_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamBank_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamBankQuestion_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ExamBankQuestion_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamBankQuestion_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamBankQuestion_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamBankQuestion_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ExamBankQuestion_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamBankQuestion_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamBankQuestion_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ExamBankQuestion_postUpdate(input, context) {
+    return true;
+}
+function ExamBankQuestion_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamBankQuestion_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamFax_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ExamFax_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamFax_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamFax_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamFax_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ExamFax_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamFax_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamFax_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ExamFax_postUpdate(input, context) {
+    return true;
+}
+function ExamFax_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamFax_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamSession_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ExamSession_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamSession_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamSession_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamSession_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ExamSession_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamSession_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamSession_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ExamSession_postUpdate(input, context) {
+    return true;
+}
+function ExamSession_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamSession_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicWarningRule_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_AcademicWarningRule_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicWarningRule_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AcademicWarningRule_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicWarningRule_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function AcademicWarningRule_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AcademicWarningRule_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicWarningRule_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_AcademicWarningRule_postUpdate(input, context) {
+    return true;
+}
+function AcademicWarningRule_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AcademicWarningRule_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicWarning_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_AcademicWarning_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicWarning_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AcademicWarning_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicWarning_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function AcademicWarning_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AcademicWarning_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function AcademicWarning_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_AcademicWarning_postUpdate(input, context) {
+    return true;
+}
+function AcademicWarning_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_AcademicWarning_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DisciplinaryWarning_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DisciplinaryWarning_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DisciplinaryWarning_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DisciplinaryWarning_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DisciplinaryWarning_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DisciplinaryWarning_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DisciplinaryWarning_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DisciplinaryWarning_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DisciplinaryWarning_postUpdate(input, context) {
+    return true;
+}
+function DisciplinaryWarning_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DisciplinaryWarning_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DisciplinaryWarningReason_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DisciplinaryWarningReason_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DisciplinaryWarningReason_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DisciplinaryWarningReason_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DisciplinaryWarningReason_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DisciplinaryWarningReason_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DisciplinaryWarningReason_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DisciplinaryWarningReason_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DisciplinaryWarningReason_postUpdate(input, context) {
+    return true;
+}
+function DisciplinaryWarningReason_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DisciplinaryWarningReason_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Feedback_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_Feedback_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Feedback_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Feedback_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Feedback_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null) || (user != null);
+}
+function Feedback_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Feedback_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function Feedback_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_Feedback_postUpdate(input, context) {
+    return true;
+}
+function Feedback_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_Feedback_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -20341,402 +21980,6 @@ function DM_BacLuong_delete(context, db) {
     return { OR: [] };
 }
 function $check_DM_BacLuong_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Feedback_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Feedback_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Feedback_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Feedback_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Feedback_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null) || (user != null);
-}
-function Feedback_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Feedback_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Feedback_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_Feedback_postUpdate(input, context) {
-    return true;
-}
-function Feedback_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Feedback_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicWarningRule_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_AcademicWarningRule_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicWarningRule_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicWarningRule_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicWarningRule_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function AcademicWarningRule_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicWarningRule_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicWarningRule_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_AcademicWarningRule_postUpdate(input, context) {
-    return true;
-}
-function AcademicWarningRule_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicWarningRule_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicWarning_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_AcademicWarning_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicWarning_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicWarning_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicWarning_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function AcademicWarning_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicWarning_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function AcademicWarning_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_AcademicWarning_postUpdate(input, context) {
-    return true;
-}
-function AcademicWarning_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_AcademicWarning_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DisciplinaryWarning_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DisciplinaryWarning_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DisciplinaryWarning_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DisciplinaryWarning_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DisciplinaryWarning_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DisciplinaryWarning_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DisciplinaryWarning_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DisciplinaryWarning_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DisciplinaryWarning_postUpdate(input, context) {
-    return true;
-}
-function DisciplinaryWarning_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DisciplinaryWarning_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DisciplinaryWarningReason_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_DisciplinaryWarningReason_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DisciplinaryWarningReason_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DisciplinaryWarningReason_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DisciplinaryWarningReason_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function DisciplinaryWarningReason_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DisciplinaryWarningReason_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function DisciplinaryWarningReason_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_DisciplinaryWarningReason_postUpdate(input, context) {
-    return true;
-}
-function DisciplinaryWarningReason_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_DisciplinaryWarningReason_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

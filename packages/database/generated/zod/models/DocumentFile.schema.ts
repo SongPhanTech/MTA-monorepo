@@ -22,6 +22,7 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     archivedCertificate: z.record(z.unknown()).optional(),
+    trainingCourse: z.record(z.unknown()).optional(),
     archivedAward: z.record(z.unknown()).optional(),
     curriculum: z.record(z.unknown()).optional(),
     curriculumVersion: z.record(z.unknown()).optional(),
@@ -36,11 +37,13 @@ const relationSchema = z.object({
     diplomaVerificationFront: z.record(z.unknown()).optional(),
     diplomaVerificationBack: z.record(z.unknown()).optional(),
     trainingField: z.record(z.unknown()).optional(),
+    studentScoreConvert: z.record(z.unknown()).optional(),
     note: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     archivedCertificateId: z.string().nullish(),
+    trainingCourseId: z.string().nullish(),
     archivedAwardId: z.string().nullish(),
     curriculumId: z.string().nullish(),
     curriculumVersionId: z.string().nullish(),
@@ -55,6 +58,7 @@ const fkSchema = z.object({
     diplomaVerificationFrontId: z.string().nullish(),
     diplomaVerificationBackId: z.string().nullish(),
     trainingFieldId: z.string().nullish(),
+    studentScoreConvertId: z.string().nullish(),
     noteId: z.string().nullish(),
 }
 );

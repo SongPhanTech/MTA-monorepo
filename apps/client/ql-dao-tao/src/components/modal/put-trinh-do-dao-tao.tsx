@@ -88,17 +88,17 @@ const PutTrainingLevel = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa trình độ đào tạo' : 'Thêm mới trình độ đào tạo'}
+            title={id ? 'Chỉnh sửa bậc đào tạo' : 'Thêm mới bậc đào tạo'}
             className="w-[45vw]"
         >
             <Col span={24}>
-                <FormItem form={form} name="code" label="Mã trình độ đào tạo" required>
-                    <Input placeholder="Nhập mã trình độ đào tạo" />
+                <FormItem form={form} name="code" label="Mã bậc đào tạo" required>
+                    <Input placeholder="Nhập mã bậc đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="name" label="Tên trình độ đào tạo" required>
-                    <Input placeholder="Nhập tên trình độ đào tạo" />
+                <FormItem form={form} name="name" label="Tên bậc đào tạo" required>
+                    <Input placeholder="Nhập tên bậc đào tạo" />
                 </FormItem>
             </Col>
             <Col span={24}>

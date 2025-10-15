@@ -328,7 +328,7 @@ export function useSuspenseCountTrainingBlockOnCurriculumVersion<TArgs extends P
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('TrainingBlockOnCurriculumVersion', `${endpoint}/trainingBlockOnCurriculumVersion/count`, args, options, fetch);
 }
 
-export function useCheckTrainingBlockOnCurriculumVersion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; trainingBlockId?: string; curriculumVersionId?: string; priority?: number; electiveCreditsRequired?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckTrainingBlockOnCurriculumVersion<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; trainingBlockId?: string; curriculumVersionId?: string; curriculumId?: string; priority?: number; electiveCreditsRequired?: number }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('TrainingBlockOnCurriculumVersion', `${endpoint}/trainingBlockOnCurriculumVersion/check`, args, options, fetch);
 }

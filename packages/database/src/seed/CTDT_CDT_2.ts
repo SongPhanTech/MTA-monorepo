@@ -15,7 +15,7 @@ async function main() {
             {
                 id: 'K25',
                 name: 'Cơ điện tử',
-                description: 'Khóa học Cơ điện tử',
+                description: 'Khoá học Cơ điện tử',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 semesterStartId: '550e8409-e29b-41d4-a716-446655440000',

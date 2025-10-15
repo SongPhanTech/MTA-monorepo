@@ -7,11 +7,12 @@ import { type DocumentFile, type SubjectVersion, SubjectVersionType } from '@wor
 import {
     useCreateSubjectVersion,
     useFindManySubject,
+    useFindManyTrainingObjectType,
     useFindUniqueSubject,
     useFindUniqueSubjectVersion,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message, Radio } from 'antd'
+import { Col, Form, Input, InputNumber, message, Radio, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -20,6 +21,7 @@ import DocumentPaths from '@components/commons/documentPaths'
 import Tabs from '@components/commons/tabar'
 import { useExamTypeOptions } from '@hooks/examType'
 import TreeSelect from '@/components/commons/tree-select'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutSubjectVersion = SubjectVersion & {
     documentFiles?: DocumentFile[]
 }
@@ -32,6 +34,8 @@ type PutSubjectVersionFormValues = PutSubjectVersion & {
 
 const subjectVersionTypeOptions = [
     { label: 'Môn thường', value: SubjectVersionType.Normal },
+    { label: 'Thực tập', value: SubjectVersionType.Internship },
+    { label: 'Chuyên đề nghiên cứu', value: SubjectVersionType.Research },
     { label: 'Đồ án tốt nghiệp', value: SubjectVersionType.Project },
 ]
 
@@ -48,7 +52,7 @@ const PutVersionSubjectModal = () => {
 
     const subjectId = input?.subjectId
     const subjectVersionId = input?.subjectVersionId
-
+    const { id: selectedTrainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: subjectVersion } = useFindUniqueSubjectVersion(
         {
             where: { id: subjectVersionId },
@@ -80,6 +84,10 @@ const PutVersionSubjectModal = () => {
                 },
             },
         },
+    })
+
+    const { data: trainingObjectType = [] } = useFindManyTrainingObjectType({
+        select: { id: true, name: true },
     })
 
     const treeData =
@@ -126,6 +134,7 @@ const PutVersionSubjectModal = () => {
                 learningOutcome: output.learningOutcome,
                 structure: output.structure,
                 guild: output.guild,
+                trainingObjectTypeId: output.trainingObjectTypeId,
                 academicResults: output.academicResults,
                 materials: output.materials,
                 rules: output.rules,
@@ -244,11 +253,13 @@ const PutVersionSubjectModal = () => {
         } else {
             form.setFieldsValue({
                 active: true,
+                type: SubjectVersionType.Normal,
                 documentFiles: [],
+                trainingObjectTypeId: selectedTrainingObjectTypeId,
             })
             setDocument([])
         }
-    }, [subjectVersion, form])
+    }, [subjectVersion, form, selectedTrainingObjectTypeId])
 
     return (
         <PutFormModal
@@ -309,32 +320,38 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col> */}
             <Col span={8}>
-                <Form.Item name="prerequisiteSubjectIds" label="Môn học tiên quyết">
-                    <TreeSelect
-                        treeData={treeData}
-                        // treeCheckable={true}
-                        multiple={true}
-                        treeDefaultExpandAll
-                        showSearch
-                        placeholder="Chọn môn học tiên quyết"
-                        style={{ width: '100%' }}
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeId"
+                    label="Đối tượng đào tạo"
+                    required
+                >
+                    <Select
+                        placeholder="Chọn đối tượng đào tạo"
+                        options={trainingObjectType?.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
                         allowClear
                     />
-                </Form.Item>
+                </FormItem>
             </Col>
             <Col span={8}>
-                <Form.Item name="coRequisiteSubjectIds" label="Môn học song hành">
-                    <TreeSelect
-                        treeData={treeData}
-                        // treeCheckable={true}
-                        multiple={true}
-                        treeDefaultExpandAll
-                        showSearch
-                        placeholder="Chọn môn học song hành"
-                        style={{ width: '100%' }}
+                <FormItem form={form} name="type" label="Loại môn học">
+                    <Select
+                        placeholder="Chọn loại môn học"
+                        options={subjectVersionTypeOptions?.map((item) => ({
+                            label: item.label,
+                            value: item.value,
+                        }))}
                         allowClear
                     />
-                </Form.Item>
+                </FormItem>
+            </Col>
+            <Col span={8}>
+                <FormItem form={form} name="onePoint" label=" ">
+                    <Switch checkedChildren="1 đầu điểm" unCheckedChildren="3 đầu điểm" />
+                </FormItem>
             </Col>
             <Col span={8}>
                 <FormItem form={form} name="credit" label="Số tín chỉ" required>
@@ -422,10 +439,34 @@ const PutVersionSubjectModal = () => {
                 </FormItem>
             </Col>
             <Col span={8}>
-                <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea rows={3} placeholder="Nhập mô tả" />
-                </FormItem>
+                <Form.Item name="prerequisiteSubjectIds" label="Môn học tiên quyết">
+                    <TreeSelect
+                        treeData={treeData}
+                        // treeCheckable={true}
+                        multiple={true}
+                        treeDefaultExpandAll
+                        showSearch
+                        placeholder="Chọn môn học tiên quyết"
+                        style={{ width: '100%' }}
+                        allowClear
+                    />
+                </Form.Item>
             </Col>
+            <Col span={8}>
+                <Form.Item name="coRequisiteSubjectIds" label="Môn học song hành">
+                    <TreeSelect
+                        treeData={treeData}
+                        // treeCheckable={true}
+                        multiple={true}
+                        treeDefaultExpandAll
+                        showSearch
+                        placeholder="Chọn môn học song hành"
+                        style={{ width: '100%' }}
+                        allowClear
+                    />
+                </Form.Item>
+            </Col>
+
             <Col span={8}>
                 <FormItem form={form} name={'active'} label="Trạng thái" required>
                     <Radio.Group buttonStyle="solid">
@@ -434,19 +475,11 @@ const PutVersionSubjectModal = () => {
                     </Radio.Group>
                 </FormItem>
             </Col>
-            <Col span={8}>
-                <FormItem form={form} name="type" label="Loại môn học">
-                    <Select
-                        placeholder="Chọn loại hệ điểm"
-                        options={subjectVersionTypeOptions?.map((item) => ({
-                            label: item.label,
-                            value: item.value,
-                        }))}
-                        allowClear
-                    />
+            <Col span={24}>
+                <FormItem form={form} name="description" label="Mô tả">
+                    <Input.TextArea rows={3} placeholder="Nhập mô tả" />
                 </FormItem>
             </Col>
-            {/*  */}
             <Col span={24}>
                 <FormItem form={form} name="documentFiles" label="Tài liệu đính kèm">
                     <DocumentPaths

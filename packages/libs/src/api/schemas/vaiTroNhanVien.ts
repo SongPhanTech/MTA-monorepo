@@ -58,4 +58,6 @@ export type VaiTroNhanVien = BaseEntity & {
     sDM_VaiTroId?: string | null
     /** @nullable */
     sDM_NhanVienId?: string | null
+    /** @nullable */
+    sDM_TaiKhoanId?: string | null
 }

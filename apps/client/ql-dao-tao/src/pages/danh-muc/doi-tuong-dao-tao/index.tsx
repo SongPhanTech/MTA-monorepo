@@ -10,6 +10,8 @@ import type { TrainingObjectTypes } from '@workspace/db'
 import {
     useCountTrainingObjectType,
     useFindManyDM_DonVi,
+    useFindManyTrainingForm,
+    useFindManyTrainingLevel,
     useFindManyTrainingObjectType,
     useUpdateTrainingObjectType,
 } from '@workspace/db/hooks'
@@ -28,6 +30,8 @@ export default function TrainingObjectTypePage() {
         name: '',
         type: undefined,
         baseScore: undefined,
+        trainingFormId: undefined,
+        trainingLevelId: undefined,
     })
 
     const { data = [], refetch } = useFindManyTrainingObjectType({
@@ -47,6 +51,24 @@ export default function TrainingObjectTypePage() {
                       },
                   }
                 : {}),
+            ...(filters.trainingFormId?.length
+                ? {
+                      trainingFormId: {
+                          in: filters.trainingFormId,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingLevelId?.length
+                ? {
+                      trainingLevelId: {
+                          in: filters.trainingLevelId,
+                      },
+                  }
+                : {}),
+        },
+        include: {
+            trainingForm: true,
+            trainingLevel: true,
         },
         orderBy: {
             name: 'asc',
@@ -54,6 +76,10 @@ export default function TrainingObjectTypePage() {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+
+    const { data: trainingFormData } = useFindManyTrainingForm()
+
+    const { data: trainingLevelData } = useFindManyTrainingLevel()
 
     const { data: count } = useCountTrainingObjectType({
         where: {
@@ -75,6 +101,28 @@ export default function TrainingObjectTypePage() {
             deletedAt: null,
         },
     })
+
+    const mapFormData = () => {
+        if (trainingFormData) {
+            return trainingFormData.map((item) => ({
+                value: item.id,
+                label: item.name,
+            }))
+        }
+
+        return []
+    }
+
+    const mapLevelData = () => {
+        if (trainingLevelData) {
+            return trainingLevelData.map((item) => ({
+                value: item.id,
+                label: item.name,
+            }))
+        }
+
+        return []
+    }
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -212,6 +260,28 @@ export default function TrainingObjectTypePage() {
                                               record?.type as keyof typeof TRAINING_OBJECT_TYPE
                                           ]
                                         : ''
+                                },
+                            },
+                            {
+                                title: 'Hình thức đào tạo',
+                                dataIndex: 'trainingFormId',
+                                fixed: 'left',
+                                align: 'center',
+                                type: 'select',
+                                options: mapFormData(),
+                                render: (__, record) => {
+                                    return record?.trainingForm?.name || ''
+                                },
+                            },
+                            {
+                                title: 'Bậc đào tạo',
+                                dataIndex: 'trainingLevelId',
+                                fixed: 'left',
+                                align: 'center',
+                                type: 'select',
+                                options: mapLevelData(),
+                                render: (__, record) => {
+                                    return record?.trainingLevel?.name || ''
                                 },
                             },
                             {

@@ -2,10 +2,10 @@ import DefaultLayout from '@layouts/default-layout'
 import { Col, Flex, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
-import RegisterClassManager from './components/dang-ky-hoc-cho-lop-quan-ly'
-import StudentCourseByPlan from './components/hoc-vien-co-mon-theo-khgd'
-import RegisterResult from './components/ket-qua-dang-ky-hoc-lop-quan-ly'
-import FixedClass from './components/lop-co-mon-theo-khgd'
+import RegisterClassManager from './_components/dang-ky-hoc-cho-lop-quan-ly'
+import StudentCourseByPlan from './_components/hoc-vien-co-mon-theo-khgd'
+import RegisterResult from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
+import FixedClass from './_components/lop-co-mon-theo-khgd'
 
 interface TabItem {
     key: string
@@ -67,7 +67,7 @@ export default function RegisterClass() {
     }
 
     return (
-        <Row gutter={[16, 0]}>
+        <Row gutter={[1, 0]}>
             <Col span={24} className="!p-0">
                 <Flex>
                     <Col span={activeLeftTab === '3' ? 24 : 14}>
@@ -81,7 +81,6 @@ export default function RegisterClass() {
                             </Tabs>
                         </div>
                     </Col>
-
                     {activeLeftTab !== '3' && (
                         <Col span={10}>
                             <div className="min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4">

@@ -1,5 +1,4 @@
 import { GridBlock } from '@components/commons/grid-block'
-import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 import { useFindUniqueStudent } from '@workspace/db/hooks'
 import { Button, Modal, Space } from 'antd'
 import dayjs from 'dayjs'
@@ -47,7 +46,6 @@ export const ModalPhuLucThacSi = () => {
     } = useDisclosure<string>({
         tag: 'ModalPhuLucThacSi',
     })
-    const { getTrainingLanguageLabel } = useTrainingLanguageOptions()
 
     const { data } = useFindUniqueStudent(
         {
@@ -71,6 +69,7 @@ export const ModalPhuLucThacSi = () => {
                             },
                         },
                         trainingTime: true,
+                        trainingLanguage: true,
                     },
                 },
             },
@@ -115,7 +114,7 @@ export const ModalPhuLucThacSi = () => {
             ),
         },
         {
-            title: 'Khóa:',
+            title: 'Khoá:',
             value: <span>{data?.fixedClass?.trainingCourse?.name}</span>,
         },
     ]
@@ -150,9 +149,7 @@ export const ModalPhuLucThacSi = () => {
         },
         {
             title: 'Ngôn ngữ đào tạo:',
-            value: (
-                <span>{getTrainingLanguageLabel(data?.curriculumVersion?.trainingLanguage)}</span>
-            ),
+            value: <span>{data?.curriculumVersion?.trainingLanguage?.name}</span>,
         },
     ]
     const basicInfoCol4 = [
@@ -715,7 +712,7 @@ export const ModalPhuLucThacSi = () => {
                         <div className="w-full flex flex-col items-center font-bold">
                             <div className="mt-4 uppercase">Phiếu học viên quân sự</div>
                             <div className="text-sm flex flex-col items-center">
-                                <span>{`Khóa: ${data?.fixedClass?.trainingCourse?.name}, Lớp CN: ${data?.fixedClass?.name}`}</span>
+                                <span>{`Khoá: ${data?.fixedClass?.trainingCourse?.name}, Lớp CN: ${data?.fixedClass?.name}`}</span>
                                 <span>{`Chuyên ngành: ${data?.curriculumVersion?.curriculum?.trainingMajor?.name}`}</span>
                             </div>
                         </div>
@@ -937,7 +934,7 @@ export const ModalPhuLucThacSi = () => {
                                             Hình thức ĐT
                                         </th>
                                         <th className="border border-black px-2 py-1 w-1/5">
-                                            Niên khóa
+                                            Niên khoá
                                         </th>
                                         <th className="border border-black px-2 py-1 w-1/5">
                                             Xếp loại TN

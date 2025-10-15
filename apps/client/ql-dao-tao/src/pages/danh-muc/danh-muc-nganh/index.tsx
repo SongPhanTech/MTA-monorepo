@@ -6,7 +6,8 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { DM_DonVi, TrainingObjectType } from '@workspace/db'
+import { getMinioUrl } from '@workspace/constant'
+import type { DM_DonVi, DocumentFile, TrainingObjectType } from '@workspace/db'
 import {
     useCountTrainingField,
     useFindManyDM_DonVi,
@@ -32,6 +33,8 @@ export default function TrainingFieldPage() {
         code: '',
         organization: undefined,
         publishDate: undefined,
+        active: undefined,
+        decisionNo: '',
     })
 
     const where = useMemo(
@@ -52,6 +55,22 @@ export default function TrainingFieldPage() {
                       },
                   }
                 : {}),
+            ...(filters.active
+                ? {
+                      active: {
+                          equals: filters.active[0],
+                      },
+                  }
+                : {}),
+            ...(filters.decisionNo && filters.decisionNo !== ''
+                ? {
+                      decisionNo: {
+                          contains: filters.decisionNo,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+
             ...(filters.trainingObjectTypes
                 ? {
                       trainingObjectTypes: {
@@ -85,12 +104,15 @@ export default function TrainingFieldPage() {
             filters.trainingObjectTypes,
             filters.organization,
             filters.publishDate,
+            filters.active,
+            filters.decisionNo,
         ]
     )
     const { data = [] } = useFindManyTrainingField({
         where,
         include: {
             organization: true,
+            documentFiles: true,
             trainingObjectTypes: {
                 include: {
                     trainingObjectType: true,
@@ -114,6 +136,18 @@ export default function TrainingFieldPage() {
     const { onOpen } = useDisclosure<string>({
         tag: 'PutTrainingFieldModal',
     })
+    const onDownload = async (url: string, fileName: string) => {
+        const response = await fetch(url)
+        if (!response.ok) return message.error('Lỗi khi tải file')
+        const blob = await response.blob()
+        const blobUrl = window.URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = blobUrl
+        link.setAttribute('download', fileName)
+        document.body.appendChild(link)
+        link.click()
+        link.parentNode?.removeChild(link)
+    }
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -175,6 +209,9 @@ export default function TrainingFieldPage() {
                         data={data}
                         filters={filters}
                         setFilters={(value) => {
+                            if (value.active?.length === 0 || value.active?.length === 2) {
+                                value.active = undefined
+                            }
                             setFilters(value)
                             setCurrentPage(1)
                         }}
@@ -237,6 +274,13 @@ export default function TrainingFieldPage() {
                                     organization?.sTen ? organization?.sTen : '',
                             },
                             {
+                                title: 'Số quyết định',
+                                dataIndex: 'decisionNo',
+                                align: 'center',
+                                width: 150,
+                                type: 'input',
+                            },
+                            {
                                 title: 'Ngày ban hành',
                                 align: 'center',
                                 width: 150,
@@ -244,6 +288,41 @@ export default function TrainingFieldPage() {
                                 type: 'date',
                                 render: (__, { publishDate }) =>
                                     publishDate ? dayjs(publishDate).format('DD/MM/YYYY') : '',
+                            },
+                            {
+                                title: 'Tài liệu đính kèm',
+                                width: 200,
+
+                                fixed: 'left',
+                                align: 'center',
+                                type: 'input',
+                                render: (__, record) =>
+                                    record.documentFiles?.length > 0
+                                        ? record.documentFiles.map(
+                                              (file: DocumentFile, index: number) => (
+                                                  // Dùng React.Fragment hoặc span để bọc và cung cấp key
+                                                  <span key={file.id || index}>
+                                                      {/** biome-ignore lint/a11y/useValidAnchor: <explanation> */}
+                                                      <a
+                                                          href="#"
+                                                          onClick={(e) => {
+                                                              e.preventDefault()
+                                                              onDownload(
+                                                                  getMinioUrl(file.path),
+                                                                  file.name
+                                                              )
+                                                          }}
+                                                      >
+                                                          {file.name}
+                                                      </a>
+                                                      {/* Thêm dấu phẩy nếu đây không phải là file cuối cùng */}
+                                                      {index < record.documentFiles.length - 1
+                                                          ? ', '
+                                                          : ''}
+                                                  </span>
+                                              )
+                                          )
+                                        : '',
                             },
                             {
                                 title: 'Mô tả',
@@ -262,6 +341,12 @@ export default function TrainingFieldPage() {
                                 title: 'Trạng thái',
                                 align: 'center',
                                 width: 130,
+                                type: 'select',
+                                dataIndex: 'active',
+                                options: [
+                                    { label: 'Đang hoạt động', value: true },
+                                    { label: 'Không hoạt động', value: false },
+                                ],
                                 render: (value, record) => {
                                     return !record?.active ? (
                                         <Tag color="error">Không hoạt động</Tag>

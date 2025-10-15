@@ -44,7 +44,10 @@ export default function TextTruncate({ arr, key }: TypeProps) {
             </ul>
             {showButton && (
                 <div
-                    onClick={() => handleShowMore()}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        handleShowMore()
+                    }}
                     className="flex  justify-end text-xs text-green-600"
                 >
                     {show ? 'Ẩn bớt' : 'Xem thêm'}

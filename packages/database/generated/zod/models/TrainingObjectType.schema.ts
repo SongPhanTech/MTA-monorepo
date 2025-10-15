@@ -20,7 +20,10 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    trainingForm: z.record(z.unknown()).optional(),
+    trainingLevel: z.record(z.unknown()).optional(),
     trainingCourse: z.array(z.unknown()).optional(),
+    curriculum: z.array(z.unknown()).optional(),
     curriculumVersion: z.array(z.unknown()).optional(),
     trainingMajors: z.array(z.unknown()).optional(),
     trainingFields: z.array(z.unknown()).optional(),
@@ -28,6 +31,14 @@ const relationSchema = z.object({
     trainingScoreSession: z.array(z.unknown()).optional(),
     subjectClass: z.array(z.unknown()).optional(),
     graduationSession: z.array(z.unknown()).optional(),
+    subjectVersion: z.array(z.unknown()).optional(),
+    planTraining: z.array(z.unknown()).optional(),
+    planTrainingDelay: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    trainingFormId: z.string().nullish(),
+    trainingLevelId: z.string().nullish(),
 }
 );
 
@@ -40,7 +51,7 @@ export const TrainingObjectTypeScalarSchema = baseSchema;
 /**
  * `TrainingObjectType` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const TrainingObjectTypeSchema = TrainingObjectTypeScalarSchema.merge(relationSchema.partial());
+export const TrainingObjectTypeSchema = TrainingObjectTypeScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -78,9 +89,7 @@ export const TrainingObjectTypeCreateScalarSchema = baseSchema.partial({
 /**
  * `TrainingObjectType` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const TrainingObjectTypeCreateSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
-});
+export const TrainingObjectTypeCreateSchema = TrainingObjectTypeCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -92,5 +101,5 @@ export const TrainingObjectTypeUpdateScalarSchema = baseSchema.partial();
 /**
  * `TrainingObjectType` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const TrainingObjectTypeUpdateSchema = TrainingObjectTypeUpdateScalarSchema;
+export const TrainingObjectTypeUpdateSchema = TrainingObjectTypeUpdateScalarSchema.merge(fkSchema.partial());
 

@@ -7,7 +7,7 @@ import 'categories'
 import 'plan-training'
 import 'student'
 
-// Đợt đánh giá rèn luyện, đi theo kì và đối tượng đào tạo
+// Đợt đánh giá rèn luyện, đi theo kỳ và đối tượng đào tạo
 model TrainingScoreSession extends Base {
   name                 String
   time                 DateTime               @default(now())// thời gian

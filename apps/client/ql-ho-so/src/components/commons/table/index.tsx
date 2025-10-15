@@ -1,6 +1,6 @@
 import { FilterFilled } from '@ant-design/icons'
+import type { ColumnTypeProps, FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import type { ColumnTypeProps, FilterProps } from '@constants/type'
 import {
     AutoComplete,
     Button,
@@ -393,7 +393,7 @@ const Table = <T extends Record<string, unknown>>({
                                 <div className="max-h-[500px] overflow-y-auto">
                                     <div className="mb-2">Tìm kiếm</div>
                                     <Input
-                                        placeholder="Nhập từ khóa cần tìm kiếm"
+                                        placeholder="Nhập từ khoá cần tìm kiếm"
                                         prefix={
                                             <Search
                                                 size={15}
@@ -520,7 +520,7 @@ const Table = <T extends Record<string, unknown>>({
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
                             <div className="mb-2">Tìm kiếm</div>
                             <Input
-                                placeholder="Nhập từ khóa cần tìm kiếm"
+                                placeholder="Nhập từ khoá cần tìm kiếm"
                                 prefix={
                                     <Search
                                         size={15}

@@ -19,6 +19,7 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     students: z.array(z.unknown()).optional(),
+    trainingObjectType: z.array(z.unknown()).optional(),
 }
 );
 

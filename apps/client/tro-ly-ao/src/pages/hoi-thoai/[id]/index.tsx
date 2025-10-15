@@ -1,6 +1,4 @@
-import { CopyOutlined, DownOutlined } from '@ant-design/icons'
-import ChatInput from '@components/commons/input-chat-bot'
-import ChatLayout from '@layouts/chat-layout'
+import { ArrowDownOutlined, CopyOutlined, FileTextOutlined } from '@ant-design/icons'
 import { MessageSender } from '@workspace/db'
 import {
     useFindManyMessage,
@@ -13,6 +11,49 @@ import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
+import ChatInput from '@components/commons/input-chat-bot'
+import CitationTooltip from '@components/commons/citation-tooltip'
+import ChatLayout from '@layouts/chat-layout'
+
+interface Citation {
+    index: number
+    content: string
+    document_id: string
+    document_type: string
+    metadata?: any
+}
+
+function parseResponseWithCitations(text: string): { answer: string; citations: Citation[] } {
+    try {
+        // Tìm vị trí của separator "---CITATIONS---"
+        const separatorIndex = text.indexOf('---CITATIONS---')
+
+        if (separatorIndex === -1) {
+            // Nếu không có citations, trả về toàn bộ text
+            return { answer: text, citations: [] }
+        }
+
+        // Phần trước: answer content
+        const answer = text.substring(0, separatorIndex).trim()
+        // Phần sau: JSON chứa citations
+        const citationsText = text.substring(separatorIndex + '---CITATIONS---'.length).trim()
+
+        let citations: Citation[] = []
+        if (citationsText) {
+            try {
+                const parsed = JSON.parse(citationsText)
+                citations = parsed.citations || []
+            } catch (e) {
+                // console.error('Failed to parse citations JSON:', e)
+            }
+        }
+
+        return { answer, citations }
+    } catch (error) {
+        console.error('Error parsing response:', error)
+        return { answer: text, citations: [] }
+    }
+}
 
 export default function Page() {
     const router = useRouter()
@@ -20,7 +61,14 @@ export default function Page() {
     const scrollRef = useRef<HTMLDivElement>(null)
     const [isFaqMode, setIsFaqMode] = useState(false)
     const [input, setInput] = useState('')
-    const [messages, setMessages] = useState<{ id: number; role: string; content: string }[]>([])
+    const [messages, setMessages] = useState<
+        {
+            id: number
+            role: string
+            content: string
+            citations?: Citation[]
+        }[]
+    >([])
     const [loading, setLoading] = useState(false)
     const [isStreaming, setIsStreaming] = useState(false)
     const [abortController, setAbortController] = useState<AbortController | null>(null)
@@ -39,14 +87,16 @@ export default function Page() {
         }
     )
 
-    const { data: messageList } = useFindManyMessage({
+    const { data: messageList, refetch: refetchMessages } = useFindManyMessage({
         where: { conversationId: id as string },
+        include: {
+            citations: true,
+        },
     })
 
     const handleSend = async () => {
         if (!input.trim() || !id || loading || isStreaming) return
 
-        // Abort any existing request
         if (abortController) {
             abortController.abort()
             setAbortController(null)
@@ -153,26 +203,111 @@ export default function Page() {
                             const chunk = decoder.decode(value, { stream: true })
                             accumulatedText += chunk
 
-                            // Cập nhật toàn bộ message của BOT
+                            // Parse citations và answer từ accumulated text
+                            const { answer, citations } =
+                                parseResponseWithCitations(accumulatedText)
+
+                            // Cập nhật toàn bộ message của BOT với answer (chỉ để hiển thị real-time)
                             setMessages((prev) =>
                                 prev.map((msg) =>
                                     msg.id === botMessageId
-                                        ? { ...msg, content: accumulatedText }
+                                        ? { ...msg, content: answer, citations }
                                         : msg
                                 )
                             )
                         }
 
                         setIsStreaming(false) // Kết thúc streaming
-                        botReply = accumulatedText
+
+                        const { citations } = parseResponseWithCitations(accumulatedText)
+
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+
+                        const { data: latestMessages } = await refetchMessages()
+
+                        const latestBotMessage = latestMessages
+                            ? [...latestMessages]
+                                  .sort(
+                                      (a, b) =>
+                                          new Date(b.createdAt).getTime() -
+                                          new Date(a.createdAt).getTime()
+                                  )
+                                  .find((msg) => msg.sender === MessageSender.BOT)
+                            : null
+
+                        if (latestBotMessage && citations.length > 0) {
+                            await updateConversation({
+                                where: { id: id as string },
+                                data: {
+                                    message: {
+                                        update: {
+                                            where: { id: latestBotMessage.id },
+                                            data: {
+                                                citations: {
+                                                    create: citations.map((citation: Citation) => ({
+                                                        content: citation.content,
+                                                        index: citation.index,
+                                                        documentId: citation.document_id,
+                                                        documentType: citation.document_type,
+                                                    })),
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            })
+                        }
                     } else {
                         // Fallback nếu không có stream
-                        botReply = await response.text()
+                        const fullText = await response.text()
+                        const { answer, citations } = parseResponseWithCitations(fullText)
+                        botReply = answer
+
                         setMessages((prev) =>
                             prev.map((msg) =>
-                                msg.id === botMessageId ? { ...msg, content: botReply } : msg
+                                msg.id === botMessageId
+                                    ? { ...msg, content: botReply, citations }
+                                    : msg
                             )
                         )
+
+                        // Similar logic for non-streaming case
+                        await new Promise((resolve) => setTimeout(resolve, 500))
+
+                        const { data: latestMessages } = await refetchMessages()
+
+                        const latestBotMessage = latestMessages
+                            ? [...latestMessages]
+                                  .sort(
+                                      (a, b) =>
+                                          new Date(b.createdAt).getTime() -
+                                          new Date(a.createdAt).getTime()
+                                  )
+                                  .find((msg) => msg.sender === MessageSender.BOT)
+                            : null
+
+                        if (latestBotMessage && citations.length > 0) {
+                            await updateConversation({
+                                where: { id: id as string },
+                                data: {
+                                    message: {
+                                        update: {
+                                            where: { id: latestBotMessage.id },
+                                            data: {
+                                                citations: {
+                                                    create: citations.map((citation: Citation) => ({
+                                                        content: citation.content,
+                                                        index: citation.index,
+                                                        documentId: citation.document_id,
+                                                        documentType: citation.document_type,
+                                                    })),
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            })
+                        }
                     }
                 }
 
@@ -195,7 +330,7 @@ export default function Page() {
                 setAbortController(null)
             }
         },
-        [id, isFaqMode, updateConversation]
+        [id, isFaqMode, updateConversation, refetchMessages]
     )
 
     const handleStop = () => {
@@ -240,20 +375,25 @@ export default function Page() {
                 id: Number(msg.id),
                 role: msg.sender === 'USER' ? 'USER' : 'BOT',
                 content: msg.content || '',
+                citations:
+                    msg.citations?.map((citation) => ({
+                        index: citation.index || 0,
+                        content: citation.content || '',
+                        document_id: citation.documentId || '',
+                        document_type: citation.documentType || '',
+                        metadata: {},
+                    })) || [],
             }))
             setMessages(mappedMessages)
         }
     }, [messageList])
 
-    // Reset states khi chuyển conversation khác
     // biome-ignore lint/correctness/useExhaustiveDependencies: need to reset when conversation changes
     useEffect(() => {
-        // Hủy request đang pending nếu có
         if (abortController) {
             abortController.abort()
         }
 
-        // Reset các state
         setLoading(false)
         setIsStreaming(false)
         setAbortController(null)
@@ -261,7 +401,7 @@ export default function Page() {
         setIsUserScrolling(false)
         setShowScrollButton(false)
         setHasAutoReplied(false)
-    }, [id]) // Chạy khi id thay đổi
+    }, [id])
 
     // Tự động gọi API cho conversation mới (chỉ có USER message, chưa có BOT reply)
     useEffect(() => {
@@ -274,7 +414,7 @@ export default function Page() {
             !isStreaming &&
             !hasAutoReplied &&
             conversationCurrent && // conversationCurrent đã load
-            !messageList.some((msg) => msg.sender === 'BOT') && // Chưa có tin nhắn BOT nào
+            !messageList.some((msg) => msg.sender === 'BOT') && // Chưa có tin nhắn BOT
             isInitMessage === 'true' // Chỉ auto reply cho tin nhắn init
         ) {
             const userMessage = messageList[0]
@@ -367,10 +507,35 @@ export default function Page() {
                                                             {msg.content}
                                                         </div>
                                                     ) : (
-                                                        <div className="overflow-x-auto">
-                                                            <ReactMarkdown>
-                                                                {msg.content}
-                                                            </ReactMarkdown>
+                                                        <div>
+                                                            <div className="overflow-x-auto">
+                                                                <ReactMarkdown>
+                                                                    {msg.content}
+                                                                </ReactMarkdown>
+                                                            </div>
+                                                            {msg.citations &&
+                                                                msg.citations.length > 0 && (
+                                                                    <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-gray-300">
+                                                                        <span className="text-xs text-gray-600 font-semibold mr-1 flex items-center">
+                                                                            <FileTextOutlined className="mr-1" />
+                                                                            Tài liệu tham khảo:
+                                                                        </span>
+                                                                        {[...msg.citations]
+                                                                            .sort(
+                                                                                (a, b) =>
+                                                                                    a.index -
+                                                                                    b.index
+                                                                            )
+                                                                            .map((citation) => (
+                                                                                <CitationTooltip
+                                                                                    key={`${citation.document_id}-${citation.index}`}
+                                                                                    citation={
+                                                                                        citation
+                                                                                    }
+                                                                                />
+                                                                            ))}
+                                                                    </div>
+                                                                )}
                                                         </div>
                                                     )}
                                                     <Button
@@ -406,9 +571,9 @@ export default function Page() {
                     {showScrollButton && (
                         <div
                             onClick={scrollToBottom}
-                            className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-50 w-8 h-8 bg-primary/90 hover:bg-primary text-white rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110"
+                            className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-50 w-8 h-8 bg-white hover:bg-gray-50 text-primary rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 shadow-md"
                         >
-                            <DownOutlined className="text-xs" />
+                            <ArrowDownOutlined className="text-sm" />
                         </div>
                     )}
                     <ChatInput

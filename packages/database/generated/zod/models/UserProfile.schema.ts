@@ -153,6 +153,7 @@ const relationSchema = z.object({
     educationAndTraining: z.array(z.unknown()).optional(),
     lecturer: z.record(z.unknown()).optional(),
     lecturerHistory: z.array(z.unknown()).optional(),
+    studentSubjectScoreHistory: z.array(z.unknown()).optional(),
     staffs: z.record(z.unknown()).optional(),
     staffHistory: z.array(z.unknown()).optional(),
     evidenceFiles: z.array(z.unknown()).optional(),
@@ -161,6 +162,8 @@ const relationSchema = z.object({
     faqsUploaded: z.array(z.unknown()).optional(),
     faqsApproved: z.array(z.unknown()).optional(),
     conversations: z.array(z.unknown()).optional(),
+    subjectVersionHistory: z.array(z.unknown()).optional(),
+    changeLog: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

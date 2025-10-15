@@ -5,7 +5,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import type { TrainingField, TrainingObjectType } from '@workspace/db'
+import type { DocumentFile, TrainingField, TrainingObjectType } from '@workspace/db'
 import {
     useCreateTrainingField,
     useFindManyDM_DonVi,
@@ -15,15 +15,18 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
+import DocumentPaths from '@components/commons/documentPaths'
 import TreeSelect from '@/components/commons/tree-select'
 export type PutTrainingField = TrainingField & {
     trainingObjectTypeIds: string[]
+    documentFiles?: DocumentFile[]
 }
 dayjs.locale('vi')
 const PutTrainingFieldModal = () => {
+    const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutTrainingField>()
     const {
         isOpen,
@@ -34,7 +37,6 @@ const PutTrainingFieldModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
     const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
         useFindManyTrainingObjectType()
 
@@ -50,6 +52,17 @@ const PutTrainingFieldModal = () => {
                 await updateTrainingField({
                     data: {
                         ...rest,
+                        documentFiles: {
+                            createMany: {
+                                data:
+                                    rest.documentFiles?.map((documentFile: DocumentFile) => ({
+                                        name: documentFile.name,
+                                        path: documentFile.path,
+                                        mimeType: documentFile.mimeType,
+                                        size: documentFile.size,
+                                    })) || [],
+                            },
+                        },
                         trainingObjectTypes: {
                             createMany: {
                                 data: trainingObjectTypeIds.map((trainingObjectTypeId) => ({
@@ -74,6 +87,15 @@ const PutTrainingFieldModal = () => {
                 await createTrainingField({
                     data: {
                         ...rest,
+                        documentFiles: {
+                            create:
+                                (rest.documentFiles || []).map((file: DocumentFile) => ({
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                })) || [],
+                        },
                         trainingObjectTypes: {
                             createMany: {
                                 data: trainingObjectTypeIds.map((trainingObjectTypeId) => ({
@@ -107,6 +129,7 @@ const PutTrainingFieldModal = () => {
             include: {
                 organization: true,
                 trainingObjectTypes: true,
+                documentFiles: true,
             },
         },
         {
@@ -124,10 +147,12 @@ const PutTrainingFieldModal = () => {
                 ),
                 publishDate: dayjs(level.publishDate),
             })
+            setDocument(level.documentFiles as DocumentFile[])
         } else {
             form.setFieldsValue({
                 active: true,
             })
+            setDocument([])
         }
     }, [level])
 
@@ -195,6 +220,11 @@ const PutTrainingFieldModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
+                <FormItem form={form} name="decisionNo" label="Số quyết định">
+                    <Input placeholder="Nhập số quyết định" />
+                </FormItem>
+            </Col>
+            <Col span={12}>
                 <FormItem form={form} name="publishDate" label="Ngày ban hành" required>
                     <DatePicker
                         format={{
@@ -202,6 +232,16 @@ const PutTrainingFieldModal = () => {
                             type: 'mask',
                         }}
                         className="w-full"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="documentFiles" label="Tài liệu đính kèm">
+                    <DocumentPaths
+                        form={form}
+                        data={document}
+                        relationId={id ?? ''}
+                        relationType="trainingFieldId"
                     />
                 </FormItem>
             </Col>

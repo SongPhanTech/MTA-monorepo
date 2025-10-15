@@ -16,6 +16,7 @@ import type {
     SubjectVersion,
     TrainingBlockOnCurriculumVersion,
 } from '@workspace/db'
+import { $Enums, type TrainingBlockSubject } from '@workspace/db/client'
 import {
     useDeleteManyTrainingBlockSubject,
     useDeleteTrainingBlockOnCurriculumVersion,
@@ -26,12 +27,14 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
 import { BookPlus, CopyPlus, FileDown, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { env } from '@/env'
 import CreateIcon from '../../../../components/icons/create'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
@@ -80,7 +83,6 @@ export default function TrainingProgramSubjects() {
         },
         { enabled: !!id }
     )
-
     const { options, getExamTypeLabel } = useExamTypeOptions()
 
     const isFiltering = useMemo(() => {
@@ -290,6 +292,7 @@ export default function TrainingProgramSubjects() {
     // })
 
     const { onOpen: onOpenTrainingBlockSubject, onClose } = useDisclosure<{
+        curriculumVersionId: string
         trainingBlockOnCurriculumVersionId: string
         trainingBlockSubjectId: string
     }>({
@@ -365,7 +368,7 @@ export default function TrainingProgramSubjects() {
     return (
         <div>
             <Divider orientation="left" orientationMargin={0}>
-                Phiên bản CTĐT:{' '}
+                CTĐT toàn khoá:{' '}
                 {[
                     initialValue?.code,
                     initialValue?.name,
@@ -386,18 +389,18 @@ export default function TrainingProgramSubjects() {
                                 ) && (
                                     <>
                                         <Button
+                                            href={`${env.NEXT_PUBLIC_BASE_PATH}/templates/Mẫu nhập CTĐT.xlsx`}
+                                            className="text-primary border-primary mr-2"
+                                        >
+                                            <FileDown />
+                                            Tải file mẫu excel
+                                        </Button>
+                                        <Button
                                             onClick={() => setImportModalVisible(true)}
                                             className="text-primary border-primary mr-2"
                                         >
                                             <FileUp />
                                             Nhập dữ liệu bằng excel
-                                        </Button>
-                                        <Button
-                                            onClick={() => onOpenTrainingBlock()}
-                                            className="text-primary border-primary mr-2"
-                                        >
-                                            <FileDown />
-                                            Tải file mẫu excel
                                         </Button>
 
                                         <ImportCurriculumVersionModal
@@ -459,58 +462,177 @@ export default function TrainingProgramSubjects() {
                 </Col>
 
                 <Col span={24}>
+                    <div className="flex gap-2">
+                        <p className="flex gap-2 items-center">
+                            <p className="w-4 h-4 bg-red-100" /> Môn bắt buộc
+                        </p>
+                        <p className="flex gap-2 items-center">
+                            <p className="w-4 h-4 bg-yellow-200" /> Môn tự chọn
+                        </p>
+                        <p className="flex gap-2 items-center">
+                            <p className="w-4 h-4 bg-orange-300" /> Môn điều kiện
+                        </p>
+                    </div>
                     <TableCollapse
                         rowKey="key"
                         headerTitleKey={({ trainingBlock }) =>
-                            `Khối kiến thức: ${[trainingBlock?.name].filter(Boolean).join(' - ')}`
+                            `${[trainingBlock?.name].filter(Boolean).join(' - ')}`
                         }
+                        onRow={(record) => {
+                            const isParent = Array.isArray(record?.subjects)
+                            if (isParent) {
+                                return {}
+                            }
+                            const subject = record as unknown as TrainingBlockSubject
+                            return {
+                                className: cn(
+                                    !subject.useForFinalScore && 'bg-orange-300',
+                                    subject.type === $Enums.SubjectRequirementType.Mandatory &&
+                                        'bg-red-100',
+                                    subject.type === $Enums.SubjectRequirementType.Optional &&
+                                        'bg-yellow-100'
+                                ),
+                            }
+                        }}
+                        headerColumn={[
+                            {
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) => (
+                                    <p className="font-bold">{record?.trainingBlock?.name}</p>
+                                ),
+                                colSpan: 3,
+                            },
+                            {
+                                render: (_, record) =>
+                                    record.subjects.reduce((sum, s) => sum + s.subject.credit, 0),
+                                colSpan: 1,
+                            },
+                            {
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) =>
+                                    record.subjects.reduce((sum, s) => sum + s.subject.period, 0),
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) =>
+                                    record.subjects.reduce(
+                                        (sum, s) => sum + (s.subject?.numberOfTheory ?? 0),
+                                        0
+                                    ),
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) =>
+                                    record.subjects.reduce(
+                                        (sum, s) => sum + (s.subject.numberOfPractical ?? 0),
+                                        0
+                                    ),
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) =>
+                                    record.subjects.reduce(
+                                        (sum, s) => sum + (s.subject.numberOfSelfStudy ?? 0),
+                                        0
+                                    ),
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) =>
+                                    record.subjects.reduce(
+                                        (sum, s) => sum + (s.subject.numberOfPractice ?? 0),
+                                        0
+                                    ),
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) =>
+                                    record.subjects.reduce(
+                                        (sum, s) => sum + (s.subject.numberOfReview ?? 0),
+                                        0
+                                    ),
+                                colSpan: 1,
+                            },
+                            {
+                                render: (_, record) =>
+                                    record.subjects.reduce(
+                                        (sum, s) => sum + (s.subject.numberOfExam ?? 0),
+                                        0
+                                    ),
+                                colSpan: 1,
+                            },
+                            {
+                                colSpan: 1,
+                            },
+                            {
+                                colSpan: 1,
+                            },
+                            {
+                                colSpan: 1,
+                                render: (_, { id }) => (
+                                    <div className="flex gap-2.5 justify-center items-center">
+                                        <CreateIcon
+                                            title={'Thêm môn học'}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                onOpenTrainingBlockSubject({
+                                                    curriculumVersionId: id,
+                                                    trainingBlockOnCurriculumVersionId: id,
+                                                    trainingBlockSubjectId: '',
+                                                })
+                                            }}
+                                        />
+                                        <DeleteIcon
+                                            popConfirm={{
+                                                onConfirm: () =>
+                                                    handleDeleteTrainingBlockOnCurriculumVersion(
+                                                        id
+                                                    ),
+                                            }}
+                                            onClick={(e) => e.stopPropagation()}
+                                        />
+                                    </div>
+                                ),
+                            },
+                        ]}
                         childrenFieldName="subjects"
                         defaultExpandAll
                         filters={filters}
                         setFilters={setFilters}
                         columns={[
                             {
-                                title: 'Mã môn học',
+                                title: 'Mã MH',
                                 dataIndex: 'code',
-                                width: 145,
+                                width: 120,
                                 align: 'center',
-                                fixed: 'left',
                                 type: 'input',
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.code ? record?.subject?.code : ''
                                 },
                             },
                             {
-                                title: 'Mã TKB',
-                                // TODO: thêm vào database
-                                dataIndex: 'codeTkb',
-                                width: 145,
-                                align: 'center',
-                                fixed: 'left',
-                                // render:(__,record)=>{
-                                //     return record?.subject?.name
-                                // }
-                            },
-                            {
                                 title: 'Tên môn học',
                                 dataIndex: 'name',
                                 width: 200,
                                 align: 'center',
-                                fixed: 'left',
                                 type: 'input',
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.name
                                 },
                             },
                             {
-                                title: 'Đơn vị quản lý',
+                                title: 'ĐVPT',
                                 dataIndex: 'organization',
-                                width: 200,
+                                width: 120,
                                 align: 'center',
                                 type: 'tree_select',
                                 options: treeData,
                                 render: (_, record) => {
-                                    return record?.subject?.managementOrganization?.sTen
+                                    return record?.subject?.managementOrganization?.sMa
                                 },
                             },
                             {
@@ -535,9 +657,9 @@ export default function TrainingProgramSubjects() {
                                 },
                             },
                             {
-                                title: 'Học kỳ dự kiến',
+                                title: 'HKDK',
                                 dataIndex: 'semester',
-                                width: 140,
+                                width: 80,
                                 type: 'order',
                                 align: 'center',
                                 distinctFilters: [
@@ -659,7 +781,7 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Ôn',
                                 dataIndex: 'numberOfReview',
-                                width: 80,
+                                width: 60,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -680,7 +802,7 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'KT, Thi',
                                 dataIndex: 'numberOfExam',
-                                width: 100,
+                                width: 90,
                                 align: 'center',
                                 type: 'order',
                                 distinctFilters: [
@@ -701,13 +823,23 @@ export default function TrainingProgramSubjects() {
                             {
                                 title: 'Thi',
                                 dataIndex: 'examType',
-                                width: 150,
+                                width: 90,
                                 align: 'center',
                                 type: 'select',
                                 options: options,
                                 render: (__, record: { subject?: SubjectVersion }) =>
                                     getExamTypeLabel(record?.subject?.examType),
                             },
+                            // {
+                            //     title: 'Tính điểm TBC',
+                            //     align: 'center',
+                            //     fixed: 'right',
+                            //     dataIndex: 'useForFinalScore',
+                            //     width: 120,
+                            //     render: (value: boolean) => {
+                            //         return <Checkbox checked={!!value} />
+                            //     },
+                            // },
                             {
                                 title: 'Trạng thái',
                                 align: 'center',
@@ -724,18 +856,18 @@ export default function TrainingProgramSubjects() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                fixed: 'right',
                                 hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                                     'SUA'
                                 ),
-                                render: (__, record: any) => {
+                                render: (_, record) => {
                                     if (record.trainingBlockOnCurriculumVersionId) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
                                                     onClick={(_e) => {
                                                         onOpenTrainingBlockSubject({
+                                                            curriculumVersionId: id,
                                                             trainingBlockOnCurriculumVersionId:
                                                                 record?.trainingBlockOnCurriculumVersionId,
                                                             trainingBlockSubjectId: record?.id,
@@ -759,28 +891,29 @@ export default function TrainingProgramSubjects() {
                             },
                         ]}
                         data={data}
-                        headerRight={({ id }) => (
-                            <div className="flex gap-2.5 w-[80px] justify-center items-center">
-                                <CreateIcon
-                                    title={'Thêm môn học'}
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onOpenTrainingBlockSubject({
-                                            trainingBlockOnCurriculumVersionId: id,
-                                            trainingBlockSubjectId: '',
-                                        })
-                                    }}
-                                />
+                        // headerRight={({ id }) => (
+                        //     <div className="flex gap-2.5 w-[80px] justify-center items-center">
+                        //         <CreateIcon
+                        //             title={'Thêm môn học'}
+                        //             onClick={(e) => {
+                        //                 e.stopPropagation()
+                        //                 onOpenTrainingBlockSubject({
+                        //                     curriculumVersionId: id,
+                        //                     trainingBlockOnCurriculumVersionId: id,
+                        //                     trainingBlockSubjectId: '',
+                        //                 })
+                        //             }}
+                        //         />
 
-                                <DeleteIcon
-                                    popConfirm={{
-                                        onConfirm: () =>
-                                            handleDeleteTrainingBlockOnCurriculumVersion(id),
-                                    }}
-                                    onClick={(e) => e.stopPropagation()}
-                                />
-                            </div>
-                        )}
+                        //         <DeleteIcon
+                        //             popConfirm={{
+                        //                 onConfirm: () =>
+                        //                     handleDeleteTrainingBlockOnCurriculumVersion(id),
+                        //             }}
+                        //             onClick={(e) => e.stopPropagation()}
+                        //         />
+                        //     </div>
+                        // )}
                         pagination={false}
                     />
                 </Col>
@@ -795,10 +928,10 @@ TrainingProgramSubjects.getLayout = function getLayout(page: React.ReactElement)
             breadcrumbList={[
                 { title: 'Chương trình đào tạo' },
                 {
-                    title: 'Danh mục CTĐT',
+                    title: 'Danh mục CTĐT khung',
                     href: ROUTER_PATH.QL_DAO_TAO.CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO,
                 },
-                { title: 'Chi tiết phiên bản CTĐT' },
+                { title: 'Chi tiết CTĐT toàn khoá' },
             ]}
         >
             {page}

@@ -194,7 +194,7 @@ export default function SubjectClassScore() {
 
     const { onOpen } = useDisclosure<{
         dataTable: DataTable[]
-        type: number // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
+        type: number // 1: In phiếu điểm và khoá, 0: In phiếu điểm nháp
     }>({
         tag: 'ModalPrintStudentSubjectScore',
     })
@@ -1046,6 +1046,7 @@ export default function SubjectClassScore() {
                                                     <ExportScoreTemplate
                                                         selectedFixedClass={selectedFixedClass}
                                                         dataTable={dataTable}
+                                                        type={'thi'}
                                                     />
                                                 )}
                                             </Flex>
@@ -1169,7 +1170,7 @@ export default function SubjectClassScore() {
                                                 valuePropName="checked"
                                             >
                                                 <Checkbox disabled={profileId !== listUser?.P13}>
-                                                    Khóa điểm CC/TX
+                                                    Khoá điểm CC/TX
                                                 </Checkbox>
                                             </Form.Item>
 
@@ -1179,7 +1180,7 @@ export default function SubjectClassScore() {
                                                 valuePropName="checked"
                                             >
                                                 <Checkbox disabled={profileId !== listUser?.P13}>
-                                                    Khóa điểm thi
+                                                    Khoá điểm thi
                                                 </Checkbox>
                                             </Form.Item>
 

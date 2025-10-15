@@ -1,10 +1,12 @@
-import Table from '@components/commons/table'
+import { NestedCollapsibleTable, NestedColumn } from '@components/commons/nested-collapsible-table'
+// import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import type { Prisma } from '@workspace/db'
 import {
     useCountTrainingBlock,
     useFindManyTrainingBlock,
@@ -18,6 +20,36 @@ import { BookPlus } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+interface TreeNode {
+    id: string
+    code: string
+    name: string
+    active: boolean
+    description: string | null
+    priority: number
+    parentId: string | null
+    children?: TreeNode[]
+    createdAt?: string
+    updatedAt?: string
+}
+type TrainingBlockType = Prisma.TrainingBlockGetPayload<{
+    include: {
+        curriculumVersions: {
+            include: {
+                subjects: {
+                    include: {
+                        subject: {
+                            select: {
+                                credit: true
+                                period: true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}>
 
 export default function TrainingBlock() {
     const { can, canSome } = useAbility()
@@ -39,14 +71,24 @@ export default function TrainingBlock() {
             curriculumVersions: {
                 include: {
                     curriculumVersion: true,
+                    subjects: {
+                        include: {
+                            subject: {
+                                select: {
+                                    credit: true,
+                                    period: true,
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
         orderBy: {
             priority: 'asc',
         },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
+        // take: numberOfPages,
+        // skip: (currentPage - 1) * numberOfPages,
     })
 
     const { data: count, refetch: refetchCount } = useCountTrainingBlock({
@@ -101,6 +143,94 @@ export default function TrainingBlock() {
         }
     }
 
+    const calculateTotal = (record: TrainingBlockType, field: 'credit' | 'period') => {
+        const curriculumVersion = record.curriculumVersions?.[0]
+
+        if (!curriculumVersion?.subjects) {
+            return 0
+        }
+
+        return curriculumVersion.subjects.reduce((sum, tbs) => {
+            const value = field === 'credit' ? tbs.subject?.credit || 0 : tbs.subject?.period || 0
+            return sum + value
+        }, 0)
+    }
+    const treeColumns: NestedColumn<TrainingBlockType>[] = [
+        {
+            title: 'Mã khối kiến thức',
+            dataIndex: 'code',
+            width: 150,
+            align: 'center',
+        },
+        {
+            title: 'Tên khối kiến thức',
+            dataIndex: 'name',
+            align: 'center',
+        },
+        {
+            title: 'Tổng số tín chỉ',
+            align: 'center',
+            render: (_: any, record: TrainingBlockType) => calculateTotal(record, 'credit') || 0,
+        },
+        {
+            title: 'Tổng số tiết',
+            align: 'center',
+            render: (_: any, record: TrainingBlockType) => calculateTotal(record, 'period') || 0,
+        },
+        {
+            title: 'Trạng thái',
+            align: 'center',
+            width: 150,
+
+            dataIndex: 'active',
+            render: (_: any, record: TrainingBlockType) => {
+                return !record?.active ? (
+                    <Tag color="error">Ngừng đào tạo</Tag>
+                ) : (
+                    <Tag color="success">Đang đào tạo</Tag>
+                )
+            },
+        },
+        {
+            title: 'Thao tác',
+            width: 150,
+            align: 'center',
+            className: 'no-row-click',
+            hidden: !canSome(
+                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
+                'SUA',
+                'XOA'
+            ),
+            render: (_: any, record: TrainingBlockType) => {
+                if (record?.id) {
+                    return (
+                        <Row className="justify-center gap-2">
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
+                                'SUA'
+                            ) && (
+                                <EditIcon
+                                    onClick={onOpen.bind(null, record?.id)}
+                                    className="text-sm text-blue-700 cursor-pointer"
+                                />
+                            )}
+                            {can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
+                                'XOA'
+                            ) && (
+                                <DeleteIcon
+                                    popConfirm={{
+                                        onConfirm: () => handleDelete(record?.id),
+                                    }}
+                                />
+                            )}
+                        </Row>
+                    )
+                }
+                return ''
+            },
+        },
+    ]
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -122,126 +252,17 @@ export default function TrainingBlock() {
                     </Row>
                 </Col>
 
-                <Col span={24}>
-                    <Table
-                        rowKey="id"
-                        id="training-block"
+                <Col span={24} className="mt-2">
+                    <NestedCollapsibleTable
                         filters={filters}
-                        setFilters={(value) => {
-                            setFilters(value)
-                            setCurrentPage(1)
-                        }}
-                        scroll={{ y: '75vh' }}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 60,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã khối kiến thức',
-                                dataIndex: 'code',
-                                align: 'center',
-                                width: 250,
-                                type: 'input',
-                            },
-                            {
-                                title: 'Tên khối kiến thức',
-                                dataIndex: 'name',
-                                align: 'center',
-                                type: 'input',
-                            },
-                            // {
-                            //     title: 'Tổng tín chỉ',
-                            //     dataIndex: '',
-                            //     width: 150,
-                            // },
-                            // {
-                            //     title: 'Tổng tín chỉ bắt buộc',
-                            //     dataIndex: 'totalRequiredCredits',
-                            //     width: 150,
-                            // },
-                            // {
-                            //     title: 'Số tín chỉ chuyên ngành',
-                            //     dataIndex: 'specializedCredits',
-                            //     width: 150,
-                            // },
-                            {
-                                title: 'Trạng thái',
-                                dataIndex: 'active',
-                                align: 'center',
-                                width: 140,
-                                options: [
-                                    { label: 'Đang đào tạo', value: true },
-                                    { label: 'Ngừng đào tạo', value: false },
-                                ],
-                                type: 'select',
-                                fixed: 'right',
-                                render: (record) => {
-                                    return !record ? (
-                                        <Tag color="error">Ngừng đào tạo</Tag>
-                                    ) : (
-                                        <Tag color="success">Đang đào tạo</Tag>
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                fixed: 'right',
-                                hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
-                                    'SUA',
-                                    'XOA'
-                                ),
-                                render: (_, { id }) => {
-                                    if (id) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
-                                                    'SUA'
-                                                ) && (
-                                                    <EditIcon
-                                                        onClick={onOpen.bind(null, id)}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                )}
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_CHUONG_TRINH_DAO_TAO_KHOI_KIEN_THUC_CTDT,
-                                                    'XOA'
-                                                ) && (
-                                                    <DeleteIcon
-                                                        popConfirm={{
-                                                            onConfirm: () => handleDelete(id),
-                                                        }}
-                                                    />
-                                                )}
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
-                                },
-                            },
-                        ]}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
-                        data={trainingBlockData}
+                        data={trainingBlockData || []}
+                        columns={treeColumns}
+                        mode="tree"
+                        childrenKey="children"
+                        defaultExpandAllRows={true}
+                        rowKey="id"
+                        buildFromParentId={true}
+                        parentIdKey="parentId"
                     />
                 </Col>
             </Row>

@@ -50,9 +50,10 @@ const importCurriculumVersion = createRoute({
 app.openapi(importCurriculumVersion, async (c) => {
     const { curriculumVersionId } = c.req.valid('param')
 
-    const { curriculum } = await prisma.curriculumVersion.findUniqueOrThrow({
+    const { trainingObjectTypeId, curriculum } = await prisma.curriculumVersion.findUniqueOrThrow({
         where: { id: curriculumVersionId },
         select: {
+            trainingObjectTypeId: true,
             curriculum: {
                 select: { trainingMajor: { select: { name: true } } },
             },
@@ -92,7 +93,13 @@ app.openapi(importCurriculumVersion, async (c) => {
 
     const subjectMap = await buildSubjectMapOrThrow(
         prisma,
-        data.trainingBlocks.flatMap(({ subjects }) => subjects)
+        data.trainingBlocks.flatMap(({ subjects }) =>
+            subjects.map((s) => ({
+                trainingObjectTypeId,
+                ...s,
+                type: s.subjectVersionType,
+            }))
+        )
     )
 
     const trainingBlocksWithId = data.trainingBlocks.map((trainingBlock) => ({

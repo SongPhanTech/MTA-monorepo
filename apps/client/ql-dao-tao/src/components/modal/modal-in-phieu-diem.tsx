@@ -17,12 +17,12 @@ dayjs.locale('vi')
 
 export enum EnumInPhieuDiem {
     PHIEU_DIEM_NHAP = 0, // In phiếu điểm nháp
-    PHIEU_DIEM_KHOA = 1, // In phiếu điểm và khóa
+    PHIEU_DIEM_KHOA = 1, // In phiếu điểm và khoá
 }
 
 type ModalPrintToKQHTInput = {
     dataTable: DataTable[]
-    type?: EnumInPhieuDiem // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
+    type?: EnumInPhieuDiem // 1: In phiếu điểm và khoá, 0: In phiếu điểm nháp
 }
 
 export type DataTable = Prisma.StudentSubjectScoreGetPayload<{
@@ -215,7 +215,7 @@ const ModalPrintStudentSubjectScore = () => {
             value: <span className="font-medium">{data?.code || '-'}</span>,
         },
         {
-            title: 'Khóa:',
+            title: 'Khoá:',
             value: <span>{trainingCourseSame || '-'}</span>,
         },
         {
@@ -287,16 +287,16 @@ const ModalPrintStudentSubjectScore = () => {
                     <span>
                         {input?.type === EnumInPhieuDiem.PHIEU_DIEM_NHAP
                             ? 'In phiếu điểm nháp'
-                            : 'In phiếu điểm và khóa'}
+                            : 'In phiếu điểm và khoá'}
                     </span>
                     <Button
                         icon={<PrinterOutlined />}
                         onClick={() => {
                             if (input?.type === EnumInPhieuDiem.PHIEU_DIEM_KHOA) {
                                 Modal.confirm({
-                                    title: 'Xác nhận khóa điểm',
+                                    title: 'Xác nhận khoá điểm',
                                     content:
-                                        'Bạn có chắc chắn muốn khóa điểm lớp môn học này không?',
+                                        'Bạn có chắc chắn muốn khoá điểm lớp môn học này không?',
                                     okText: 'Xác nhận',
                                     cancelText: 'Hủy',
                                     onOk: () => onOk(data as PutSubjectClass),
@@ -472,7 +472,7 @@ const ModalPrintStudentSubjectScore = () => {
                                             : ''}
                                     </td>
                                     <td className="border border-black text-center">
-                                        {item?.student?.fixedClass?.name}
+                                        {item?.student?.fixedClass?.code}
                                     </td>
                                     <td className="border border-black text-center">
                                         {item?.attendanceScore}
@@ -515,12 +515,15 @@ const ModalPrintStudentSubjectScore = () => {
                     </table>
                 </div>
                 <div className="mt-6">
-                    <div className="flex flex-row gap-2">
-                        <div className="font-bold">Tổng hợp kết quả thi:</div>
+                    <div className="flex gap-2 flex-wrap">
+                        <span className="font-bold">Tổng hợp kết quả thi:</span>
                         {Object.entries(statistics).map(([type, { count, percentage }]) => (
-                            <p key={type}>
+                            <span
+                                key={type}
+                                className={type.includes('Không đạt') ? 'text-red-600' : ''}
+                            >
                                 {type}: {count}= {percentage}%
-                            </p>
+                            </span>
                         ))}
                     </div>
                 </div>

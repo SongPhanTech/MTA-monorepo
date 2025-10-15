@@ -15,7 +15,7 @@ import type {
     SubjectClassSchedule,
     ThesisProjectStatus,
     TrainingObjectTypes,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import type { ColumnsType } from 'antd/es/table'
 export type FilterProps = {
     searchText?: string
@@ -137,7 +137,13 @@ export type FilterProps = {
     role?: CouncilRole[]
     order?: 'asc' | 'desc'
     subjectClassId?: string
+    decisionNo?: string
     classRegisterStatus?: ClassRegisterStatus[]
+    isTeaching?: boolean[]
+    subjectClassIds?: string[]
+    trainingObjectTypeId?: string
+    trainingFormId?: string[]
+    trainingLevelId?: string[]
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

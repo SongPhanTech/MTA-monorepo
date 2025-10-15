@@ -1,7 +1,7 @@
 import { SemesterType } from '@workspace/db'
 
 export type SemesterTypeOption = {
-    value: SemesterType | null
+    value: SemesterType
     label: string
 }
 
@@ -12,7 +12,7 @@ export const useSemesterTypeOptions = () => {
         { value: SemesterType.FIRST_SUPPLEMENTARY, label: 'Học kỳ phụ HK1' },
         { value: SemesterType.SECOND_SUPPLEMENTARY, label: 'Học kỳ phụ HK2' },
         { value: SemesterType.SUMMER, label: 'Học kỳ hè' },
-        { value: null, label: 'Học kỳ khác (có thể tạo trùng)' },
+        { value: null as unknown as SemesterType, label: 'Học kỳ khác (có thể tạo trùng)' },
     ]
 
     const getSemesterTypeLabel = (value: SemesterType | null | undefined): string => {

@@ -7,7 +7,10 @@ import NAVIGATION, {
     type TRO_LY_AO_PERMISSION,
 } from '@workspace/router'
 import { useMemo } from 'react'
-import { useGetUserPermissionsPermissionAppCodeUserId } from '../../libs/src/api/system'
+import {
+    useGetUserPermissionsPermissionAppCodeUserId,
+    useGetUserPermissionsAccessLevelAppCodeUserId,
+} from '../../libs/src/api/system'
 import ability from './ability'
 
 declare global {
@@ -50,6 +53,11 @@ const useAbility = () => {
                 | QL_HO_SO_PERMISSION,
             ...action: (keyof typeof PERMISSIONS)[]
         ) => {
+            if (
+                process?.env?.NODE_ENV === 'development' ||
+                window?.location.host?.startsWith('localhost')
+            )
+                return true
             const perm = ability.actionsFor(subject)
             if (perm.length === 0) return false
 
@@ -65,6 +73,11 @@ const useAbility = () => {
                 | QL_HO_SO_PERMISSION,
             ...action: (keyof typeof PERMISSIONS)[]
         ) => {
+            if (
+                process?.env?.NODE_ENV === 'development' ||
+                window?.location.host?.startsWith('localhost')
+            )
+                return true
             const perm = ability.actionsFor(subject)
             if (perm.length === 0) return false
 
@@ -362,4 +375,20 @@ const usePermissions = () => {
     return permissions
 }
 
-export { getDynamicBreadcrumb, getDynamicTitle, PERMISSIONS, useAbility, usePermissions }
+const useOrgPermissions = () => {
+    const { data } = useGetUserPermissionsAccessLevelAppCodeUserId(
+        process.env.NEXT_PUBLIC_APP_CODE || 'lms',
+        window?.contextData?.userId ?? ''
+    )
+    if (data?.status !== 200) return undefined
+    return data?.data?.sDM_DonviId
+}
+
+export {
+    getDynamicBreadcrumb,
+    getDynamicTitle,
+    PERMISSIONS,
+    useAbility,
+    usePermissions,
+    useOrgPermissions,
+}

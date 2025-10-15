@@ -164,7 +164,7 @@ export default function AcademicWarningRule() {
                         <Flex>
                             <Col span={12}>
                                 <Select
-                                    placeholder="Chọn khóa"
+                                    placeholder="Chọn khoá"
                                     options={trainingCourseData.map((i: TrainingCourse) => {
                                         return {
                                             value: i.id,

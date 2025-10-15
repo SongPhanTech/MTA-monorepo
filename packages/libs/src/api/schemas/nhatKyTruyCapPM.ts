@@ -72,4 +72,6 @@ export type NhatKyTruyCapPM = BaseEntity & {
     sIPAddress?: string | null
     /** @nullable */
     sRawUserAgent?: string | null
+    /** @nullable */
+    sAppCode?: string | null
 }

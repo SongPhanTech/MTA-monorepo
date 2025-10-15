@@ -8,6 +8,7 @@
     "./hook/*": "./src/hook/*.ts",
     "./constants": "./src/constants.ts",
     "./parseExcel": "./src/parseExcel.ts",
+    "./template-excel": "./src/template-excel.ts",
     "./utils": "./src/utils.ts",
     "./docxjs": "./src/docxjs.ts",
     ".": "./src/index.ts"
@@ -16,6 +17,7 @@
     "generate:api": "orval"
   },
   "devDependencies": {
+    "@types/file-saver": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@workspace/typescript-config": "workspace:*",
@@ -28,6 +30,8 @@
     "dayjs": "catalog:",
     "decimal.js": "catalog:",
     "docxtemplater": "catalog:",
+    "exceljs": "catalog:",
+    "file-saver": "catalog:",
     "pizzip": "catalog:",
     "react": "catalog:",
     "xlsx": "catalog:"

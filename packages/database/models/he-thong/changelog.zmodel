@@ -1,0 +1,22 @@
+import '../ql-ho-so/profile'
+
+model ChangeLog {
+  id            String      @id @default(cuid())
+  tableName     String
+  recordId      String
+  operation     String
+  changedAt     DateTime    @default(now())
+  oldData       Json?
+  newData       Json?
+  transactionId String?     // optional: group multiple changes
+  source        String?     // optional: e.g., "api", "admin_ui", "cron_job"
+
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId String
+
+  @@index([tableName, recordId])
+  @@index([userProfileId])
+  @@index([changedAt])
+
+  @@schema("he-thong")
+}

@@ -200,7 +200,7 @@ const PutClassRegisterSession = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingCourses" label="Khóa" required>
+                <FormItem form={form} name="trainingCourses" label="Khoá" required>
                     <Select
                         mode="multiple"
                         maxTagCount={'responsive'}

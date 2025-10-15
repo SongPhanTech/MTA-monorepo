@@ -192,22 +192,19 @@ const Table = <T extends Record<string, unknown>>({
         label: string
         children?: TreeNode[]
     }
-    const genFilter = (item: ColumnTypeProps) => {
-        const ListButton = useCallback(
-            ({ clear, click }: { clear: () => void; click: () => void }) => {
-                return (
-                    <div className="flex justify-end gap-2">
-                        <Button size="small" onClick={clear}>
-                            Bỏ lọc
-                        </Button>
-                        <Button type="primary" size="small" onClick={click}>
-                            Lọc
-                        </Button>
-                    </div>
-                )
-            },
-            []
+    const ListButton = useCallback(({ clear, click }: { clear: () => void; click: () => void }) => {
+        return (
+            <div className="flex justify-end gap-2">
+                <Button size="small" onClick={clear}>
+                    Bỏ lọc
+                </Button>
+                <Button type="primary" size="small" onClick={click}>
+                    Lọc
+                </Button>
+            </div>
         )
+    }, [])
+    const genFilter = (item: ColumnTypeProps) => {
         if (item?.type === 'input') {
             return {
                 filterDropdown: (props: FilterDropdownProps) => (
@@ -393,7 +390,7 @@ const Table = <T extends Record<string, unknown>>({
                                 <div className="max-h-[500px] overflow-y-auto">
                                     <div className="mb-2">Tìm kiếm</div>
                                     <Input
-                                        placeholder="Nhập từ khóa cần tìm kiếm"
+                                        placeholder="Nhập từ khoá cần tìm kiếm"
                                         prefix={
                                             <Search
                                                 size={15}
@@ -520,7 +517,7 @@ const Table = <T extends Record<string, unknown>>({
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
                             <div className="mb-2">Tìm kiếm</div>
                             <Input
-                                placeholder="Nhập từ khóa cần tìm kiếm"
+                                placeholder="Nhập từ khoá cần tìm kiếm"
                                 prefix={
                                     <Search
                                         size={15}
@@ -820,7 +817,7 @@ const Table = <T extends Record<string, unknown>>({
             id={id}
             rowKey={rowKey}
             size="small"
-            className="mt-4 custom-scrollbar"
+            className="mt-2 custom-scrollbar"
             rowSelection={rowSelection}
             columns={
                 columns.map((column) => ({
@@ -852,6 +849,7 @@ const Table = <T extends Record<string, unknown>>({
                     : false
             }
             expandable={expandable}
+            {...rest}
             onRow={(record) => ({
                 onClick: () => {
                     if (onRowClick) {
@@ -864,9 +862,10 @@ const Table = <T extends Record<string, unknown>>({
                     }
                 },
                 style: { cursor: 'pointer' },
-                className: record.id === selectedRow ? 'bg-blue-100' : '',
+                className:
+                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : '',
+                ...rest.onRow?.(record),
             })}
-            {...rest}
         />
     )
 }

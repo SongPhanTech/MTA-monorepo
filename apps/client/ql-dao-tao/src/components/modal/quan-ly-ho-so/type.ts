@@ -118,6 +118,8 @@ export type FilterProps = {
     academicRankType?: string[]
     academicDegreeType?: string[]
     rankId?: string[]
+    rank?: string
+    phone?: string
     officerNumber?: string
     lecturerType?: string[]
     staffType?: string[]

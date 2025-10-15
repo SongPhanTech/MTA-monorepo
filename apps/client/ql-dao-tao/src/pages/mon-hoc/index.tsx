@@ -193,7 +193,7 @@ export default function SubjectVersionPage({ subjectInfo }: any) {
                                 title: 'Đơn vị phụ trách',
                                 dataIndex: 'managementOrganization',
                                 align: 'center',
-                                render: (value) => (value?.name ? value?.name : ''),
+                                render: (value) => (value?.sMa ? value?.sMa : ''),
                             },
                             {
                                 title: 'Tín chỉ',
