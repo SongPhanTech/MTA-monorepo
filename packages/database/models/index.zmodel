@@ -1,4 +1,5 @@
 import './he-thong/config'
+import './he-thong/changelog'
 
 import './khao-thi/exam.zmodel'
 import './khao-thi/survey'
