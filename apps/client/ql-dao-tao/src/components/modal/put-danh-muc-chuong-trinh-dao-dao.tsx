@@ -10,6 +10,7 @@ import {
     useCreateCurriculum,
     useFindManyDM_DonVi,
     useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
     useFindUniqueCurriculum,
     useUpdateCurriculum,
 } from '@workspace/db/hooks'
@@ -17,6 +18,7 @@ import { Col, Form, Input, message, Radio } from 'antd'
 import dayjs from 'dayjs'
 import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import './index.css'
@@ -26,6 +28,7 @@ export type PutCurriculum = Curriculum & {
 dayjs.locale('vi')
 
 const PutCurriculum = () => {
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutCurriculum>()
     const {
@@ -40,8 +43,23 @@ const PutCurriculum = () => {
 
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
 
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType({
+        orderBy: { name: 'asc' },
+    })
+
+    const trainingObjectTypeIdForm = Form.useWatch('trainingObjectTypeId', form)
+
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
+        where: {
+            ...(trainingObjectTypeIdForm
+                ? {
+                      trainingObjectTypes: {
+                          some: { trainingObjectTypeId: trainingObjectTypeIdForm },
+                      },
+                  }
+                : {}),
+        },
     })
 
     const { mutateAsync: createCurriculum } = useCreateCurriculum()
@@ -55,8 +73,9 @@ const PutCurriculum = () => {
                 name: output.name.trim(),
                 englishName: output.englishName,
                 description: output.description,
-                trainingMajorId: output.trainingMajorId,
                 managementOrganizationId: output.managementOrganizationId,
+                trainingMajorId: output.trainingMajorId,
+                trainingObjectTypeId: output.trainingObjectTypeId,
                 active: output.active,
             }
 
@@ -158,10 +177,11 @@ const PutCurriculum = () => {
             form.setFieldsValue({
                 active: true,
                 documentFiles: [],
+                trainingObjectTypeId,
             })
             setDocument([])
         }
-    }, [initialData])
+    }, [initialData, trainingObjectTypeId])
 
     return (
         <PutFormModal
@@ -189,19 +209,6 @@ const PutCurriculum = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingMajorId" label="Chuyên ngành đào tạo" required>
-                    <Select
-                        placeholder="Chọn chuyên ngành đào tạo"
-                        options={trainingMajorData.map((i: TrainingMajor) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem
                     form={form}
                     name="managementOrganizationId"
@@ -217,6 +224,37 @@ const PutCurriculum = () => {
                         filterTreeNode={(input, node) =>
                             (node?.label as string)?.toLowerCase()?.includes(input?.toLowerCase())
                         }
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem
+                    form={form}
+                    name="trainingObjectTypeId"
+                    label="Chọn đối tượng đào tạo"
+                    required
+                >
+                    <Select
+                        placeholder="Đối tượng đào tạo"
+                        options={trainingObjectTypeData.map((i) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+                <FormItem form={form} name="trainingMajorId" label="Chuyên ngành đào tạo" required>
+                    <Select
+                        placeholder="Chọn chuyên ngành đào tạo"
+                        options={trainingMajorData.map((i: TrainingMajor) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
                     />
                 </FormItem>
             </Col>

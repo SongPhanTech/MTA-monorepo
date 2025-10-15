@@ -31,6 +31,7 @@ model TrainingObjectType extends Base {
   trainingLevelId      String?
 
   trainingCourse       TrainingCourse[]
+  curriculum           Curriculum[]
   curriculumVersion    CurriculumVersion[]
   trainingMajors       TrainingMajorOnTrainingObjectType[]
   trainingFields       TrainingFieldOnTrainingObjectType[]
@@ -40,11 +41,9 @@ model TrainingObjectType extends Base {
   graduationSession    GraduationSession[]
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
+  planTrainingDelay    PlanTrainingDelay[]
 
   @@schema("ql-dao-tao")
-
-
-  planTrainingDelay    PlanTrainingDelay[]
 }
 
 /// đối tượng ưu tiên
@@ -96,6 +95,7 @@ model TrainingLocation extends Base {
 
   students      Student[]
   buildings     Building[]
+
   @@schema("ql-dao-tao")
 }
 
@@ -220,13 +220,17 @@ model TrainingBlock extends Base {
 model TrainingBlockOnCurriculumVersion extends Base {
   trainingBlock           TrainingBlock          @relation(fields: [trainingBlockId], references: [id])
   trainingBlockId         String
-  curriculumVersion       CurriculumVersion      @relation(fields: [curriculumVersionId], references: [id])
-  curriculumVersionId     String
+  curriculumVersion       CurriculumVersion?     @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersionId     String?
+
+  curriculum              Curriculum?            @relation(fields: [curriculumId], references: [id])
+  curriculumId            String?
 
   /// ưu tiên sắp xếp
   priority                Int                    @default(0)
   electiveCreditsRequired Int                    @default(0)
   subjects                TrainingBlockSubject[]
+
 
   @@unique([trainingBlockId, curriculumVersionId])
   @@schema("ql-dao-tao")
@@ -239,6 +243,47 @@ model TrainingTime extends Base {
   curriculumVersion CurriculumVersion[]
   @@schema("ql-dao-tao")
 }
+
+/// Chứng chỉ
+model Certificate extends Base {
+  name                String
+  englishName         String?
+
+  /// SV đạt
+  archivedCertificate ArchivedCertificate[]
+  /// môn học có thể phiên điểm
+  subjects            CertificateOnSubject[]
+  @@schema("ql-dao-tao")
+}
+
+model CertificateOnSubject extends Base {
+  /// phiên điểm môn học
+  finalScore    Float       @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
+
+  certificate   Certificate @relation(fields: [certificateId], references: [id])
+  certificateId String
+
+  subject       Subject     @relation(fields: [subjectId], references: [id])
+  subjectId     String
+
+  @@schema("ql-dao-tao")
+}
+
+/// Giải thưởng
+model Award extends Base {
+  name          String
+  englishName   String?
+  bonusScore    Float
+
+  /// môn học có thể cộng điểm
+  subjects      Subject[]
+  /// SV đạt
+  archivedAward ArchivedAward[]
+
+  @@schema("ql-dao-tao")
+}
+
+
 
 // enum DiplomaFields {
 //   VI_FULLNAME

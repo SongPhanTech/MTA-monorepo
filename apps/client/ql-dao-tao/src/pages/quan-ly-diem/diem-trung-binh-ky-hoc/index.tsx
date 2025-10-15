@@ -1,4 +1,3 @@
-import TableCollapse from '@components/commons/tableCollapse'
 import { DEFAULT_PAGINATE_SIZE, TRANG_THAI_HOC_VIEN } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
@@ -6,21 +5,24 @@ import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import { buildOrgTree } from '@lib/utils'
-import type { Prisma, TrainingCourse } from '@workspace/db'
+import type { FixedClass, TrainingCourse } from '@workspace/db'
 import {
-    useCountFixedClass,
+    useCountStudent,
     useFindManyDM_DonVi,
     useFindManyFixedClass,
+    useFindManyStudent,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/training'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
 import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
+import DefaultLayout from '@layouts/default-layout'
+import Table from '@components/commons/table'
 
 dayjs.locale('vi')
 
@@ -28,153 +30,121 @@ interface DiemTrungBinhKyHocProps {
     semesterId: string
 }
 
-const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
+const DiemTrungBinhKyHoc = () => {
+    const { id: semesterId } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         code: '',
         name: '',
-        trainingCourseId: '',
-        managementOrganizationId: '',
+        trainingCourseId: undefined,
+        managementOrganizationId: undefined,
+        fixedClassId:undefined
     })
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
         useStudentTrainingTypeOptions()
     const { getAcademicRankingBaseTypeLabel } = useAcademicRankingBaseTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const isFiltering = useMemo(() => {
-        return Object.values(filters).some((value) => !!value)
-    }, [filters])
-
-    const where: Prisma.FixedClassWhereInput = useMemo(
-        () =>
-            isFiltering
-                ? {
-                      ...(filters.searchText
-                          ? {
-                                OR: [
-                                    {
-                                        code: {
-                                            contains: filters.searchText,
-                                            mode: 'insensitive',
-                                        },
-                                    },
-                                    {
-                                        name: {
-                                            contains: filters.searchText,
-                                            mode: 'insensitive',
-                                        },
-                                    },
-                                ],
-                            }
-                          : {}),
-                      students: {
-                          some: {
-                              studentSemesterResult: {
-                                  some: {
-                                      semesterId: semesterId,
-                                  },
-                              },
-                              ...(filters.code && filters.code !== ''
-                                  ? {
-                                        code: {
-                                            contains: filters.code,
-                                            mode: 'insensitive',
-                                        },
-                                    }
-                                  : {}),
-                              userProfile: {
-                                  ...(filters.name && filters.name !== ''
-                                      ? {
-                                            fullname: {
-                                                contains: filters.name,
-                                                mode: 'insensitive',
-                                            },
-                                        }
-                                      : {}),
-                              },
-                          },
-                      },
-                      ...(filters.trainingCourseId && filters.trainingCourseId !== ''
-                          ? {
-                                trainingCourseId: filters.trainingCourseId,
-                            }
-                          : {}),
-                      ...(filters.managementOrganizationId &&
-                      filters.managementOrganizationId !== ''
-                          ? {
-                                managementOrganizationId: filters.managementOrganizationId,
-                            }
-                          : {}),
-                  }
-                : {},
-        [filters, isFiltering, semesterId]
-    )
-
-    const { data: dataStudents, refetch } = useFindManyFixedClass(
-        {
-            where: {
-                ...where,
-                trainingCourse: {
-                    trainingObjectTypeId,
+    const where = useMemo(() => {
+        return {
+            trainingObjectTypeId,
+            studentSemesterResult: {
+                some: {
+                    semesterId,
                 },
             },
-            include: {
-                managementOrganization: true,
-                trainingCourse: {
-                    include: {
-                        trainingObjectType: true,
-                    },
-                },
-                students: {
-                    where: {
+             ...(
+                    (filters.code && filters.code !== '')||filters.name && filters.name !== ''
+                )?{
+                    userProfile: {
                         ...(filters.code && filters.code !== ''
                             ? {
                                   code: {
                                       contains: filters.code,
-                                      mode: 'insensitive',
+                                      mode: 'insensitive' as const,
                                   },
                               }
                             : {}),
-                        userProfile: {
-                            ...(filters.name && filters.name !== ''
-                                ? {
-                                      fullname: {
-                                          contains: filters.name,
-                                          mode: 'insensitive',
-                                      },
-                                  }
-                                : {}),
-                        },
-                    },
-                    include: {
-                        studentSemesterResult: {
-                            where: {
+                        ...(filters.name && filters.name !== ''
+                            ?{ OR: [
+                                {
+                                  fullname: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                                },
+                               {
+                                  firstName: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                                },
+                                 {
+                                  lastName: {
+                                      contains: filters.name,
+                                      mode: 'insensitive' as const,
+                                  },
+                                },
+                            ] }
+                            : {}),
+                }
+                }:{},
+                 ...(!!filters.trainingCourseId || !!filters.fixedClassId?{
+                    fixedClass: {
+                        ...(!!filters.fixedClassId?{
+                            id: filters.fixedClassId
+                        }:{}),
+                         ...(!!filters.trainingCourseId?{
+                             trainingCourseId: filters.trainingCourseId,
+                        }:{}),
+                    }
+                 }:{})
+                
+        }
+    }, [filters])
+
+    const { data: dataStudents, refetch } = useFindManyStudent(
+        {
+            where,
+            include: {
+                studentSemesterResult: {
+                    where: {
                                 semesterId,
                             },
-                        },
-                        userProfile: true,
-                    },
+                },
+               userProfile:true,
+                fixedClass: {
+                    include:{
+                        trainingCourse: true
+                    }
                 },
             },
-            orderBy: {
-                name: 'asc',
-            },
+            orderBy: [
+                {
+                    userProfile: {
+                        firstName: 'asc',
+                    },
+                },
+                {
+                    userProfile: {
+                        lastName: 'asc',
+                    },
+                },
+            ],
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
         { enabled: !!semesterId }
     )
 
-    const { data: count } = useCountFixedClass(
+    const { data: count } = useCountStudent(
         {
             where: {
                 ...where,
                 deletedAt: null,
-                trainingCourse: {
-                    trainingObjectTypeId,
-                },
             },
         },
         { enabled: !!semesterId }
@@ -184,8 +154,21 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
         orderBy: { name: 'asc' },
         where: {
             trainingObjectTypeId,
+            semesterStartId:semesterId
         },
     })
+
+        const { data: fixedClassData = [] } = useFindManyFixedClass({
+            orderBy: { name: 'asc' },
+            where: {
+                 ...(!!filters.managementOrganizationId?{
+                    managementOrganizationId: filters.managementOrganizationId,
+                 }:{}),
+                   ...(!!filters.trainingCourseId?{
+                    trainingCourseId: filters.trainingCourseId,
+                 }:{})
+            },
+        })
 
     const { data: managementOrganizationData = [] } = useFindManyDM_DonVi({
         orderBy: { sTen: 'asc' },
@@ -236,11 +219,11 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
+        <div className="bg-white rounded-lg shadow-sm px-4">
             <Row gutter={[16, 0]}>
-                <Col span={24}>
+                <Col span={24} className="mb-4">
                     <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
+                        <Col span={18}>
                             <Flex>
                                 {/* <Col span={10}>
                                     <Form.Item name="searchText">
@@ -280,7 +263,21 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                         />
                                     </Form.Item>
                                 </Col> */}
-                                <Col span={10}>
+                                           <Col span={8}>
+                                    <Form.Item className="mb-0" name="managementOrganizationId">
+                                        <TreeSelect
+                                            placeholder="Chọn đơn vị quản lý"
+                                            allowClear
+                                            showSearch
+                                            treeDefaultExpandAll
+                                            onChange={(val) =>
+                                                handleFilterChange('managementOrganizationId', val)
+                                            }
+                                            treeData={treeData}
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={8}>
                                     <Form.Item className="mb-0" name="trainingCourseId">
                                         <Select
                                             placeholder="Khoá đào tạo"
@@ -297,20 +294,25 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={10}>
-                                    <Form.Item className="mb-0" name="managementOrganizationId">
-                                        <TreeSelect
-                                            placeholder="Chọn đơn vị quản lý"
-                                            allowClear
-                                            showSearch
-                                            treeDefaultExpandAll
+
+                                            <Col span={8}>
+                                    <Form.Item className="mb-0" name="fixedClassId">
+                                        <Select
+                                            placeholder="Lớp quản lý"
+                                            options={fixedClassData.map(
+                                                (i: FixedClass) => ({
+                                                    value: i.id,
+                                                    label: `${i?.code} - ${i.name}`,
+                                                })
+                                            )}
                                             onChange={(val) =>
-                                                handleFilterChange('managementOrganizationId', val)
+                                                handleFilterChange('fixedClassId', val)
                                             }
-                                            treeData={treeData}
+                                            allowClear
                                         />
                                     </Form.Item>
                                 </Col>
+                     
                             </Flex>
                         </Col>
                         <Col span={6}>
@@ -323,30 +325,17 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                     </Row>
                 </Col>
                 <Col span={24}>
-                    <TableCollapse
-                        rowKey="key"
-                        headerTitleKey={({ code, name, trainingCourse, managementOrganization }) =>
-                            `${[
-                                code,
-                                name,
-                                trainingCourse?.name,
-                                trainingCourse?.trainingObjectType?.name,
-                                managementOrganization?.sTen,
-                            ]
-                                .filter(Boolean)
-                                .join(' - ')}`
-                        }
+                    <Table
+                        rowKey="id"
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                        childrenFieldName="students"
-                        defaultExpandAll
                         data={dataStudents}
                         columns={[
                             {
-                                title: 'Mã sinh viên',
+                                title: 'Mã SV',
                                 dataIndex: 'code',
                                 width: 120,
                                 align: 'center',
@@ -358,6 +347,7 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
                                 title: 'Tên sinh viên',
                                 dataIndex: 'name',
                                 width: 200,
+                                align: 'center',
                                 fixed: 'left',
                                 type: 'input',
                                 render: (__, record) => record?.userProfile?.fullname,
@@ -647,3 +637,6 @@ const DiemTrungBinhKyHoc = ({ semesterId }: DiemTrungBinhKyHocProps) => {
 }
 
 export default DiemTrungBinhKyHoc
+DiemTrungBinhKyHoc.getLayout = function getLayout(page: React.ReactElement) {
+    return <DefaultLayout>{page}</DefaultLayout>
+}

@@ -84,6 +84,8 @@ model Student extends Base {
   studentSemesterResult          StudentSemesterResult[]
   studentYearResult              StudentYearResult[]
   scholarshipAwards              ScholarshipAward[]
+  archivedCertificate            ArchivedCertificate[]
+  archivedAward                  ArchivedAward[]
   academicWarning                AcademicWarning[]
   disciplinaryWarning            DisciplinaryWarning[]
   studentAcademicDecision        StudentAcademicDecision[]

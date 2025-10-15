@@ -51,6 +51,8 @@ const relationSchema = z.object({
     studentSemesterResult: z.array(z.unknown()).optional(),
     studentYearResult: z.array(z.unknown()).optional(),
     scholarshipAwards: z.array(z.unknown()).optional(),
+    archivedCertificate: z.array(z.unknown()).optional(),
+    archivedAward: z.array(z.unknown()).optional(),
     academicWarning: z.array(z.unknown()).optional(),
     disciplinaryWarning: z.array(z.unknown()).optional(),
     studentAcademicDecision: z.array(z.unknown()).optional(),
