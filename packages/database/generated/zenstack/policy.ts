@@ -14,6 +14,7 @@ import { PermissionType } from "../prisma-client";
 import { MessageSender } from "../prisma-client";
 import { DocumentStatus } from "../prisma-client";
 import { ScoreConvertStatus } from "../prisma-client";
+import { ArchivedCertificateStatus } from "../prisma-client";
 import { SemesterType } from "../prisma-client";
 import { ExamType } from "../prisma-client";
 import { SubjectVersionType } from "../prisma-client";
@@ -2345,6 +2346,66 @@ const policy: PolicyDef = {
                 update: { guard: TrainingTime_update, },
                 postUpdate: { guard: TrainingTime_postUpdate, },
                 delete: { guard: TrainingTime_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        certificate: {
+            modelLevel: {
+                read: { guard: Certificate_read, },
+                create: { guard: Certificate_create, inputChecker: Certificate_create_input, },
+                update: { guard: Certificate_update, },
+                postUpdate: { guard: Certificate_postUpdate, },
+                delete: { guard: Certificate_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        certificateOnSubject: {
+            modelLevel: {
+                read: { guard: CertificateOnSubject_read, },
+                create: { guard: CertificateOnSubject_create, inputChecker: CertificateOnSubject_create_input, },
+                update: { guard: CertificateOnSubject_update, },
+                postUpdate: { guard: CertificateOnSubject_postUpdate, },
+                delete: { guard: CertificateOnSubject_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        award: {
+            modelLevel: {
+                read: { guard: Award_read, },
+                create: { guard: Award_create, inputChecker: Award_create_input, },
+                update: { guard: Award_update, },
+                postUpdate: { guard: Award_postUpdate, },
+                delete: { guard: Award_delete, }
             },
             fieldLevel: {
                 read:
@@ -4955,7 +5016,7 @@ const policy: PolicyDef = {
         studentSubjectScore: { hasValidation: true },
         studentSubjectScoreHistory: { hasValidation: true },
         archivedCertificateOnStudentSubjectScore: { hasValidation: false },
-        archivedCertificate: { hasValidation: true },
+        archivedCertificate: { hasValidation: false },
         archivedAwardOnStudentSubjectScore: { hasValidation: false },
         archivedAward: { hasValidation: false },
         schoolYear: { hasValidation: false },
@@ -4995,6 +5056,9 @@ const policy: PolicyDef = {
         trainingBlock: { hasValidation: false },
         trainingBlockOnCurriculumVersion: { hasValidation: false },
         trainingTime: { hasValidation: false },
+        certificate: { hasValidation: false },
+        certificateOnSubject: { hasValidation: true },
+        award: { hasValidation: false },
         diplomaType: { hasValidation: false },
         scoreConvert: { hasValidation: false },
         trainingKPI: { hasValidation: false },
@@ -12573,6 +12637,201 @@ function TrainingTime_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_TrainingTime_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Certificate_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Certificate_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Certificate_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Certificate_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Certificate_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Certificate_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Certificate_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Certificate_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Certificate_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Certificate_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Certificate_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CertificateOnSubject_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_CertificateOnSubject_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CertificateOnSubject_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CertificateOnSubject_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CertificateOnSubject_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function CertificateOnSubject_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CertificateOnSubject_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CertificateOnSubject_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_CertificateOnSubject_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function CertificateOnSubject_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CertificateOnSubject_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Award_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_Award_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Award_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Award_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Award_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function Award_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Award_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function Award_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_Award_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function Award_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_Award_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

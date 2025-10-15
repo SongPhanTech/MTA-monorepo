@@ -104,6 +104,15 @@ enum ScoreConvertStatus {
   @@schema("ql-dao-tao")
 }
 
+/// Trạng thái khi SV nộp chứng chỉ online
+enum ArchivedCertificateStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
 enum SemesterType {
   FIRST
   FIRST_SUPPLEMENTARY
@@ -2314,6 +2323,7 @@ model ArchivedCertificateOnStudentSubjectScore {
   @@schema("ql-dao-tao")
 }
 
+/// Chứng chỉ của SV
 model ArchivedCertificate {
   id                  String                                     @id() @default(cuid())
   code                String?                                    @unique()
@@ -2322,9 +2332,19 @@ model ArchivedCertificate {
   deletedAt           DateTime?
   createdAt           DateTime                                   @default(now())
   updatedAt           DateTime                                   @default(now()) @updatedAt()
-  name                String
-  englishName         String?
-  finalScore          Float
+  certificate         Certificate                                @relation(fields: [certificateId], references: [id])
+  certificateId       String
+  student             Student                                    @relation(fields: [studentId], references: [id])
+  studentId           String
+  /// điểm chứng chỉ
+  score               Float
+  /// nơi cấp
+  issuedBy            String
+  /// ngày cấp  
+  issuedDate          DateTime
+  /// ngày hết hạn
+  expiredDate         DateTime?
+  status              ArchivedCertificateStatus?
   documentFiles       DocumentFile[]
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
 
@@ -2348,6 +2368,7 @@ model ArchivedAwardOnStudentSubjectScore {
   @@schema("ql-dao-tao")
 }
 
+/// Giải thưởng của SV
 model ArchivedAward {
   id                  String                               @id() @default(cuid())
   code                String?                              @unique()
@@ -2356,9 +2377,13 @@ model ArchivedAward {
   deletedAt           DateTime?
   createdAt           DateTime                             @default(now())
   updatedAt           DateTime                             @default(now()) @updatedAt()
-  name                String
-  englishName         String?
-  bonusScore          Float
+  award               Award                                @relation(fields: [awardId], references: [id])
+  awardId             String
+  student             Student                              @relation(fields: [studentId], references: [id])
+  studentId           String
+  /// ngày nhận
+  date                DateTime?
+  /// minh chứng
   documentFiles       DocumentFile[]
   studentSubjectScore ArchivedAwardOnStudentSubjectScore[]
 
@@ -2649,19 +2674,21 @@ model CurriculumVersion {
 
 /// môn học
 model Subject {
-  id                       String           @id() @default(cuid())
-  code                     String?          @unique()
-  active                   Boolean          @default(true)
-  description              String?          @db.Text()
+  id                       String                 @id() @default(cuid())
+  code                     String?                @unique()
+  active                   Boolean                @default(true)
+  description              String?                @db.Text()
   deletedAt                DateTime?
-  createdAt                DateTime         @default(now())
-  updatedAt                DateTime         @default(now()) @updatedAt()
-  name                     String           @unique()
-  englishName              String?          @unique()
-  managementOrganization   DM_DonVi?        @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?          @db.Uuid()
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @default(now()) @updatedAt()
+  name                     String                 @unique()
+  englishName              String?                @unique()
+  managementOrganization   DM_DonVi?              @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?                @db.Uuid()
   information              String?
-  subjectVersion           SubjectVersion[] @relation(name: "SubjectVersion")
+  subjectVersion           SubjectVersion[]       @relation(name: "SubjectVersion")
+  certificateOnSubject     CertificateOnSubject[]
+  awardOnSubject           Award[]
 
   @@schema("ql-dao-tao")
 }
@@ -3297,6 +3324,63 @@ model TrainingTime {
   @@schema("ql-dao-tao")
 }
 
+/// Chứng chỉ
+model Certificate {
+  id                  String                 @id() @default(cuid())
+  code                String?                @unique()
+  active              Boolean                @default(true)
+  description         String?                @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @default(now()) @updatedAt()
+  name                String
+  englishName         String?
+  /// SV đạt
+  archivedCertificate ArchivedCertificate[]
+  /// môn học có thể phiên điểm
+  subjects            CertificateOnSubject[]
+
+  @@schema("ql-dao-tao")
+}
+
+model CertificateOnSubject {
+  id            String      @id() @default(cuid())
+  code          String?     @unique()
+  active        Boolean     @default(true)
+  description   String?     @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt()
+  /// phiên điểm môn học
+  finalScore    Float
+  certificate   Certificate @relation(fields: [certificateId], references: [id])
+  certificateId String
+  subject       Subject     @relation(fields: [subjectId], references: [id])
+  subjectId     String
+
+  @@schema("ql-dao-tao")
+}
+
+/// Giải thưởng
+model Award {
+  id            String          @id() @default(cuid())
+  code          String?         @unique()
+  active        Boolean         @default(true)
+  description   String?         @db.Text()
+  deletedAt     DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt()
+  name          String
+  englishName   String?
+  bonusScore    Float
+  /// môn học có thể cộng điểm
+  subjects      Subject[]
+  /// SV đạt
+  archivedAward ArchivedAward[]
+
+  @@schema("ql-dao-tao")
+}
+
 model DiplomaType {
   id                 String               @id() @default(cuid())
   code               String?              @unique()
@@ -3402,6 +3486,8 @@ model Student {
   studentSemesterResult          StudentSemesterResult[]
   studentYearResult              StudentYearResult[]
   scholarshipAwards              ScholarshipAward[]
+  archivedCertificate            ArchivedCertificate[]
+  archivedAward                  ArchivedAward[]
   academicWarning                AcademicWarning[]
   disciplinaryWarning            DisciplinaryWarning[]
   studentAcademicDecision        StudentAcademicDecision[]

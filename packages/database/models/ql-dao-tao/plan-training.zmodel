@@ -211,17 +211,41 @@ model ArchivedCertificateOnStudentSubjectScore extends Base {
   @@schema("ql-dao-tao")
 }
 
+/// Trạng thái khi SV nộp chứng chỉ online
+enum ArchivedCertificateStatus {
+  PENDING
+  APPROVED
+  REJECTED
+
+  @@schema("ql-dao-tao")
+}
+
+/// Chứng chỉ của SV
 model ArchivedCertificate extends Base {
-  name                String
-  englishName         String?
-  finalScore          Float                                      @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10') // điểm tổng kết
+  certificate         Certificate                                @relation(fields: [certificateId], references: [id])
+  certificateId       String
+
+  student             Student                                    @relation(fields: [studentId], references: [id])
+  studentId           String
+
+  // TODO: dùng `code` cho mã/ID chứng chỉ
+
+  /// điểm chứng chỉ
+  score               Float
+  /// nơi cấp
+  issuedBy            String
+  /// ngày cấp  
+  issuedDate          DateTime
+  /// ngày hết hạn
+  expiredDate         DateTime?
+  status              ArchivedCertificateStatus?
 
   documentFiles       DocumentFile[]
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
   @@schema("ql-dao-tao")
 }
 
-model  ArchivedAwardOnStudentSubjectScore extends Base {
+model ArchivedAwardOnStudentSubjectScore extends Base {
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String
 
@@ -232,10 +256,18 @@ model  ArchivedAwardOnStudentSubjectScore extends Base {
   @@schema("ql-dao-tao")
 }
 
+/// Giải thưởng của SV
 model ArchivedAward extends Base {
-  name                String
-  englishName         String?
-  bonusScore          Float  // điểm thưởng
+  award               Award                                @relation(fields: [awardId], references: [id])
+  awardId             String
+
+  student             Student                              @relation(fields: [studentId], references: [id])
+  studentId           String
+
+  /// ngày nhận
+  date                DateTime?
+
+  /// minh chứng
   documentFiles       DocumentFile[]
 
   studentSubjectScore ArchivedAwardOnStudentSubjectScore[]
@@ -505,14 +537,16 @@ model CurriculumVersion extends Base {
 
 /// môn học
 model Subject extends Base {
-  name                     String           @unique
-  englishName              String?          @unique
+  name                     String                 @unique
+  englishName              String?                @unique
 
-  managementOrganization   DM_DonVi?        @relation(fields: [managementOrganizationId], references: [Id])
-  managementOrganizationId String?          @db.Uuid
+  managementOrganization   DM_DonVi?              @relation(fields: [managementOrganizationId], references: [Id])
+  managementOrganizationId String?                @db.Uuid
   information              String?   //Thông tin
 
-  subjectVersion           SubjectVersion[] @relation(name: "SubjectVersion")
+  subjectVersion           SubjectVersion[]       @relation(name: "SubjectVersion")
+  certificateOnSubject     CertificateOnSubject[]
+  awardOnSubject           Award[]
 
   @@schema("ql-dao-tao")
 }
