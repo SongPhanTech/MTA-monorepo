@@ -2690,6 +2690,7 @@ model SubjectVersion {
   deletedAt                DateTime?
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @default(now()) @updatedAt()
+  locked                   Boolean                    @default(false)
   name                     String
   codeTkb                  String?
   examType                 ExamType
@@ -2755,6 +2756,7 @@ model SubjectVersionHistory {
   updatedAt            DateTime            @default(now()) @updatedAt()
   subjectVersion       SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId     String
+  locked               Boolean?
   name                 String?
   codeTkb              String?
   examType             ExamType?

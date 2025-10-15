@@ -16667,6 +16667,17 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                locked: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 name: {
                     name: string;
                     type: string;
@@ -17144,6 +17155,11 @@ declare const metadata: {
                     type: string;
                     isForeignKey: boolean;
                     relationField: string;
+                };
+                locked: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                 };
                 name: {
                     name: string;

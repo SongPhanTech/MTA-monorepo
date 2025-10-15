@@ -143552,6 +143552,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    locked: boolean | null
     name: string | null
     codeTkb: string | null
     examType: $Enums.ExamType | null
@@ -143589,6 +143590,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    locked: boolean | null
     name: string | null
     codeTkb: string | null
     examType: $Enums.ExamType | null
@@ -143626,6 +143628,7 @@ export namespace Prisma {
     deletedAt: number
     createdAt: number
     updatedAt: number
+    locked: number
     name: number
     codeTkb: number
     examType: number
@@ -143693,6 +143696,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
+    locked?: true
     name?: true
     codeTkb?: true
     examType?: true
@@ -143730,6 +143734,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
+    locked?: true
     name?: true
     codeTkb?: true
     examType?: true
@@ -143767,6 +143772,7 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
+    locked?: true
     name?: true
     codeTkb?: true
     examType?: true
@@ -143891,6 +143897,7 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
+    locked: boolean
     name: string
     codeTkb: string | null
     examType: $Enums.ExamType
@@ -143947,6 +143954,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    locked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -144004,6 +144012,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    locked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -144045,6 +144054,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    locked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -144086,6 +144096,7 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    locked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -144115,7 +144126,7 @@ export namespace Prisma {
     subjectVersionCategoryId?: boolean
   }
 
-  export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId" | "trainingObjectTypeId" | "subjectVersionCategoryId", ExtArgs["result"]["subjectVersion"]>
+  export type SubjectVersionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "locked" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "objectives" | "learningOutcome" | "structure" | "guild" | "academicResults" | "materials" | "rules" | "managementOrganizationId" | "subjectId" | "trainingObjectTypeId" | "subjectVersionCategoryId", ExtArgs["result"]["subjectVersion"]>
   export type SubjectVersionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     managementOrganization?: boolean | SubjectVersion$managementOrganizationArgs<ExtArgs>
     subject?: boolean | SubjectDefaultArgs<ExtArgs>
@@ -144188,6 +144199,7 @@ export namespace Prisma {
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
+      locked: boolean
       name: string
       codeTkb: string | null
       examType: $Enums.ExamType
@@ -144673,6 +144685,7 @@ export namespace Prisma {
     readonly deletedAt: FieldRef<"SubjectVersion", 'DateTime'>
     readonly createdAt: FieldRef<"SubjectVersion", 'DateTime'>
     readonly updatedAt: FieldRef<"SubjectVersion", 'DateTime'>
+    readonly locked: FieldRef<"SubjectVersion", 'Boolean'>
     readonly name: FieldRef<"SubjectVersion", 'String'>
     readonly codeTkb: FieldRef<"SubjectVersion", 'String'>
     readonly examType: FieldRef<"SubjectVersion", 'ExamType'>
@@ -145561,6 +145574,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     subjectVersionId: string | null
+    locked: boolean | null
     name: string | null
     codeTkb: string | null
     examType: $Enums.ExamType | null
@@ -145590,6 +145604,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     subjectVersionId: string | null
+    locked: boolean | null
     name: string | null
     codeTkb: string | null
     examType: $Enums.ExamType | null
@@ -145619,6 +145634,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     subjectVersionId: number
+    locked: number
     name: number
     codeTkb: number
     examType: number
@@ -145678,6 +145694,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     subjectVersionId?: true
+    locked?: true
     name?: true
     codeTkb?: true
     examType?: true
@@ -145707,6 +145724,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     subjectVersionId?: true
+    locked?: true
     name?: true
     codeTkb?: true
     examType?: true
@@ -145736,6 +145754,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     subjectVersionId?: true
+    locked?: true
     name?: true
     codeTkb?: true
     examType?: true
@@ -145852,6 +145871,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     subjectVersionId: string
+    locked: boolean | null
     name: string | null
     codeTkb: string | null
     examType: $Enums.ExamType | null
@@ -145900,6 +145920,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     subjectVersionId?: boolean
+    locked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -145932,6 +145953,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     subjectVersionId?: boolean
+    locked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -145964,6 +145986,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     subjectVersionId?: boolean
+    locked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -145996,6 +146019,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     subjectVersionId?: boolean
+    locked?: boolean
     name?: boolean
     codeTkb?: boolean
     examType?: boolean
@@ -146016,7 +146040,7 @@ export namespace Prisma {
     updatedById?: boolean
   }
 
-  export type SubjectVersionHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectVersionId" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "trainingObjectTypeId" | "updatedById", ExtArgs["result"]["subjectVersionHistory"]>
+  export type SubjectVersionHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectVersionId" | "locked" | "name" | "codeTkb" | "examType" | "type" | "onePoint" | "credit" | "week" | "period" | "schedulePeriod" | "numberOfTheory" | "numberOfPractical" | "numberOfSelfStudy" | "numberOfPractice" | "numberOfReview" | "numberOfExam" | "numberOfOther" | "trainingObjectTypeId" | "updatedById", ExtArgs["result"]["subjectVersionHistory"]>
   export type SubjectVersionHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     trainingObjectType?: boolean | SubjectVersionHistory$trainingObjectTypeArgs<ExtArgs>
@@ -146049,6 +146073,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       subjectVersionId: string
+      locked: boolean | null
       name: string | null
       codeTkb: string | null
       examType: $Enums.ExamType | null
@@ -146501,6 +146526,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"SubjectVersionHistory", 'DateTime'>
     readonly updatedAt: FieldRef<"SubjectVersionHistory", 'DateTime'>
     readonly subjectVersionId: FieldRef<"SubjectVersionHistory", 'String'>
+    readonly locked: FieldRef<"SubjectVersionHistory", 'Boolean'>
     readonly name: FieldRef<"SubjectVersionHistory", 'String'>
     readonly codeTkb: FieldRef<"SubjectVersionHistory", 'String'>
     readonly examType: FieldRef<"SubjectVersionHistory", 'ExamType'>
@@ -330782,6 +330808,7 @@ export namespace Prisma {
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
+    locked: 'locked',
     name: 'name',
     codeTkb: 'codeTkb',
     examType: 'examType',
@@ -330823,6 +330850,7 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     subjectVersionId: 'subjectVersionId',
+    locked: 'locked',
     name: 'name',
     codeTkb: 'codeTkb',
     examType: 'examType',
@@ -347685,6 +347713,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
+    locked?: BoolFilter<"SubjectVersion"> | boolean
     name?: StringFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
     examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
@@ -347741,6 +347770,7 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    locked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrderInput | SortOrder
     examType?: SortOrder
@@ -347801,6 +347831,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
+    locked?: BoolFilter<"SubjectVersion"> | boolean
     name?: StringFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
     examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
@@ -347857,6 +347888,7 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    locked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrderInput | SortOrder
     examType?: SortOrder
@@ -347902,6 +347934,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SubjectVersion"> | Date | string
+    locked?: BoolWithAggregatesFilter<"SubjectVersion"> | boolean
     name?: StringWithAggregatesFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableWithAggregatesFilter<"SubjectVersion"> | string | null
     examType?: EnumExamTypeWithAggregatesFilter<"SubjectVersion"> | $Enums.ExamType
@@ -347943,6 +347976,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     subjectVersionId?: StringFilter<"SubjectVersionHistory"> | string
+    locked?: BoolNullableFilter<"SubjectVersionHistory"> | boolean | null
     name?: StringNullableFilter<"SubjectVersionHistory"> | string | null
     codeTkb?: StringNullableFilter<"SubjectVersionHistory"> | string | null
     examType?: EnumExamTypeNullableFilter<"SubjectVersionHistory"> | $Enums.ExamType | null
@@ -347975,6 +348009,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
+    locked?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     codeTkb?: SortOrderInput | SortOrder
     examType?: SortOrderInput | SortOrder
@@ -348011,6 +348046,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     subjectVersionId?: StringFilter<"SubjectVersionHistory"> | string
+    locked?: BoolNullableFilter<"SubjectVersionHistory"> | boolean | null
     name?: StringNullableFilter<"SubjectVersionHistory"> | string | null
     codeTkb?: StringNullableFilter<"SubjectVersionHistory"> | string | null
     examType?: EnumExamTypeNullableFilter<"SubjectVersionHistory"> | $Enums.ExamType | null
@@ -348043,6 +348079,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
+    locked?: SortOrderInput | SortOrder
     name?: SortOrderInput | SortOrder
     codeTkb?: SortOrderInput | SortOrder
     examType?: SortOrderInput | SortOrder
@@ -348080,6 +348117,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"SubjectVersionHistory"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SubjectVersionHistory"> | Date | string
     subjectVersionId?: StringWithAggregatesFilter<"SubjectVersionHistory"> | string
+    locked?: BoolNullableWithAggregatesFilter<"SubjectVersionHistory"> | boolean | null
     name?: StringNullableWithAggregatesFilter<"SubjectVersionHistory"> | string | null
     codeTkb?: StringNullableWithAggregatesFilter<"SubjectVersionHistory"> | string | null
     examType?: EnumExamTypeNullableWithAggregatesFilter<"SubjectVersionHistory"> | $Enums.ExamType | null
@@ -374543,6 +374581,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -374595,6 +374634,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -374647,6 +374687,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -374699,6 +374740,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -374751,6 +374793,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -374788,6 +374831,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -374821,6 +374865,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -374858,6 +374903,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -374888,6 +374934,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -374916,6 +374963,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -374946,6 +374994,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -374975,6 +375024,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -375003,6 +375053,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -375030,6 +375081,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -399057,6 +399109,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    locked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
     examType?: SortOrder
@@ -399108,6 +399161,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    locked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
     examType?: SortOrder
@@ -399145,6 +399199,7 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    locked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
     examType?: SortOrder
@@ -399242,6 +399297,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
+    locked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
     examType?: SortOrder
@@ -399285,6 +399341,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
+    locked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
     examType?: SortOrder
@@ -399314,6 +399371,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     subjectVersionId?: SortOrder
+    locked?: SortOrder
     name?: SortOrder
     codeTkb?: SortOrder
     examType?: SortOrder
@@ -437600,6 +437658,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -437629,6 +437688,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -440864,6 +440924,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersionHistory"> | Date | string
     subjectVersionId?: StringFilter<"SubjectVersionHistory"> | string
+    locked?: BoolNullableFilter<"SubjectVersionHistory"> | boolean | null
     name?: StringNullableFilter<"SubjectVersionHistory"> | string | null
     codeTkb?: StringNullableFilter<"SubjectVersionHistory"> | string | null
     examType?: EnumExamTypeNullableFilter<"SubjectVersionHistory"> | $Enums.ExamType | null
@@ -465710,6 +465771,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -465761,6 +465823,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -466468,6 +466531,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"SubjectVersion"> | Date | string | null
     createdAt?: DateTimeFilter<"SubjectVersion"> | Date | string
     updatedAt?: DateTimeFilter<"SubjectVersion"> | Date | string
+    locked?: BoolFilter<"SubjectVersion"> | boolean
     name?: StringFilter<"SubjectVersion"> | string
     codeTkb?: StringNullableFilter<"SubjectVersion"> | string | null
     examType?: EnumExamTypeFilter<"SubjectVersion"> | $Enums.ExamType
@@ -475522,6 +475586,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -475573,6 +475638,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -475730,6 +475796,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -475781,6 +475848,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -476173,6 +476241,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -476224,6 +476293,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -476383,6 +476453,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -476434,6 +476505,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -476962,6 +477034,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -477013,6 +477086,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -477115,6 +477189,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -477166,6 +477241,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -477312,6 +477388,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -477363,6 +477440,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -477896,6 +477974,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -477947,6 +478026,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -486301,6 +486381,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486352,6 +486433,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486516,6 +486598,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486567,6 +486650,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486882,6 +486966,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486933,6 +487018,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -486989,6 +487075,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487040,6 +487127,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487096,6 +487184,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487147,6 +487236,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487203,6 +487293,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487254,6 +487345,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -487764,6 +487856,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -487792,6 +487885,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -488388,6 +488482,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -488439,6 +488534,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -488880,6 +488976,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -488931,6 +489028,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -489418,6 +489516,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -489469,6 +489568,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -489561,6 +489661,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -489612,6 +489713,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -489694,6 +489796,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -489745,6 +489848,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -489847,6 +489951,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -489898,6 +490003,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -490963,6 +491069,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -491014,6 +491121,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -491996,6 +492104,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -492047,6 +492156,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -494421,6 +494531,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -494472,6 +494583,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -494595,6 +494707,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -494624,6 +494737,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -504893,6 +505007,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -504944,6 +505059,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -505888,6 +506004,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -505939,6 +506056,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -530685,6 +530803,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -530736,6 +530855,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -530919,6 +531039,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -530970,6 +531091,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -531144,6 +531266,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -531195,6 +531318,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -531354,6 +531478,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -531405,6 +531530,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -538756,6 +538882,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -540493,6 +540620,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -540522,6 +540650,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -540550,6 +540679,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -545615,6 +545745,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -546134,6 +546265,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -546185,6 +546317,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -546236,6 +546369,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -564987,6 +565121,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -565023,6 +565158,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565074,6 +565210,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565125,6 +565262,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565161,6 +565299,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -565197,6 +565336,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565248,6 +565388,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565299,6 +565440,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565511,6 +565653,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -565584,6 +565727,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565635,6 +565779,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565686,6 +565831,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565723,6 +565869,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565774,6 +565921,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565825,6 +565973,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565862,6 +566011,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565913,6 +566063,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -565964,6 +566115,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566001,6 +566153,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566052,6 +566205,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566103,6 +566257,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -566665,6 +566820,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -566693,6 +566849,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -566721,6 +566878,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -567964,6 +568122,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    locked?: boolean
     name: string
     codeTkb?: string | null
     examType: $Enums.ExamType
@@ -568020,6 +568179,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    locked?: boolean | null
     name?: string | null
     codeTkb?: string | null
     examType?: $Enums.ExamType | null
@@ -568771,6 +568931,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -568822,6 +568983,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -568873,6 +569035,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: BoolFieldUpdateOperationsInput | boolean
     name?: StringFieldUpdateOperationsInput | string
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: EnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType
@@ -568970,6 +569133,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -568999,6 +569163,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
@@ -569027,6 +569192,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    locked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     codeTkb?: NullableStringFieldUpdateOperationsInput | string | null
     examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null

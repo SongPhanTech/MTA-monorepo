@@ -9451,6 +9451,10 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, locked: {
+                    name: "locked",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -9749,6 +9753,10 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'subjectVersion',
+                }, locked: {
+                    name: "locked",
+                    type: "Boolean",
+                    isOptional: true,
                 }, name: {
                     name: "name",
                     type: "String",
