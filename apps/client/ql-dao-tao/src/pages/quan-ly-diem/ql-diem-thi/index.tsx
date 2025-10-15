@@ -42,7 +42,6 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-type PutStudentSubjectScore = StudentSubjectScore & {}
 type FilterTable = FilterProps & {
     fullname?: string
     fixedClassName?: string
@@ -64,6 +63,8 @@ export default function SubjectClassScore() {
         scoreChecked: boolean
         scoreSubmitted: boolean
     }>()
+
+    const [isChanged, setIsChanged] = useState(false)
     const [formTable] =
         Form.useForm<
             {
@@ -140,7 +141,6 @@ export default function SubjectClassScore() {
                     ...value_,
                 }
             })
-            console.log(listObject, dataTableSubmit)
 
             const error = listObject?.find((i: any) => i?.examScore > 10 || i?.examScore < 0)
             if (error) {
@@ -186,24 +186,34 @@ export default function SubjectClassScore() {
                     },
                 ]
             }
-            const listChange = dataTableSubmit.filter(
+            const listChange = listObject.filter(
                 (i: any) => i.examScore || i.description || i.suspended || i.suspendedReason
             )
 
             if (listChange?.length > 0) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
-                    ...listChange.map(({ id, item }: any) => {
+                    ...listChange.map((item: any) => {
+                        const { id } = item
                         const newData = dataTableSubmit[id]
+
                         return {
                             model: 'StudentSubjectScore',
                             operation: 'update',
                             data: {
-                                where: {
-                                    id,
-                                },
+                                where: { id },
                                 data: {
                                     ...newData,
+                                    attendanceScore: !!item?.subjectVersion?.onePoint
+                                        ? !!item.examScore
+                                            ? item.examScore
+                                            : newData?.examScore
+                                        : item?.attendanceScore,
+                                    midtermScore: !!item?.subjectVersion?.onePoint
+                                        ? !!item.examScore
+                                            ? item.examScore
+                                            : newData?.examScore
+                                        : item?.midtermScore,
                                     examScore: !!item.examScore
                                         ? item.examScore
                                         : newData?.examScore,
@@ -220,16 +230,27 @@ export default function SubjectClassScore() {
                             },
                         }
                     }),
-                    ...listChange.map(({ id, item }: any) => {
+
+                    ...listChange.map((item: any) => {
+                        const { id } = item
                         const newData = dataTableSubmit[id]
+
                         return {
                             model: 'StudentSubjectScoreHistory',
                             operation: 'create',
                             data: {
                                 data: {
                                     studentSubjectScoreId: id,
-                                    attendanceScore: item?.attendanceScore,
-                                    midtermScore: item?.midtermScore,
+                                    attendanceScore: !!item?.subjectVersion?.onePoint
+                                        ? !!item.examScore
+                                            ? item.examScore
+                                            : newData?.examScore
+                                        : item?.attendanceScore,
+                                    midtermScore: !!item?.subjectVersion?.onePoint
+                                        ? !!item.examScore
+                                            ? item.examScore
+                                            : newData?.examScore
+                                        : item?.midtermScore,
                                     examScore: !!item.examScore
                                         ? item.examScore
                                         : newData?.examScore,
@@ -255,6 +276,7 @@ export default function SubjectClassScore() {
                 await sqlTransaction(listSqlTransaction)
                 message.success('Đã cập nhật điểm thi thành công!')
                 debouncedRefetch()
+                setIsChanged(false)
             }
         } catch (error: any) {
             if (error?.info?.message) {
@@ -570,7 +592,7 @@ export default function SubjectClassScore() {
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <form>
     useEffect(() => {
         if (subjectClassId) {
             form.setFieldsValue({
@@ -581,15 +603,28 @@ export default function SubjectClassScore() {
             })
         }
     }, [dataTable, subjectClassId])
+    const listForm = Form.useWatch([], formTable) || []
+    useEffect(() => {
+        if (listForm) {
+            const item = Object.values(listForm).find(
+                (i: any) => i?.examScore || i?.description || i?.suspended || i?.suspendedReason
+            )
+            if (item) {
+                setIsChanged(true)
+            }
+        }
+    }, [listForm])
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <formTable>
     useEffect(() => {
         if (subjectClassId) {
-            // setListChange([])
-            // setSubjectClassIdSelected(subjectClassId as string)
+            setIsChanged(false)
+            formTable.setFieldsValue([])
         }
     }, [subjectClassId])
 
     useEffect(() => {
+        if (!isChanged) return
         const handleRouteChange = (url: string) => {
             if (
                 router.pathname !== url &&
@@ -605,7 +640,7 @@ export default function SubjectClassScore() {
         return () => {
             router.events.off('routeChangeStart', handleRouteChange)
         }
-    }, [router.events.emit, router.events.off, router.events.on, router.pathname])
+    }, [isChanged, router.events.emit, router.events.off, router.events.on, router.pathname])
 
     return (
         <div className="bg-white">
@@ -1123,6 +1158,7 @@ export default function SubjectClassScore() {
                                                     render: (value, record, index: number) => {
                                                         return (
                                                             <Checkbox
+                                                                disabled={true}
                                                                 checked={record?.examBanned}
                                                             />
                                                         )
@@ -1151,6 +1187,7 @@ export default function SubjectClassScore() {
                                                     render: (value, record, index: number) => {
                                                         return (
                                                             <Checkbox
+                                                                disabled={true}
                                                                 checked={record?.examPostponed}
                                                             />
                                                         )
@@ -1185,7 +1222,12 @@ export default function SubjectClassScore() {
                                                                 label=""
                                                                 valuePropName="checked"
                                                             >
-                                                                <Checkbox />
+                                                                <Checkbox
+                                                                    disabled={
+                                                                        profileId !== listUser.P13
+                                                                    }
+                                                                    checked={record?.suspended}
+                                                                />
                                                             </Form.Item>
                                                         )
                                                     },
@@ -1218,7 +1260,13 @@ export default function SubjectClassScore() {
                                                                     >
                                                                         <Input
                                                                             placeholder="Nhập lý do đình chỉ"
-                                                                            disabled={!suspended} // 👈 disable khi chưa tick
+                                                                            disabled={
+                                                                                !(
+                                                                                    suspended &&
+                                                                                    profileId ===
+                                                                                        listUser.P13
+                                                                                )
+                                                                            }
                                                                         />
                                                                     </Form.Item>
                                                                 )
