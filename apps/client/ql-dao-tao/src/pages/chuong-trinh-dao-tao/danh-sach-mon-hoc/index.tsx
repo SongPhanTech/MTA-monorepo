@@ -3,6 +3,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import ViewIcon from '@components/icons/view'
+import { HistorySubjectVersionType } from '@components/modal/put-phien-ban-mon-hoc'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
@@ -204,6 +205,9 @@ export default function SubjectList() {
     const { onOpen } = useDisclosure<{ id: string; isLocked: boolean }>({
         tag: 'PutSubjectListModal',
     })
+    const { onOpen: onOpenHistory } = useDisclosure<{ id: string; isLocked: boolean }>({
+        tag: 'ModalViewHistoryChange',
+    })
 
     const { onOpen: onOpenSubjectVersion } = useDisclosure<{
         subjectId: string
@@ -219,7 +223,7 @@ export default function SubjectList() {
         onOpen()
     }
     const handleHistory = () => {
-        // onOpenHistory()
+        onOpenHistory()
     }
     const handleToggleLock = () => {
         //Todo: cần api để xử lí việc khóa/mở khóa hàng loạt
@@ -236,17 +240,25 @@ export default function SubjectList() {
 
     const { mutateAsync: updateSubjectVersion } = useUpdateSubjectVersion()
     const { mutateAsync: updateSubject } = useUpdateSubject()
-    async function handleDelete(id: string) {
+    async function handleDelete(record: any) {
         try {
             showSpinner()
             await updateSubjectVersion({
                 where: {
-                    id,
+                    id: record.id,
                 },
                 data: {
                     deletedAt: new Date(),
                 },
             })
+            const historyData = {
+                subjectVersionId: record.id,
+                content: 'Xóa môn học',
+                action: HistorySubjectVersionType.DELETE,
+                updatedById: window?.contextData?.userId ?? null,
+            }
+            //TODO: Gọi api lưu lịch sử
+            // await useCreateSubjectVersionHistory({ data: historyData });
             message.success('Xóa thành công')
         } catch (error: any) {
             if (error?.info?.message) {
@@ -259,7 +271,7 @@ export default function SubjectList() {
         }
     }
     const handleLogHistory = (record: any) => {
-        console.log(record)
+        // console.log(record)
     }
 
     async function handleDeleteSubject(id: string) {
@@ -376,7 +388,9 @@ export default function SubjectList() {
                                     >
                                         <Button type="primary">
                                             {isLocked ? <LockKeyhole /> : <LockKeyholeOpen />}
-                                            Khóa: <span>{isLocked ? 'Bật' : 'Tắt'}</span>
+                                            {isLocked
+                                                ? 'Mở tất cả chỉnh sửa'
+                                                : 'Khóa tất cả chỉnh sửa'}
                                         </Button>
                                     </Popconfirm>
                                 )}
@@ -649,7 +663,6 @@ export default function SubjectList() {
                                         )
                                     }
 
-                                    // 3. Nếu không bị khóa, hiển thị Sửa và Xóa như cũ
                                     return (
                                         <Row className="justify-center gap-2">
                                             {can(
@@ -657,13 +670,13 @@ export default function SubjectList() {
                                                 'SUA'
                                             ) && (
                                                 <EditIcon
-                                                    onClick={() =>
+                                                    onClick={() => {
                                                         onOpenSubjectVersion({
                                                             subjectId,
                                                             subjectVersionId,
                                                             isLocked,
                                                         })
-                                                    }
+                                                    }}
                                                     className="text-sm text-blue-700 cursor-pointer"
                                                 />
                                             )}
@@ -674,8 +687,7 @@ export default function SubjectList() {
                                                 <DeleteIcon
                                                     disabled={subjectClass?.length > 0}
                                                     popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDelete(subjectVersionId),
+                                                        onConfirm: () => handleDelete(record),
                                                     }}
                                                 />
                                             )}
@@ -697,7 +709,7 @@ export default function SubjectList() {
                                 }
                             },
                         }}
-                        headerRight={({ id: subjectId }) => {
+                        headerRight={(record) => {
                             if (isLocked) {
                                 return (
                                     <Flex gap={8} align="center">
@@ -707,7 +719,7 @@ export default function SubjectList() {
                                         ) && (
                                             <ViewIcon
                                                 onClick={onOpen.bind(null, {
-                                                    id: subjectId,
+                                                    id: record.id,
                                                     isLocked,
                                                 })}
                                                 className="text-sm text-blue-700 cursor-pointer mr-8"
@@ -730,7 +742,7 @@ export default function SubjectList() {
                                             <BookPlus
                                                 onClick={() =>
                                                     handleModalSubjectVersion(
-                                                        subjectId,
+                                                        record.id,
                                                         '',
                                                         isLocked
                                                     )
@@ -744,7 +756,10 @@ export default function SubjectList() {
                                         'SUA'
                                     ) && (
                                         <EditIcon
-                                            onClick={onOpen.bind(null, { id: subjectId, isLocked })}
+                                            onClick={() => {
+                                                onOpen({ id: record.id, isLocked })
+                                                handleLogHistory(record)
+                                            }}
                                             className="text-sm text-blue-700 cursor-pointer"
                                         />
                                     )}
@@ -755,8 +770,7 @@ export default function SubjectList() {
                                         <DeleteIcon
                                             popConfirm={{
                                                 onConfirm: () => {
-                                                    handleDeleteSubject(subjectId)
-                                                    // handleLogHistory(record)
+                                                    handleDeleteSubject(record.id)
                                                 },
                                             }}
                                         />
