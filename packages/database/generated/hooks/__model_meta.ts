@@ -7476,16 +7476,47 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, name: {
-                    name: "name",
+                }, certificate: {
+                    name: "certificate",
+                    type: "Certificate",
+                    isDataModel: true,
+                    backLink: 'archivedCertificate',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "certificateId" },
+                }, certificateId: {
+                    name: "certificateId",
                     type: "String",
-                }, englishName: {
-                    name: "englishName",
+                    isForeignKey: true,
+                    relationField: 'certificate',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'archivedCertificate',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
                     type: "String",
-                    isOptional: true,
-                }, finalScore: {
-                    name: "finalScore",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, score: {
+                    name: "score",
                     type: "Float",
+                }, issuedBy: {
+                    name: "issuedBy",
+                    type: "String",
+                }, issuedDate: {
+                    name: "issuedDate",
+                    type: "DateTime",
+                }, expiredDate: {
+                    name: "expiredDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "ArchivedCertificateStatus",
+                    isOptional: true,
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -7609,16 +7640,34 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, name: {
-                    name: "name",
+                }, award: {
+                    name: "award",
+                    type: "Award",
+                    isDataModel: true,
+                    backLink: 'archivedAward',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "awardId" },
+                }, awardId: {
+                    name: "awardId",
                     type: "String",
-                }, englishName: {
-                    name: "englishName",
+                    isForeignKey: true,
+                    relationField: 'award',
+                }, student: {
+                    name: "student",
+                    type: "Student",
+                    isDataModel: true,
+                    backLink: 'archivedAward',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "studentId" },
+                }, studentId: {
+                    name: "studentId",
                     type: "String",
+                    isForeignKey: true,
+                    relationField: 'student',
+                }, date: {
+                    name: "date",
+                    type: "DateTime",
                     isOptional: true,
-                }, bonusScore: {
-                    name: "bonusScore",
-                    type: "Float",
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -8888,6 +8937,19 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subject',
+                }, certificateOnSubject: {
+                    name: "certificateOnSubject",
+                    type: "CertificateOnSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subject',
+                }, awardOnSubject: {
+                    name: "awardOnSubject",
+                    type: "Award",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjects',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -8987,6 +9049,10 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, isLocked: {
+                    name: "isLocked",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, name: {
                     name: "name",
                     type: "String",
@@ -9272,84 +9338,12 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'subjectVersion',
-                }, name: {
-                    name: "name",
+                }, content: {
+                    name: "content",
                     type: "String",
-                    isOptional: true,
-                }, codeTkb: {
-                    name: "codeTkb",
+                }, action: {
+                    name: "action",
                     type: "String",
-                    isOptional: true,
-                }, examType: {
-                    name: "examType",
-                    type: "ExamType",
-                    isOptional: true,
-                }, type: {
-                    name: "type",
-                    type: "SubjectVersionType",
-                    isOptional: true,
-                }, onePoint: {
-                    name: "onePoint",
-                    type: "Boolean",
-                    isOptional: true,
-                }, credit: {
-                    name: "credit",
-                    type: "Int",
-                    isOptional: true,
-                }, week: {
-                    name: "week",
-                    type: "Int",
-                    isOptional: true,
-                }, period: {
-                    name: "period",
-                    type: "Int",
-                    isOptional: true,
-                }, schedulePeriod: {
-                    name: "schedulePeriod",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfTheory: {
-                    name: "numberOfTheory",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfPractical: {
-                    name: "numberOfPractical",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfSelfStudy: {
-                    name: "numberOfSelfStudy",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfPractice: {
-                    name: "numberOfPractice",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfReview: {
-                    name: "numberOfReview",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfExam: {
-                    name: "numberOfExam",
-                    type: "Int",
-                    isOptional: true,
-                }, numberOfOther: {
-                    name: "numberOfOther",
-                    type: "Int",
-                    isOptional: true,
-                }, trainingObjectType: {
-                    name: "trainingObjectType",
-                    type: "TrainingObjectType",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'subjectVersionHistory',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
-                }, trainingObjectTypeId: {
-                    name: "trainingObjectTypeId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'trainingObjectType',
                 }, updatedBy: {
                     name: "updatedBy",
                     type: "UserProfile",
@@ -10425,12 +10419,6 @@ const metadata = {
                 }, planTrainingDelay: {
                     name: "planTrainingDelay",
                     type: "PlanTrainingDelay",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'trainingObjectType',
-                }, subjectVersionHistory: {
-                    name: "subjectVersionHistory",
-                    type: "SubjectVersionHistory",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -11571,6 +11559,201 @@ const metadata = {
                 },
             },
         },
+        certificate: {
+            name: 'Certificate', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, englishName: {
+                    name: "englishName",
+                    type: "String",
+                    isOptional: true,
+                }, archivedCertificate: {
+                    name: "archivedCertificate",
+                    type: "ArchivedCertificate",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'certificate',
+                }, subjects: {
+                    name: "subjects",
+                    type: "CertificateOnSubject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'certificate',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        certificateOnSubject: {
+            name: 'CertificateOnSubject', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, finalScore: {
+                    name: "finalScore",
+                    type: "Float",
+                }, certificate: {
+                    name: "certificate",
+                    type: "Certificate",
+                    isDataModel: true,
+                    backLink: 'subjects',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "certificateId" },
+                }, certificateId: {
+                    name: "certificateId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'certificate',
+                }, subject: {
+                    name: "subject",
+                    type: "Subject",
+                    isDataModel: true,
+                    backLink: 'certificateOnSubject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectId" },
+                }, subjectId: {
+                    name: "subjectId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subject',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
+        award: {
+            name: 'Award', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, englishName: {
+                    name: "englishName",
+                    type: "String",
+                    isOptional: true,
+                }, bonusScore: {
+                    name: "bonusScore",
+                    type: "Float",
+                }, subjects: {
+                    name: "subjects",
+                    type: "Subject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'awardOnSubject',
+                    isRelationOwner: true,
+                }, archivedAward: {
+                    name: "archivedAward",
+                    type: "ArchivedAward",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'award',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
         diplomaType: {
             name: 'DiplomaType', fields: {
                 id: {
@@ -12030,6 +12213,18 @@ const metadata = {
                 }, scholarshipAwards: {
                     name: "scholarshipAwards",
                     type: "ScholarshipAward",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                }, archivedCertificate: {
+                    name: "archivedCertificate",
+                    type: "ArchivedCertificate",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'student',
+                }, archivedAward: {
+                    name: "archivedAward",
+                    type: "ArchivedAward",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',

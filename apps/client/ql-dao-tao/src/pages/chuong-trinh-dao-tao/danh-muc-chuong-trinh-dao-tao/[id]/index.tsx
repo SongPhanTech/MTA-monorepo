@@ -1,4 +1,3 @@
-import { env } from '@/env'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -17,6 +16,7 @@ import type {
     SubjectVersion,
     TrainingBlockOnCurriculumVersion,
 } from '@workspace/db'
+import { $Enums, type TrainingBlockSubject } from '@workspace/db/client'
 import {
     useDeleteManyTrainingBlockSubject,
     useDeleteTrainingBlockOnCurriculumVersion,
@@ -27,15 +27,15 @@ import {
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Divider, Flex, message, Row, Tag, Tooltip } from 'antd'
 import { BookPlus, CopyPlus, FileDown, FileUp } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { env } from '@/env'
 import CreateIcon from '../../../../components/icons/create'
-import { cn } from '@workspace/ui/lib/utils'
-import { $Enums, TrainingBlockSubject } from '@workspace/db/client'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
     const router = useRouter()

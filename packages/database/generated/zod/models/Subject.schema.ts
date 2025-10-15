@@ -22,6 +22,8 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     managementOrganization: z.record(z.unknown()).optional(),
     subjectVersion: z.array(z.unknown()).optional(),
+    certificateOnSubject: z.array(z.unknown()).optional(),
+    awardOnSubject: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

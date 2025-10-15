@@ -84,6 +84,7 @@ export default function TrainingProgramCatalog() {
         }
 
         return {
+            trainingObjectTypeId,
             ...(filters.managementOrganizationId && {
                 managementOrganizationId: filters.managementOrganizationId,
             }),
@@ -111,6 +112,7 @@ export default function TrainingProgramCatalog() {
             }),
         }
     }, [
+        trainingObjectTypeId,
         filters.searchText,
         filters.name,
         filters.trainingTime,
@@ -222,9 +224,7 @@ export default function TrainingProgramCatalog() {
 
     const { data: count } = useCountCurriculum({ where: { ...where, deletedAt: null } })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: {
-            name: 'asc',
-        },
+        orderBy: { name: 'asc' },
         where: {
             trainingObjectTypeId,
             active: true,
@@ -243,6 +243,11 @@ export default function TrainingProgramCatalog() {
 
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
+        where: {
+            ...(trainingObjectTypeId
+                ? { trainingObjectTypes: { some: { trainingObjectTypeId } } }
+                : {}),
+        },
     })
 
     const { onOpen: onOpenCurriculum } = useDisclosure<string>({

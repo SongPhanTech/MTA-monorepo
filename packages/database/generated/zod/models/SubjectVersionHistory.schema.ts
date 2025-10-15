@@ -6,8 +6,6 @@
 // @ts-nocheck
 
 import { z } from 'zod';
-import { ExamTypeSchema } from '../enums/ExamType.schema';
-import { SubjectVersionTypeSchema } from '../enums/SubjectVersionType.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -16,33 +14,17 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string().nullish(),
-    codeTkb: z.string().nullish(),
-    examType: ExamTypeSchema.nullish(),
-    type: SubjectVersionTypeSchema.nullish(),
-    onePoint: z.boolean().nullish(),
-    credit: z.number().nullish(),
-    week: z.number().nullish(),
-    period: z.number().nullish(),
-    schedulePeriod: z.number().nullish(),
-    numberOfTheory: z.number().nullish(),
-    numberOfPractical: z.number().nullish(),
-    numberOfSelfStudy: z.number().nullish(),
-    numberOfPractice: z.number().nullish(),
-    numberOfReview: z.number().nullish(),
-    numberOfExam: z.number().nullish(),
-    numberOfOther: z.number().nullish(),
+    content: z.string(),
+    action: z.string(),
 }
 ).strict();
 const relationSchema = z.object({
     subjectVersion: z.record(z.unknown()),
-    trainingObjectType: z.record(z.unknown()).optional(),
     updatedBy: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
     subjectVersionId: z.string(),
-    trainingObjectTypeId: z.string().nullish(),
     updatedById: z.string(),
 }
 );
@@ -78,22 +60,8 @@ export const SubjectVersionHistoryPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string().nullish(),
-    codeTkb: z.string().nullish(),
-    examType: ExamTypeSchema.nullish(),
-    type: SubjectVersionTypeSchema.nullish(),
-    onePoint: z.boolean().nullish(),
-    credit: z.union([z.number().nullish(), z.record(z.unknown())]),
-    week: z.union([z.number().nullish(), z.record(z.unknown())]),
-    period: z.union([z.number().nullish(), z.record(z.unknown())]),
-    schedulePeriod: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfTheory: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfPractical: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfSelfStudy: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfPractice: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfReview: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfExam: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfOther: z.union([z.number().nullish(), z.record(z.unknown())])
+    content: z.string(),
+    action: z.string()
 }).partial().passthrough();
 
 
