@@ -6413,6 +6413,27 @@ declare const metadata: {
                     type: string;
                     isDataModel: boolean;
                     isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                studentCurriculumVersionParallel: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
                     backLink: string;
                 };
             };
@@ -12089,10 +12110,13 @@ declare const metadata: {
                     isOptional: boolean;
                     attributes: {
                         name: string;
-                        args: {
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
                             name: string;
                             value: null[];
-                        }[];
+                        })[];
                     }[];
                     backLink: string;
                     isRelationOwner: boolean;
@@ -12101,6 +12125,34 @@ declare const metadata: {
                     };
                 };
                 curriculumVersionId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                curriculumVersionParallel: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                curriculumVersionParallelId: {
                     name: string;
                     type: string;
                     isOptional: boolean;

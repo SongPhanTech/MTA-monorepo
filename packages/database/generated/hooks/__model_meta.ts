@@ -3322,6 +3322,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'curriculumVersion',
+                }, studentCurriculumVersionParallel: {
+                    name: "studentCurriculumVersionParallel",
+                    type: "Student",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'curriculumVersionParallel',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -6292,6 +6298,20 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
+                }, curriculumVersionParallel: {
+                    name: "curriculumVersionParallel",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentCurriculumVersionParallel',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionParallelId" },
+                }, curriculumVersionParallelId: {
+                    name: "curriculumVersionParallelId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'curriculumVersionParallel',
                 }, academicWarningLevel: {
                     name: "academicWarningLevel",
                     type: "Int",

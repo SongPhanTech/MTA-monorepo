@@ -1163,6 +1163,7 @@ exports.Prisma.StudentScalarFieldEnum = {
   trainingFormId: 'trainingFormId',
   registrationAreaId: 'registrationAreaId',
   curriculumVersionId: 'curriculumVersionId',
+  curriculumVersionParallelId: 'curriculumVersionParallelId',
   academicWarningLevel: 'academicWarningLevel',
   disciplinaryWarningLevel: 'disciplinaryWarningLevel',
   suspended: 'suspended',
@@ -4608,7 +4609,8 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   trainingTypeId: 'trainingTypeId',
   trainingFormId: 'trainingFormId',
   registrationAreaId: 'registrationAreaId',
-  curriculumVersionId: 'curriculumVersionId'
+  curriculumVersionId: 'curriculumVersionId',
+  curriculumVersionParallelId: 'curriculumVersionParallelId'
 };
 
 exports.Prisma.StudentSemesterResultOrderByRelevanceFieldEnum = {

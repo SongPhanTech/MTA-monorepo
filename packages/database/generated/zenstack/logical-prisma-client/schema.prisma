@@ -1438,49 +1438,50 @@ model Curriculum {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model CurriculumVersion {
-  id                    String                             @id() @default(cuid())
-  code                  String?                            @unique()
-  active                Boolean                            @default(true)
-  description           String?                            @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime                           @default(now())
-  updatedAt             DateTime                           @default(now()) @updatedAt()
-  name                  String
-  shortName             String?
-  englishName           String?
-  trainingLanguage      TrainingLanguage?                  @relation(fields: [trainingLanguageId], references: [id])
-  trainingLanguageId    String?
-  numberOfSemesters     Int?
-  yearCreation          Int?
-  yearApplication       Int?
-  isLock                Boolean                            @default(false)
-  curriculum            Curriculum                         @relation(fields: [curriculumId], references: [id])
-  curriculumId          String
-  trainingObjectType    TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId  String
-  trainingLevel         TrainingLevel                      @relation(fields: [trainingLevelId], references: [id])
-  trainingLevelId       String
-  trainingTime          TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
-  trainingTimeId        String
-  diplomaType           DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
-  diplomaTypeId         String?
-  requiredCredits       Int?
-  electiveCredits       Int?
-  jobPosition           String?
-  objectives            String?
-  learningOutcome       String?
-  inputStandard         String?
-  time                  String?
-  structure             String?
-  matrixLearningOutcome String?
-  summary               String?
-  learningDiagram       String?
-  guide                 String?
-  renderPath            String?
-  documentFiles         DocumentFile[]
-  trainingBlocks        TrainingBlockOnCurriculumVersion[]
-  fixedClasses          FixedClass[]
-  students              Student[]
+  id                               String                             @id() @default(cuid())
+  code                             String?                            @unique()
+  active                           Boolean                            @default(true)
+  description                      String?                            @db.Text()
+  deletedAt                        DateTime?
+  createdAt                        DateTime                           @default(now())
+  updatedAt                        DateTime                           @default(now()) @updatedAt()
+  name                             String
+  shortName                        String?
+  englishName                      String?
+  trainingLanguage                 TrainingLanguage?                  @relation(fields: [trainingLanguageId], references: [id])
+  trainingLanguageId               String?
+  numberOfSemesters                Int?
+  yearCreation                     Int?
+  yearApplication                  Int?
+  isLock                           Boolean                            @default(false)
+  curriculum                       Curriculum                         @relation(fields: [curriculumId], references: [id])
+  curriculumId                     String
+  trainingObjectType               TrainingObjectType                 @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId             String
+  trainingLevel                    TrainingLevel                      @relation(fields: [trainingLevelId], references: [id])
+  trainingLevelId                  String
+  trainingTime                     TrainingTime                       @relation(fields: [trainingTimeId], references: [id])
+  trainingTimeId                   String
+  diplomaType                      DiplomaType?                       @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId                    String?
+  requiredCredits                  Int?
+  electiveCredits                  Int?
+  jobPosition                      String?
+  objectives                       String?
+  learningOutcome                  String?
+  inputStandard                    String?
+  time                             String?
+  structure                        String?
+  matrixLearningOutcome            String?
+  summary                          String?
+  learningDiagram                  String?
+  guide                            String?
+  renderPath                       String?
+  documentFiles                    DocumentFile[]
+  trainingBlocks                   TrainingBlockOnCurriculumVersion[]
+  fixedClasses                     FixedClass[]
+  students                         Student[]                          @relation("CurriculumVersion")
+  studentCurriculumVersionParallel Student[]                          @relation("CurriculumVersionParallel")
 
   @@schema("ql-dao-tao")
 }
@@ -2294,8 +2295,10 @@ model Student {
   trainingFormId                 String?
   registrationArea               DM_KhuVuc_DiaLy?                 @relation(fields: [registrationAreaId], references: [Id])
   registrationAreaId             String?                          @db.Uuid()
-  curriculumVersion              CurriculumVersion?               @relation(fields: [curriculumVersionId], references: [id])
+  curriculumVersion              CurriculumVersion?               @relation("CurriculumVersion", fields: [curriculumVersionId], references: [id])
   curriculumVersionId            String?
+  curriculumVersionParallel      CurriculumVersion?               @relation("CurriculumVersionParallel", fields: [curriculumVersionParallelId], references: [id])
+  curriculumVersionParallelId    String?
   academicWarningLevel           Int                              @default(0)
   disciplinaryWarningLevel       Int                              @default(0)
   suspended                      Boolean                          @default(false)

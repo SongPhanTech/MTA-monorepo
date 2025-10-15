@@ -46,6 +46,7 @@ const relationSchema = z.object({
     trainingForm: z.record(z.unknown()).optional(),
     registrationArea: z.record(z.unknown()).optional(),
     curriculumVersion: z.record(z.unknown()).optional(),
+    curriculumVersionParallel: z.record(z.unknown()).optional(),
     studentTrainingScore: z.array(z.unknown()).optional(),
     studentSemesterResult: z.array(z.unknown()).optional(),
     studentYearResult: z.array(z.unknown()).optional(),
@@ -77,6 +78,7 @@ const fkSchema = z.object({
     trainingFormId: z.string().nullish(),
     registrationAreaId: z.string().uuid().nullish(),
     curriculumVersionId: z.string().nullish(),
+    curriculumVersionParallelId: z.string().nullish(),
 }
 );
 

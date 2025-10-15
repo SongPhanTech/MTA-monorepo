@@ -3509,7 +3509,15 @@ const metadata = {
                     type: "Student",
                     isDataModel: true,
                     isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CurriculumVersion" }] }],
                     backLink: 'curriculumVersion',
+                }, studentCurriculumVersionParallel: {
+                    name: "studentCurriculumVersionParallel",
+                    type: "Student",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CurriculumVersionParallel" }] }],
+                    backLink: 'curriculumVersionParallel',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -6652,7 +6660,7 @@ const metadata = {
                     type: "CurriculumVersion",
                     isDataModel: true,
                     isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CurriculumVersion" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'students',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "curriculumVersionId" },
@@ -6662,6 +6670,21 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'curriculumVersion',
+                }, curriculumVersionParallel: {
+                    name: "curriculumVersionParallel",
+                    type: "CurriculumVersion",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "CurriculumVersionParallel" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'studentCurriculumVersionParallel',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "curriculumVersionParallelId" },
+                }, curriculumVersionParallelId: {
+                    name: "curriculumVersionParallelId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'curriculumVersionParallel',
                 }, academicWarningLevel: {
                     name: "academicWarningLevel",
                     type: "Int",
