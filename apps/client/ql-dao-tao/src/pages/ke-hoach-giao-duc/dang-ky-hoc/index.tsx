@@ -5,7 +5,7 @@ import { useState } from 'react'
 import RegisterClassManager from './_components/dang-ky-hoc-cho-lop-quan-ly'
 import StudentCourseByPlan from './_components/hoc-vien-co-mon-theo-khgd'
 import RegisterResult from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
-import FixedClass from './_components/lop-co-mon-theo-khgd'
+import LopCoMonTheoKhgd from './_components/lop-co-mon-theo-khgd'
 
 interface TabItem {
     key: string
@@ -39,7 +39,7 @@ export default function RegisterClass() {
             {
                 key: '1',
                 label: 'Lớp có môn theo KHGD',
-                content: <FixedClass subjectClassId={subjectClassId} />,
+                content: <LopCoMonTheoKhgd subjectClassId={subjectClassId} />,
             },
         ],
         '2': [

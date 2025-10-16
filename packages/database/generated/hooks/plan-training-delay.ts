@@ -328,7 +328,7 @@ export function useSuspenseCountPlanTrainingDelay<TArgs extends Prisma.PlanTrain
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('PlanTrainingDelay', `${endpoint}/planTrainingDelay/count`, args, options, fetch);
 }
 
-export function useCheckPlanTrainingDelay<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; semesterId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckPlanTrainingDelay<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; trainingObjectTypeId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('PlanTrainingDelay', `${endpoint}/planTrainingDelay/check`, args, options, fetch);
 }

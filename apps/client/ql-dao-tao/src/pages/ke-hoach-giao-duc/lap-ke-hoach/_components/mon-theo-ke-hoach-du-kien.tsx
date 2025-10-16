@@ -1,22 +1,23 @@
+import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
 import { type TrainingMajor } from '@workspace/db'
+import { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
 import {
+    useFindFirstPlanTraining,
     useFindManyTrainingCourse,
     useFindManyTrainingMajor,
-    useFindUniqueSemester,
-    useUpsertPlanTraining,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
-import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -25,7 +26,7 @@ interface SubjectBySemesterForm {
     subjectSelected?: Array<string>
 }
 
-export default function SubjectBySemester() {
+export default function MonTheoKeHoachDuKien() {
     const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const [currentPage, setCurrentPage] = useState(1)
@@ -36,21 +37,6 @@ export default function SubjectBySemester() {
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
 
-    const { data: semesterData } = useFindUniqueSemester(
-        {
-            where: { id: semesterId },
-            select: {
-                id: true,
-                name: true,
-                schoolYear: {
-                    select: { id: true, name: true },
-                },
-            },
-        },
-        {
-            enabled: !!semesterId,
-        }
-    )
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res, refetch } = useOpenSubjectClass(
         {
@@ -61,8 +47,28 @@ export default function SubjectBySemester() {
             trainingCourseId,
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
+            nextSemester: 'false',
         },
         { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
+    )
+
+    const { data: planTrainingData } = useFindFirstPlanTraining(
+        {
+            where: {
+                semesterId: semesterId as string,
+                trainingObjectTypeId,
+            },
+            select: {
+                planTrainingSubjects: {
+                    select: {
+                        subjectVersionId: true,
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!semesterId && !!trainingObjectTypeId,
+        }
     )
 
     const data = useMemo(
@@ -76,9 +82,20 @@ export default function SubjectBySemester() {
         [res]
     )
 
+    useEffect(() => {
+        if (planTrainingData) {
+            form.setFieldValue(
+                'subjectSelected',
+                planTrainingData.planTrainingSubjects.map((subject) => subject.subjectVersionId)
+            )
+        }
+    }, [planTrainingData, form])
+
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
         }, 500),
         []
     )
@@ -92,17 +109,21 @@ export default function SubjectBySemester() {
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
-    const { mutate: createPlanTraining } = useUpsertPlanTraining()
+    const { showSpinner, hideSpinner } = useSpinner()
 
     const onSubmit = async () => {
         try {
             if (!semesterId || !trainingObjectTypeId) return
-
+            showSpinner()
             const delaySubject = data.filter(
                 (subject) => !subjectSelected.includes(subject.subjectVersionId)
             )
 
-            const exist = await sqlTransaction([
+            const subject = data.filter((subject) =>
+                subjectSelected.includes(subject.subjectVersionId)
+            )
+
+            let planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
                     operation: 'findFirst',
@@ -111,14 +132,162 @@ export default function SubjectBySemester() {
                     },
                 },
             ])
+            let planTrainingDelay = await sqlTransaction([
+                {
+                    model: 'PlanTrainingDelay',
+                    operation: 'findFirst',
+                    data: {
+                        where: { trainingObjectTypeId },
+                    },
+                },
+            ])
 
-            message.success('Lưu kế hoạch mở lớp thành công')
+            if (planTraining.status === 200 && !planTraining?.data?.[0]) {
+                planTraining = await sqlTransaction([
+                    {
+                        model: 'PlanTraining',
+                        operation: 'create',
+                        data: {
+                            data: { semesterId, trainingObjectTypeId },
+                        },
+                    },
+                ])
+            }
+
+            if (planTrainingDelay.status === 200 && !planTrainingDelay?.data?.[0]) {
+                planTrainingDelay = await sqlTransaction([
+                    {
+                        model: 'PlanTrainingDelay',
+                        operation: 'create',
+                        data: {
+                            data: { trainingObjectTypeId },
+                        },
+                    },
+                ])
+            }
+
+            if (planTraining.status !== 200 || planTrainingDelay.status !== 200) {
+                throw new Error('Lỗi khi tạo kế hoạch đào tạo')
+            }
+
+            const planTrainingId = (planTraining?.data?.[0] as PlanTraining)?.id
+            if (!planTrainingId) {
+                throw new Error('Kế hoạch đào tạo không tồn tại')
+            }
+            const planTrainingDelayId = (planTrainingDelay?.data?.[0] as PlanTrainingDelay)?.id
+            if (!planTrainingDelayId) {
+                throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
+            }
+
+            // new PrismaClient().planTrainingDelay.update({
+            //     where: { id: planTrainingDelayId },
+            //     data: {
+            //         planTrainingDelaySubjects: {
+            //             upsert: delaySubject.map((subject) => ({
+            //                 where: {
+            //                     planTrainingDelayId_subjectVersionId: {
+            //                         planTrainingDelayId,
+            //                         subjectVersionId: subject.subjectVersionId,
+            //                     },
+            //                 },
+            //                 create: {
+            //                     subjectVersionId: subject.subjectVersionId,
+            //                     fixedClasses: {
+            //                         connect: subject.fixedClass.map((fc) => ({
+            //                             id: fc.fixedClassId,
+            //                         })),
+            //                     },
+            //                 },
+            //                 update: {},
+            //             })),
+            //         },
+            //     },
+            // })
+
+            const res = await sqlTransaction([
+                {
+                    model: 'PlanTraining',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingId },
+                        data: {
+                            planTrainingSubjects: {
+                                deleteMany: {},
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'PlanTrainingDelay',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingDelayId },
+                        data: {
+                            planTrainingDelaySubjects: {
+                                deleteMany: subjectSelected.map((id) => ({ subjectVersionId: id })),
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'PlanTraining',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingId },
+                        data: {
+                            planTrainingSubjects: {
+                                create: subject.map((subject) => ({
+                                    subjectVersionId: subject.subjectVersionId,
+                                    fixedClasses: {
+                                        connect: subject.fixedClass.map((fc) => ({
+                                            id: fc.fixedClassId,
+                                        })),
+                                    },
+                                })),
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'PlanTrainingDelay',
+                    operation: 'update',
+                    data: {
+                        where: { id: planTrainingDelayId },
+                        data: {
+                            planTrainingDelaySubjects: {
+                                upsert: delaySubject.map((subject) => ({
+                                    where: {
+                                        planTrainingDelayId_subjectVersionId: {
+                                            planTrainingDelayId,
+                                            subjectVersionId: subject.subjectVersionId,
+                                        },
+                                    },
+                                    create: {
+                                        subjectVersionId: subject.subjectVersionId,
+                                        fixedClasses: {
+                                            connect: subject.fixedClass.map((fc) => ({
+                                                id: fc.fixedClassId,
+                                            })),
+                                        },
+                                    },
+                                    update: {},
+                                })),
+                            },
+                        },
+                    },
+                },
+            ])
+            if (res.status !== 200) {
+                throw new Error('Lỗi khi lưu kế hoạch đào tạo')
+            }
+            message.success('Thêm môn học vào kế hoạch thành công')
             form.resetFields()
             debouncedRefetch()
         } catch (error) {
-            message.error('Lưu kế hoạch mở lớp thất bại')
+            message.error('Lưu kế hoạch môn thất bại')
             console.error(error)
         }
+        hideSpinner()
     }
 
     return (
@@ -176,86 +345,8 @@ export default function SubjectBySemester() {
                     </Col>
                     <Col span={24} className="mt-2">
                         <Flex justify="end" gap={4}>
-                            <Button
-                                type="primary"
-                                onClick={() =>
-                                    exportFromTemplate({
-                                        templateUrl: '/lms/templates/ke-hoach-mo-lop.xlsx',
-                                        data: {
-                                            hoc_ky: semesterData?.name ?? '',
-                                            nam_hoc: semesterData?.schoolYear?.name ?? '',
-                                        },
-                                        tableStartCell: { row: 7, col: 1 },
-                                        rows: data.flatMap((item, index) =>
-                                            item.fixedClass.map((fc, idx) => {
-                                                const rowSpan =
-                                                    idx === 0 ? item.fixedClass.length : 1
-                                                return {
-                                                    cells: [
-                                                        {
-                                                            value: index + 1,
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: item.subjectVersionCode,
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: item.subjectVersionName,
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: item.subjectVersionCredit,
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: `${fc.fixedClassCode}`,
-                                                            align: 'center',
-                                                        },
-                                                        {
-                                                            value: `${fc.fixedClassSemester}`,
-                                                            align: 'center',
-                                                        },
-                                                        {
-                                                            value: `${fc.fixedClassCount}`,
-                                                            align: 'center',
-                                                        },
-                                                        {
-                                                            value: '',
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: item.countStudent,
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value:
-                                                                item.managementOrganizationCode ??
-                                                                '',
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                    ],
-                                                }
-                                            })
-                                        ),
-                                        fileName: `ke-hoach-mo-lop-mon-hoc-${semesterData?.name}.xlsx`,
-                                    })
-                                }
-                            >
-                                Xuất kế hoạch môn dự kiến
-                            </Button>
-                            <Button
-                                onClick={onSubmit}
-                                disabled={!subjectSelected.length}
-                                type="primary"
-                            >
-                                Thêm môn học vào kế hoạch
+                            <Button onClick={onSubmit} type="primary">
+                                Lưu kế hoạch
                             </Button>
                         </Flex>
                     </Col>
@@ -271,6 +362,7 @@ export default function SubjectBySemester() {
                                 onChange: (selectedRowKeys) => {
                                     form.setFieldValue('subjectSelected', selectedRowKeys)
                                 },
+                                columnWidth: 15,
                             }}
                             onRow={(record) => {
                                 return {
@@ -314,8 +406,10 @@ export default function SubjectBySemester() {
                                     align: 'center',
                                     render: (__, record) => {
                                         return (
-                                            `${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
-                                            ''
+                                            <div className="text-left">
+                                                {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
+                                                    ''}
+                                            </div>
                                         )
                                     },
                                 },
@@ -340,7 +434,6 @@ export default function SubjectBySemester() {
                                         )
                                     },
                                 },
-
                                 {
                                     title: 'CTĐT',
                                     dataIndex: 'curriculumVersion',

@@ -16,13 +16,12 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    semester: z.record(z.unknown()),
-    fixedClasses: z.array(z.unknown()).optional(),
-    subjects: z.array(z.unknown()).optional(),
+    trainingObjectType: z.record(z.unknown()),
+    planTrainingDelaySubjects: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    semesterId: z.string(),
+    trainingObjectTypeId: z.string(),
 }
 );
 

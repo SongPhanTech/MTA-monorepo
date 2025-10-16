@@ -1,4 +1,5 @@
 import type { $Enums, PrismaClient } from '@workspace/db'
+import { createId } from '@workspace/db'
 import { HTTPException } from 'hono/http-exception'
 
 export function parseDate(input?: number | string | Date): Date | null {
@@ -297,67 +298,118 @@ type SubjectData = {
     numberOfExam?: number
 }
 
-export const buildSubjectMapOrThrow = async (prisma: PrismaClient, subjects: SubjectData[]) => {
-    const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(subjects)))
-
-    const uniqueTuples = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
+export const buildSubjectMapOrThrow = async (
+    prisma: PrismaClient,
+    subjects: SubjectData[],
+    createNewSubject = false
+) => {
+    const subjectSet = new Set<string>(subjects.map((s) => JSON.stringify(s)))
+    const uniqueSubject = Array.from(subjectSet).map((s) => JSON.parse(s) as SubjectData)
 
     const existing = await prisma.subjectVersion.findMany({
         where: {
-            OR: uniqueTuples.map(({ name, organizationCode, credit }) => ({
-                name,
-                ...(organizationCode
-                    ? {
-                          subject: {
-                              managementOrganization: {
-                                  sMa: organizationCode,
-                              },
-                          },
-                      }
-                    : {}),
-                ...(credit ? { credit } : {}),
+            OR: uniqueSubject.map((s) => ({
+                name: s.name,
+                trainingObjectTypeId: s.trainingObjectTypeId,
+                ...(s.code ? { code: s.code } : {}),
+                // TODO: check it
+                // ...(s.organizationCode
+                //     ? {
+                //           subject: {
+                //               managementOrganization: {
+                //                   sMa: s.organizationCode,
+                //               },
+                //           },
+                //       }
+                //     : {}),
+                credit: s.credit,
+                examType: s.examType,
+                type: s.type,
+                ...(s.schedulePeriod ? { schedulePeriod: s.schedulePeriod } : {}),
+                ...(s.numberOfTheory ? { numberOfTheory: s.numberOfTheory } : {}),
+                ...(s.numberOfPractical ? { numberOfPractical: s.numberOfPractical } : {}),
+                ...(s.numberOfSelfStudy ? { numberOfSelfStudy: s.numberOfSelfStudy } : {}),
+                ...(s.numberOfPractice ? { numberOfPractice: s.numberOfPractice } : {}),
+                ...(s.numberOfReview ? { numberOfReview: s.numberOfReview } : {}),
+                ...(s.numberOfExam ? { numberOfExam: s.numberOfExam } : {}),
             })),
         },
         select: { id: true, name: true },
     })
 
-    const missing = uniqueTuples.filter(
+    console.log(
+        'existing',
+        existing.map((s) => s.name)
+    )
+
+    const missing = uniqueSubject.filter(
         ({ name }) => !existing.some((version) => version.name === name)
     )
-
-    const orgMap = await buildOrgCodeMapOrThrow(
-        prisma,
-        subjects.map((s) => s.organizationCode || null)
+    console.log(
+        'missing',
+        missing.map((s) => `${s.code} - ${s.name}`)
     )
 
-    if (missing.length) {
-        for (const subject of missing) {
-            const managementOrganizationId = orgMap.get(subject.name) || null
+    console.log(111, missing.length)
 
-            const a = await prisma.subjectVersion.create({
-                data: {
-                    trainingObjectType: { connect: { id: subject.trainingObjectTypeId } },
-                    name: subject.name,
-                    examType: subject.examType,
-                    credit: subject.credit,
-                    ...(managementOrganizationId
-                        ? {
-                              managementOrganization: {
-                                  connect: { Id: managementOrganizationId },
-                              },
-                          }
-                        : {}),
-                    subject: {
-                        connectOrCreate: {
-                            where: { name: subject.name },
-                            create: { name: subject.name, managementOrganizationId },
-                        },
-                    },
-                },
+    // throw new HTTPException(400, {
+    //     message: `Môn học không tồn tại: ${missing.map((s) => s.name).join(', ')}`,
+    // })
+
+    if (missing.length && createNewSubject) {
+        const orgMap = await buildOrgCodeMapOrThrow(
+            prisma,
+            subjects.map((s) => s.organizationCode || null)
+        )
+
+        const subjectMap = new Map(missing.map((s) => [s.name, createId()]))
+        const newSubjects = await prisma.$transaction(async (tx) => {
+            await tx.subject.createMany({
+                data: missing.map((s) => ({
+                    name: s.name,
+                    managementOrganizationId: orgMap.get(s.organizationCode || null),
+                })),
+                skipDuplicates: true,
+            })
+
+            const subjectGroup = await tx.subject.findMany({
+                where: { name: { in: missing.map((s) => s.name) } },
                 select: { id: true, name: true },
             })
-        }
 
+            const groupMap = new Map(subjectGroup.map((s) => [s.name, s.id]))
+
+            return await prisma.subjectVersion.createManyAndReturn({
+                data: missing.map((subject) => ({
+                    name: subject.name,
+                    trainingObjectTypeId: subject.trainingObjectTypeId,
+                    credit: subject.credit,
+                    code: subject.code,
+                    examType: subject.examType,
+                    type: subject.type,
+                    onePoint: subject.onePoint,
+                    schedulePeriod: subject.schedulePeriod,
+                    numberOfTheory: subject.numberOfTheory,
+                    numberOfPractical: subject.numberOfPractical,
+                    numberOfSelfStudy: subject.numberOfSelfStudy,
+                    numberOfPractice: subject.numberOfPractice,
+                    numberOfReview: subject.numberOfReview,
+                    numberOfExam: subject.numberOfExam,
+                    ...(orgMap.get(subject.organizationCode || null)
+                        ? {
+                              managementOrganizationId: orgMap.get(
+                                  subject.organizationCode || null
+                              ),
+                          }
+                        : {}),
+                    subjectId: groupMap.get(subject.name) as string,
+                })),
+                select: { id: true, name: true },
+            })
+        })
+    }
+
+    if (missing.length && !createNewSubject) {
         throw new HTTPException(400, {
             message: `Phiên bản môn học không tồn tại: ${missing
                 .map(

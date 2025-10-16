@@ -34,7 +34,6 @@ const relationSchema = z.object({
     studentAcademicDecision: z.array(z.unknown()).optional(),
     classRegisterSession: z.array(z.unknown()).optional(),
     planTraining: z.array(z.unknown()).optional(),
-    planTrainingDelay: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

@@ -55,20 +55,20 @@ const PutAddCertificateScoreModal = () => {
     const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
         where: {
             OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                // { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
         },
         include: {},
         orderBy: {
-            name: 'asc',
+            // name: 'asc',
         },
     })
 
     const { data: count } = useCountArchivedCertificate({
         where: {
             OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                // { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             deletedAt: null,

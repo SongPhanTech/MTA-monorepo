@@ -28,7 +28,7 @@ export type ColumnOption = {
     children?: ColumnOption[]
 }
 
-type TableProps<T> = {
+type TableProps<T = Record<string, unknown>> = {
     columns?: ColumnsType<T> & {
         type?: string
         distinctFilters?: string[]
@@ -192,22 +192,19 @@ const Table = <T extends Record<string, unknown>>({
         label: string
         children?: TreeNode[]
     }
-    const genFilter = (item: ColumnTypeProps) => {
-        const ListButton = useCallback(
-            ({ clear, click }: { clear: () => void; click: () => void }) => {
-                return (
-                    <div className="flex justify-end gap-2">
-                        <Button size="small" onClick={clear}>
-                            Bỏ lọc
-                        </Button>
-                        <Button type="primary" size="small" onClick={click}>
-                            Lọc
-                        </Button>
-                    </div>
-                )
-            },
-            []
+    const ListButton = useCallback(({ clear, click }: { clear: () => void; click: () => void }) => {
+        return (
+            <div className="flex justify-end gap-2">
+                <Button size="small" onClick={clear}>
+                    Bỏ lọc
+                </Button>
+                <Button type="primary" size="small" onClick={click}>
+                    Lọc
+                </Button>
+            </div>
         )
+    }, [])
+    const genFilter = (item: ColumnTypeProps) => {
         if (item?.type === 'input') {
             return {
                 filterDropdown: (props: FilterDropdownProps) => (
@@ -865,7 +862,8 @@ const Table = <T extends Record<string, unknown>>({
                     }
                 },
                 style: { cursor: 'pointer' },
-                className: record.id === selectedRow ? 'bg-blue-100' : '',
+                className:
+                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : '',
                 ...rest.onRow?.(record),
             })}
         />

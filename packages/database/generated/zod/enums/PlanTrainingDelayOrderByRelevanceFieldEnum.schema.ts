@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const PlanTrainingDelayOrderByRelevanceFieldEnumSchema = z.enum(["id", "description", "semesterId"])
+export const PlanTrainingDelayOrderByRelevanceFieldEnumSchema = z.enum(["id", "description", "trainingObjectTypeId"])

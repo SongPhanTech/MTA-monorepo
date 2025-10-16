@@ -1,0 +1,179 @@
+import { FileTextOutlined, LinkOutlined } from '@ant-design/icons'
+import { useFindUniqueDocument } from '@workspace/db/hooks'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+
+interface Citation {
+    index: number
+    content: string
+    document_id: string
+    document_type: string
+}
+
+interface CitationTooltipProps {
+    citation: Citation
+}
+
+export default function CitationTooltip({ citation }: CitationTooltipProps) {
+    const [isHovered, setIsHovered] = useState(false)
+    const [isVisible, setIsVisible] = useState(false)
+    const [position, setPosition] = useState({
+        top: 0,
+        left: 0,
+        placement: 'bottom' as 'top' | 'bottom',
+        maxHeight: '60vh',
+    })
+    const triggerRef = useRef<HTMLSpanElement>(null)
+    const tooltipRef = useRef<HTMLDivElement>(null)
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+    const { data: document } = useFindUniqueDocument(
+        {
+            where: { id: citation.document_id },
+            include: {
+                topic: true,
+            },
+        },
+        {
+            enabled: !!citation.document_id,
+        }
+    )
+
+    useEffect(() => {
+        const updatePosition = () => {
+            if (triggerRef.current) {
+                const rect = triggerRef.current.getBoundingClientRect()
+                const viewportHeight = window.innerHeight
+                const tooltipHeight = tooltipRef.current?.offsetHeight || 300
+
+                const spaceBelow = viewportHeight - rect.bottom - 16 // 16px margin
+                const spaceAbove = rect.top - 16 // 16px margin
+
+                const useTop = spaceBelow < tooltipHeight && spaceAbove > spaceBelow
+
+                let maxHeight = '60vh'
+                if (useTop) {
+                    maxHeight = `${Math.min(spaceAbove - 2, viewportHeight * 0.6)}px`
+                } else {
+                    maxHeight = `${Math.min(spaceBelow - 2, viewportHeight * 0.6)}px`
+                }
+
+                setPosition({
+                    top: useTop ? rect.top - 2 : rect.bottom + 2,
+                    left: rect.left + rect.width / 2,
+                    placement: useTop ? 'top' : 'bottom',
+                    maxHeight,
+                })
+            }
+        }
+
+        if (isHovered) {
+            updatePosition()
+            const timeoutId = setTimeout(updatePosition, 0)
+            window.addEventListener('scroll', updatePosition, true)
+            window.addEventListener('resize', updatePosition)
+
+            return () => {
+                clearTimeout(timeoutId)
+                window.removeEventListener('scroll', updatePosition, true)
+                window.removeEventListener('resize', updatePosition)
+            }
+        }
+    }, [isHovered])
+
+    const handleMouseEnter = () => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current)
+        }
+        setIsHovered(true)
+        setIsVisible(true)
+    }
+
+    const handleMouseLeave = () => {
+        setIsVisible(false)
+        timeoutRef.current = setTimeout(() => {
+            setIsHovered(false)
+        }, 150)
+    }
+
+    const tooltipContent = isHovered ? (
+        <div
+            ref={tooltipRef}
+            className="fixed z-[9999] rounded-lg shadow-lg border border-gray-200 w-[400px] max-w-[calc(100vw-48px)] transition-opacity duration-150 ease-in-out"
+            style={{
+                top: `${position.top}px`,
+                left: `${position.left}px`,
+                transform:
+                    position.placement === 'top' ? 'translate(-50%, -100%)' : 'translate(-50%, 0)',
+                opacity: isVisible ? 1 : 0,
+                fontFamily: '"Noto Serif", serif',
+                backgroundColor: '#F0F2F7',
+            }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            <div
+                className="overflow-y-auto px-3 pt-3"
+                style={{
+                    maxHeight: position.maxHeight,
+                    scrollbarWidth: 'thin',
+                    // scrollbarColor: '#108850 rgba(70, 137, 81, 0.1)',
+                }}
+            >
+                <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap break-words">
+                    {citation.content}
+                </p>
+
+                {document?.title && (
+                    <div className="pt-3 mt-3 border-t border-gray-200 pb-3 space-y-2">
+                        {document?.uri ? (
+                            <a
+                                href={document.uri}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 text-[#108850] hover:text-[#0f7a3b] text-sm font-medium transition-colors group"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <LinkOutlined className="text-sm flex-shrink-0" />
+                                <span className="truncate">{document.title}</span>
+                            </a>
+                        ) : (
+                            <div className="flex items-center gap-1.5 text-gray-600 text-sm">
+                                <FileTextOutlined className="text-sm flex-shrink-0" />
+                                <span className="truncate">{document.title}</span>
+                            </div>
+                        )}
+
+                        {document?.topic?.name && (
+                            <div className="text-xs text-gray-500 flex items-center gap-1">
+                                <span>Chủ đề:</span>
+                                <span className="font-medium text-gray-700">
+                                    {document.topic.name}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {!document?.title && <div className="pb-3" />}
+            </div>
+        </div>
+    ) : null
+
+    return (
+        <div>
+            <span
+                ref={triggerRef}
+                className="inline-flex items-center justify-center w-5 h-5 ml-0.5 text-xs font-semibold text-[#108850] bg-[#e8f5f0] rounded-full cursor-pointer hover:bg-[#108850] hover:text-white transition-all border border-[#108850]"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onClick={() => setIsHovered(!isHovered)}
+            >
+                {citation.index}
+            </span>
+            {typeof window !== 'undefined' &&
+                tooltipContent &&
+                createPortal(tooltipContent, window.document.body)}
+        </div>
+    )
+}

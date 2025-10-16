@@ -89,6 +89,7 @@ const FIXED_CLASS_STUDENT_STATUS = {
     TRANSFERRED: { label: 'Chuyển trường', color: 'purple' },
     PENDING_GRADUATION_REVIEW: { label: 'Chờ xét tốt nghiệp', color: 'cyan' },
     ACADEMIC_SUSPENSION: { label: 'Đình chỉ học', color: 'red' },
+    REPEATED: { label: 'Lưu ban', color: 'magenta' },
 } as const
 
 const STUDENT_STATUS_OPTIONS = [

@@ -6,6 +6,10 @@ declare global {
         toFixedSmart(fractionDigits: number): string
         formatVND(): string
     }
+    interface String {
+        titleCase(): string
+        firstCase(): string
+    }
 }
 
 type StudentSubjectScoreRelation = StudentSubjectScore & {
@@ -13,7 +17,8 @@ type StudentSubjectScoreRelation = StudentSubjectScore & {
     student?: {
         fixedClass?: {
             trainingCourse?: {
-                scoreConverts: ScoreConvert[] | null
+                scoreConverts?: ScoreConvert[] | null
+                scoreToPass?: number | null
             } | null
         } | null
     }
@@ -29,6 +34,15 @@ Number.prototype.formatVND = function (): string {
     return this.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
         .replace('₫', 'VNĐ')
         .trim()
+}
+String.prototype.titleCase = function (): string {
+    return this.replace(
+        /\w\S*/g,
+        (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    )
+}
+String.prototype.firstCase = function (): string {
+    return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase()
 }
 
 export function splitFullName(fullName?: string): {
@@ -95,13 +109,24 @@ export const calcFinalScore = (
     return Decimal.min(Math.max(rawFinalScore || 0, maxCertFinalScore || 0) + bonusScore, 10)
 }
 
-function getScoreClassification(finalScore: Decimal | null, scoreConverts: ScoreConvert[]) {
-    if (!finalScore) {
-        return { classification: 'Vắng', base10Max: null }
+function getScoreClassification(
+    finalScore: Decimal | null,
+    examScore: Decimal | number | null,
+    scoreConverts: ScoreConvert[],
+    scoreToPass?: Decimal | number | null
+) {
+    // Nếu không có điểm thi ⇒ coi là Vắng
+    if (
+        examScore === null ||
+        examScore === undefined ||
+        (scoreToPass !== null && scoreToPass !== undefined && examScore < scoreToPass)
+    ) {
+        return { classification: 'Không đạt', base10Max: null }
     }
 
+    // Nếu có điểm cuối cùng (finalScore), tìm classification
     const rank = scoreConverts.find(
-        (item) => finalScore.gte(item.base10Min) && finalScore.lte(item.base10Max)
+        (item) => finalScore?.gte(item.base10Min) && finalScore?.lte(item.base10Max)
     )
 
     const classification = rank
@@ -124,9 +149,16 @@ export function getScoreStatistics(
 
     dataTable.forEach((row) => {
         const finalScore = row.finalScore
-        const scoreConverts = row.student?.fixedClass?.trainingCourse?.scoreConverts ?? []
+        const examScore = row?.examScore ?? null
+        const scoreConverts = row?.student?.fixedClass?.trainingCourse?.scoreConverts ?? []
+        const scoreToPass = row?.student?.fixedClass?.trainingCourse?.scoreToPass ?? null
 
-        const { classification, base10Max } = getScoreClassification(finalScore, scoreConverts)
+        const { classification, base10Max } = getScoreClassification(
+            finalScore,
+            examScore,
+            scoreConverts,
+            scoreToPass
+        )
 
         const entry = stats.get(classification)
         if (entry) {
@@ -163,6 +195,8 @@ export function getScoreStatistics(
 export type ItemProps = {
     value: string
     label: string
+    title?: string
+    isParent?: boolean
 }
 export function diffArrays<T, K extends keyof T>(a: T[], b: T[], key: K) {
     const onlyInA = a.filter((itemA) => !b.some((itemB) => itemA[key] === itemB[key]))

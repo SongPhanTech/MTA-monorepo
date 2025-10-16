@@ -1,14 +1,12 @@
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useExamTypeOptions } from '@hooks/examType'
-import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import { useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Checkbox, Col, Flex, Form, Input, Row } from 'antd'
+import { Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { type Key, useCallback, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -20,9 +18,7 @@ interface RegisterClassProps {
 
 export default function RegisterClassManager({ setSubjectClassId }: RegisterClassProps) {
     const [currentPage, _setCurrentPage] = useState(1)
-    const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
-    const { getScheduleLabel } = useScheduleOptions()
-    const { getExamTypeLabel } = useExamTypeOptions()
+    const [selectedRowKey, setSelectedRowKey] = useState<Key>('')
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -40,12 +36,18 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                       },
                   }
                 : {}),
-            ...(semesterId
-                ? {
-                      semesterId,
-                  }
-                : {}),
+            semesterId,
             trainingObjectTypeId,
+            subject: {
+                planTrainingSubject: {
+                    some: {
+                        planTraining: {
+                            semesterId,
+                            trainingObjectTypeId,
+                        },
+                    },
+                },
+            },
             cancelled: false,
             active: true,
         },
@@ -58,7 +60,17 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
             subject: true,
             fixedClasses: {
                 include: {
-                    _count: true,
+                    _count: {
+                        select: {
+                            students: {
+                                where: {
+                                    active: true,
+                                    status: 'ENROLLED',
+                                    deletedAt: null,
+                                },
+                            },
+                        },
+                    },
                 },
             },
             room: {
@@ -69,7 +81,7 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
             subjectClassTimes: true,
         },
         orderBy: {
-            createdAt: 'desc',
+            code: 'asc',
         },
     })
     type SubjectClassData = (typeof subjectClassData)[number]
@@ -125,33 +137,21 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
             </Row>
             <Table
                 rowKey="id"
-                id="subject-class"
                 dataSource={subjectClassData}
                 onRow={(record) => ({
                     onClick: () => handleRowSelection(record),
                     style: { cursor: 'pointer' },
-                    className:
-                        record.id === selectedRowKey ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]' : '',
+                    columnWidth: 35,
                 })}
-                selectedRow={selectedRowKey}
-                columns={[
-                    {
-                        title: '',
-                        dataIndex: 'selection',
-                        width: 50,
-                        align: 'center',
-                        fixed: 'left',
-                        render: (_, record) => (
-                            <Checkbox
-                                checked={record.id === selectedRowKey}
-                                onChange={(e) => {
-                                    e.stopPropagation()
-                                    handleRowSelection(record)
-                                }}
-                                onClick={(e) => e.stopPropagation()}
-                            />
-                        ),
+                rowSelection={{
+                    selectedRowKeys: [selectedRowKey],
+                    onChange: (selectedRowKeys) => {
+                        setSelectedRowKey(selectedRowKeys?.[0] as string)
                     },
+                    type: 'radio',
+                    columnWidth: 35,
+                }}
+                columns={[
                     {
                         title: 'TT',
                         dataIndex: '',
@@ -165,6 +165,13 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                         dataIndex: 'code',
                         align: 'center',
                         width: 150,
+                    },
+                    {
+                        title: 'Tên môn',
+                        dataIndex: 'name',
+                        align: 'center',
+                        width: 150,
+                        render: (text: string) => <p className="text-left">{text}</p>,
                     },
                     // {
                     //     title: 'Thời gian học',
@@ -189,18 +196,18 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                     //         })
                     //     },
                     // },
-                    {
-                        title: 'Kíp học',
-                        dataIndex: 'schedule',
-                        width: 80,
-                        align: 'center',
-                        // filters: scheduleOptions.map((opt) => ({
-                        //     text: opt.label,
-                        //     value: opt.value,
-                        // })),
-                        filterSearch: true,
-                        render: (value) => getScheduleLabel(value),
-                    },
+                    // {
+                    //     title: 'Kíp học',
+                    //     dataIndex: 'schedule',
+                    //     width: 80,
+                    //     align: 'center',
+                    //     // filters: scheduleOptions.map((opt) => ({
+                    //     //     text: opt.label,
+                    //     //     value: opt.value,
+                    //     // })),
+                    //     filterSearch: true,
+                    //     render: (value) => getScheduleLabel(value),
+                    // },
                     // {
                     //     title: 'Giảng viên 1',
                     //     dataIndex: ['mainLecturer', 'userProfile'],
@@ -232,12 +239,12 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                     //     align: 'center',
                     //     width: 100,
                     // },
-                    {
-                        title: 'Số SV max',
-                        dataIndex: 'maxStudent',
-                        align: 'center',
-                        width: 120,
-                    },
+                    // {
+                    //     title: 'Số SV max',
+                    //     dataIndex: 'maxStudent',
+                    //     align: 'center',
+                    //     width: 120,
+                    // },
                     {
                         title: 'Số SV đã ĐK',
                         align: 'center',
@@ -256,7 +263,10 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                             return record?.fixedClasses.length ? (
                                 <TextTruncate
                                     arr={record?.fixedClasses.map((i: any) => {
-                                        return { key: i?.id, label: i.code }
+                                        return {
+                                            key: i?.id,
+                                            label: `${i.code} (${i?._count.students})`,
+                                        }
                                     })}
                                     key="fixedClasses"
                                 />

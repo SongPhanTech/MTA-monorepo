@@ -11,6 +11,7 @@ import {
     useCreateManyTrainingBlockSubject,
     useFindManyDM_DonVi,
     useFindManySubjectVersion,
+    useFindManyTrainingBlockOnCurriculumVersion,
     useFindUniqueTrainingBlockSubject,
     useUpdateTrainingBlockSubject,
 } from '@workspace/db/hooks'
@@ -27,6 +28,7 @@ export type PutTrainingBlockSubject = TrainingBlockSubject
 dayjs.locale('vi')
 
 type TrainingBlockOnCurriculumVersionInput = {
+    curriculumVersionId: string
     trainingBlockOnCurriculumVersionId: string
     trainingBlockSubjectId: string
 }
@@ -48,11 +50,18 @@ const PutTrainingBlockSubject = () => {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
+    // for update
     const { data: initialValue } = useFindUniqueTrainingBlockSubject(
-        {
-            where: { id: input?.trainingBlockSubjectId },
-        },
+        { where: { id: input?.trainingBlockSubjectId } },
         { enabled: !!input?.trainingBlockSubjectId }
+    )
+
+    const { data: trainingBlockOnCurriculumVersion } = useFindManyTrainingBlockOnCurriculumVersion(
+        {
+            where: { curriculumVersionId: input?.curriculumVersionId },
+            include: { trainingBlock: true },
+        },
+        { enabled: !!input?.curriculumVersionId }
     )
 
     const { data: subjectVersionData = [], refetch } = useFindManySubjectVersion({
@@ -204,6 +213,24 @@ const PutTrainingBlockSubject = () => {
                     />
                 </FormItem>
             </Col>
+            {input?.trainingBlockSubjectId && (
+                <Col span={24}>
+                    <FormItem
+                        form={form}
+                        name="trainingBlockOnCurriculumVersionId"
+                        label="Khối kiến thức"
+                    >
+                        <Select
+                            placeholder="Chọn khối kiến thức"
+                            showSearch
+                            onChange={(val) => handleFilterChange('managementOrganizationId', val)}
+                            options={trainingBlockOnCurriculumVersion?.map((item) => {
+                                return { label: item.trainingBlock.name, value: item.id }
+                            })}
+                        />
+                    </FormItem>
+                </Col>
+            )}
             <Col span={24}>
                 <FormItem form={form} name="semester" label="Kỳ học dự kiến">
                     <InputNumber
@@ -225,30 +252,28 @@ const PutTrainingBlockSubject = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <div className="flex justify-between items-center mb-6">
-                    <span>Có sử dụng để tính điểm thi cuối kỳ hay không?</span>
-                    <FormItem
-                        form={form}
-                        name="useForFinalScore"
-                        valuePropName="checked"
-                        className="mb-0"
-                    >
-                        <Checkbox />
-                    </FormItem>
-                </div>
+                <FormItem
+                    form={form}
+                    name="useForFinalScore"
+                    label="Tính điểm thi cuối kỳ"
+                    layout="horizontal"
+                    valuePropName="checked"
+                    className="mb-0"
+                >
+                    <Checkbox />
+                </FormItem>
             </Col>
             <Col span={24}>
-                <div className="flex justify-between items-center mb-6">
-                    <span>Có phải là môn học tốt nghiệp hay không?</span>
-                    <FormItem
-                        form={form}
-                        name="graduation"
-                        valuePropName="checked"
-                        className="mb-0"
-                    >
-                        <Checkbox />
-                    </FormItem>
-                </div>
+                <FormItem
+                    form={form}
+                    name="graduation"
+                    label="Môn học tốt nghiệp"
+                    layout="horizontal"
+                    valuePropName="checked"
+                    className="mb-0"
+                >
+                    <Checkbox />
+                </FormItem>
             </Col>
             {/* <Col span={24}>
                 <div className="flex justify-between items-center mb-6">

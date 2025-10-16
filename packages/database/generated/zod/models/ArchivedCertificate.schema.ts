@@ -6,6 +6,8 @@
 // @ts-nocheck
 
 import { z } from 'zod';
+import { ArchivedCertificateStatus } from '../../zenstack/models';
+import { ArchivedCertificateStatusSchema } from '../enums/ArchivedCertificateStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -14,14 +16,24 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-    englishName: z.string().nullish(),
-    finalScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }),
+    finalScore: z.number(),
+    score: z.number(),
+    issuedBy: z.string(),
+    issuedDate: z.coerce.date(),
+    expiredDate: z.coerce.date().nullish(),
+    status: ArchivedCertificateStatusSchema,
 }
 ).strict();
 const relationSchema = z.object({
+    certificate: z.record(z.unknown()),
+    student: z.record(z.unknown()),
     documentFiles: z.array(z.unknown()).optional(),
     studentSubjectScore: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    certificateId: z.string(),
+    studentId: z.string(),
 }
 );
 
@@ -34,7 +46,7 @@ export const ArchivedCertificateScalarSchema = baseSchema;
 /**
  * `ArchivedCertificate` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const ArchivedCertificateSchema = ArchivedCertificateScalarSchema.merge(relationSchema.partial());
+export const ArchivedCertificateSchema = ArchivedCertificateScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
@@ -56,9 +68,12 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-    englishName: z.string().nullish(),
-    finalScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }), z.record(z.unknown())])
+    finalScore: z.union([z.number(), z.record(z.unknown())]),
+    score: z.union([z.number(), z.record(z.unknown())]),
+    issuedBy: z.string(),
+    issuedDate: z.coerce.date(),
+    expiredDate: z.coerce.date().nullish(),
+    status: ArchivedCertificateStatusSchema
 }).partial().passthrough();
 
 
@@ -66,16 +81,14 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
  * `ArchivedCertificate` schema for create operations excluding foreign keys and relations.
  */
 export const ArchivedCertificateCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
 
 /**
  * `ArchivedCertificate` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const ArchivedCertificateCreateSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
-});
+export const ArchivedCertificateCreateSchema = ArchivedCertificateCreateScalarSchema.merge(fkSchema);
 
 
 /**
@@ -87,5 +100,5 @@ export const ArchivedCertificateUpdateScalarSchema = baseSchema.partial();
 /**
  * `ArchivedCertificate` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const ArchivedCertificateUpdateSchema = ArchivedCertificateUpdateScalarSchema;
+export const ArchivedCertificateUpdateSchema = ArchivedCertificateUpdateScalarSchema.merge(fkSchema.partial());
 

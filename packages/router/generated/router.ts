@@ -87,6 +87,7 @@ export default {
     "QL_VAN_BANG_DON_DANG_KY_XAC_MINH": "/ql-van-bang/don-dang-ky-xac-minh",
     "QL_VAN_BANG_QL_DON_DANG_KY_XAC_MINH": "/ql-van-bang/ql-don-dang-ky-xac-minh",
     "QL_VAN_BANG_TRA_CUU_VAN_BANG": "/ql-van-bang/tra-cuu-van-bang",
+    "QUAN_LY_DIEM_DIEM_TRUNG_BINH_KY_HOC": "/quan-ly-diem/diem-trung-binh-ky-hoc",
     "QUAN_LY_DIEM_DS_LOP_MON_HOC": "/quan-ly-diem/ds-lop-mon-hoc",
     "QUAN_LY_DIEM_KHOA_NHAP_DIEM": "/quan-ly-diem/khoa-nhap-diem",
     "QUAN_LY_DIEM_QL_DIEM_CC_TX": "/quan-ly-diem/ql-diem-cc-tx",

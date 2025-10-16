@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const PlanTrainingDelayScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "semesterId"])
+export const PlanTrainingDelayScalarFieldEnumSchema = z.enum(["id", "active", "description", "deletedAt", "createdAt", "updatedAt", "trainingObjectTypeId"])

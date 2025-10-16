@@ -167,10 +167,32 @@ const PheDuyetLuuBan = createRoute({
         body: {
             content: {
                 'application/json': {
-                    schema: z.object({
-                        decisionIds: z.string().array(),
-                        academicActionType: z.nativeEnum(AcademicActionType),
-                    }),
+                    schema: z
+                        .object({
+                            decisionIds: z.string().array(),
+                            academicActionType: z.nativeEnum(AcademicActionType),
+                            classChanges: z
+                                .array(
+                                    z.object({
+                                        decisionId: z.string(),
+                                        fixedClassId: z.string(),
+                                        changeCurriculumVersion: z.boolean(),
+                                    })
+                                )
+                                .optional(),
+                        })
+                        .superRefine((data, ctx) => {
+                            if (data.academicActionType === AcademicActionType.REPEAT_YEAR) {
+                                if (!data.classChanges || data.classChanges.length === 0) {
+                                    ctx.addIssue({
+                                        code: z.ZodIssueCode.custom,
+                                        path: ['classChanges'],
+                                        message:
+                                            'classChanges is required when academicActionType is REPEAT_YEAR',
+                                    })
+                                }
+                            }
+                        }),
                 },
             },
         },
@@ -187,11 +209,31 @@ const PheDuyetLuuBan = createRoute({
                 },
             },
         },
+        400: {
+            description: 'Bad request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
     },
 })
 
 app.openapi(PheDuyetLuuBan, async (c) => {
-    const { decisionIds, academicActionType } = c.req.valid('json')
+    const { decisionIds, academicActionType, classChanges } = c.req.valid('json')
+
+    if (
+        academicActionType === AcademicActionType.REPEAT_YEAR &&
+        decisionIds.length !== classChanges?.length
+    ) {
+        return c.json(
+            { message: 'classChanges is required when academicActionType is REPEAT_YEAR' },
+            400
+        )
+    }
 
     const decisions = await prisma.studentAcademicDecision.findMany({
         where: {
@@ -225,7 +267,28 @@ app.openapi(PheDuyetLuuBan, async (c) => {
                 status: actionMap[academicActionType],
             },
         })
-        if (academicActionType === AcademicActionType.REPEAT_YEAR) {
+
+        await tx.studentAcademicDecision.updateMany({
+            where: { id: { in: decisionIds } },
+            data: { status: 'APPROVED' },
+        })
+
+        if (academicActionType === AcademicActionType.REPEAT_YEAR && classChanges) {
+            // update student fixedClassId independently based on classChanges
+            for (const classChange of classChanges) {
+                await tx.student.updateMany({
+                    where: {
+                        studentAcademicDecision: {
+                            some: { id: classChange.decisionId },
+                        },
+                    },
+                    data: {
+                        fixedClassId: classChange.fixedClassId,
+                        curriculumVersionId: classChange.changeCurriculumVersion ? null : undefined,
+                    },
+                })
+            }
+
             await tx.studentSubjectScore.updateMany({
                 where: { studentId: { in: studentIds }, repeated: false },
                 data: { repeated: true },
