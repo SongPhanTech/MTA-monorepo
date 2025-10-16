@@ -824,6 +824,7 @@ model SubjectClass extends BaseNoCode {
 
   cancelled                  Boolean               @default(false) // đã hủy lớp
   lecturerAssignmentDeadline DateTime? // hạn phân công giảng dạy
+  submitLecturerAssignmentAt DateTime? // ngày nộp phân công giảng dạy
   examDate                   DateTime? // ngày thi
 
   // hình thức thi copy từ phiên bản môn học; hình thức thi của lớp có thể thay đổi giữa kỳ học

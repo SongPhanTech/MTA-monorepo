@@ -45,7 +45,7 @@ const PutFormModal = <T extends PutModalFormType>({
                 wrapperCol={wrapperCol}
                 {...rest.formProps}
             >
-                {rowWrap ? <Row gutter={16}>{children}</Row> : children}
+                {rowWrap ? <Row gutter={[12, 12]}>{children}</Row> : children}
             </Form>
         </AntdModal>
     )

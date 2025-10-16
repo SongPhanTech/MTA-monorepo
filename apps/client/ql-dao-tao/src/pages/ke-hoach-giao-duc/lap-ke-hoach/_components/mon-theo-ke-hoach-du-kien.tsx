@@ -291,199 +291,188 @@ export default function MonTheoKeHoachDuKien() {
     }
 
     return (
-        <div>
-            <Row gutter={[0, 0]}>
-                <Form
-                    className="w-full"
-                    form={form}
-                    onValuesChange={(filter: SubjectBySemesterForm) => {
-                        if (!filter.subjectSelected) {
-                            debouncedRefetch()
-                        }
-                    }}
-                >
-                    <Col span={24}>
-                        <Flex gap={4}>
-                            <Col span={8}>
-                                <Form.Item className="mb-0" name="searchText">
-                                    <Input id="search" placeholder="Tìm kiếm" allowClear />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    className="mb-0"
-                                    name="trainingMajorId"
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn chuyên ngành đào tạo"
-                                        options={trainingMajorData.map((i: TrainingMajor) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        }))}
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    className="mb-0"
-                                    name="trainingCourseId"
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Khoá đào tạo"
-                                        options={trainingCourseData.map((i) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        }))}
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Flex>
-                    </Col>
-                    <Col span={24} className="mt-2">
-                        <Flex justify="end" gap={4}>
-                            <Button onClick={onSubmit} type="primary">
-                                Lưu kế hoạch
-                            </Button>
-                        </Flex>
-                    </Col>
-                    <Col span={24}>
-                        <Form.Item hidden name="subjectSelected" />
-                        <Table
-                            rowKey="subjectVersionId"
-                            data={data}
-                            rowSelection={{
-                                type: 'checkbox',
-                                checkStrictly: true,
-                                selectedRowKeys: subjectSelected,
-                                onChange: (selectedRowKeys) => {
-                                    form.setFieldValue('subjectSelected', selectedRowKeys)
-                                },
-                                columnWidth: 15,
-                            }}
-                            onRow={(record) => {
-                                return {
-                                    onClick: () => {
-                                        const isSelected = subjectSelected.includes(
-                                            record.subjectVersionId
-                                        )
-                                        if (isSelected) {
-                                            form.setFieldValue(
-                                                'subjectSelected',
-                                                subjectSelected.filter(
-                                                    (id) => id !== record.subjectVersionId
-                                                )
+        <Form
+            form={form}
+            onValuesChange={(filter: SubjectBySemesterForm) => {
+                if (!filter.subjectSelected) {
+                    debouncedRefetch()
+                }
+            }}
+        >
+            <Row >
+                <Col span={20}>
+                    <Flex gap={4}>
+                        <Col span={8}>
+                            <Form.Item className="mb-0" name="searchText">
+                                <Input id="search" placeholder="Tìm kiếm" allowClear />
+                            </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                            <Form.Item className="mb-0" name="trainingMajorId" labelAlign="left">
+                                <Select
+                                    placeholder="Chọn chuyên ngành đào tạo"
+                                    options={trainingMajorData.map((i: TrainingMajor) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    allowClear
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                            <Form.Item className="mb-0" name="trainingCourseId" labelAlign="left">
+                                <Select
+                                    placeholder="Khoá đào tạo"
+                                    options={trainingCourseData.map((i) => ({
+                                        value: i.id,
+                                        label: i.name,
+                                    }))}
+                                    allowClear
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Flex>
+                </Col>
+                <Col span={4}>
+                    <Flex justify="end" gap={4}>
+                        <Button onClick={onSubmit} type="primary">
+                            Lưu kế hoạch
+                        </Button>
+                    </Flex>
+                </Col>
+                <Col span={24}>
+                    <Form.Item hidden name="subjectSelected" />
+                    <Table
+                        rowKey="subjectVersionId"
+                        data={data}
+                        rowSelection={{
+                            type: 'checkbox',
+                            checkStrictly: true,
+                            selectedRowKeys: subjectSelected,
+                            onChange: (selectedRowKeys) => {
+                                form.setFieldValue('subjectSelected', selectedRowKeys)
+                            },
+                            columnWidth: 15,
+                        }}
+                        onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    const isSelected = subjectSelected.includes(
+                                        record.subjectVersionId
+                                    )
+                                    if (isSelected) {
+                                        form.setFieldValue(
+                                            'subjectSelected',
+                                            subjectSelected.filter(
+                                                (id) => id !== record.subjectVersionId
                                             )
-                                        } else {
-                                            form.setFieldValue('subjectSelected', [
-                                                ...subjectSelected,
-                                                record.subjectVersionId,
-                                            ])
-                                        }
-                                    },
-                                }
-                            }}
-                            columns={[
-                                {
-                                    title: 'TT',
-                                    width: 35,
-                                    align: 'center',
-                                    render: (_, __, index) =>
-                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                                },
-                                {
-                                    title: 'Mã MH',
-                                    dataIndex: 'subjectVersionCode',
-                                    align: 'center',
-                                    width: 100,
-                                },
-                                {
-                                    title: 'Tên môn học',
-                                    dataIndex: 'subjectVersionName',
-                                    align: 'center',
-                                    render: (__, record) => {
-                                        return (
-                                            <div className="text-left">
-                                                {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
-                                                    ''}
-                                            </div>
                                         )
-                                    },
-                                },
-                                {
-                                    title: 'Danh sách lớp quản lý',
-                                    dataIndex: 'fixedClass',
-                                    align: 'center',
-                                    width: 180,
-                                    render: (__, record) => {
-                                        return record?.fixedClass.length ? (
-                                            <TextTruncate
-                                                arr={record?.fixedClass.map((i: any) => {
-                                                    return {
-                                                        key: i?.fixedClassId,
-                                                        label: `Kỳ ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
-                                                    }
-                                                })}
-                                                key="fixedClass"
-                                            />
-                                        ) : (
-                                            ''
-                                        )
-                                    },
-                                },
-                                {
-                                    title: 'CTĐT',
-                                    dataIndex: 'curriculumVersion',
-                                    align: 'center',
-                                    render: (__, record) => {
-                                        return record?.curriculumVersion.length ? (
-                                            <TextTruncate
-                                                arr={record?.curriculumVersion.map((i: any) => {
-                                                    return {
-                                                        key: i?.curriculumVersionId,
-                                                        label: `${i?.curriculumVersionCode} - ${i?.curriculumVersionName}`,
-                                                    }
-                                                })}
-                                                key="curriculumVersion"
-                                            />
-                                        ) : (
-                                            ''
-                                        )
-                                    },
-                                },
-                                {
-                                    title: 'Tổng SV',
-                                    dataIndex: 'countStudent',
-                                    width: 80,
-                                    align: 'center',
-                                },
-                                {
-                                    title: 'Đơn vị phụ trách',
-                                    dataIndex: 'managementOrganizationCode',
-                                    width: 150,
-                                    align: 'center',
-                                },
-                            ]}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: numberOfPages,
-                                total: res?.data?.count ?? 0,
-                                onChange: (page, pageSize) => {
-                                    if (numberOfPages === pageSize) {
-                                        setCurrentPage(page)
                                     } else {
-                                        setCurrentPage(1)
-                                        setNumberOfPages(pageSize)
+                                        form.setFieldValue('subjectSelected', [
+                                            ...subjectSelected,
+                                            record.subjectVersionId,
+                                        ])
                                     }
                                 },
-                            }}
-                        />
-                    </Col>
-                </Form>
+                            }
+                        }}
+                        columns={[
+                            {
+                                title: 'TT',
+                                width: 35,
+                                align: 'center',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Mã MH',
+                                dataIndex: 'subjectVersionCode',
+                                align: 'center',
+                                width: 100,
+                            },
+                            {
+                                title: 'Tên môn học',
+                                dataIndex: 'subjectVersionName',
+                                align: 'center',
+                                render: (__, record) => {
+                                    return (
+                                        <div className="text-left">
+                                            {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
+                                                ''}
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Danh sách lớp quản lý',
+                                dataIndex: 'fixedClass',
+                                align: 'center',
+                                width: 180,
+                                render: (__, record) => {
+                                    return record?.fixedClass.length ? (
+                                        <TextTruncate
+                                            arr={record?.fixedClass.map((i: any) => {
+                                                return {
+                                                    key: i?.fixedClassId,
+                                                    label: `Kỳ ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
+                                                }
+                                            })}
+                                            key="fixedClass"
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
+                            },
+                            {
+                                title: 'CTĐT',
+                                dataIndex: 'curriculumVersion',
+                                align: 'center',
+                                render: (__, record) => {
+                                    return record?.curriculumVersion.length ? (
+                                        <TextTruncate
+                                            arr={record?.curriculumVersion.map((i: any) => {
+                                                return {
+                                                    key: i?.curriculumVersionId,
+                                                    label: `${i?.curriculumVersionCode} - ${i?.curriculumVersionName}`,
+                                                }
+                                            })}
+                                            key="curriculumVersion"
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Tổng SV',
+                                dataIndex: 'countStudent',
+                                width: 80,
+                                align: 'center',
+                            },
+                            {
+                                title: 'Đơn vị phụ trách',
+                                dataIndex: 'managementOrganizationCode',
+                                width: 150,
+                                align: 'center',
+                            },
+                        ]}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: res?.data?.count ?? 0,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
+                        }}
+                    />
+                </Col>
             </Row>
-        </div>
+        </Form>
     )
 }

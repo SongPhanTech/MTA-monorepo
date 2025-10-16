@@ -108,6 +108,7 @@ export default function TeachingAssignment() {
         examType: undefined,
         organization: undefined,
         room: undefined,
+        pcgd: undefined,
     })
 
     const [form] = Form.useForm<TeachingAssignmentForm>()
@@ -121,6 +122,15 @@ export default function TeachingAssignment() {
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
         'XEM_TAT_CA'
     )
+
+    const canSua = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+        'SUA'
+    )
+
+    const isBoMon = canXemTatCa && canSua
+    // const isBoMon = !canXemTatCa && canSua
+
     const where = useMemo(
         () =>
             ({
@@ -254,10 +264,17 @@ export default function TeachingAssignment() {
                           },
                       }
                     : {}),
+                ...(filters.pcgd
+                    ? {
+                          lecturerId: { not: null },
+                          extraLecturerId: { not: null },
+                          submitLecturerAssignmentAt: { not: null },
+                      }
+                    : {}),
                 deletedAt: null,
                 active: true,
                 trainingObjectTypeId,
-                ...(!canXemTatCa
+                ...(!isBoMon
                     ? {
                           lecturerAssignmentDeadline: {
                               not: null,
@@ -265,7 +282,7 @@ export default function TeachingAssignment() {
                       }
                     : {}),
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, canXemTatCa]
+        [filters, semesterId, trainingObjectTypeId, isBoMon]
     )
 
     const { data = [], refetch } = useFindManySubjectClass(
@@ -587,6 +604,18 @@ export default function TeachingAssignment() {
                             <Flex justify="end" gap={4}>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                    'THEM'
+                                ) && (
+                                    <Button
+                                        onClick={() => handleModal()}
+                                        //TODO: handle save
+                                        type="primary"
+                                    >
+                                        Thêm mới lớp MH
+                                    </Button>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
                                     'XEM_TAT_CA'
                                 ) && (
                                     <Popover
@@ -622,37 +651,8 @@ export default function TeachingAssignment() {
                                         trigger="click"
                                         placement="bottomRight"
                                     >
-                                        <Button
-                                            // onClick={() => handleModal()}
-                                            type="primary"
-                                        >
-                                            Báo dạy
-                                        </Button>
+                                        <Button type="primary">1.Báo dạy</Button>
                                     </Popover>
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'THEM'
-                                ) && (
-                                    <Button
-                                        onClick={() => handleModal()}
-                                        //TODO: handle save
-                                        type="primary"
-                                    >
-                                        Thêm mới lớp MH
-                                    </Button>
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'NHAP_EXCEL'
-                                ) && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() => onOpenModalNhapTKB(semesterId || '')}
-                                    >
-                                        <EditIcon stroke="white" />
-                                        Nhập từ TKB
-                                    </Button>
                                 )}
                                 {isEdit ? (
                                     <>
@@ -682,9 +682,43 @@ export default function TeachingAssignment() {
                                             type="primary"
                                             disabled={!data.length}
                                         >
-                                            PCGD
+                                            2.PCGD
                                         </Button>
                                     )
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                    'SUA'
+                                ) && (
+                                    // TODO: Bỏ check quyền xem tất cả khi hoàn thành xong
+                                    // !can(
+                                    //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                    //     'XEM_TAT_CA'
+                                    // ) &&
+                                    <Button
+                                        onClick={() => setIsEdit(true)}
+                                        //TODO: handle save
+                                        type="primary"
+                                        disabled={!data.length}
+                                    >
+                                        3.Gửi PCGD
+                                    </Button>
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                    'XEM_TAT_CA'
+                                ) && <Button type="primary">4.Xuất báo dạy</Button>}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                    'NHAP_EXCEL'
+                                ) && (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => onOpenModalNhapTKB(semesterId || '')}
+                                    >
+                                        <EditIcon stroke="white" />
+                                        5.Nhập từ TKB
+                                    </Button>
                                 )}
                             </Flex>
                         </Col>
@@ -718,13 +752,21 @@ export default function TeachingAssignment() {
                                     title: 'PCGD',
                                     align: 'center',
                                     width: 80,
-                                    dataIndex: 'lecturerId',
                                     type: 'select',
+                                    dataIndex: 'pcgd',
                                     options: [
                                         { value: true, label: 'Đã phân công giảng dạy' },
                                         { value: false, label: 'Chưa phân công giảng dạy' },
                                     ],
-                                    render: (value) => <Checkbox checked={!!value} />,
+                                    render: (_, record) => (
+                                        <Checkbox
+                                            checked={
+                                                record.lecturerId &&
+                                                record.extraLecturerId &&
+                                                record.submitLecturerAssignmentAt
+                                            }
+                                        />
+                                    ),
                                 },
                                 {
                                     title: 'Hạn PCGD',
@@ -782,14 +824,7 @@ export default function TeachingAssignment() {
                                     render: (_, record) =>
                                         record.subject?.credit ? record.subject?.credit : '',
                                 },
-                                // {
-                                //     title: 'Số SV tối đa',
-                                //     dataIndex: 'maxStudent',
-                                //     width: 150,
-                                //     align: 'center',
-                                //     type: 'order',
-                                //     distinctFilters: ['credit', 'subjectClassStudent'],
-                                // },
+
                                 {
                                     title: 'Số SV',
                                     dataIndex: 'subjectClassStudent',
@@ -802,22 +837,7 @@ export default function TeachingAssignment() {
                                             ? record.subjectClassStudent.length
                                             : record.maxStudent) ?? 0,
                                 },
-                                // {
-                                //     title: 'Thời khoá biểu',
-                                //     width: 150,
-                                //     align: 'center',
-                                //     dataIndex: 'subjectClassTimes',
-                                //     render: (subjectClassTimes: SubjectClassTime[]) => {
-                                //         return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
-                                //             return (
-                                //                 <p>
-                                //                     {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
-                                //                     {tkb.startPeriod} - {tkb.endPeriod}
-                                //                 </p>
-                                //             )
-                                //         })
-                                //     },
-                                // },
+
                                 {
                                     title: 'Giảng viên 1',
                                     width: 200,
@@ -899,26 +919,7 @@ export default function TeachingAssignment() {
                                             '-'
                                         ),
                                 },
-                                // {
-                                //     title: 'Kíp học',
-                                //     dataIndex: 'schedule',
-                                //     align: 'center',
-                                //     width: 100,
-                                //     type: 'select',
 
-                                //     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
-                                //         ([key, value_]) => {
-                                //             return {
-                                //                 label: value_,
-                                //                 value: key,
-                                //             }
-                                //         }
-                                //     ),
-                                //     render: (value: SubjectClassSchedule) =>
-                                //         SUBJECT_CLASS_SCHEDULE_TYPE[
-                                //             value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                //         ],
-                                // },
                                 {
                                     title: 'Khu vực',
                                     dataIndex: 'room',
@@ -986,6 +987,50 @@ export default function TeachingAssignment() {
                                 //     align: 'center',
                                 //     render: (value) => (value ? formatDate(value) : ''),
                                 // },
+                                // {
+                                //     title: 'Kíp học',
+                                //     dataIndex: 'schedule',
+                                //     align: 'center',
+                                //     width: 100,
+                                //     type: 'select',
+
+                                //     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                                //         ([key, value_]) => {
+                                //             return {
+                                //                 label: value_,
+                                //                 value: key,
+                                //             }
+                                //         }
+                                //     ),
+                                //     render: (value: SubjectClassSchedule) =>
+                                //         SUBJECT_CLASS_SCHEDULE_TYPE[
+                                //             value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                //         ],
+                                // },
+                                // {
+                                //     title: 'Thời khoá biểu',
+                                //     width: 150,
+                                //     align: 'center',
+                                //     dataIndex: 'subjectClassTimes',
+                                //     render: (subjectClassTimes: SubjectClassTime[]) => {
+                                //         return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                                //             return (
+                                //                 <p>
+                                //                     {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                                //                     {tkb.startPeriod} - {tkb.endPeriod}
+                                //                 </p>
+                                //             )
+                                //         })
+                                //     },
+                                // },
+                                // {
+                                //     title: 'Số SV tối đa',
+                                //     dataIndex: 'maxStudent',
+                                //     width: 150,
+                                //     align: 'center',
+                                //     type: 'order',
+                                //     distinctFilters: ['credit', 'subjectClassStudent'],
+                                // },
                                 {
                                     title: 'ĐV phụ trách',
                                     dataIndex: 'subject',
@@ -1003,12 +1048,6 @@ export default function TeachingAssignment() {
                                 //     render: (value) => (
                                 //         <Checkbox checked={value.subjectEquivalentType} disabled />
                                 //     ),
-                                // },
-                                // {
-                                //     title: 'Lớp liên kết',
-                                //     dataIndex: 'lopLienKet',
-                                //     width: 150,
-                                //     align: 'center',
                                 // },
                                 {
                                     title: 'Thao tác',

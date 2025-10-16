@@ -2939,6 +2939,7 @@ model SubjectClass {
   semesterId                 String
   cancelled                  Boolean               @default(false)
   lecturerAssignmentDeadline DateTime?
+  submitLecturerAssignmentAt DateTime?
   examDate                   DateTime?
   examType                   ExamType?
   exam                       Exam?                 @relation(fields: [examId], references: [id])

@@ -30,7 +30,7 @@ export default function TextTruncate({ arr, key }: TypeProps) {
         }
     }, [arr?.length])
     return (
-        <div ref={textRef} className="relative collapse-content">
+        <div ref={textRef} className="relative">
             <ul
                 style={{
                     paddingLeft: 0,
@@ -48,7 +48,7 @@ export default function TextTruncate({ arr, key }: TypeProps) {
                         e.stopPropagation()
                         handleShowMore()
                     }}
-                    className="flex  justify-end text-xs text-green-600"
+                    className="flex  justify-end text-xs text-green-700"
                 >
                     {show ? 'Ẩn bớt' : 'Xem thêm'}
                 </div>

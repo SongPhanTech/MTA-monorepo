@@ -7458,6 +7458,7 @@ export namespace Prisma {
         semesterId: 'semesterId',
         cancelled: 'cancelled',
         lecturerAssignmentDeadline: 'lecturerAssignmentDeadline',
+        submitLecturerAssignmentAt: 'submitLecturerAssignmentAt',
         examDate: 'examDate',
         examType: 'examType',
         examId: 'examId',
@@ -49917,6 +49918,7 @@ export namespace Prisma {
         readonly semesterId: FieldRef<"SubjectClass", 'String'>;
         readonly cancelled: FieldRef<"SubjectClass", 'Boolean'>;
         readonly lecturerAssignmentDeadline: FieldRef<"SubjectClass", 'DateTime'>;
+        readonly submitLecturerAssignmentAt: FieldRef<"SubjectClass", 'DateTime'>;
         readonly examDate: FieldRef<"SubjectClass", 'DateTime'>;
         readonly examType: FieldRef<"SubjectClass", 'ExamType'>;
         readonly examId: FieldRef<"SubjectClass", 'String'>;
@@ -207570,6 +207572,7 @@ export namespace Prisma {
         semesterId: string | null
         cancelled: boolean | null
         lecturerAssignmentDeadline: Date | null
+        submitLecturerAssignmentAt: Date | null
         examDate: Date | null
         examType: $Enums.ExamType | null
         examId: string | null
@@ -207606,6 +207609,7 @@ export namespace Prisma {
         semesterId: string | null
         cancelled: boolean | null
         lecturerAssignmentDeadline: Date | null
+        submitLecturerAssignmentAt: Date | null
         examDate: Date | null
         examType: $Enums.ExamType | null
         examId: string | null
@@ -207642,6 +207646,7 @@ export namespace Prisma {
         semesterId: number
         cancelled: number
         lecturerAssignmentDeadline: number
+        submitLecturerAssignmentAt: number
         examDate: number
         examType: number
         examId: number
@@ -207685,6 +207690,7 @@ export namespace Prisma {
         semesterId?: true
         cancelled?: true
         lecturerAssignmentDeadline?: true
+        submitLecturerAssignmentAt?: true
         examDate?: true
         examType?: true
         examId?: true
@@ -207721,6 +207727,7 @@ export namespace Prisma {
         semesterId?: true
         cancelled?: true
         lecturerAssignmentDeadline?: true
+        submitLecturerAssignmentAt?: true
         examDate?: true
         examType?: true
         examId?: true
@@ -207757,6 +207764,7 @@ export namespace Prisma {
         semesterId?: true
         cancelled?: true
         lecturerAssignmentDeadline?: true
+        submitLecturerAssignmentAt?: true
         examDate?: true
         examType?: true
         examId?: true
@@ -207874,6 +207882,7 @@ export namespace Prisma {
         semesterId: string
         cancelled: boolean
         lecturerAssignmentDeadline: Date | null
+        submitLecturerAssignmentAt: Date | null
         examDate: Date | null
         examType: $Enums.ExamType | null
         examId: string | null
@@ -207927,6 +207936,7 @@ export namespace Prisma {
         semesterId?: boolean
         cancelled?: boolean
         lecturerAssignmentDeadline?: boolean
+        submitLecturerAssignmentAt?: boolean
         examDate?: boolean
         examType?: boolean
         examId?: boolean
@@ -207981,6 +207991,7 @@ export namespace Prisma {
         semesterId?: boolean
         cancelled?: boolean
         lecturerAssignmentDeadline?: boolean
+        submitLecturerAssignmentAt?: boolean
         examDate?: boolean
         examType?: boolean
         examId?: boolean
@@ -208025,6 +208036,7 @@ export namespace Prisma {
         semesterId?: boolean
         cancelled?: boolean
         lecturerAssignmentDeadline?: boolean
+        submitLecturerAssignmentAt?: boolean
         examDate?: boolean
         examType?: boolean
         examId?: boolean
@@ -208069,6 +208081,7 @@ export namespace Prisma {
         semesterId?: boolean
         cancelled?: boolean
         lecturerAssignmentDeadline?: boolean
+        submitLecturerAssignmentAt?: boolean
         examDate?: boolean
         examType?: boolean
         examId?: boolean
@@ -208087,7 +208100,7 @@ export namespace Prisma {
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
     };
-    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "examDate" | "examType" | "examId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "roomId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
+    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "submitLecturerAssignmentAt" | "examDate" | "examType" | "examId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "roomId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
     export type SubjectClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subject?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
@@ -208167,6 +208180,7 @@ export namespace Prisma {
             semesterId: string
             cancelled: boolean
             lecturerAssignmentDeadline: Date | null
+            submitLecturerAssignmentAt: Date | null
             examDate: Date | null
             examType: $Enums.ExamType | null
             examId: string | null
@@ -327476,6 +327490,7 @@ export namespace Prisma {
         semesterId?: StringFilter<"SubjectClass"> | string
         cancelled?: BoolFilter<"SubjectClass"> | boolean
         lecturerAssignmentDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
+        submitLecturerAssignmentAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -327529,6 +327544,7 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrderInput | SortOrder
+        submitLecturerAssignmentAt?: SortOrderInput | SortOrder
         examDate?: SortOrderInput | SortOrder
         examType?: SortOrderInput | SortOrder
         examId?: SortOrderInput | SortOrder
@@ -327586,6 +327602,7 @@ export namespace Prisma {
         semesterId?: StringFilter<"SubjectClass"> | string
         cancelled?: BoolFilter<"SubjectClass"> | boolean
         lecturerAssignmentDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
+        submitLecturerAssignmentAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -327639,6 +327656,7 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrderInput | SortOrder
+        submitLecturerAssignmentAt?: SortOrderInput | SortOrder
         examDate?: SortOrderInput | SortOrder
         examType?: SortOrderInput | SortOrder
         examId?: SortOrderInput | SortOrder
@@ -327683,6 +327701,7 @@ export namespace Prisma {
         semesterId?: StringWithAggregatesFilter<"SubjectClass"> | string
         cancelled?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
         lecturerAssignmentDeadline?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
+        submitLecturerAssignmentAt?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
         examDate?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableWithAggregatesFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
@@ -353305,6 +353324,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -353353,6 +353373,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -353395,6 +353416,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -353443,6 +353465,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -353488,6 +353511,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -353521,6 +353545,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -353552,6 +353577,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -375934,6 +375960,7 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrder
+        submitLecturerAssignmentAt?: SortOrder
         examDate?: SortOrder
         examType?: SortOrder
         examId?: SortOrder
@@ -375973,6 +376000,7 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrder
+        submitLecturerAssignmentAt?: SortOrder
         examDate?: SortOrder
         examType?: SortOrder
         examId?: SortOrder
@@ -376009,6 +376037,7 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrder
+        submitLecturerAssignmentAt?: SortOrder
         examDate?: SortOrder
         examType?: SortOrder
         examId?: SortOrder
@@ -448537,6 +448566,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -448584,6 +448614,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -449088,6 +449119,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -449135,6 +449167,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -452008,6 +452041,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -452054,6 +452088,7 @@ export namespace Prisma {
         trainingObjectTypeId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -452604,6 +452639,7 @@ export namespace Prisma {
         semesterId?: StringFilter<"SubjectClass"> | string
         cancelled?: BoolFilter<"SubjectClass"> | boolean
         lecturerAssignmentDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
+        submitLecturerAssignmentAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -455180,6 +455216,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -455227,6 +455264,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -458860,6 +458898,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -458906,6 +458945,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -461658,6 +461698,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -461705,6 +461746,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -461918,6 +461960,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -461965,6 +462008,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -463830,6 +463874,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -463877,6 +463922,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -463931,6 +463977,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -463978,6 +464025,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -464019,6 +464067,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -464066,6 +464115,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -464380,6 +464430,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -464427,6 +464478,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -465249,6 +465301,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -465295,6 +465348,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -467239,6 +467293,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -467286,6 +467341,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -467335,6 +467391,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -467382,6 +467439,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -479590,6 +479648,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -479637,6 +479696,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -479686,6 +479746,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -479733,6 +479794,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -479782,6 +479844,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -479829,6 +479892,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -482746,6 +482810,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -482793,6 +482858,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -483321,6 +483387,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -483368,6 +483435,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -484985,6 +485053,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -485032,6 +485101,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -490334,6 +490404,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -490381,6 +490452,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -501598,6 +501670,7 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -501645,6 +501718,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -529657,6 +529731,7 @@ export namespace Prisma {
         trainingObjectTypeId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -529856,6 +529931,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -529902,6 +529978,7 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529946,6 +530023,7 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531733,6 +531811,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -531780,6 +531859,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531824,6 +531904,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -533432,6 +533513,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -534239,6 +534321,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -534285,6 +534368,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534329,6 +534413,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535845,6 +535930,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -536479,6 +536565,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -536525,6 +536612,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536569,6 +536657,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538113,6 +538202,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -538282,6 +538372,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -538329,6 +538420,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538373,6 +538465,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538405,6 +538498,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -538452,6 +538546,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538496,6 +538591,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -542792,6 +542888,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -542827,6 +542924,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -542862,6 +542960,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -543072,6 +543171,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543119,6 +543219,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543163,6 +543264,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543195,6 +543297,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543242,6 +543345,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543286,6 +543390,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543318,6 +543423,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543365,6 +543471,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543409,6 +543516,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544833,6 +544941,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -544880,6 +544989,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544924,6 +545034,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546800,6 +546911,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -546847,6 +546959,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546891,6 +547004,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -549747,6 +549861,7 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -549889,6 +550004,7 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549936,6 +550052,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549980,6 +550097,7 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

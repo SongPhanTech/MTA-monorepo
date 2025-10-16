@@ -18417,6 +18417,11 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
+                submitLecturerAssignmentAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 examDate: {
                     name: string;
                     type: string;
