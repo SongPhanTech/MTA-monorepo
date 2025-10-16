@@ -335,7 +335,6 @@ const PutStudentScoreConvertModal = () => {
                     <Select
                         showSearch
                         placeholder="Chọn sinh viên"
-                        allowClear
                         loading={loadingStudents}
                         filterOption={false}
                         onSearch={(v) => setStudentKeyword(v)}
