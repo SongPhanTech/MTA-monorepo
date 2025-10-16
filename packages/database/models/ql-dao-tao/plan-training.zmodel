@@ -161,6 +161,12 @@ model StudentSubjectScore extends Base {
 
   isImproving                  Boolean                                    @default(false) // học cải thiện
 
+  /// kì thi
+  exam                         Exam?                                      @relation(fields: [examId], references: [id])
+  examId                       String?
+  /// thí sinh trong kì thi
+  examSession                  ExamSession?
+
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
 
@@ -190,7 +196,7 @@ model StudentSubjectScoreHistory extends Base {
   examPostponedReason   Boolean?
   examPostponed         String?
 
-  examBanned            Boolean
+  examBanned            Boolean?
   examBannedReason      String?
 
   suspended             Boolean?

@@ -2632,19 +2632,6 @@ const policy = {
                 update: {},
             },
         },
-        answer: {
-            modelLevel: {
-                read: { guard: Answer_read, },
-                create: { guard: Answer_create, inputChecker: Answer_create_input, },
-                update: { guard: Answer_update, },
-                postUpdate: { guard: Answer_postUpdate, },
-                delete: { guard: Answer_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
         exam: {
             modelLevel: {
                 read: { guard: Exam_read, },
@@ -2652,6 +2639,19 @@ const policy = {
                 update: { guard: Exam_update, },
                 postUpdate: { guard: Exam_postUpdate, },
                 delete: { guard: Exam_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        examRoom: {
+            modelLevel: {
+                read: { guard: ExamRoom_read, },
+                create: { guard: ExamRoom_create, inputChecker: ExamRoom_create_input, },
+                update: { guard: ExamRoom_update, },
+                postUpdate: { guard: ExamRoom_postUpdate, },
+                delete: { guard: ExamRoom_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -2691,19 +2691,6 @@ const policy = {
                 update: { guard: ExamBankQuestion_update, },
                 postUpdate: { guard: ExamBankQuestion_postUpdate, },
                 delete: { guard: ExamBankQuestion_delete, }
-            },
-            fieldLevel: {
-                read: {},
-                update: {},
-            },
-        },
-        examFax: {
-            modelLevel: {
-                read: { guard: ExamFax_read, },
-                create: { guard: ExamFax_create, inputChecker: ExamFax_create_input, },
-                update: { guard: ExamFax_update, },
-                postUpdate: { guard: ExamFax_postUpdate, },
-                delete: { guard: ExamFax_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3382,12 +3369,11 @@ const policy = {
         multipleChoiceOption: { hasValidation: false },
         fillInBlankSlot: { hasValidation: false },
         orderingItem: { hasValidation: false },
-        answer: { hasValidation: false },
         exam: { hasValidation: false },
+        examRoom: { hasValidation: false },
         testStructureRule: { hasValidation: false },
         examBank: { hasValidation: false },
         examBankQuestion: { hasValidation: false },
-        examFax: { hasValidation: false },
         examSession: { hasValidation: false },
         academicWarningRule: { hasValidation: false },
         academicWarning: { hasValidation: false },
@@ -19137,84 +19123,6 @@ function $check_OrderingItem_delete(input, context) {
     }
     return false;
 }
-function Answer_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_Answer_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Answer_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Answer_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Answer_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function Answer_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Answer_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function Answer_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_Answer_postUpdate(input, context) {
-    return true;
-}
-function Answer_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_Answer_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
 function Exam_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -19286,6 +19194,84 @@ function Exam_delete(context, db) {
     return { OR: [] };
 }
 function $check_Exam_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamRoom_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ExamRoom_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamRoom_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamRoom_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamRoom_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ExamRoom_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamRoom_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ExamRoom_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ExamRoom_postUpdate(input, context) {
+    return true;
+}
+function ExamRoom_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ExamRoom_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
@@ -19520,84 +19506,6 @@ function ExamBankQuestion_delete(context, db) {
     return { OR: [] };
 }
 function $check_ExamBankQuestion_delete(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ExamFax_read(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-function $check_ExamFax_read(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ExamFax_create(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ExamFax_create(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ExamFax_create_input(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return (user != null);
-}
-function ExamFax_update(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ExamFax_update(input, context) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return true;
-    }
-    return false;
-}
-function ExamFax_postUpdate(context, db) {
-    return { AND: [] };
-}
-function $check_ExamFax_postUpdate(input, context) {
-    return true;
-}
-function ExamFax_delete(context, db) {
-    var _a;
-    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if ((user != null)) {
-        return { AND: [] };
-    }
-    return { OR: [] };
-}
-function $check_ExamFax_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

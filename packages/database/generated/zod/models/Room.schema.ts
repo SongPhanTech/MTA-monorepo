@@ -30,7 +30,7 @@ const relationSchema = z.object({
     defenseRooms: z.array(z.unknown()).optional(),
     thesisProject: z.array(z.unknown()).optional(),
     classSchedules: z.array(z.unknown()).optional(),
-    examSession: z.array(z.unknown()).optional(),
+    examRooms: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

@@ -182,16 +182,7 @@ const genExamFax = createRoute({
                     schema: z
                         .object({
                             examId: z.string().openapi('examId', {
-                                description: 'ID của đề thi',
-                            }),
-                            start: z.number().openapi('start', {
-                                description: 'Số bắt đầu',
-                            }),
-                            count: z.number().openapi('count', {
-                                description: 'Số lượng',
-                            }),
-                            step: z.number().default(1).openapi('step', {
-                                description: 'Bước nhảy',
+                                description: 'ID của kì thi',
                             }),
                         })
                         .openapi('gen-exam-code'),
@@ -237,60 +228,69 @@ const genExamFax = createRoute({
 })
 
 app.openapi(genExamFax, async (c) => {
-    const { examId, start, count, step } = c.req.valid('json')
+    const { examId } = c.req.valid('json')
     const exam = await prisma.exam.findUnique({
         where: { id: examId },
         include: {
-            subjectClass: {
-                select: {
-                    _count: {
-                        select: {
-                            subjectClassStudent: {
-                                where: {
-                                    examBanned: false,
-                                },
-                            },
-                        },
+            studentSubjectScore: true,
+            examRooms: {
+                include: {
+                    examSessions: {
+                        include: { studentSubjectScore: true },
                     },
                 },
-                where: {
-                    cancelled: false,
-                },
             },
-            examFax: { include: { examSession: { select: { id: true } } } },
         },
     })
     if (!exam) {
         return c.json({ message: 'Kỳ thi không tồn tại' }, 404)
     }
 
-    const hasScore = exam.examFax.some((f) => f.score)
-    if (hasScore) {
-        return c.json({ message: 'Fax đã được nhập điểm' }, 400)
+    if (exam.lockExamCode) {
+        return c.json({ message: 'Phách đã khoá' }, 400)
     }
 
-    const hasSession = exam.examFax.some((f) => f.examSession?.id)
-    if (hasSession) {
-        return c.json({ message: 'Fax đã được gán kết quả' }, 400)
+    const examSessions = exam.examRooms.flatMap((r) => r.examSessions)
+    if (exam.studentSubjectScore.length !== examSessions.length) {
+        return c.json({ message: 'Thí sinh chưa được phân phòng thi' }, 404)
     }
 
-    const totalCandidate = exam.subjectClass.reduce(
-        (total, subjectClass) => total + subjectClass._count.subjectClassStudent,
-        0
+    const hasScore = exam.examRooms.some((r) =>
+        r.examSessions.some((s) => s.studentSubjectScore.finalScore !== null)
     )
 
-    if (count < totalCandidate) {
-        return c.json({ message: 'Số lượng phách không đủ cho thí sinh' }, 400)
+    if (hasScore) {
+        return c.json({ message: 'Phách đã được nhập điểm' }, 400)
     }
 
-    const faxes = Array.from({ length: count }, (_, i) => start + i * step)
+    const padding = examSessions.length.toString().length
+    const examCodes = Array.from({ length: examSessions.length }, (_, i) =>
+        String(i).padStart(padding, '0')
+    ).sort((a, b) => Math.random() - 0.5)
+
+    const examSessionUpdates = examSessions.map((s, i) => ({
+        id: s.id,
+        examCode: examCodes[i],
+    }))
+
+    const examCodesCases = examSessionUpdates.map(
+        (u) => Prisma.sql`WHEN "id" = ${u.id} THEN ${u.examCode}`
+    )
+
+    const ids = examSessionUpdates.map((u) => u.id)
+
     await prisma.$transaction(async (tx) => {
-        await tx.examFax.deleteMany({
-            where: { examId },
+        await tx.examSession.updateMany({
+            where: { id: { in: ids } },
+            data: { examCode: null },
         })
-        await tx.examFax.createMany({
-            data: faxes.map((f) => ({ examId, fax: `${f}` })),
-        })
+        await tx.$executeRaw`
+            UPDATE "khao-thi"."ExamFax"
+            SET
+                "examCode" = ${examCodesCases}
+            WHERE
+                "id" IN (${Prisma.join(ids)})
+            `
     })
 
     return c.json({ success: true, message: 'Success' }, 200)

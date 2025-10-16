@@ -328,7 +328,7 @@ export function useSuspenseCountExamSession<TArgs extends Prisma.ExamSessionCoun
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ExamSession', `${endpoint}/examSession/count`, args, options, fetch);
 }
 
-export function useCheckExamSession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; studentId?: string; examId?: string; roomId?: string; examBankId?: string; examFaxId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckExamSession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; examId?: string; examRoomId?: string; studentSubjectScoreId?: string; examCode?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ExamSession', `${endpoint}/examSession/check`, args, options, fetch);
 }
