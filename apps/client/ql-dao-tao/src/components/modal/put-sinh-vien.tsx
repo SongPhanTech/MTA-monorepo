@@ -107,6 +107,14 @@ const PutStudentModal = () => {
         return trainingCourseData.filter((course) => coursesWithCurriculum.includes(course.id))
     }, [trainingCourseData, fixedClassData, selectedCurriculumVersionId])
 
+    const filteredParallelCurriculumVersions = useMemo(() => {
+        if (!selectedCurriculumVersionId) {
+            return curriculumVersionData
+        }
+
+        return curriculumVersionData.filter((cv) => cv.id !== selectedCurriculumVersionId)
+    }, [curriculumVersionData, selectedCurriculumVersionId])
+
     // Cập nhật handleFixedClassChange hoàn chỉnh
     const handleFixedClassChange = (classId: string) => {
         const selectedClass = fixedClassData.find((cls) => cls.id === classId)
@@ -189,6 +197,7 @@ const PutStudentModal = () => {
                         registrationAreaId: output.registrationAreaId,
                         status: output.status,
                         curriculumVersionId: output.curriculumVersionId,
+                        curriculumVersionParallelId: output.curriculumVersionParallelId,
                         note: output.note,
                         code: output.code,
                     },
@@ -207,6 +216,7 @@ const PutStudentModal = () => {
                         registrationAreaId: output.registrationAreaId,
                         status: output.status,
                         curriculumVersionId: output.curriculumVersionId,
+                        curriculumVersionParallelId: output.curriculumVersionParallelId,
                         note: output.note,
                         code: output.code,
                     },
@@ -250,6 +260,7 @@ const PutStudentModal = () => {
                 trainingCourseId: studentData.fixedClass?.trainingCourse?.id ?? undefined,
                 status: studentData.status,
                 curriculumVersionId: studentData.curriculumVersionId ?? undefined,
+                curriculumVersionParallelId: studentData.curriculumVersionParallelId ?? undefined,
 
                 // UserProfile fields với ID
                 firstName: studentData.userProfile?.firstName,
@@ -365,6 +376,23 @@ const PutStudentModal = () => {
                                 showSearch
                                 optionFilterProp="label"
                                 options={curriculumVersionData.map((value) => ({
+                                    value: value.id,
+                                    label: value.name,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
+                        <FormItem
+                            form={form}
+                            name="curriculumVersionParallelId"
+                            label="Chương trình đào tạo song song"
+                        >
+                            <Select
+                                placeholder={'Chọn chương trình đào tạo'}
+                                showSearch
+                                optionFilterProp="label"
+                                options={filteredParallelCurriculumVersions.map((value) => ({
                                     value: value.id,
                                     label: value.name,
                                 }))}
