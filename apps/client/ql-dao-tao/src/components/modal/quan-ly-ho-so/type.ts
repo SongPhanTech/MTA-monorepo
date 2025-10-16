@@ -108,6 +108,7 @@ export type FilterProps = {
     admissionQuota?: 'asc' | 'desc'
     semesterStart?: string
     curriculumVersion?: string[]
+    curriculumVersionParallel?: string[]
     managementOrganization?: string[]
     graduated?: boolean
     trainingLevel?: string[]

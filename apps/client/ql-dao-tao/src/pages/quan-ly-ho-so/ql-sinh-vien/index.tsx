@@ -55,6 +55,7 @@ export default function UserProfilePageDs() {
         fixedClassId: undefined,
         rank: undefined,
         phone: undefined,
+        curriculumVersionParallel: undefined,
     })
 
     const form = Form.useForm<{ trainingCourseId: string }>()
@@ -129,6 +130,13 @@ export default function UserProfilePageDs() {
                       },
                   }
                 : {}),
+            ...(filters.curriculumVersionParallel
+                ? {
+                      curriculumVersionParallelId: {
+                          in: filters.curriculumVersionParallel,
+                      },
+                  }
+                : undefined),
             ...(filters.fixedClass
                 ? {
                       fixedClassId: {
@@ -232,6 +240,7 @@ export default function UserProfilePageDs() {
                     },
                 },
             },
+            curriculumVersionParallel: true,
             trainingForm: true,
         },
         orderBy: {
@@ -620,6 +629,20 @@ export default function UserProfilePageDs() {
                                 })),
                                 render: (__, record: any) => {
                                     return record?.fixedClass?.curriculumVersion?.name
+                                },
+                            },
+                            {
+                                title: 'CTĐT song song',
+                                align: 'center',
+                                dataIndex: 'curriculumVersionParallel',
+                                width: 180,
+                                type: 'select',
+                                options: TrainingCurriculumVersionData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record) => {
+                                    return record?.curriculumVersionParallel?.name || ''
                                 },
                             },
                             {
