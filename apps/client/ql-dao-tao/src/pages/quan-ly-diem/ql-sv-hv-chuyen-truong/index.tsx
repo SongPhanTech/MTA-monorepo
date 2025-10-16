@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useMemo, useState } from 'react'
-import { Button, Col, message, Row, Tag } from 'antd'
+import { Button, Col, Flex, message, Row, Select, Tag } from 'antd'
 import DefaultLayout from '@layouts/default-layout'
 import Table from '@components/commons/table'
 import EditIcon from '@components/icons/edit'
@@ -16,7 +16,6 @@ import {
 } from '@workspace/db/hooks'
 import { DEFAULT_PAGINATE_SIZE, SCORE_CONVERT_STATUS } from '@constants/constants'
 import { formatDate } from '@lib/utils'
-import type { ScoreConvertStatus } from '@workspace/db'
 
 type LeafStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
 type AggregateStatus = LeafStatus | 'PARTIAL'
@@ -46,8 +45,11 @@ export default function StudentScoreConvertPage() {
     })
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: updateStudentScoreConvert } = useUpdateStudentScoreConvert()
-    const [filters, setFilters] = useState<{ name?: string; code?: string }>({ name: '', code: '' })
-    const [uiStatus, setUiStatus] = useState<AggregateStatus | undefined>(undefined)
+    const [filters, setFilters] = useState<{
+        name?: string
+        code?: string
+        formStatus?: AggregateStatus
+    }>({})
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const handleModal = () => {
@@ -75,7 +77,7 @@ export default function StudentScoreConvertPage() {
                       code: { contains: filters.code },
                   },
               }
-        const st = uiStatus
+        const st = filters.formStatus
         let byStatus = {}
         if (st) {
             switch (st) {
@@ -112,7 +114,7 @@ export default function StudentScoreConvertPage() {
             }
         }
         return { ...byName, ...byCode, ...byStatus }
-    }, [filters.name, filters.code, uiStatus])
+    }, [filters])
 
     const { data = [], refetch } = useFindManyStudentScoreConvert({
         where,
@@ -154,15 +156,36 @@ export default function StudentScoreConvertPage() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="end" className="m-1">
-                        {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
-                            'THEM'
-                        ) && (
-                            <Button onClick={handleModal} type="primary">
-                                Thêm mới
-                            </Button>
-                        )}
+                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                        <Col span={12}>
+                            <Select
+                                allowClear
+                                placeholder="Chọn trạng thái"
+                                style={{ width: 200 }}
+                                options={[
+                                    { label: SCORE_CONVERT_STATUS.PENDING, value: 'PENDING' },
+                                    { label: SCORE_CONVERT_STATUS.APPROVED, value: 'APPROVED' },
+                                    { label: SCORE_CONVERT_STATUS.REJECTED, value: 'REJECTED' },
+                                    { label: SCORE_CONVERT_STATUS.PARTIAL, value: 'PARTIAL' },
+                                ]}
+                                onChange={(value) => {
+                                    setFilters((prev) => ({ ...prev, formStatus: value }))
+                                    setCurrentPage(1)
+                                }}
+                            />
+                        </Col>
+                        <Col span={6}>
+                            <Flex justify="end">
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
+                            </Flex>
+                        </Col>
                     </Row>
                 </Col>
                 <Col span={24}>
@@ -170,11 +193,9 @@ export default function StudentScoreConvertPage() {
                         filters={{
                             name: filters.name,
                             code: filters.code,
-                            formStatus: uiStatus === 'PARTIAL' ? undefined : uiStatus,
                         }}
                         setFilters={(value) => {
-                            setFilters({ name: value.name, code: value.code })
-                            setUiStatus(value.formStatus as AggregateStatus | undefined)
+                            setFilters((prev) => ({ ...prev, ...value }))
                             setCurrentPage(1)
                         }}
                         columns={[
@@ -223,14 +244,6 @@ export default function StudentScoreConvertPage() {
                             },
                             {
                                 title: 'Trạng thái phiếu',
-                                key: 'formStatus',
-                                type: 'select',
-                                options: [
-                                    { label: SCORE_CONVERT_STATUS.PENDING, value: 'PENDING' },
-                                    { label: SCORE_CONVERT_STATUS.APPROVED, value: 'APPROVED' },
-                                    { label: SCORE_CONVERT_STATUS.REJECTED, value: 'REJECTED' },
-                                    { label: SCORE_CONVERT_STATUS.PARTIAL, value: 'PARTIAL' },
-                                ],
                                 align: 'center',
                                 width: 200,
                                 render: (_, record) => {
