@@ -1501,6 +1501,7 @@ exports.Prisma.ArchivedCertificateScalarFieldEnum = {
   updatedAt: 'updatedAt',
   certificateId: 'certificateId',
   studentId: 'studentId',
+  finalScore: 'finalScore',
   score: 'score',
   issuedBy: 'issuedBy',
   issuedDate: 'issuedDate',
@@ -1530,6 +1531,7 @@ exports.Prisma.ArchivedAwardScalarFieldEnum = {
   updatedAt: 'updatedAt',
   awardId: 'awardId',
   studentId: 'studentId',
+  bonusScore: 'bonusScore',
   date: 'date',
   status: 'status'
 };
