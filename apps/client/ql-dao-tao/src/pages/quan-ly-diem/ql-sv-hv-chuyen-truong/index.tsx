@@ -20,15 +20,10 @@ import { formatDate } from '@lib/utils'
 type LeafStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
 type AggregateStatus = LeafStatus | 'PARTIAL'
 
-const AGG_LABEL: Record<AggregateStatus, string> = {
-    PENDING: SCORE_CONVERT_STATUS.PENDING,
-    APPROVED: SCORE_CONVERT_STATUS.APPROVED,
-    REJECTED: SCORE_CONVERT_STATUS.REJECTED,
-    PARTIAL: SCORE_CONVERT_STATUS.PARTIAL,
-}
-
-function computeAggregateStatus(items: { status: LeafStatus }[]): AggregateStatus {
-    if (!items?.length) return 'PENDING'
+function computeAggregateStatus(items: { status: LeafStatus }[]): AggregateStatus | null {
+    if (!items || items.length === 0) {
+        return null
+    }
     const hasPending = items.some((i) => i.status === 'PENDING')
     const hasApproved = items.some((i) => i.status === 'APPROVED')
     const hasRejected = items.some((i) => i.status === 'REJECTED')
@@ -113,7 +108,7 @@ export default function StudentScoreConvertPage() {
                     break
             }
         }
-        return { ...byName, ...byCode, ...byStatus }
+        return { deletedAt: null, ...byName, ...byCode, ...byStatus }
     }, [filters])
 
     const { data = [], refetch } = useFindManyStudentScoreConvert({
@@ -162,12 +157,12 @@ export default function StudentScoreConvertPage() {
                                 allowClear
                                 placeholder="Chọn trạng thái"
                                 style={{ width: 200 }}
-                                options={[
-                                    { label: SCORE_CONVERT_STATUS.PENDING, value: 'PENDING' },
-                                    { label: SCORE_CONVERT_STATUS.APPROVED, value: 'APPROVED' },
-                                    { label: SCORE_CONVERT_STATUS.REJECTED, value: 'REJECTED' },
-                                    { label: SCORE_CONVERT_STATUS.PARTIAL, value: 'PARTIAL' },
-                                ]}
+                                options={Object.entries(SCORE_CONVERT_STATUS).map(
+                                    ([value, label]) => ({
+                                        label,
+                                        value,
+                                    })
+                                )}
                                 onChange={(value) => {
                                     setFilters((prev) => ({ ...prev, formStatus: value }))
                                     setCurrentPage(1)
@@ -250,13 +245,20 @@ export default function StudentScoreConvertPage() {
                                     const status = computeAggregateStatus(
                                         record.subjectScoreConvert || []
                                     )
+                                    if (!status) {
+                                        return '_'
+                                    }
                                     const colorMap: Record<AggregateStatus, string> = {
                                         PENDING: 'gold',
                                         APPROVED: 'green',
                                         REJECTED: 'red',
                                         PARTIAL: 'blue',
                                     }
-                                    return <Tag color={colorMap[status]}>{AGG_LABEL[status]}</Tag>
+                                    return (
+                                        <Tag color={colorMap[status]}>
+                                            {SCORE_CONVERT_STATUS[status]}
+                                        </Tag>
+                                    )
                                 },
                             },
                             {

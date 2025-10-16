@@ -33,6 +33,7 @@ const PutStudentScoreConvertModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [studentKeyword, setStudentKeyword] = useState<string>('')
     const originalStatusRef = useRef<Record<string, 'PENDING' | 'APPROVED' | 'REJECTED'>>({})
+    const initialSubjectsRef = useRef<Partial<SubjectScoreConvert>[]>([])
     const { showSpinner, hideSpinner } = useSpinner()
     const {
         isOpen,
@@ -162,6 +163,17 @@ const PutStudentScoreConvertModal = () => {
                 },
             }))
 
+        const toDelete: { id: string }[] = []
+        if (isEdit) {
+            const initialIds = new Set(initialSubjectsRef.current.map((s) => s.id).filter(Boolean))
+            const finalIds = new Set(rows.map((r) => r.id).filter(Boolean))
+            for (const idToDelete of initialIds) {
+                if (!finalIds.has(idToDelete)) {
+                    toDelete.push({ id: idToDelete as string })
+                }
+            }
+        }
+
         try {
             showSpinner()
             if (id) {
@@ -212,6 +224,7 @@ const PutStudentScoreConvertModal = () => {
                                 ? { createMany: { data: toCreate, skipDuplicates: true } }
                                 : {}),
                             ...(toUpdate.length ? { update: toUpdate } : {}),
+                            ...(toDelete.length ? { delete: toDelete } : {}),
                         },
                     },
                 })
@@ -273,18 +286,20 @@ const PutStudentScoreConvertModal = () => {
     useEffect(() => {
         if (!isOpen) return
         if (initialValue) {
+            const subjects = (initialValue.subjectScoreConvert || []).map((i: any) => ({
+                id: i.id,
+                subjectVersionId: i.subjectVersionId,
+                score: i.score,
+                status: i.status,
+            }))
             form.setFieldsValue({
                 ...initialValue,
-                subjectScoreConvert: (initialValue.subjectScoreConvert || []).map((i: any) => ({
-                    id: i.id,
-                    subjectVersionId: i.subjectVersionId,
-                    score: i.score,
-                    status: i.status,
-                })),
+                subjectScoreConvert: subjects,
             })
             originalStatusRef.current = Object.fromEntries(
                 (initialValue?.subjectScoreConvert || []).map((i: any) => [i.id, i.status])
             )
+            initialSubjectsRef.current = subjects
             setDocument((initialValue.documentFiles || []) as DocumentFile[])
         } else {
             form.setFieldsValue({})
@@ -347,7 +362,7 @@ const PutStudentScoreConvertModal = () => {
                                             return (
                                                 <Row
                                                     gutter={12}
-                                                    align="middle"
+                                                    align="bottom"
                                                     style={{ marginBottom: 8 }}
                                                 >
                                                     <Col flex="auto">
