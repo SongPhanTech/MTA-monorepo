@@ -36,12 +36,18 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                       },
                   }
                 : {}),
-            ...(semesterId
-                ? {
-                      semesterId,
-                  }
-                : {}),
+            semesterId,
             trainingObjectTypeId,
+            subject: {
+                planTrainingSubject: {
+                    some: {
+                        planTraining: {
+                            semesterId,
+                            trainingObjectTypeId,
+                        },
+                    },
+                },
+            },
             cancelled: false,
             active: true,
         },
@@ -136,8 +142,6 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                     onClick: () => handleRowSelection(record),
                     style: { cursor: 'pointer' },
                     columnWidth: 35,
-                    // className:
-                    //     record.id === selectedRowKey ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]' : '',
                 })}
                 rowSelection={{
                     selectedRowKeys: [selectedRowKey],
@@ -147,7 +151,6 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                     type: 'radio',
                     columnWidth: 35,
                 }}
-                // selectedRow={selectedRowKey}
                 columns={[
                     {
                         title: 'TT',

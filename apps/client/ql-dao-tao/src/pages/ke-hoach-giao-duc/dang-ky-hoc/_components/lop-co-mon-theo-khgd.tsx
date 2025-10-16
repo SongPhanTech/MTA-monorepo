@@ -58,64 +58,69 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
         { enabled: !!semesterId && !!subjectClassId }
     )
 
-    const { data: fixedClasses = [] } = useFindManyFixedClass({
-        where: {
-            planTrainingSubject: {
-                some: {
-                    planTraining: {
-                        semesterId: semesterId as string,
-                        trainingObjectTypeId: trainingObjectTypeId as string,
-                    },
-                    subjectVersion: {
-                        subjectClass: {
-                            some: {
-                                id: subjectClassId as string,
+    const { data: fixedClasses = [] } = useFindManyFixedClass(
+        {
+            where: {
+                planTrainingSubject: {
+                    some: {
+                        planTraining: {
+                            semesterId: semesterId as string,
+                            trainingObjectTypeId: trainingObjectTypeId as string,
+                        },
+                        subjectVersion: {
+                            subjectClass: {
+                                some: {
+                                    id: subjectClassId as string,
+                                },
                             },
                         },
                     },
                 },
+                name: {
+                    contains: filters.searchText || undefined,
+                    mode: 'insensitive',
+                },
             },
-            name: {
-                contains: filters.searchText || undefined,
-                mode: 'insensitive',
+            orderBy: {
+                code: 'asc',
             },
-        },
-        orderBy: {
-            code: 'asc',
-        },
-        take: numberOfPages,
-        skip: (currentPage - 1) * numberOfPages,
-        include: {
-            trainingCourse: true,
-            _count: {
-                select: {
-                    students: {
-                        where: {
-                            active: true,
-                            status: 'ENROLLED',
-                            deletedAt: null,
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
+            include: {
+                trainingCourse: true,
+                _count: {
+                    select: {
+                        students: {
+                            where: {
+                                active: true,
+                                status: 'ENROLLED',
+                                deletedAt: null,
+                            },
                         },
                     },
                 },
-            },
-            curriculumVersion: {
-                select: {
-                    curriculum: {
-                        select: {
-                            trainingMajor: true,
+                curriculumVersion: {
+                    select: {
+                        curriculum: {
+                            select: {
+                                trainingMajor: true,
+                            },
                         },
                     },
                 },
-            },
-            subjectClasses: {
-                where: {
-                    semesterId: semesterId as string,
-                    trainingObjectTypeId: trainingObjectTypeId as string,
-                    subjectId: selectedSubjectClass?.subjectId,
+                subjectClasses: {
+                    where: {
+                        semesterId: semesterId as string,
+                        trainingObjectTypeId: trainingObjectTypeId as string,
+                        subjectId: selectedSubjectClass?.subjectId,
+                    },
                 },
             },
         },
-    })
+        {
+            enabled: !!semesterId && !!subjectClassId,
+        }
+    )
 
     const { data: countFixedClassAll = 0 } = useCountFixedClass({
         where: {
@@ -143,8 +148,6 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                 .filter((item) => selectedSubjectClassFixedClassIds?.includes(item.id))
                 .map((item) => item.id)
             setSelectedRowKeys(selectedKeys)
-        } else {
-            setSelectedRowKeys([])
         }
     }, [fixedClasses, selectedSubjectClass])
 
