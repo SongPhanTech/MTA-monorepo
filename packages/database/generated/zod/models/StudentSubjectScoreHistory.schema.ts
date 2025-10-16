@@ -35,7 +35,7 @@ const baseSchema = z.object({
     manualFinalScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
     examPostponedReason: z.boolean().nullish(),
     examPostponed: z.string().nullish(),
-    examBanned: z.boolean(),
+    examBanned: z.boolean().nullish(),
     examBannedReason: z.string().nullish(),
     suspended: z.boolean().nullish(),
     suspendedReason: z.string().nullish(),
@@ -102,7 +102,7 @@ export const StudentSubjectScoreHistoryPrismaUpdateSchema = z.object({
     manualFinalScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
     examPostponedReason: z.boolean().nullish(),
     examPostponed: z.string().nullish(),
-    examBanned: z.boolean(),
+    examBanned: z.boolean().nullish(),
     examBannedReason: z.string().nullish(),
     suspended: z.boolean().nullish(),
     suspendedReason: z.string().nullish()

@@ -13364,6 +13364,38 @@ declare const metadata: {
                         }[];
                     }[];
                 };
+                exam: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                examId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                examSession: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    backLink: string;
+                };
                 graduationGpaScores: {
                     name: string;
                     type: string;
@@ -13638,6 +13670,7 @@ declare const metadata: {
                 examBanned: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                 };
                 examBannedReason: {
                     name: string;
@@ -20365,7 +20398,7 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                 };
-                examSession: {
+                examRooms: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -22962,13 +22995,6 @@ declare const metadata: {
                     backLink: string;
                 };
                 thesisRegistrations: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                examSession: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -36873,13 +36899,6 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                 };
-                answers: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
             };
             uniqueConstraints: {
                 id: {
@@ -37308,175 +37327,6 @@ declare const metadata: {
                 }[];
             })[];
         };
-        answer: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                sessionId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                session: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: ({
-                            name: string;
-                            value: null[];
-                        } | {
-                            name: string;
-                            value?: undefined;
-                        })[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    onDeleteAction: string;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                questionId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                question: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                isCorrect: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                score: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                comment: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                essayAnswer: {
-                    name: string;
-                    type: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                sessionId_questionId: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
-        };
         exam: {
             name: string;
             fields: {
@@ -37563,6 +37413,7 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
@@ -37579,75 +37430,38 @@ declare const metadata: {
                 questionBankId: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                     isForeignKey: boolean;
                     relationField: string;
+                };
+                lockExamCode: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
                 };
                 startTime: {
                     name: string;
                     type: string;
                 };
-                endTime: {
+                subjectClass: {
                     name: string;
                     type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
                 };
-                duration: {
+                studentSubjectScore: {
                     name: string;
                     type: string;
-                };
-                passScore: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: number;
-                        }[];
-                    }[];
-                };
-                maxScore: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: number;
-                        }[];
-                    }[];
-                };
-                shuffleQuestions: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                shuffleAnswers: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                showResult: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
                 };
                 room: {
                     name: string;
@@ -37656,13 +37470,6 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                     isRelationOwner: boolean;
-                };
-                subjectClass: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
                 };
                 examBank: {
                     name: string;
@@ -37685,7 +37492,7 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                 };
-                examFax: {
+                examRooms: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
@@ -37713,6 +37520,159 @@ declare const metadata: {
                     value?: undefined;
                 })[];
             }[];
+        };
+        examRoom: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                exam: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                examId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                room: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                roomId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                examSessions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                examId_roomId: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         testStructureRule: {
             name: string;
@@ -37963,17 +37923,6 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                examCode: {
-                    name: string;
-                    type: string;
-                };
-                examSession: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
                 questions: {
                     name: string;
                     type: string;
@@ -37991,12 +37940,8 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
-                examId_examCode: {
-                    name: string;
-                    fields: string[];
-                };
             };
-            attributes: ({
+            attributes: {
                 name: string;
                 args: ({
                     name: string;
@@ -38005,13 +37950,7 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
+            }[];
         };
         examBankQuestion: {
             name: string;
@@ -38172,156 +38111,6 @@ declare const metadata: {
                 }[];
             })[];
         };
-        examFax: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                examId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                exam: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: ({
-                            name: string;
-                            value: null[];
-                        } | {
-                            name: string;
-                            value?: undefined;
-                        })[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    onDeleteAction: string;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                fax: {
-                    name: string;
-                    type: string;
-                };
-                score: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: number;
-                        }[];
-                    }[];
-                };
-                examSession: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isOptional: boolean;
-                    backLink: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                examId_fax: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
-        };
         examSession: {
             name: string;
             fields: {
@@ -38390,41 +38179,6 @@ declare const metadata: {
                         }[];
                     }[];
                 };
-                startTime: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                endTime: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                student: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                studentId: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
                 exam: {
                     name: string;
                     type: string;
@@ -38448,11 +38202,10 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                room: {
+                examRoom: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
-                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
@@ -38466,18 +38219,16 @@ declare const metadata: {
                         id: string;
                     };
                 };
-                roomId: {
+                examRoomId: {
                     name: string;
                     type: string;
-                    isOptional: boolean;
                     isForeignKey: boolean;
                     relationField: string;
                 };
-                examBank: {
+                studentSubjectScore: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
-                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
@@ -38491,48 +38242,20 @@ declare const metadata: {
                         id: string;
                     };
                 };
-                examBankId: {
+                studentSubjectScoreId: {
                     name: string;
                     type: string;
-                    isOptional: boolean;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                answers: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                examFax: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                examFaxId: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: never[];
                     }[];
                     isForeignKey: boolean;
                     relationField: string;
+                };
+                examCode: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                 };
             };
             uniqueConstraints: {
@@ -38544,11 +38267,11 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
-                examFaxId: {
+                studentSubjectScoreId: {
                     name: string;
                     fields: string[];
                 };
-                studentId_examId: {
+                examCode_examId: {
                     name: string;
                     fields: string[];
                 };
@@ -42529,9 +42252,7 @@ declare const metadata: {
         evaluationCouncil: string[];
         note: string[];
         question: string[];
-        exam: string[];
         examBank: string[];
-        examSession: string[];
     };
     authModel: string;
 };

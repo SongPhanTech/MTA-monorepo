@@ -1,23 +1,24 @@
-import type React from 'react'
-import { useMemo, useState } from 'react'
-import { Button, Col, Flex, message, Row, Select, Tag } from 'antd'
-import DefaultLayout from '@layouts/default-layout'
 import Table from '@components/commons/table'
-import EditIcon from '@components/icons/edit'
 import DeleteIcon from '@components/icons/delete'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import EditIcon from '@components/icons/edit'
+import { DEFAULT_PAGINATE_SIZE, SCORE_CONVERT_STATUS } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import DefaultLayout from '@layouts/default-layout'
+import { formatDate } from '@lib/utils'
+import type { $Enums } from '@workspace/db'
 import {
     useCountStudentScoreConvert,
     useFindManyStudentScoreConvert,
     useUpdateStudentScoreConvert,
 } from '@workspace/db/hooks'
-import { DEFAULT_PAGINATE_SIZE, SCORE_CONVERT_STATUS } from '@constants/constants'
-import { formatDate } from '@lib/utils'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { Button, Col, Flex, message, Row, Select, Tag } from 'antd'
+import type React from 'react'
+import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
-type LeafStatus = 'PENDING' | 'APPROVED' | 'REJECTED'
+type LeafStatus = keyof typeof $Enums.ScoreConvertStatus
 type AggregateStatus = LeafStatus | 'PARTIAL'
 
 function computeAggregateStatus(items: { status: LeafStatus }[]): AggregateStatus | null {

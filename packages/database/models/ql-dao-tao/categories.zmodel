@@ -130,7 +130,7 @@ model Room extends Base {
   defenseRooms   SubjectClass[]  @relation("DefenseRooms") // DS phòng bảo vệ đồ án -> chọn phòng tự động
   thesisProject  ThesisProject[]
   classSchedules ClassSchedule[]
-  examSession    ExamSession[]
+  examRooms      ExamRoom[]
 
   @@schema("ql-dao-tao")
 }
