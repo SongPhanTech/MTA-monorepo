@@ -1,20 +1,27 @@
+import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import Table from '@components/commons/table'
+import useSpinner from '@hooks/spinner'
+import { AcademicActionType } from '@workspace/db/client'
 import {
     useFindManyFixedClass,
     useFindManyStudentAcademicDecision,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import { Col, Form, Select } from 'antd'
+import { updateStudentStatus } from '@workspace/libs/api/training'
+import { Col, Form, message, Select, Switch } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ModalChuyenLopLuuBan = () => {
     const [form] = Form.useForm()
 
-    const selectedCourses = Form.useWatch([], form)
+    const selected = Form.useWatch([], form)
+
+    const { showSpinner, hideSpinner } = useSpinner()
 
     const { isOpen, onClose, input } = useDisclosure<{
         ids: string[]
+        actionTaken: AcademicActionType
     }>({
         tag: 'ModalChuyenLopLuuBan',
     })
@@ -33,6 +40,19 @@ const ModalChuyenLopLuuBan = () => {
                             include: {
                                 trainingCourse: true,
                                 managementOrganization: true,
+                                curriculumVersion: {
+                                    include: {
+                                        curriculum: {
+                                            include: {
+                                                trainingMajor: {
+                                                    include: {
+                                                        trainingField: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
                             },
                         },
                         userProfile: true,
@@ -74,8 +94,42 @@ const ModalChuyenLopLuuBan = () => {
     })
 
     const handleSubmit = async () => {
-        const dataSubmit = form.getFieldsValue()
-        console.log(dataSubmit)
+        try {
+            showSpinner()
+
+            const dataSubmit = form.getFieldsValue()
+
+            const listObject = Object.entries(dataSubmit).map(([key, value_]) => {
+                return {
+                    id: key,
+                    ...(value_ as any),
+                }
+            })
+
+            if (input) {
+                await updateStudentStatus({
+                    decisionIds: input.ids as string[],
+                    academicActionType: input.actionTaken,
+                    classChanges: listObject.map((i) => {
+                        return {
+                            decisionId: i.id,
+                            changeCurriculumVersion: !!i.changeCurriculumVersion,
+                            fixedClassId: i.newFixedClassId,
+                        }
+                    }),
+                })
+            }
+
+            message.success('Cập nhật thành công')
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'StudentAcademicDecision'],
+            })
+            onClose()
+        } catch (error: any) {
+            message.error(error?.info?.message || 'Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
     }
 
     const removeVietnameseTones = (str: string) =>
@@ -102,12 +156,11 @@ const ModalChuyenLopLuuBan = () => {
 
     /**
      * Lọc danh sách lớp niên chế theo khóa học được chọn
-     * Có thể lọc theo: khóa học, trình độ đào tạo, ngành, chuyên ngành
+     * Có thể lọc theo: khóa học, ngành
      */
     const getAvailableFixedClasses = (
         selectedTrainingCourseId?: string,
-        currentTrainingFieldId?: string,
-        currentTrainingMajorId?: string
+        currentTrainingFieldId?: string
     ) => {
         if (!selectedTrainingCourseId) return []
 
@@ -127,14 +180,23 @@ const ModalChuyenLopLuuBan = () => {
                     return false
             }
 
-            // Lọc theo chuyên ngành đào tạo
-            if (currentTrainingMajorId && fc.curriculumVersion?.curriculum?.trainingMajorId) {
-                if (fc.curriculumVersion.curriculum.trainingMajorId !== currentTrainingMajorId)
-                    return false
-            }
-
             return true
         })
+    }
+
+    const handleFixedClassChange = (
+        recordId: string,
+        newFixedClassId: string,
+        currentCurriculumVersionId?: string
+    ) => {
+        const newFixedClass = fixedClasses.find((fc) => fc.id === newFixedClassId)
+
+        if (newFixedClass && currentCurriculumVersionId) {
+            const isDifferentCurriculum =
+                newFixedClass.curriculumVersionId !== currentCurriculumVersionId
+
+            form.setFieldValue([recordId, 'changeCurriculumVersion'], isDifferentCurriculum)
+        }
     }
 
     return (
@@ -211,7 +273,7 @@ const ModalChuyenLopLuuBan = () => {
                                                 )
                                             }}
                                             options={newTrainingCourses.map((tc) => ({
-                                                label: `${tc.name}${tc.startYear ? ` (${tc.startYear})` : ''}`,
+                                                label: tc.name,
                                                 value: tc.id,
                                             }))}
                                         />
@@ -221,22 +283,21 @@ const ModalChuyenLopLuuBan = () => {
                         },
                         {
                             title: 'Lớp niên chế mới',
-                            width: 200,
+                            width: 400,
                             render: (_, record) => {
                                 const selectedTrainingCourseId =
-                                    selectedCourses?.[record.id]?.newTrainingCourseId
+                                    selected?.[record.id]?.newTrainingCourseId
 
                                 const currentTrainingFieldId =
                                     record.student.fixedClass?.curriculumVersion?.curriculum
                                         ?.trainingMajor?.trainingFieldId
-                                const currentTrainingMajorId =
-                                    record.student.fixedClass?.curriculumVersion?.curriculum
-                                        ?.trainingMajorId
+
+                                const currentCurriculumVersionId =
+                                    record.student.fixedClass?.curriculumVersionId
 
                                 const availableFixedClasses = getAvailableFixedClasses(
                                     selectedTrainingCourseId,
-                                    currentTrainingFieldId,
-                                    currentTrainingMajorId
+                                    currentTrainingFieldId
                                 )
 
                                 return (
@@ -256,11 +317,34 @@ const ModalChuyenLopLuuBan = () => {
                                             optionFilterProp="label"
                                             allowClear
                                             disabled={!selectedTrainingCourseId}
+                                            onChange={(value) => {
+                                                handleFixedClassChange(
+                                                    record.id,
+                                                    value,
+                                                    currentCurriculumVersionId
+                                                )
+                                            }}
                                             options={availableFixedClasses.map((fc) => ({
-                                                label: fc.name,
+                                                label: `${fc.name}${fc.curriculumVersion?.name ? ` - ${fc.curriculumVersion.name}` : ''}`,
                                                 value: fc.id,
                                             }))}
                                         />
+                                    </Form.Item>
+                                )
+                            },
+                        },
+                        {
+                            title: 'Thay đổi CTĐT',
+                            width: 80,
+                            align: 'center',
+                            render: (_, record) => {
+                                return (
+                                    <Form.Item
+                                        name={[record.id, 'changeCurriculumVersion']}
+                                        className="mb-0 flex justify-center items-center"
+                                        valuePropName="checked"
+                                    >
+                                        <Switch />
                                     </Form.Item>
                                 )
                             },
