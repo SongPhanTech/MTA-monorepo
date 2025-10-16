@@ -25,6 +25,7 @@ export interface SubjectClasses {
     startDate?: string | null
     /** @nullable */
     endDate?: string | null
+    /** @nullable */
     schedule?: SubjectClassesSchedule
     maxStudent?: number
     cancelled?: boolean
@@ -34,6 +35,8 @@ export interface SubjectClasses {
     examDate?: string | null
     /** @nullable */
     examType?: SubjectClassesExamType
+    /** @nullable */
+    scoreDeadLineStart?: string | null
     /** @nullable */
     scoreDeadline?: string | null
     /** @nullable */

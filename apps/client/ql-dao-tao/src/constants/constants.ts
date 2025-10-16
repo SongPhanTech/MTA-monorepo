@@ -165,6 +165,13 @@ const TRAINING_OBJECT_TYPE = {
     INTERNATIONAL_MILITARY: 'Quốc tế',
 }
 
+const SCORE_CONVERT_STATUS = {
+    PENDING: 'Chờ duyệt',
+    APPROVED: 'Đã duyệt',
+    REJECTED: 'Không được duyệt',
+    PARTIAL: 'Duyệt một phần',
+}
+
 export {
     DEFAULT_PAGINATE_SIZE,
     MAX_INPUT_LENGTH,
@@ -182,4 +189,5 @@ export {
     SUBJECT_CLASS_SCHEDULE_TYPE,
     CUSTOM_VI_LOCALE,
     TRAINING_OBJECT_TYPE,
+    SCORE_CONVERT_STATUS,
 }

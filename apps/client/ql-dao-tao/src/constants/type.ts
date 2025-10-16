@@ -10,6 +10,7 @@ import type {
     ExamType,
     GraduationSessionStatus,
     PaymentStatus,
+    ScoreConvertStatus,
     SemesterType,
     StudentStatus,
     SubjectClassSchedule,
@@ -144,6 +145,7 @@ export type FilterProps = {
     trainingObjectTypeId?: string
     trainingFormId?: string[]
     trainingLevelId?: string[]
+    formStatus?: ScoreConvertStatus
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

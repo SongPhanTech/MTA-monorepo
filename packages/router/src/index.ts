@@ -216,6 +216,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CONG,
                         description: 'Quản lý điểm cộng',
                     },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                        label: 'SV/HV chuyển trường',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                        description: 'SV/HV chuyển trường',
+                    },
                 ],
             },
             {

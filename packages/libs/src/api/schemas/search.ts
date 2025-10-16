@@ -6,6 +6,6 @@
  */
 
 /**
- * Từ khóa tìm kiếm
+ * Từ khoá tìm kiếm
  */
 export type Search = string
