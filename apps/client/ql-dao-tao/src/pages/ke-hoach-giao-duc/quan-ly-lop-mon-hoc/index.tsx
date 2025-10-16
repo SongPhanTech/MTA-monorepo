@@ -1,4 +1,5 @@
 import DatePicker from '@components/commons/date-picker'
+import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 import FormItem from '@components/commons/form-item'
 import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import Select from '@components/commons/select'
@@ -12,21 +13,21 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { $Enums, Prisma, SubjectClassSchedule, TrainingMajor } from '@workspace/db/client'
+import type { $Enums, Prisma, SubjectClassSchedule } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useDeleteSubjectClass,
     useFindManyDM_DonVi,
     useFindManySubjectClass,
     useFindManyTrainingCourse,
-    useFindManyTrainingMajor,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility, useOrgPermissions } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, message, Popover, Row, Switch } from 'antd'
+import { cn } from '@workspace/ui/lib/utils'
+import { Button, Checkbox, Col, Flex, Form, message, Popconfirm, Popover, Row, Switch } from 'antd'
 import type { Dayjs } from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
@@ -192,10 +193,12 @@ export default function TeachingAssignment() {
                           },
                       }
                     : {}),
-                ...(filters.organization
+                ...(filters.organization && filters.organization.length > 0
                     ? {
-                          managementOrganizationId: {
-                              in: filters.organization,
+                          subject: {
+                              managementOrganizationId: {
+                                  in: filters.organization,
+                              },
                           },
                       }
                     : {}),
@@ -397,7 +400,7 @@ export default function TeachingAssignment() {
             showSpinner()
             await updateManySubjectClass({
                 data: {
-                    lecturerAssignmentDeadline: values.deadline,
+                    lecturerAssignmentDeadline: dayjs(values.deadline).endOf('day').toDate(),
                 },
                 where: {
                     trainingObjectTypeId,
@@ -424,9 +427,6 @@ export default function TeachingAssignment() {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData, canXemTatCa ? '0' : orgId)
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
@@ -436,7 +436,7 @@ export default function TeachingAssignment() {
         try {
             setIsEdit(false)
             showSpinner()
-            await sqlTransaction(
+            const res = await sqlTransaction(
                 Object.entries(values.subjectClass).map(([id, subjectClass]) => ({
                     model: 'SubjectClass',
                     operation: 'update',
@@ -453,17 +453,9 @@ export default function TeachingAssignment() {
                     },
                 }))
             )
-            // await updateManySubjectClass({
-            //     data: Object.entries(values.subjectClass).map(([id, subjectClass]) => ({
-            //         id,
-            //         lecturerId: subjectClass.lecturerId,
-            //         extraLecturerId: subjectClass.extraLecturerId,
-            //         enterGradeLecturerId: subjectClass.enterGradeLecturerId,
-            //     })),
-            //     where: {
-            //         id: { in: data.map((subjectClass) => subjectClass.id) },
-            //     },
-            // })
+            if (res.status !== 200) {
+                throw new Error('Lỗi khi phân công giảng dạy')
+            }
             debouncedRefetch()
             message.success('Phân công giảng dạy thành công')
         } catch (error: any) {
@@ -472,6 +464,35 @@ export default function TeachingAssignment() {
             hideSpinner()
         }
     }
+
+    async function handleGuiPCGD() {
+        try {
+            setIsEdit(false)
+            showSpinner()
+            await updateManySubjectClass({
+                data: {
+                    submitLecturerAssignmentAt: new Date(),
+                    lecturerAssignmentDeadline: new Date(),
+                },
+                where: {
+                    trainingObjectTypeId,
+                    semesterId,
+                    lecturerId: { not: null },
+                    extraLecturerId: { not: null },
+                    lecturerAssignmentDeadline: { not: null },
+                    submitLecturerAssignmentAt: null,
+                },
+            })
+            message.success('Gửi PCGD thành công')
+            debouncedRefetch()
+            formBaoDay.resetFields()
+        } catch (error: any) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const { mutateAsync: deleteSubjectClass } = useDeleteSubjectClass()
     async function handleDelete(id: string) {
         try {
@@ -561,168 +582,155 @@ export default function TeachingAssignment() {
 
     return (
         <div>
-            <Row gutter={[16, 0]}>
+            <Row gutter={[8, 8]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Row gutter={[16, 16]} align="top">
-                                <Col span={8}>
-                                    <Select
-                                        placeholder="Chọn khoá"
-                                        options={trainingCourseData.map((i) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
-                                        })}
-                                        style={{ width: '100%' }}
-                                        onChange={(val) =>
-                                            handleFilterChange('trainingCourseId', val)
-                                        }
-                                        allowClear
-                                    />
-                                </Col>
-                                <Col span={8}>
-                                    <Select
-                                        placeholder="Chọn chuyên ngành"
-                                        options={trainingMajorData.map((i: TrainingMajor) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
-                                        })}
-                                        style={{ width: '100%' }}
-                                        onChange={(val) =>
-                                            handleFilterChange('trainingMajorId', val)
-                                        }
-                                    />
-                                </Col>
-                            </Row>
-                        </Col>
-
-                        <Col span={8}>
-                            <Flex justify="end" gap={4}>
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'THEM'
-                                ) && (
-                                    <Button
-                                        onClick={() => handleModal()}
-                                        //TODO: handle save
-                                        type="primary"
+                    <Flex justify="end" gap={4}>
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'THEM'
+                        ) && (
+                            <Button
+                                onClick={() => handleModal()}
+                                //TODO: handle save
+                                type="primary"
+                            >
+                                Thêm mới lớp MH
+                            </Button>
+                        )}
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'XEM_TAT_CA'
+                        ) && (
+                            <Popover
+                                content={
+                                    <Form
+                                        form={formBaoDay}
+                                        initialValues={{ isOverride: false }}
+                                        onFinish={guiBaoDay}
                                     >
-                                        Thêm mới lớp MH
-                                    </Button>
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'XEM_TAT_CA'
-                                ) && (
-                                    <Popover
-                                        content={
-                                            <Form
-                                                form={formBaoDay}
-                                                initialValues={{ isOverride: false }}
-                                                onFinish={guiBaoDay}
-                                            >
-                                                <FormItem
-                                                    form={formBaoDay}
-                                                    name={'deadline'}
-                                                    label="Hạn PCGD"
-                                                >
-                                                    <DatePicker />
-                                                </FormItem>
-                                                <FormItem
-                                                    form={formBaoDay}
-                                                    name={'isOverride'}
-                                                    label="Ghi đè PCGD"
-                                                    className="mt-2"
-                                                >
-                                                    <Switch />
-                                                </FormItem>
-                                                <Col span={24} className="text-right mt-4">
-                                                    <Button type="primary" htmlType="submit">
-                                                        Gửi báo dạy
-                                                    </Button>
-                                                </Col>
-                                            </Form>
-                                        }
-                                        title="Báo dạy cho Khoa/Viện/Bộ môn"
-                                        trigger="click"
-                                        placement="bottomRight"
-                                    >
-                                        <Button type="primary">1.Báo dạy</Button>
-                                    </Popover>
-                                )}
-                                {isEdit ? (
-                                    <>
-                                        <Button
-                                            onClick={() => form.submit()}
-                                            type="primary"
-                                            disabled={!data.length}
+                                        <FormItem
+                                            form={formBaoDay}
+                                            name={'deadline'}
+                                            label="Hạn PCGD"
                                         >
-                                            Lưu
-                                        </Button>
-                                        <Button
-                                            onClick={() => handleCancel()}
-                                            type="primary"
-                                            disabled={!data.length}
+                                            <DatePicker />
+                                        </FormItem>
+                                        <FormItem
+                                            form={formBaoDay}
+                                            name={'isOverride'}
+                                            label="Ghi đè PCGD"
+                                            className="mt-2"
                                         >
-                                            Hủy
-                                        </Button>
-                                    </>
-                                ) : (
-                                    can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                        'SUA'
-                                    ) && (
-                                        <Button
-                                            onClick={() => setIsEdit(true)}
-                                            //TODO: handle save
-                                            type="primary"
-                                            disabled={!data.length}
-                                        >
-                                            2.PCGD
-                                        </Button>
-                                    )
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'SUA'
-                                ) && (
-                                    // TODO: Bỏ check quyền xem tất cả khi hoàn thành xong
-                                    // !can(
-                                    //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    //     'XEM_TAT_CA'
-                                    // ) &&
-                                    <Button
-                                        onClick={() => setIsEdit(true)}
-                                        //TODO: handle save
-                                        type="primary"
-                                        disabled={!data.length}
-                                    >
-                                        3.Gửi PCGD
-                                    </Button>
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'XEM_TAT_CA'
-                                ) && <Button type="primary">4.Xuất báo dạy</Button>}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'NHAP_EXCEL'
-                                ) && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() => onOpenModalNhapTKB(semesterId || '')}
-                                    >
-                                        <EditIcon stroke="white" />
-                                        5.Nhập từ TKB
-                                    </Button>
-                                )}
-                            </Flex>
-                        </Col>
-                    </Row>
+                                            <Switch />
+                                        </FormItem>
+                                        <Col span={24} className="text-right mt-4">
+                                            <Button type="primary" htmlType="submit">
+                                                Gửi báo dạy
+                                            </Button>
+                                        </Col>
+                                    </Form>
+                                }
+                                title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                trigger="click"
+                                placement="bottomRight"
+                            >
+                                <Button type="primary">1.Báo dạy</Button>
+                            </Popover>
+                        )}
+                        {isEdit ? (
+                            <>
+                                <Button
+                                    onClick={() => form.submit()}
+                                    type="primary"
+                                    disabled={!data.length}
+                                >
+                                    Lưu
+                                </Button>
+                                <Button
+                                    onClick={() => handleCancel()}
+                                    type="primary"
+                                    disabled={!data.length}
+                                >
+                                    Hủy
+                                </Button>
+                            </>
+                        ) : (
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                'SUA'
+                            ) && (
+                                <Button
+                                    onClick={() => setIsEdit(true)}
+                                    //TODO: handle save
+                                    type="primary"
+                                    disabled={!data.length}
+                                >
+                                    2.PCGD
+                                </Button>
+                            )
+                        )}
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'SUA'
+                        ) && (
+                            // TODO: Bỏ check quyền xem tất cả khi hoàn thành xong
+                            // !can(
+                            //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            //     'XEM_TAT_CA'
+                            // ) &&
+                            <Popconfirm
+                                title="Xác nhận gửi phân công giảng dạy?"
+                                placement="topRight"
+                                description="Các lớp môn học đã gửi phân công giảng dạy sẽ không thể chỉnh sửa, vui lòng kiểm tra kỹ trước khi gửi."
+                                onConfirm={handleGuiPCGD}
+                            >
+                                <Button
+                                    //TODO: handle save
+                                    type="primary"
+                                    disabled={!data.length}
+                                >
+                                    3.Gửi PCGD
+                                </Button>
+                            </Popconfirm>
+                        )}
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'XEM_TAT_CA'
+                        ) && <Button type="primary">4.Xuất báo dạy</Button>}
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'NHAP_EXCEL'
+                        ) && (
+                            <Button
+                                type="primary"
+                                onClick={() => onOpenModalNhapTKB(semesterId || '')}
+                            >
+                                <EditIcon stroke="white" />
+                                5.Nhập từ TKB
+                            </Button>
+                        )}
+                    </Flex>
+                </Col>
+                <Col span={4}>
+                    <Select
+                        placeholder="Chọn khoá"
+                        options={trainingCourseData.map((i) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                        style={{ width: '100%' }}
+                        onChange={(val) => handleFilterChange('trainingCourseId', val)}
+                        allowClear
+                    />
+                </Col>
+                <Col span={7}>
+                    <TreeSelectDepartment
+                        className="w-full"
+                        rootId={canXemTatCa ? '0' : orgId}
+                        onChange={(val) => handleFilterChange('organization', val)}
+                    />
                 </Col>
                 <Col span={24}>
                     <Form form={form} onFinish={handleSaveData}>
@@ -790,9 +798,17 @@ export default function TeachingAssignment() {
                                                 />
                                             </FormItem>
                                         ) : record.lecturerAssignmentDeadline ? (
-                                            dayjs(record.lecturerAssignmentDeadline).format(
-                                                'DD/MM/YYYY'
-                                            )
+                                            <p
+                                                className={cn(
+                                                    dayjs(
+                                                        record.lecturerAssignmentDeadline
+                                                    ).isBefore(dayjs().startOf('day')) && 'text-red-600'
+                                                )}
+                                            >
+                                                {dayjs(record.lecturerAssignmentDeadline).format(
+                                                    'DD/MM/YYYY'
+                                                )}
+                                            </p>
                                         ) : (
                                             ''
                                         ),
