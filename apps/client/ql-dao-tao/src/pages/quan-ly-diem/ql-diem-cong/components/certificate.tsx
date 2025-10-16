@@ -4,21 +4,20 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
-import { emptyObjectIf } from '@workspace/constant'
 import {
-    useCountArchivedCertificate,
-    useFindManyArchivedCertificate,
-    useUpdateArchivedCertificate,
+    useCountCertificate,
+    useFindManyCertificate,
+    useUpdateCertificate,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function ArchivedCertificate() {
+export default function Certificate() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -27,6 +26,7 @@ export default function ArchivedCertificate() {
         name: '',
         finalScore: undefined,
         count: undefined,
+        subjects: undefined,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -43,11 +43,11 @@ export default function ArchivedCertificate() {
     //     data?.[0]?.trainingCoursesStart?.[0]?.scoreConverts
     // )
 
-    const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
+    const { mutateAsync: updateCertificate } = useUpdateCertificate()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateArchivedCertificate({
+            await updateCertificate({
                 where: {
                     id,
                 },
@@ -66,30 +66,31 @@ export default function ArchivedCertificate() {
         }
     }
 
-    const { data: dataTable = [], refetch } = useFindManyArchivedCertificate({
-        where: {
-            name: { contains: filters.name, mode: 'insensitive' },
-        },
-        include: { _count: true },
+        const where = useMemo(() => {
+            return {
+                ...(filters.name && filters.name !== ''
+                    ? {
+                          name: {
+                              contains: filters.name,
+                              mode: 'insensitive' as const,
+                          },
+                      }
+                    : {}),
+            }
+        }, [filters])
+
+    const { data: dataTable = [], refetch } = useFindManyCertificate({
+        where,
+        include: { subjects:true,_count: true },
         orderBy: [
-            ...emptyObjectIf(
-                [
-                    {
-                        finalScore: filters.finalScore,
-                    },
-                ],
-                !!filters.finalScore
-            ),
-            ...emptyObjectIf(
-                [
-                    {
-                        studentSubjectScore: {
-                            _count: filters.count,
-                        },
-                    },
-                ],
-                !!filters.count
-            ),
+            // ...emptyObjectIf(
+            //     [
+            //         {
+            //             finalScore: filters.finalScore,
+            //         },
+            //     ],
+            //     !!filters.finalScore
+            // ),
             {
                 createdAt: 'desc',
             },
@@ -105,9 +106,9 @@ export default function ArchivedCertificate() {
         []
     )
 
-    const { data: count } = useCountArchivedCertificate({
+    const { data: count } = useCountCertificate({
         where: {
-            name: { contains: filters.name, mode: 'insensitive' },
+            ...where,
             deletedAt: null,
         },
     })
@@ -168,23 +169,6 @@ export default function ArchivedCertificate() {
                                 align: 'center',
                                 width: 200,
                                 type: 'input',
-                            },
-                            {
-                                title: 'Điểm tương đương hệ 10',
-                                dataIndex: 'finalScore',
-                                width: 150,
-                                align: 'center',
-                                type: 'order',
-                            },
-                            {
-                                title: 'Số SV đã đổi chứng chỉ',
-                                dataIndex: 'count',
-                                width: 150,
-                                align: 'center',
-                                type: 'order',
-                                render: (__, record) => {
-                                    return record._count?.studentSubjectScore
-                                },
                             },
                             {
                                 title: 'Thao tác',
