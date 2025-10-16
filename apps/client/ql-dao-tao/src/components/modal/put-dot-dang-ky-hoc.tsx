@@ -2,6 +2,7 @@ import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import type { ClassRegisterSession, TrainingCourse } from '@workspace/db'
 import {
@@ -22,6 +23,15 @@ export type PutClassRegisterSession = ClassRegisterSession & {
     trainingCourses: string[]
     minCredit: number | null
     maxCredit: number | null
+    creditLimit: Array<{
+        baseScore: string | null
+        base10Min: number | null
+        base10Max: number | null
+        base4Min: number | null
+        base4Max: number | null
+        minCredit: number | null
+        maxCredit: number | null
+    }>
 }
 dayjs.locale('vi')
 
@@ -90,10 +100,10 @@ const PutClassRegisterSession = () => {
                                     : [],
                         },
                         creditLimit: {
-                            create: {
-                                minCredit: output.minCredit || 0,
-                                maxCredit: output.maxCredit || 0,
-                            },
+                            // create: {
+                            //     minCredit: output.minCredit || 0,
+                            //     maxCredit: output.maxCredit || 0,
+                            // },
                         },
                     },
                     where: {
@@ -112,10 +122,10 @@ const PutClassRegisterSession = () => {
                                     : [],
                         },
                         creditLimit: {
-                            create: {
-                                minCredit: output.minCredit || 0,
-                                maxCredit: output.maxCredit || 0,
-                            },
+                            // create: {
+                            //     minCredit: output.minCredit || 0,
+                            //     maxCredit: output.maxCredit || 0,
+                            // },
                         },
                     },
                 })
@@ -213,30 +223,7 @@ const PutClassRegisterSession = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
-                <FormItem form={form} required name="minCredit" label="Tín chỉ tối thiểu">
-                    <InputNumber
-                        type="number"
-                        className="w-full"
-                        min={0}
-                        defaultValue={0}
-                        placeholder="Nhập tín chỉ tối thiểu"
-                        step={1}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} required name="maxCredit" label="Tín chỉ tối đa">
-                    <InputNumber
-                        type="number"
-                        className="w-full"
-                        min={0}
-                        defaultValue={25}
-                        placeholder="Nhập tín chỉ tối đa"
-                        step={1}
-                    />
-                </FormItem>
-            </Col>
+
             <Col span={12}>
                 <FormItem
                     form={form}
@@ -260,6 +247,68 @@ const PutClassRegisterSession = () => {
                 <FormItem form={form} name="description" label="Mô tả">
                     <Input.TextArea placeholder="Nhập mô tả" />
                 </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem hidden form={form} name="creditLimit" />
+                <span>Giới hạn đăng ký tín chỉ</span>
+                <Table
+                    columns={[
+                        {
+                            title: 'Xếp loại',
+                            align: 'center',
+                        },
+                        {
+                            title: 'Từ',
+                            align: 'center',
+                        },
+                        {
+                            title: 'Đến',
+                            align: 'center',
+                        },
+                        {
+                            title: 'Tối thiểu',
+                            align: 'center',
+                            render: (_, record: any) => (
+                                <FormItem
+                                    form={form}
+                                    required
+                                    name="minCredit"
+                                    label="Tín chỉ tối thiểu"
+                                >
+                                    <InputNumber
+                                        type="number"
+                                        className="w-full"
+                                        min={0}
+                                        defaultValue={0}
+                                        placeholder="Nhập tín chỉ tối thiểu"
+                                        step={1}
+                                    />
+                                </FormItem>
+                            ),
+                        },
+                        {
+                            title: 'Tối đa',
+                            align: 'center',
+                            render: (_, record: any) => (
+                                <FormItem
+                                    form={form}
+                                    required
+                                    name="maxCredit"
+                                    label="Tín chỉ tối đa"
+                                >
+                                    <InputNumber
+                                        type="number"
+                                        className="w-full"
+                                        min={0}
+                                        defaultValue={25}
+                                        placeholder="Nhập tín chỉ tối đa"
+                                        step={1}
+                                    />
+                                </FormItem>
+                            ),
+                        },
+                    ]}
+                />
             </Col>
             {id && (
                 <Col span={12}>

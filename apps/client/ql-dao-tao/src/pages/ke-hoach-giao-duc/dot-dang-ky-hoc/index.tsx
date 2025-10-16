@@ -7,6 +7,7 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { TrainingCourse } from '@workspace/db'
+import { Prisma } from '@workspace/db/client'
 import {
     useCountClassRegisterSession,
     useDeleteClassRegisterSession,
@@ -38,57 +39,64 @@ export default function ClassRegisterSession() {
     })
 
     const { id: semesterId } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where = useMemo(
-        () => ({
-            deletedAt: null,
-            ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-            ...(semesterId
-                ? {
-                      semesterId,
-                  }
-                : {}),
-            ...(filters.startDate?.length === 2
-                ? {
-                      startDate: {
-                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.endDate?.length === 2
-                ? {
-                      endDate: {
-                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.trainingCourseId &&
-                filters.trainingCourseId !== '' && {
-                    trainingCourses: {
-                        some: {
-                            id: filters.trainingCourseId,
+        () =>
+            ({
+                deletedAt: null,
+                ...(filters.name && filters.name !== ''
+                    ? {
+                          name: {
+                              contains: filters.name,
+                              mode: 'insensitive' as const,
+                          },
+                      }
+                    : {}),
+                ...(semesterId
+                    ? {
+                          semesterId,
+                      }
+                    : {}),
+                ...(filters.startDate?.length === 2
+                    ? {
+                          startDate: {
+                              gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+                ...(filters.endDate?.length === 2
+                    ? {
+                          endDate: {
+                              gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+                ...(filters.trainingCourseId &&
+                    filters.trainingCourseId !== '' && {
+                        trainingCourses: {
+                            some: {
+                                id: filters.trainingCourseId,
+                            },
                         },
-                    },
+                    }),
+                ...(filters.active !== undefined && {
+                    active:
+                        String(filters.active) === 'true'
+                            ? true
+                            : String(filters.active) === 'false'
+                              ? false
+                              : undefined,
                 }),
-            ...(filters.active !== undefined && {
-                active:
-                    String(filters.active) === 'true'
-                        ? true
-                        : String(filters.active) === 'false'
-                          ? false
-                          : undefined,
-            }),
-        }),
-        [filters, semesterId]
+                trainingCourses: {
+                    some: {
+                        trainingObjectTypeId,
+                    },
+                },
+            }) satisfies Prisma.ClassRegisterSessionWhereInput,
+        [filters, semesterId, trainingObjectTypeId]
     )
 
     const { data } = useFindManyClassRegisterSession({
@@ -106,7 +114,6 @@ export default function ClassRegisterSession() {
         },
     })
 
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         where: { active: true, trainingObjectTypeId, deletedAt: null },
         orderBy: { createdAt: 'desc' },

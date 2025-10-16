@@ -16,7 +16,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -63,6 +63,7 @@ export default function MonKySau() {
             trainingCourseId,
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
+            nextSemester: 'true',
         },
         { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
     )
@@ -303,27 +304,10 @@ export default function MonKySau() {
                             </Col>
                         </Flex>
                     </Col>
-                    <Col span={24} className="mt-2">
-                        <Flex justify="end" gap={4}>
-                            <Button onClick={onSubmit} type="primary">
-                                Lưu kế hoạch
-                            </Button>
-                        </Flex>
-                    </Col>
                     <Col span={24}>
-                        <Form.Item hidden name="subjectSelected" />
                         <Table
                             rowKey="subjectVersionId"
                             data={data}
-                            rowSelection={{
-                                type: 'checkbox',
-                                checkStrictly: true,
-                                selectedRowKeys: subjectSelected,
-                                onChange: (selectedRowKeys) => {
-                                    form.setFieldValue('subjectSelected', selectedRowKeys)
-                                },
-                                columnWidth: 15,
-                            }}
                             onRow={(record) => {
                                 return {
                                     onClick: () => {

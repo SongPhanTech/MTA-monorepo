@@ -214,6 +214,7 @@ model ArchivedCertificateOnStudentSubjectScore extends Base {
 /// Trạng thái khi SV nộp chứng chỉ online
 enum ArchivedCertificateStatus {
   PENDING
+  CANCEL
   APPROVED
   REJECTED
 
@@ -234,11 +235,11 @@ model ArchivedCertificate extends Base {
   score               Float
   /// nơi cấp
   issuedBy            String
-  /// ngày cấp  
+  /// ngày cấp
   issuedDate          DateTime
   /// ngày hết hạn
   expiredDate         DateTime?
-  status              ArchivedCertificateStatus?
+  status              ArchivedCertificateStatus                  @default(PENDING)
 
   documentFiles       DocumentFile[]
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
@@ -266,6 +267,8 @@ model ArchivedAward extends Base {
 
   /// ngày nhận
   date                DateTime?
+
+  status              ArchivedCertificateStatus            @default(PENDING)
 
   /// minh chứng
   documentFiles       DocumentFile[]
@@ -583,7 +586,7 @@ enum SubjectVersionType {
 }
 
 /// Phiên bản môn học
-model SubjectVersion extends Base {
+model SubjectVersion extends BaseNoRule {
   isLocked                 Boolean                    @default(false)
   name                     String
   codeTkb                  String?
@@ -726,11 +729,15 @@ model TrainingBlockSubject extends Base {
 
 // Giới hạn tín chỉ đăng ký
 model ClassRegisterSessionCredit extends Base {
-  classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
+  classRegisterSession   ClassRegisterSession    @relation(fields: [classRegisterSessionId], references: [id])
   classRegisterSessionId String
-  minCredit              Int                  @default(0) // tối thiểu số tín chỉ phải đăng ký
-  maxCredit              Int                  @default(25)        // tối đa số tín chỉ được đăng ký
-
+  minCredit              Int                     @default(0) // tối thiểu số tín chỉ phải đăng ký
+  maxCredit              Int                     @default(25)        // tối đa số tín chỉ được đăng ký
+  baseScore              AcademicRankingBaseType
+  base10Min              Float?
+  base10Max              Float?
+  base4Min               Float?
+  base4Max               Float?
   @@schema("ql-dao-tao")
 }
 

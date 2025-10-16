@@ -13968,7 +13968,12 @@ declare const metadata: {
                 status: {
                     name: string;
                     type: string;
-                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
                 };
                 documentFiles: {
                     name: string;
@@ -14270,6 +14275,16 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isOptional: boolean;
+                };
+                status: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
                 };
                 documentFiles: {
                     name: string;
@@ -17833,6 +17848,30 @@ declare const metadata: {
                             value: number;
                         }[];
                     }[];
+                };
+                baseScore: {
+                    name: string;
+                    type: string;
+                };
+                base10Min: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                base10Max: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                base4Min: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                base4Max: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                 };
             };
             uniqueConstraints: {

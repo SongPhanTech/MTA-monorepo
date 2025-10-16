@@ -4,6 +4,7 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { type TrainingMajor } from '@workspace/db'
+import { FixedClass, SubjectClass } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,
     useFindManyTrainingCourse,
@@ -16,7 +17,9 @@ import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Flex, Form, Input, InputNumber, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { DndProvider, DragSourceMonitor, useDrag, useDrop } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 interface OpenSubjectClassForm {
     searchText?: string
@@ -32,6 +35,141 @@ interface OpenSubjectClassForm {
             countOld: number
         }
     >
+    subjectClassToFixedClass?: Record<
+        string,
+        Record<
+            string,
+            {
+                id: string
+                code: string | null
+                count: number
+            }[]
+        >
+    > // SubjectVersionId -> SubjectClassId -> FixedClassId
+}
+
+const SubjectClassDropItem: React.FC<{
+    item: SubjectClass
+    subjectVersionId: string
+}> = ({ item, subjectVersionId }) => {
+    const form = Form.useFormInstance<OpenSubjectClassForm>()
+    const subjectClassToFixedForm = Form.useWatch('subjectClassToFixedClass', form) || {}
+    const fixedClass = subjectClassToFixedForm?.[subjectVersionId]?.[item.id] || []
+    const ref = useRef<HTMLDivElement>(null)
+    const [{ canDrop, isOver }, drop] = useDrop(
+        () => ({
+            accept: 'fixedClass',
+            drop: () => ({
+                item,
+            }),
+            collect: (monitor) => ({
+                isOver: monitor.isOver(),
+                canDrop: monitor.canDrop(),
+            }),
+        }),
+        []
+    )
+
+    const onRemoveFixedClass = (fixedClassId: string) => {
+        const subjectClass = subjectClassToFixedForm[subjectVersionId] || {}
+        form.setFieldValue('subjectClassToFixedClass', {
+            ...subjectClassToFixedForm,
+            [subjectVersionId]: {
+                ...subjectClass,
+                [item.id]: (subjectClass?.[item.id] || []).filter((fc) => fc.id !== fixedClassId),
+            },
+        })
+    }
+
+    drop(ref)
+    return (
+        <div
+            ref={ref}
+            className="border border-dashed border-gray-400 rounded p-1 mx-1 bg-white select-none h-fit"
+            style={{
+                opacity: canDrop && isOver ? 0.4 : 1,
+            }}
+        >
+            {item.code} ({fixedClass.reduce((sum, fcId) => sum + (fcId.count || 0), 0)})
+            <div className="grid grid-cols-3 gap-1">
+                {!!fixedClass?.length &&
+                    fixedClass.map((fcId) => (
+                        <div
+                            onClick={() => onRemoveFixedClass(fcId.id)}
+                            className="border border-dashed border-gray-400 rounded p-1 bg-green-100 select-none"
+                            key={fcId.id}
+                            style={{
+                                height: (fcId.count || 0) * 1 + 30,
+                            }}
+                        >
+                            {fcId.code} ({fcId.count})
+                        </div>
+                    ))}
+            </div>
+        </div>
+    )
+}
+
+const FixedClassDragItem: React.FC<{
+    item: FixedClass & { _count?: { students: number } }
+    subjectVersionId: string
+    hiddenAlreadyAdded?: boolean
+}> = ({ item, subjectVersionId, hiddenAlreadyAdded = true }) => {
+    const ref = useRef<HTMLDivElement>(null)
+    const form = Form.useFormInstance<OpenSubjectClassForm>()
+    const subjectClassToFixedForm = Form.useWatch('subjectClassToFixedClass', form) || {}
+    const subjectClass = subjectClassToFixedForm[subjectVersionId] || {}
+    const [{ opacity }, drag] = useDrag(
+        () => ({
+            type: 'fixedClass',
+            end(_, monitor) {
+                const dropResult = monitor.getDropResult() as any
+                if (!dropResult) return
+                const subjectClass = subjectClassToFixedForm[subjectVersionId]
+                form.setFieldValue('subjectClassToFixedClass', {
+                    ...subjectClassToFixedForm,
+                    [subjectVersionId]: {
+                        ...subjectClass,
+                        [dropResult?.item?.id]: [
+                            ...(subjectClass?.[dropResult?.item?.id] || []),
+                            {
+                                id: item.id,
+                                code: item.code,
+                                count: item._count?.students || 0,
+                            },
+                        ],
+                    },
+                })
+            },
+            collect: (monitor: DragSourceMonitor) => ({
+                opacity: monitor.isDragging() ? 0.4 : 1,
+            }),
+        }),
+        [subjectClassToFixedForm]
+    )
+
+    drag(ref)
+
+    const isAlreadyAdded = !!Object.values(subjectClass)
+        .flat()
+        .find((e) => e.id === item.id)
+
+    // if (isAlreadyAdded) return null
+
+    return (
+        <div
+            ref={ref}
+            hidden={isAlreadyAdded && hiddenAlreadyAdded}
+            onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+            }}
+            className="border border-dashed border-gray-400 rounded px-2 py-1 m-1 bg-green-100 select-none cursor-move"
+            style={{ opacity, height: (item?._count?.students ?? 0) * 1 + 30 }}
+        >
+            {item.code} ({item._count?.students})
+        </div>
+    )
 }
 
 export default function SubjectOpeningPlan() {
@@ -40,10 +178,14 @@ export default function SubjectOpeningPlan() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const { id: semesterId } = useSemesterStore()
+
+    const [isLayering, setIsLayering] = useState(false)
+
     const searchText = Form.useWatch('searchText', form)
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectClassNumber = Form.useWatch('subjectClassNumber', form) || {}
+    const subjectClassToFixed = Form.useWatch('subjectClassToFixedClass', form) || {}
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res, refetch } = useFindFirstPlanTraining(
@@ -97,6 +239,26 @@ export default function SubjectOpeningPlan() {
                                         semesterId: semesterId as string,
                                         trainingObjectTypeId: trainingObjectTypeId || '',
                                     },
+                                    orderBy: { code: 'asc' },
+                                    include: {
+                                        fixedClasses: {
+                                            select: {
+                                                id: true,
+                                                code: true,
+                                                _count: {
+                                                    select: {
+                                                        students: {
+                                                            where: {
+                                                                deletedAt: null,
+                                                                active: true,
+                                                                status: 'ENROLLED',
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
                                 },
                                 managementOrganization: {
                                     select: {
@@ -119,6 +281,7 @@ export default function SubjectOpeningPlan() {
                                     },
                                 },
                             },
+                            orderBy: { code: 'asc' },
                         },
                     },
                     take: numberOfPages,
@@ -171,8 +334,40 @@ export default function SubjectOpeningPlan() {
                     {} as OpenSubjectClassForm['subjectClassNumber']
                 )
             )
+            resetSubjectClassToFixedClass()
         }
     }, [data, form])
+
+    const resetSubjectClassToFixedClass = () => {
+        if (!data) return
+        form.setFieldValue(
+            'subjectClassToFixedClass',
+            data.reduce(
+                (acc, cur) => {
+                    if (!acc) return {}
+                    acc[cur.subjectVersionId] = {
+                        ...(acc?.[cur.subjectVersionId] || {}),
+                        ...cur.subjectVersion.subjectClass.reduce(
+                            (acc2, sc) => {
+                                acc2[sc.id] = sc.fixedClasses.map((fc) => ({
+                                    code: fc.code,
+                                    id: fc.id,
+                                    count: fc._count?.students || 0,
+                                }))
+                                return acc2
+                            },
+                            {} as Record<
+                                string,
+                                { id: string; code: string | null; count: number }[]
+                            >
+                        ),
+                    }
+                    return acc
+                },
+                {} as OpenSubjectClassForm['subjectClassToFixedClass']
+            )
+        )
+    }
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -197,7 +392,7 @@ export default function SubjectOpeningPlan() {
                 .filter(([, subjectVersion]) => subjectVersion.count !== subjectVersion.countOld)
                 .map(([key]) => key)
 
-            await sqlTransaction([
+            const res = await sqlTransaction([
                 {
                     model: 'ClassRegisterLogs',
                     operation: 'deleteMany',
@@ -257,14 +452,49 @@ export default function SubjectOpeningPlan() {
                                     trainingObjectTypeId: trainingObjectTypeId,
                                     code: `${subjectVersion.code} ${String(index + 1)}`,
                                     name: subjectVersion.name,
-                                    maxStudent: Math.ceil(
-                                        subjectVersion.maxStudent / subjectVersion.count
-                                    ),
+                                    maxStudent: subjectVersion.count,
                                 }))
                             ),
                     },
                 },
             ])
+            if (res.status !== 200) throw new Error('Lưu kế hoạch mở lớp thất bại')
+            message.success('Lưu kế hoạch mở lớp thành công')
+            form.resetFields()
+            debouncedRefetch()
+        } catch (error) {
+            message.error('Lưu kế hoạch mở lớp thất bại')
+            console.error(error)
+        }
+    }
+
+    const onSaveLayering = async () => {
+        try {
+            const payload = Object.entries(subjectClassToFixed).flatMap(([, subjectClass]) =>
+                Object.entries(subjectClass).flatMap(([subjectClassId, fixedClasses]) => ({
+                    subjectClassId,
+                    fixedClasses,
+                }))
+            )
+            const res = await sqlTransaction(
+                payload.map((e) => ({
+                    model: 'SubjectClass' as const,
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id: e.subjectClassId,
+                        },
+                        data: {
+                            fixedClasses: {
+                                set: e.fixedClasses.map((fc) => ({
+                                    id: fc.id,
+                                })),
+                            },
+                        },
+                    },
+                }))
+            )
+            if (res.status !== 200) throw new Error('Lưu ghép lớp thất bại')
             message.success('Lưu kế hoạch mở lớp thành công')
             form.resetFields()
             debouncedRefetch()
@@ -340,6 +570,25 @@ export default function SubjectOpeningPlan() {
                             </Col>
                             <Col span={6}>
                                 <Flex justify="end" gap={4}>
+                                    <Button
+                                        onClick={() => {
+                                            setIsLayering(!isLayering)
+                                            resetSubjectClassToFixedClass()
+                                        }}
+                                        type={isLayering ? 'default' : 'primary'}
+                                    >
+                                        {isLayering ? 'Tắt' : 'Xem'} ghép lớp
+                                    </Button>
+                                    {isLayering && (
+                                        <Popconfirm
+                                            onConfirm={onSaveLayering}
+                                            title="Xác nhận lưu kế hoạch ghép lớp?"
+                                            okText="Xác nhận"
+                                            cancelText="Hủy"
+                                        >
+                                            <Button type="primary">Lưu ghép lớp</Button>
+                                        </Popconfirm>
+                                    )}
                                     <Popconfirm
                                         onConfirm={onSubmit}
                                         title="Xác nhận lưu kế hoạch mở lớp?"
@@ -349,7 +598,7 @@ export default function SubjectOpeningPlan() {
                                             'Sau khi lưu kế hoạch mở lớp, các môn học sẽ được tạo mới lại hoàn toàn theo kế hoạch.\nCác lớp học và lịch học đã được tạo trước đó sẽ bị xoá.\nBạn có chắc chắn muốn tiếp tục?'
                                         }
                                     >
-                                        <Button type="primary">Lưu kế hoạch</Button>
+                                        <Button type="primary">Lưu mở lớp MH</Button>
                                     </Popconfirm>
                                     {/* <Button type="primary">Thêm mới</Button> */}
                                     {/* {can(
@@ -380,6 +629,7 @@ export default function SubjectOpeningPlan() {
                             </Col>
                         </Row>
                     </Col>
+                    <Form.Item name="subjectClassToFixedClass" hidden />
                     <Col span={24}>
                         <Table
                             rowKey="subjectVersionId"
@@ -415,10 +665,51 @@ export default function SubjectOpeningPlan() {
                                     title: 'Tên môn học',
                                     dataIndex: ['subjectVersion', 'name'],
                                     align: 'center',
-                                    render: (__, record) => {
+                                    render: (_, record) => {
                                         return (
-                                            `${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
-                                            ''
+                                            <div className="text-left">
+                                                {`${record?.subjectVersion?.name} (${record?.subjectVersion?.credit})` ||
+                                                    ''}
+                                            </div>
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Ghép lớp',
+                                    align: 'center',
+                                    hidden: !isLayering,
+                                    render: (_, record) => {
+                                        return (
+                                            <DndProvider backend={HTML5Backend}>
+                                                <div className="flex flex-col items-center justify-center">
+                                                    <div className="flex h-fit">
+                                                        {record?.subjectVersion?.subjectClass.map(
+                                                            (e: SubjectClass) => (
+                                                                <SubjectClassDropItem
+                                                                    subjectVersionId={
+                                                                        record.subjectVersionId
+                                                                    }
+                                                                    item={e}
+                                                                    key={e.id}
+                                                                />
+                                                            )
+                                                        )}
+                                                    </div>
+                                                    <div className="flex h-fit">
+                                                        {record?.fixedClasses.map(
+                                                            (e: FixedClass) => (
+                                                                <FixedClassDragItem
+                                                                    subjectVersionId={
+                                                                        record.subjectVersionId
+                                                                    }
+                                                                    item={e}
+                                                                    key={e.id}
+                                                                />
+                                                            )
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </DndProvider>
                                         )
                                     },
                                 },
@@ -426,6 +717,7 @@ export default function SubjectOpeningPlan() {
                                     title: 'Danh sách lớp MH',
                                     dataIndex: 'subjectClass',
                                     align: 'center',
+                                    hidden: isLayering,
                                     render: (__, record) => {
                                         return record?.subjectVersion?.subjectClass?.length ? (
                                             <TextTruncate
@@ -448,6 +740,7 @@ export default function SubjectOpeningPlan() {
                                     title: 'Danh sách lớp quản lý',
                                     dataIndex: 'fixedClass',
                                     align: 'center',
+                                    hidden: isLayering,
                                     render: (__, record) => {
                                         return record?.fixedClasses?.length ? (
                                             <TextTruncate

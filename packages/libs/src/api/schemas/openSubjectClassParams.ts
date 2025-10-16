@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { NextSemester } from './nextSemester'
 import type { Page } from './page'
 import type { PageSize } from './pageSize'
 import type { Search } from './search'
@@ -21,4 +22,5 @@ export type OpenSubjectClassParams = {
     page: Page
     pageSize: PageSize
     trainingObjectTypeId: TrainingObjectTypeId
+    nextSemester: NextSemester
 }

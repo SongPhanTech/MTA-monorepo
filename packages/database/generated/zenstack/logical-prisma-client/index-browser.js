@@ -1530,7 +1530,8 @@ exports.Prisma.ArchivedAwardScalarFieldEnum = {
   updatedAt: 'updatedAt',
   awardId: 'awardId',
   studentId: 'studentId',
-  date: 'date'
+  date: 'date',
+  status: 'status'
 };
 
 exports.Prisma.SchoolYearScalarFieldEnum = {
@@ -1840,7 +1841,12 @@ exports.Prisma.ClassRegisterSessionCreditScalarFieldEnum = {
   updatedAt: 'updatedAt',
   classRegisterSessionId: 'classRegisterSessionId',
   minCredit: 'minCredit',
-  maxCredit: 'maxCredit'
+  maxCredit: 'maxCredit',
+  baseScore: 'baseScore',
+  base10Min: 'base10Min',
+  base10Max: 'base10Max',
+  base4Min: 'base4Min',
+  base4Max: 'base4Max'
 };
 
 exports.Prisma.ClassRegisterSessionScalarFieldEnum = {
@@ -6530,6 +6536,7 @@ exports.ScoreConvertStatus = exports.$Enums.ScoreConvertStatus = {
 
 exports.ArchivedCertificateStatus = exports.$Enums.ArchivedCertificateStatus = {
   PENDING: 'PENDING',
+  CANCEL: 'CANCEL',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED'
 };

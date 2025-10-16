@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const ArchivedCertificateStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED"])
+export const ArchivedCertificateStatusSchema = z.enum(["PENDING", "CANCEL", "APPROVED", "REJECTED"])

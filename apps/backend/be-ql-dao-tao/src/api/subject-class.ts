@@ -68,6 +68,10 @@ const openSubjectClass = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
+            nextSemester: z.string().openapi('nextSemester', {
+                description: 'Xem học kỳ tiếp theo',
+                default: 'false',
+            }),
         }),
     },
     responses: {
@@ -408,7 +412,10 @@ app.openapi(openSubjectClass, async (c) => {
         trainingCourseId,
         trainingMajorId,
         trainingObjectTypeId,
+        nextSemester,
     } = c.req.valid('query')
+
+    const nextSemesterBool = nextSemester === 'true'
 
     const semester = await prisma.semester.findUnique({
         where: { id: semesterId },
@@ -425,15 +432,22 @@ app.openapi(openSubjectClass, async (c) => {
             400
         )
     }
-    const semesterYear = semester?.schoolYear.startDate.getFullYear()
 
-    const semesterType =
+    let semesterType =
         semester?.semesterType === $Enums.SemesterType.FIRST
             ? 1
             : semester?.semesterType === $Enums.SemesterType.SECOND
               ? 2
               : 0
-
+    let semesterYear = semester?.schoolYear.startDate.getFullYear()
+    if (nextSemesterBool) {
+        if (semesterType === 1) {
+            semesterType = 2
+        } else if (semesterType === 2) {
+            semesterType = 1
+            semesterYear = semesterYear + 1
+        }
+    }
     const res = (await prisma.$queryRawTyped(
         getSubjectClassBySemester(
             semesterYear,

@@ -107,6 +107,7 @@ enum ScoreConvertStatus {
 /// Trạng thái khi SV nộp chứng chỉ online
 enum ArchivedCertificateStatus {
   PENDING
+  CANCEL
   APPROVED
   REJECTED
 
@@ -2586,11 +2587,11 @@ model ArchivedCertificate {
   score               Float
   /// nơi cấp
   issuedBy            String
-  /// ngày cấp  
+  /// ngày cấp
   issuedDate          DateTime
   /// ngày hết hạn
   expiredDate         DateTime?
-  status              ArchivedCertificateStatus?
+  status              ArchivedCertificateStatus                  @default(PENDING)
   documentFiles       DocumentFile[]
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
 
@@ -2635,6 +2636,7 @@ model ArchivedAward {
   studentId           String
   /// ngày nhận
   date                DateTime?
+  status              ArchivedCertificateStatus            @default(PENDING)
   /// minh chứng
   documentFiles       DocumentFile[]
   studentSubjectScore ArchivedAwardOnStudentSubjectScore[]
@@ -2995,8 +2997,6 @@ model SubjectVersionCategory {
 
 /// Phiên bản môn học
 /// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
 model SubjectVersion {
   id                       String                     @id() @default(cuid())
   code                     String?                    @unique()
@@ -3154,17 +3154,22 @@ model TrainingBlockSubject {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ClassRegisterSessionCredit {
-  id                     String               @id() @default(cuid())
-  code                   String?              @unique()
-  active                 Boolean              @default(true)
-  description            String?              @db.Text()
+  id                     String                  @id() @default(cuid())
+  code                   String?                 @unique()
+  active                 Boolean                 @default(true)
+  description            String?                 @db.Text()
   deletedAt              DateTime?
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime             @default(now()) @updatedAt()
-  classRegisterSession   ClassRegisterSession @relation(fields: [classRegisterSessionId], references: [id])
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @default(now()) @updatedAt()
+  classRegisterSession   ClassRegisterSession    @relation(fields: [classRegisterSessionId], references: [id])
   classRegisterSessionId String
-  minCredit              Int                  @default(0)
-  maxCredit              Int                  @default(25)
+  minCredit              Int                     @default(0)
+  maxCredit              Int                     @default(25)
+  baseScore              AcademicRankingBaseType
+  base10Min              Float?
+  base10Max              Float?
+  base4Min               Float?
+  base4Max               Float?
 
   @@schema("ql-dao-tao")
 }
