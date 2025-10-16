@@ -92,6 +92,7 @@ import PutAddOlympicScoreModal from './them-diem-cong'
 import ThongTinBaoCaoModal from './thong-tin-bao-cao'
 import ModalChuyenLop from './modal-chuyen-lop'
 import ModalPreviewUpload from './modal-preview-upload-ctdt'
+import ModalChuyenLopLuuBan from './modal-chuyen-lop-luu-ban'
 export {
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -187,4 +188,5 @@ export {
     PutTrainingLanguage,
     ModalChuyenLop,
     ModalPreviewUpload,
+    ModalChuyenLopLuuBan,
 }
