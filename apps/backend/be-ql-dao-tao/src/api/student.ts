@@ -225,6 +225,12 @@ app.openapi(PheDuyetLuuBan, async (c) => {
                 status: actionMap[academicActionType],
             },
         })
+
+        await tx.studentAcademicDecision.updateMany({
+            where: { id: { in: decisionIds } },
+            data: { status: 'APPROVED' },
+        })
+
         if (academicActionType === AcademicActionType.REPEAT_YEAR) {
             await tx.studentSubjectScore.updateMany({
                 where: { studentId: { in: studentIds }, repeated: false },

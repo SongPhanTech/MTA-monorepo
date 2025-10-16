@@ -11,24 +11,20 @@ import type { FilterProps } from '@constants/type'
 import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
-import { buildOrgTree } from '@lib/utils'
-import { type AcademicActionType, DecisionStatus, type Prisma } from '@workspace/db'
+
 import {
     useDeleteStudentAcademicDecision,
-    useFindManyDM_DonVi,
-    useFindManyFixedClass,
     useFindManyStudentAcademicDecision,
-    useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import {
     updateStudentStatus,
     useExportStudentResultSemesterJson,
 } from '@workspace/libs/api/training'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import { type AcademicActionType, DecisionStatus, type Prisma } from '@workspace/db/client'
 
 dayjs.locale('vi')
 
@@ -188,7 +184,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         }
     }
 
-    const { onOpen, onClose } = useDisclosure<{
+    const { onOpen } = useDisclosure<{
         id: string
         semesterId: string
         actionTaken: AcademicActionType
@@ -196,26 +192,11 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         tag: 'PutStudentAcademicDecision',
     })
 
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: {
-            name: 'asc',
-        },
-        where: {
-            trainingObjectTypeId,
-            active: true,
-            deletedAt: null,
-        },
+    const { onOpen: openModalChuyenLopLuuBan } = useDisclosure<{
+        ids: string[]
+    }>({
+        tag: 'ModalChuyenLopLuuBan',
     })
-
-    const { data: fixedClassData = [] } = useFindManyFixedClass({
-        orderBy: {
-            name: 'asc',
-        },
-    })
-
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
-    const treeData = buildOrgTree(manageOrgData)
 
     const { data: students = [] } = useExportStudentResultSemesterJson<any[] | { data: any[] }>(
         {
@@ -388,7 +369,11 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                                     decisionIds: selectedDecision as string[],
                                                     academicActionType: actionTaken,
                                                 })
+
                                                 await refetch()
+                                                openModalChuyenLopLuuBan({
+                                                    ids: selectedDecision as string[],
+                                                })
                                                 setSelectedDecision([])
                                             }}
                                         >
@@ -531,9 +516,15 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                     align: 'center',
                                     fixed: 'right',
                                     render: (_, record) => {
+                                        const isDisabled = record?.updatedResult
+
                                         return record?.id ? (
                                             <Row className="justify-center gap-2">
-                                                <Button ghost disabled>
+                                                <Button
+                                                    type="text"
+                                                    className="hover:bg-transparent px-0"
+                                                    disabled={isDisabled}
+                                                >
                                                     <EditIcon
                                                         onClick={() =>
                                                             onOpen({
@@ -542,17 +533,23 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                                                 actionTaken,
                                                             })
                                                         }
-                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                        className="text-sm text-blue-700 cursor-pointer bg-transparent border-none"
                                                     />
                                                 </Button>
-                                                <DeleteIcon
-                                                    popConfirm={{
-                                                        onConfirm: () =>
-                                                            handleDeleteStudentAcademicDecision(
-                                                                record?.id
-                                                            ),
-                                                    }}
-                                                />
+                                                <Button
+                                                    type="text"
+                                                    className="hover:bg-transparent px-0"
+                                                    disabled={isDisabled}
+                                                >
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () =>
+                                                                handleDeleteStudentAcademicDecision(
+                                                                    record?.id
+                                                                ),
+                                                        }}
+                                                    />
+                                                </Button>
                                             </Row>
                                         ) : null
                                     },
