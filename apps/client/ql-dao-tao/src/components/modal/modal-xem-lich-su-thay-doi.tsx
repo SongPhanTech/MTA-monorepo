@@ -1,17 +1,16 @@
 // biome-ignore assist/source/organizeImports: <code fix>
-import {
-    useCountSubjectVersionHistory,
-    useFindManySubjectVersionHistory,
-} from '@workspace/db/hooks'
+
 import { Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Table from '@components/commons/table'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import ExpandableContent from '@components/commons/expandable-content/ExpandableContent'
-
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { SubjectVersionHistory } from '@workspace/db'
+import useSpinner from '@hooks/spinner'
 dayjs.locale('vi')
 
 const ModalViewHistoryChange = () => {
@@ -20,36 +19,87 @@ const ModalViewHistoryChange = () => {
     })
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const { data = [], refetch } = useFindManySubjectVersionHistory(
-        {
-            where: {
-                subjectVersion: {},
-            },
-            include: {
-                subjectVersion: {
-                    select: {
-                        name: true,
+    const [dataHistory, setDataHistory] = useState<SubjectVersionHistory[]>([])
+    const [countHistory, setCountHistory] = useState(0)
+    const { showSpinner, hideSpinner } = useSpinner()
+    const fetchData = async () => {
+        showSpinner()
+        try {
+            const dataHistory = await sqlTransaction([
+                {
+                    model: 'SubjectVersionHistory',
+                    operation: 'findMany',
+                    data: {
+                        include: {
+                            subjectVersion: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            updatedBy: {
+                                select: {
+                                    fullname: true,
+                                },
+                            },
+                        },
+                        orderBy: {
+                            createdAt: 'desc',
+                        },
+                        take: numberOfPages,
+                        skip: (currentPage - 1) * numberOfPages,
                     },
                 },
-                updatedBy: {
-                    select: {
-                        fullname: true,
-                    },
+            ])
+            const fullDataHistory = await sqlTransaction([
+                {
+                    model: 'SubjectVersionHistory',
+                    operation: 'findMany',
                 },
-            },
-            orderBy: {
-                createdAt: 'desc',
-            },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-        },
-        { enabled: !!isOpen }
-    )
-    const { data: count } = useCountSubjectVersionHistory({
-        where: {
-            subjectVersion: {},
-        },
-    })
+            ])
+            setDataHistory(dataHistory.data[0] as SubjectVersionHistory[])
+            setCountHistory((fullDataHistory.data[0] as SubjectVersionHistory[]).length)
+        } catch (error) {
+        } finally {
+            hideSpinner()
+        }
+    }
+    useEffect(() => {
+        fetchData()
+    }, [currentPage, numberOfPages])
+    // useEffect(() => {
+    //     async function fetchData() {}
+    //     fetchData()
+    // }, [])
+    // const { data = [], refetch } = useFindManySubjectVersionHistory(
+    //     {
+    //         where: {
+    //             subjectVersion: {},
+    //         },
+    //         include: {
+    //             subjectVersion: {
+    //                 select: {
+    //                     name: true,
+    //                 },
+    //             },
+    //             updatedBy: {
+    //                 select: {
+    //                     fullname: true,
+    //                 },
+    //             },
+    //         },
+    //         orderBy: {
+    //             createdAt: 'desc',
+    //         },
+    //         take: numberOfPages,
+    //         skip: (currentPage - 1) * numberOfPages,
+    //     },
+    //     { enabled: !!isOpen }
+    // )
+    // const { data: count } = useCountSubjectVersionHistory({
+    //     where: {
+    //         subjectVersion: {},
+    //     },
+    // })
 
     return (
         <Modal
@@ -89,6 +139,7 @@ const ModalViewHistoryChange = () => {
                         width: 60,
                         render: (_, record) => {
                             return (
+                                // @ts-ignore
                                 <div className="truncate">{record.updatedBy?.fullname || ''}</div>
                             )
                         },
@@ -99,6 +150,7 @@ const ModalViewHistoryChange = () => {
                         width: 60,
                         align: 'center',
                         render: (_, record) => {
+                            // @ts-ignore
                             return record.subjectVersion?.name || ''
                         },
                     },
@@ -121,11 +173,11 @@ const ModalViewHistoryChange = () => {
                         },
                     },
                 ]}
-                data={data}
+                data={dataHistory}
                 pagination={{
                     current: currentPage,
                     pageSize: numberOfPages,
-                    total: count,
+                    total: countHistory || 0,
                     onChange: (page, pageSize) => {
                         if (numberOfPages === pageSize) {
                             setCurrentPage(page)
@@ -133,6 +185,7 @@ const ModalViewHistoryChange = () => {
                             setCurrentPage(1)
                             setNumberOfPages(pageSize)
                         }
+                        fetchData()
                     },
                 }}
             />
