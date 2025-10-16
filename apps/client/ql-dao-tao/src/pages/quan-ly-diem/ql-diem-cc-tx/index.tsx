@@ -572,12 +572,12 @@ export default function SubjectClassScore() {
     }, [listForm])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <formTable>
-    useEffect(() => {
-        if (subjectClassId) {
-            setIsChanged(false)
-            formTable.setFieldsValue([])
-        }
-    }, [subjectClassId])
+    // useEffect(() => {
+    //     if (subjectClassId) {
+    //         setIsChanged(false)
+          
+    //     }
+    // }, [subjectClassId])
 
     useEffect(() => {
         if (!isChanged) return
@@ -618,6 +618,7 @@ export default function SubjectClassScore() {
                                     })}
                                     defaultValue={subjectClassId}
                                     onChange={(value) => {
+                                          formTable.setFieldsValue([])
                                         router.push(
                                             `/quan-ly-diem/ql-diem-cc-tx?subjectClassId=${value}`
                                         )
