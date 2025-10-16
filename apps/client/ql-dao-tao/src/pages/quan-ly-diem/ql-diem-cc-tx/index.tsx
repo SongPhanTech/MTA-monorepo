@@ -524,8 +524,7 @@ export default function SubjectClassScore() {
                 dataDetailSubjectClass?.scoreDeadline &&
                 dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
                 !dataDetailSubjectClass?.isLockScore &&
-                profileId !== listUser.P13) ||
-            false
+                profileId !== listUser.P13)
         )
     }, [dataDetailSubjectClass, subjectClassId])
 

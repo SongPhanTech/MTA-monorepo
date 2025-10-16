@@ -587,8 +587,7 @@ export default function SubjectClassScore() {
                 ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
                     profileId === listUser.P13) ||
                     (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
-                        profileId !== listUser.P13))) ||
-            false
+                        profileId !== listUser.P13)))
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
