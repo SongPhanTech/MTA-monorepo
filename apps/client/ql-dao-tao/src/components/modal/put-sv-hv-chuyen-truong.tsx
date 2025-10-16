@@ -55,7 +55,6 @@ const PutStudentScoreConvertModal = () => {
     const { data: studentList = [], isFetching: loadingStudents } = useFindManyStudent({
         where: {
             active: true,
-            // tìm theo họ tên / fullname / mã
             userProfile: {
                 is: {
                     OR: [
@@ -153,7 +152,6 @@ const PutStudentScoreConvertModal = () => {
             }))
 
         const toUpdate = rows
-            // Chỉ cập nhật những dòng đã có id VÀ trạng thái GỐC của nó không phải là 'APPROVED'
             .filter((r) => !!r.id && originalStatusRef.current[r.id] !== 'APPROVED')
             .map((r) => ({
                 where: { id: r.id },
@@ -164,37 +162,51 @@ const PutStudentScoreConvertModal = () => {
                 },
             }))
 
-        const getDocumentPayload = () => {
-            const validFiles = (output.documentFiles || []).filter((f) => !!f.path)
-            if (validFiles.length > 0) {
-                return {
-                    deleteMany: {},
-                    createMany: {
-                        data: validFiles.map((file) => ({
-                            name: file.name,
-                            path: file.path,
-                            mimeType: file.mimeType,
-                            size: file.size,
-                        })),
-                    },
-                }
-            }
-            return {
-                deleteMany: {},
-            }
-        }
-
         try {
             showSpinner()
-            console.log('Dữ liệu file lưu: ', output.documentFiles)
             if (id) {
                 await updateStudentScoreConvert({
                     where: { id },
                     data: {
                         studentId: output.studentId,
                         description: output.description,
-                        // TODO: xử lý file
-                        documentFiles: getDocumentPayload(),
+                        documentFiles: {
+                            upsert: (output.documentFiles || [])
+                                .filter((file) => !!file.id)
+                                .map((file) => ({
+                                    where: { id: file.id },
+                                    create: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                    },
+                                    update: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                    },
+                                })),
+
+                            create: (output.documentFiles || [])
+                                .filter((file) => !file.id)
+                                .map((file) => ({
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                })),
+
+                            disconnect: document
+                                .filter(
+                                    (initialFile) =>
+                                        !output.documentFiles?.some(
+                                            (finalFile) => finalFile.id === initialFile.id
+                                        )
+                                )
+                                .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
+                        },
                         subjectScoreConvert: {
                             ...(toCreate.length
                                 ? { createMany: { data: toCreate, skipDuplicates: true } }
