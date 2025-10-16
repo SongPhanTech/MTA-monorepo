@@ -2583,6 +2583,7 @@ model ArchivedCertificate {
   certificateId       String
   student             Student                                    @relation(fields: [studentId], references: [id])
   studentId           String
+  finalScore          Float
   /// điểm chứng chỉ
   score               Float
   /// nơi cấp
@@ -2634,6 +2635,7 @@ model ArchivedAward {
   awardId             String
   student             Student                              @relation(fields: [studentId], references: [id])
   studentId           String
+  bonusScore          Float
   /// ngày nhận
   date                DateTime?
   status              ArchivedCertificateStatus            @default(PENDING)

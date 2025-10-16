@@ -16,6 +16,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    bonusScore: z.number(),
     date: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema,
 }
@@ -64,6 +65,7 @@ export const ArchivedAwardPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    bonusScore: z.union([z.number(), z.record(z.unknown())]),
     date: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema
 }).partial().passthrough();

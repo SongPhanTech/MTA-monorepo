@@ -7500,6 +7500,9 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'student',
+                }, finalScore: {
+                    name: "finalScore",
+                    type: "Float",
                 }, score: {
                     name: "score",
                     type: "Float",
@@ -7664,6 +7667,9 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'student',
+                }, bonusScore: {
+                    name: "bonusScore",
+                    type: "Float",
                 }, date: {
                     name: "date",
                     type: "DateTime",

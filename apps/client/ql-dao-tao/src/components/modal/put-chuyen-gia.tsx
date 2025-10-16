@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { ExpertProfile, Prisma } from '@workspace/db'
+import type { ExpertProfile } from '@workspace/db'
 import {
     useCreateExpertProfile,
     useFindManyLecturer,
@@ -80,30 +80,26 @@ const PutExpertProfile = () => {
     async function onOk(output?: PutExpertProfile) {
         if (!output) return
 
-        let payload: Prisma.ExpertProfileUncheckedCreateInput
-
-        if (selectedLecturer) {
-            payload = {
-                name: selectedLecturer.userProfile.fullname || null,
-                phone: selectedLecturer.userProfile.phoneNumber || null,
-                email: selectedLecturer.userProfile.email || null,
-                lecturerId: selectedLecturer.id,
-                eligibleSecretary: output.eligibleSecretary,
-                eligiblePresident: output.eligiblePresident,
-            }
-        } else {
-            payload = {
-                academicRank: output.academicRank,
-                academicDegree: output.academicDegree,
-                specialization: output.specialization,
-                workplace: output.workplace,
-                phone: output.phone,
-                email: output.email,
-                name: output?.name?.trim(),
-                eligibleSecretary: output.eligibleSecretary,
-                eligiblePresident: output.eligiblePresident,
-            }
-        }
+        const payload = selectedLecturer
+            ? {
+                  name: selectedLecturer.userProfile.fullname || null,
+                  phone: selectedLecturer.userProfile.phoneNumber || null,
+                  email: selectedLecturer.userProfile.email || null,
+                  lecturerId: selectedLecturer.id,
+                  eligibleSecretary: output.eligibleSecretary,
+                  eligiblePresident: output.eligiblePresident,
+              }
+            : {
+                  academicRank: output.academicRank,
+                  academicDegree: output.academicDegree,
+                  specialization: output.specialization,
+                  workplace: output.workplace,
+                  phone: output.phone,
+                  email: output.email,
+                  name: output?.name?.trim(),
+                  eligibleSecretary: output.eligibleSecretary,
+                  eligiblePresident: output.eligiblePresident,
+              }
 
         try {
             showSpinner()

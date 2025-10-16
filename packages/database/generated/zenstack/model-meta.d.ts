@@ -13948,6 +13948,10 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                finalScore: {
+                    name: string;
+                    type: string;
+                };
                 score: {
                     name: string;
                     type: string;
@@ -14270,6 +14274,10 @@ declare const metadata: {
                     type: string;
                     isForeignKey: boolean;
                     relationField: string;
+                };
+                bonusScore: {
+                    name: string;
+                    type: string;
                 };
                 date: {
                     name: string;
