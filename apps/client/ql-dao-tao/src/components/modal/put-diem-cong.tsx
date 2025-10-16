@@ -9,7 +9,7 @@ import {
     useFindUniqueAward,
     useUpdateAward,
 } from '@workspace/db/hooks'
-import { Col, Form, InputNumber, message } from 'antd'
+import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
@@ -109,7 +109,7 @@ const PutOlympicScoreModal = () => {
             <Col span={24} className="mb-4">
                 <FormItem form={form} name="name" label="Tên giải thưởng" required>
                     <Input placeholder="Nhập tên giải thưởng" />
-                </FormItem> */}
+                </FormItem>
             </Col>
             <Col span={24} className="mb-4">
                 <FormItem form={form} name="bonusScore" label="Điểm cộng">

@@ -315,7 +315,7 @@ export default function StudentScoreClassPage() {
                                     subjectClassStudent?.[0]?.certificates
                                         .map(
                                             (i: { archivedCertificate: ArchivedCertificate }) =>
-                                                i?.archivedCertificate?.name
+                                                i?.archivedCertificate?.code
                                         )
                                         .join(', '),
                             },
