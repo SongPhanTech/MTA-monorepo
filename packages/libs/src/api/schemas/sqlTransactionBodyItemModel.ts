@@ -249,4 +249,5 @@ export const SqlTransactionBodyItemModel = {
     DisciplinaryWarningReason: 'DisciplinaryWarningReason',
     TemplateFile: 'TemplateFile',
     BlockedIp: 'BlockedIp',
+    SubjectVersionHistory: 'SubjectVersionHistory',
 } as const
