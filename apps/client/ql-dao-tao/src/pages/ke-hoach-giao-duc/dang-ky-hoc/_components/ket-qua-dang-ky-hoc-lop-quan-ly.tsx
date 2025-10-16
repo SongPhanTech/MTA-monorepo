@@ -4,7 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import type { ExamType, SubjectClassSchedule } from '@workspace/db'
-import { useFindManySubjectClass } from '@workspace/db/hooks'
+import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
@@ -16,13 +16,10 @@ interface FilterProps {
     searchText: string | null
 }
 
-interface RegisterClassProps {
-    setSubjectClassId?: (id: string | null) => void
-}
-
-export default function RegisterResult({ setSubjectClassId }: RegisterClassProps) {
-    const [currentPage, _setCurrentPage] = useState(1)
-    const [selectedRowKey, _setSelectedRowKey] = useState<string | null>(null)
+export default function KeQuaDangKyHocLopQuanLy() {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
@@ -71,7 +68,24 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
             createdAt: 'desc',
         },
     })
-
+    const { data: countSubjectClass = 0 } = useCountSubjectClass({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      name: {
+                          contains: filters.searchText,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(semesterId
+                ? {
+                      semesterId,
+                  }
+                : {}),
+            trainingObjectTypeId,
+        },
+    })
     type SubjectClassData = (typeof subjectClassData)[number]
 
     const debouncedRefetch = useCallback(
@@ -120,8 +134,7 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
             </Row>
             <Table
                 rowKey="id"
-                id="subject-class"
-                dataSource={subjectClassData}
+                data={subjectClassData}
                 // onRow={(record) => ({
                 //     onClick: () => {
                 //         setSubjectClassId?.(record.id)
@@ -236,6 +249,19 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
                         },
                     },
                 ]}
+                pagination={{
+                    current: currentPage,
+                    pageSize: numberOfPages,
+                    total: countSubjectClass,
+                    onChange: (page, pageSize) => {
+                        if (numberOfPages === pageSize) {
+                            setCurrentPage(page)
+                        } else {
+                            setCurrentPage(1)
+                            setNumberOfPages(pageSize)
+                        }
+                    },
+                }}
             />
         </div>
     )

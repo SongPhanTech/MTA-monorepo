@@ -1,0 +1,388 @@
+import { queryClient } from '@api/index'
+import Table from '@components/commons/table'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { cn } from '@workspace/ui/lib/utils'
+import { Button, Col, Form, Input, message, Row } from 'antd'
+import _ from 'lodash'
+import { Search } from 'lucide-react'
+import type React from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+interface FilterProps {
+    searchText: string | null
+}
+
+interface StudentCourseByPlanProps {
+    studentId?: string | null
+}
+
+export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
+    const { can } = useAbility()
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [selectedSubjectClassRowKeys, setSelectedSubjectClassRowKeys] = useState<React.Key[]>([])
+    const [fixedRowKeys, setFixedRowKeys] = useState<React.Key[]>([])
+    const [subjectVersionIds, setSubjectVersionIds] = useState<string[]>([])
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
+    })
+    const { id: semesterId } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const { data: subjectClassData = [], refetch } = useFindManySubjectClass(
+        {
+            where: {
+                ...(filters.searchText && filters.searchText !== ''
+                    ? {
+                          name: {
+                              contains: filters.searchText,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
+                semesterId,
+                trainingObjectTypeId,
+                subject: {
+                    planTrainingSubject: {
+                        some: {
+                            planTraining: {
+                                semesterId,
+                                trainingObjectTypeId,
+                            },
+                        },
+                    },
+                },
+                cancelled: false,
+                active: true,
+            },
+            include: {
+                subject: {
+                    include: {
+                        studentSubjectScore: {
+                            where: {
+                                studentId: studentId as string,
+                            },
+                            orderBy: {
+                                finalScore: 'desc',
+                            },
+                        },
+                    },
+                },
+                subjectClassStudent: {
+                    where: {
+                        studentId: studentId as string,
+                    },
+                    select: {
+                        id: true,
+                    },
+                },
+                fixedClasses: {
+                    select: {
+                        _count: {
+                            select: {
+                                students: {
+                                    where: {
+                                        active: true,
+                                        deletedAt: null,
+                                        status: 'ENROLLED',
+                                    },
+                                },
+                            },
+                        },
+                        students: {
+                            where: {
+                                id: studentId as string,
+                            },
+                            select: {
+                                id: true,
+                            },
+                        },
+                    },
+                },
+            },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
+            orderBy: {
+                code: 'asc',
+            },
+        },
+        {
+            enabled: !!studentId && !!semesterId,
+        }
+    )
+    const { data: countSubjectClass = 0 } = useCountSubjectClass({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      name: {
+                          contains: filters.searchText,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            semesterId,
+            trainingObjectTypeId,
+            subject: {
+                planTrainingSubject: {
+                    some: {
+                        planTraining: {
+                            semesterId,
+                            trainingObjectTypeId,
+                        },
+                    },
+                },
+            },
+            cancelled: false,
+            active: true,
+        },
+    })
+
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
+
+    const handleSaveStudentClass = async () => {
+        if (!studentId) return
+        try {
+            const allSubjectClassInfo = await sqlTransaction(
+                selectedSubjectClassRowKeys.map((subjectClassId) => ({
+                    model: 'SubjectClass',
+                    operation: 'findUnique',
+                    data: {
+                        where: { id: subjectClassId },
+                        select: {
+                            id: true,
+                            subjectId: true,
+                        },
+                    },
+                }))
+            )
+            if (allSubjectClassInfo.status !== 200) {
+                throw new Error('Có lỗi xảy ra khi lấy thông tin lớp học phần!')
+            }
+            console.log(allSubjectClassInfo.data)
+            await sqlTransaction([
+                {
+                    model: 'StudentSubjectScore',
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            studentId,
+                            subjectClass: {
+                                semesterId,
+                                trainingObjectTypeId,
+                            },
+                        },
+                    },
+                },
+                ...allSubjectClassInfo.data.map((subjectClass: any) => ({
+                    model: 'StudentSubjectScore' as const,
+                    operation: 'create',
+                    data: {
+                        data: {
+                            studentId,
+                            subjectClassId: subjectClass.id,
+                            subjectVersionId: subjectClass.subjectId,
+                        },
+                    },
+                })),
+            ])
+            message.success('Lưu đăng ký học cải thiện thành công!')
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'StudentSubjectScore'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Có lỗi xảy ra khi gán lớp!')
+        }
+    }
+
+    useEffect(() => {
+        if (subjectClassData) {
+            const checkedSubjectClassByFixedClassIds = [
+                ...new Set(
+                    subjectClassData
+                        .filter((item) =>
+                            item.fixedClasses.some((fc) =>
+                                fc.students.some((s) => s.id === studentId)
+                            )
+                        )
+                        .map((item) => item.id)
+                ),
+            ]
+            setSubjectVersionIds([
+                ...subjectClassData
+                    .filter((item) =>
+                        item.fixedClasses.some((fc) => fc.students.some((s) => s.id === studentId))
+                    )
+                    .map((item) => item.subject.id),
+                ...subjectClassData
+                    .filter((item) => item.subjectClassStudent.length > 0).map((item) => item.subject.id),
+            ])
+            setFixedRowKeys(checkedSubjectClassByFixedClassIds)
+            setSelectedSubjectClassRowKeys(
+                subjectClassData
+                    .filter((item) => item.subjectClassStudent.length > 0)
+                    .map((item) => item.id)
+            )
+        }
+    }, [subjectClassData, studentId])
+
+    return (
+        <Row>
+            <Col span={20}>
+                <Form.Item className="mb-1" name="searchText">
+                    <Input
+                        id="search"
+                        placeholder="Tìm kiếm LMH..."
+                        onChange={(e) => handleFilterChange('searchText', e.target.value)}
+                        prefix={
+                            <Search
+                                size={15}
+                                style={{
+                                    color: 'rgba(0, 0, 0, 0.25)',
+                                }}
+                            />
+                        }
+                        className="h-8"
+                        allowClear
+                    />
+                </Form.Item>
+            </Col>
+            <Col span={4} className="text-right">
+                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DANG_KY_HOC, 'SUA') && (
+                    <Button
+                        type="primary"
+                        className="h-[32px] px-4"
+                        onClick={handleSaveStudentClass}
+                        disabled={!studentId || !semesterId}
+                    >
+                        Lưu
+                    </Button>
+                )}
+            </Col>
+            <Col span={24}>
+                <Table
+                    className="m-0"
+                    rowKey="id"
+                    data={subjectClassData}
+                    onRow={(record) => ({
+                        onClick: () => {
+                            if (fixedRowKeys.includes(record.id)) return
+                            if (
+                                subjectVersionIds.includes(record.subject.id) &&
+                                !selectedSubjectClassRowKeys.includes(record.id)
+                            )
+                                return
+                            if (selectedSubjectClassRowKeys.includes(record.id)) {
+                                setSelectedSubjectClassRowKeys((prev) =>
+                                    prev.filter((key) => key !== record.id)
+                                )
+                                setSubjectVersionIds((prev) =>
+                                    prev.filter((id) => id !== record.subject.id)
+                                )
+                                return
+                            }
+                            setSelectedSubjectClassRowKeys((prev) => [...prev, record.id])
+                            setSubjectVersionIds((prev) => [...prev, record.subject.id])
+                        },
+                        className: cn(
+                            subjectVersionIds.includes(record.subject.id) &&
+                                'bg-yellow-100 cursor-not-allowed'
+                        ),
+                        columnWidth: 35,
+                    })}
+                    rowSelection={{
+                        selectedRowKeys: [...selectedSubjectClassRowKeys, ...fixedRowKeys],
+                        onChange: (selectedRowKeys) => {
+                            setSelectedSubjectClassRowKeys(selectedRowKeys)
+                        },
+                        getCheckboxProps: (record) => ({
+                            disabled:
+                                fixedRowKeys.includes(record.id) ||
+                                (subjectVersionIds.includes(record.subject.id) &&
+                                    !selectedSubjectClassRowKeys.includes(record.id)),
+                        }),
+                        columnWidth: 35,
+                    }}
+                    columns={[
+                        {
+                            title: 'TT',
+                            width: 35,
+                            align: 'center',
+                            render: (_, __, index) =>
+                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                        },
+                        {
+                            title: 'Mã LMH',
+                            dataIndex: 'code',
+                            align: 'center',
+                            width: 100,
+                        },
+                        {
+                            title: 'Tên môn',
+                            dataIndex: 'name',
+                            align: 'center',
+                            width: 150,
+                            render: (text) => <p className="text-left">{text}</p>,
+                        },
+                        {
+                            title: 'Số TC',
+                            dataIndex: ['subject', 'credit'],
+                            align: 'center',
+                            width: 80,
+                        },
+                        {
+                            title: 'Sĩ số',
+                            align: 'center',
+                            width: 100,
+                            render: (record) =>
+                                record?.fixedClasses?.reduce(
+                                    (acc: number, curr: any) => acc + (curr?._count?.students ?? 0),
+                                    0
+                                ),
+                        },
+                        {
+                            title: 'Điểm',
+                            align: 'center',
+                            width: 50,
+                            render: (_, record) =>
+                                record.subject.studentSubjectScore[0]?.finalScore || '-',
+                        },
+                    ]}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: countSubjectClass,
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
+                        },
+                    }}
+                />
+            </Col>
+        </Row>
+    )
+}

@@ -1,7 +1,7 @@
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useFindManySubjectClass } from '@workspace/db/hooks'
+import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
@@ -16,8 +16,9 @@ interface RegisterClassProps {
     setSubjectClassId?: (id: string | null) => void
 }
 
-export default function RegisterClassManager({ setSubjectClassId }: RegisterClassProps) {
-    const [currentPage, _setCurrentPage] = useState(1)
+export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterClassProps) {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKey, setSelectedRowKey] = useState<Key>('')
 
     const [filters, setFilters] = useState<FilterProps>({
@@ -84,6 +85,34 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
             code: 'asc',
         },
     })
+
+    const { data: countSubjectClass = 0 } = useCountSubjectClass({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      name: {
+                          contains: filters.searchText,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            semesterId,
+            trainingObjectTypeId,
+            subject: {
+                planTrainingSubject: {
+                    some: {
+                        planTraining: {
+                            semesterId,
+                            trainingObjectTypeId,
+                        },
+                    },
+                },
+            },
+            cancelled: false,
+            active: true,
+        },
+    })
+
     type SubjectClassData = (typeof subjectClassData)[number]
 
     const debouncedRefetch = useCallback(
@@ -173,78 +202,18 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                         width: 150,
                         render: (text: string) => <p className="text-left">{text}</p>,
                     },
-                    // {
-                    //     title: 'Thời gian học',
-                    //     dataIndex: 'startDate',
-                    //     align: 'center',
-                    //     width: 150,
-                    //     render: (record: string) =>
-                    //         record ? dayjs(record).format('DD/MM/YYYY') : '',
-                    // },
-                    // {
-                    //     title: 'Thời khoá biểu',
-                    //     width: 150,
-                    //     align: 'center',
-                    //     render: (_, record) => {
-                    //         return record.subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
-                    //             return (
-                    //                 <p>
-                    //                     {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
-                    //                     {tkb.startPeriod} - {tkb.endPeriod}
-                    //                 </p>
-                    //             )
-                    //         })
-                    //     },
-                    // },
-                    // {
-                    //     title: 'Kíp học',
-                    //     dataIndex: 'schedule',
-                    //     width: 80,
-                    //     align: 'center',
-                    //     // filters: scheduleOptions.map((opt) => ({
-                    //     //     text: opt.label,
-                    //     //     value: opt.value,
-                    //     // })),
-                    //     filterSearch: true,
-                    //     render: (value) => getScheduleLabel(value),
-                    // },
-                    // {
-                    //     title: 'Giảng viên 1',
-                    //     dataIndex: ['mainLecturer', 'userProfile'],
-                    //     width: 250,
-                    //     render: (record) => record && `${record?.code || ''} - ${record.fullname}`,
-                    // },
                     {
                         title: 'Số TC',
                         dataIndex: ['subject', 'credit'],
                         align: 'center',
                         width: 80,
                     },
-                    // {
-                    //     title: 'Hình thức thi',
-                    //     dataIndex: ['subject', 'examType'],
-                    //     align: 'center',
-                    //     width: 180,
-                    //     render: (value) => getExamTypeLabel(value),
-                    // },
                     {
                         title: 'Khu vực',
                         dataIndex: ['room', 'building', 'name'],
                         align: 'center',
                         width: 120,
                     },
-                    // {
-                    //     title: 'Phòng học',
-                    //     dataIndex: ['room', 'name'],
-                    //     align: 'center',
-                    //     width: 100,
-                    // },
-                    // {
-                    //     title: 'Số SV max',
-                    //     dataIndex: 'maxStudent',
-                    //     align: 'center',
-                    //     width: 120,
-                    // },
                     {
                         title: 'Số SV đã ĐK',
                         align: 'center',
@@ -276,6 +245,19 @@ export default function RegisterClassManager({ setSubjectClassId }: RegisterClas
                         },
                     },
                 ]}
+                pagination={{
+                    current: currentPage,
+                    pageSize: numberOfPages,
+                    total: countSubjectClass,
+                    onChange: (page, pageSize) => {
+                        if (numberOfPages === pageSize) {
+                            setCurrentPage(page)
+                        } else {
+                            setCurrentPage(1)
+                            setNumberOfPages(pageSize)
+                        }
+                    },
+                }}
             />
         </div>
     )
