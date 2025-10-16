@@ -10955,11 +10955,15 @@ function $check_SubjectVersionCategory_delete(input: any, context: QueryContext)
 
 function SubjectVersion_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
 function $check_SubjectVersion_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
     if ((user != null)) { return true; }
 
     return false;

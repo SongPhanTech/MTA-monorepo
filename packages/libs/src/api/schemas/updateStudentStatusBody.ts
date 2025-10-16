@@ -5,8 +5,10 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { UpdateStudentStatusBodyAcademicActionType } from './updateStudentStatusBodyAcademicActionType'
+import type { UpdateStudentStatusBodyClassChangesItem } from './updateStudentStatusBodyClassChangesItem'
 
 export type UpdateStudentStatusBody = {
     decisionIds: string[]
     academicActionType: UpdateStudentStatusBodyAcademicActionType
+    classChanges?: UpdateStudentStatusBodyClassChangesItem[]
 }

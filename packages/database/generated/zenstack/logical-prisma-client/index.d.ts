@@ -916,6 +916,10 @@ export type SubjectVersionCategory = $Result.DefaultSelection<Prisma.$SubjectVer
  * Phiên bản môn học
  * @
  * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
  */
 export type SubjectVersion = $Result.DefaultSelection<Prisma.$SubjectVersionPayload>;
 /**

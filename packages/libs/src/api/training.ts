@@ -145,6 +145,7 @@ import type {
     TrainingField200Item,
     TrainingField400,
     UpdateStudentStatus200,
+    UpdateStudentStatus400,
     UpdateStudentStatusBody,
     UploadExcelCreateFixedClass,
     UploadExcelCreateFixedClass200,
@@ -2389,7 +2390,14 @@ export type updateStudentStatusResponse200 = {
     status: 200
 }
 
-export type updateStudentStatusResponseComposite = updateStudentStatusResponse200
+export type updateStudentStatusResponse400 = {
+    data: UpdateStudentStatus400
+    status: 400
+}
+
+export type updateStudentStatusResponseComposite =
+    | updateStudentStatusResponse200
+    | updateStudentStatusResponse400
 
 export type updateStudentStatusResponse = updateStudentStatusResponseComposite & {
     headers: Headers
@@ -2412,7 +2420,7 @@ export const updateStudentStatus = async (
 }
 
 export const getUpdateStudentStatusMutationOptions = <
-    TError = unknown,
+    TError = UpdateStudentStatus400,
     TContext = unknown,
 >(options?: {
     mutation?: UseMutationOptions<
@@ -2451,12 +2459,12 @@ export type UpdateStudentStatusMutationResult = NonNullable<
     Awaited<ReturnType<typeof updateStudentStatus>>
 >
 export type UpdateStudentStatusMutationBody = UpdateStudentStatusBody
-export type UpdateStudentStatusMutationError = unknown
+export type UpdateStudentStatusMutationError = UpdateStudentStatus400
 
 /**
  * @summary Cập nhật trạng thái, điểm học viên theo xử lý học tập
  */
-export const useUpdateStudentStatus = <TError = unknown, TContext = unknown>(
+export const useUpdateStudentStatus = <TError = UpdateStudentStatus400, TContext = unknown>(
     options?: {
         mutation?: UseMutationOptions<
             Awaited<ReturnType<typeof updateStudentStatus>>,

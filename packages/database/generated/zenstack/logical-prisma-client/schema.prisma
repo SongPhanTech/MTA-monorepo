@@ -2999,6 +2999,8 @@ model SubjectVersionCategory {
 
 /// Phiên bản môn học
 /// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
 model SubjectVersion {
   id                       String                     @id() @default(cuid())
   code                     String?                    @unique()
