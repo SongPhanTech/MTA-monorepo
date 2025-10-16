@@ -18,6 +18,7 @@ import {
     useFindManyDM_DonVi,
     useFindManySubject,
     useFindUniqueTrainingObjectType,
+    useUpdateManySubjectVersion,
     useUpdateSubject,
     useUpdateSubjectVersion,
 } from '@workspace/db/hooks'
@@ -40,7 +41,7 @@ import {
 import _ from 'lodash'
 import { BookPlus, History, LockKeyhole, LockKeyholeOpen, Search } from 'lucide-react'
 import type React from 'react'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
@@ -65,6 +66,18 @@ export default function SubjectList() {
         numberOfOther: undefined,
         isTeaching: undefined,
     })
+    useEffect(() => {
+        if (SubjectData && Array.isArray(SubjectData)) {
+            const hasAnyUnlockedVersion = SubjectData.some(
+                (subject) =>
+                    Array.isArray(subject.subjectVersion) &&
+                    subject.subjectVersion.some((version) => version.isLocked === true)
+            )
+
+            setIsLocked(hasAnyUnlockedVersion)
+        }
+    }, [])
+
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: selectedTrainingObjectType } = useFindUniqueTrainingObjectType(
         {
@@ -76,7 +89,25 @@ export default function SubjectList() {
         }
     )
     const { getExamTypeLabel, options: examTypeFilters } = useExamTypeOptions()
-
+    const { mutateAsync: updateManySubjectVersion } = useUpdateManySubjectVersion()
+    async function handleToggleLock() {
+        try {
+            showSpinner()
+            await updateManySubjectVersion({
+                data: { isLocked: isLocked },
+            })
+            setIsLocked(!isLocked)
+            message.success(isLocked ? 'Mở khoá thành công' : 'Khoá thành công')
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
     const { data: organization = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(organization)
 
@@ -225,10 +256,6 @@ export default function SubjectList() {
     }
     const handleHistory = () => {
         onOpenHistory()
-    }
-    const handleToggleLock = () => {
-        //Todo: cần api để xử lí việc khóa/mở khóa hàng loạt
-        setIsLocked((prevState) => !prevState)
     }
 
     const handleModalSubjectVersion = (

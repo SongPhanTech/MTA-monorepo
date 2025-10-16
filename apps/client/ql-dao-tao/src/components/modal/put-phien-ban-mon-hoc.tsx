@@ -256,21 +256,35 @@ const PutVersionSubjectModal = () => {
                             )
                             oldDisplay = oldTrainingObject?.name || 'trống'
                             newDisplay = newTrainingObject?.name || 'trống'
-                        }
-
-                        if (key === 'prerequisiteSubjectIds' || key === 'coRequisiteSubjectIds') {
+                        } else if (
+                            key === 'prerequisiteSubjectIds' ||
+                            key === 'coRequisiteSubjectIds'
+                        ) {
                             const oldNames = (oldValue as string[])
                                 ?.map((id) => subjectVersionNameMap.get(id) || id)
                                 .join(', ')
                             const newNames = (newValue as string[])
                                 ?.map((id) => subjectVersionNameMap.get(id) || id)
                                 .join(', ')
-                            oldDisplay = oldNames
-                            newDisplay = newNames
-                        }
-                        if (key === 'active') {
+                            oldDisplay = oldNames || 'trống'
+                            newDisplay = newNames || 'trống'
+                        } else if (key === 'active') {
                             oldDisplay = oldValue ? 'Đang hoạt động' : 'Ngừng hoạt động'
                             newDisplay = newValue ? 'Đang hoạt động' : 'Ngừng hoạt động'
+                        } else if (key === 'examType') {
+                            const oldOption = options?.find((opt) => opt.value === oldValue)
+                            const newOption = options?.find((opt) => opt.value === newValue)
+                            oldDisplay = oldOption?.label || 'trống'
+                            newDisplay = newOption?.label || 'trống'
+                        } else if (key === 'type') {
+                            const oldOption = subjectVersionTypeOptions.find(
+                                (opt) => opt.value === oldValue
+                            )
+                            const newOption = subjectVersionTypeOptions.find(
+                                (opt) => opt.value === newValue
+                            )
+                            oldDisplay = oldOption?.label || 'trống'
+                            newDisplay = newOption?.label || 'trống'
                         }
 
                         const oldDisplayHtml = `<strong>${oldDisplay || 'trống'}</strong>`
@@ -360,7 +374,6 @@ const PutVersionSubjectModal = () => {
                     },
                 })
                 const historyData = {
-                    //  subjectVersionId: data?.id ?? '',
                     content: 'Thêm mới bản ghi',
                     action: HistorySubjectVersionType.CREATE,
                     active: true,
