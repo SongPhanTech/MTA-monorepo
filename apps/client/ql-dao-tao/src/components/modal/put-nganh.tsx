@@ -5,7 +5,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import type { DocumentFile, TrainingField, TrainingObjectType } from '@workspace/db'
+import type { DocumentFile, TrainingField, TrainingObjectType } from '@workspace/db/client'
 import {
     useCreateTrainingField,
     useFindManyDM_DonVi,

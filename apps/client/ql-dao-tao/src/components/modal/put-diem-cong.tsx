@@ -2,17 +2,17 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { ArchivedAward } from '@workspace/db'
+import type { ArchivedAward } from '@workspace/db/client'
 import {
     useCreateArchivedAward,
     useFindUniqueArchivedAward,
     useUpdateArchivedAward,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message } from 'antd'
+import { Col, Form, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
 export type PutArchivedAward = ArchivedAward
 dayjs.locale('vi')
 const PutOlympicScoreModal = () => {
@@ -36,7 +36,7 @@ const PutOlympicScoreModal = () => {
             if (id) {
                 await updateArchivedAward({
                     data: {
-                        name: rest.name,
+                        // name: rest.name,
                         bonusScore: rest.bonusScore,
                     },
                     where: { id },
@@ -96,9 +96,9 @@ const PutOlympicScoreModal = () => {
             className="w-[500px]"
         >
             <Col span={24}>
-                <FormItem form={form} name="name" label="Tên giải thưởng" required>
+                {/* <FormItem form={form} name="name" label="Tên giải thưởng" required>
                     <Input placeholder="Nhập tên giải thưởng" />
-                </FormItem>
+                </FormItem> */}
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="bonusScore" label="Điểm cộng">

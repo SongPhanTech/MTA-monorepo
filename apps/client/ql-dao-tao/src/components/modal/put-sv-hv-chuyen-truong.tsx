@@ -7,7 +7,7 @@ import type {
     StudentScoreConvert,
     SubjectScoreConvert,
     SubjectVersion,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCreateStudentScoreConvert,
     useFindUniqueStudent,

@@ -15,7 +15,7 @@ import type {
     TrainingField,
     TrainingMajor,
     UserProfile,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCountStudent,
     useFindManyCurriculumVersion,

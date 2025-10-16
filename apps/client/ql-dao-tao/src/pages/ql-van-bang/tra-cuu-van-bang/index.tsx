@@ -13,7 +13,7 @@ import type {
     TrainingField,
     TrainingMajor,
     TrainingObjectType,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCountGraduationDecision,
     useFindManyDiplomaType,

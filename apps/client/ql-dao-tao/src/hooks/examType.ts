@@ -1,4 +1,4 @@
-import { ExamType } from '@workspace/db'
+import { ExamType } from '@workspace/db/client'
 
 export type ExamTypeOption = {
     value: ExamType

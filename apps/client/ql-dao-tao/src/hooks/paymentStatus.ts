@@ -1,4 +1,4 @@
-import { PaymentStatus } from '@workspace/db'
+import { PaymentStatus } from '@workspace/db/client'
 
 export type PaymentStatusOption = {
     value: PaymentStatus

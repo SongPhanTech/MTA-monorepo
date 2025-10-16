@@ -3,7 +3,7 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { SchoolYear } from '@workspace/db'
+import type { SchoolYear } from '@workspace/db/client'
 import {
     useCreateSchoolYear,
     useFindUniqueSchoolYear,

@@ -10,7 +10,7 @@ import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import { type CouncilMember, SubjectVersionType, ThesisProjectStatus } from '@workspace/db'
+import { type CouncilMember, SubjectVersionType, ThesisProjectStatus } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useCreateManyInvitation,

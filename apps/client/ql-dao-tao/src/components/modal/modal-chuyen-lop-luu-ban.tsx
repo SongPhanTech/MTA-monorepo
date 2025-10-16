@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import { AcademicActionType } from '@workspace/db/client'
+import type { AcademicActionType } from '@workspace/db/client'
 import {
     useFindManyFixedClass,
     useFindManyStudentAcademicDecision,

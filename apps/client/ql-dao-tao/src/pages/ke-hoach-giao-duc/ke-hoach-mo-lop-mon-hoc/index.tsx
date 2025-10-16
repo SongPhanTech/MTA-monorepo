@@ -4,8 +4,8 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { type TrainingMajor } from '@workspace/db'
-import { FixedClass, SubjectClass } from '@workspace/db/client'
+import type { TrainingMajor } from '@workspace/db/client'
+import type { FixedClass, SubjectClass } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,
     useFindManyTrainingCourse,
@@ -19,7 +19,7 @@ import { Button, Col, Flex, Form, Input, InputNumber, message, Popconfirm, Row }
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { DndProvider, DragSourceMonitor, useDrag, useDrop } from 'react-dnd'
+import { DndProvider, type DragSourceMonitor, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
 interface OpenSubjectClassForm {

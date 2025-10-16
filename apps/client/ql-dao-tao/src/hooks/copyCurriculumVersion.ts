@@ -4,7 +4,7 @@ import type {
     Prisma,
     TrainingBlockOnCurriculumVersion,
     TrainingBlockSubject,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import { useCreateCurriculumVersion } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { message } from 'antd'

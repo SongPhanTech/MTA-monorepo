@@ -6,7 +6,7 @@ import { FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Student } from '@workspace/db'
+import type { Student } from '@workspace/db/client'
 import {
     useFindManyCurriculumVersion,
     useFindManyDM_GioiTinh,

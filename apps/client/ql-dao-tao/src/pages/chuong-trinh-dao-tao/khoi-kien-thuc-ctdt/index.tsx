@@ -1,4 +1,4 @@
-import { NestedCollapsibleTable, NestedColumn } from '@components/commons/nested-collapsible-table'
+import { NestedCollapsibleTable, type NestedColumn } from '@components/commons/nested-collapsible-table'
 // import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -6,7 +6,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma } from '@workspace/db'
+import type { Prisma } from '@workspace/db/client'
 import {
     useCountTrainingBlock,
     useFindManyTrainingBlock,

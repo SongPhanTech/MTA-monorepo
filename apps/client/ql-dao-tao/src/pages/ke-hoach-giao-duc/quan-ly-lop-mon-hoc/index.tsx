@@ -5,14 +5,14 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { $Enums, Prisma, TrainingMajor } from '@workspace/db/client'
+import type { $Enums, Prisma, SubjectClassSchedule, TrainingMajor } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useDeleteSubjectClass,
@@ -27,7 +27,7 @@ import { useAbility, useOrgPermissions } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, message, Popover, Row, Switch } from 'antd'
-import { Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -824,7 +824,25 @@ export default function TeachingAssignment() {
                                     render: (_, record) =>
                                         record.subject?.credit ? record.subject?.credit : '',
                                 },
-
+                                {
+                                    title: 'Kíp học',
+                                    dataIndex: 'schedule',
+                                    align: 'center',
+                                    width: 100,
+                                    type: 'select',
+                                    options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                                        ([key, value_]) => {
+                                            return {
+                                                label: value_,
+                                                value: key,
+                                            }
+                                        }
+                                    ),
+                                    render: (value: SubjectClassSchedule) =>
+                                        SUBJECT_CLASS_SCHEDULE_TYPE[
+                                            value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                        ],
+                                },
                                 {
                                     title: 'Số SV',
                                     dataIndex: 'subjectClassStudent',
@@ -987,26 +1005,7 @@ export default function TeachingAssignment() {
                                 //     align: 'center',
                                 //     render: (value) => (value ? formatDate(value) : ''),
                                 // },
-                                // {
-                                //     title: 'Kíp học',
-                                //     dataIndex: 'schedule',
-                                //     align: 'center',
-                                //     width: 100,
-                                //     type: 'select',
 
-                                //     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
-                                //         ([key, value_]) => {
-                                //             return {
-                                //                 label: value_,
-                                //                 value: key,
-                                //             }
-                                //         }
-                                //     ),
-                                //     render: (value: SubjectClassSchedule) =>
-                                //         SUBJECT_CLASS_SCHEDULE_TYPE[
-                                //             value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                //         ],
-                                // },
                                 // {
                                 //     title: 'Thời khoá biểu',
                                 //     width: 150,

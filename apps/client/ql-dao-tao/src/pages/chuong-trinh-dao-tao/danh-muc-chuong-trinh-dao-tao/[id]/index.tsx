@@ -15,7 +15,7 @@ import type {
     Prisma,
     SubjectVersion,
     TrainingBlockOnCurriculumVersion,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import { $Enums, type TrainingBlockSubject } from '@workspace/db/client'
 import {
     useDeleteManyTrainingBlockSubject,

@@ -9,7 +9,7 @@ import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import { emptyObjectIf } from '@workspace/constant'
-import type { TrainingCourse } from '@workspace/db'
+import type { TrainingCourse } from '@workspace/db/client'
 import {
     useCountFixedClass,
     useFindManyCurriculumVersion,

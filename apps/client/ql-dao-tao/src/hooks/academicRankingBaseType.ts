@@ -1,4 +1,4 @@
-import { AcademicRankingBaseType } from '@workspace/db'
+import { AcademicRankingBaseType } from '@workspace/db/client'
 
 export type AcademicRankingBaseTypeOption = {
     value: AcademicRankingBaseType

@@ -6,7 +6,7 @@ import {
     DecisionStatus,
     type DocumentFile,
     type StudentAcademicDecision,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCreateStudentAcademicDecision,
     useFindManyStudent,

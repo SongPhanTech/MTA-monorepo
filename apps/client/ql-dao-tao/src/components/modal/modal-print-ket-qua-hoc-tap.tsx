@@ -1,6 +1,6 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { useScoreConverter } from '@hooks/scoreConverter'
-import { SubjectRequirementType } from '@workspace/db'
+import { SubjectRequirementType } from '@workspace/db/client'
 import { useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
 import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankingConvert'
 import { Button, Input, Modal } from 'antd'

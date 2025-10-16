@@ -4,7 +4,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { SchoolYear, Semester } from '@workspace/db'
+import type { SchoolYear, Semester } from '@workspace/db/client'
 import {
     useCreateSemester,
     useFindManySchoolYear,

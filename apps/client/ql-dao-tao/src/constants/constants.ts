@@ -1,4 +1,4 @@
-import { $Enums } from '@workspace/db'
+import { $Enums } from '@workspace/db/client'
 import { env } from '@/env'
 
 const DEFAULT_PAGINATE_SIZE = 10

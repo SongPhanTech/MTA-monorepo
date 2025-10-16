@@ -32,7 +32,7 @@ import type {
     TrainingCourse,
     TrainingObjectTypes,
     UserProfile,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import type { UploadFile, UploadProps } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 

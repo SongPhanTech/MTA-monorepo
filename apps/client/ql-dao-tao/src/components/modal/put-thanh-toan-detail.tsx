@@ -3,7 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
-import type { PaymentRecord } from '@workspace/db'
+import type { PaymentRecord } from '@workspace/db/client'
 import {
     useCreatePaymentRecord,
     useFindManyExpertProfile,

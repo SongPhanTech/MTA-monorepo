@@ -1,4 +1,4 @@
-import { SemesterType } from '@workspace/db'
+import { SemesterType } from '@workspace/db/client'
 
 export type SemesterTypeOption = {
     value: SemesterType

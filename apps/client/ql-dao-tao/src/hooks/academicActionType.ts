@@ -1,4 +1,4 @@
-import { AcademicActionType } from '@workspace/db'
+import { AcademicActionType } from '@workspace/db/client'
 
 export type AcademicActionTypeOption = {
     value: AcademicActionType

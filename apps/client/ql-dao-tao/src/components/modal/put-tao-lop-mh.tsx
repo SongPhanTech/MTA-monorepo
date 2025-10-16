@@ -5,7 +5,7 @@ import Table from '@components/commons/table'
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
-import type { Room, SubjectClass } from '@workspace/db'
+import type { Room, SubjectClass } from '@workspace/db/client'
 import {
     useCreateManySubjectClass,
     useFindManyRoom,

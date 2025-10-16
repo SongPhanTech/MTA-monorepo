@@ -8,7 +8,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import type { StudentSubjectScore } from '@workspace/db'
+import type { StudentSubjectScore } from '@workspace/db/client'
 import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
@@ -1148,10 +1148,10 @@ export default function SubjectClassScore() {
                                                                     {
                                                                         ...record,
                                                                         attendanceScore:
-                                                                            !!attendanceScore
+                                                                            attendanceScore
                                                                                 ? attendanceScore
                                                                                 : record?.attendanceScore,
-                                                                        midtermScore: !!midtermScore
+                                                                        midtermScore: midtermScore
                                                                             ? midtermScore
                                                                             : record?.attendanceScore,
                                                                     }

@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { AcademicActionConfig } from '@workspace/db'
+import type { AcademicActionConfig } from '@workspace/db/client'
 import {
     useCreateAcademicActionConfig,
     useFindUniqueAcademicActionConfig,

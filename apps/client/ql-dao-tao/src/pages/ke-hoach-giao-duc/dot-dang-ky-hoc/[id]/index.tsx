@@ -4,7 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useClassRegisterStatus } from '@hooks/classRegisterStatus'
 import DefaultLayout from '@layouts/default-layout'
-import type { SubjectClassTime } from '@workspace/db'
+import type { SubjectClassTime } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManySubjectClass,

@@ -4,7 +4,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import type { ClassRegisterSession, TrainingCourse } from '@workspace/db'
+import type { ClassRegisterSession, TrainingCourse } from '@workspace/db/client'
 import {
     useCreateClassRegisterSession,
     useDeleteManyClassRegisterSessionCredit,

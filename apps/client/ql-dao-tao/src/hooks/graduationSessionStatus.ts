@@ -1,4 +1,4 @@
-import { GraduationSessionStatus } from '@workspace/db'
+import { GraduationSessionStatus } from '@workspace/db/client'
 
 export type GraduationSessionStatusOption = {
     value: GraduationSessionStatus

@@ -1,6 +1,6 @@
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { StudentSubjectScore } from '@workspace/db'
+import type { StudentSubjectScore } from '@workspace/db/client'
 import {
     useCountArchivedAward,
     useFindFirstTrainingCourse,
@@ -56,20 +56,20 @@ const PutAddOlympicScoreModal = () => {
     const { data: dataTable = [], refetch } = useFindManyArchivedAward({
         where: {
             OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                // { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
         },
         include: {},
         orderBy: {
-            name: 'asc',
+            code: 'asc',
         },
     })
 
     const { data: count } = useCountArchivedAward({
         where: {
             OR: [
-                { name: { contains: filters.searchText, mode: 'insensitive' } },
+                // { name: { contains: filters.searchText, mode: 'insensitive' } },
                 { code: { contains: filters.searchText, mode: 'insensitive' } },
             ],
             deletedAt: null,

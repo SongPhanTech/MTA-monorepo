@@ -1,5 +1,5 @@
 import { DownloadOutlined } from '@ant-design/icons'
-import type { Student } from '@workspace/db'
+import type { Student } from '@workspace/db/client'
 import { Button, Flex } from 'antd'
 import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
