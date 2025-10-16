@@ -7583,6 +7583,10 @@ const metadata = {
                     name: "repeatedReason",
                     type: "String",
                     isOptional: true,
+                }, isImproving: {
+                    name: "isImproving",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, graduationGpaScores: {
                     name: "graduationGpaScores",
                     type: "StudentGraduationApplication",

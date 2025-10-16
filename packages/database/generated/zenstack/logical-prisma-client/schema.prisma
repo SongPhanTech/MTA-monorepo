@@ -2491,6 +2491,7 @@ model StudentSubjectScore {
   /// lưu ban
   repeated                     Boolean                                    @default(false)
   repeatedReason               String?
+  isImproving                  Boolean                                    @default(false)
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
   certificates                 ArchivedCertificateOnStudentSubjectScore[]

@@ -1,13 +1,14 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { ScoreConvert } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
-import { Button, Col, Form, Input, message, Row } from 'antd'
+import { Button, Checkbox, Col, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
@@ -63,12 +64,29 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
             include: {
                 subject: {
                     include: {
+                        // Lấy điểm cao nhất của sinh viên trong các lần đăng ký học cải thiện
                         studentSubjectScore: {
                             where: {
                                 studentId: studentId as string,
                             },
                             orderBy: {
                                 finalScore: 'desc',
+                            },
+                            select: {
+                                finalScore: true,
+                                student: {
+                                    select: {
+                                        fixedClass: {
+                                            select: {
+                                                trainingCourse: {
+                                                    select: {
+                                                        scoreConverts: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
@@ -169,6 +187,35 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
                         select: {
                             id: true,
                             subjectId: true,
+                            subject: {
+                                select: {
+                                    // Lấy điểm cao nhất của sinh viên trong các lần đăng ký học cải thiện
+                                    studentSubjectScore: {
+                                        where: {
+                                            studentId,
+                                        },
+                                        orderBy: {
+                                            finalScore: 'desc',
+                                        },
+                                        select: {
+                                            finalScore: true,
+                                            student: {
+                                                select: {
+                                                    fixedClass: {
+                                                        select: {
+                                                            trainingCourse: {
+                                                                select: {
+                                                                    scoreConverts: true,
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
                         },
                     },
                 }))
@@ -176,8 +223,7 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
             if (allSubjectClassInfo.status !== 200) {
                 throw new Error('Có lỗi xảy ra khi lấy thông tin lớp học phần!')
             }
-            console.log(allSubjectClassInfo.data)
-            await sqlTransaction([
+            const res = await sqlTransaction([
                 {
                     model: 'StudentSubjectScore',
                     operation: 'deleteMany',
@@ -199,10 +245,26 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
                             studentId,
                             subjectClassId: subjectClass.id,
                             subjectVersionId: subjectClass.subjectId,
+                            isImproving:
+                                subjectClass.subject.studentSubjectScore.length > 0 &&
+                                subjectClass.subject.studentSubjectScore[0]?.finalScore !== null
+                                    ? subjectClass.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
+                                          (sc: ScoreConvert) =>
+                                              sc?.base10Min <=
+                                                  subjectClass.subject.studentSubjectScore[0]
+                                                      ?.finalScore &&
+                                              subjectClass.subject.studentSubjectScore[0]
+                                                  ?.finalScore <= sc?.base10Max &&
+                                              sc?.improvementRegister
+                                      )
+                                    : false,
                         },
                     },
                 })),
             ])
+            if (res.status !== 200) {
+                throw new Error('Có lỗi xảy ra khi lưu đăng ký học!')
+            }
             message.success('Lưu đăng ký học cải thiện thành công!')
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'StudentSubjectScore'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'SubjectClass'] })
@@ -235,7 +297,8 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
                     )
                     .map((item) => item.subject.id),
                 ...subjectClassData
-                    .filter((item) => item.subjectClassStudent.length > 0).map((item) => item.subject.id),
+                    .filter((item) => item.subjectClassStudent.length > 0)
+                    .map((item) => item.subject.id),
             ])
             setFixedRowKeys(checkedSubjectClassByFixedClassIds)
             setSelectedSubjectClassRowKeys(
@@ -366,6 +429,29 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
                             width: 50,
                             render: (_, record) =>
                                 record.subject.studentSubjectScore[0]?.finalScore || '-',
+                        },
+                        {
+                            title: 'Cải thiện',
+                            align: 'center',
+                            width: 50,
+                            render: (_, record) => (
+                                <Checkbox
+                                    checked={
+                                        record.subject.studentSubjectScore.length > 0 &&
+                                        record.subject.studentSubjectScore[0]?.finalScore !== null
+                                            ? record.subject.studentSubjectScore[0].student?.fixedClass?.trainingCourse?.scoreConverts?.some(
+                                                  (sc: ScoreConvert) =>
+                                                      sc?.base10Min <=
+                                                          record.subject.studentSubjectScore[0]
+                                                              ?.finalScore &&
+                                                      record.subject.studentSubjectScore[0]
+                                                          ?.finalScore <= sc?.base10Max &&
+                                                      sc?.improvementRegister
+                                              )
+                                            : false
+                                    }
+                                />
+                            ),
                         },
                     ]}
                     pagination={{

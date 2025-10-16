@@ -26,7 +26,7 @@ export default function RegisterClass() {
         },
         {
             key: '2',
-            label: 'Đăng ký học cải thiện cho cá nhân',
+            label: 'Đăng ký học cho cá nhân',
             content: <DangKyHocChoCaNhan setStudentId={setStudentId} />,
         },
         {

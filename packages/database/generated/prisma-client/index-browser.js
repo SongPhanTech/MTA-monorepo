@@ -1453,7 +1453,8 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   suspended: 'suspended',
   suspendedReason: 'suspendedReason',
   repeated: 'repeated',
-  repeatedReason: 'repeatedReason'
+  repeatedReason: 'repeatedReason',
+  isImproving: 'isImproving'
 };
 
 exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {

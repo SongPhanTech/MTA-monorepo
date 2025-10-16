@@ -94,9 +94,12 @@ export default function DangKyHocChoCaNhan({ setStudentId }: RegisterClassProps)
             studentSemesterResult: {
                 select: {
                     gpaBase10: true,
-                    gpaBase4: true,
                     cumulativeGpaBase10: true,
-                    cumulativeGpaBase4: true,
+                },
+                orderBy: {
+                    semester: {
+                        startDate: 'desc',
+                    },
                 },
             },
             fixedClass: {
@@ -256,13 +259,13 @@ export default function DangKyHocChoCaNhan({ setStudentId }: RegisterClassProps)
                             title: 'Mã',
                             dataIndex: 'code',
                             align: 'center',
-                            width: 150,
+                            width: 100,
                         },
                         {
                             title: 'Tên',
                             dataIndex: ['userProfile', 'fullname'],
                             align: 'center',
-                            width: 150,
+                            width: 200,
                             render: (text: string) => <p className="text-left">{text}</p>,
                         },
                         {
@@ -278,9 +281,10 @@ export default function DangKyHocChoCaNhan({ setStudentId }: RegisterClassProps)
                             dataIndex: ['fixedClass', 'trainingCourse', 'name'],
                         },
                         {
-                            title: 'GPA',
+                            title: 'GPA tích luỹ',
                             align: 'center',
-                            width: 120,
+                            dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
+                            width: 80,
                         },
                     ]}
                     pagination={{

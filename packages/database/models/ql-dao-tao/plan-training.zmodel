@@ -159,6 +159,8 @@ model StudentSubjectScore extends Base {
   repeated                     Boolean                                    @default(false)
   repeatedReason               String?
 
+  isImproving                  Boolean                                    @default(false) // học cải thiện
+
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
 

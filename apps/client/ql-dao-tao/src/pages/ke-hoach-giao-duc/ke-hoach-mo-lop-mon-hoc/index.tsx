@@ -2,6 +2,7 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { type TrainingMajor } from '@workspace/db'
 import { FixedClass, SubjectClass } from '@workspace/db/client'
@@ -385,9 +386,12 @@ export default function SubjectOpeningPlan() {
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
+    const { hideSpinner, showSpinner } = useSpinner()
+
     const onSubmit = async () => {
         try {
             if (!semesterId || !trainingObjectTypeId) return
+            showSpinner()
             const listSubjectVersionIds = Object.entries(subjectClassNumber)
                 .filter(([, subjectVersion]) => subjectVersion.count !== subjectVersion.countOld)
                 .map(([key]) => key)
@@ -466,10 +470,12 @@ export default function SubjectOpeningPlan() {
             message.error('Lưu kế hoạch mở lớp thất bại')
             console.error(error)
         }
+        hideSpinner()
     }
 
     const onSaveLayering = async () => {
         try {
+            showSpinner()
             const payload = Object.entries(subjectClassToFixed).flatMap(([, subjectClass]) =>
                 Object.entries(subjectClass).flatMap(([subjectClassId, fixedClasses]) => ({
                     subjectClassId,
@@ -502,6 +508,7 @@ export default function SubjectOpeningPlan() {
             message.error('Lưu kế hoạch mở lớp thất bại')
             console.error(error)
         }
+        hideSpinner()
     }
 
     return (
@@ -513,122 +520,91 @@ export default function SubjectOpeningPlan() {
                     onValuesChange={(filter: OpenSubjectClassForm) => {
                         if (!filter.subjectClassNumber) {
                             debouncedRefetch()
-                        } else {
-                            console.log(filter.subjectClassNumber)
                         }
                     }}
                 >
-                    <Col span={24}>
-                        <Row gutter={[16, 16]} align="top" justify="space-between">
-                            <Col span={12}>
-                                <Flex>
-                                    <Col span={8}>
-                                        <Form.Item name="searchText">
-                                            <Input id="search" placeholder="Tìm kiếm" allowClear />
-                                        </Form.Item>
-                                    </Col>
+                    <Row gutter={[0, 0]}>
+                        <Col span={12}>
+                            <Flex gap={4}>
+                                <Col span={8}>
+                                    <Form.Item className="m-0" name="searchText">
+                                        <Input id="search" placeholder="Tìm kiếm" allowClear />
+                                    </Form.Item>
+                                </Col>
 
-                                    <Col span={8}>
-                                        <Form.Item
-                                            className="mb-0"
-                                            name="trainingMajorId"
-                                            labelCol={{ span: 24 }}
-                                            wrapperCol={{ span: 24 }}
-                                            labelAlign="left"
-                                        >
-                                            <Select
-                                                placeholder="Chọn chuyên ngành đào tạo"
-                                                options={trainingMajorData.map(
-                                                    (i: TrainingMajor) => ({
-                                                        value: i.id,
-                                                        label: i.name,
-                                                    })
-                                                )}
-                                                allowClear
-                                            />
-                                        </Form.Item>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Form.Item
-                                            className="mb-0"
-                                            name="trainingCourseId"
-                                            labelCol={{ span: 24 }}
-                                            wrapperCol={{ span: 24 }}
-                                            labelAlign="left"
-                                        >
-                                            <Select
-                                                placeholder="Khoá đào tạo"
-                                                options={trainingCourseData.map((i) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                }))}
-                                                allowClear
-                                            />
-                                        </Form.Item>
-                                    </Col>
-                                </Flex>
-                            </Col>
-                            <Col span={6}>
-                                <Flex justify="end" gap={4}>
-                                    <Button
-                                        onClick={() => {
-                                            setIsLayering(!isLayering)
-                                            resetSubjectClassToFixedClass()
-                                        }}
-                                        type={isLayering ? 'default' : 'primary'}
+                                <Col span={8}>
+                                    <Form.Item
+                                        className="m-0"
+                                        name="trainingMajorId"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        labelAlign="left"
                                     >
-                                        {isLayering ? 'Tắt' : 'Xem'} ghép lớp
-                                    </Button>
-                                    {isLayering && (
-                                        <Popconfirm
-                                            onConfirm={onSaveLayering}
-                                            title="Xác nhận lưu kế hoạch ghép lớp?"
-                                            okText="Xác nhận"
-                                            cancelText="Hủy"
-                                        >
-                                            <Button type="primary">Lưu ghép lớp</Button>
-                                        </Popconfirm>
-                                    )}
+                                        <Select
+                                            placeholder="Chọn chuyên ngành đào tạo"
+                                            options={trainingMajorData.map((i: TrainingMajor) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            }))}
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={8}>
+                                    <Form.Item
+                                        className="m-0"
+                                        name="trainingCourseId"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        labelAlign="left"
+                                    >
+                                        <Select
+                                            placeholder="Khoá đào tạo"
+                                            options={trainingCourseData.map((i) => ({
+                                                value: i.id,
+                                                label: i.name,
+                                            }))}
+                                            allowClear
+                                        />
+                                    </Form.Item>
+                                </Col>
+                            </Flex>
+                        </Col>
+                        <Col span={12}>
+                            <Flex justify="end" gap={4}>
+                                <Button
+                                    onClick={() => {
+                                        setIsLayering(!isLayering)
+                                        resetSubjectClassToFixedClass()
+                                    }}
+                                    type={isLayering ? 'default' : 'primary'}
+                                >
+                                    {isLayering ? 'Tắt' : 'Xem'} ghép lớp
+                                </Button>
+                                {isLayering && (
                                     <Popconfirm
-                                        onConfirm={onSubmit}
-                                        title="Xác nhận lưu kế hoạch mở lớp?"
+                                        onConfirm={onSaveLayering}
+                                        title="Xác nhận lưu kế hoạch ghép lớp?"
                                         okText="Xác nhận"
                                         cancelText="Hủy"
-                                        description={
-                                            'Sau khi lưu kế hoạch mở lớp, các môn học sẽ được tạo mới lại hoàn toàn theo kế hoạch.\nCác lớp học và lịch học đã được tạo trước đó sẽ bị xoá.\nBạn có chắc chắn muốn tiếp tục?'
-                                        }
                                     >
-                                        <Button type="primary">Lưu mở lớp MH</Button>
+                                        <Button type="primary">Lưu ghép lớp</Button>
                                     </Popconfirm>
-                                    {/* <Button type="primary">Thêm mới</Button> */}
-                                    {/* {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
-                                    'XUAT_EXCEL'
-                                ) && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() => onOpenXuatFileMoLop(selectedSemesterId)}
-                                    >
-                                        <FileDoneOutlined />
-                                        Xuất file mẫu
-                                    </Button>
-                                )} */}
-                                    {/* {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
-                                    'NHAP_EXCEL'
-                                ) && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() => onOpenModalNhapTKB(selectedSemesterId)}
-                                    >
-                                        <EditIcon stroke="white" />
-                                        Nhập từ file TKB
-                                    </Button>
-                                )} */}
-                                </Flex>
-                            </Col>
-                        </Row>
-                    </Col>
+                                )}
+                                <Popconfirm
+                                    onConfirm={onSubmit}
+                                    title="Xác nhận lưu kế hoạch mở lớp?"
+                                    okText="Xác nhận"
+                                    cancelText="Hủy"
+                                    description={
+                                        'Sau khi lưu kế hoạch mở lớp, các môn học sẽ được tạo mới lại hoàn toàn theo kế hoạch.\nCác lớp học và lịch học đã được tạo trước đó sẽ bị xoá.\nBạn có chắc chắn muốn tiếp tục?'
+                                    }
+                                >
+                                    <Button type="primary">Lưu mở lớp MH</Button>
+                                </Popconfirm>
+                            </Flex>
+                        </Col>
+                    </Row>
                     <Form.Item name="subjectClassToFixedClass" hidden />
                     <Col span={24}>
                         <Table

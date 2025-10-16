@@ -13353,6 +13353,17 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
+                isImproving: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 graduationGpaScores: {
                     name: string;
                     type: string;
