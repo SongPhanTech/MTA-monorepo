@@ -7516,7 +7516,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "ArchivedCertificateStatus",
-                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -7668,6 +7668,10 @@ const metadata = {
                     name: "date",
                     type: "DateTime",
                     isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "ArchivedCertificateStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",

@@ -6,6 +6,7 @@
 // @ts-nocheck
 
 import { z } from 'zod';
+import { ArchivedCertificateStatus } from '../../zenstack/models';
 import { ArchivedCertificateStatusSchema } from '../enums/ArchivedCertificateStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
@@ -19,7 +20,7 @@ const baseSchema = z.object({
     issuedBy: z.string(),
     issuedDate: z.coerce.date(),
     expiredDate: z.coerce.date().nullish(),
-    status: ArchivedCertificateStatusSchema.nullish(),
+    status: ArchivedCertificateStatusSchema,
 }
 ).strict();
 const relationSchema = z.object({
@@ -70,7 +71,7 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
     issuedBy: z.string(),
     issuedDate: z.coerce.date(),
     expiredDate: z.coerce.date().nullish(),
-    status: ArchivedCertificateStatusSchema.nullish()
+    status: ArchivedCertificateStatusSchema
 }).partial().passthrough();
 
 
@@ -78,7 +79,7 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
  * `ArchivedCertificate` schema for create operations excluding foreign keys and relations.
  */
 export const ArchivedCertificateCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
 

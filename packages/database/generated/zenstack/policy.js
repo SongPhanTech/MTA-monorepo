@@ -10326,17 +10326,14 @@ function $check_SubjectVersionCategory_delete(input, context) {
 function SubjectVersion_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
 }
 function $check_SubjectVersion_read(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
-    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
-        return false;
-    }
-    if ((user != null)) {
-        return true;
-    }
     if ((user != null)) {
         return true;
     }

@@ -214,6 +214,7 @@ model ArchivedCertificateOnStudentSubjectScore extends Base {
 /// Trạng thái khi SV nộp chứng chỉ online
 enum ArchivedCertificateStatus {
   PENDING
+  CANCEL
   APPROVED
   REJECTED
 
@@ -234,11 +235,11 @@ model ArchivedCertificate extends Base {
   score               Float
   /// nơi cấp
   issuedBy            String
-  /// ngày cấp  
+  /// ngày cấp
   issuedDate          DateTime
   /// ngày hết hạn
   expiredDate         DateTime?
-  status              ArchivedCertificateStatus?
+  status              ArchivedCertificateStatus                  @default(PENDING)
 
   documentFiles       DocumentFile[]
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
@@ -266,6 +267,8 @@ model ArchivedAward extends Base {
 
   /// ngày nhận
   date                DateTime?
+
+  status              ArchivedCertificateStatus            @default(PENDING)
 
   /// minh chứng
   documentFiles       DocumentFile[]
@@ -583,7 +586,7 @@ enum SubjectVersionType {
 }
 
 /// Phiên bản môn học
-model SubjectVersion extends Base {
+model SubjectVersion extends BaseNoRule {
   isLocked                 Boolean                    @default(false)
   name                     String
   codeTkb                  String?

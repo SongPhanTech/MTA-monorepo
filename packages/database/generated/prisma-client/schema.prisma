@@ -107,6 +107,7 @@ enum ScoreConvertStatus {
 /// Trạng thái khi SV nộp chứng chỉ online
 enum ArchivedCertificateStatus {
   PENDING
+  CANCEL
   APPROVED
   REJECTED
 
@@ -2340,11 +2341,11 @@ model ArchivedCertificate {
   score               Float
   /// nơi cấp
   issuedBy            String
-  /// ngày cấp  
+  /// ngày cấp
   issuedDate          DateTime
   /// ngày hết hạn
   expiredDate         DateTime?
-  status              ArchivedCertificateStatus?
+  status              ArchivedCertificateStatus                  @default(PENDING)
   documentFiles       DocumentFile[]
   studentSubjectScore ArchivedCertificateOnStudentSubjectScore[]
 
@@ -2383,6 +2384,7 @@ model ArchivedAward {
   studentId           String
   /// ngày nhận
   date                DateTime?
+  status              ArchivedCertificateStatus            @default(PENDING)
   /// minh chứng
   documentFiles       DocumentFile[]
   studentSubjectScore ArchivedAwardOnStudentSubjectScore[]

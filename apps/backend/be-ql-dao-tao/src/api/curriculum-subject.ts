@@ -76,8 +76,6 @@ app.openapi(importCurriculumVersion, async (c) => {
         createNewSubjects
     )
 
-    console.log(subjectMap)
-
     const curriculumTrainingBlock = new Map(
         uniqueTrainingBlockNames.map((trainingBlock) => [trainingBlock, createId()])
     )

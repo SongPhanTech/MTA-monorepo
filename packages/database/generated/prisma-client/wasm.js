@@ -1530,7 +1530,8 @@ exports.Prisma.ArchivedAwardScalarFieldEnum = {
   updatedAt: 'updatedAt',
   awardId: 'awardId',
   studentId: 'studentId',
-  date: 'date'
+  date: 'date',
+  status: 'status'
 };
 
 exports.Prisma.SchoolYearScalarFieldEnum = {
@@ -6535,6 +6536,7 @@ exports.ScoreConvertStatus = exports.$Enums.ScoreConvertStatus = {
 
 exports.ArchivedCertificateStatus = exports.$Enums.ArchivedCertificateStatus = {
   PENDING: 'PENDING',
+  CANCEL: 'CANCEL',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED'
 };

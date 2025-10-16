@@ -7905,7 +7905,7 @@ const metadata = {
                 }, status: {
                     name: "status",
                     type: "ArchivedCertificateStatus",
-                    isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -8067,6 +8067,10 @@ const metadata = {
                     name: "date",
                     type: "DateTime",
                     isOptional: true,
+                }, status: {
+                    name: "status",
+                    type: "ArchivedCertificateStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, documentFiles: {
                     name: "documentFiles",
                     type: "DocumentFile",
@@ -9770,7 +9774,7 @@ const metadata = {
                     fields: ["code"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
         },
         subjectVersionHistory: {
             name: 'SubjectVersionHistory', fields: {
