@@ -4,7 +4,7 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { TrainingMajor } from '@workspace/db'
+import type { TrainingMajor } from '@workspace/db/client'
 import type { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,

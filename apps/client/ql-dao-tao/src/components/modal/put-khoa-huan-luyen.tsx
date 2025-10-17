@@ -11,7 +11,7 @@ import type {
     TrainingCourse,
     TrainingCourseRegulation,
     TrainingObjectType,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCreateTrainingCourse,
     useFindManySchoolYear,
@@ -25,7 +25,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Form, Input, InputNumber, message, Radio, Row, Switch, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
-import type { DocumentFile } from '@workspace/db'
+import type { DocumentFile } from '@workspace/db/client'
 import { BadgeHelpIcon, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'

@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingLocation } from '@workspace/db'
+import type { TrainingLocation } from '@workspace/db/client'
 import {
     useCreateTrainingLocation,
     useFindManyDM_Tinh,

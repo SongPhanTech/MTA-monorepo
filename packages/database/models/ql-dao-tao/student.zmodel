@@ -61,7 +61,7 @@ model Student extends Base {
 
   // phiên bản chương trình đào tạo, được copy từ lớp quản lý
   // phiên bản -> CTĐT -> chuyên ngành
-  curriculumVersion              CurriculumVersion?               @relation('CurriculumVersion',  fields: [curriculumVersionId], references: [id])
+  curriculumVersion              CurriculumVersion?               @relation('CurriculumVersion', fields: [curriculumVersionId], references: [id])
   curriculumVersionId            String?
 
   curriculumVersionParallel      CurriculumVersion?               @relation('CurriculumVersionParallel', fields: [curriculumVersionParallelId], references: [id])
@@ -95,7 +95,6 @@ model Student extends Base {
   notifications                  Notification[]     // Thông báo cá nhân
   researchRegistrations          StudentResearchRegistration[] // Đăng ký đề tài nghiên cứu
   thesisRegistrations            StudentThesisRegistration[] // Đăng ký đồ án tốt nghiệp
-  examSession                    ExamSession[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
   studentScoreConvert            StudentScoreConvert[]
   classRegisterLogs              ClassRegisterLogs[]

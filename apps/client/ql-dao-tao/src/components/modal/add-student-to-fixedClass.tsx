@@ -5,7 +5,7 @@ import {
     GENDER_MEAN,
 } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { Student } from '@workspace/db'
+import type { Student } from '@workspace/db/client'
 import {
     useCountStudent,
     useFindManyStudent,

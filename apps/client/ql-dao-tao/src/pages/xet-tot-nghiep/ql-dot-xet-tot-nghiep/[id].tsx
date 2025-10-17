@@ -10,7 +10,7 @@ import { useApplicationStatusOptions } from '@hooks/applicationStatus'
 import { useCriteriaFieldOptions } from '@hooks/criteriaField'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { ApplicationStatus, GraduationSessionStatus } from '@workspace/db'
+import { ApplicationStatus, GraduationSessionStatus } from '@workspace/db/client'
 import {
     useCountStudentGraduationApplication,
     useFindManyStudentGraduationApplication,

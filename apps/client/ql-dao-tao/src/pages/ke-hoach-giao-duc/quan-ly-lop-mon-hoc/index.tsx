@@ -1,33 +1,49 @@
 import DatePicker from '@components/commons/date-picker'
+import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 import FormItem from '@components/commons/form-item'
 import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { $Enums, Prisma, TrainingMajor } from '@workspace/db/client'
+import { $Enums, type Prisma, type SubjectClassSchedule } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useDeleteSubjectClass,
+    useFindManyBuilding,
     useFindManyDM_DonVi,
     useFindManySubjectClass,
     useFindManyTrainingCourse,
-    useFindManyTrainingMajor,
+    useFindManyTrainingLocation,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { useAbility, useOrgPermissions } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, message, Popover, Row, Switch } from 'antd'
-import { Dayjs } from 'dayjs'
+import { cn } from '@workspace/ui/lib/utils'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    message,
+    Popconfirm,
+    Popover,
+    Row,
+    Switch,
+    TreeSelect,
+} from 'antd'
+import type { Dayjs } from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -80,6 +96,7 @@ type TeachingAssignmentForm = {
             lecturerAssignmentDeadline: Dayjs | null
             examType: $Enums.ExamType | null
             roomId: string | null
+            trainingLocationId: string | null
         }
     >
 }
@@ -108,6 +125,7 @@ export default function TeachingAssignment() {
         examType: undefined,
         organization: undefined,
         room: undefined,
+        pcgd: undefined,
     })
 
     const [form] = Form.useForm<TeachingAssignmentForm>()
@@ -121,6 +139,15 @@ export default function TeachingAssignment() {
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
         'XEM_TAT_CA'
     )
+
+    const canSua = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+        'SUA'
+    )
+
+    const isBoMon = canXemTatCa && canSua
+    // const isBoMon = !canXemTatCa && canSua
+
     const where = useMemo(
         () =>
             ({
@@ -182,10 +209,12 @@ export default function TeachingAssignment() {
                           },
                       }
                     : {}),
-                ...(filters.organization
+                ...(filters.organization && filters.organization.length > 0
                     ? {
-                          managementOrganizationId: {
-                              in: filters.organization,
+                          subject: {
+                              managementOrganizationId: {
+                                  in: filters.organization,
+                              },
                           },
                       }
                     : {}),
@@ -254,10 +283,42 @@ export default function TeachingAssignment() {
                           },
                       }
                     : {}),
+                ...(filters.pcgd && filters.pcgd.length === 1 && filters.pcgd[0]
+                    ? {
+                          lecturerId: { not: null },
+                          extraLecturerId: { not: null },
+                          submitLecturerAssignmentAt: { not: null },
+                      }
+                    : {}),
+                ...(filters.pcgd && filters.pcgd.length === 1 && !filters.pcgd[0]
+                    ? {
+                          OR: [
+                              {
+                                  lecturerId: null,
+                              },
+                              {
+                                  extraLecturerId: null,
+                              },
+                              {
+                                  submitLecturerAssignmentAt: null,
+                              },
+                          ],
+                      }
+                    : {}),
+                subject: {
+                    planTrainingSubject: {
+                        some: {
+                            planTraining: {
+                                semesterId,
+                                trainingObjectTypeId,
+                            },
+                        },
+                    },
+                },
                 deletedAt: null,
                 active: true,
                 trainingObjectTypeId,
-                ...(!canXemTatCa
+                ...(!isBoMon
                     ? {
                           lecturerAssignmentDeadline: {
                               not: null,
@@ -265,7 +326,7 @@ export default function TeachingAssignment() {
                       }
                     : {}),
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, canXemTatCa]
+        [filters, semesterId, trainingObjectTypeId, isBoMon]
     )
 
     const { data = [], refetch } = useFindManySubjectClass(
@@ -295,15 +356,8 @@ export default function TeachingAssignment() {
                         userProfile: true,
                     },
                 },
-                room: {
-                    include: {
-                        building: {
-                            include: {
-                                trainingLocation: true,
-                            },
-                        },
-                    },
-                },
+                room: true,
+                trainingLocation: true,
                 subjectClassStudent: true,
                 subjectClassTimes: true,
             },
@@ -380,7 +434,8 @@ export default function TeachingAssignment() {
             showSpinner()
             await updateManySubjectClass({
                 data: {
-                    lecturerAssignmentDeadline: values.deadline,
+                    lecturerAssignmentDeadline: dayjs(values.deadline).endOf('day').toDate(),
+                    sendLecturerAssignmentAt: new Date(),
                 },
                 where: {
                     trainingObjectTypeId,
@@ -407,19 +462,34 @@ export default function TeachingAssignment() {
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData, canXemTatCa ? '0' : orgId)
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
+    })
+
+    const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
+        orderBy: { name: 'asc' },
+        where: { deletedAt: null, active: true },
+    })
+
+    const { data: buildingData = [] } = useFindManyBuilding({
+        orderBy: { name: 'asc' },
+        where: { deletedAt: null, active: true },
+        include: {
+            rooms: {
+                where: {
+                    deletedAt: null,
+                    active: true,
+                },
+            },
+        },
     })
 
     async function handleSaveData(values: TeachingAssignmentForm) {
         try {
             setIsEdit(false)
             showSpinner()
-            await sqlTransaction(
+            const res = await sqlTransaction(
                 Object.entries(values.subjectClass).map(([id, subjectClass]) => ({
                     model: 'SubjectClass',
                     operation: 'update',
@@ -432,21 +502,16 @@ export default function TeachingAssignment() {
                             lecturerAssignmentDeadline: subjectClass.lecturerAssignmentDeadline
                                 ? subjectClass.lecturerAssignmentDeadline?.toDate()
                                 : null,
+                            examType: subjectClass.examType,
+                            roomId: subjectClass.roomId,
+                            trainingLocationId: subjectClass.trainingLocationId,
                         },
                     },
                 }))
             )
-            // await updateManySubjectClass({
-            //     data: Object.entries(values.subjectClass).map(([id, subjectClass]) => ({
-            //         id,
-            //         lecturerId: subjectClass.lecturerId,
-            //         extraLecturerId: subjectClass.extraLecturerId,
-            //         enterGradeLecturerId: subjectClass.enterGradeLecturerId,
-            //     })),
-            //     where: {
-            //         id: { in: data.map((subjectClass) => subjectClass.id) },
-            //     },
-            // })
+            if (res.status !== 200) {
+                throw new Error('Lỗi khi phân công giảng dạy')
+            }
             debouncedRefetch()
             message.success('Phân công giảng dạy thành công')
         } catch (error: any) {
@@ -455,6 +520,35 @@ export default function TeachingAssignment() {
             hideSpinner()
         }
     }
+
+    async function handleGuiPCGD() {
+        try {
+            setIsEdit(false)
+            showSpinner()
+            await updateManySubjectClass({
+                data: {
+                    submitLecturerAssignmentAt: new Date(),
+                    lecturerAssignmentDeadline: new Date(),
+                },
+                where: {
+                    trainingObjectTypeId,
+                    semesterId,
+                    lecturerId: { not: null },
+                    extraLecturerId: { not: null },
+                    lecturerAssignmentDeadline: { not: null },
+                    submitLecturerAssignmentAt: null,
+                },
+            })
+            message.success('Gửi PCGD thành công')
+            debouncedRefetch()
+            formBaoDay.resetFields()
+        } catch (error: any) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const { mutateAsync: deleteSubjectClass } = useDeleteSubjectClass()
     async function handleDelete(id: string) {
         try {
@@ -528,6 +622,7 @@ export default function TeachingAssignment() {
                             : null,
                         examType: curr.examType,
                         roomId: curr.roomId,
+                        trainingLocationId: curr.trainingLocationId,
                     }
                     return acc
                 },
@@ -544,151 +639,573 @@ export default function TeachingAssignment() {
 
     return (
         <div>
-            <Row gutter={[16, 0]}>
+            <Row gutter={[8, 8]}>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={12}>
-                            <Row gutter={[16, 16]} align="top">
-                                <Col span={8}>
-                                    <Select
-                                        placeholder="Chọn khoá"
-                                        options={trainingCourseData.map((i) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
-                                        })}
-                                        style={{ width: '100%' }}
-                                        onChange={(val) =>
-                                            handleFilterChange('trainingCourseId', val)
-                                        }
-                                        allowClear
-                                    />
-                                </Col>
-                                <Col span={8}>
-                                    <Select
-                                        placeholder="Chọn chuyên ngành"
-                                        options={trainingMajorData.map((i: TrainingMajor) => {
-                                            return {
-                                                value: i.id,
-                                                label: i.name,
-                                            }
-                                        })}
-                                        style={{ width: '100%' }}
-                                        onChange={(val) =>
-                                            handleFilterChange('trainingMajorId', val)
-                                        }
-                                    />
-                                </Col>
-                            </Row>
-                        </Col>
+                    <Flex justify="end" gap={4}>
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'THEM'
+                        ) && (
+                            <Button
+                                onClick={() => handleModal()}
+                                //TODO: handle save
+                                type="primary"
+                            >
+                                Thêm mới lớp MH
+                            </Button>
+                        )}
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'XEM_TAT_CA'
+                        ) && (
+                            <Popover
+                                content={
+                                    <Form
+                                        form={formBaoDay}
+                                        initialValues={{ isOverride: false }}
+                                        onFinish={guiBaoDay}
+                                    >
+                                        <FormItem
+                                            form={formBaoDay}
+                                            name={'deadline'}
+                                            label="Hạn PCGD"
+                                        >
+                                            <DatePicker />
+                                        </FormItem>
+                                        <FormItem
+                                            form={formBaoDay}
+                                            name={'isOverride'}
+                                            label="Ghi đè PCGD"
+                                            className="mt-2"
+                                        >
+                                            <Switch />
+                                        </FormItem>
+                                        <Col span={24} className="text-right mt-4">
+                                            <Button type="primary" htmlType="submit">
+                                                Gửi báo dạy
+                                            </Button>
+                                        </Col>
+                                    </Form>
+                                }
+                                title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                trigger="click"
+                                placement="bottomRight"
+                            >
+                                <Button type="primary">1.Báo dạy</Button>
+                            </Popover>
+                        )}
+                        {isEdit ? (
+                            <>
+                                <Button
+                                    onClick={() => form.submit()}
+                                    type="primary"
+                                    disabled={!data.length}
+                                >
+                                    Lưu
+                                </Button>
+                                <Button
+                                    onClick={() => handleCancel()}
+                                    type="primary"
+                                    disabled={!data.length}
+                                >
+                                    Hủy
+                                </Button>
+                            </>
+                        ) : (
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                'SUA'
+                            ) && (
+                                <Button
+                                    onClick={() => setIsEdit(true)}
+                                    //TODO: handle save
+                                    type="primary"
+                                    disabled={!data.length}
+                                >
+                                    2.PCGD
+                                </Button>
+                            )
+                        )}
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'SUA'
+                        ) && (
+                            // TODO: Bỏ check quyền xem tất cả khi hoàn thành xong
+                            // !can(
+                            //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            //     'XEM_TAT_CA'
+                            // ) &&
+                            <Popconfirm
+                                title="Xác nhận gửi phân công giảng dạy?"
+                                placement="topRight"
+                                description="Các lớp môn học đã gửi phân công giảng dạy sẽ không thể chỉnh sửa, vui lòng kiểm tra kỹ trước khi gửi."
+                                onConfirm={handleGuiPCGD}
+                            >
+                                <Button
+                                    //TODO: handle save
+                                    type="primary"
+                                    disabled={!data.length}
+                                >
+                                    3.Gửi PCGD
+                                </Button>
+                            </Popconfirm>
+                        )}
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'XEM_TAT_CA'
+                        ) && (
+                            <Button
+                                onClick={async () => {
+                                    try {
+                                        // new PrismaClient().subjectClass.findMany({
+                                        //     include:{
+                                        //         subject:{
+                                        //             select:{
 
-                        <Col span={8}>
-                            <Flex justify="end" gap={4}>
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'XEM_TAT_CA'
-                                ) && (
-                                    <Popover
-                                        content={
-                                            <Form
-                                                form={formBaoDay}
-                                                initialValues={{ isOverride: false }}
-                                                onFinish={guiBaoDay}
-                                            >
-                                                <FormItem
-                                                    form={formBaoDay}
-                                                    name={'deadline'}
-                                                    label="Hạn PCGD"
-                                                >
-                                                    <DatePicker />
-                                                </FormItem>
-                                                <FormItem
-                                                    form={formBaoDay}
-                                                    name={'isOverride'}
-                                                    label="Ghi đè PCGD"
-                                                    className="mt-2"
-                                                >
-                                                    <Switch />
-                                                </FormItem>
-                                                <Col span={24} className="text-right mt-4">
-                                                    <Button type="primary" htmlType="submit">
-                                                        Gửi báo dạy
-                                                    </Button>
-                                                </Col>
-                                            </Form>
+                                        //             }
+                                        //         }
+                                        //     }
+                                        // })
+
+                                        const res = await sqlTransaction([
+                                            {
+                                                model: 'SubjectClass',
+                                                operation: 'findMany',
+                                                data: {
+                                                    where,
+                                                    select: {
+                                                        submitLecturerAssignmentAt: true,
+                                                        schedule: true,
+                                                        examType: true,
+                                                        mainLecturer: {
+                                                            select: {
+                                                                userProfile: {
+                                                                    select: {
+                                                                        fullname: true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        subject: {
+                                                            select: {
+                                                                code: true,
+                                                                name: true,
+                                                                credit: true,
+                                                                period: true,
+                                                                managementOrganization: {
+                                                                    select: {
+                                                                        sTen: true,
+                                                                        sMa: true,
+                                                                        sParentId: true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        extraLecturer: {
+                                                            select: {
+                                                                userProfile: {
+                                                                    select: {
+                                                                        fullname: true,
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        fixedClasses: {
+                                                            select: {
+                                                                code: true,
+                                                                _count: {
+                                                                    select: {
+                                                                        students: {
+                                                                            where: {
+                                                                                deletedAt: null,
+                                                                                active: true,
+                                                                                status: 'ENROLLED',
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        room: {
+                                                            select: {
+                                                                name: true,
+                                                            },
+                                                        },
+                                                        trainingLocation: {
+                                                            select: {
+                                                                name: true,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                            {
+                                                model: 'Semester',
+                                                operation: 'findUnique',
+                                                data: {
+                                                    where: { id: semesterId },
+                                                    select: {
+                                                        semesterType: true,
+                                                        schoolYear: {
+                                                            select: {
+                                                                startDate: true,
+                                                                endDate: true,
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                            {
+                                                model: 'DM_DonVi',
+                                                operation: 'findMany',
+                                                data: {
+                                                    where: {
+                                                        bActive: true,
+                                                    },
+                                                    select: {
+                                                        sMa: true,
+                                                        Id: true,
+                                                        sTen: true,
+                                                        sParentId: true,
+                                                    },
+                                                },
+                                            },
+                                        ])
+
+                                        if (res.status !== 200) {
+                                            throw new Error('Lỗi khi xuất báo dạy')
                                         }
-                                        title="Báo dạy cho Khoa/Viện/Bộ môn"
-                                        trigger="click"
-                                        placement="bottomRight"
-                                    >
-                                        <Button
-                                            // onClick={() => handleModal()}
-                                            type="primary"
-                                        >
-                                            Báo dạy
-                                        </Button>
-                                    </Popover>
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'THEM'
-                                ) && (
-                                    <Button
-                                        onClick={() => handleModal()}
-                                        //TODO: handle save
-                                        type="primary"
-                                    >
-                                        Thêm mới lớp MH
-                                    </Button>
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                    'NHAP_EXCEL'
-                                ) && (
-                                    <Button
-                                        type="primary"
-                                        onClick={() => onOpenModalNhapTKB(semesterId || '')}
-                                    >
-                                        <EditIcon stroke="white" />
-                                        Nhập từ TKB
-                                    </Button>
-                                )}
-                                {isEdit ? (
-                                    <>
-                                        <Button
-                                            onClick={() => form.submit()}
-                                            type="primary"
-                                            disabled={!data.length}
-                                        >
-                                            Lưu
-                                        </Button>
-                                        <Button
-                                            onClick={() => handleCancel()}
-                                            type="primary"
-                                            disabled={!data.length}
-                                        >
-                                            Hủy
-                                        </Button>
-                                    </>
-                                ) : (
-                                    can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                        'SUA'
-                                    ) && (
-                                        <Button
-                                            onClick={() => setIsEdit(true)}
-                                            //TODO: handle save
-                                            type="primary"
-                                            disabled={!data.length}
-                                        >
-                                            PCGD
-                                        </Button>
-                                    )
-                                )}
-                            </Flex>
-                        </Col>
-                    </Row>
+
+                                        const payload = res.data[0] as Array<{
+                                            schedule: string
+                                            examType: $Enums.ExamType | null
+                                            mainLecturer: any
+                                            subject: {
+                                                code: string
+                                                name: string
+                                                credit: number
+                                                period: number
+                                                managementOrganization: {
+                                                    sTen: string
+                                                    sMa: string
+                                                    sParentId: any
+                                                }
+                                            }
+                                            submitLecturerAssignmentAt: Date | null
+                                            sendLecturerAssignmentAt: Date | null
+                                            extraLecturer: any
+                                            fixedClasses: Array<{
+                                                code: string
+                                                _count: {
+                                                    students: number
+                                                }
+                                            }>
+                                            room: {
+                                                name: string
+                                            }
+                                            trainingLocation: {
+                                                name: string
+                                            }
+                                        }>
+                                        const semesterPayload = res.data[1] as {
+                                            semesterType: $Enums.SemesterType
+                                            schoolYear: {
+                                                startDate: Date
+                                                endDate: Date
+                                            }
+                                        }
+
+                                        const orgPayload = res.data[2] as Array<{
+                                            sMa: string
+                                            Id: string
+                                            sTen: string
+                                            sParentId: string
+                                        }>
+
+                                        const hocKy = (() => {
+                                            if (
+                                                semesterPayload.semesterType ===
+                                                $Enums.SemesterType.FIRST
+                                            )
+                                                return '1'
+                                            if (
+                                                semesterPayload.semesterType ===
+                                                $Enums.SemesterType.SECOND
+                                            )
+                                                return '2'
+                                            if (
+                                                semesterPayload.semesterType ===
+                                                $Enums.SemesterType.SUMMER
+                                            )
+                                                return 'Hè'
+                                            if (
+                                                semesterPayload.semesterType ===
+                                                $Enums.SemesterType.FIRST_SUPPLEMENTARY
+                                            )
+                                                return 'Phụ 1'
+                                            if (
+                                                semesterPayload.semesterType ===
+                                                $Enums.SemesterType.SECOND_SUPPLEMENTARY
+                                            )
+                                                return 'Phụ 2'
+                                            return ''
+                                        })()
+
+                                        const namHoc = (() => {
+                                            const startYear = dayjs(
+                                                semesterPayload.schoolYear.startDate
+                                            ).year()
+                                            const endYear = startYear + 1
+                                            return `${startYear} - ${endYear}`
+                                        })()
+
+                                        const groupedPayload = Object.groupBy(
+                                            payload,
+                                            (item) =>
+                                                item?.subject?.managementOrganization?.sMa || 'MTA'
+                                        )
+                                        exportFromTemplate({
+                                            templateUrl:
+                                                '/lms/templates/ke-hoach-dao-tao/bao-day.xlsx',
+                                            fileName: `Bao_day_${dayjs().format('DD_MM_YYYY')}.xlsx`,
+                                            fontFamily: 'Tahoma',
+                                            fontSize: 9,
+                                            sheets: Object.entries(groupedPayload).map(
+                                                ([sMa, items = []]) => {
+                                                    const ngayGui = dayjs.unix(
+                                                        Math.min(
+                                                            ...items.map(
+                                                                (i) =>
+                                                                    dayjs(
+                                                                        i.sendLecturerAssignmentAt
+                                                                    ).unix() ??
+                                                                    Number.POSITIVE_INFINITY
+                                                            )
+                                                        )
+                                                    )
+                                                    const ngayNhan = dayjs.unix(
+                                                        Math.max(
+                                                            ...items.map(
+                                                                (i) =>
+                                                                    dayjs(
+                                                                        i.sendLecturerAssignmentAt
+                                                                    ).unix() ??
+                                                                    Number.NEGATIVE_INFINITY
+                                                            )
+                                                        )
+                                                    )
+
+                                                    const boMon = orgPayload.find(
+                                                        (e) => e.sMa === sMa
+                                                    )
+
+                                                    const khoa = orgPayload.find(
+                                                        (e) => e.Id === boMon?.sParentId
+                                                    )
+
+                                                    const itemBySubjectCode = Object.groupBy(
+                                                        items,
+                                                        (item) => item.subject.code
+                                                    )
+
+                                                    return {
+                                                        tableStartCell: {
+                                                            col: 1,
+                                                            row: 10,
+                                                        },
+                                                        data: {
+                                                            khoa: khoa?.sTen || '',
+                                                            bo_mon: boMon?.sTen || '',
+                                                            ngay_gui: `Ngày ${ngayGui.format('DD')} tháng ${ngayGui.format('MM')} năm ${ngayGui.format(
+                                                                'YYYY'
+                                                            )}`,
+                                                            ngay_nhan: `Ngày ${ngayNhan.format('DD')} tháng ${ngayNhan.format('MM')} năm ${ngayNhan.format(
+                                                                'YYYY'
+                                                            )}`,
+                                                            hoc_ky: hocKy,
+                                                            nam_hoc: namHoc,
+                                                        },
+                                                        rows: Object.entries(
+                                                            itemBySubjectCode
+                                                        ).flatMap(
+                                                            (
+                                                                [_, subjectItems = []],
+                                                                idxOfSubject
+                                                            ) => {
+                                                                return subjectItems.map(
+                                                                    (item, index) => {
+                                                                        const rowSpan =
+                                                                            index === 0
+                                                                                ? subjectItems.length
+                                                                                : 1
+                                                                        return {
+                                                                            cells: [
+                                                                                {
+                                                                                    value:
+                                                                                        idxOfSubject +
+                                                                                        1,
+                                                                                    rowSpan,
+                                                                                    align: 'center',
+                                                                                },
+                                                                                {
+                                                                                    value: item
+                                                                                        .subject
+                                                                                        .code,
+                                                                                    rowSpan,
+                                                                                },
+                                                                                {
+                                                                                    value: item
+                                                                                        .subject
+                                                                                        .name,
+                                                                                    rowSpan,
+                                                                                },
+                                                                                {
+                                                                                    value: item
+                                                                                        .subject
+                                                                                        .credit,
+                                                                                    rowSpan,
+                                                                                    align: 'right',
+                                                                                },
+                                                                                {
+                                                                                    value: Math.floor(
+                                                                                        item.subject
+                                                                                            .period /
+                                                                                            15
+                                                                                    ), // dvht
+                                                                                    rowSpan,
+                                                                                    align: 'right',
+                                                                                },
+                                                                                {
+                                                                                    value: item
+                                                                                        .subject
+                                                                                        .period, //
+                                                                                    rowSpan,
+                                                                                    align: 'right',
+                                                                                },
+                                                                                {
+                                                                                    value: subjectItems.length, //
+                                                                                    rowSpan,
+                                                                                    align: 'right',
+                                                                                },
+                                                                                {
+                                                                                    value: item.schedule
+                                                                                        ? SUBJECT_CLASS_SCHEDULE_TYPE[
+                                                                                              item.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                                                                          ]
+                                                                                        : '',
+                                                                                    align: 'center',
+                                                                                },
+                                                                                {
+                                                                                    value: item.fixedClasses.reduce(
+                                                                                        (
+                                                                                            acc,
+                                                                                            curr
+                                                                                        ) =>
+                                                                                            acc +
+                                                                                            curr
+                                                                                                ._count
+                                                                                                .students,
+                                                                                        0
+                                                                                    ),
+                                                                                },
+                                                                                {
+                                                                                    value: item.fixedClasses
+                                                                                        .map(
+                                                                                            (fc) =>
+                                                                                                fc.code
+                                                                                        )
+                                                                                        .join(', '),
+                                                                                },
+                                                                                {
+                                                                                    value:
+                                                                                        item
+                                                                                            .trainingLocation
+                                                                                            ?.name ??
+                                                                                        '',
+                                                                                },
+                                                                                {
+                                                                                    value:
+                                                                                        item
+                                                                                            .mainLecturer
+                                                                                            ?.userProfile
+                                                                                            ?.fullname ||
+                                                                                        '',
+                                                                                },
+                                                                                {
+                                                                                    value:
+                                                                                        item
+                                                                                            .extraLecturer
+                                                                                            ?.userProfile
+                                                                                            ?.fullname ||
+                                                                                        '',
+                                                                                },
+                                                                                {
+                                                                                    value: item.room
+                                                                                        ? item.room
+                                                                                              .name
+                                                                                        : '',
+                                                                                },
+                                                                                {
+                                                                                    value: item.examType
+                                                                                        ? getExamTypeLabel(
+                                                                                              item.examType
+                                                                                          )
+                                                                                        : '',
+                                                                                },
+                                                                            ],
+                                                                        }
+                                                                    }
+                                                                )
+                                                            }
+                                                        ),
+                                                        sheet: sMa,
+                                                    }
+                                                }
+                                            ),
+                                        })
+                                    } catch (error) {
+                                        console.log('error', error)
+                                    }
+                                }}
+                                type="primary"
+                            >
+                                4.Xuất báo dạy
+                            </Button>
+                        )}
+                        {can(
+                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                            'NHAP_EXCEL'
+                        ) && (
+                            <Button
+                                type="primary"
+                                onClick={() => onOpenModalNhapTKB(semesterId || '')}
+                            >
+                                <EditIcon stroke="white" />
+                                5.Nhập từ TKB
+                            </Button>
+                        )}
+                    </Flex>
+                </Col>
+                <Col span={4}>
+                    <Select
+                        placeholder="Chọn khoá"
+                        options={trainingCourseData.map((i) => {
+                            return {
+                                value: i.id,
+                                label: i.name,
+                            }
+                        })}
+                        style={{ width: '100%' }}
+                        onChange={(val) => handleFilterChange('trainingCourseId', val)}
+                        allowClear
+                    />
+                </Col>
+                <Col span={7}>
+                    <TreeSelectDepartment
+                        className="w-full"
+                        rootId={canXemTatCa ? '0' : orgId}
+                        onChange={(val) => handleFilterChange('organization', val)}
+                    />
                 </Col>
                 <Col span={24}>
                     <Form form={form} onFinish={handleSaveData}>
@@ -718,13 +1235,21 @@ export default function TeachingAssignment() {
                                     title: 'PCGD',
                                     align: 'center',
                                     width: 80,
-                                    dataIndex: 'lecturerId',
                                     type: 'select',
+                                    dataIndex: 'pcgd',
                                     options: [
                                         { value: true, label: 'Đã phân công giảng dạy' },
                                         { value: false, label: 'Chưa phân công giảng dạy' },
                                     ],
-                                    render: (value) => <Checkbox checked={!!value} />,
+                                    render: (_, record) => (
+                                        <Checkbox
+                                            checked={
+                                                record.lecturerId &&
+                                                record.extraLecturerId &&
+                                                record.submitLecturerAssignmentAt
+                                            }
+                                        />
+                                    ),
                                 },
                                 {
                                     title: 'Hạn PCGD',
@@ -732,7 +1257,7 @@ export default function TeachingAssignment() {
                                     width: 100,
                                     align: 'center',
                                     render: (_, record) =>
-                                        canXemTatCa && isEdit ? (
+                                        canXemTatCa ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -748,9 +1273,18 @@ export default function TeachingAssignment() {
                                                 />
                                             </FormItem>
                                         ) : record.lecturerAssignmentDeadline ? (
-                                            dayjs(record.lecturerAssignmentDeadline).format(
-                                                'DD/MM/YYYY'
-                                            )
+                                            <p
+                                                className={cn(
+                                                    dayjs(
+                                                        record.lecturerAssignmentDeadline
+                                                    ).isBefore(dayjs().startOf('day')) &&
+                                                        'text-red-600'
+                                                )}
+                                            >
+                                                {dayjs(record.lecturerAssignmentDeadline).format(
+                                                    'DD/MM/YYYY'
+                                                )}
+                                            </p>
                                         ) : (
                                             ''
                                         ),
@@ -765,12 +1299,13 @@ export default function TeachingAssignment() {
                                 {
                                     title: 'Tên môn học',
                                     dataIndex: 'name',
-                                    width: 200,
+                                    width: 180,
                                     align: 'center',
                                     type: 'input',
                                     onCell: (record) => ({
                                         rowSpan: record.rowSpan,
                                     }),
+                                    render: (text) => <p className="text-left">{text}</p>,
                                 },
                                 {
                                     title: 'STC',
@@ -782,14 +1317,25 @@ export default function TeachingAssignment() {
                                     render: (_, record) =>
                                         record.subject?.credit ? record.subject?.credit : '',
                                 },
-                                // {
-                                //     title: 'Số SV tối đa',
-                                //     dataIndex: 'maxStudent',
-                                //     width: 150,
-                                //     align: 'center',
-                                //     type: 'order',
-                                //     distinctFilters: ['credit', 'subjectClassStudent'],
-                                // },
+                                {
+                                    title: 'Kíp học',
+                                    dataIndex: 'schedule',
+                                    align: 'center',
+                                    width: 100,
+                                    type: 'select',
+                                    options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                                        ([key, value_]) => {
+                                            return {
+                                                label: value_,
+                                                value: key,
+                                            }
+                                        }
+                                    ),
+                                    render: (value: SubjectClassSchedule) =>
+                                        SUBJECT_CLASS_SCHEDULE_TYPE[
+                                            value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                        ],
+                                },
                                 {
                                     title: 'Số SV',
                                     dataIndex: 'subjectClassStudent',
@@ -802,22 +1348,7 @@ export default function TeachingAssignment() {
                                             ? record.subjectClassStudent.length
                                             : record.maxStudent) ?? 0,
                                 },
-                                // {
-                                //     title: 'Thời khoá biểu',
-                                //     width: 150,
-                                //     align: 'center',
-                                //     dataIndex: 'subjectClassTimes',
-                                //     render: (subjectClassTimes: SubjectClassTime[]) => {
-                                //         return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
-                                //             return (
-                                //                 <p>
-                                //                     {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
-                                //                     {tkb.startPeriod} - {tkb.endPeriod}
-                                //                 </p>
-                                //             )
-                                //         })
-                                //     },
-                                // },
+
                                 {
                                     title: 'Giảng viên 1',
                                     width: 200,
@@ -899,43 +1430,102 @@ export default function TeachingAssignment() {
                                             '-'
                                         ),
                                 },
-                                // {
-                                //     title: 'Kíp học',
-                                //     dataIndex: 'schedule',
-                                //     align: 'center',
-                                //     width: 100,
-                                //     type: 'select',
-
-                                //     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
-                                //         ([key, value_]) => {
-                                //             return {
-                                //                 label: value_,
-                                //                 value: key,
-                                //             }
-                                //         }
-                                //     ),
-                                //     render: (value: SubjectClassSchedule) =>
-                                //         SUBJECT_CLASS_SCHEDULE_TYPE[
-                                //             value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                //         ],
-                                // },
                                 {
                                     title: 'Khu vực',
-                                    dataIndex: 'room',
+                                    dataIndex: 'trainingLocationId',
                                     align: 'center',
                                     width: 150,
                                     type: 'input',
-                                    render: (value) =>
-                                        value?.building?.trainingLocation?.name
-                                            ? value?.building?.trainingLocation?.name
-                                            : '',
+                                    render: (_, record) =>
+                                        isEdit ? (
+                                            <FormItem
+                                                form={form}
+                                                name={[
+                                                    'subjectClass',
+                                                    record.id,
+                                                    'trainingLocationId',
+                                                ]}
+                                            >
+                                                <Select
+                                                    options={trainingLocationData.map((e) => ({
+                                                        label: e.name,
+                                                        value: e.id,
+                                                    }))}
+                                                    allowClear
+                                                    showSearch
+                                                    filterOption={(input, option) =>
+                                                        (option?.label ?? '')
+                                                            .toString()
+                                                            .toLowerCase()
+                                                            .includes(input.toLowerCase())
+                                                    }
+                                                    dropdownStyle={{
+                                                        width: 400,
+                                                        maxHeight: 400,
+                                                    }}
+                                                    disabled={!isEdit}
+                                                />
+                                            </FormItem>
+                                        ) : record.trainingLocation ? (
+                                            record.trainingLocation?.name
+                                        ) : (
+                                            '-'
+                                        ),
                                 },
                                 {
                                     title: 'Phòng học',
-                                    dataIndex: 'room',
+                                    dataIndex: 'roomId',
                                     align: 'center',
-                                    width: 120,
-                                    render: (value) => value?.name || '',
+                                    width: 200,
+                                    render: (_, record) =>
+                                        isEdit ? (
+                                            <FormItem
+                                                form={form}
+                                                name={['subjectClass', record.id, 'roomId']}
+                                            >
+                                                <TreeSelect
+                                                    treeData={buildingData
+                                                        .filter(
+                                                            (e) =>
+                                                                e.trainingLocationId ===
+                                                                (form.getFieldValue([
+                                                                    'subjectClass',
+                                                                    record.id,
+                                                                    'trainingLocationId',
+                                                                ]) ?? record.trainingLocationId)
+                                                        )
+                                                        .map((e) => ({
+                                                            label: e.name,
+                                                            value: e.id,
+                                                            selectable: false,
+                                                            children: e.rooms.map((room) => ({
+                                                                label: room.name,
+                                                                value: room.id,
+                                                                selectable: true,
+                                                            })),
+                                                        }))}
+                                                    filterTreeNode={(input, option) =>
+                                                        (option?.title ?? '')
+                                                            .toString()
+                                                            .toLowerCase()
+                                                            .includes(input.toLowerCase())
+                                                    }
+                                                    showSearch
+                                                    allowClear
+                                                    treeNodeFilterProp="title"
+                                                    multiple={false}
+                                                    showCheckedStrategy="SHOW_CHILD"
+                                                    dropdownStyle={{
+                                                        width: 400,
+                                                        maxHeight: 400,
+                                                    }}
+                                                />
+                                            </FormItem>
+                                        ) : record.room ? (
+                                            record.room?.name
+                                        ) : (
+                                            '-'
+                                        ),
                                 },
                                 {
                                     title: 'Giảng viên nhập điểm',
@@ -986,6 +1576,31 @@ export default function TeachingAssignment() {
                                 //     align: 'center',
                                 //     render: (value) => (value ? formatDate(value) : ''),
                                 // },
+
+                                // {
+                                //     title: 'Thời khoá biểu',
+                                //     width: 150,
+                                //     align: 'center',
+                                //     dataIndex: 'subjectClassTimes',
+                                //     render: (subjectClassTimes: SubjectClassTime[]) => {
+                                //         return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                                //             return (
+                                //                 <p>
+                                //                     {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                                //                     {tkb.startPeriod} - {tkb.endPeriod}
+                                //                 </p>
+                                //             )
+                                //         })
+                                //     },
+                                // },
+                                // {
+                                //     title: 'Số SV tối đa',
+                                //     dataIndex: 'maxStudent',
+                                //     width: 150,
+                                //     align: 'center',
+                                //     type: 'order',
+                                //     distinctFilters: ['credit', 'subjectClassStudent'],
+                                // },
                                 {
                                     title: 'ĐV phụ trách',
                                     dataIndex: 'subject',
@@ -1003,12 +1618,6 @@ export default function TeachingAssignment() {
                                 //     render: (value) => (
                                 //         <Checkbox checked={value.subjectEquivalentType} disabled />
                                 //     ),
-                                // },
-                                // {
-                                //     title: 'Lớp liên kết',
-                                //     dataIndex: 'lopLienKet',
-                                //     width: 150,
-                                //     align: 'center',
                                 // },
                                 {
                                     title: 'Thao tác',

@@ -107,223 +107,228 @@ export default function MonDaLapKeHoach() {
     )
 
     return (
-        <div>
-            <Row gutter={[16, 16]} align="top" justify="space-between">
-                <Form
-                    className="w-full"
-                    form={form}
-                    onValuesChange={(filter: MonDaLapKeHoachForm) => {
-                        if (!filter.subjectSelected) {
-                            debouncedRefetch()
+        <Form
+            className="w-full"
+            form={form}
+            onValuesChange={(filter: MonDaLapKeHoachForm) => {
+                if (!filter.subjectSelected) {
+                    debouncedRefetch()
+                }
+            }}
+        >
+            <Row align="top" justify="space-between">
+                <Col span={16}>
+                    <Form.Item className="m-0" name="searchText">
+                        <Input
+                            id="search"
+                            placeholder="Nhập tên môn..."
+                            style={{ height: 32 }}
+                            prefix={
+                                <Search
+                                    size={15}
+                                    style={{
+                                        color: 'rgba(0, 0, 0, 0.25)',
+                                    }}
+                                />
+                            }
+                            allowClear
+                        />
+                    </Form.Item>
+                </Col>
+                <Col span={8}>
+                    <Flex justify="end" gap={4}>
+                        <Button
+                            type="primary"
+                            onClick={() =>
+                                exportFromTemplate({
+                                    templateUrl:
+                                        '/lms/templates/ke-hoach-dao-tao/ke-hoach-mo-lop.xlsx',
+                                    sheets: [
+                                        {
+                                            sheet: 'KeHoachMoLop',
+                                            data: {
+                                                hoc_ky: semesterData?.name ?? '',
+                                                nam_hoc: semesterData?.schoolYear?.name ?? '',
+                                            },
+                                            tableStartCell: { row: 7, col: 1 },
+                                            rows: planTraining?.planTrainingSubjects.flatMap(
+                                                (item, index) =>
+                                                    item.fixedClasses.map((fc, idx) => {
+                                                        const rowSpan =
+                                                            idx === 0 ? item.fixedClasses.length : 1
+                                                        return {
+                                                            cells: [
+                                                                {
+                                                                    value: index + 1,
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: item.subjectVersion
+                                                                        ?.code,
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: item.subjectVersion
+                                                                        ?.name,
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: item.subjectVersion
+                                                                        ?.credit,
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: `${fc.code}`,
+                                                                    align: 'center',
+                                                                },
+                                                                {
+                                                                    value: `${fc._count.students ?? 0}`,
+                                                                    align: 'center',
+                                                                },
+                                                                {
+                                                                    value: '',
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: item.fixedClasses.reduce(
+                                                                        (sum, fc) =>
+                                                                            sum +
+                                                                            (fc._count?.students ??
+                                                                                0),
+                                                                        0
+                                                                    ),
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value:
+                                                                        item.subjectVersion
+                                                                            .managementOrganization
+                                                                            ?.sMa ?? '',
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                            ],
+                                                        }
+                                                    })
+                                            ),
+                                        },
+                                    ],
+                                    fileName: `ke-hoach-mo-lop-mon-hoc-${semesterData?.name}-${semesterData?.schoolYear.name}.xlsx`,
+                                })
+                            }
+                        >
+                            Xuất kế hoạch
+                        </Button>
+                        <Button
+                            onClick={() => {}}
+                            disabled={!subjectSelected.length}
+                            type="primary"
+                        >
+                            Xoá
+                        </Button>
+                    </Flex>
+                </Col>
+                <Form.Item hidden name="subjectSelected" />
+                <Table
+                    rowKey="subjectVersionId"
+                    id="fixed-class"
+                    rowSelection={{
+                        selectedRowKeys: subjectSelected,
+                        onChange: (selectedRowKeys) => {
+                            form.setFieldValue('subjectSelected', selectedRowKeys)
+                        },
+                        type: 'checkbox',
+                        columnWidth: 20,
+                    }}
+                    onRow={(record) => {
+                        return {
+                            onClick: () => {
+                                const isSelected = subjectSelected.includes(record.subjectVersionId)
+                                if (isSelected) {
+                                    form.setFieldValue(
+                                        'subjectSelected',
+                                        subjectSelected.filter(
+                                            (id) => id !== record.subjectVersionId
+                                        )
+                                    )
+                                } else {
+                                    form.setFieldValue('subjectSelected', [
+                                        ...subjectSelected,
+                                        record.subjectVersionId,
+                                    ])
+                                }
+                            },
                         }
                     }}
-                >
-                    <Col span={24}>
-                        <Form.Item className="m-0" name="searchText">
-                            <Input
-                                id="search"
-                                placeholder="Nhập tên môn..."
-                                style={{ height: 32 }}
-                                prefix={
-                                    <Search
-                                        size={15}
-                                        style={{
-                                            color: 'rgba(0, 0, 0, 0.25)',
-                                        }}
+                    data={planTraining?.planTrainingSubjects ?? []}
+                    columns={[
+                        {
+                            title: 'STT',
+                            width: 35,
+                            align: 'center',
+                            fixed: 'left',
+                            render: (_, __, index) =>
+                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                        },
+                        {
+                            title: 'Mã MH',
+                            dataIndex: ['subjectVersion', 'code'],
+                            align: 'center',
+                            width: 100,
+                        },
+                        {
+                            title: 'Tên môn',
+                            dataIndex: ['subjectVersion', 'name'],
+                            width: 120,
+                            align: 'center',
+                            render: (text, record) => (
+                                <div className="text-left">
+                                    {text} ({record.subjectVersion.credit})
+                                </div>
+                            ),
+                        },
+                        {
+                            title: 'Danh sách lớp quản lý',
+                            dataIndex: 'fixedClass',
+                            align: 'center',
+                            width: 120,
+                            render: (__, record) => {
+                                return record?.fixedClasses.length ? (
+                                    <TextTruncate
+                                        arr={record?.fixedClasses.map((i: any) => {
+                                            return {
+                                                key: i?.id,
+                                                label: ` ${i.code} (${i._count?.students})`,
+                                            }
+                                        })}
+                                        key="fixedClass"
                                     />
-                                }
-                                allowClear
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col span={24} className="mt-2">
-                        <Flex justify="end" gap={4}>
-                            <Button
-                                type="primary"
-                                onClick={() =>
-                                    exportFromTemplate({
-                                        templateUrl:
-                                            '/lms/templates/chuong-trinh-dao-tao/ke-hoach-mo-lop.xlsx',
-                                        data: {
-                                            hoc_ky: semesterData?.name ?? '',
-                                            nam_hoc: semesterData?.schoolYear?.name ?? '',
-                                        },
-                                        tableStartCell: { row: 7, col: 1 },
-                                        rows: planTraining?.planTrainingSubjects.flatMap(
-                                            (item, index) =>
-                                                item.fixedClasses.map((fc, idx) => {
-                                                    const rowSpan =
-                                                        idx === 0 ? item.fixedClasses.length : 1
-                                                    return {
-                                                        cells: [
-                                                            {
-                                                                value: index + 1,
-                                                                align: 'center',
-                                                                rowSpan,
-                                                            },
-                                                            {
-                                                                value: item.subjectVersion?.code,
-                                                                align: 'center',
-                                                                rowSpan,
-                                                            },
-                                                            {
-                                                                value: item.subjectVersion?.name,
-                                                                rowSpan,
-                                                            },
-                                                            {
-                                                                value: item.subjectVersion?.credit,
-                                                                align: 'center',
-                                                                rowSpan,
-                                                            },
-                                                            {
-                                                                value: `${fc.code}`,
-                                                                align: 'center',
-                                                            },
-                                                            {
-                                                                value: `${fc._count.students ?? 0}`,
-                                                                align: 'center',
-                                                            },
-                                                            {
-                                                                value: '',
-                                                                align: 'center',
-                                                                rowSpan,
-                                                            },
-                                                            {
-                                                                value: item.fixedClasses.reduce(
-                                                                    (sum, fc) =>
-                                                                        sum +
-                                                                        (fc._count?.students ?? 0),
-                                                                    0
-                                                                ),
-                                                                align: 'center',
-                                                                rowSpan,
-                                                            },
-                                                            {
-                                                                value:
-                                                                    item.subjectVersion
-                                                                        .managementOrganization
-                                                                        ?.sMa ?? '',
-                                                                align: 'center',
-                                                                rowSpan,
-                                                            },
-                                                        ],
-                                                    }
-                                                })
-                                        ),
-                                        fileName: `ke-hoach-mo-lop-mon-hoc-${semesterData?.name}-${semesterData?.schoolYear.name}.xlsx`,
-                                    })
-                                }
-                            >
-                                Xuất kế hoạch môn dự kiến
-                            </Button>
-                            <Button
-                                onClick={() => {}}
-                                disabled={!subjectSelected.length}
-                                type="primary"
-                            >
-                                Xoá môn khỏi kế hoạch
-                            </Button>
-                        </Flex>
-                    </Col>
-                    <Form.Item hidden name="subjectSelected" />
-                    <Table
-                        rowKey="subjectVersionId"
-                        id="fixed-class"
-                        rowSelection={{
-                            selectedRowKeys: subjectSelected,
-                            onChange: (selectedRowKeys) => {
-                                form.setFieldValue('subjectSelected', selectedRowKeys)
+                                ) : (
+                                    ''
+                                )
                             },
-                            type: 'checkbox',
-                            columnWidth: 15,
-                        }}
-                        onRow={(record) => {
-                            return {
-                                onClick: () => {
-                                    const isSelected = subjectSelected.includes(
-                                        record.subjectVersionId
-                                    )
-                                    if (isSelected) {
-                                        form.setFieldValue(
-                                            'subjectSelected',
-                                            subjectSelected.filter(
-                                                (id) => id !== record.subjectVersionId
-                                            )
-                                        )
-                                    } else {
-                                        form.setFieldValue('subjectSelected', [
-                                            ...subjectSelected,
-                                            record.subjectVersionId,
-                                        ])
-                                    }
-                                },
+                        },
+                    ]}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: planTraining?._count.planTrainingSubjects ?? 0,
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
                             }
-                        }}
-                        data={planTraining?.planTrainingSubjects ?? []}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 35,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã MH',
-                                dataIndex: ['subjectVersion', 'code'],
-                                align: 'center',
-                                width: 100,
-                            },
-                            {
-                                title: 'Tên môn',
-                                dataIndex: ['subjectVersion', 'name'],
-                                width: 100,
-                                align: 'center',
-                                render: (text, record) => (
-                                    <div className="text-left">
-                                        {text} ({record.subjectVersion.credit})
-                                    </div>
-                                ),
-                            },
-                            {
-                                title: 'Danh sách lớp quản lý',
-                                dataIndex: 'fixedClass',
-                                align: 'center',
-                                width: 180,
-                                render: (__, record) => {
-                                    return record?.fixedClasses.length ? (
-                                        <TextTruncate
-                                            arr={record?.fixedClasses.map((i: any) => {
-                                                return {
-                                                    key: i?.id,
-                                                    label: ` ${i.code} (${i._count?.students})`,
-                                                }
-                                            })}
-                                            key="fixedClass"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-                        ]}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: planTraining?._count.planTrainingSubjects ?? 0,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
-                    />
-                </Form>
+                        },
+                    }}
+                />
             </Row>
-        </div>
+        </Form>
     )
 }

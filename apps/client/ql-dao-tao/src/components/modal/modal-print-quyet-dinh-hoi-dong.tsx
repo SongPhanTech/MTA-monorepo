@@ -11,7 +11,7 @@ import type {
     ThesisProject,
     TrainingCourse,
     UserProfile,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'

@@ -11,7 +11,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { ExamType } from '@workspace/db'
+import type { ExamType } from '@workspace/db/client'
 import {
     useCountSubject,
     useCreateSubjectVersionHistory,

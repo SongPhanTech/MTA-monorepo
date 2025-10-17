@@ -1,5 +1,5 @@
 import useSpinner from '@hooks/spinner'
-import { EquivalencySide } from '@workspace/db'
+import { EquivalencySide } from '@workspace/db/client'
 import {
     useCreateEquivalencyGroup,
     useCreateSubjectInGroup,

@@ -51,7 +51,6 @@ import PutTrainingLocationModal from './put-khu-vuc'
 import PutSemesterModal from './put-ky-hoc'
 import PutTrainingTypeModal from './put-loai-hinh-dao-tao'
 import PutFixedClassModal from './put-lop-bien-che'
-import PutOpenClassModal from './put-mo-lop'
 import PutMilestoneModal from './put-moc-huan-luyen'
 import PutSubjectModal from './put-mon-hoc'
 import PutTrainingBlockSubject from './put-mon-hoc-chuong-trinh-dao-tao'
@@ -95,6 +94,9 @@ import PutStudentScoreConvertModal from './put-sv-hv-chuyen-truong'
 import ModalPreviewUpload from './modal-preview-upload-ctdt'
 import ModalChuyenLopLuuBan from './modal-chuyen-lop-luu-ban'
 import ModalViewHistoryChange from './modal-xem-lich-su-thay-doi'
+import PutArchivedAwardModal from './put-archived-award'
+import PutCertificateOnSubjectScoreModal from './put-certificate-on-subject'
+import PutCertificateArchivedModal from './put-archived-certificate'
 export {
     ModalViewHistoryChange,
     PutUpdateProfileModal,
@@ -116,7 +118,6 @@ export {
     PutTrainingBlock,
     PutCurriculumVersion,
     PutVersionSubjectModal,
-    PutOpenClassModal,
     PutOpenSubjectClassModal,
     PutCurriculum,
     PutTrainingBlockOnCurriculumVersion,
@@ -193,4 +194,7 @@ export {
     PutStudentScoreConvertModal,
     ModalPreviewUpload,
     ModalChuyenLopLuuBan,
+    PutArchivedAwardModal,
+    PutCertificateOnSubjectScoreModal,
+    PutCertificateArchivedModal
 }

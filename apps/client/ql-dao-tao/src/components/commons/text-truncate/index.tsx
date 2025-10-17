@@ -2,9 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 type TypeProps = {
     arr: { key: string; label: string }[]
-    key: string
 }
-export default function TextTruncate({ arr, key }: TypeProps) {
+export default function TextTruncate({ arr }: TypeProps) {
     const [show, setShow] = useState(false)
     const [showButton, setShowButton] = useState(false)
     const textRef = useRef<HTMLDivElement>(null)
@@ -30,7 +29,7 @@ export default function TextTruncate({ arr, key }: TypeProps) {
         }
     }, [arr?.length])
     return (
-        <div ref={textRef} className="relative collapse-content">
+        <div ref={textRef} className="relative">
             <ul
                 style={{
                     paddingLeft: 0,
@@ -48,7 +47,7 @@ export default function TextTruncate({ arr, key }: TypeProps) {
                         e.stopPropagation()
                         handleShowMore()
                     }}
-                    className="flex  justify-end text-xs text-green-600"
+                    className="flex  justify-end text-xs text-green-700"
                 >
                     {show ? 'Ẩn bớt' : 'Xem thêm'}
                 </div>

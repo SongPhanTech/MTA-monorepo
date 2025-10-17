@@ -1,4 +1,4 @@
-import { DiplomaVerificationStatus } from '@workspace/db'
+import { DiplomaVerificationStatus } from '@workspace/db/client'
 
 export type DiplomaVerificationStatusOption = {
     value: DiplomaVerificationStatus

@@ -6,7 +6,7 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { TrainingObjectTypes } from '@workspace/db'
+import type { TrainingObjectTypes } from '@workspace/db/client'
 import {
     useCountTrainingObjectType,
     useFindManyDM_DonVi,

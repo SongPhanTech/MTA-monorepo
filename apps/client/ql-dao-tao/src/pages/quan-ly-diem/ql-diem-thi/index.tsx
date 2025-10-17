@@ -9,7 +9,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import type { StudentSubjectScore } from '@workspace/db'
+import type { StudentSubjectScore } from '@workspace/db/client'
 import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
@@ -204,26 +204,26 @@ export default function SubjectClassScore() {
                                 where: { id },
                                 data: {
                                     ...newData,
-                                    attendanceScore: !!item?.subjectVersion?.onePoint
-                                        ? !!item.examScore
+                                    attendanceScore: item?.subjectVersion?.onePoint
+                                        ? item.examScore
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.attendanceScore,
-                                    midtermScore: !!item?.subjectVersion?.onePoint
-                                        ? !!item.examScore
+                                    midtermScore: item?.subjectVersion?.onePoint
+                                        ? item.examScore
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.midtermScore,
-                                    examScore: !!item.examScore
+                                    examScore: item.examScore
                                         ? item.examScore
                                         : newData?.examScore,
-                                    description: !!item.description
+                                    description: item.description
                                         ? item.description
                                         : newData?.description,
-                                    suspended: !!item.suspended
+                                    suspended: item.suspended
                                         ? item.suspended
                                         : newData?.suspended,
-                                    suspendedReason: !!item.suspendedReason
+                                    suspendedReason: item.suspendedReason
                                         ? item.suspendedReason
                                         : newData?.suspendedReason,
                                 },
@@ -241,28 +241,28 @@ export default function SubjectClassScore() {
                             data: {
                                 data: {
                                     studentSubjectScoreId: id,
-                                    attendanceScore: !!item?.subjectVersion?.onePoint
-                                        ? !!item.examScore
+                                    attendanceScore: item?.subjectVersion?.onePoint
+                                        ? item.examScore
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.attendanceScore,
-                                    midtermScore: !!item?.subjectVersion?.onePoint
-                                        ? !!item.examScore
+                                    midtermScore: item?.subjectVersion?.onePoint
+                                        ? item.examScore
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.midtermScore,
-                                    examScore: !!item.examScore
+                                    examScore: item.examScore
                                         ? item.examScore
                                         : newData?.examScore,
                                     finalScore: item?.finalScore,
                                     manualFinalScore: item?.manualFinalScore,
-                                    description: !!item.description
+                                    description: item.description
                                         ? item.description
                                         : newData?.description,
-                                    suspended: !!item.suspended
+                                    suspended: item.suspended
                                         ? item.suspended
                                         : newData?.suspended,
-                                    suspendedReason: !!item.suspendedReason
+                                    suspendedReason: item.suspendedReason
                                         ? item.suspendedReason
                                         : newData?.suspendedReason,
                                     updatedById: profileId,
@@ -587,8 +587,7 @@ export default function SubjectClassScore() {
                 ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
                     profileId === listUser.P13) ||
                     (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
-                        profileId !== listUser.P13))) ||
-            false
+                        profileId !== listUser.P13)))
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
@@ -1138,7 +1137,7 @@ export default function SubjectClassScore() {
                                                                         ?.trainingCourse,
                                                                     {
                                                                         ...record,
-                                                                        examScore: !!recordForm
+                                                                        examScore: recordForm
                                                                             ? recordForm
                                                                             : record?.examScore,
                                                                     }

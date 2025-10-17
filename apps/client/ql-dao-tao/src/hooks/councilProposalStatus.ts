@@ -1,4 +1,4 @@
-import { CouncilProposalStatus } from '@workspace/db'
+import { CouncilProposalStatus } from '@workspace/db/client'
 
 export type CouncilProposalStatusOption = {
     value: CouncilProposalStatus

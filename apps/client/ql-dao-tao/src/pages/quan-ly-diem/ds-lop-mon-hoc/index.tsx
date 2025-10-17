@@ -2,12 +2,12 @@ import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { FilterProps } from '@constants/type'
+import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { SubjectClass, SubjectVersion } from '@workspace/db'
+import type { SubjectClass, SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManySubjectClass,
@@ -31,7 +31,7 @@ import {
     Row,
     Tooltip,
 } from 'antd'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'

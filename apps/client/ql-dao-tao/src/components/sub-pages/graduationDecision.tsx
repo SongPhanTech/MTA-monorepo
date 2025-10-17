@@ -4,7 +4,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
-import { ApplicationStatus, type Prisma } from '@workspace/db'
+import { ApplicationStatus, type Prisma } from '@workspace/db/client'
 import {
     useCountTrainingCourse,
     useDeleteGraduationDecision,

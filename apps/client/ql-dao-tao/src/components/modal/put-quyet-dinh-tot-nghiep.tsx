@@ -14,7 +14,7 @@ import 'dayjs/locale/vi'
 import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
-import { type DocumentFile, type GraduationDecision, RankingContext } from '@workspace/db'
+import { type DocumentFile, type GraduationDecision, RankingContext } from '@workspace/db/client'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 

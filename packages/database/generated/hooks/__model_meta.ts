@@ -7217,6 +7217,30 @@ const metadata = {
                     name: "repeatedReason",
                     type: "String",
                     isOptional: true,
+                }, isImproving: {
+                    name: "isImproving",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, exam: {
+                    name: "exam",
+                    type: "Exam",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentSubjectScore',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examId" },
+                }, examId: {
+                    name: "examId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'exam',
+                }, examSession: {
+                    name: "examSession",
+                    type: "ExamSession",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentSubjectScore',
                 }, graduationGpaScores: {
                     name: "graduationGpaScores",
                     type: "StudentGraduationApplication",
@@ -7341,6 +7365,7 @@ const metadata = {
                 }, examBanned: {
                     name: "examBanned",
                     type: "Boolean",
+                    isOptional: true,
                 }, examBannedReason: {
                     name: "examBannedReason",
                     type: "String",
@@ -9924,6 +9949,14 @@ const metadata = {
                     name: "lecturerAssignmentDeadline",
                     type: "DateTime",
                     isOptional: true,
+                }, sendLecturerAssignmentAt: {
+                    name: "sendLecturerAssignmentAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, submitLecturerAssignmentAt: {
+                    name: "submitLecturerAssignmentAt",
+                    type: "DateTime",
+                    isOptional: true,
                 }, examDate: {
                     name: "examDate",
                     type: "DateTime",
@@ -10000,6 +10033,20 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
+                }, trainingLocation: {
+                    name: "trainingLocation",
+                    type: "TrainingLocation",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'subjectClasses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingLocationId" },
+                }, trainingLocationId: {
+                    name: "trainingLocationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingLocation',
                 }, mainLecturer: {
                     name: "mainLecturer",
                     type: "Lecturer",
@@ -10774,6 +10821,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingLocation',
+                }, subjectClasses: {
+                    name: "subjectClasses",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingLocation',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -10959,9 +11012,9 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'room',
-                }, examSession: {
-                    name: "examSession",
-                    type: "ExamSession",
+                }, examRooms: {
+                    name: "examRooms",
+                    type: "ExamRoom",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'room',
@@ -12309,12 +12362,6 @@ const metadata = {
                 }, thesisRegistrations: {
                     name: "thesisRegistrations",
                     type: "StudentThesisRegistration",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'student',
-                }, examSession: {
-                    name: "examSession",
-                    type: "ExamSession",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'student',
@@ -19437,12 +19484,6 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'question',
-                }, answers: {
-                    name: "answers",
-                    type: "Answer",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'question',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19647,91 +19688,6 @@ const metadata = {
                 },
             },
         },
-        answer: {
-            name: 'Answer', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, sessionId: {
-                    name: "sessionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'session',
-                }, session: {
-                    name: "session",
-                    type: "ExamSession",
-                    isDataModel: true,
-                    backLink: 'answers',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "sessionId" },
-                }, questionId: {
-                    name: "questionId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'question',
-                }, question: {
-                    name: "question",
-                    type: "Question",
-                    isDataModel: true,
-                    backLink: 'answers',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "questionId" },
-                }, isCorrect: {
-                    name: "isCorrect",
-                    type: "Boolean",
-                    isOptional: true,
-                }, score: {
-                    name: "score",
-                    type: "Float",
-                    isOptional: true,
-                }, comment: {
-                    name: "comment",
-                    type: "String",
-                    isOptional: true,
-                }, essayAnswer: {
-                    name: "essayAnswer",
-                    type: "String",
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, sessionId_questionId: {
-                    name: "sessionId_questionId",
-                    fields: ["sessionId", "questionId"]
-                },
-            },
-        },
         exam: {
             name: 'Exam', fields: {
                 id: {
@@ -19774,43 +19730,35 @@ const metadata = {
                     name: "questionBank",
                     type: "QuestionBank",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'exam',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "questionBankId" },
                 }, questionBankId: {
                     name: "questionBankId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'questionBank',
-                }, startTime: {
-                    name: "startTime",
-                    type: "DateTime",
-                }, endTime: {
-                    name: "endTime",
-                    type: "DateTime",
-                }, duration: {
-                    name: "duration",
-                    type: "Int",
-                }, passScore: {
-                    name: "passScore",
-                    type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 5 }] }],
-                }, maxScore: {
-                    name: "maxScore",
-                    type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 10 }] }],
-                }, shuffleQuestions: {
-                    name: "shuffleQuestions",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, shuffleAnswers: {
-                    name: "shuffleAnswers",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, showResult: {
-                    name: "showResult",
+                }, lockExamCode: {
+                    name: "lockExamCode",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, startTime: {
+                    name: "startTime",
+                    type: "String",
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'exam',
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'exam',
                 }, room: {
                     name: "room",
                     type: "Room",
@@ -19818,12 +19766,6 @@ const metadata = {
                     isArray: true,
                     backLink: 'exam',
                     isRelationOwner: true,
-                }, subjectClass: {
-                    name: "subjectClass",
-                    type: "SubjectClass",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'exam',
                 }, examBank: {
                     name: "examBank",
                     type: "ExamBank",
@@ -19842,9 +19784,9 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'exam',
-                }, examFax: {
-                    name: "examFax",
-                    type: "ExamFax",
+                }, examRooms: {
+                    name: "examRooms",
+                    type: "ExamRoom",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'exam',
@@ -19856,6 +19798,81 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        examRoom: {
+            name: 'ExamRoom', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, exam: {
+                    name: "exam",
+                    type: "Exam",
+                    isDataModel: true,
+                    backLink: 'examRooms',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examId" },
+                }, examId: {
+                    name: "examId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'exam',
+                }, room: {
+                    name: "room",
+                    type: "Room",
+                    isDataModel: true,
+                    backLink: 'examRooms',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "roomId" },
+                }, roomId: {
+                    name: "roomId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'room',
+                }, examSessions: {
+                    name: "examSessions",
+                    type: "ExamSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examRoom',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, examId_roomId: {
+                    name: "examId_roomId",
+                    fields: ["examId", "roomId"]
                 },
             },
         },
@@ -19980,15 +19997,6 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'exam',
-                }, examCode: {
-                    name: "examCode",
-                    type: "String",
-                }, examSession: {
-                    name: "examSession",
-                    type: "ExamSession",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'examBank',
                 }, questions: {
                     name: "questions",
                     type: "ExamBankQuestion",
@@ -20003,9 +20011,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, examId_examCode: {
-                    name: "examId_examCode",
-                    fields: ["examId", "examCode"]
                 },
             },
         },
@@ -20086,77 +20091,6 @@ const metadata = {
                 },
             },
         },
-        examFax: {
-            name: 'ExamFax', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, examId: {
-                    name: "examId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'exam',
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
-                    isDataModel: true,
-                    backLink: 'examFax',
-                    isRelationOwner: true,
-                    onDeleteAction: 'Cascade',
-                    foreignKeyMapping: { "id": "examId" },
-                }, fax: {
-                    name: "fax",
-                    type: "String",
-                }, score: {
-                    name: "score",
-                    type: "Decimal",
-                    isOptional: true,
-                }, examSession: {
-                    name: "examSession",
-                    type: "ExamSession",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examFax',
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, examId_fax: {
-                    name: "examId_fax",
-                    fields: ["examId", "fax"]
-                },
-            },
-        },
         examSession: {
             name: 'ExamSession', fields: {
                 id: {
@@ -20188,28 +20122,6 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, startTime: {
-                    name: "startTime",
-                    type: "DateTime",
-                    isOptional: true,
-                }, endTime: {
-                    name: "endTime",
-                    type: "DateTime",
-                    isOptional: true,
-                }, student: {
-                    name: "student",
-                    type: "Student",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examSession',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "studentId" },
-                }, studentId: {
-                    name: "studentId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'student',
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -20222,54 +20134,34 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'exam',
-                }, room: {
-                    name: "room",
-                    type: "Room",
+                }, examRoom: {
+                    name: "examRoom",
+                    type: "ExamRoom",
                     isDataModel: true,
-                    isOptional: true,
+                    backLink: 'examSessions',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examRoomId" },
+                }, examRoomId: {
+                    name: "examRoomId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'examRoom',
+                }, studentSubjectScore: {
+                    name: "studentSubjectScore",
+                    type: "StudentSubjectScore",
+                    isDataModel: true,
                     backLink: 'examSession',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "roomId" },
-                }, roomId: {
-                    name: "roomId",
+                    foreignKeyMapping: { "id": "studentSubjectScoreId" },
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'studentSubjectScore',
+                }, examCode: {
+                    name: "examCode",
                     type: "String",
                     isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'room',
-                }, examBank: {
-                    name: "examBank",
-                    type: "ExamBank",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examSession',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examBankId" },
-                }, examBankId: {
-                    name: "examBankId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'examBank',
-                }, answers: {
-                    name: "answers",
-                    type: "Answer",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'session',
-                }, examFax: {
-                    name: "examFax",
-                    type: "ExamFax",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'examSession',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examFaxId" },
-                }, examFaxId: {
-                    name: "examFaxId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'examFax',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -20278,12 +20170,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, examFaxId: {
-                    name: "examFaxId",
-                    fields: ["examFaxId"]
-                }, studentId_examId: {
-                    name: "studentId_examId",
-                    fields: ["studentId", "examId"]
+                }, studentSubjectScoreId: {
+                    name: "studentSubjectScoreId",
+                    fields: ["studentSubjectScoreId"]
+                }, examCode_examId: {
+                    name: "examCode_examId",
+                    fields: ["examCode", "examId"]
                 },
             },
         },
@@ -22242,9 +22134,7 @@ const metadata = {
         evaluationCouncil: ['EvaluationCouncilMember'],
         note: ['NoteReminder'],
         question: ['MultipleChoiceOption', 'FillInBlankSlot', 'OrderingItem'],
-        exam: ['ExamFax'],
         examBank: ['ExamBankQuestion'],
-        examSession: ['Answer'],
 
     },
     authModel: 'UserProfile'

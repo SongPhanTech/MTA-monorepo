@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import type { Subject, SubjectVersion } from '@workspace/db'
+import type { Subject, SubjectVersion } from '@workspace/db/client'
 import {
     useCreateSubjectVersion,
     useFindManyDM_DonVi,

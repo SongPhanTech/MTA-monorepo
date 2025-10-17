@@ -14,7 +14,7 @@ import type {
     TrainingForm,
     TrainingObjectType,
     TrainingTime,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCreateCurriculumVersion,
     useDeleteCurriculumVersion,

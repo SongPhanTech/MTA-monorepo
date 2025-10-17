@@ -8,7 +8,7 @@ import type {
     TrainingCourse,
     TrainingMajor,
     TrainingObjectType,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCreateFixedClass,
     useFindManyCurriculum,

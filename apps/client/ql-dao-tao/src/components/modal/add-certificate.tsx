@@ -1,6 +1,6 @@
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { StudentSubjectScore } from '@workspace/db'
+import type { StudentSubjectScore } from '@workspace/db/client'
 import {
     useCountArchivedCertificate,
     useFindFirstTrainingCourse,

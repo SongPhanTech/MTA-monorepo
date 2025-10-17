@@ -2122,17 +2122,6 @@ export type FillInBlankSlot = $Result.DefaultSelection<Prisma.$FillInBlankSlotPa
  */
 export type OrderingItem = $Result.DefaultSelection<Prisma.$OrderingItemPayload>;
 /**
- * Model Answer
- * Câu trả lời của thí sinh
- * @
- * @allow ('all', auth() != null)
- * @
- * @deny ('read', deletedAt != null)
- * @
- * @allow ('read', auth() != null)
- */
-export type Answer = $Result.DefaultSelection<Prisma.$AnswerPayload>;
-/**
  * Model Exam
  * Bảng kỳ thi
  * @
@@ -2143,6 +2132,17 @@ export type Answer = $Result.DefaultSelection<Prisma.$AnswerPayload>;
  * @allow ('read', auth() != null)
  */
 export type Exam = $Result.DefaultSelection<Prisma.$ExamPayload>;
+/**
+ * Model ExamRoom
+ * Phòng thi cho kỳ thi
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ExamRoom = $Result.DefaultSelection<Prisma.$ExamRoomPayload>;
 /**
  * Model TestStructureRule
  * Cấu hình tạo đề tự động cho kỳ thi
@@ -2167,7 +2167,7 @@ export type TestStructureRule = $Result.DefaultSelection<Prisma.$TestStructureRu
 export type ExamBank = $Result.DefaultSelection<Prisma.$ExamBankPayload>;
 /**
  * Model ExamBankQuestion
- * Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
+ * Bảng nối, xác định câu hỏi nào thuộc về đề thi nào
  * @
  * @allow ('all', auth() != null)
  * @
@@ -2176,16 +2176,6 @@ export type ExamBank = $Result.DefaultSelection<Prisma.$ExamBankPayload>;
  * @allow ('read', auth() != null)
  */
 export type ExamBankQuestion = $Result.DefaultSelection<Prisma.$ExamBankQuestionPayload>;
-/**
- * Model ExamFax
- * @
- * @allow ('all', auth() != null)
- * @
- * @deny ('read', deletedAt != null)
- * @
- * @allow ('read', auth() != null)
- */
-export type ExamFax = $Result.DefaultSelection<Prisma.$ExamFaxPayload>;
 /**
  * Model ExamSession
  * Bài thi
@@ -4455,15 +4445,6 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get orderingItem(): Prisma.OrderingItemDelegate<ExtArgs, ClientOptions>;
     /**
-     * `prisma.answer`: Exposes CRUD operations for the **Answer** model.
-     * Example usage:
-     * ```ts
-     * // Fetch zero or more Answers
-     * const answers = await prisma.answer.findMany()
-     * ```
-     */
-    get answer(): Prisma.AnswerDelegate<ExtArgs, ClientOptions>;
-    /**
      * `prisma.exam`: Exposes CRUD operations for the **Exam** model.
      * Example usage:
      * ```ts
@@ -4472,6 +4453,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get exam(): Prisma.ExamDelegate<ExtArgs, ClientOptions>;
+    /**
+     * `prisma.examRoom`: Exposes CRUD operations for the **ExamRoom** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ExamRooms
+     * const examRooms = await prisma.examRoom.findMany()
+     * ```
+     */
+    get examRoom(): Prisma.ExamRoomDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.testStructureRule`: Exposes CRUD operations for the **TestStructureRule** model.
      * Example usage:
@@ -4499,15 +4489,6 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      * ```
      */
     get examBankQuestion(): Prisma.ExamBankQuestionDelegate<ExtArgs, ClientOptions>;
-    /**
-     * `prisma.examFax`: Exposes CRUD operations for the **ExamFax** model.
-     * Example usage:
-     * ```ts
-     * // Fetch zero or more ExamFaxes
-     * const examFaxes = await prisma.examFax.findMany()
-     * ```
-     */
-    get examFax(): Prisma.ExamFaxDelegate<ExtArgs, ClientOptions>;
     /**
      * `prisma.examSession`: Exposes CRUD operations for the **ExamSession** model.
      * Example usage:
@@ -5722,12 +5703,11 @@ export namespace Prisma {
         MultipleChoiceOption: 'MultipleChoiceOption',
         FillInBlankSlot: 'FillInBlankSlot',
         OrderingItem: 'OrderingItem',
-        Answer: 'Answer',
         Exam: 'Exam',
+        ExamRoom: 'ExamRoom',
         TestStructureRule: 'TestStructureRule',
         ExamBank: 'ExamBank',
         ExamBankQuestion: 'ExamBankQuestion',
-        ExamFax: 'ExamFax',
         ExamSession: 'ExamSession',
         AcademicWarningRule: 'AcademicWarningRule',
         AcademicWarning: 'AcademicWarning',
@@ -7036,7 +7016,9 @@ export namespace Prisma {
         suspended: 'suspended',
         suspendedReason: 'suspendedReason',
         repeated: 'repeated',
-        repeatedReason: 'repeatedReason'
+        repeatedReason: 'repeatedReason',
+        isImproving: 'isImproving',
+        examId: 'examId'
     };
     export const StudentSubjectScoreHistoryScalarFieldEnum: {
         id: 'id',
@@ -7457,6 +7439,8 @@ export namespace Prisma {
         semesterId: 'semesterId',
         cancelled: 'cancelled',
         lecturerAssignmentDeadline: 'lecturerAssignmentDeadline',
+        sendLecturerAssignmentAt: 'sendLecturerAssignmentAt',
+        submitLecturerAssignmentAt: 'submitLecturerAssignmentAt',
         examDate: 'examDate',
         examType: 'examType',
         examId: 'examId',
@@ -7471,6 +7455,7 @@ export namespace Prisma {
         scoreSubmitted: 'scoreSubmitted',
         scoreChecked: 'scoreChecked',
         roomId: 'roomId',
+        trainingLocationId: 'trainingLocationId',
         lecturerId: 'lecturerId',
         extraLecturerId: 'extraLecturerId',
         enterGradeLecturerId: 'enterGradeLecturerId'
@@ -8999,21 +8984,6 @@ export namespace Prisma {
         content: 'content',
         correctOrder: 'correctOrder'
     };
-    export const AnswerScalarFieldEnum: {
-        id: 'id',
-        code: 'code',
-        active: 'active',
-        description: 'description',
-        deletedAt: 'deletedAt',
-        createdAt: 'createdAt',
-        updatedAt: 'updatedAt',
-        sessionId: 'sessionId',
-        questionId: 'questionId',
-        isCorrect: 'isCorrect',
-        score: 'score',
-        comment: 'comment',
-        essayAnswer: 'essayAnswer'
-    };
     export const ExamScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -9025,14 +8995,19 @@ export namespace Prisma {
         title: 'title',
         status: 'status',
         questionBankId: 'questionBankId',
-        startTime: 'startTime',
-        endTime: 'endTime',
-        duration: 'duration',
-        passScore: 'passScore',
-        maxScore: 'maxScore',
-        shuffleQuestions: 'shuffleQuestions',
-        shuffleAnswers: 'shuffleAnswers',
-        showResult: 'showResult'
+        lockExamCode: 'lockExamCode',
+        startTime: 'startTime'
+    };
+    export const ExamRoomScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        examId: 'examId',
+        roomId: 'roomId'
     };
     export const TestStructureRuleScalarFieldEnum: {
         id: 'id',
@@ -9056,8 +9031,7 @@ export namespace Prisma {
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
-        examId: 'examId',
-        examCode: 'examCode'
+        examId: 'examId'
     };
     export const ExamBankQuestionScalarFieldEnum: {
         id: 'id',
@@ -9071,18 +9045,6 @@ export namespace Prisma {
         questionId: 'questionId',
         order: 'order'
     };
-    export const ExamFaxScalarFieldEnum: {
-        id: 'id',
-        code: 'code',
-        active: 'active',
-        description: 'description',
-        deletedAt: 'deletedAt',
-        createdAt: 'createdAt',
-        updatedAt: 'updatedAt',
-        examId: 'examId',
-        fax: 'fax',
-        score: 'score'
-    };
     export const ExamSessionScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -9091,13 +9053,10 @@ export namespace Prisma {
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
-        startTime: 'startTime',
-        endTime: 'endTime',
-        studentId: 'studentId',
         examId: 'examId',
-        roomId: 'roomId',
-        examBankId: 'examBankId',
-        examFaxId: 'examFaxId'
+        examRoomId: 'examRoomId',
+        studentSubjectScoreId: 'studentSubjectScoreId',
+        examCode: 'examCode'
     };
     export const AcademicWarningRuleScalarFieldEnum: {
         id: 'id',
@@ -10283,7 +10242,8 @@ export namespace Prisma {
         examPostponedReason: 'examPostponedReason',
         examBannedReason: 'examBannedReason',
         suspendedReason: 'suspendedReason',
-        repeatedReason: 'repeatedReason'
+        repeatedReason: 'repeatedReason',
+        examId: 'examId'
     };
     export const StudentSubjectScoreHistoryOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -10516,6 +10476,7 @@ export namespace Prisma {
         semesterId: 'semesterId',
         examId: 'examId',
         roomId: 'roomId',
+        trainingLocationId: 'trainingLocationId',
         lecturerId: 'lecturerId',
         extraLecturerId: 'extraLecturerId',
         enterGradeLecturerId: 'enterGradeLecturerId'
@@ -11372,21 +11333,20 @@ export namespace Prisma {
         questionId: 'questionId',
         content: 'content'
     };
-    export const AnswerOrderByRelevanceFieldEnum: {
-        id: 'id',
-        code: 'code',
-        description: 'description',
-        sessionId: 'sessionId',
-        questionId: 'questionId',
-        comment: 'comment',
-        essayAnswer: 'essayAnswer'
-    };
     export const ExamOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
         description: 'description',
         title: 'title',
-        questionBankId: 'questionBankId'
+        questionBankId: 'questionBankId',
+        startTime: 'startTime'
+    };
+    export const ExamRoomOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        examId: 'examId',
+        roomId: 'roomId'
     };
     export const TestStructureRuleOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -11399,8 +11359,7 @@ export namespace Prisma {
         id: 'id',
         code: 'code',
         description: 'description',
-        examId: 'examId',
-        examCode: 'examCode'
+        examId: 'examId'
     };
     export const ExamBankQuestionOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -11409,22 +11368,14 @@ export namespace Prisma {
         examBankId: 'examBankId',
         questionId: 'questionId'
     };
-    export const ExamFaxOrderByRelevanceFieldEnum: {
-        id: 'id',
-        code: 'code',
-        description: 'description',
-        examId: 'examId',
-        fax: 'fax'
-    };
     export const ExamSessionOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
         description: 'description',
-        studentId: 'studentId',
         examId: 'examId',
-        roomId: 'roomId',
-        examBankId: 'examBankId',
-        examFaxId: 'examFaxId'
+        examRoomId: 'examRoomId',
+        studentSubjectScoreId: 'studentSubjectScoreId',
+        examCode: 'examCode'
     };
     export const AcademicWarningRuleOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -40080,6 +40031,8 @@ export namespace Prisma {
         subjectClass<T extends StudentSubjectScore$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         subjectVersion<T extends SubjectVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersionDefaultArgs<ExtArgs>>): Prisma__SubjectVersionClient<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        exam<T extends StudentSubjectScore$examArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$examArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        examSession<T extends StudentSubjectScore$examSessionArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$examSessionArgs<ExtArgs>>): Prisma__ExamSessionClient<$Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         graduationGpaScores<T extends StudentSubjectScore$graduationGpaScoresArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$graduationGpaScoresArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentGraduationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         graduationSupplementaryScore<T extends StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentGraduationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         certificates<T extends StudentSubjectScore$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScore$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -40137,6 +40090,8 @@ export namespace Prisma {
         readonly suspendedReason: FieldRef<"StudentSubjectScore", 'String'>;
         readonly repeated: FieldRef<"StudentSubjectScore", 'Boolean'>;
         readonly repeatedReason: FieldRef<"StudentSubjectScore", 'String'>;
+        readonly isImproving: FieldRef<"StudentSubjectScore", 'Boolean'>;
+        readonly examId: FieldRef<"StudentSubjectScore", 'String'>;
     }
 
     export interface StudentSubjectScoreHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -49860,6 +49815,7 @@ export namespace Prisma {
         semester<T extends SemesterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SemesterDefaultArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         exam<T extends SubjectClass$examArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$examArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         room<T extends SubjectClass$roomArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$roomArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        trainingLocation<T extends SubjectClass$trainingLocationArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$trainingLocationArgs<ExtArgs>>): Prisma__TrainingLocationClient<$Result.GetResult<Prisma.$TrainingLocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         mainLecturer<T extends SubjectClass$mainLecturerArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$mainLecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         extraLecturer<T extends SubjectClass$extraLecturerArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$extraLecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         enterGradeLecturer<T extends SubjectClass$enterGradeLecturerArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$enterGradeLecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -49915,6 +49871,8 @@ export namespace Prisma {
         readonly semesterId: FieldRef<"SubjectClass", 'String'>;
         readonly cancelled: FieldRef<"SubjectClass", 'Boolean'>;
         readonly lecturerAssignmentDeadline: FieldRef<"SubjectClass", 'DateTime'>;
+        readonly sendLecturerAssignmentAt: FieldRef<"SubjectClass", 'DateTime'>;
+        readonly submitLecturerAssignmentAt: FieldRef<"SubjectClass", 'DateTime'>;
         readonly examDate: FieldRef<"SubjectClass", 'DateTime'>;
         readonly examType: FieldRef<"SubjectClass", 'ExamType'>;
         readonly examId: FieldRef<"SubjectClass", 'String'>;
@@ -49929,6 +49887,7 @@ export namespace Prisma {
         readonly scoreSubmitted: FieldRef<"SubjectClass", 'Boolean'>;
         readonly scoreChecked: FieldRef<"SubjectClass", 'Boolean'>;
         readonly roomId: FieldRef<"SubjectClass", 'String'>;
+        readonly trainingLocationId: FieldRef<"SubjectClass", 'String'>;
         readonly lecturerId: FieldRef<"SubjectClass", 'String'>;
         readonly extraLecturerId: FieldRef<"SubjectClass", 'String'>;
         readonly enterGradeLecturerId: FieldRef<"SubjectClass", 'String'>;
@@ -52979,6 +52938,7 @@ export namespace Prisma {
         dM_Tinh_New<T extends TrainingLocation$dM_Tinh_NewArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$dM_Tinh_NewArgs<ExtArgs>>): Prisma__DM_Tinh_NewClient<$Result.GetResult<Prisma.$DM_Tinh_NewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         students<T extends TrainingLocation$studentsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         buildings<T extends TrainingLocation$buildingsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$buildingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BuildingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        subjectClasses<T extends TrainingLocation$subjectClassesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$subjectClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -53749,7 +53709,7 @@ export namespace Prisma {
         defenseRooms<T extends Room$defenseRoomsArgs<ExtArgs> = {}>(args?: Subset<T, Room$defenseRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         thesisProject<T extends Room$thesisProjectArgs<ExtArgs> = {}>(args?: Subset<T, Room$thesisProjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         classSchedules<T extends Room$classSchedulesArgs<ExtArgs> = {}>(args?: Subset<T, Room$classSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        examSession<T extends Room$examSessionArgs<ExtArgs> = {}>(args?: Subset<T, Room$examSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        examRooms<T extends Room$examRoomsArgs<ExtArgs> = {}>(args?: Subset<T, Room$examRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -59162,7 +59122,6 @@ export namespace Prisma {
         notifications<T extends Student$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Student$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         researchRegistrations<T extends Student$researchRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, Student$researchRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentResearchRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         thesisRegistrations<T extends Student$thesisRegistrationsArgs<ExtArgs> = {}>(args?: Subset<T, Student$thesisRegistrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentThesisRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        examSession<T extends Student$examSessionArgs<ExtArgs> = {}>(args?: Subset<T, Student$examSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         diplomaVerificationApplication<T extends Student$diplomaVerificationApplicationArgs<ExtArgs> = {}>(args?: Subset<T, Student$diplomaVerificationApplicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DiplomaVerificationApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         studentScoreConvert<T extends Student$studentScoreConvertArgs<ExtArgs> = {}>(args?: Subset<T, Student$studentScoreConvertArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentScoreConvertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         classRegisterLogs<T extends Student$classRegisterLogsArgs<ExtArgs> = {}>(args?: Subset<T, Student$classRegisterLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterLogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -89021,7 +88980,6 @@ export namespace Prisma {
         knowledgeBlock<T extends Question$knowledgeBlockArgs<ExtArgs> = {}>(args?: Subset<T, Question$knowledgeBlockArgs<ExtArgs>>): Prisma__KnowledgeBlockClient<$Result.GetResult<Prisma.$KnowledgeBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         difficulty<T extends Question$difficultyArgs<ExtArgs> = {}>(args?: Subset<T, Question$difficultyArgs<ExtArgs>>): Prisma__DifficultyClient<$Result.GetResult<Prisma.$DifficultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         sessionQuestions<T extends Question$sessionQuestionsArgs<ExtArgs> = {}>(args?: Subset<T, Question$sessionQuestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamBankQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        answers<T extends Question$answersArgs<ExtArgs> = {}>(args?: Subset<T, Question$answersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -90212,392 +90170,6 @@ export namespace Prisma {
         readonly correctOrder: FieldRef<"OrderingItem", 'Int'>;
     }
 
-    export interface AnswerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Answer'], meta: { name: 'Answer' } };
-        /**
-         * Fields of the Answer model
-         */
-        readonly fields: AnswerFieldRefs;
-        /**
-         * Find zero or one Answer that matches the filter.
-         * @param {AnswerFindUniqueArgs} args - Arguments to find a Answer
-         * @example
-         * // Get one Answer
-         * const answer = await prisma.answer.findUnique({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        findUnique<T extends AnswerFindUniqueArgs>(args: SelectSubset<T, AnswerFindUniqueArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Find one Answer that matches the filter or throw an error with `error.code='P2025'`
-         * if no matches were found.
-         * @param {AnswerFindUniqueOrThrowArgs} args - Arguments to find a Answer
-         * @example
-         * // Get one Answer
-         * const answer = await prisma.answer.findUniqueOrThrow({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        findUniqueOrThrow<T extends AnswerFindUniqueOrThrowArgs>(args: SelectSubset<T, AnswerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Find the first Answer that matches the filter.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {AnswerFindFirstArgs} args - Arguments to find a Answer
-         * @example
-         * // Get one Answer
-         * const answer = await prisma.answer.findFirst({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        findFirst<T extends AnswerFindFirstArgs>(args?: SelectSubset<T, AnswerFindFirstArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Find the first Answer that matches the filter or
-         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {AnswerFindFirstOrThrowArgs} args - Arguments to find a Answer
-         * @example
-         * // Get one Answer
-         * const answer = await prisma.answer.findFirstOrThrow({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        findFirstOrThrow<T extends AnswerFindFirstOrThrowArgs>(args?: SelectSubset<T, AnswerFindFirstOrThrowArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Find zero or more Answers that matches the filter.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {AnswerFindManyArgs} args - Arguments to filter and select certain fields only.
-         * @example
-         * // Get all Answers
-         * const answers = await prisma.answer.findMany()
-         *
-         * // Get first 10 Answers
-         * const answers = await prisma.answer.findMany({ take: 10 })
-         *
-         * // Only select the `id`
-         * const answerWithIdOnly = await prisma.answer.findMany({ select: { id: true } })
-         */
-        findMany<T extends AnswerFindManyArgs>(args?: SelectSubset<T, AnswerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
-        /**
-         * Create a Answer.
-         * @param {AnswerCreateArgs} args - Arguments to create a Answer.
-         * @example
-         * // Create one Answer
-         * const Answer = await prisma.answer.create({
-         *   data: {
-         *     // ... data to create a Answer
-         *   }
-         * })
-         */
-        create<T extends AnswerCreateArgs>(args: SelectSubset<T, AnswerCreateArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Create many Answers.
-         * @param {AnswerCreateManyArgs} args - Arguments to create many Answers.
-         * @example
-         * // Create many Answers
-         * const answer = await prisma.answer.createMany({
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         */
-        createMany<T extends AnswerCreateManyArgs>(args?: SelectSubset<T, AnswerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
-        /**
-         * Create many Answers and returns the data saved in the database.
-         * @param {AnswerCreateManyAndReturnArgs} args - Arguments to create many Answers.
-         * @example
-         * // Create many Answers
-         * const answer = await prisma.answer.createManyAndReturn({
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         *
-         * // Create many Answers and only return the `id`
-         * const answerWithIdOnly = await prisma.answer.createManyAndReturn({
-         *   select: { id: true },
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         */
-        createManyAndReturn<T extends AnswerCreateManyAndReturnArgs>(args?: SelectSubset<T, AnswerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
-        /**
-         * Delete a Answer.
-         * @param {AnswerDeleteArgs} args - Arguments to delete one Answer.
-         * @example
-         * // Delete one Answer
-         * const Answer = await prisma.answer.delete({
-         *   where: {
-         *     // ... filter to delete one Answer
-         *   }
-         * })
-         */
-        delete<T extends AnswerDeleteArgs>(args: SelectSubset<T, AnswerDeleteArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Update one Answer.
-         * @param {AnswerUpdateArgs} args - Arguments to update one Answer.
-         * @example
-         * // Update one Answer
-         * const answer = await prisma.answer.update({
-         *   where: {
-         *     // ... provide filter here
-         *   },
-         *   data: {
-         *     // ... provide data here
-         *   }
-         * })
-         */
-        update<T extends AnswerUpdateArgs>(args: SelectSubset<T, AnswerUpdateArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Delete zero or more Answers.
-         * @param {AnswerDeleteManyArgs} args - Arguments to filter Answers to delete.
-         * @example
-         * // Delete a few Answers
-         * const { count } = await prisma.answer.deleteMany({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        deleteMany<T extends AnswerDeleteManyArgs>(args?: SelectSubset<T, AnswerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
-        /**
-         * Update zero or more Answers.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {AnswerUpdateManyArgs} args - Arguments to update one or more rows.
-         * @example
-         * // Update many Answers
-         * const answer = await prisma.answer.updateMany({
-         *   where: {
-         *     // ... provide filter here
-         *   },
-         *   data: {
-         *     // ... provide data here
-         *   }
-         * })
-         */
-        updateMany<T extends AnswerUpdateManyArgs>(args: SelectSubset<T, AnswerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
-        /**
-         * Update zero or more Answers and returns the data updated in the database.
-         * @param {AnswerUpdateManyAndReturnArgs} args - Arguments to update many Answers.
-         * @example
-         * // Update many Answers
-         * const answer = await prisma.answer.updateManyAndReturn({
-         *   where: {
-         *     // ... provide filter here
-         *   },
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         *
-         * // Update zero or more Answers and only return the `id`
-         * const answerWithIdOnly = await prisma.answer.updateManyAndReturn({
-         *   select: { id: true },
-         *   where: {
-         *     // ... provide filter here
-         *   },
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         */
-        updateManyAndReturn<T extends AnswerUpdateManyAndReturnArgs>(args: SelectSubset<T, AnswerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
-        /**
-         * Create or update one Answer.
-         * @param {AnswerUpsertArgs} args - Arguments to update or create a Answer.
-         * @example
-         * // Update or create a Answer
-         * const answer = await prisma.answer.upsert({
-         *   create: {
-         *     // ... data to create a Answer
-         *   },
-         *   update: {
-         *     // ... in case it already exists, update
-         *   },
-         *   where: {
-         *     // ... the filter for the Answer we want to update
-         *   }
-         * })
-         */
-        upsert<T extends AnswerUpsertArgs>(args: SelectSubset<T, AnswerUpsertArgs<ExtArgs>>): Prisma__AnswerClient<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Count the number of Answers.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {AnswerCountArgs} args - Arguments to filter Answers to count.
-         * @example
-         * // Count the number of Answers
-         * const count = await prisma.answer.count({
-         *   where: {
-         *     // ... the filter for the Answers we want to count
-         *   }
-         * })
-         */
-        count<T extends AnswerCountArgs>(args?: Subset<T, AnswerCountArgs>): Prisma.PrismaPromise<
-            T extends $Utils.Record<'select', any>
-            ? T['select'] extends true
-            ? number
-            : GetScalarType<T['select'], AnswerCountAggregateOutputType>
-            : number
-        >;
-        /**
-         * Allows you to perform aggregations operations on a Answer.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {AnswerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-         * @example
-         * // Ordered by age ascending
-         * // Where email contains prisma.io
-         * // Limited to the 10 users
-         * const aggregations = await prisma.user.aggregate({
-         *   _avg: {
-         *     age: true,
-         *   },
-         *   where: {
-         *     email: {
-         *       contains: "prisma.io",
-         *     },
-         *   },
-         *   orderBy: {
-         *     age: "asc",
-         *   },
-         *   take: 10,
-         * })
-         */
-        aggregate<T extends AnswerAggregateArgs>(args: Subset<T, AnswerAggregateArgs>): Prisma.PrismaPromise<GetAnswerAggregateType<T>>;
-        /**
-         * Group by Answer.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {AnswerGroupByArgs} args - Group by arguments.
-         * @example
-         * // Group by city, order by createdAt, get count
-         * const result = await prisma.user.groupBy({
-         *   by: ['city', 'createdAt'],
-         *   orderBy: {
-         *     createdAt: true
-         *   },
-         *   _count: {
-         *     _all: true
-         *   },
-         * })
-         */
-        groupBy<T extends AnswerGroupByArgs, HasSelectOrTake extends Or<
-            Extends<'skip', Keys<T>>,
-            Extends<'take', Keys<T>>
-        >, OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AnswerGroupByArgs['orderBy'] }
-        : { orderBy?: AnswerGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
-        ? `Error: "by" must not be empty.`
-        : HavingValid extends False
-        ? {
-            [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-            ]
-        }[HavingFields]
-        : 'take' extends Keys<T>
-        ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-        ? {}
-        : {
-            [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-        : 'skip' extends Keys<T>
-        ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-        ? {}
-        : {
-            [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-        : ByValid extends True
-        ? {}
-        : {
-            [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]>(args: SubsetIntersection<T, AnswerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAnswerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
-    }
-
-    /**
-     * The delegate class that acts as a "Promise-like" for Answer.
-     * Why is this prefixed with `Prisma__`?
-     * Because we want to prevent naming conflicts as mentioned in
-     * https://github.com/prisma/prisma-client-js/issues/707
-     */
-    export interface Prisma__AnswerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-        readonly [Symbol.toStringTag]: "PrismaPromise";
-        session<T extends ExamSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExamSessionDefaultArgs<ExtArgs>>): Prisma__ExamSessionClient<$Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        question<T extends QuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionDefaultArgs<ExtArgs>>): Prisma__QuestionClient<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Attaches callbacks for the resolution and/or rejection of the Promise.
-         * @param onfulfilled The callback to execute when the Promise is resolved.
-         * @param onrejected The callback to execute when the Promise is rejected.
-         * @returns A Promise for the completion of which ever callback is executed.
-         */
-        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-        /**
-         * Attaches a callback for only the rejection of the Promise.
-         * @param onrejected The callback to execute when the Promise is rejected.
-         * @returns A Promise for the completion of the callback.
-         */
-        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-        /**
-         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-         * resolved value cannot be modified from the callback.
-         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-         * @returns A Promise for the completion of the callback.
-         */
-        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-    }
-
-    /**
-     * Fields of the Answer model
-     */
-    interface AnswerFieldRefs {
-        readonly id: FieldRef<"Answer", 'String'>;
-        readonly code: FieldRef<"Answer", 'String'>;
-        readonly active: FieldRef<"Answer", 'Boolean'>;
-        readonly description: FieldRef<"Answer", 'String'>;
-        readonly deletedAt: FieldRef<"Answer", 'DateTime'>;
-        readonly createdAt: FieldRef<"Answer", 'DateTime'>;
-        readonly updatedAt: FieldRef<"Answer", 'DateTime'>;
-        readonly sessionId: FieldRef<"Answer", 'String'>;
-        readonly questionId: FieldRef<"Answer", 'String'>;
-        readonly isCorrect: FieldRef<"Answer", 'Boolean'>;
-        readonly score: FieldRef<"Answer", 'Float'>;
-        readonly comment: FieldRef<"Answer", 'String'>;
-        readonly essayAnswer: FieldRef<"Answer", 'String'>;
-    }
-
     export interface ExamDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Exam'], meta: { name: 'Exam' } };
         /**
@@ -90941,13 +90513,14 @@ export namespace Prisma {
      */
     export interface Prisma__ExamClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        questionBank<T extends QuestionBankDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QuestionBankDefaultArgs<ExtArgs>>): Prisma__QuestionBankClient<$Result.GetResult<Prisma.$QuestionBankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        room<T extends Exam$roomArgs<ExtArgs> = {}>(args?: Subset<T, Exam$roomArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        questionBank<T extends Exam$questionBankArgs<ExtArgs> = {}>(args?: Subset<T, Exam$questionBankArgs<ExtArgs>>): Prisma__QuestionBankClient<$Result.GetResult<Prisma.$QuestionBankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         subjectClass<T extends Exam$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, Exam$subjectClassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        studentSubjectScore<T extends Exam$studentSubjectScoreArgs<ExtArgs> = {}>(args?: Subset<T, Exam$studentSubjectScoreArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        room<T extends Exam$roomArgs<ExtArgs> = {}>(args?: Subset<T, Exam$roomArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         examBank<T extends Exam$examBankArgs<ExtArgs> = {}>(args?: Subset<T, Exam$examBankArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamBankPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         testStructureRules<T extends Exam$testStructureRulesArgs<ExtArgs> = {}>(args?: Subset<T, Exam$testStructureRulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestStructureRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         examSessions<T extends Exam$examSessionsArgs<ExtArgs> = {}>(args?: Subset<T, Exam$examSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        examFax<T extends Exam$examFaxArgs<ExtArgs> = {}>(args?: Subset<T, Exam$examFaxArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        examRooms<T extends Exam$examRoomsArgs<ExtArgs> = {}>(args?: Subset<T, Exam$examRoomsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -90984,14 +90557,391 @@ export namespace Prisma {
         readonly title: FieldRef<"Exam", 'String'>;
         readonly status: FieldRef<"Exam", 'ExamStatus'>;
         readonly questionBankId: FieldRef<"Exam", 'String'>;
-        readonly startTime: FieldRef<"Exam", 'DateTime'>;
-        readonly endTime: FieldRef<"Exam", 'DateTime'>;
-        readonly duration: FieldRef<"Exam", 'Int'>;
-        readonly passScore: FieldRef<"Exam", 'Float'>;
-        readonly maxScore: FieldRef<"Exam", 'Float'>;
-        readonly shuffleQuestions: FieldRef<"Exam", 'Boolean'>;
-        readonly shuffleAnswers: FieldRef<"Exam", 'Boolean'>;
-        readonly showResult: FieldRef<"Exam", 'Boolean'>;
+        readonly lockExamCode: FieldRef<"Exam", 'Boolean'>;
+        readonly startTime: FieldRef<"Exam", 'String'>;
+    }
+
+    export interface ExamRoomDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExamRoom'], meta: { name: 'ExamRoom' } };
+        /**
+         * Fields of the ExamRoom model
+         */
+        readonly fields: ExamRoomFieldRefs;
+        /**
+         * Find zero or one ExamRoom that matches the filter.
+         * @param {ExamRoomFindUniqueArgs} args - Arguments to find a ExamRoom
+         * @example
+         * // Get one ExamRoom
+         * const examRoom = await prisma.examRoom.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ExamRoomFindUniqueArgs>(args: SelectSubset<T, ExamRoomFindUniqueArgs<ExtArgs>>): Prisma__ExamRoomClient<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ExamRoom that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ExamRoomFindUniqueOrThrowArgs} args - Arguments to find a ExamRoom
+         * @example
+         * // Get one ExamRoom
+         * const examRoom = await prisma.examRoom.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ExamRoomFindUniqueOrThrowArgs>(args: SelectSubset<T, ExamRoomFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExamRoomClient<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ExamRoom that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ExamRoomFindFirstArgs} args - Arguments to find a ExamRoom
+         * @example
+         * // Get one ExamRoom
+         * const examRoom = await prisma.examRoom.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ExamRoomFindFirstArgs>(args?: SelectSubset<T, ExamRoomFindFirstArgs<ExtArgs>>): Prisma__ExamRoomClient<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ExamRoom that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ExamRoomFindFirstOrThrowArgs} args - Arguments to find a ExamRoom
+         * @example
+         * // Get one ExamRoom
+         * const examRoom = await prisma.examRoom.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ExamRoomFindFirstOrThrowArgs>(args?: SelectSubset<T, ExamRoomFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExamRoomClient<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ExamRooms that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ExamRoomFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ExamRooms
+         * const examRooms = await prisma.examRoom.findMany()
+         *
+         * // Get first 10 ExamRooms
+         * const examRooms = await prisma.examRoom.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const examRoomWithIdOnly = await prisma.examRoom.findMany({ select: { id: true } })
+         */
+        findMany<T extends ExamRoomFindManyArgs>(args?: SelectSubset<T, ExamRoomFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ExamRoom.
+         * @param {ExamRoomCreateArgs} args - Arguments to create a ExamRoom.
+         * @example
+         * // Create one ExamRoom
+         * const ExamRoom = await prisma.examRoom.create({
+         *   data: {
+         *     // ... data to create a ExamRoom
+         *   }
+         * })
+         */
+        create<T extends ExamRoomCreateArgs>(args: SelectSubset<T, ExamRoomCreateArgs<ExtArgs>>): Prisma__ExamRoomClient<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ExamRooms.
+         * @param {ExamRoomCreateManyArgs} args - Arguments to create many ExamRooms.
+         * @example
+         * // Create many ExamRooms
+         * const examRoom = await prisma.examRoom.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ExamRoomCreateManyArgs>(args?: SelectSubset<T, ExamRoomCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ExamRooms and returns the data saved in the database.
+         * @param {ExamRoomCreateManyAndReturnArgs} args - Arguments to create many ExamRooms.
+         * @example
+         * // Create many ExamRooms
+         * const examRoom = await prisma.examRoom.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ExamRooms and only return the `id`
+         * const examRoomWithIdOnly = await prisma.examRoom.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ExamRoomCreateManyAndReturnArgs>(args?: SelectSubset<T, ExamRoomCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ExamRoom.
+         * @param {ExamRoomDeleteArgs} args - Arguments to delete one ExamRoom.
+         * @example
+         * // Delete one ExamRoom
+         * const ExamRoom = await prisma.examRoom.delete({
+         *   where: {
+         *     // ... filter to delete one ExamRoom
+         *   }
+         * })
+         */
+        delete<T extends ExamRoomDeleteArgs>(args: SelectSubset<T, ExamRoomDeleteArgs<ExtArgs>>): Prisma__ExamRoomClient<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ExamRoom.
+         * @param {ExamRoomUpdateArgs} args - Arguments to update one ExamRoom.
+         * @example
+         * // Update one ExamRoom
+         * const examRoom = await prisma.examRoom.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ExamRoomUpdateArgs>(args: SelectSubset<T, ExamRoomUpdateArgs<ExtArgs>>): Prisma__ExamRoomClient<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ExamRooms.
+         * @param {ExamRoomDeleteManyArgs} args - Arguments to filter ExamRooms to delete.
+         * @example
+         * // Delete a few ExamRooms
+         * const { count } = await prisma.examRoom.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ExamRoomDeleteManyArgs>(args?: SelectSubset<T, ExamRoomDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ExamRooms.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ExamRoomUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ExamRooms
+         * const examRoom = await prisma.examRoom.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ExamRoomUpdateManyArgs>(args: SelectSubset<T, ExamRoomUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ExamRooms and returns the data updated in the database.
+         * @param {ExamRoomUpdateManyAndReturnArgs} args - Arguments to update many ExamRooms.
+         * @example
+         * // Update many ExamRooms
+         * const examRoom = await prisma.examRoom.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ExamRooms and only return the `id`
+         * const examRoomWithIdOnly = await prisma.examRoom.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ExamRoomUpdateManyAndReturnArgs>(args: SelectSubset<T, ExamRoomUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ExamRoom.
+         * @param {ExamRoomUpsertArgs} args - Arguments to update or create a ExamRoom.
+         * @example
+         * // Update or create a ExamRoom
+         * const examRoom = await prisma.examRoom.upsert({
+         *   create: {
+         *     // ... data to create a ExamRoom
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ExamRoom we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ExamRoomUpsertArgs>(args: SelectSubset<T, ExamRoomUpsertArgs<ExtArgs>>): Prisma__ExamRoomClient<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ExamRooms.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ExamRoomCountArgs} args - Arguments to filter ExamRooms to count.
+         * @example
+         * // Count the number of ExamRooms
+         * const count = await prisma.examRoom.count({
+         *   where: {
+         *     // ... the filter for the ExamRooms we want to count
+         *   }
+         * })
+         */
+        count<T extends ExamRoomCountArgs>(args?: Subset<T, ExamRoomCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ExamRoomCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ExamRoom.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ExamRoomAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ExamRoomAggregateArgs>(args: Subset<T, ExamRoomAggregateArgs>): Prisma.PrismaPromise<GetExamRoomAggregateType<T>>;
+        /**
+         * Group by ExamRoom.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ExamRoomGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ExamRoomGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ExamRoomGroupByArgs['orderBy'] }
+        : { orderBy?: ExamRoomGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ExamRoomGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExamRoomGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ExamRoom.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ExamRoomClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        exam<T extends ExamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExamDefaultArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        room<T extends RoomDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoomDefaultArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        examSessions<T extends ExamRoom$examSessionsArgs<ExtArgs> = {}>(args?: Subset<T, ExamRoom$examSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ExamRoom model
+     */
+    interface ExamRoomFieldRefs {
+        readonly id: FieldRef<"ExamRoom", 'String'>;
+        readonly code: FieldRef<"ExamRoom", 'String'>;
+        readonly active: FieldRef<"ExamRoom", 'Boolean'>;
+        readonly description: FieldRef<"ExamRoom", 'String'>;
+        readonly deletedAt: FieldRef<"ExamRoom", 'DateTime'>;
+        readonly createdAt: FieldRef<"ExamRoom", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ExamRoom", 'DateTime'>;
+        readonly examId: FieldRef<"ExamRoom", 'String'>;
+        readonly roomId: FieldRef<"ExamRoom", 'String'>;
     }
 
     export interface TestStructureRuleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -91723,7 +91673,6 @@ export namespace Prisma {
     export interface Prisma__ExamBankClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         exam<T extends ExamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExamDefaultArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        examSession<T extends ExamBank$examSessionArgs<ExtArgs> = {}>(args?: Subset<T, ExamBank$examSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         questions<T extends ExamBank$questionsArgs<ExtArgs> = {}>(args?: Subset<T, ExamBank$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamBankQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -91759,7 +91708,6 @@ export namespace Prisma {
         readonly createdAt: FieldRef<"ExamBank", 'DateTime'>;
         readonly updatedAt: FieldRef<"ExamBank", 'DateTime'>;
         readonly examId: FieldRef<"ExamBank", 'String'>;
-        readonly examCode: FieldRef<"ExamBank", 'String'>;
     }
 
     export interface ExamBankQuestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -92145,389 +92093,6 @@ export namespace Prisma {
         readonly order: FieldRef<"ExamBankQuestion", 'Int'>;
     }
 
-    export interface ExamFaxDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExamFax'], meta: { name: 'ExamFax' } };
-        /**
-         * Fields of the ExamFax model
-         */
-        readonly fields: ExamFaxFieldRefs;
-        /**
-         * Find zero or one ExamFax that matches the filter.
-         * @param {ExamFaxFindUniqueArgs} args - Arguments to find a ExamFax
-         * @example
-         * // Get one ExamFax
-         * const examFax = await prisma.examFax.findUnique({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        findUnique<T extends ExamFaxFindUniqueArgs>(args: SelectSubset<T, ExamFaxFindUniqueArgs<ExtArgs>>): Prisma__ExamFaxClient<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Find one ExamFax that matches the filter or throw an error with `error.code='P2025'`
-         * if no matches were found.
-         * @param {ExamFaxFindUniqueOrThrowArgs} args - Arguments to find a ExamFax
-         * @example
-         * // Get one ExamFax
-         * const examFax = await prisma.examFax.findUniqueOrThrow({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        findUniqueOrThrow<T extends ExamFaxFindUniqueOrThrowArgs>(args: SelectSubset<T, ExamFaxFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExamFaxClient<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Find the first ExamFax that matches the filter.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {ExamFaxFindFirstArgs} args - Arguments to find a ExamFax
-         * @example
-         * // Get one ExamFax
-         * const examFax = await prisma.examFax.findFirst({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        findFirst<T extends ExamFaxFindFirstArgs>(args?: SelectSubset<T, ExamFaxFindFirstArgs<ExtArgs>>): Prisma__ExamFaxClient<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Find the first ExamFax that matches the filter or
-         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {ExamFaxFindFirstOrThrowArgs} args - Arguments to find a ExamFax
-         * @example
-         * // Get one ExamFax
-         * const examFax = await prisma.examFax.findFirstOrThrow({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        findFirstOrThrow<T extends ExamFaxFindFirstOrThrowArgs>(args?: SelectSubset<T, ExamFaxFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExamFaxClient<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Find zero or more ExamFaxes that matches the filter.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {ExamFaxFindManyArgs} args - Arguments to filter and select certain fields only.
-         * @example
-         * // Get all ExamFaxes
-         * const examFaxes = await prisma.examFax.findMany()
-         *
-         * // Get first 10 ExamFaxes
-         * const examFaxes = await prisma.examFax.findMany({ take: 10 })
-         *
-         * // Only select the `id`
-         * const examFaxWithIdOnly = await prisma.examFax.findMany({ select: { id: true } })
-         */
-        findMany<T extends ExamFaxFindManyArgs>(args?: SelectSubset<T, ExamFaxFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
-        /**
-         * Create a ExamFax.
-         * @param {ExamFaxCreateArgs} args - Arguments to create a ExamFax.
-         * @example
-         * // Create one ExamFax
-         * const ExamFax = await prisma.examFax.create({
-         *   data: {
-         *     // ... data to create a ExamFax
-         *   }
-         * })
-         */
-        create<T extends ExamFaxCreateArgs>(args: SelectSubset<T, ExamFaxCreateArgs<ExtArgs>>): Prisma__ExamFaxClient<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Create many ExamFaxes.
-         * @param {ExamFaxCreateManyArgs} args - Arguments to create many ExamFaxes.
-         * @example
-         * // Create many ExamFaxes
-         * const examFax = await prisma.examFax.createMany({
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         */
-        createMany<T extends ExamFaxCreateManyArgs>(args?: SelectSubset<T, ExamFaxCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
-        /**
-         * Create many ExamFaxes and returns the data saved in the database.
-         * @param {ExamFaxCreateManyAndReturnArgs} args - Arguments to create many ExamFaxes.
-         * @example
-         * // Create many ExamFaxes
-         * const examFax = await prisma.examFax.createManyAndReturn({
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         *
-         * // Create many ExamFaxes and only return the `id`
-         * const examFaxWithIdOnly = await prisma.examFax.createManyAndReturn({
-         *   select: { id: true },
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         */
-        createManyAndReturn<T extends ExamFaxCreateManyAndReturnArgs>(args?: SelectSubset<T, ExamFaxCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
-        /**
-         * Delete a ExamFax.
-         * @param {ExamFaxDeleteArgs} args - Arguments to delete one ExamFax.
-         * @example
-         * // Delete one ExamFax
-         * const ExamFax = await prisma.examFax.delete({
-         *   where: {
-         *     // ... filter to delete one ExamFax
-         *   }
-         * })
-         */
-        delete<T extends ExamFaxDeleteArgs>(args: SelectSubset<T, ExamFaxDeleteArgs<ExtArgs>>): Prisma__ExamFaxClient<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Update one ExamFax.
-         * @param {ExamFaxUpdateArgs} args - Arguments to update one ExamFax.
-         * @example
-         * // Update one ExamFax
-         * const examFax = await prisma.examFax.update({
-         *   where: {
-         *     // ... provide filter here
-         *   },
-         *   data: {
-         *     // ... provide data here
-         *   }
-         * })
-         */
-        update<T extends ExamFaxUpdateArgs>(args: SelectSubset<T, ExamFaxUpdateArgs<ExtArgs>>): Prisma__ExamFaxClient<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Delete zero or more ExamFaxes.
-         * @param {ExamFaxDeleteManyArgs} args - Arguments to filter ExamFaxes to delete.
-         * @example
-         * // Delete a few ExamFaxes
-         * const { count } = await prisma.examFax.deleteMany({
-         *   where: {
-         *     // ... provide filter here
-         *   }
-         * })
-         */
-        deleteMany<T extends ExamFaxDeleteManyArgs>(args?: SelectSubset<T, ExamFaxDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
-        /**
-         * Update zero or more ExamFaxes.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {ExamFaxUpdateManyArgs} args - Arguments to update one or more rows.
-         * @example
-         * // Update many ExamFaxes
-         * const examFax = await prisma.examFax.updateMany({
-         *   where: {
-         *     // ... provide filter here
-         *   },
-         *   data: {
-         *     // ... provide data here
-         *   }
-         * })
-         */
-        updateMany<T extends ExamFaxUpdateManyArgs>(args: SelectSubset<T, ExamFaxUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
-        /**
-         * Update zero or more ExamFaxes and returns the data updated in the database.
-         * @param {ExamFaxUpdateManyAndReturnArgs} args - Arguments to update many ExamFaxes.
-         * @example
-         * // Update many ExamFaxes
-         * const examFax = await prisma.examFax.updateManyAndReturn({
-         *   where: {
-         *     // ... provide filter here
-         *   },
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         *
-         * // Update zero or more ExamFaxes and only return the `id`
-         * const examFaxWithIdOnly = await prisma.examFax.updateManyAndReturn({
-         *   select: { id: true },
-         *   where: {
-         *     // ... provide filter here
-         *   },
-         *   data: [
-         *     // ... provide data here
-         *   ]
-         * })
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         */
-        updateManyAndReturn<T extends ExamFaxUpdateManyAndReturnArgs>(args: SelectSubset<T, ExamFaxUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
-        /**
-         * Create or update one ExamFax.
-         * @param {ExamFaxUpsertArgs} args - Arguments to update or create a ExamFax.
-         * @example
-         * // Update or create a ExamFax
-         * const examFax = await prisma.examFax.upsert({
-         *   create: {
-         *     // ... data to create a ExamFax
-         *   },
-         *   update: {
-         *     // ... in case it already exists, update
-         *   },
-         *   where: {
-         *     // ... the filter for the ExamFax we want to update
-         *   }
-         * })
-         */
-        upsert<T extends ExamFaxUpsertArgs>(args: SelectSubset<T, ExamFaxUpsertArgs<ExtArgs>>): Prisma__ExamFaxClient<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Count the number of ExamFaxes.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {ExamFaxCountArgs} args - Arguments to filter ExamFaxes to count.
-         * @example
-         * // Count the number of ExamFaxes
-         * const count = await prisma.examFax.count({
-         *   where: {
-         *     // ... the filter for the ExamFaxes we want to count
-         *   }
-         * })
-         */
-        count<T extends ExamFaxCountArgs>(args?: Subset<T, ExamFaxCountArgs>): Prisma.PrismaPromise<
-            T extends $Utils.Record<'select', any>
-            ? T['select'] extends true
-            ? number
-            : GetScalarType<T['select'], ExamFaxCountAggregateOutputType>
-            : number
-        >;
-        /**
-         * Allows you to perform aggregations operations on a ExamFax.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {ExamFaxAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-         * @example
-         * // Ordered by age ascending
-         * // Where email contains prisma.io
-         * // Limited to the 10 users
-         * const aggregations = await prisma.user.aggregate({
-         *   _avg: {
-         *     age: true,
-         *   },
-         *   where: {
-         *     email: {
-         *       contains: "prisma.io",
-         *     },
-         *   },
-         *   orderBy: {
-         *     age: "asc",
-         *   },
-         *   take: 10,
-         * })
-         */
-        aggregate<T extends ExamFaxAggregateArgs>(args: Subset<T, ExamFaxAggregateArgs>): Prisma.PrismaPromise<GetExamFaxAggregateType<T>>;
-        /**
-         * Group by ExamFax.
-         * Note, that providing `undefined` is treated as the value not being there.
-         * Read more here: https://pris.ly/d/null-undefined
-         * @param {ExamFaxGroupByArgs} args - Group by arguments.
-         * @example
-         * // Group by city, order by createdAt, get count
-         * const result = await prisma.user.groupBy({
-         *   by: ['city', 'createdAt'],
-         *   orderBy: {
-         *     createdAt: true
-         *   },
-         *   _count: {
-         *     _all: true
-         *   },
-         * })
-         */
-        groupBy<T extends ExamFaxGroupByArgs, HasSelectOrTake extends Or<
-            Extends<'skip', Keys<T>>,
-            Extends<'take', Keys<T>>
-        >, OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ExamFaxGroupByArgs['orderBy'] }
-        : { orderBy?: ExamFaxGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
-        ? `Error: "by" must not be empty.`
-        : HavingValid extends False
-        ? {
-            [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-            ]
-        }[HavingFields]
-        : 'take' extends Keys<T>
-        ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-        ? {}
-        : {
-            [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-        : 'skip' extends Keys<T>
-        ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-        ? {}
-        : {
-            [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-        : ByValid extends True
-        ? {}
-        : {
-            [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]>(args: SubsetIntersection<T, ExamFaxGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExamFaxGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
-    }
-
-    /**
-     * The delegate class that acts as a "Promise-like" for ExamFax.
-     * Why is this prefixed with `Prisma__`?
-     * Because we want to prevent naming conflicts as mentioned in
-     * https://github.com/prisma/prisma-client-js/issues/707
-     */
-    export interface Prisma__ExamFaxClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-        readonly [Symbol.toStringTag]: "PrismaPromise";
-        exam<T extends ExamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExamDefaultArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        examSession<T extends ExamFax$examSessionArgs<ExtArgs> = {}>(args?: Subset<T, ExamFax$examSessionArgs<ExtArgs>>): Prisma__ExamSessionClient<$Result.GetResult<Prisma.$ExamSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        /**
-         * Attaches callbacks for the resolution and/or rejection of the Promise.
-         * @param onfulfilled The callback to execute when the Promise is resolved.
-         * @param onrejected The callback to execute when the Promise is rejected.
-         * @returns A Promise for the completion of which ever callback is executed.
-         */
-        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-        /**
-         * Attaches a callback for only the rejection of the Promise.
-         * @param onrejected The callback to execute when the Promise is rejected.
-         * @returns A Promise for the completion of the callback.
-         */
-        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-        /**
-         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-         * resolved value cannot be modified from the callback.
-         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-         * @returns A Promise for the completion of the callback.
-         */
-        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-    }
-
-    /**
-     * Fields of the ExamFax model
-     */
-    interface ExamFaxFieldRefs {
-        readonly id: FieldRef<"ExamFax", 'String'>;
-        readonly code: FieldRef<"ExamFax", 'String'>;
-        readonly active: FieldRef<"ExamFax", 'Boolean'>;
-        readonly description: FieldRef<"ExamFax", 'String'>;
-        readonly deletedAt: FieldRef<"ExamFax", 'DateTime'>;
-        readonly createdAt: FieldRef<"ExamFax", 'DateTime'>;
-        readonly updatedAt: FieldRef<"ExamFax", 'DateTime'>;
-        readonly examId: FieldRef<"ExamFax", 'String'>;
-        readonly fax: FieldRef<"ExamFax", 'String'>;
-        readonly score: FieldRef<"ExamFax", 'Decimal'>;
-    }
-
     export interface ExamSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExamSession'], meta: { name: 'ExamSession' } };
         /**
@@ -92871,12 +92436,9 @@ export namespace Prisma {
      */
     export interface Prisma__ExamSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        student<T extends ExamSession$studentArgs<ExtArgs> = {}>(args?: Subset<T, ExamSession$studentArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         exam<T extends ExamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExamDefaultArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        room<T extends ExamSession$roomArgs<ExtArgs> = {}>(args?: Subset<T, ExamSession$roomArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        examBank<T extends ExamSession$examBankArgs<ExtArgs> = {}>(args?: Subset<T, ExamSession$examBankArgs<ExtArgs>>): Prisma__ExamBankClient<$Result.GetResult<Prisma.$ExamBankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
-        answers<T extends ExamSession$answersArgs<ExtArgs> = {}>(args?: Subset<T, ExamSession$answersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        examFax<T extends ExamSession$examFaxArgs<ExtArgs> = {}>(args?: Subset<T, ExamSession$examFaxArgs<ExtArgs>>): Prisma__ExamFaxClient<$Result.GetResult<Prisma.$ExamFaxPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        examRoom<T extends ExamRoomDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExamRoomDefaultArgs<ExtArgs>>): Prisma__ExamRoomClient<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        studentSubjectScore<T extends StudentSubjectScoreDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScoreDefaultArgs<ExtArgs>>): Prisma__StudentSubjectScoreClient<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -92910,13 +92472,10 @@ export namespace Prisma {
         readonly deletedAt: FieldRef<"ExamSession", 'DateTime'>;
         readonly createdAt: FieldRef<"ExamSession", 'DateTime'>;
         readonly updatedAt: FieldRef<"ExamSession", 'DateTime'>;
-        readonly startTime: FieldRef<"ExamSession", 'DateTime'>;
-        readonly endTime: FieldRef<"ExamSession", 'DateTime'>;
-        readonly studentId: FieldRef<"ExamSession", 'String'>;
         readonly examId: FieldRef<"ExamSession", 'String'>;
-        readonly roomId: FieldRef<"ExamSession", 'String'>;
-        readonly examBankId: FieldRef<"ExamSession", 'String'>;
-        readonly examFaxId: FieldRef<"ExamSession", 'String'>;
+        readonly examRoomId: FieldRef<"ExamSession", 'String'>;
+        readonly studentSubjectScoreId: FieldRef<"ExamSession", 'String'>;
+        readonly examCode: FieldRef<"ExamSession", 'String'>;
     }
 
     export interface AcademicWarningRuleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -106477,7 +106036,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "answer" | "exam" | "testStructureRule" | "examBank" | "examBankQuestion" | "examFax" | "examSession" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "testStructureRule" | "examBank" | "examBankQuestion" | "examSession" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -121429,80 +120988,6 @@ export namespace Prisma {
                     }
                 }
             }
-            Answer: {
-                payload: Prisma.$AnswerPayload<ExtArgs>
-                fields: Prisma.AnswerFieldRefs
-                operations: {
-                    findUnique: {
-                        args: Prisma.AnswerFindUniqueArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload> | null
-                    }
-                    findUniqueOrThrow: {
-                        args: Prisma.AnswerFindUniqueOrThrowArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload>
-                    }
-                    findFirst: {
-                        args: Prisma.AnswerFindFirstArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload> | null
-                    }
-                    findFirstOrThrow: {
-                        args: Prisma.AnswerFindFirstOrThrowArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload>
-                    }
-                    findMany: {
-                        args: Prisma.AnswerFindManyArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload>[]
-                    }
-                    create: {
-                        args: Prisma.AnswerCreateArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload>
-                    }
-                    createMany: {
-                        args: Prisma.AnswerCreateManyArgs<ExtArgs>
-                        result: BatchPayload
-                    }
-                    createManyAndReturn: {
-                        args: Prisma.AnswerCreateManyAndReturnArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload>[]
-                    }
-                    delete: {
-                        args: Prisma.AnswerDeleteArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload>
-                    }
-                    update: {
-                        args: Prisma.AnswerUpdateArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload>
-                    }
-                    deleteMany: {
-                        args: Prisma.AnswerDeleteManyArgs<ExtArgs>
-                        result: BatchPayload
-                    }
-                    updateMany: {
-                        args: Prisma.AnswerUpdateManyArgs<ExtArgs>
-                        result: BatchPayload
-                    }
-                    updateManyAndReturn: {
-                        args: Prisma.AnswerUpdateManyAndReturnArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload>[]
-                    }
-                    upsert: {
-                        args: Prisma.AnswerUpsertArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$AnswerPayload>
-                    }
-                    aggregate: {
-                        args: Prisma.AnswerAggregateArgs<ExtArgs>
-                        result: $Utils.Optional<AggregateAnswer>
-                    }
-                    groupBy: {
-                        args: Prisma.AnswerGroupByArgs<ExtArgs>
-                        result: $Utils.Optional<AnswerGroupByOutputType>[]
-                    }
-                    count: {
-                        args: Prisma.AnswerCountArgs<ExtArgs>
-                        result: $Utils.Optional<AnswerCountAggregateOutputType> | number
-                    }
-                }
-            }
             Exam: {
                 payload: Prisma.$ExamPayload<ExtArgs>
                 fields: Prisma.ExamFieldRefs
@@ -121574,6 +121059,80 @@ export namespace Prisma {
                     count: {
                         args: Prisma.ExamCountArgs<ExtArgs>
                         result: $Utils.Optional<ExamCountAggregateOutputType> | number
+                    }
+                }
+            }
+            ExamRoom: {
+                payload: Prisma.$ExamRoomPayload<ExtArgs>
+                fields: Prisma.ExamRoomFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ExamRoomFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ExamRoomFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ExamRoomFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ExamRoomFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ExamRoomFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ExamRoomCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ExamRoomCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ExamRoomCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ExamRoomDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload>
+                    }
+                    update: {
+                        args: Prisma.ExamRoomUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ExamRoomDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ExamRoomUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ExamRoomUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ExamRoomUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ExamRoomPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ExamRoomAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateExamRoom>
+                    }
+                    groupBy: {
+                        args: Prisma.ExamRoomGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ExamRoomGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ExamRoomCountArgs<ExtArgs>
+                        result: $Utils.Optional<ExamRoomCountAggregateOutputType> | number
                     }
                 }
             }
@@ -121796,80 +121355,6 @@ export namespace Prisma {
                     count: {
                         args: Prisma.ExamBankQuestionCountArgs<ExtArgs>
                         result: $Utils.Optional<ExamBankQuestionCountAggregateOutputType> | number
-                    }
-                }
-            }
-            ExamFax: {
-                payload: Prisma.$ExamFaxPayload<ExtArgs>
-                fields: Prisma.ExamFaxFieldRefs
-                operations: {
-                    findUnique: {
-                        args: Prisma.ExamFaxFindUniqueArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload> | null
-                    }
-                    findUniqueOrThrow: {
-                        args: Prisma.ExamFaxFindUniqueOrThrowArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload>
-                    }
-                    findFirst: {
-                        args: Prisma.ExamFaxFindFirstArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload> | null
-                    }
-                    findFirstOrThrow: {
-                        args: Prisma.ExamFaxFindFirstOrThrowArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload>
-                    }
-                    findMany: {
-                        args: Prisma.ExamFaxFindManyArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload>[]
-                    }
-                    create: {
-                        args: Prisma.ExamFaxCreateArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload>
-                    }
-                    createMany: {
-                        args: Prisma.ExamFaxCreateManyArgs<ExtArgs>
-                        result: BatchPayload
-                    }
-                    createManyAndReturn: {
-                        args: Prisma.ExamFaxCreateManyAndReturnArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload>[]
-                    }
-                    delete: {
-                        args: Prisma.ExamFaxDeleteArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload>
-                    }
-                    update: {
-                        args: Prisma.ExamFaxUpdateArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload>
-                    }
-                    deleteMany: {
-                        args: Prisma.ExamFaxDeleteManyArgs<ExtArgs>
-                        result: BatchPayload
-                    }
-                    updateMany: {
-                        args: Prisma.ExamFaxUpdateManyArgs<ExtArgs>
-                        result: BatchPayload
-                    }
-                    updateManyAndReturn: {
-                        args: Prisma.ExamFaxUpdateManyAndReturnArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload>[]
-                    }
-                    upsert: {
-                        args: Prisma.ExamFaxUpsertArgs<ExtArgs>
-                        result: $Utils.PayloadToResult<Prisma.$ExamFaxPayload>
-                    }
-                    aggregate: {
-                        args: Prisma.ExamFaxAggregateArgs<ExtArgs>
-                        result: $Utils.Optional<AggregateExamFax>
-                    }
-                    groupBy: {
-                        args: Prisma.ExamFaxGroupByArgs<ExtArgs>
-                        result: $Utils.Optional<ExamFaxGroupByOutputType>[]
-                    }
-                    count: {
-                        args: Prisma.ExamFaxCountArgs<ExtArgs>
-                        result: $Utils.Optional<ExamFaxCountAggregateOutputType> | number
                     }
                 }
             }
@@ -124770,12 +124255,11 @@ export namespace Prisma {
         multipleChoiceOption?: MultipleChoiceOptionOmit
         fillInBlankSlot?: FillInBlankSlotOmit
         orderingItem?: OrderingItemOmit
-        answer?: AnswerOmit
         exam?: ExamOmit
+        examRoom?: ExamRoomOmit
         testStructureRule?: TestStructureRuleOmit
         examBank?: ExamBankOmit
         examBankQuestion?: ExamBankQuestionOmit
-        examFax?: ExamFaxOmit
         examSession?: ExamSessionOmit
         academicWarningRule?: AcademicWarningRuleOmit
         academicWarning?: AcademicWarningOmit
@@ -127488,10 +126972,12 @@ export namespace Prisma {
     export type TrainingLocationCountOutputType = {
         students: number
         buildings: number
+        subjectClasses: number
     };
     export type TrainingLocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         students?: boolean | TrainingLocationCountOutputTypeCountStudentsArgs
         buildings?: boolean | TrainingLocationCountOutputTypeCountBuildingsArgs
+        subjectClasses?: boolean | TrainingLocationCountOutputTypeCountSubjectClassesArgs
     };
     /**
      * TrainingLocationCountOutputType without action
@@ -127513,6 +126999,12 @@ export namespace Prisma {
      */
     export type TrainingLocationCountOutputTypeCountBuildingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: BuildingWhereInput
+    };
+    /**
+     * TrainingLocationCountOutputType without action
+     */
+    export type TrainingLocationCountOutputTypeCountSubjectClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SubjectClassWhereInput
     };
     /**
      * Count Type BuildingCountOutputType
@@ -127547,7 +127039,7 @@ export namespace Prisma {
         defenseRooms: number
         thesisProject: number
         classSchedules: number
-        examSession: number
+        examRooms: number
     };
     export type RoomCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         exam?: boolean | RoomCountOutputTypeCountExamArgs
@@ -127555,7 +127047,7 @@ export namespace Prisma {
         defenseRooms?: boolean | RoomCountOutputTypeCountDefenseRoomsArgs
         thesisProject?: boolean | RoomCountOutputTypeCountThesisProjectArgs
         classSchedules?: boolean | RoomCountOutputTypeCountClassSchedulesArgs
-        examSession?: boolean | RoomCountOutputTypeCountExamSessionArgs
+        examRooms?: boolean | RoomCountOutputTypeCountExamRoomsArgs
     };
     /**
      * RoomCountOutputType without action
@@ -127599,8 +127091,8 @@ export namespace Prisma {
     /**
      * RoomCountOutputType without action
      */
-    export type RoomCountOutputTypeCountExamSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: ExamSessionWhereInput
+    export type RoomCountOutputTypeCountExamRoomsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ExamRoomWhereInput
     };
     /**
      * Count Type TrainingFieldCountOutputType
@@ -127902,7 +127394,6 @@ export namespace Prisma {
         notifications: number
         researchRegistrations: number
         thesisRegistrations: number
-        examSession: number
         diplomaVerificationApplication: number
         studentScoreConvert: number
         classRegisterLogs: number
@@ -127926,7 +127417,6 @@ export namespace Prisma {
         notifications?: boolean | StudentCountOutputTypeCountNotificationsArgs
         researchRegistrations?: boolean | StudentCountOutputTypeCountResearchRegistrationsArgs
         thesisRegistrations?: boolean | StudentCountOutputTypeCountThesisRegistrationsArgs
-        examSession?: boolean | StudentCountOutputTypeCountExamSessionArgs
         diplomaVerificationApplication?: boolean | StudentCountOutputTypeCountDiplomaVerificationApplicationArgs
         studentScoreConvert?: boolean | StudentCountOutputTypeCountStudentScoreConvertArgs
         classRegisterLogs?: boolean | StudentCountOutputTypeCountClassRegisterLogsArgs
@@ -128037,12 +127527,6 @@ export namespace Prisma {
      */
     export type StudentCountOutputTypeCountThesisRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: StudentThesisRegistrationWhereInput
-    };
-    /**
-     * StudentCountOutputType without action
-     */
-    export type StudentCountOutputTypeCountExamSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: ExamSessionWhereInput
     };
     /**
      * StudentCountOutputType without action
@@ -129730,14 +129214,12 @@ export namespace Prisma {
         fillInBlankSlots: number
         orderingItems: number
         sessionQuestions: number
-        answers: number
     };
     export type QuestionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         multipleChoiceOptions?: boolean | QuestionCountOutputTypeCountMultipleChoiceOptionsArgs
         fillInBlankSlots?: boolean | QuestionCountOutputTypeCountFillInBlankSlotsArgs
         orderingItems?: boolean | QuestionCountOutputTypeCountOrderingItemsArgs
         sessionQuestions?: boolean | QuestionCountOutputTypeCountSessionQuestionsArgs
-        answers?: boolean | QuestionCountOutputTypeCountAnswersArgs
     };
     /**
      * QuestionCountOutputType without action
@@ -129773,29 +129255,25 @@ export namespace Prisma {
         where?: ExamBankQuestionWhereInput
     };
     /**
-     * QuestionCountOutputType without action
-     */
-    export type QuestionCountOutputTypeCountAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: AnswerWhereInput
-    };
-    /**
      * Count Type ExamCountOutputType
      */
     export type ExamCountOutputType = {
-        room: number
         subjectClass: number
+        studentSubjectScore: number
+        room: number
         examBank: number
         testStructureRules: number
         examSessions: number
-        examFax: number
+        examRooms: number
     };
     export type ExamCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        room?: boolean | ExamCountOutputTypeCountRoomArgs
         subjectClass?: boolean | ExamCountOutputTypeCountSubjectClassArgs
+        studentSubjectScore?: boolean | ExamCountOutputTypeCountStudentSubjectScoreArgs
+        room?: boolean | ExamCountOutputTypeCountRoomArgs
         examBank?: boolean | ExamCountOutputTypeCountExamBankArgs
         testStructureRules?: boolean | ExamCountOutputTypeCountTestStructureRulesArgs
         examSessions?: boolean | ExamCountOutputTypeCountExamSessionsArgs
-        examFax?: boolean | ExamCountOutputTypeCountExamFaxArgs
+        examRooms?: boolean | ExamCountOutputTypeCountExamRoomsArgs
     };
     /**
      * ExamCountOutputType without action
@@ -129809,14 +129287,20 @@ export namespace Prisma {
     /**
      * ExamCountOutputType without action
      */
-    export type ExamCountOutputTypeCountRoomArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: RoomWhereInput
+    export type ExamCountOutputTypeCountSubjectClassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SubjectClassWhereInput
     };
     /**
      * ExamCountOutputType without action
      */
-    export type ExamCountOutputTypeCountSubjectClassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: SubjectClassWhereInput
+    export type ExamCountOutputTypeCountStudentSubjectScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: StudentSubjectScoreWhereInput
+    };
+    /**
+     * ExamCountOutputType without action
+     */
+    export type ExamCountOutputTypeCountRoomArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: RoomWhereInput
     };
     /**
      * ExamCountOutputType without action
@@ -129839,18 +129323,40 @@ export namespace Prisma {
     /**
      * ExamCountOutputType without action
      */
-    export type ExamCountOutputTypeCountExamFaxArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: ExamFaxWhereInput
+    export type ExamCountOutputTypeCountExamRoomsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ExamRoomWhereInput
+    };
+    /**
+     * Count Type ExamRoomCountOutputType
+     */
+    export type ExamRoomCountOutputType = {
+        examSessions: number
+    };
+    export type ExamRoomCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        examSessions?: boolean | ExamRoomCountOutputTypeCountExamSessionsArgs
+    };
+    /**
+     * ExamRoomCountOutputType without action
+     */
+    export type ExamRoomCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoomCountOutputType
+         */
+        select?: ExamRoomCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * ExamRoomCountOutputType without action
+     */
+    export type ExamRoomCountOutputTypeCountExamSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ExamSessionWhereInput
     };
     /**
      * Count Type ExamBankCountOutputType
      */
     export type ExamBankCountOutputType = {
-        examSession: number
         questions: number
     };
     export type ExamBankCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        examSession?: boolean | ExamBankCountOutputTypeCountExamSessionArgs
         questions?: boolean | ExamBankCountOutputTypeCountQuestionsArgs
     };
     /**
@@ -129865,38 +129371,8 @@ export namespace Prisma {
     /**
      * ExamBankCountOutputType without action
      */
-    export type ExamBankCountOutputTypeCountExamSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: ExamSessionWhereInput
-    };
-    /**
-     * ExamBankCountOutputType without action
-     */
     export type ExamBankCountOutputTypeCountQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ExamBankQuestionWhereInput
-    };
-    /**
-     * Count Type ExamSessionCountOutputType
-     */
-    export type ExamSessionCountOutputType = {
-        answers: number
-    };
-    export type ExamSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        answers?: boolean | ExamSessionCountOutputTypeCountAnswersArgs
-    };
-    /**
-     * ExamSessionCountOutputType without action
-     */
-    export type ExamSessionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamSessionCountOutputType
-         */
-        select?: ExamSessionCountOutputTypeSelect<ExtArgs> | null
-    };
-    /**
-     * ExamSessionCountOutputType without action
-     */
-    export type ExamSessionCountOutputTypeCountAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: AnswerWhereInput
     };
     /**
      * Count Type AcademicWarningRuleCountOutputType
@@ -186694,6 +186170,8 @@ export namespace Prisma {
         suspendedReason: string | null
         repeated: boolean | null
         repeatedReason: string | null
+        isImproving: boolean | null
+        examId: string | null
     };
     export type StudentSubjectScoreMaxAggregateOutputType = {
         id: string | null
@@ -186721,6 +186199,8 @@ export namespace Prisma {
         suspendedReason: string | null
         repeated: boolean | null
         repeatedReason: string | null
+        isImproving: boolean | null
+        examId: string | null
     };
     export type StudentSubjectScoreCountAggregateOutputType = {
         id: number
@@ -186748,6 +186228,8 @@ export namespace Prisma {
         suspendedReason: number
         repeated: number
         repeatedReason: number
+        isImproving: number
+        examId: number
         _all: number
     };
     export type StudentSubjectScoreAvgAggregateInputType = {
@@ -186790,6 +186272,8 @@ export namespace Prisma {
         suspendedReason?: true
         repeated?: true
         repeatedReason?: true
+        isImproving?: true
+        examId?: true
     };
     export type StudentSubjectScoreMaxAggregateInputType = {
         id?: true
@@ -186817,6 +186301,8 @@ export namespace Prisma {
         suspendedReason?: true
         repeated?: true
         repeatedReason?: true
+        isImproving?: true
+        examId?: true
     };
     export type StudentSubjectScoreCountAggregateInputType = {
         id?: true
@@ -186844,6 +186330,8 @@ export namespace Prisma {
         suspendedReason?: true
         repeated?: true
         repeatedReason?: true
+        isImproving?: true
+        examId?: true
         _all?: true
     };
     export type StudentSubjectScoreAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -186952,6 +186440,8 @@ export namespace Prisma {
         suspendedReason: string | null
         repeated: boolean
         repeatedReason: string | null
+        isImproving: boolean
+        examId: string | null
         _count: StudentSubjectScoreCountAggregateOutputType | null
         _avg: StudentSubjectScoreAvgAggregateOutputType | null
         _sum: StudentSubjectScoreSumAggregateOutputType | null
@@ -186996,9 +186486,13 @@ export namespace Prisma {
         suspendedReason?: boolean
         repeated?: boolean
         repeatedReason?: boolean
+        isImproving?: boolean
+        examId?: boolean
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
+        exam?: boolean | StudentSubjectScore$examArgs<ExtArgs>
+        examSession?: boolean | StudentSubjectScore$examSessionArgs<ExtArgs>
         graduationGpaScores?: boolean | StudentSubjectScore$graduationGpaScoresArgs<ExtArgs>
         graduationSupplementaryScore?: boolean | StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs>
         certificates?: boolean | StudentSubjectScore$certificatesArgs<ExtArgs>
@@ -187033,9 +186527,12 @@ export namespace Prisma {
         suspendedReason?: boolean
         repeated?: boolean
         repeatedReason?: boolean
+        isImproving?: boolean
+        examId?: boolean
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
+        exam?: boolean | StudentSubjectScore$examArgs<ExtArgs>
     }, ExtArgs["result"]["studentSubjectScore"]>;
     export type StudentSubjectScoreSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -187063,9 +186560,12 @@ export namespace Prisma {
         suspendedReason?: boolean
         repeated?: boolean
         repeatedReason?: boolean
+        isImproving?: boolean
+        examId?: boolean
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
+        exam?: boolean | StudentSubjectScore$examArgs<ExtArgs>
     }, ExtArgs["result"]["studentSubjectScore"]>;
     export type StudentSubjectScoreSelectScalar = {
         id?: boolean
@@ -187093,12 +186593,16 @@ export namespace Prisma {
         suspendedReason?: boolean
         repeated?: boolean
         repeatedReason?: boolean
+        isImproving?: boolean
+        examId?: boolean
     };
-    export type StudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectClassId" | "subjectVersionId" | "studentId" | "attendanceScore" | "midtermScore" | "examScore" | "finalScore" | "manualFinalScore" | "examPostponed" | "examPostponedReason" | "exempted" | "withdrew" | "examBanned" | "examBannedReason" | "suspended" | "suspendedReason" | "repeated" | "repeatedReason", ExtArgs["result"]["studentSubjectScore"]>;
+    export type StudentSubjectScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "subjectClassId" | "subjectVersionId" | "studentId" | "attendanceScore" | "midtermScore" | "examScore" | "finalScore" | "manualFinalScore" | "examPostponed" | "examPostponedReason" | "exempted" | "withdrew" | "examBanned" | "examBannedReason" | "suspended" | "suspendedReason" | "repeated" | "repeatedReason" | "isImproving" | "examId", ExtArgs["result"]["studentSubjectScore"]>;
     export type StudentSubjectScoreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
+        exam?: boolean | StudentSubjectScore$examArgs<ExtArgs>
+        examSession?: boolean | StudentSubjectScore$examSessionArgs<ExtArgs>
         graduationGpaScores?: boolean | StudentSubjectScore$graduationGpaScoresArgs<ExtArgs>
         graduationSupplementaryScore?: boolean | StudentSubjectScore$graduationSupplementaryScoreArgs<ExtArgs>
         certificates?: boolean | StudentSubjectScore$certificatesArgs<ExtArgs>
@@ -187111,11 +186615,13 @@ export namespace Prisma {
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
+        exam?: boolean | StudentSubjectScore$examArgs<ExtArgs>
     };
     export type StudentSubjectScoreIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subjectClass?: boolean | StudentSubjectScore$subjectClassArgs<ExtArgs>
         subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
+        exam?: boolean | StudentSubjectScore$examArgs<ExtArgs>
     };
     export type $StudentSubjectScorePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "StudentSubjectScore"
@@ -187123,6 +186629,14 @@ export namespace Prisma {
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
             subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>
             student: Prisma.$StudentPayload<ExtArgs>
+            /**
+             * kì thi
+             */
+            exam: Prisma.$ExamPayload<ExtArgs> | null
+            /**
+             * thí sinh trong kì thi
+             */
+            examSession: Prisma.$ExamSessionPayload<ExtArgs> | null
             graduationGpaScores: Prisma.$StudentGraduationApplicationPayload<ExtArgs>[]
             graduationSupplementaryScore: Prisma.$StudentGraduationApplicationPayload<ExtArgs>[]
             certificates: Prisma.$ArchivedCertificateOnStudentSubjectScorePayload<ExtArgs>[]
@@ -187190,6 +186704,8 @@ export namespace Prisma {
              */
             repeated: boolean
             repeatedReason: string | null
+            isImproving: boolean
+            examId: string | null
         }, ExtArgs["result"]["studentSubjectScore"]>
         composites: {}
     };
@@ -187591,6 +187107,42 @@ export namespace Prisma {
          */
         include?: SubjectClassInclude<ExtArgs> | null
         where?: SubjectClassWhereInput
+    };
+    /**
+     * StudentSubjectScore.exam
+     */
+    export type StudentSubjectScore$examArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Exam
+         */
+        select?: ExamSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Exam
+         */
+        omit?: ExamOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamInclude<ExtArgs> | null
+        where?: ExamWhereInput
+    };
+    /**
+     * StudentSubjectScore.examSession
+     */
+    export type StudentSubjectScore$examSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamSession
+         */
+        select?: ExamSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamSession
+         */
+        omit?: ExamSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamSessionInclude<ExtArgs> | null
+        where?: ExamSessionWhereInput
     };
     /**
      * StudentSubjectScore.graduationGpaScores
@@ -188015,7 +187567,7 @@ export namespace Prisma {
         manualFinalScore: number | null
         examPostponedReason: boolean | null
         examPostponed: string | null
-        examBanned: boolean
+        examBanned: boolean | null
         examBannedReason: string | null
         suspended: boolean | null
         suspendedReason: string | null
@@ -188192,7 +187744,7 @@ export namespace Prisma {
             manualFinalScore: number | null
             examPostponedReason: boolean | null
             examPostponed: string | null
-            examBanned: boolean
+            examBanned: boolean | null
             examBannedReason: string | null
             suspended: boolean | null
             suspendedReason: string | null
@@ -207556,6 +207108,8 @@ export namespace Prisma {
         semesterId: string | null
         cancelled: boolean | null
         lecturerAssignmentDeadline: Date | null
+        sendLecturerAssignmentAt: Date | null
+        submitLecturerAssignmentAt: Date | null
         examDate: Date | null
         examType: $Enums.ExamType | null
         examId: string | null
@@ -207570,6 +207124,7 @@ export namespace Prisma {
         scoreSubmitted: boolean | null
         scoreChecked: boolean | null
         roomId: string | null
+        trainingLocationId: string | null
         lecturerId: string | null
         extraLecturerId: string | null
         enterGradeLecturerId: string | null
@@ -207592,6 +207147,8 @@ export namespace Prisma {
         semesterId: string | null
         cancelled: boolean | null
         lecturerAssignmentDeadline: Date | null
+        sendLecturerAssignmentAt: Date | null
+        submitLecturerAssignmentAt: Date | null
         examDate: Date | null
         examType: $Enums.ExamType | null
         examId: string | null
@@ -207606,6 +207163,7 @@ export namespace Prisma {
         scoreSubmitted: boolean | null
         scoreChecked: boolean | null
         roomId: string | null
+        trainingLocationId: string | null
         lecturerId: string | null
         extraLecturerId: string | null
         enterGradeLecturerId: string | null
@@ -207628,6 +207186,8 @@ export namespace Prisma {
         semesterId: number
         cancelled: number
         lecturerAssignmentDeadline: number
+        sendLecturerAssignmentAt: number
+        submitLecturerAssignmentAt: number
         examDate: number
         examType: number
         examId: number
@@ -207642,6 +207202,7 @@ export namespace Prisma {
         scoreSubmitted: number
         scoreChecked: number
         roomId: number
+        trainingLocationId: number
         lecturerId: number
         extraLecturerId: number
         enterGradeLecturerId: number
@@ -207671,6 +207232,8 @@ export namespace Prisma {
         semesterId?: true
         cancelled?: true
         lecturerAssignmentDeadline?: true
+        sendLecturerAssignmentAt?: true
+        submitLecturerAssignmentAt?: true
         examDate?: true
         examType?: true
         examId?: true
@@ -207685,6 +207248,7 @@ export namespace Prisma {
         scoreSubmitted?: true
         scoreChecked?: true
         roomId?: true
+        trainingLocationId?: true
         lecturerId?: true
         extraLecturerId?: true
         enterGradeLecturerId?: true
@@ -207707,6 +207271,8 @@ export namespace Prisma {
         semesterId?: true
         cancelled?: true
         lecturerAssignmentDeadline?: true
+        sendLecturerAssignmentAt?: true
+        submitLecturerAssignmentAt?: true
         examDate?: true
         examType?: true
         examId?: true
@@ -207721,6 +207287,7 @@ export namespace Prisma {
         scoreSubmitted?: true
         scoreChecked?: true
         roomId?: true
+        trainingLocationId?: true
         lecturerId?: true
         extraLecturerId?: true
         enterGradeLecturerId?: true
@@ -207743,6 +207310,8 @@ export namespace Prisma {
         semesterId?: true
         cancelled?: true
         lecturerAssignmentDeadline?: true
+        sendLecturerAssignmentAt?: true
+        submitLecturerAssignmentAt?: true
         examDate?: true
         examType?: true
         examId?: true
@@ -207757,6 +207326,7 @@ export namespace Prisma {
         scoreSubmitted?: true
         scoreChecked?: true
         roomId?: true
+        trainingLocationId?: true
         lecturerId?: true
         extraLecturerId?: true
         enterGradeLecturerId?: true
@@ -207860,6 +207430,8 @@ export namespace Prisma {
         semesterId: string
         cancelled: boolean
         lecturerAssignmentDeadline: Date | null
+        sendLecturerAssignmentAt: Date | null
+        submitLecturerAssignmentAt: Date | null
         examDate: Date | null
         examType: $Enums.ExamType | null
         examId: string | null
@@ -207874,6 +207446,7 @@ export namespace Prisma {
         scoreSubmitted: boolean
         scoreChecked: boolean
         roomId: string | null
+        trainingLocationId: string | null
         lecturerId: string | null
         extraLecturerId: string | null
         enterGradeLecturerId: string | null
@@ -207913,6 +207486,8 @@ export namespace Prisma {
         semesterId?: boolean
         cancelled?: boolean
         lecturerAssignmentDeadline?: boolean
+        sendLecturerAssignmentAt?: boolean
+        submitLecturerAssignmentAt?: boolean
         examDate?: boolean
         examType?: boolean
         examId?: boolean
@@ -207927,6 +207502,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: boolean
+        trainingLocationId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
@@ -207935,6 +207511,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -207967,6 +207544,8 @@ export namespace Prisma {
         semesterId?: boolean
         cancelled?: boolean
         lecturerAssignmentDeadline?: boolean
+        sendLecturerAssignmentAt?: boolean
+        submitLecturerAssignmentAt?: boolean
         examDate?: boolean
         examType?: boolean
         examId?: boolean
@@ -207981,6 +207560,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: boolean
+        trainingLocationId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
@@ -207989,6 +207569,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -208011,6 +207592,8 @@ export namespace Prisma {
         semesterId?: boolean
         cancelled?: boolean
         lecturerAssignmentDeadline?: boolean
+        sendLecturerAssignmentAt?: boolean
+        submitLecturerAssignmentAt?: boolean
         examDate?: boolean
         examType?: boolean
         examId?: boolean
@@ -208025,6 +207608,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: boolean
+        trainingLocationId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
@@ -208033,6 +207617,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -208055,6 +207640,8 @@ export namespace Prisma {
         semesterId?: boolean
         cancelled?: boolean
         lecturerAssignmentDeadline?: boolean
+        sendLecturerAssignmentAt?: boolean
+        submitLecturerAssignmentAt?: boolean
         examDate?: boolean
         examType?: boolean
         examId?: boolean
@@ -208069,17 +207656,19 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: boolean
+        trainingLocationId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
     };
-    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "examDate" | "examType" | "examId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "roomId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
+    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "sendLecturerAssignmentAt" | "submitLecturerAssignmentAt" | "examDate" | "examType" | "examId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "roomId" | "trainingLocationId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
     export type SubjectClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subject?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -208100,6 +207689,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -208110,6 +207700,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -208122,6 +207713,7 @@ export namespace Prisma {
             semester: Prisma.$SemesterPayload<ExtArgs>
             exam: Prisma.$ExamPayload<ExtArgs> | null
             room: Prisma.$RoomPayload<ExtArgs> | null
+            trainingLocation: Prisma.$TrainingLocationPayload<ExtArgs> | null
             mainLecturer: Prisma.$LecturerPayload<ExtArgs> | null
             extraLecturer: Prisma.$LecturerPayload<ExtArgs> | null
             enterGradeLecturer: Prisma.$LecturerPayload<ExtArgs> | null
@@ -208153,6 +207745,8 @@ export namespace Prisma {
             semesterId: string
             cancelled: boolean
             lecturerAssignmentDeadline: Date | null
+            sendLecturerAssignmentAt: Date | null
+            submitLecturerAssignmentAt: Date | null
             examDate: Date | null
             examType: $Enums.ExamType | null
             examId: string | null
@@ -208176,6 +207770,7 @@ export namespace Prisma {
             scoreSubmitted: boolean
             scoreChecked: boolean
             roomId: string | null
+            trainingLocationId: string | null
             lecturerId: string | null
             extraLecturerId: string | null
             enterGradeLecturerId: string | null
@@ -208598,6 +208193,24 @@ export namespace Prisma {
          */
         include?: RoomInclude<ExtArgs> | null
         where?: RoomWhereInput
+    };
+    /**
+     * SubjectClass.trainingLocation
+     */
+    export type SubjectClass$trainingLocationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingLocation
+         */
+        select?: TrainingLocationSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingLocation
+         */
+        omit?: TrainingLocationOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingLocationInclude<ExtArgs> | null
+        where?: TrainingLocationWhereInput
     };
     /**
      * SubjectClass.mainLecturer
@@ -214346,6 +213959,7 @@ export namespace Prisma {
         dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
         students?: boolean | TrainingLocation$studentsArgs<ExtArgs>
         buildings?: boolean | TrainingLocation$buildingsArgs<ExtArgs>
+        subjectClasses?: boolean | TrainingLocation$subjectClassesArgs<ExtArgs>
         _count?: boolean | TrainingLocationCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingLocation"]>;
     export type TrainingLocationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -214394,6 +214008,7 @@ export namespace Prisma {
         dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
         students?: boolean | TrainingLocation$studentsArgs<ExtArgs>
         buildings?: boolean | TrainingLocation$buildingsArgs<ExtArgs>
+        subjectClasses?: boolean | TrainingLocation$subjectClassesArgs<ExtArgs>
         _count?: boolean | TrainingLocationCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type TrainingLocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -214411,6 +214026,7 @@ export namespace Prisma {
             dM_Tinh_New: Prisma.$DM_Tinh_NewPayload<ExtArgs> | null
             students: Prisma.$StudentPayload<ExtArgs>[]
             buildings: Prisma.$BuildingPayload<ExtArgs>[]
+            subjectClasses: Prisma.$SubjectClassPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -214888,6 +214504,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: BuildingScalarFieldEnum | BuildingScalarFieldEnum[]
+    };
+    /**
+     * TrainingLocation.subjectClasses
+     */
+    export type TrainingLocation$subjectClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClass
+         */
+        select?: SubjectClassSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClass
+         */
+        omit?: SubjectClassOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassInclude<ExtArgs> | null
+        where?: SubjectClassWhereInput
+        orderBy?: SubjectClassOrderByWithRelationInput | SubjectClassOrderByWithRelationInput[]
+        cursor?: SubjectClassWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SubjectClassScalarFieldEnum | SubjectClassScalarFieldEnum[]
     };
     /**
      * TrainingLocation without action
@@ -215901,7 +215540,7 @@ export namespace Prisma {
         defenseRooms?: boolean | Room$defenseRoomsArgs<ExtArgs>
         thesisProject?: boolean | Room$thesisProjectArgs<ExtArgs>
         classSchedules?: boolean | Room$classSchedulesArgs<ExtArgs>
-        examSession?: boolean | Room$examSessionArgs<ExtArgs>
+        examRooms?: boolean | Room$examRoomsArgs<ExtArgs>
         _count?: boolean | RoomCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["room"]>;
     export type RoomSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -215965,7 +215604,7 @@ export namespace Prisma {
         defenseRooms?: boolean | Room$defenseRoomsArgs<ExtArgs>
         thesisProject?: boolean | Room$thesisProjectArgs<ExtArgs>
         classSchedules?: boolean | Room$classSchedulesArgs<ExtArgs>
-        examSession?: boolean | Room$examSessionArgs<ExtArgs>
+        examRooms?: boolean | Room$examRoomsArgs<ExtArgs>
         _count?: boolean | RoomCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type RoomIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -215983,7 +215622,7 @@ export namespace Prisma {
             defenseRooms: Prisma.$SubjectClassPayload<ExtArgs>[]
             thesisProject: Prisma.$ThesisProjectPayload<ExtArgs>[]
             classSchedules: Prisma.$ClassSchedulePayload<ExtArgs>[]
-            examSession: Prisma.$ExamSessionPayload<ExtArgs>[]
+            examRooms: Prisma.$ExamRoomPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -216519,27 +216158,27 @@ export namespace Prisma {
         distinct?: ClassScheduleScalarFieldEnum | ClassScheduleScalarFieldEnum[]
     };
     /**
-     * Room.examSession
+     * Room.examRooms
      */
-    export type Room$examSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    export type Room$examRoomsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         /**
-         * Select specific fields to fetch from the ExamSession
+         * Select specific fields to fetch from the ExamRoom
          */
-        select?: ExamSessionSelect<ExtArgs> | null
+        select?: ExamRoomSelect<ExtArgs> | null
         /**
-         * Omit specific fields from the ExamSession
+         * Omit specific fields from the ExamRoom
          */
-        omit?: ExamSessionOmit<ExtArgs> | null
+        omit?: ExamRoomOmit<ExtArgs> | null
         /**
          * Choose, which related nodes to fetch as well
          */
-        include?: ExamSessionInclude<ExtArgs> | null
-        where?: ExamSessionWhereInput
-        orderBy?: ExamSessionOrderByWithRelationInput | ExamSessionOrderByWithRelationInput[]
-        cursor?: ExamSessionWhereUniqueInput
+        include?: ExamRoomInclude<ExtArgs> | null
+        where?: ExamRoomWhereInput
+        orderBy?: ExamRoomOrderByWithRelationInput | ExamRoomOrderByWithRelationInput[]
+        cursor?: ExamRoomWhereUniqueInput
         take?: number
         skip?: number
-        distinct?: ExamSessionScalarFieldEnum | ExamSessionScalarFieldEnum[]
+        distinct?: ExamRoomScalarFieldEnum | ExamRoomScalarFieldEnum[]
     };
     /**
      * Room without action
@@ -226337,7 +225976,6 @@ export namespace Prisma {
         notifications?: boolean | Student$notificationsArgs<ExtArgs>
         researchRegistrations?: boolean | Student$researchRegistrationsArgs<ExtArgs>
         thesisRegistrations?: boolean | Student$thesisRegistrationsArgs<ExtArgs>
-        examSession?: boolean | Student$examSessionArgs<ExtArgs>
         diplomaVerificationApplication?: boolean | Student$diplomaVerificationApplicationArgs<ExtArgs>
         studentScoreConvert?: boolean | Student$studentScoreConvertArgs<ExtArgs>
         classRegisterLogs?: boolean | Student$classRegisterLogsArgs<ExtArgs>
@@ -226495,7 +226133,6 @@ export namespace Prisma {
         notifications?: boolean | Student$notificationsArgs<ExtArgs>
         researchRegistrations?: boolean | Student$researchRegistrationsArgs<ExtArgs>
         thesisRegistrations?: boolean | Student$thesisRegistrationsArgs<ExtArgs>
-        examSession?: boolean | Student$examSessionArgs<ExtArgs>
         diplomaVerificationApplication?: boolean | Student$diplomaVerificationApplicationArgs<ExtArgs>
         studentScoreConvert?: boolean | Student$studentScoreConvertArgs<ExtArgs>
         classRegisterLogs?: boolean | Student$classRegisterLogsArgs<ExtArgs>
@@ -226562,7 +226199,6 @@ export namespace Prisma {
             notifications: Prisma.$NotificationPayload<ExtArgs>[]
             researchRegistrations: Prisma.$StudentResearchRegistrationPayload<ExtArgs>[]
             thesisRegistrations: Prisma.$StudentThesisRegistrationPayload<ExtArgs>[]
-            examSession: Prisma.$ExamSessionPayload<ExtArgs>[]
             diplomaVerificationApplication: Prisma.$DiplomaVerificationApplicationPayload<ExtArgs>[]
             studentScoreConvert: Prisma.$StudentScoreConvertPayload<ExtArgs>[]
             classRegisterLogs: Prisma.$ClassRegisterLogsPayload<ExtArgs>[]
@@ -227568,29 +227204,6 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: StudentThesisRegistrationScalarFieldEnum | StudentThesisRegistrationScalarFieldEnum[]
-    };
-    /**
-     * Student.examSession
-     */
-    export type Student$examSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamSession
-         */
-        select?: ExamSessionSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamSession
-         */
-        omit?: ExamSessionOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamSessionInclude<ExtArgs> | null
-        where?: ExamSessionWhereInput
-        orderBy?: ExamSessionOrderByWithRelationInput | ExamSessionOrderByWithRelationInput[]
-        cursor?: ExamSessionWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: ExamSessionScalarFieldEnum | ExamSessionScalarFieldEnum[]
     };
     /**
      * Student.diplomaVerificationApplication
@@ -285783,7 +285396,6 @@ export namespace Prisma {
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
         difficulty?: boolean | Question$difficultyArgs<ExtArgs>
         sessionQuestions?: boolean | Question$sessionQuestionsArgs<ExtArgs>
-        answers?: boolean | Question$answersArgs<ExtArgs>
         _count?: boolean | QuestionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["question"]>;
     export type QuestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -285852,7 +285464,6 @@ export namespace Prisma {
         knowledgeBlock?: boolean | Question$knowledgeBlockArgs<ExtArgs>
         difficulty?: boolean | Question$difficultyArgs<ExtArgs>
         sessionQuestions?: boolean | Question$sessionQuestionsArgs<ExtArgs>
-        answers?: boolean | Question$answersArgs<ExtArgs>
         _count?: boolean | QuestionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type QuestionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -285875,10 +285486,6 @@ export namespace Prisma {
             knowledgeBlock: Prisma.$KnowledgeBlockPayload<ExtArgs> | null
             difficulty: Prisma.$DifficultyPayload<ExtArgs> | null
             sessionQuestions: Prisma.$ExamBankQuestionPayload<ExtArgs>[]
-            /**
-             * Câu trả lời của thí sinh trong các phiên thi
-             */
-            answers: Prisma.$AnswerPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -286407,29 +286014,6 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ExamBankQuestionScalarFieldEnum | ExamBankQuestionScalarFieldEnum[]
-    };
-    /**
-     * Question.answers
-     */
-    export type Question$answersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        where?: AnswerWhereInput
-        orderBy?: AnswerOrderByWithRelationInput | AnswerOrderByWithRelationInput[]
-        cursor?: AnswerWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: AnswerScalarFieldEnum | AnswerScalarFieldEnum[]
     };
     /**
      * Question without action
@@ -288510,750 +288094,12 @@ export namespace Prisma {
         include?: OrderingItemInclude<ExtArgs> | null
     };
     /**
-     * Model Answer
-     */
-    export type AggregateAnswer = {
-        _count: AnswerCountAggregateOutputType | null
-        _avg: AnswerAvgAggregateOutputType | null
-        _sum: AnswerSumAggregateOutputType | null
-        _min: AnswerMinAggregateOutputType | null
-        _max: AnswerMaxAggregateOutputType | null
-    };
-    export type AnswerAvgAggregateOutputType = {
-        score: number | null
-    };
-    export type AnswerSumAggregateOutputType = {
-        score: number | null
-    };
-    export type AnswerMinAggregateOutputType = {
-        id: string | null
-        code: string | null
-        active: boolean | null
-        description: string | null
-        deletedAt: Date | null
-        createdAt: Date | null
-        updatedAt: Date | null
-        sessionId: string | null
-        questionId: string | null
-        isCorrect: boolean | null
-        score: number | null
-        comment: string | null
-        essayAnswer: string | null
-    };
-    export type AnswerMaxAggregateOutputType = {
-        id: string | null
-        code: string | null
-        active: boolean | null
-        description: string | null
-        deletedAt: Date | null
-        createdAt: Date | null
-        updatedAt: Date | null
-        sessionId: string | null
-        questionId: string | null
-        isCorrect: boolean | null
-        score: number | null
-        comment: string | null
-        essayAnswer: string | null
-    };
-    export type AnswerCountAggregateOutputType = {
-        id: number
-        code: number
-        active: number
-        description: number
-        deletedAt: number
-        createdAt: number
-        updatedAt: number
-        sessionId: number
-        questionId: number
-        isCorrect: number
-        score: number
-        comment: number
-        essayAnswer: number
-        _all: number
-    };
-    export type AnswerAvgAggregateInputType = {
-        score?: true
-    };
-    export type AnswerSumAggregateInputType = {
-        score?: true
-    };
-    export type AnswerMinAggregateInputType = {
-        id?: true
-        code?: true
-        active?: true
-        description?: true
-        deletedAt?: true
-        createdAt?: true
-        updatedAt?: true
-        sessionId?: true
-        questionId?: true
-        isCorrect?: true
-        score?: true
-        comment?: true
-        essayAnswer?: true
-    };
-    export type AnswerMaxAggregateInputType = {
-        id?: true
-        code?: true
-        active?: true
-        description?: true
-        deletedAt?: true
-        createdAt?: true
-        updatedAt?: true
-        sessionId?: true
-        questionId?: true
-        isCorrect?: true
-        score?: true
-        comment?: true
-        essayAnswer?: true
-    };
-    export type AnswerCountAggregateInputType = {
-        id?: true
-        code?: true
-        active?: true
-        description?: true
-        deletedAt?: true
-        createdAt?: true
-        updatedAt?: true
-        sessionId?: true
-        questionId?: true
-        isCorrect?: true
-        score?: true
-        comment?: true
-        essayAnswer?: true
-        _all?: true
-    };
-    export type AnswerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Filter which Answer to aggregate.
-         */
-        where?: AnswerWhereInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-         * 
-         * Determine the order of Answers to fetch.
-         */
-        orderBy?: AnswerOrderByWithRelationInput | AnswerOrderByWithRelationInput[]
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-         * 
-         * Sets the start position
-         */
-        cursor?: AnswerWhereUniqueInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Take `±n` Answers from the position of the cursor.
-         */
-        take?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Skip the first `n` Answers.
-         */
-        skip?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Count returned Answers
-        **/
-        _count?: true | AnswerCountAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to average
-        **/
-        _avg?: AnswerAvgAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to sum
-        **/
-        _sum?: AnswerSumAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to find the minimum value
-        **/
-        _min?: AnswerMinAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to find the maximum value
-        **/
-        _max?: AnswerMaxAggregateInputType
-    };
-    export type GetAnswerAggregateType<T extends AnswerAggregateArgs> = {
-        [P in keyof T & keyof AggregateAnswer]: P extends '_count' | 'count'
-        ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateAnswer[P]>
-        : GetScalarType<T[P], AggregateAnswer[P]>
-    };
-    export type AnswerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: AnswerWhereInput
-        orderBy?: AnswerOrderByWithAggregationInput | AnswerOrderByWithAggregationInput[]
-        by: AnswerScalarFieldEnum[] | AnswerScalarFieldEnum
-        having?: AnswerScalarWhereWithAggregatesInput
-        take?: number
-        skip?: number
-        _count?: AnswerCountAggregateInputType | true
-        _avg?: AnswerAvgAggregateInputType
-        _sum?: AnswerSumAggregateInputType
-        _min?: AnswerMinAggregateInputType
-        _max?: AnswerMaxAggregateInputType
-    };
-    export type AnswerGroupByOutputType = {
-        id: string
-        code: string | null
-        active: boolean
-        description: string | null
-        deletedAt: Date | null
-        createdAt: Date
-        updatedAt: Date
-        sessionId: string
-        questionId: string
-        isCorrect: boolean | null
-        score: number | null
-        comment: string | null
-        essayAnswer: string
-        _count: AnswerCountAggregateOutputType | null
-        _avg: AnswerAvgAggregateOutputType | null
-        _sum: AnswerSumAggregateOutputType | null
-        _min: AnswerMinAggregateOutputType | null
-        _max: AnswerMaxAggregateOutputType | null
-    };
-    type GetAnswerGroupByPayload<T extends AnswerGroupByArgs> = Prisma.PrismaPromise<
-        Array<
-            PickEnumerable<AnswerGroupByOutputType, T['by']> &
-            {
-                [P in ((keyof T) & (keyof AnswerGroupByOutputType))]: P extends '_count'
-                ? T[P] extends boolean
-                ? number
-                : GetScalarType<T[P], AnswerGroupByOutputType[P]>
-                : GetScalarType<T[P], AnswerGroupByOutputType[P]>
-            }
-        >
-    >;
-    export type AnswerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-        id?: boolean
-        code?: boolean
-        active?: boolean
-        description?: boolean
-        deletedAt?: boolean
-        createdAt?: boolean
-        updatedAt?: boolean
-        sessionId?: boolean
-        questionId?: boolean
-        isCorrect?: boolean
-        score?: boolean
-        comment?: boolean
-        essayAnswer?: boolean
-        session?: boolean | ExamSessionDefaultArgs<ExtArgs>
-        question?: boolean | QuestionDefaultArgs<ExtArgs>
-    }, ExtArgs["result"]["answer"]>;
-    export type AnswerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-        id?: boolean
-        code?: boolean
-        active?: boolean
-        description?: boolean
-        deletedAt?: boolean
-        createdAt?: boolean
-        updatedAt?: boolean
-        sessionId?: boolean
-        questionId?: boolean
-        isCorrect?: boolean
-        score?: boolean
-        comment?: boolean
-        essayAnswer?: boolean
-        session?: boolean | ExamSessionDefaultArgs<ExtArgs>
-        question?: boolean | QuestionDefaultArgs<ExtArgs>
-    }, ExtArgs["result"]["answer"]>;
-    export type AnswerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-        id?: boolean
-        code?: boolean
-        active?: boolean
-        description?: boolean
-        deletedAt?: boolean
-        createdAt?: boolean
-        updatedAt?: boolean
-        sessionId?: boolean
-        questionId?: boolean
-        isCorrect?: boolean
-        score?: boolean
-        comment?: boolean
-        essayAnswer?: boolean
-        session?: boolean | ExamSessionDefaultArgs<ExtArgs>
-        question?: boolean | QuestionDefaultArgs<ExtArgs>
-    }, ExtArgs["result"]["answer"]>;
-    export type AnswerSelectScalar = {
-        id?: boolean
-        code?: boolean
-        active?: boolean
-        description?: boolean
-        deletedAt?: boolean
-        createdAt?: boolean
-        updatedAt?: boolean
-        sessionId?: boolean
-        questionId?: boolean
-        isCorrect?: boolean
-        score?: boolean
-        comment?: boolean
-        essayAnswer?: boolean
-    };
-    export type AnswerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "sessionId" | "questionId" | "isCorrect" | "score" | "comment" | "essayAnswer", ExtArgs["result"]["answer"]>;
-    export type AnswerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        session?: boolean | ExamSessionDefaultArgs<ExtArgs>
-        question?: boolean | QuestionDefaultArgs<ExtArgs>
-    };
-    export type AnswerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        session?: boolean | ExamSessionDefaultArgs<ExtArgs>
-        question?: boolean | QuestionDefaultArgs<ExtArgs>
-    };
-    export type AnswerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        session?: boolean | ExamSessionDefaultArgs<ExtArgs>
-        question?: boolean | QuestionDefaultArgs<ExtArgs>
-    };
-    export type $AnswerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        name: "Answer"
-        objects: {
-            session: Prisma.$ExamSessionPayload<ExtArgs>
-            question: Prisma.$QuestionPayload<ExtArgs>
-        }
-        scalars: $Extensions.GetPayloadResult<{
-            id: string
-            code: string | null
-            active: boolean
-            description: string | null
-            deletedAt: Date | null
-            createdAt: Date
-            updatedAt: Date
-            sessionId: string
-            questionId: string
-            isCorrect: boolean | null
-            score: number | null
-            comment: string | null
-            essayAnswer: string
-        }, ExtArgs["result"]["answer"]>
-        composites: {}
-    };
-    type AnswerGetPayload<S extends boolean | null | undefined | AnswerDefaultArgs> = $Result.GetResult<Prisma.$AnswerPayload, S>;
-    type AnswerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<AnswerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-        select?: AnswerCountAggregateInputType | true
-    };
-    /**
-     * Answer findUnique
-     */
-    export type AnswerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        /**
-         * Filter, which Answer to fetch.
-         */
-        where: AnswerWhereUniqueInput
-    };
-    /**
-     * Answer findUniqueOrThrow
-     */
-    export type AnswerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        /**
-         * Filter, which Answer to fetch.
-         */
-        where: AnswerWhereUniqueInput
-    };
-    /**
-     * Answer findFirst
-     */
-    export type AnswerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        /**
-         * Filter, which Answer to fetch.
-         */
-        where?: AnswerWhereInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-         * 
-         * Determine the order of Answers to fetch.
-         */
-        orderBy?: AnswerOrderByWithRelationInput | AnswerOrderByWithRelationInput[]
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-         * 
-         * Sets the position for searching for Answers.
-         */
-        cursor?: AnswerWhereUniqueInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Take `±n` Answers from the position of the cursor.
-         */
-        take?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Skip the first `n` Answers.
-         */
-        skip?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-         * 
-         * Filter by unique combinations of Answers.
-         */
-        distinct?: AnswerScalarFieldEnum | AnswerScalarFieldEnum[]
-    };
-    /**
-     * Answer findFirstOrThrow
-     */
-    export type AnswerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        /**
-         * Filter, which Answer to fetch.
-         */
-        where?: AnswerWhereInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-         * 
-         * Determine the order of Answers to fetch.
-         */
-        orderBy?: AnswerOrderByWithRelationInput | AnswerOrderByWithRelationInput[]
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-         * 
-         * Sets the position for searching for Answers.
-         */
-        cursor?: AnswerWhereUniqueInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Take `±n` Answers from the position of the cursor.
-         */
-        take?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Skip the first `n` Answers.
-         */
-        skip?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-         * 
-         * Filter by unique combinations of Answers.
-         */
-        distinct?: AnswerScalarFieldEnum | AnswerScalarFieldEnum[]
-    };
-    /**
-     * Answer findMany
-     */
-    export type AnswerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        /**
-         * Filter, which Answers to fetch.
-         */
-        where?: AnswerWhereInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-         * 
-         * Determine the order of Answers to fetch.
-         */
-        orderBy?: AnswerOrderByWithRelationInput | AnswerOrderByWithRelationInput[]
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-         * 
-         * Sets the position for listing Answers.
-         */
-        cursor?: AnswerWhereUniqueInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Take `±n` Answers from the position of the cursor.
-         */
-        take?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Skip the first `n` Answers.
-         */
-        skip?: number
-        distinct?: AnswerScalarFieldEnum | AnswerScalarFieldEnum[]
-    };
-    /**
-     * Answer create
-     */
-    export type AnswerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        /**
-         * The data needed to create a Answer.
-         */
-        data: XOR<AnswerCreateInput, AnswerUncheckedCreateInput>
-    };
-    /**
-     * Answer createMany
-     */
-    export type AnswerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * The data used to create many Answers.
-         */
-        data: AnswerCreateManyInput | AnswerCreateManyInput[]
-        skipDuplicates?: boolean
-    };
-    /**
-     * Answer createManyAndReturn
-     */
-    export type AnswerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelectCreateManyAndReturn<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * The data used to create many Answers.
-         */
-        data: AnswerCreateManyInput | AnswerCreateManyInput[]
-        skipDuplicates?: boolean
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerIncludeCreateManyAndReturn<ExtArgs> | null
-    };
-    /**
-     * Answer update
-     */
-    export type AnswerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        /**
-         * The data needed to update a Answer.
-         */
-        data: XOR<AnswerUpdateInput, AnswerUncheckedUpdateInput>
-        /**
-         * Choose, which Answer to update.
-         */
-        where: AnswerWhereUniqueInput
-    };
-    /**
-     * Answer updateMany
-     */
-    export type AnswerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * The data used to update Answers.
-         */
-        data: XOR<AnswerUpdateManyMutationInput, AnswerUncheckedUpdateManyInput>
-        /**
-         * Filter which Answers to update
-         */
-        where?: AnswerWhereInput
-        /**
-         * Limit how many Answers to update.
-         */
-        limit?: number
-    };
-    /**
-     * Answer updateManyAndReturn
-     */
-    export type AnswerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelectUpdateManyAndReturn<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * The data used to update Answers.
-         */
-        data: XOR<AnswerUpdateManyMutationInput, AnswerUncheckedUpdateManyInput>
-        /**
-         * Filter which Answers to update
-         */
-        where?: AnswerWhereInput
-        /**
-         * Limit how many Answers to update.
-         */
-        limit?: number
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerIncludeUpdateManyAndReturn<ExtArgs> | null
-    };
-    /**
-     * Answer upsert
-     */
-    export type AnswerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        /**
-         * The filter to search for the Answer to update in case it exists.
-         */
-        where: AnswerWhereUniqueInput
-        /**
-         * In case the Answer found by the `where` argument doesn't exist, create a new Answer with this data.
-         */
-        create: XOR<AnswerCreateInput, AnswerUncheckedCreateInput>
-        /**
-         * In case the Answer was found with the provided `where` argument, update it with this data.
-         */
-        update: XOR<AnswerUpdateInput, AnswerUncheckedUpdateInput>
-    };
-    /**
-     * Answer delete
-     */
-    export type AnswerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        /**
-         * Filter which Answer to delete.
-         */
-        where: AnswerWhereUniqueInput
-    };
-    /**
-     * Answer deleteMany
-     */
-    export type AnswerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Filter which Answers to delete
-         */
-        where?: AnswerWhereInput
-        /**
-         * Limit how many Answers to delete.
-         */
-        limit?: number
-    };
-    /**
-     * Answer without action
-     */
-    export type AnswerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-    };
-    /**
      * Model Exam
      */
     export type AggregateExam = {
         _count: ExamCountAggregateOutputType | null
-        _avg: ExamAvgAggregateOutputType | null
-        _sum: ExamSumAggregateOutputType | null
         _min: ExamMinAggregateOutputType | null
         _max: ExamMaxAggregateOutputType | null
-    };
-    export type ExamAvgAggregateOutputType = {
-        duration: number | null
-        passScore: number | null
-        maxScore: number | null
-    };
-    export type ExamSumAggregateOutputType = {
-        duration: number | null
-        passScore: number | null
-        maxScore: number | null
     };
     export type ExamMinAggregateOutputType = {
         id: string | null
@@ -289266,14 +288112,8 @@ export namespace Prisma {
         title: string | null
         status: $Enums.ExamStatus | null
         questionBankId: string | null
-        startTime: Date | null
-        endTime: Date | null
-        duration: number | null
-        passScore: number | null
-        maxScore: number | null
-        shuffleQuestions: boolean | null
-        shuffleAnswers: boolean | null
-        showResult: boolean | null
+        lockExamCode: boolean | null
+        startTime: string | null
     };
     export type ExamMaxAggregateOutputType = {
         id: string | null
@@ -289286,14 +288126,8 @@ export namespace Prisma {
         title: string | null
         status: $Enums.ExamStatus | null
         questionBankId: string | null
-        startTime: Date | null
-        endTime: Date | null
-        duration: number | null
-        passScore: number | null
-        maxScore: number | null
-        shuffleQuestions: boolean | null
-        shuffleAnswers: boolean | null
-        showResult: boolean | null
+        lockExamCode: boolean | null
+        startTime: string | null
     };
     export type ExamCountAggregateOutputType = {
         id: number
@@ -289306,25 +288140,9 @@ export namespace Prisma {
         title: number
         status: number
         questionBankId: number
+        lockExamCode: number
         startTime: number
-        endTime: number
-        duration: number
-        passScore: number
-        maxScore: number
-        shuffleQuestions: number
-        shuffleAnswers: number
-        showResult: number
         _all: number
-    };
-    export type ExamAvgAggregateInputType = {
-        duration?: true
-        passScore?: true
-        maxScore?: true
-    };
-    export type ExamSumAggregateInputType = {
-        duration?: true
-        passScore?: true
-        maxScore?: true
     };
     export type ExamMinAggregateInputType = {
         id?: true
@@ -289337,14 +288155,8 @@ export namespace Prisma {
         title?: true
         status?: true
         questionBankId?: true
+        lockExamCode?: true
         startTime?: true
-        endTime?: true
-        duration?: true
-        passScore?: true
-        maxScore?: true
-        shuffleQuestions?: true
-        shuffleAnswers?: true
-        showResult?: true
     };
     export type ExamMaxAggregateInputType = {
         id?: true
@@ -289357,14 +288169,8 @@ export namespace Prisma {
         title?: true
         status?: true
         questionBankId?: true
+        lockExamCode?: true
         startTime?: true
-        endTime?: true
-        duration?: true
-        passScore?: true
-        maxScore?: true
-        shuffleQuestions?: true
-        shuffleAnswers?: true
-        showResult?: true
     };
     export type ExamCountAggregateInputType = {
         id?: true
@@ -289377,14 +288183,8 @@ export namespace Prisma {
         title?: true
         status?: true
         questionBankId?: true
+        lockExamCode?: true
         startTime?: true
-        endTime?: true
-        duration?: true
-        passScore?: true
-        maxScore?: true
-        shuffleQuestions?: true
-        shuffleAnswers?: true
-        showResult?: true
         _all?: true
     };
     export type ExamAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -289425,18 +288225,6 @@ export namespace Prisma {
         /**
          * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
          * 
-         * Select which fields to average
-        **/
-        _avg?: ExamAvgAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to sum
-        **/
-        _sum?: ExamSumAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
          * Select which fields to find the minimum value
         **/
         _min?: ExamMinAggregateInputType
@@ -289462,8 +288250,6 @@ export namespace Prisma {
         take?: number
         skip?: number
         _count?: ExamCountAggregateInputType | true
-        _avg?: ExamAvgAggregateInputType
-        _sum?: ExamSumAggregateInputType
         _min?: ExamMinAggregateInputType
         _max?: ExamMaxAggregateInputType
     };
@@ -289477,18 +288263,10 @@ export namespace Prisma {
         updatedAt: Date
         title: string
         status: $Enums.ExamStatus
-        questionBankId: string
-        startTime: Date
-        endTime: Date
-        duration: number
-        passScore: number
-        maxScore: number
-        shuffleQuestions: boolean
-        shuffleAnswers: boolean
-        showResult: boolean
+        questionBankId: string | null
+        lockExamCode: boolean
+        startTime: string
         _count: ExamCountAggregateOutputType | null
-        _avg: ExamAvgAggregateOutputType | null
-        _sum: ExamSumAggregateOutputType | null
         _min: ExamMinAggregateOutputType | null
         _max: ExamMaxAggregateOutputType | null
     };
@@ -289515,21 +288293,16 @@ export namespace Prisma {
         title?: boolean
         status?: boolean
         questionBankId?: boolean
+        lockExamCode?: boolean
         startTime?: boolean
-        endTime?: boolean
-        duration?: boolean
-        passScore?: boolean
-        maxScore?: boolean
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
-        room?: boolean | Exam$roomArgs<ExtArgs>
+        questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
         subjectClass?: boolean | Exam$subjectClassArgs<ExtArgs>
+        studentSubjectScore?: boolean | Exam$studentSubjectScoreArgs<ExtArgs>
+        room?: boolean | Exam$roomArgs<ExtArgs>
         examBank?: boolean | Exam$examBankArgs<ExtArgs>
         testStructureRules?: boolean | Exam$testStructureRulesArgs<ExtArgs>
         examSessions?: boolean | Exam$examSessionsArgs<ExtArgs>
-        examFax?: boolean | Exam$examFaxArgs<ExtArgs>
+        examRooms?: boolean | Exam$examRoomsArgs<ExtArgs>
         _count?: boolean | ExamCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["exam"]>;
     export type ExamSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -289543,15 +288316,9 @@ export namespace Prisma {
         title?: boolean
         status?: boolean
         questionBankId?: boolean
+        lockExamCode?: boolean
         startTime?: boolean
-        endTime?: boolean
-        duration?: boolean
-        passScore?: boolean
-        maxScore?: boolean
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
+        questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
     }, ExtArgs["result"]["exam"]>;
     export type ExamSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -289564,15 +288331,9 @@ export namespace Prisma {
         title?: boolean
         status?: boolean
         questionBankId?: boolean
+        lockExamCode?: boolean
         startTime?: boolean
-        endTime?: boolean
-        duration?: boolean
-        passScore?: boolean
-        maxScore?: boolean
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
+        questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
     }, ExtArgs["result"]["exam"]>;
     export type ExamSelectScalar = {
         id?: boolean
@@ -289585,42 +288346,44 @@ export namespace Prisma {
         title?: boolean
         status?: boolean
         questionBankId?: boolean
+        lockExamCode?: boolean
         startTime?: boolean
-        endTime?: boolean
-        duration?: boolean
-        passScore?: boolean
-        maxScore?: boolean
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
     };
-    export type ExamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "status" | "questionBankId" | "startTime" | "endTime" | "duration" | "passScore" | "maxScore" | "shuffleQuestions" | "shuffleAnswers" | "showResult", ExtArgs["result"]["exam"]>;
+    export type ExamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "status" | "questionBankId" | "lockExamCode" | "startTime", ExtArgs["result"]["exam"]>;
     export type ExamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
-        room?: boolean | Exam$roomArgs<ExtArgs>
+        questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
         subjectClass?: boolean | Exam$subjectClassArgs<ExtArgs>
+        studentSubjectScore?: boolean | Exam$studentSubjectScoreArgs<ExtArgs>
+        room?: boolean | Exam$roomArgs<ExtArgs>
         examBank?: boolean | Exam$examBankArgs<ExtArgs>
         testStructureRules?: boolean | Exam$testStructureRulesArgs<ExtArgs>
         examSessions?: boolean | Exam$examSessionsArgs<ExtArgs>
-        examFax?: boolean | Exam$examFaxArgs<ExtArgs>
+        examRooms?: boolean | Exam$examRoomsArgs<ExtArgs>
         _count?: boolean | ExamCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ExamIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
+        questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
     };
     export type ExamIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        questionBank?: boolean | QuestionBankDefaultArgs<ExtArgs>
+        questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
     };
     export type $ExamPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "Exam"
         objects: {
-            questionBank: Prisma.$QuestionBankPayload<ExtArgs>
-            room: Prisma.$RoomPayload<ExtArgs>[]
+            questionBank: Prisma.$QuestionBankPayload<ExtArgs> | null
+            /**
+             * Lớp môn học
+             */
             subjectClass: Prisma.$SubjectClassPayload<ExtArgs>[]
+            /**
+             * thí sinh
+             */
+            studentSubjectScore: Prisma.$StudentSubjectScorePayload<ExtArgs>[]
+            room: Prisma.$RoomPayload<ExtArgs>[]
             examBank: Prisma.$ExamBankPayload<ExtArgs>[]
             testStructureRules: Prisma.$TestStructureRulePayload<ExtArgs>[]
             examSessions: Prisma.$ExamSessionPayload<ExtArgs>[]
-            examFax: Prisma.$ExamFaxPayload<ExtArgs>[]
+            examRooms: Prisma.$ExamRoomPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -289632,15 +288395,12 @@ export namespace Prisma {
             updatedAt: Date
             title: string
             status: $Enums.ExamStatus
-            questionBankId: string
-            startTime: Date
-            endTime: Date
-            duration: number
-            passScore: number
-            maxScore: number
-            shuffleQuestions: boolean
-            shuffleAnswers: boolean
-            showResult: boolean
+            questionBankId: string | null
+            lockExamCode: boolean
+            /**
+             * thời gian thi
+             */
+            startTime: string
         }, ExtArgs["result"]["exam"]>
         composites: {}
     };
@@ -290026,27 +288786,22 @@ export namespace Prisma {
         limit?: number
     };
     /**
-     * Exam.room
+     * Exam.questionBank
      */
-    export type Exam$roomArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    export type Exam$questionBankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         /**
-         * Select specific fields to fetch from the Room
+         * Select specific fields to fetch from the QuestionBank
          */
-        select?: RoomSelect<ExtArgs> | null
+        select?: QuestionBankSelect<ExtArgs> | null
         /**
-         * Omit specific fields from the Room
+         * Omit specific fields from the QuestionBank
          */
-        omit?: RoomOmit<ExtArgs> | null
+        omit?: QuestionBankOmit<ExtArgs> | null
         /**
          * Choose, which related nodes to fetch as well
          */
-        include?: RoomInclude<ExtArgs> | null
-        where?: RoomWhereInput
-        orderBy?: RoomOrderByWithRelationInput | RoomOrderByWithRelationInput[]
-        cursor?: RoomWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: RoomScalarFieldEnum | RoomScalarFieldEnum[]
+        include?: QuestionBankInclude<ExtArgs> | null
+        where?: QuestionBankWhereInput
     };
     /**
      * Exam.subjectClass
@@ -290070,6 +288825,52 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: SubjectClassScalarFieldEnum | SubjectClassScalarFieldEnum[]
+    };
+    /**
+     * Exam.studentSubjectScore
+     */
+    export type Exam$studentSubjectScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScore
+         */
+        select?: StudentSubjectScoreSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScore
+         */
+        omit?: StudentSubjectScoreOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreInclude<ExtArgs> | null
+        where?: StudentSubjectScoreWhereInput
+        orderBy?: StudentSubjectScoreOrderByWithRelationInput | StudentSubjectScoreOrderByWithRelationInput[]
+        cursor?: StudentSubjectScoreWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: StudentSubjectScoreScalarFieldEnum | StudentSubjectScoreScalarFieldEnum[]
+    };
+    /**
+     * Exam.room
+     */
+    export type Exam$roomArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the Room
+         */
+        select?: RoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the Room
+         */
+        omit?: RoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: RoomInclude<ExtArgs> | null
+        where?: RoomWhereInput
+        orderBy?: RoomOrderByWithRelationInput | RoomOrderByWithRelationInput[]
+        cursor?: RoomWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: RoomScalarFieldEnum | RoomScalarFieldEnum[]
     };
     /**
      * Exam.examBank
@@ -290141,27 +288942,27 @@ export namespace Prisma {
         distinct?: ExamSessionScalarFieldEnum | ExamSessionScalarFieldEnum[]
     };
     /**
-     * Exam.examFax
+     * Exam.examRooms
      */
-    export type Exam$examFaxArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    export type Exam$examRoomsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         /**
-         * Select specific fields to fetch from the ExamFax
+         * Select specific fields to fetch from the ExamRoom
          */
-        select?: ExamFaxSelect<ExtArgs> | null
+        select?: ExamRoomSelect<ExtArgs> | null
         /**
-         * Omit specific fields from the ExamFax
+         * Omit specific fields from the ExamRoom
          */
-        omit?: ExamFaxOmit<ExtArgs> | null
+        omit?: ExamRoomOmit<ExtArgs> | null
         /**
          * Choose, which related nodes to fetch as well
          */
-        include?: ExamFaxInclude<ExtArgs> | null
-        where?: ExamFaxWhereInput
-        orderBy?: ExamFaxOrderByWithRelationInput | ExamFaxOrderByWithRelationInput[]
-        cursor?: ExamFaxWhereUniqueInput
+        include?: ExamRoomInclude<ExtArgs> | null
+        where?: ExamRoomWhereInput
+        orderBy?: ExamRoomOrderByWithRelationInput | ExamRoomOrderByWithRelationInput[]
+        cursor?: ExamRoomWhereUniqueInput
         take?: number
         skip?: number
-        distinct?: ExamFaxScalarFieldEnum | ExamFaxScalarFieldEnum[]
+        distinct?: ExamRoomScalarFieldEnum | ExamRoomScalarFieldEnum[]
     };
     /**
      * Exam without action
@@ -290179,6 +288980,682 @@ export namespace Prisma {
          * Choose, which related nodes to fetch as well
          */
         include?: ExamInclude<ExtArgs> | null
+    };
+    /**
+     * Model ExamRoom
+     */
+    export type AggregateExamRoom = {
+        _count: ExamRoomCountAggregateOutputType | null
+        _min: ExamRoomMinAggregateOutputType | null
+        _max: ExamRoomMaxAggregateOutputType | null
+    };
+    export type ExamRoomMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        examId: string | null
+        roomId: string | null
+    };
+    export type ExamRoomMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        examId: string | null
+        roomId: string | null
+    };
+    export type ExamRoomCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        examId: number
+        roomId: number
+        _all: number
+    };
+    export type ExamRoomMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        examId?: true
+        roomId?: true
+    };
+    export type ExamRoomMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        examId?: true
+        roomId?: true
+    };
+    export type ExamRoomCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        examId?: true
+        roomId?: true
+        _all?: true
+    };
+    export type ExamRoomAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ExamRoom to aggregate.
+         */
+        where?: ExamRoomWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ExamRooms to fetch.
+         */
+        orderBy?: ExamRoomOrderByWithRelationInput | ExamRoomOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ExamRoomWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ExamRooms from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ExamRooms.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ExamRooms
+        **/
+        _count?: true | ExamRoomCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ExamRoomMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ExamRoomMaxAggregateInputType
+    };
+    export type GetExamRoomAggregateType<T extends ExamRoomAggregateArgs> = {
+        [P in keyof T & keyof AggregateExamRoom]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExamRoom[P]>
+        : GetScalarType<T[P], AggregateExamRoom[P]>
+    };
+    export type ExamRoomGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ExamRoomWhereInput
+        orderBy?: ExamRoomOrderByWithAggregationInput | ExamRoomOrderByWithAggregationInput[]
+        by: ExamRoomScalarFieldEnum[] | ExamRoomScalarFieldEnum
+        having?: ExamRoomScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ExamRoomCountAggregateInputType | true
+        _min?: ExamRoomMinAggregateInputType
+        _max?: ExamRoomMaxAggregateInputType
+    };
+    export type ExamRoomGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        examId: string
+        roomId: string
+        _count: ExamRoomCountAggregateOutputType | null
+        _min: ExamRoomMinAggregateOutputType | null
+        _max: ExamRoomMaxAggregateOutputType | null
+    };
+    type GetExamRoomGroupByPayload<T extends ExamRoomGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ExamRoomGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ExamRoomGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ExamRoomGroupByOutputType[P]>
+                : GetScalarType<T[P], ExamRoomGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ExamRoomSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        examId?: boolean
+        roomId?: boolean
+        exam?: boolean | ExamDefaultArgs<ExtArgs>
+        room?: boolean | RoomDefaultArgs<ExtArgs>
+        examSessions?: boolean | ExamRoom$examSessionsArgs<ExtArgs>
+        _count?: boolean | ExamRoomCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["examRoom"]>;
+    export type ExamRoomSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        examId?: boolean
+        roomId?: boolean
+        exam?: boolean | ExamDefaultArgs<ExtArgs>
+        room?: boolean | RoomDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["examRoom"]>;
+    export type ExamRoomSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        examId?: boolean
+        roomId?: boolean
+        exam?: boolean | ExamDefaultArgs<ExtArgs>
+        room?: boolean | RoomDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["examRoom"]>;
+    export type ExamRoomSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        examId?: boolean
+        roomId?: boolean
+    };
+    export type ExamRoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "roomId", ExtArgs["result"]["examRoom"]>;
+    export type ExamRoomInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        exam?: boolean | ExamDefaultArgs<ExtArgs>
+        room?: boolean | RoomDefaultArgs<ExtArgs>
+        examSessions?: boolean | ExamRoom$examSessionsArgs<ExtArgs>
+        _count?: boolean | ExamRoomCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type ExamRoomIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        exam?: boolean | ExamDefaultArgs<ExtArgs>
+        room?: boolean | RoomDefaultArgs<ExtArgs>
+    };
+    export type ExamRoomIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        exam?: boolean | ExamDefaultArgs<ExtArgs>
+        room?: boolean | RoomDefaultArgs<ExtArgs>
+    };
+    export type $ExamRoomPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ExamRoom"
+        objects: {
+            exam: Prisma.$ExamPayload<ExtArgs>
+            room: Prisma.$RoomPayload<ExtArgs>
+            examSessions: Prisma.$ExamSessionPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            examId: string
+            roomId: string
+        }, ExtArgs["result"]["examRoom"]>
+        composites: {}
+    };
+    type ExamRoomGetPayload<S extends boolean | null | undefined | ExamRoomDefaultArgs> = $Result.GetResult<Prisma.$ExamRoomPayload, S>;
+    type ExamRoomCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ExamRoomFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ExamRoomCountAggregateInputType | true
+    };
+    /**
+     * ExamRoom findUnique
+     */
+    export type ExamRoomFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
+        /**
+         * Filter, which ExamRoom to fetch.
+         */
+        where: ExamRoomWhereUniqueInput
+    };
+    /**
+     * ExamRoom findUniqueOrThrow
+     */
+    export type ExamRoomFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
+        /**
+         * Filter, which ExamRoom to fetch.
+         */
+        where: ExamRoomWhereUniqueInput
+    };
+    /**
+     * ExamRoom findFirst
+     */
+    export type ExamRoomFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
+        /**
+         * Filter, which ExamRoom to fetch.
+         */
+        where?: ExamRoomWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ExamRooms to fetch.
+         */
+        orderBy?: ExamRoomOrderByWithRelationInput | ExamRoomOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ExamRooms.
+         */
+        cursor?: ExamRoomWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ExamRooms from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ExamRooms.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ExamRooms.
+         */
+        distinct?: ExamRoomScalarFieldEnum | ExamRoomScalarFieldEnum[]
+    };
+    /**
+     * ExamRoom findFirstOrThrow
+     */
+    export type ExamRoomFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
+        /**
+         * Filter, which ExamRoom to fetch.
+         */
+        where?: ExamRoomWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ExamRooms to fetch.
+         */
+        orderBy?: ExamRoomOrderByWithRelationInput | ExamRoomOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ExamRooms.
+         */
+        cursor?: ExamRoomWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ExamRooms from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ExamRooms.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ExamRooms.
+         */
+        distinct?: ExamRoomScalarFieldEnum | ExamRoomScalarFieldEnum[]
+    };
+    /**
+     * ExamRoom findMany
+     */
+    export type ExamRoomFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
+        /**
+         * Filter, which ExamRooms to fetch.
+         */
+        where?: ExamRoomWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ExamRooms to fetch.
+         */
+        orderBy?: ExamRoomOrderByWithRelationInput | ExamRoomOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ExamRooms.
+         */
+        cursor?: ExamRoomWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ExamRooms from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ExamRooms.
+         */
+        skip?: number
+        distinct?: ExamRoomScalarFieldEnum | ExamRoomScalarFieldEnum[]
+    };
+    /**
+     * ExamRoom create
+     */
+    export type ExamRoomCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ExamRoom.
+         */
+        data: XOR<ExamRoomCreateInput, ExamRoomUncheckedCreateInput>
+    };
+    /**
+     * ExamRoom createMany
+     */
+    export type ExamRoomCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ExamRooms.
+         */
+        data: ExamRoomCreateManyInput | ExamRoomCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ExamRoom createManyAndReturn
+     */
+    export type ExamRoomCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * The data used to create many ExamRooms.
+         */
+        data: ExamRoomCreateManyInput | ExamRoomCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ExamRoom update
+     */
+    export type ExamRoomUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ExamRoom.
+         */
+        data: XOR<ExamRoomUpdateInput, ExamRoomUncheckedUpdateInput>
+        /**
+         * Choose, which ExamRoom to update.
+         */
+        where: ExamRoomWhereUniqueInput
+    };
+    /**
+     * ExamRoom updateMany
+     */
+    export type ExamRoomUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ExamRooms.
+         */
+        data: XOR<ExamRoomUpdateManyMutationInput, ExamRoomUncheckedUpdateManyInput>
+        /**
+         * Filter which ExamRooms to update
+         */
+        where?: ExamRoomWhereInput
+        /**
+         * Limit how many ExamRooms to update.
+         */
+        limit?: number
+    };
+    /**
+     * ExamRoom updateManyAndReturn
+     */
+    export type ExamRoomUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * The data used to update ExamRooms.
+         */
+        data: XOR<ExamRoomUpdateManyMutationInput, ExamRoomUncheckedUpdateManyInput>
+        /**
+         * Filter which ExamRooms to update
+         */
+        where?: ExamRoomWhereInput
+        /**
+         * Limit how many ExamRooms to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ExamRoom upsert
+     */
+    export type ExamRoomUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ExamRoom to update in case it exists.
+         */
+        where: ExamRoomWhereUniqueInput
+        /**
+         * In case the ExamRoom found by the `where` argument doesn't exist, create a new ExamRoom with this data.
+         */
+        create: XOR<ExamRoomCreateInput, ExamRoomUncheckedCreateInput>
+        /**
+         * In case the ExamRoom was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ExamRoomUpdateInput, ExamRoomUncheckedUpdateInput>
+    };
+    /**
+     * ExamRoom delete
+     */
+    export type ExamRoomDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
+        /**
+         * Filter which ExamRoom to delete.
+         */
+        where: ExamRoomWhereUniqueInput
+    };
+    /**
+     * ExamRoom deleteMany
+     */
+    export type ExamRoomDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ExamRooms to delete
+         */
+        where?: ExamRoomWhereInput
+        /**
+         * Limit how many ExamRooms to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ExamRoom.examSessions
+     */
+    export type ExamRoom$examSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamSession
+         */
+        select?: ExamSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamSession
+         */
+        omit?: ExamSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamSessionInclude<ExtArgs> | null
+        where?: ExamSessionWhereInput
+        orderBy?: ExamSessionOrderByWithRelationInput | ExamSessionOrderByWithRelationInput[]
+        cursor?: ExamSessionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ExamSessionScalarFieldEnum | ExamSessionScalarFieldEnum[]
+    };
+    /**
+     * ExamRoom without action
+     */
+    export type ExamRoomDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ExamRoom
+         */
+        select?: ExamRoomSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ExamRoom
+         */
+        omit?: ExamRoomOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ExamRoomInclude<ExtArgs> | null
     };
     /**
      * Model TestStructureRule
@@ -290915,7 +290392,6 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         examId: string | null
-        examCode: string | null
     };
     export type ExamBankMaxAggregateOutputType = {
         id: string | null
@@ -290926,7 +290402,6 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         examId: string | null
-        examCode: string | null
     };
     export type ExamBankCountAggregateOutputType = {
         id: number
@@ -290937,7 +290412,6 @@ export namespace Prisma {
         createdAt: number
         updatedAt: number
         examId: number
-        examCode: number
         _all: number
     };
     export type ExamBankMinAggregateInputType = {
@@ -290949,7 +290423,6 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         examId?: true
-        examCode?: true
     };
     export type ExamBankMaxAggregateInputType = {
         id?: true
@@ -290960,7 +290433,6 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         examId?: true
-        examCode?: true
     };
     export type ExamBankCountAggregateInputType = {
         id?: true
@@ -290971,7 +290443,6 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         examId?: true
-        examCode?: true
         _all?: true
     };
     export type ExamBankAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -291049,7 +290520,6 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         examId: string
-        examCode: string
         _count: ExamBankCountAggregateOutputType | null
         _min: ExamBankMinAggregateOutputType | null
         _max: ExamBankMaxAggregateOutputType | null
@@ -291075,9 +290545,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         examId?: boolean
-        examCode?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        examSession?: boolean | ExamBank$examSessionArgs<ExtArgs>
         questions?: boolean | ExamBank$questionsArgs<ExtArgs>
         _count?: boolean | ExamBankCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examBank"]>;
@@ -291090,7 +290558,6 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         examId?: boolean
-        examCode?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examBank"]>;
     export type ExamBankSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -291102,7 +290569,6 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         examId?: boolean
-        examCode?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examBank"]>;
     export type ExamBankSelectScalar = {
@@ -291114,12 +290580,10 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         examId?: boolean
-        examCode?: boolean
     };
-    export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "examCode", ExtArgs["result"]["examBank"]>;
+    export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId", ExtArgs["result"]["examBank"]>;
     export type ExamBankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        examSession?: boolean | ExamBank$examSessionArgs<ExtArgs>
         questions?: boolean | ExamBank$questionsArgs<ExtArgs>
         _count?: boolean | ExamBankCountOutputTypeDefaultArgs<ExtArgs>
     };
@@ -291133,7 +290597,6 @@ export namespace Prisma {
         name: "ExamBank"
         objects: {
             exam: Prisma.$ExamPayload<ExtArgs>
-            examSession: Prisma.$ExamSessionPayload<ExtArgs>[]
             questions: Prisma.$ExamBankQuestionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
@@ -291145,7 +290608,6 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             examId: string
-            examCode: string
         }, ExtArgs["result"]["examBank"]>
         composites: {}
     };
@@ -291529,29 +290991,6 @@ export namespace Prisma {
          * Limit how many ExamBanks to delete.
          */
         limit?: number
-    };
-    /**
-     * ExamBank.examSession
-     */
-    export type ExamBank$examSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamSession
-         */
-        select?: ExamSessionSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamSession
-         */
-        omit?: ExamSessionOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamSessionInclude<ExtArgs> | null
-        where?: ExamSessionWhereInput
-        orderBy?: ExamSessionOrderByWithRelationInput | ExamSessionOrderByWithRelationInput[]
-        cursor?: ExamSessionWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: ExamSessionScalarFieldEnum | ExamSessionScalarFieldEnum[]
     };
     /**
      * ExamBank.questions
@@ -292284,710 +291723,6 @@ export namespace Prisma {
         include?: ExamBankQuestionInclude<ExtArgs> | null
     };
     /**
-     * Model ExamFax
-     */
-    export type AggregateExamFax = {
-        _count: ExamFaxCountAggregateOutputType | null
-        _avg: ExamFaxAvgAggregateOutputType | null
-        _sum: ExamFaxSumAggregateOutputType | null
-        _min: ExamFaxMinAggregateOutputType | null
-        _max: ExamFaxMaxAggregateOutputType | null
-    };
-    export type ExamFaxAvgAggregateOutputType = {
-        score: Decimal | null
-    };
-    export type ExamFaxSumAggregateOutputType = {
-        score: Decimal | null
-    };
-    export type ExamFaxMinAggregateOutputType = {
-        id: string | null
-        code: string | null
-        active: boolean | null
-        description: string | null
-        deletedAt: Date | null
-        createdAt: Date | null
-        updatedAt: Date | null
-        examId: string | null
-        fax: string | null
-        score: Decimal | null
-    };
-    export type ExamFaxMaxAggregateOutputType = {
-        id: string | null
-        code: string | null
-        active: boolean | null
-        description: string | null
-        deletedAt: Date | null
-        createdAt: Date | null
-        updatedAt: Date | null
-        examId: string | null
-        fax: string | null
-        score: Decimal | null
-    };
-    export type ExamFaxCountAggregateOutputType = {
-        id: number
-        code: number
-        active: number
-        description: number
-        deletedAt: number
-        createdAt: number
-        updatedAt: number
-        examId: number
-        fax: number
-        score: number
-        _all: number
-    };
-    export type ExamFaxAvgAggregateInputType = {
-        score?: true
-    };
-    export type ExamFaxSumAggregateInputType = {
-        score?: true
-    };
-    export type ExamFaxMinAggregateInputType = {
-        id?: true
-        code?: true
-        active?: true
-        description?: true
-        deletedAt?: true
-        createdAt?: true
-        updatedAt?: true
-        examId?: true
-        fax?: true
-        score?: true
-    };
-    export type ExamFaxMaxAggregateInputType = {
-        id?: true
-        code?: true
-        active?: true
-        description?: true
-        deletedAt?: true
-        createdAt?: true
-        updatedAt?: true
-        examId?: true
-        fax?: true
-        score?: true
-    };
-    export type ExamFaxCountAggregateInputType = {
-        id?: true
-        code?: true
-        active?: true
-        description?: true
-        deletedAt?: true
-        createdAt?: true
-        updatedAt?: true
-        examId?: true
-        fax?: true
-        score?: true
-        _all?: true
-    };
-    export type ExamFaxAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Filter which ExamFax to aggregate.
-         */
-        where?: ExamFaxWhereInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-         * 
-         * Determine the order of ExamFaxes to fetch.
-         */
-        orderBy?: ExamFaxOrderByWithRelationInput | ExamFaxOrderByWithRelationInput[]
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-         * 
-         * Sets the start position
-         */
-        cursor?: ExamFaxWhereUniqueInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Take `±n` ExamFaxes from the position of the cursor.
-         */
-        take?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Skip the first `n` ExamFaxes.
-         */
-        skip?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Count returned ExamFaxes
-        **/
-        _count?: true | ExamFaxCountAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to average
-        **/
-        _avg?: ExamFaxAvgAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to sum
-        **/
-        _sum?: ExamFaxSumAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to find the minimum value
-        **/
-        _min?: ExamFaxMinAggregateInputType
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-         * 
-         * Select which fields to find the maximum value
-        **/
-        _max?: ExamFaxMaxAggregateInputType
-    };
-    export type GetExamFaxAggregateType<T extends ExamFaxAggregateArgs> = {
-        [P in keyof T & keyof AggregateExamFax]: P extends '_count' | 'count'
-        ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateExamFax[P]>
-        : GetScalarType<T[P], AggregateExamFax[P]>
-    };
-    export type ExamFaxGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        where?: ExamFaxWhereInput
-        orderBy?: ExamFaxOrderByWithAggregationInput | ExamFaxOrderByWithAggregationInput[]
-        by: ExamFaxScalarFieldEnum[] | ExamFaxScalarFieldEnum
-        having?: ExamFaxScalarWhereWithAggregatesInput
-        take?: number
-        skip?: number
-        _count?: ExamFaxCountAggregateInputType | true
-        _avg?: ExamFaxAvgAggregateInputType
-        _sum?: ExamFaxSumAggregateInputType
-        _min?: ExamFaxMinAggregateInputType
-        _max?: ExamFaxMaxAggregateInputType
-    };
-    export type ExamFaxGroupByOutputType = {
-        id: string
-        code: string | null
-        active: boolean
-        description: string | null
-        deletedAt: Date | null
-        createdAt: Date
-        updatedAt: Date
-        examId: string
-        fax: string
-        score: Decimal | null
-        _count: ExamFaxCountAggregateOutputType | null
-        _avg: ExamFaxAvgAggregateOutputType | null
-        _sum: ExamFaxSumAggregateOutputType | null
-        _min: ExamFaxMinAggregateOutputType | null
-        _max: ExamFaxMaxAggregateOutputType | null
-    };
-    type GetExamFaxGroupByPayload<T extends ExamFaxGroupByArgs> = Prisma.PrismaPromise<
-        Array<
-            PickEnumerable<ExamFaxGroupByOutputType, T['by']> &
-            {
-                [P in ((keyof T) & (keyof ExamFaxGroupByOutputType))]: P extends '_count'
-                ? T[P] extends boolean
-                ? number
-                : GetScalarType<T[P], ExamFaxGroupByOutputType[P]>
-                : GetScalarType<T[P], ExamFaxGroupByOutputType[P]>
-            }
-        >
-    >;
-    export type ExamFaxSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-        id?: boolean
-        code?: boolean
-        active?: boolean
-        description?: boolean
-        deletedAt?: boolean
-        createdAt?: boolean
-        updatedAt?: boolean
-        examId?: boolean
-        fax?: boolean
-        score?: boolean
-        exam?: boolean | ExamDefaultArgs<ExtArgs>
-        examSession?: boolean | ExamFax$examSessionArgs<ExtArgs>
-    }, ExtArgs["result"]["examFax"]>;
-    export type ExamFaxSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-        id?: boolean
-        code?: boolean
-        active?: boolean
-        description?: boolean
-        deletedAt?: boolean
-        createdAt?: boolean
-        updatedAt?: boolean
-        examId?: boolean
-        fax?: boolean
-        score?: boolean
-        exam?: boolean | ExamDefaultArgs<ExtArgs>
-    }, ExtArgs["result"]["examFax"]>;
-    export type ExamFaxSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-        id?: boolean
-        code?: boolean
-        active?: boolean
-        description?: boolean
-        deletedAt?: boolean
-        createdAt?: boolean
-        updatedAt?: boolean
-        examId?: boolean
-        fax?: boolean
-        score?: boolean
-        exam?: boolean | ExamDefaultArgs<ExtArgs>
-    }, ExtArgs["result"]["examFax"]>;
-    export type ExamFaxSelectScalar = {
-        id?: boolean
-        code?: boolean
-        active?: boolean
-        description?: boolean
-        deletedAt?: boolean
-        createdAt?: boolean
-        updatedAt?: boolean
-        examId?: boolean
-        fax?: boolean
-        score?: boolean
-    };
-    export type ExamFaxOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "fax" | "score", ExtArgs["result"]["examFax"]>;
-    export type ExamFaxInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        exam?: boolean | ExamDefaultArgs<ExtArgs>
-        examSession?: boolean | ExamFax$examSessionArgs<ExtArgs>
-    };
-    export type ExamFaxIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        exam?: boolean | ExamDefaultArgs<ExtArgs>
-    };
-    export type ExamFaxIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        exam?: boolean | ExamDefaultArgs<ExtArgs>
-    };
-    export type $ExamFaxPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        name: "ExamFax"
-        objects: {
-            exam: Prisma.$ExamPayload<ExtArgs>
-            examSession: Prisma.$ExamSessionPayload<ExtArgs> | null
-        }
-        scalars: $Extensions.GetPayloadResult<{
-            id: string
-            code: string | null
-            active: boolean
-            description: string | null
-            deletedAt: Date | null
-            createdAt: Date
-            updatedAt: Date
-            examId: string
-            fax: string
-            score: Prisma.Decimal | null
-        }, ExtArgs["result"]["examFax"]>
-        composites: {}
-    };
-    type ExamFaxGetPayload<S extends boolean | null | undefined | ExamFaxDefaultArgs> = $Result.GetResult<Prisma.$ExamFaxPayload, S>;
-    type ExamFaxCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ExamFaxFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-        select?: ExamFaxCountAggregateInputType | true
-    };
-    /**
-     * ExamFax findUnique
-     */
-    export type ExamFaxFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        /**
-         * Filter, which ExamFax to fetch.
-         */
-        where: ExamFaxWhereUniqueInput
-    };
-    /**
-     * ExamFax findUniqueOrThrow
-     */
-    export type ExamFaxFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        /**
-         * Filter, which ExamFax to fetch.
-         */
-        where: ExamFaxWhereUniqueInput
-    };
-    /**
-     * ExamFax findFirst
-     */
-    export type ExamFaxFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        /**
-         * Filter, which ExamFax to fetch.
-         */
-        where?: ExamFaxWhereInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-         * 
-         * Determine the order of ExamFaxes to fetch.
-         */
-        orderBy?: ExamFaxOrderByWithRelationInput | ExamFaxOrderByWithRelationInput[]
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-         * 
-         * Sets the position for searching for ExamFaxes.
-         */
-        cursor?: ExamFaxWhereUniqueInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Take `±n` ExamFaxes from the position of the cursor.
-         */
-        take?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Skip the first `n` ExamFaxes.
-         */
-        skip?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-         * 
-         * Filter by unique combinations of ExamFaxes.
-         */
-        distinct?: ExamFaxScalarFieldEnum | ExamFaxScalarFieldEnum[]
-    };
-    /**
-     * ExamFax findFirstOrThrow
-     */
-    export type ExamFaxFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        /**
-         * Filter, which ExamFax to fetch.
-         */
-        where?: ExamFaxWhereInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-         * 
-         * Determine the order of ExamFaxes to fetch.
-         */
-        orderBy?: ExamFaxOrderByWithRelationInput | ExamFaxOrderByWithRelationInput[]
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-         * 
-         * Sets the position for searching for ExamFaxes.
-         */
-        cursor?: ExamFaxWhereUniqueInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Take `±n` ExamFaxes from the position of the cursor.
-         */
-        take?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Skip the first `n` ExamFaxes.
-         */
-        skip?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-         * 
-         * Filter by unique combinations of ExamFaxes.
-         */
-        distinct?: ExamFaxScalarFieldEnum | ExamFaxScalarFieldEnum[]
-    };
-    /**
-     * ExamFax findMany
-     */
-    export type ExamFaxFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        /**
-         * Filter, which ExamFaxes to fetch.
-         */
-        where?: ExamFaxWhereInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-         * 
-         * Determine the order of ExamFaxes to fetch.
-         */
-        orderBy?: ExamFaxOrderByWithRelationInput | ExamFaxOrderByWithRelationInput[]
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-         * 
-         * Sets the position for listing ExamFaxes.
-         */
-        cursor?: ExamFaxWhereUniqueInput
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Take `±n` ExamFaxes from the position of the cursor.
-         */
-        take?: number
-        /**
-         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-         * 
-         * Skip the first `n` ExamFaxes.
-         */
-        skip?: number
-        distinct?: ExamFaxScalarFieldEnum | ExamFaxScalarFieldEnum[]
-    };
-    /**
-     * ExamFax create
-     */
-    export type ExamFaxCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        /**
-         * The data needed to create a ExamFax.
-         */
-        data: XOR<ExamFaxCreateInput, ExamFaxUncheckedCreateInput>
-    };
-    /**
-     * ExamFax createMany
-     */
-    export type ExamFaxCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * The data used to create many ExamFaxes.
-         */
-        data: ExamFaxCreateManyInput | ExamFaxCreateManyInput[]
-        skipDuplicates?: boolean
-    };
-    /**
-     * ExamFax createManyAndReturn
-     */
-    export type ExamFaxCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelectCreateManyAndReturn<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * The data used to create many ExamFaxes.
-         */
-        data: ExamFaxCreateManyInput | ExamFaxCreateManyInput[]
-        skipDuplicates?: boolean
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxIncludeCreateManyAndReturn<ExtArgs> | null
-    };
-    /**
-     * ExamFax update
-     */
-    export type ExamFaxUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        /**
-         * The data needed to update a ExamFax.
-         */
-        data: XOR<ExamFaxUpdateInput, ExamFaxUncheckedUpdateInput>
-        /**
-         * Choose, which ExamFax to update.
-         */
-        where: ExamFaxWhereUniqueInput
-    };
-    /**
-     * ExamFax updateMany
-     */
-    export type ExamFaxUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * The data used to update ExamFaxes.
-         */
-        data: XOR<ExamFaxUpdateManyMutationInput, ExamFaxUncheckedUpdateManyInput>
-        /**
-         * Filter which ExamFaxes to update
-         */
-        where?: ExamFaxWhereInput
-        /**
-         * Limit how many ExamFaxes to update.
-         */
-        limit?: number
-    };
-    /**
-     * ExamFax updateManyAndReturn
-     */
-    export type ExamFaxUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelectUpdateManyAndReturn<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * The data used to update ExamFaxes.
-         */
-        data: XOR<ExamFaxUpdateManyMutationInput, ExamFaxUncheckedUpdateManyInput>
-        /**
-         * Filter which ExamFaxes to update
-         */
-        where?: ExamFaxWhereInput
-        /**
-         * Limit how many ExamFaxes to update.
-         */
-        limit?: number
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxIncludeUpdateManyAndReturn<ExtArgs> | null
-    };
-    /**
-     * ExamFax upsert
-     */
-    export type ExamFaxUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        /**
-         * The filter to search for the ExamFax to update in case it exists.
-         */
-        where: ExamFaxWhereUniqueInput
-        /**
-         * In case the ExamFax found by the `where` argument doesn't exist, create a new ExamFax with this data.
-         */
-        create: XOR<ExamFaxCreateInput, ExamFaxUncheckedCreateInput>
-        /**
-         * In case the ExamFax was found with the provided `where` argument, update it with this data.
-         */
-        update: XOR<ExamFaxUpdateInput, ExamFaxUncheckedUpdateInput>
-    };
-    /**
-     * ExamFax delete
-     */
-    export type ExamFaxDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        /**
-         * Filter which ExamFax to delete.
-         */
-        where: ExamFaxWhereUniqueInput
-    };
-    /**
-     * ExamFax deleteMany
-     */
-    export type ExamFaxDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Filter which ExamFaxes to delete
-         */
-        where?: ExamFaxWhereInput
-        /**
-         * Limit how many ExamFaxes to delete.
-         */
-        limit?: number
-    };
-    /**
-     * ExamFax.examSession
-     */
-    export type ExamFax$examSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamSession
-         */
-        select?: ExamSessionSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamSession
-         */
-        omit?: ExamSessionOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamSessionInclude<ExtArgs> | null
-        where?: ExamSessionWhereInput
-    };
-    /**
-     * ExamFax without action
-     */
-    export type ExamFaxDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-    };
-    /**
      * Model ExamSession
      */
     export type AggregateExamSession = {
@@ -293003,13 +291738,10 @@ export namespace Prisma {
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
-        startTime: Date | null
-        endTime: Date | null
-        studentId: string | null
         examId: string | null
-        roomId: string | null
-        examBankId: string | null
-        examFaxId: string | null
+        examRoomId: string | null
+        studentSubjectScoreId: string | null
+        examCode: string | null
     };
     export type ExamSessionMaxAggregateOutputType = {
         id: string | null
@@ -293019,13 +291751,10 @@ export namespace Prisma {
         deletedAt: Date | null
         createdAt: Date | null
         updatedAt: Date | null
-        startTime: Date | null
-        endTime: Date | null
-        studentId: string | null
         examId: string | null
-        roomId: string | null
-        examBankId: string | null
-        examFaxId: string | null
+        examRoomId: string | null
+        studentSubjectScoreId: string | null
+        examCode: string | null
     };
     export type ExamSessionCountAggregateOutputType = {
         id: number
@@ -293035,13 +291764,10 @@ export namespace Prisma {
         deletedAt: number
         createdAt: number
         updatedAt: number
-        startTime: number
-        endTime: number
-        studentId: number
         examId: number
-        roomId: number
-        examBankId: number
-        examFaxId: number
+        examRoomId: number
+        studentSubjectScoreId: number
+        examCode: number
         _all: number
     };
     export type ExamSessionMinAggregateInputType = {
@@ -293052,13 +291778,10 @@ export namespace Prisma {
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
-        startTime?: true
-        endTime?: true
-        studentId?: true
         examId?: true
-        roomId?: true
-        examBankId?: true
-        examFaxId?: true
+        examRoomId?: true
+        studentSubjectScoreId?: true
+        examCode?: true
     };
     export type ExamSessionMaxAggregateInputType = {
         id?: true
@@ -293068,13 +291791,10 @@ export namespace Prisma {
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
-        startTime?: true
-        endTime?: true
-        studentId?: true
         examId?: true
-        roomId?: true
-        examBankId?: true
-        examFaxId?: true
+        examRoomId?: true
+        studentSubjectScoreId?: true
+        examCode?: true
     };
     export type ExamSessionCountAggregateInputType = {
         id?: true
@@ -293084,13 +291804,10 @@ export namespace Prisma {
         deletedAt?: true
         createdAt?: true
         updatedAt?: true
-        startTime?: true
-        endTime?: true
-        studentId?: true
         examId?: true
-        roomId?: true
-        examBankId?: true
-        examFaxId?: true
+        examRoomId?: true
+        studentSubjectScoreId?: true
+        examCode?: true
         _all?: true
     };
     export type ExamSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -293167,13 +291884,10 @@ export namespace Prisma {
         deletedAt: Date | null
         createdAt: Date
         updatedAt: Date
-        startTime: Date | null
-        endTime: Date | null
-        studentId: string | null
         examId: string
-        roomId: string | null
-        examBankId: string | null
-        examFaxId: string | null
+        examRoomId: string
+        studentSubjectScoreId: string
+        examCode: string | null
         _count: ExamSessionCountAggregateOutputType | null
         _min: ExamSessionMinAggregateOutputType | null
         _max: ExamSessionMaxAggregateOutputType | null
@@ -293198,20 +291912,13 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        startTime?: boolean
-        endTime?: boolean
-        studentId?: boolean
         examId?: boolean
-        roomId?: boolean
-        examBankId?: boolean
-        examFaxId?: boolean
-        student?: boolean | ExamSession$studentArgs<ExtArgs>
+        examRoomId?: boolean
+        studentSubjectScoreId?: boolean
+        examCode?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | ExamSession$roomArgs<ExtArgs>
-        examBank?: boolean | ExamSession$examBankArgs<ExtArgs>
-        answers?: boolean | ExamSession$answersArgs<ExtArgs>
-        examFax?: boolean | ExamSession$examFaxArgs<ExtArgs>
-        _count?: boolean | ExamSessionCountOutputTypeDefaultArgs<ExtArgs>
+        examRoom?: boolean | ExamRoomDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examSession"]>;
     export type ExamSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -293221,18 +291928,13 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        startTime?: boolean
-        endTime?: boolean
-        studentId?: boolean
         examId?: boolean
-        roomId?: boolean
-        examBankId?: boolean
-        examFaxId?: boolean
-        student?: boolean | ExamSession$studentArgs<ExtArgs>
+        examRoomId?: boolean
+        studentSubjectScoreId?: boolean
+        examCode?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | ExamSession$roomArgs<ExtArgs>
-        examBank?: boolean | ExamSession$examBankArgs<ExtArgs>
-        examFax?: boolean | ExamSession$examFaxArgs<ExtArgs>
+        examRoom?: boolean | ExamRoomDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examSession"]>;
     export type ExamSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -293242,18 +291944,13 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        startTime?: boolean
-        endTime?: boolean
-        studentId?: boolean
         examId?: boolean
-        roomId?: boolean
-        examBankId?: boolean
-        examFaxId?: boolean
-        student?: boolean | ExamSession$studentArgs<ExtArgs>
+        examRoomId?: boolean
+        studentSubjectScoreId?: boolean
+        examCode?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | ExamSession$roomArgs<ExtArgs>
-        examBank?: boolean | ExamSession$examBankArgs<ExtArgs>
-        examFax?: boolean | ExamSession$examFaxArgs<ExtArgs>
+        examRoom?: boolean | ExamRoomDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examSession"]>;
     export type ExamSessionSelectScalar = {
         id?: boolean
@@ -293263,47 +291960,33 @@ export namespace Prisma {
         deletedAt?: boolean
         createdAt?: boolean
         updatedAt?: boolean
-        startTime?: boolean
-        endTime?: boolean
-        studentId?: boolean
         examId?: boolean
-        roomId?: boolean
-        examBankId?: boolean
-        examFaxId?: boolean
+        examRoomId?: boolean
+        studentSubjectScoreId?: boolean
+        examCode?: boolean
     };
-    export type ExamSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "startTime" | "endTime" | "studentId" | "examId" | "roomId" | "examBankId" | "examFaxId", ExtArgs["result"]["examSession"]>;
+    export type ExamSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "examRoomId" | "studentSubjectScoreId" | "examCode", ExtArgs["result"]["examSession"]>;
     export type ExamSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        student?: boolean | ExamSession$studentArgs<ExtArgs>
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | ExamSession$roomArgs<ExtArgs>
-        examBank?: boolean | ExamSession$examBankArgs<ExtArgs>
-        answers?: boolean | ExamSession$answersArgs<ExtArgs>
-        examFax?: boolean | ExamSession$examFaxArgs<ExtArgs>
-        _count?: boolean | ExamSessionCountOutputTypeDefaultArgs<ExtArgs>
+        examRoom?: boolean | ExamRoomDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     };
     export type ExamSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        student?: boolean | ExamSession$studentArgs<ExtArgs>
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | ExamSession$roomArgs<ExtArgs>
-        examBank?: boolean | ExamSession$examBankArgs<ExtArgs>
-        examFax?: boolean | ExamSession$examFaxArgs<ExtArgs>
+        examRoom?: boolean | ExamRoomDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     };
     export type ExamSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        student?: boolean | ExamSession$studentArgs<ExtArgs>
         exam?: boolean | ExamDefaultArgs<ExtArgs>
-        room?: boolean | ExamSession$roomArgs<ExtArgs>
-        examBank?: boolean | ExamSession$examBankArgs<ExtArgs>
-        examFax?: boolean | ExamSession$examFaxArgs<ExtArgs>
+        examRoom?: boolean | ExamRoomDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
     };
     export type $ExamSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ExamSession"
         objects: {
-            student: Prisma.$StudentPayload<ExtArgs> | null
             exam: Prisma.$ExamPayload<ExtArgs>
-            room: Prisma.$RoomPayload<ExtArgs> | null
-            examBank: Prisma.$ExamBankPayload<ExtArgs> | null
-            answers: Prisma.$AnswerPayload<ExtArgs>[]
-            examFax: Prisma.$ExamFaxPayload<ExtArgs> | null
+            examRoom: Prisma.$ExamRoomPayload<ExtArgs>
+            studentSubjectScore: Prisma.$StudentSubjectScorePayload<ExtArgs>
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -293313,13 +291996,13 @@ export namespace Prisma {
             deletedAt: Date | null
             createdAt: Date
             updatedAt: Date
-            startTime: Date | null
-            endTime: Date | null
-            studentId: string | null
             examId: string
-            roomId: string | null
-            examBankId: string | null
-            examFaxId: string | null
+            examRoomId: string
+            studentSubjectScoreId: string
+            /**
+             * phách
+             */
+            examCode: string | null
         }, ExtArgs["result"]["examSession"]>
         composites: {}
     };
@@ -293703,101 +292386,6 @@ export namespace Prisma {
          * Limit how many ExamSessions to delete.
          */
         limit?: number
-    };
-    /**
-     * ExamSession.student
-     */
-    export type ExamSession$studentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Student
-         */
-        select?: StudentSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Student
-         */
-        omit?: StudentOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: StudentInclude<ExtArgs> | null
-        where?: StudentWhereInput
-    };
-    /**
-     * ExamSession.room
-     */
-    export type ExamSession$roomArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Room
-         */
-        select?: RoomSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Room
-         */
-        omit?: RoomOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: RoomInclude<ExtArgs> | null
-        where?: RoomWhereInput
-    };
-    /**
-     * ExamSession.examBank
-     */
-    export type ExamSession$examBankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamBank
-         */
-        select?: ExamBankSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamBank
-         */
-        omit?: ExamBankOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamBankInclude<ExtArgs> | null
-        where?: ExamBankWhereInput
-    };
-    /**
-     * ExamSession.answers
-     */
-    export type ExamSession$answersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the Answer
-         */
-        select?: AnswerSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the Answer
-         */
-        omit?: AnswerOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: AnswerInclude<ExtArgs> | null
-        where?: AnswerWhereInput
-        orderBy?: AnswerOrderByWithRelationInput | AnswerOrderByWithRelationInput[]
-        cursor?: AnswerWhereUniqueInput
-        take?: number
-        skip?: number
-        distinct?: AnswerScalarFieldEnum | AnswerScalarFieldEnum[]
-    };
-    /**
-     * ExamSession.examFax
-     */
-    export type ExamSession$examFaxArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        /**
-         * Select specific fields to fetch from the ExamFax
-         */
-        select?: ExamFaxSelect<ExtArgs> | null
-        /**
-         * Omit specific fields from the ExamFax
-         */
-        omit?: ExamFaxOmit<ExtArgs> | null
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: ExamFaxInclude<ExtArgs> | null
-        where?: ExamFaxWhereInput
     };
     /**
      * ExamSession without action
@@ -315968,12 +314556,11 @@ export namespace Prisma {
     export type MultipleChoiceOptionScalarFieldEnum = (typeof MultipleChoiceOptionScalarFieldEnum)[keyof typeof MultipleChoiceOptionScalarFieldEnum];
     export type FillInBlankSlotScalarFieldEnum = (typeof FillInBlankSlotScalarFieldEnum)[keyof typeof FillInBlankSlotScalarFieldEnum];
     export type OrderingItemScalarFieldEnum = (typeof OrderingItemScalarFieldEnum)[keyof typeof OrderingItemScalarFieldEnum];
-    export type AnswerScalarFieldEnum = (typeof AnswerScalarFieldEnum)[keyof typeof AnswerScalarFieldEnum];
     export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum];
+    export type ExamRoomScalarFieldEnum = (typeof ExamRoomScalarFieldEnum)[keyof typeof ExamRoomScalarFieldEnum];
     export type TestStructureRuleScalarFieldEnum = (typeof TestStructureRuleScalarFieldEnum)[keyof typeof TestStructureRuleScalarFieldEnum];
     export type ExamBankScalarFieldEnum = (typeof ExamBankScalarFieldEnum)[keyof typeof ExamBankScalarFieldEnum];
     export type ExamBankQuestionScalarFieldEnum = (typeof ExamBankQuestionScalarFieldEnum)[keyof typeof ExamBankQuestionScalarFieldEnum];
-    export type ExamFaxScalarFieldEnum = (typeof ExamFaxScalarFieldEnum)[keyof typeof ExamFaxScalarFieldEnum];
     export type ExamSessionScalarFieldEnum = (typeof ExamSessionScalarFieldEnum)[keyof typeof ExamSessionScalarFieldEnum];
     export type AcademicWarningRuleScalarFieldEnum = (typeof AcademicWarningRuleScalarFieldEnum)[keyof typeof AcademicWarningRuleScalarFieldEnum];
     export type AcademicWarningScalarFieldEnum = (typeof AcademicWarningScalarFieldEnum)[keyof typeof AcademicWarningScalarFieldEnum];
@@ -316217,12 +314804,11 @@ export namespace Prisma {
     export type MultipleChoiceOptionOrderByRelevanceFieldEnum = (typeof MultipleChoiceOptionOrderByRelevanceFieldEnum)[keyof typeof MultipleChoiceOptionOrderByRelevanceFieldEnum];
     export type FillInBlankSlotOrderByRelevanceFieldEnum = (typeof FillInBlankSlotOrderByRelevanceFieldEnum)[keyof typeof FillInBlankSlotOrderByRelevanceFieldEnum];
     export type OrderingItemOrderByRelevanceFieldEnum = (typeof OrderingItemOrderByRelevanceFieldEnum)[keyof typeof OrderingItemOrderByRelevanceFieldEnum];
-    export type AnswerOrderByRelevanceFieldEnum = (typeof AnswerOrderByRelevanceFieldEnum)[keyof typeof AnswerOrderByRelevanceFieldEnum];
     export type ExamOrderByRelevanceFieldEnum = (typeof ExamOrderByRelevanceFieldEnum)[keyof typeof ExamOrderByRelevanceFieldEnum];
+    export type ExamRoomOrderByRelevanceFieldEnum = (typeof ExamRoomOrderByRelevanceFieldEnum)[keyof typeof ExamRoomOrderByRelevanceFieldEnum];
     export type TestStructureRuleOrderByRelevanceFieldEnum = (typeof TestStructureRuleOrderByRelevanceFieldEnum)[keyof typeof TestStructureRuleOrderByRelevanceFieldEnum];
     export type ExamBankOrderByRelevanceFieldEnum = (typeof ExamBankOrderByRelevanceFieldEnum)[keyof typeof ExamBankOrderByRelevanceFieldEnum];
     export type ExamBankQuestionOrderByRelevanceFieldEnum = (typeof ExamBankQuestionOrderByRelevanceFieldEnum)[keyof typeof ExamBankQuestionOrderByRelevanceFieldEnum];
-    export type ExamFaxOrderByRelevanceFieldEnum = (typeof ExamFaxOrderByRelevanceFieldEnum)[keyof typeof ExamFaxOrderByRelevanceFieldEnum];
     export type ExamSessionOrderByRelevanceFieldEnum = (typeof ExamSessionOrderByRelevanceFieldEnum)[keyof typeof ExamSessionOrderByRelevanceFieldEnum];
     export type AcademicWarningRuleOrderByRelevanceFieldEnum = (typeof AcademicWarningRuleOrderByRelevanceFieldEnum)[keyof typeof AcademicWarningRuleOrderByRelevanceFieldEnum];
     export type AcademicWarningOrderByRelevanceFieldEnum = (typeof AcademicWarningOrderByRelevanceFieldEnum)[keyof typeof AcademicWarningOrderByRelevanceFieldEnum];
@@ -324593,9 +323179,13 @@ export namespace Prisma {
         suspendedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
         repeated?: BoolFilter<"StudentSubjectScore"> | boolean
         repeatedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
+        isImproving?: BoolFilter<"StudentSubjectScore"> | boolean
+        examId?: StringNullableFilter<"StudentSubjectScore"> | string | null
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+        exam?: XOR<ExamNullableScalarRelationFilter, ExamWhereInput> | null
+        examSession?: XOR<ExamSessionNullableScalarRelationFilter, ExamSessionWhereInput> | null
         graduationGpaScores?: StudentGraduationApplicationListRelationFilter
         graduationSupplementaryScore?: StudentGraduationApplicationListRelationFilter
         certificates?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
@@ -324629,9 +323219,13 @@ export namespace Prisma {
         suspendedReason?: SortOrderInput | SortOrder
         repeated?: SortOrder
         repeatedReason?: SortOrderInput | SortOrder
+        isImproving?: SortOrder
+        examId?: SortOrderInput | SortOrder
         subjectClass?: SubjectClassOrderByWithRelationInput
         subjectVersion?: SubjectVersionOrderByWithRelationInput
         student?: StudentOrderByWithRelationInput
+        exam?: ExamOrderByWithRelationInput
+        examSession?: ExamSessionOrderByWithRelationInput
         graduationGpaScores?: StudentGraduationApplicationOrderByRelationAggregateInput
         graduationSupplementaryScore?: StudentGraduationApplicationOrderByRelationAggregateInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreOrderByRelationAggregateInput
@@ -324670,9 +323264,13 @@ export namespace Prisma {
         suspendedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
         repeated?: BoolFilter<"StudentSubjectScore"> | boolean
         repeatedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
+        isImproving?: BoolFilter<"StudentSubjectScore"> | boolean
+        examId?: StringNullableFilter<"StudentSubjectScore"> | string | null
         subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
         subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+        exam?: XOR<ExamNullableScalarRelationFilter, ExamWhereInput> | null
+        examSession?: XOR<ExamSessionNullableScalarRelationFilter, ExamSessionWhereInput> | null
         graduationGpaScores?: StudentGraduationApplicationListRelationFilter
         graduationSupplementaryScore?: StudentGraduationApplicationListRelationFilter
         certificates?: ArchivedCertificateOnStudentSubjectScoreListRelationFilter
@@ -324706,6 +323304,8 @@ export namespace Prisma {
         suspendedReason?: SortOrderInput | SortOrder
         repeated?: SortOrder
         repeatedReason?: SortOrderInput | SortOrder
+        isImproving?: SortOrder
+        examId?: SortOrderInput | SortOrder
         _count?: StudentSubjectScoreCountOrderByAggregateInput
         _avg?: StudentSubjectScoreAvgOrderByAggregateInput
         _max?: StudentSubjectScoreMaxOrderByAggregateInput
@@ -324741,6 +323341,8 @@ export namespace Prisma {
         suspendedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
         repeated?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
         repeatedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
+        isImproving?: BoolWithAggregatesFilter<"StudentSubjectScore"> | boolean
+        examId?: StringNullableWithAggregatesFilter<"StudentSubjectScore"> | string | null
     };
     export type StudentSubjectScoreHistoryWhereInput = {
         AND?: StudentSubjectScoreHistoryWhereInput | StudentSubjectScoreHistoryWhereInput[]
@@ -324761,7 +323363,7 @@ export namespace Prisma {
         manualFinalScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
         examPostponedReason?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
         examPostponed?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
-        examBanned?: BoolFilter<"StudentSubjectScoreHistory"> | boolean
+        examBanned?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
         examBannedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
         suspended?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
         suspendedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
@@ -324785,7 +323387,7 @@ export namespace Prisma {
         manualFinalScore?: SortOrderInput | SortOrder
         examPostponedReason?: SortOrderInput | SortOrder
         examPostponed?: SortOrderInput | SortOrder
-        examBanned?: SortOrder
+        examBanned?: SortOrderInput | SortOrder
         examBannedReason?: SortOrderInput | SortOrder
         suspended?: SortOrderInput | SortOrder
         suspendedReason?: SortOrderInput | SortOrder
@@ -324813,7 +323415,7 @@ export namespace Prisma {
         manualFinalScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
         examPostponedReason?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
         examPostponed?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
-        examBanned?: BoolFilter<"StudentSubjectScoreHistory"> | boolean
+        examBanned?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
         examBannedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
         suspended?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
         suspendedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
@@ -324837,7 +323439,7 @@ export namespace Prisma {
         manualFinalScore?: SortOrderInput | SortOrder
         examPostponedReason?: SortOrderInput | SortOrder
         examPostponed?: SortOrderInput | SortOrder
-        examBanned?: SortOrder
+        examBanned?: SortOrderInput | SortOrder
         examBannedReason?: SortOrderInput | SortOrder
         suspended?: SortOrderInput | SortOrder
         suspendedReason?: SortOrderInput | SortOrder
@@ -324867,7 +323469,7 @@ export namespace Prisma {
         manualFinalScore?: FloatNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | number | null
         examPostponedReason?: BoolNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | boolean | null
         examPostponed?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
-        examBanned?: BoolWithAggregatesFilter<"StudentSubjectScoreHistory"> | boolean
+        examBanned?: BoolNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | boolean | null
         examBannedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
         suspended?: BoolNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | boolean | null
         suspendedReason?: StringNullableWithAggregatesFilter<"StudentSubjectScoreHistory"> | string | null
@@ -327457,6 +326059,8 @@ export namespace Prisma {
         semesterId?: StringFilter<"SubjectClass"> | string
         cancelled?: BoolFilter<"SubjectClass"> | boolean
         lecturerAssignmentDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
+        sendLecturerAssignmentAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
+        submitLecturerAssignmentAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -327471,6 +326075,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFilter<"SubjectClass"> | boolean
         scoreChecked?: BoolFilter<"SubjectClass"> | boolean
         roomId?: StringNullableFilter<"SubjectClass"> | string | null
+        trainingLocationId?: StringNullableFilter<"SubjectClass"> | string | null
         lecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         extraLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         enterGradeLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -327479,6 +326084,7 @@ export namespace Prisma {
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
         exam?: XOR<ExamNullableScalarRelationFilter, ExamWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
+        trainingLocation?: XOR<TrainingLocationNullableScalarRelationFilter, TrainingLocationWhereInput> | null
         mainLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         extraLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         enterGradeLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -327510,6 +326116,8 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrderInput | SortOrder
+        sendLecturerAssignmentAt?: SortOrderInput | SortOrder
+        submitLecturerAssignmentAt?: SortOrderInput | SortOrder
         examDate?: SortOrderInput | SortOrder
         examType?: SortOrderInput | SortOrder
         examId?: SortOrderInput | SortOrder
@@ -327524,6 +326132,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrderInput | SortOrder
+        trainingLocationId?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         extraLecturerId?: SortOrderInput | SortOrder
         enterGradeLecturerId?: SortOrderInput | SortOrder
@@ -327532,6 +326141,7 @@ export namespace Prisma {
         semester?: SemesterOrderByWithRelationInput
         exam?: ExamOrderByWithRelationInput
         room?: RoomOrderByWithRelationInput
+        trainingLocation?: TrainingLocationOrderByWithRelationInput
         mainLecturer?: LecturerOrderByWithRelationInput
         extraLecturer?: LecturerOrderByWithRelationInput
         enterGradeLecturer?: LecturerOrderByWithRelationInput
@@ -327567,6 +326177,8 @@ export namespace Prisma {
         semesterId?: StringFilter<"SubjectClass"> | string
         cancelled?: BoolFilter<"SubjectClass"> | boolean
         lecturerAssignmentDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
+        sendLecturerAssignmentAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
+        submitLecturerAssignmentAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -327581,6 +326193,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFilter<"SubjectClass"> | boolean
         scoreChecked?: BoolFilter<"SubjectClass"> | boolean
         roomId?: StringNullableFilter<"SubjectClass"> | string | null
+        trainingLocationId?: StringNullableFilter<"SubjectClass"> | string | null
         lecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         extraLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         enterGradeLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -327589,6 +326202,7 @@ export namespace Prisma {
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
         exam?: XOR<ExamNullableScalarRelationFilter, ExamWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
+        trainingLocation?: XOR<TrainingLocationNullableScalarRelationFilter, TrainingLocationWhereInput> | null
         mainLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         extraLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         enterGradeLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -327620,6 +326234,8 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrderInput | SortOrder
+        sendLecturerAssignmentAt?: SortOrderInput | SortOrder
+        submitLecturerAssignmentAt?: SortOrderInput | SortOrder
         examDate?: SortOrderInput | SortOrder
         examType?: SortOrderInput | SortOrder
         examId?: SortOrderInput | SortOrder
@@ -327634,6 +326250,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrderInput | SortOrder
+        trainingLocationId?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         extraLecturerId?: SortOrderInput | SortOrder
         enterGradeLecturerId?: SortOrderInput | SortOrder
@@ -327664,6 +326281,8 @@ export namespace Prisma {
         semesterId?: StringWithAggregatesFilter<"SubjectClass"> | string
         cancelled?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
         lecturerAssignmentDeadline?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
+        sendLecturerAssignmentAt?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
+        submitLecturerAssignmentAt?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
         examDate?: DateTimeNullableWithAggregatesFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableWithAggregatesFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
@@ -327678,6 +326297,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
         scoreChecked?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
         roomId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
+        trainingLocationId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         lecturerId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         extraLecturerId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         enterGradeLecturerId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
@@ -328314,6 +326934,7 @@ export namespace Prisma {
         dM_Tinh_New?: XOR<DM_Tinh_NewNullableScalarRelationFilter, DM_Tinh_NewWhereInput> | null
         students?: StudentListRelationFilter
         buildings?: BuildingListRelationFilter
+        subjectClasses?: SubjectClassListRelationFilter
     };
     export type TrainingLocationOrderByWithRelationInput = {
         id?: SortOrder
@@ -328330,6 +326951,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewOrderByWithRelationInput
         students?: StudentOrderByRelationAggregateInput
         buildings?: BuildingOrderByRelationAggregateInput
+        subjectClasses?: SubjectClassOrderByRelationAggregateInput
         _relevance?: TrainingLocationOrderByRelevanceInput
     };
     export type TrainingLocationWhereUniqueInput = Prisma.AtLeast<{
@@ -328350,6 +326972,7 @@ export namespace Prisma {
         dM_Tinh_New?: XOR<DM_Tinh_NewNullableScalarRelationFilter, DM_Tinh_NewWhereInput> | null
         students?: StudentListRelationFilter
         buildings?: BuildingListRelationFilter
+        subjectClasses?: SubjectClassListRelationFilter
     }, "id" | "code" | "name">;
     export type TrainingLocationOrderByWithAggregationInput = {
         id?: SortOrder
@@ -328487,7 +327110,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassListRelationFilter
         thesisProject?: ThesisProjectListRelationFilter
         classSchedules?: ClassScheduleListRelationFilter
-        examSession?: ExamSessionListRelationFilter
+        examRooms?: ExamRoomListRelationFilter
     };
     export type RoomOrderByWithRelationInput = {
         id?: SortOrder
@@ -328511,7 +327134,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassOrderByRelationAggregateInput
         thesisProject?: ThesisProjectOrderByRelationAggregateInput
         classSchedules?: ClassScheduleOrderByRelationAggregateInput
-        examSession?: ExamSessionOrderByRelationAggregateInput
+        examRooms?: ExamRoomOrderByRelationAggregateInput
         _relevance?: RoomOrderByRelevanceInput
     };
     export type RoomWhereUniqueInput = Prisma.AtLeast<{
@@ -328539,7 +327162,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassListRelationFilter
         thesisProject?: ThesisProjectListRelationFilter
         classSchedules?: ClassScheduleListRelationFilter
-        examSession?: ExamSessionListRelationFilter
+        examRooms?: ExamRoomListRelationFilter
     }, "id" | "code">;
     export type RoomOrderByWithAggregationInput = {
         id?: SortOrder
@@ -329762,7 +328385,6 @@ export namespace Prisma {
         notifications?: NotificationListRelationFilter
         researchRegistrations?: StudentResearchRegistrationListRelationFilter
         thesisRegistrations?: StudentThesisRegistrationListRelationFilter
-        examSession?: ExamSessionListRelationFilter
         diplomaVerificationApplication?: DiplomaVerificationApplicationListRelationFilter
         studentScoreConvert?: StudentScoreConvertListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
@@ -329830,7 +328452,6 @@ export namespace Prisma {
         notifications?: NotificationOrderByRelationAggregateInput
         researchRegistrations?: StudentResearchRegistrationOrderByRelationAggregateInput
         thesisRegistrations?: StudentThesisRegistrationOrderByRelationAggregateInput
-        examSession?: ExamSessionOrderByRelationAggregateInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationOrderByRelationAggregateInput
         studentScoreConvert?: StudentScoreConvertOrderByRelationAggregateInput
         classRegisterLogs?: ClassRegisterLogsOrderByRelationAggregateInput
@@ -329902,7 +328523,6 @@ export namespace Prisma {
         notifications?: NotificationListRelationFilter
         researchRegistrations?: StudentResearchRegistrationListRelationFilter
         thesisRegistrations?: StudentThesisRegistrationListRelationFilter
-        examSession?: ExamSessionListRelationFilter
         diplomaVerificationApplication?: DiplomaVerificationApplicationListRelationFilter
         studentScoreConvert?: StudentScoreConvertListRelationFilter
         classRegisterLogs?: ClassRegisterLogsListRelationFilter
@@ -337569,7 +336189,6 @@ export namespace Prisma {
         knowledgeBlock?: XOR<KnowledgeBlockNullableScalarRelationFilter, KnowledgeBlockWhereInput> | null
         difficulty?: XOR<DifficultyNullableScalarRelationFilter, DifficultyWhereInput> | null
         sessionQuestions?: ExamBankQuestionListRelationFilter
-        answers?: AnswerListRelationFilter
     };
     export type QuestionOrderByWithRelationInput = {
         id?: SortOrder
@@ -337594,7 +336213,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockOrderByWithRelationInput
         difficulty?: DifficultyOrderByWithRelationInput
         sessionQuestions?: ExamBankQuestionOrderByRelationAggregateInput
-        answers?: AnswerOrderByRelationAggregateInput
         _relevance?: QuestionOrderByRelevanceInput
     };
     export type QuestionWhereUniqueInput = Prisma.AtLeast<{
@@ -337623,7 +336241,6 @@ export namespace Prisma {
         knowledgeBlock?: XOR<KnowledgeBlockNullableScalarRelationFilter, KnowledgeBlockWhereInput> | null
         difficulty?: XOR<DifficultyNullableScalarRelationFilter, DifficultyWhereInput> | null
         sessionQuestions?: ExamBankQuestionListRelationFilter
-        answers?: AnswerListRelationFilter
     }, "id" | "code">;
     export type QuestionOrderByWithAggregationInput = {
         id?: SortOrder
@@ -337908,103 +336525,6 @@ export namespace Prisma {
         content?: StringWithAggregatesFilter<"OrderingItem"> | string
         correctOrder?: IntWithAggregatesFilter<"OrderingItem"> | number
     };
-    export type AnswerWhereInput = {
-        AND?: AnswerWhereInput | AnswerWhereInput[]
-        OR?: AnswerWhereInput[]
-        NOT?: AnswerWhereInput | AnswerWhereInput[]
-        id?: StringFilter<"Answer"> | string
-        code?: StringNullableFilter<"Answer"> | string | null
-        active?: BoolFilter<"Answer"> | boolean
-        description?: StringNullableFilter<"Answer"> | string | null
-        deletedAt?: DateTimeNullableFilter<"Answer"> | Date | string | null
-        createdAt?: DateTimeFilter<"Answer"> | Date | string
-        updatedAt?: DateTimeFilter<"Answer"> | Date | string
-        sessionId?: StringFilter<"Answer"> | string
-        questionId?: StringFilter<"Answer"> | string
-        isCorrect?: BoolNullableFilter<"Answer"> | boolean | null
-        score?: FloatNullableFilter<"Answer"> | number | null
-        comment?: StringNullableFilter<"Answer"> | string | null
-        essayAnswer?: StringFilter<"Answer"> | string
-        session?: XOR<ExamSessionScalarRelationFilter, ExamSessionWhereInput>
-        question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
-    };
-    export type AnswerOrderByWithRelationInput = {
-        id?: SortOrder
-        code?: SortOrderInput | SortOrder
-        active?: SortOrder
-        description?: SortOrderInput | SortOrder
-        deletedAt?: SortOrderInput | SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        sessionId?: SortOrder
-        questionId?: SortOrder
-        isCorrect?: SortOrderInput | SortOrder
-        score?: SortOrderInput | SortOrder
-        comment?: SortOrderInput | SortOrder
-        essayAnswer?: SortOrder
-        session?: ExamSessionOrderByWithRelationInput
-        question?: QuestionOrderByWithRelationInput
-        _relevance?: AnswerOrderByRelevanceInput
-    };
-    export type AnswerWhereUniqueInput = Prisma.AtLeast<{
-        id?: string
-        code?: string
-        sessionId_questionId?: AnswerSessionIdQuestionIdCompoundUniqueInput
-        AND?: AnswerWhereInput | AnswerWhereInput[]
-        OR?: AnswerWhereInput[]
-        NOT?: AnswerWhereInput | AnswerWhereInput[]
-        active?: BoolFilter<"Answer"> | boolean
-        description?: StringNullableFilter<"Answer"> | string | null
-        deletedAt?: DateTimeNullableFilter<"Answer"> | Date | string | null
-        createdAt?: DateTimeFilter<"Answer"> | Date | string
-        updatedAt?: DateTimeFilter<"Answer"> | Date | string
-        sessionId?: StringFilter<"Answer"> | string
-        questionId?: StringFilter<"Answer"> | string
-        isCorrect?: BoolNullableFilter<"Answer"> | boolean | null
-        score?: FloatNullableFilter<"Answer"> | number | null
-        comment?: StringNullableFilter<"Answer"> | string | null
-        essayAnswer?: StringFilter<"Answer"> | string
-        session?: XOR<ExamSessionScalarRelationFilter, ExamSessionWhereInput>
-        question?: XOR<QuestionScalarRelationFilter, QuestionWhereInput>
-    }, "id" | "code" | "sessionId_questionId">;
-    export type AnswerOrderByWithAggregationInput = {
-        id?: SortOrder
-        code?: SortOrderInput | SortOrder
-        active?: SortOrder
-        description?: SortOrderInput | SortOrder
-        deletedAt?: SortOrderInput | SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        sessionId?: SortOrder
-        questionId?: SortOrder
-        isCorrect?: SortOrderInput | SortOrder
-        score?: SortOrderInput | SortOrder
-        comment?: SortOrderInput | SortOrder
-        essayAnswer?: SortOrder
-        _count?: AnswerCountOrderByAggregateInput
-        _avg?: AnswerAvgOrderByAggregateInput
-        _max?: AnswerMaxOrderByAggregateInput
-        _min?: AnswerMinOrderByAggregateInput
-        _sum?: AnswerSumOrderByAggregateInput
-    };
-    export type AnswerScalarWhereWithAggregatesInput = {
-        AND?: AnswerScalarWhereWithAggregatesInput | AnswerScalarWhereWithAggregatesInput[]
-        OR?: AnswerScalarWhereWithAggregatesInput[]
-        NOT?: AnswerScalarWhereWithAggregatesInput | AnswerScalarWhereWithAggregatesInput[]
-        id?: StringWithAggregatesFilter<"Answer"> | string
-        code?: StringNullableWithAggregatesFilter<"Answer"> | string | null
-        active?: BoolWithAggregatesFilter<"Answer"> | boolean
-        description?: StringNullableWithAggregatesFilter<"Answer"> | string | null
-        deletedAt?: DateTimeNullableWithAggregatesFilter<"Answer"> | Date | string | null
-        createdAt?: DateTimeWithAggregatesFilter<"Answer"> | Date | string
-        updatedAt?: DateTimeWithAggregatesFilter<"Answer"> | Date | string
-        sessionId?: StringWithAggregatesFilter<"Answer"> | string
-        questionId?: StringWithAggregatesFilter<"Answer"> | string
-        isCorrect?: BoolNullableWithAggregatesFilter<"Answer"> | boolean | null
-        score?: FloatNullableWithAggregatesFilter<"Answer"> | number | null
-        comment?: StringNullableWithAggregatesFilter<"Answer"> | string | null
-        essayAnswer?: StringWithAggregatesFilter<"Answer"> | string
-    };
     export type ExamWhereInput = {
         AND?: ExamWhereInput | ExamWhereInput[]
         OR?: ExamWhereInput[]
@@ -338018,22 +336538,17 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"Exam"> | Date | string
         title?: StringFilter<"Exam"> | string
         status?: EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
-        questionBankId?: StringFilter<"Exam"> | string
-        startTime?: DateTimeFilter<"Exam"> | Date | string
-        endTime?: DateTimeFilter<"Exam"> | Date | string
-        duration?: IntFilter<"Exam"> | number
-        passScore?: FloatFilter<"Exam"> | number
-        maxScore?: FloatFilter<"Exam"> | number
-        shuffleQuestions?: BoolFilter<"Exam"> | boolean
-        shuffleAnswers?: BoolFilter<"Exam"> | boolean
-        showResult?: BoolFilter<"Exam"> | boolean
-        questionBank?: XOR<QuestionBankScalarRelationFilter, QuestionBankWhereInput>
-        room?: RoomListRelationFilter
+        questionBankId?: StringNullableFilter<"Exam"> | string | null
+        lockExamCode?: BoolFilter<"Exam"> | boolean
+        startTime?: StringFilter<"Exam"> | string
+        questionBank?: XOR<QuestionBankNullableScalarRelationFilter, QuestionBankWhereInput> | null
         subjectClass?: SubjectClassListRelationFilter
+        studentSubjectScore?: StudentSubjectScoreListRelationFilter
+        room?: RoomListRelationFilter
         examBank?: ExamBankListRelationFilter
         testStructureRules?: TestStructureRuleListRelationFilter
         examSessions?: ExamSessionListRelationFilter
-        examFax?: ExamFaxListRelationFilter
+        examRooms?: ExamRoomListRelationFilter
     };
     export type ExamOrderByWithRelationInput = {
         id?: SortOrder
@@ -338045,22 +336560,17 @@ export namespace Prisma {
         updatedAt?: SortOrder
         title?: SortOrder
         status?: SortOrder
-        questionBankId?: SortOrder
+        questionBankId?: SortOrderInput | SortOrder
+        lockExamCode?: SortOrder
         startTime?: SortOrder
-        endTime?: SortOrder
-        duration?: SortOrder
-        passScore?: SortOrder
-        maxScore?: SortOrder
-        shuffleQuestions?: SortOrder
-        shuffleAnswers?: SortOrder
-        showResult?: SortOrder
         questionBank?: QuestionBankOrderByWithRelationInput
-        room?: RoomOrderByRelationAggregateInput
         subjectClass?: SubjectClassOrderByRelationAggregateInput
+        studentSubjectScore?: StudentSubjectScoreOrderByRelationAggregateInput
+        room?: RoomOrderByRelationAggregateInput
         examBank?: ExamBankOrderByRelationAggregateInput
         testStructureRules?: TestStructureRuleOrderByRelationAggregateInput
         examSessions?: ExamSessionOrderByRelationAggregateInput
-        examFax?: ExamFaxOrderByRelationAggregateInput
+        examRooms?: ExamRoomOrderByRelationAggregateInput
         _relevance?: ExamOrderByRelevanceInput
     };
     export type ExamWhereUniqueInput = Prisma.AtLeast<{
@@ -338076,22 +336586,17 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"Exam"> | Date | string
         title?: StringFilter<"Exam"> | string
         status?: EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
-        questionBankId?: StringFilter<"Exam"> | string
-        startTime?: DateTimeFilter<"Exam"> | Date | string
-        endTime?: DateTimeFilter<"Exam"> | Date | string
-        duration?: IntFilter<"Exam"> | number
-        passScore?: FloatFilter<"Exam"> | number
-        maxScore?: FloatFilter<"Exam"> | number
-        shuffleQuestions?: BoolFilter<"Exam"> | boolean
-        shuffleAnswers?: BoolFilter<"Exam"> | boolean
-        showResult?: BoolFilter<"Exam"> | boolean
-        questionBank?: XOR<QuestionBankScalarRelationFilter, QuestionBankWhereInput>
-        room?: RoomListRelationFilter
+        questionBankId?: StringNullableFilter<"Exam"> | string | null
+        lockExamCode?: BoolFilter<"Exam"> | boolean
+        startTime?: StringFilter<"Exam"> | string
+        questionBank?: XOR<QuestionBankNullableScalarRelationFilter, QuestionBankWhereInput> | null
         subjectClass?: SubjectClassListRelationFilter
+        studentSubjectScore?: StudentSubjectScoreListRelationFilter
+        room?: RoomListRelationFilter
         examBank?: ExamBankListRelationFilter
         testStructureRules?: TestStructureRuleListRelationFilter
         examSessions?: ExamSessionListRelationFilter
-        examFax?: ExamFaxListRelationFilter
+        examRooms?: ExamRoomListRelationFilter
     }, "id" | "code">;
     export type ExamOrderByWithAggregationInput = {
         id?: SortOrder
@@ -338103,20 +336608,12 @@ export namespace Prisma {
         updatedAt?: SortOrder
         title?: SortOrder
         status?: SortOrder
-        questionBankId?: SortOrder
+        questionBankId?: SortOrderInput | SortOrder
+        lockExamCode?: SortOrder
         startTime?: SortOrder
-        endTime?: SortOrder
-        duration?: SortOrder
-        passScore?: SortOrder
-        maxScore?: SortOrder
-        shuffleQuestions?: SortOrder
-        shuffleAnswers?: SortOrder
-        showResult?: SortOrder
         _count?: ExamCountOrderByAggregateInput
-        _avg?: ExamAvgOrderByAggregateInput
         _max?: ExamMaxOrderByAggregateInput
         _min?: ExamMinOrderByAggregateInput
-        _sum?: ExamSumOrderByAggregateInput
     };
     export type ExamScalarWhereWithAggregatesInput = {
         AND?: ExamScalarWhereWithAggregatesInput | ExamScalarWhereWithAggregatesInput[]
@@ -338131,15 +336628,87 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"Exam"> | Date | string
         title?: StringWithAggregatesFilter<"Exam"> | string
         status?: EnumExamStatusWithAggregatesFilter<"Exam"> | $Enums.ExamStatus
-        questionBankId?: StringWithAggregatesFilter<"Exam"> | string
-        startTime?: DateTimeWithAggregatesFilter<"Exam"> | Date | string
-        endTime?: DateTimeWithAggregatesFilter<"Exam"> | Date | string
-        duration?: IntWithAggregatesFilter<"Exam"> | number
-        passScore?: FloatWithAggregatesFilter<"Exam"> | number
-        maxScore?: FloatWithAggregatesFilter<"Exam"> | number
-        shuffleQuestions?: BoolWithAggregatesFilter<"Exam"> | boolean
-        shuffleAnswers?: BoolWithAggregatesFilter<"Exam"> | boolean
-        showResult?: BoolWithAggregatesFilter<"Exam"> | boolean
+        questionBankId?: StringNullableWithAggregatesFilter<"Exam"> | string | null
+        lockExamCode?: BoolWithAggregatesFilter<"Exam"> | boolean
+        startTime?: StringWithAggregatesFilter<"Exam"> | string
+    };
+    export type ExamRoomWhereInput = {
+        AND?: ExamRoomWhereInput | ExamRoomWhereInput[]
+        OR?: ExamRoomWhereInput[]
+        NOT?: ExamRoomWhereInput | ExamRoomWhereInput[]
+        id?: StringFilter<"ExamRoom"> | string
+        code?: StringNullableFilter<"ExamRoom"> | string | null
+        active?: BoolFilter<"ExamRoom"> | boolean
+        description?: StringNullableFilter<"ExamRoom"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ExamRoom"> | Date | string | null
+        createdAt?: DateTimeFilter<"ExamRoom"> | Date | string
+        updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
+        examId?: StringFilter<"ExamRoom"> | string
+        roomId?: StringFilter<"ExamRoom"> | string
+        exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
+        room?: XOR<RoomScalarRelationFilter, RoomWhereInput>
+        examSessions?: ExamSessionListRelationFilter
+    };
+    export type ExamRoomOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        examId?: SortOrder
+        roomId?: SortOrder
+        exam?: ExamOrderByWithRelationInput
+        room?: RoomOrderByWithRelationInput
+        examSessions?: ExamSessionOrderByRelationAggregateInput
+        _relevance?: ExamRoomOrderByRelevanceInput
+    };
+    export type ExamRoomWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        examId_roomId?: ExamRoomExamIdRoomIdCompoundUniqueInput
+        AND?: ExamRoomWhereInput | ExamRoomWhereInput[]
+        OR?: ExamRoomWhereInput[]
+        NOT?: ExamRoomWhereInput | ExamRoomWhereInput[]
+        active?: BoolFilter<"ExamRoom"> | boolean
+        description?: StringNullableFilter<"ExamRoom"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ExamRoom"> | Date | string | null
+        createdAt?: DateTimeFilter<"ExamRoom"> | Date | string
+        updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
+        examId?: StringFilter<"ExamRoom"> | string
+        roomId?: StringFilter<"ExamRoom"> | string
+        exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
+        room?: XOR<RoomScalarRelationFilter, RoomWhereInput>
+        examSessions?: ExamSessionListRelationFilter
+    }, "id" | "code" | "examId_roomId">;
+    export type ExamRoomOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        examId?: SortOrder
+        roomId?: SortOrder
+        _count?: ExamRoomCountOrderByAggregateInput
+        _max?: ExamRoomMaxOrderByAggregateInput
+        _min?: ExamRoomMinOrderByAggregateInput
+    };
+    export type ExamRoomScalarWhereWithAggregatesInput = {
+        AND?: ExamRoomScalarWhereWithAggregatesInput | ExamRoomScalarWhereWithAggregatesInput[]
+        OR?: ExamRoomScalarWhereWithAggregatesInput[]
+        NOT?: ExamRoomScalarWhereWithAggregatesInput | ExamRoomScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ExamRoom"> | string
+        code?: StringNullableWithAggregatesFilter<"ExamRoom"> | string | null
+        active?: BoolWithAggregatesFilter<"ExamRoom"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ExamRoom"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ExamRoom"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ExamRoom"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ExamRoom"> | Date | string
+        examId?: StringWithAggregatesFilter<"ExamRoom"> | string
+        roomId?: StringWithAggregatesFilter<"ExamRoom"> | string
     };
     export type TestStructureRuleWhereInput = {
         AND?: TestStructureRuleWhereInput | TestStructureRuleWhereInput[]
@@ -338245,9 +336814,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ExamBank"> | Date | string
         updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
         examId?: StringFilter<"ExamBank"> | string
-        examCode?: StringFilter<"ExamBank"> | string
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
-        examSession?: ExamSessionListRelationFilter
         questions?: ExamBankQuestionListRelationFilter
     };
     export type ExamBankOrderByWithRelationInput = {
@@ -338259,16 +336826,13 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
-        examCode?: SortOrder
         exam?: ExamOrderByWithRelationInput
-        examSession?: ExamSessionOrderByRelationAggregateInput
         questions?: ExamBankQuestionOrderByRelationAggregateInput
         _relevance?: ExamBankOrderByRelevanceInput
     };
     export type ExamBankWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
-        examId_examCode?: ExamBankExamIdExamCodeCompoundUniqueInput
         AND?: ExamBankWhereInput | ExamBankWhereInput[]
         OR?: ExamBankWhereInput[]
         NOT?: ExamBankWhereInput | ExamBankWhereInput[]
@@ -338278,11 +336842,9 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ExamBank"> | Date | string
         updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
         examId?: StringFilter<"ExamBank"> | string
-        examCode?: StringFilter<"ExamBank"> | string
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
-        examSession?: ExamSessionListRelationFilter
         questions?: ExamBankQuestionListRelationFilter
-    }, "id" | "code" | "examId_examCode">;
+    }, "id" | "code">;
     export type ExamBankOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -338292,7 +336854,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
-        examCode?: SortOrder
         _count?: ExamBankCountOrderByAggregateInput
         _max?: ExamBankMaxOrderByAggregateInput
         _min?: ExamBankMinOrderByAggregateInput
@@ -338309,7 +336870,6 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"ExamBank"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"ExamBank"> | Date | string
         examId?: StringWithAggregatesFilter<"ExamBank"> | string
-        examCode?: StringWithAggregatesFilter<"ExamBank"> | string
     };
     export type ExamBankQuestionWhereInput = {
         AND?: ExamBankQuestionWhereInput | ExamBankQuestionWhereInput[]
@@ -338394,88 +336954,6 @@ export namespace Prisma {
         questionId?: StringWithAggregatesFilter<"ExamBankQuestion"> | string
         order?: IntNullableWithAggregatesFilter<"ExamBankQuestion"> | number | null
     };
-    export type ExamFaxWhereInput = {
-        AND?: ExamFaxWhereInput | ExamFaxWhereInput[]
-        OR?: ExamFaxWhereInput[]
-        NOT?: ExamFaxWhereInput | ExamFaxWhereInput[]
-        id?: StringFilter<"ExamFax"> | string
-        code?: StringNullableFilter<"ExamFax"> | string | null
-        active?: BoolFilter<"ExamFax"> | boolean
-        description?: StringNullableFilter<"ExamFax"> | string | null
-        deletedAt?: DateTimeNullableFilter<"ExamFax"> | Date | string | null
-        createdAt?: DateTimeFilter<"ExamFax"> | Date | string
-        updatedAt?: DateTimeFilter<"ExamFax"> | Date | string
-        examId?: StringFilter<"ExamFax"> | string
-        fax?: StringFilter<"ExamFax"> | string
-        score?: DecimalNullableFilter<"ExamFax"> | Decimal | DecimalJsLike | number | string | null
-        exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
-        examSession?: XOR<ExamSessionNullableScalarRelationFilter, ExamSessionWhereInput> | null
-    };
-    export type ExamFaxOrderByWithRelationInput = {
-        id?: SortOrder
-        code?: SortOrderInput | SortOrder
-        active?: SortOrder
-        description?: SortOrderInput | SortOrder
-        deletedAt?: SortOrderInput | SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        examId?: SortOrder
-        fax?: SortOrder
-        score?: SortOrderInput | SortOrder
-        exam?: ExamOrderByWithRelationInput
-        examSession?: ExamSessionOrderByWithRelationInput
-        _relevance?: ExamFaxOrderByRelevanceInput
-    };
-    export type ExamFaxWhereUniqueInput = Prisma.AtLeast<{
-        id?: string
-        code?: string
-        examId_fax?: ExamFaxExamIdFaxCompoundUniqueInput
-        AND?: ExamFaxWhereInput | ExamFaxWhereInput[]
-        OR?: ExamFaxWhereInput[]
-        NOT?: ExamFaxWhereInput | ExamFaxWhereInput[]
-        active?: BoolFilter<"ExamFax"> | boolean
-        description?: StringNullableFilter<"ExamFax"> | string | null
-        deletedAt?: DateTimeNullableFilter<"ExamFax"> | Date | string | null
-        createdAt?: DateTimeFilter<"ExamFax"> | Date | string
-        updatedAt?: DateTimeFilter<"ExamFax"> | Date | string
-        examId?: StringFilter<"ExamFax"> | string
-        fax?: StringFilter<"ExamFax"> | string
-        score?: DecimalNullableFilter<"ExamFax"> | Decimal | DecimalJsLike | number | string | null
-        exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
-        examSession?: XOR<ExamSessionNullableScalarRelationFilter, ExamSessionWhereInput> | null
-    }, "id" | "code" | "examId_fax">;
-    export type ExamFaxOrderByWithAggregationInput = {
-        id?: SortOrder
-        code?: SortOrderInput | SortOrder
-        active?: SortOrder
-        description?: SortOrderInput | SortOrder
-        deletedAt?: SortOrderInput | SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        examId?: SortOrder
-        fax?: SortOrder
-        score?: SortOrderInput | SortOrder
-        _count?: ExamFaxCountOrderByAggregateInput
-        _avg?: ExamFaxAvgOrderByAggregateInput
-        _max?: ExamFaxMaxOrderByAggregateInput
-        _min?: ExamFaxMinOrderByAggregateInput
-        _sum?: ExamFaxSumOrderByAggregateInput
-    };
-    export type ExamFaxScalarWhereWithAggregatesInput = {
-        AND?: ExamFaxScalarWhereWithAggregatesInput | ExamFaxScalarWhereWithAggregatesInput[]
-        OR?: ExamFaxScalarWhereWithAggregatesInput[]
-        NOT?: ExamFaxScalarWhereWithAggregatesInput | ExamFaxScalarWhereWithAggregatesInput[]
-        id?: StringWithAggregatesFilter<"ExamFax"> | string
-        code?: StringNullableWithAggregatesFilter<"ExamFax"> | string | null
-        active?: BoolWithAggregatesFilter<"ExamFax"> | boolean
-        description?: StringNullableWithAggregatesFilter<"ExamFax"> | string | null
-        deletedAt?: DateTimeNullableWithAggregatesFilter<"ExamFax"> | Date | string | null
-        createdAt?: DateTimeWithAggregatesFilter<"ExamFax"> | Date | string
-        updatedAt?: DateTimeWithAggregatesFilter<"ExamFax"> | Date | string
-        examId?: StringWithAggregatesFilter<"ExamFax"> | string
-        fax?: StringWithAggregatesFilter<"ExamFax"> | string
-        score?: DecimalNullableWithAggregatesFilter<"ExamFax"> | Decimal | DecimalJsLike | number | string | null
-    };
     export type ExamSessionWhereInput = {
         AND?: ExamSessionWhereInput | ExamSessionWhereInput[]
         OR?: ExamSessionWhereInput[]
@@ -338487,19 +336965,13 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
         createdAt?: DateTimeFilter<"ExamSession"> | Date | string
         updatedAt?: DateTimeFilter<"ExamSession"> | Date | string
-        startTime?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
-        endTime?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
-        studentId?: StringNullableFilter<"ExamSession"> | string | null
         examId?: StringFilter<"ExamSession"> | string
-        roomId?: StringNullableFilter<"ExamSession"> | string | null
-        examBankId?: StringNullableFilter<"ExamSession"> | string | null
-        examFaxId?: StringNullableFilter<"ExamSession"> | string | null
-        student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+        examRoomId?: StringFilter<"ExamSession"> | string
+        studentSubjectScoreId?: StringFilter<"ExamSession"> | string
+        examCode?: StringNullableFilter<"ExamSession"> | string | null
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
-        room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
-        examBank?: XOR<ExamBankNullableScalarRelationFilter, ExamBankWhereInput> | null
-        answers?: AnswerListRelationFilter
-        examFax?: XOR<ExamFaxNullableScalarRelationFilter, ExamFaxWhereInput> | null
+        examRoom?: XOR<ExamRoomScalarRelationFilter, ExamRoomWhereInput>
+        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
     };
     export type ExamSessionOrderByWithRelationInput = {
         id?: SortOrder
@@ -338509,26 +336981,20 @@ export namespace Prisma {
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        startTime?: SortOrderInput | SortOrder
-        endTime?: SortOrderInput | SortOrder
-        studentId?: SortOrderInput | SortOrder
         examId?: SortOrder
-        roomId?: SortOrderInput | SortOrder
-        examBankId?: SortOrderInput | SortOrder
-        examFaxId?: SortOrderInput | SortOrder
-        student?: StudentOrderByWithRelationInput
+        examRoomId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        examCode?: SortOrderInput | SortOrder
         exam?: ExamOrderByWithRelationInput
-        room?: RoomOrderByWithRelationInput
-        examBank?: ExamBankOrderByWithRelationInput
-        answers?: AnswerOrderByRelationAggregateInput
-        examFax?: ExamFaxOrderByWithRelationInput
+        examRoom?: ExamRoomOrderByWithRelationInput
+        studentSubjectScore?: StudentSubjectScoreOrderByWithRelationInput
         _relevance?: ExamSessionOrderByRelevanceInput
     };
     export type ExamSessionWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
-        examFaxId?: string
-        studentId_examId?: ExamSessionStudentIdExamIdCompoundUniqueInput
+        studentSubjectScoreId?: string
+        examCode_examId?: ExamSessionExamCodeExamIdCompoundUniqueInput
         AND?: ExamSessionWhereInput | ExamSessionWhereInput[]
         OR?: ExamSessionWhereInput[]
         NOT?: ExamSessionWhereInput | ExamSessionWhereInput[]
@@ -338537,19 +337003,13 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
         createdAt?: DateTimeFilter<"ExamSession"> | Date | string
         updatedAt?: DateTimeFilter<"ExamSession"> | Date | string
-        startTime?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
-        endTime?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
-        studentId?: StringNullableFilter<"ExamSession"> | string | null
         examId?: StringFilter<"ExamSession"> | string
-        roomId?: StringNullableFilter<"ExamSession"> | string | null
-        examBankId?: StringNullableFilter<"ExamSession"> | string | null
-        student?: XOR<StudentNullableScalarRelationFilter, StudentWhereInput> | null
+        examRoomId?: StringFilter<"ExamSession"> | string
+        examCode?: StringNullableFilter<"ExamSession"> | string | null
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
-        room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
-        examBank?: XOR<ExamBankNullableScalarRelationFilter, ExamBankWhereInput> | null
-        answers?: AnswerListRelationFilter
-        examFax?: XOR<ExamFaxNullableScalarRelationFilter, ExamFaxWhereInput> | null
-    }, "id" | "code" | "examFaxId" | "studentId_examId">;
+        examRoom?: XOR<ExamRoomScalarRelationFilter, ExamRoomWhereInput>
+        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
+    }, "id" | "code" | "studentSubjectScoreId" | "examCode_examId">;
     export type ExamSessionOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -338558,13 +337018,10 @@ export namespace Prisma {
         deletedAt?: SortOrderInput | SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        startTime?: SortOrderInput | SortOrder
-        endTime?: SortOrderInput | SortOrder
-        studentId?: SortOrderInput | SortOrder
         examId?: SortOrder
-        roomId?: SortOrderInput | SortOrder
-        examBankId?: SortOrderInput | SortOrder
-        examFaxId?: SortOrderInput | SortOrder
+        examRoomId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        examCode?: SortOrderInput | SortOrder
         _count?: ExamSessionCountOrderByAggregateInput
         _max?: ExamSessionMaxOrderByAggregateInput
         _min?: ExamSessionMinOrderByAggregateInput
@@ -338580,13 +337037,10 @@ export namespace Prisma {
         deletedAt?: DateTimeNullableWithAggregatesFilter<"ExamSession"> | Date | string | null
         createdAt?: DateTimeWithAggregatesFilter<"ExamSession"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"ExamSession"> | Date | string
-        startTime?: DateTimeNullableWithAggregatesFilter<"ExamSession"> | Date | string | null
-        endTime?: DateTimeNullableWithAggregatesFilter<"ExamSession"> | Date | string | null
-        studentId?: StringNullableWithAggregatesFilter<"ExamSession"> | string | null
         examId?: StringWithAggregatesFilter<"ExamSession"> | string
-        roomId?: StringNullableWithAggregatesFilter<"ExamSession"> | string | null
-        examBankId?: StringNullableWithAggregatesFilter<"ExamSession"> | string | null
-        examFaxId?: StringNullableWithAggregatesFilter<"ExamSession"> | string | null
+        examRoomId?: StringWithAggregatesFilter<"ExamSession"> | string
+        studentSubjectScoreId?: StringWithAggregatesFilter<"ExamSession"> | string
+        examCode?: StringNullableWithAggregatesFilter<"ExamSession"> | string | null
     };
     export type AcademicWarningRuleWhereInput = {
         AND?: AcademicWarningRuleWhereInput | AcademicWarningRuleWhereInput[]
@@ -350046,9 +348500,12 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -350082,6 +348539,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -350112,9 +348572,12 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -350148,6 +348611,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -350181,6 +348647,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
     };
     export type StudentSubjectScoreUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -350205,6 +348673,7 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
     };
     export type StudentSubjectScoreUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -350232,6 +348701,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentSubjectScoreHistoryCreateInput = {
         id?: string
@@ -350248,7 +348719,7 @@ export namespace Prisma {
         manualFinalScore?: number | null
         examPostponedReason?: boolean | null
         examPostponed?: string | null
-        examBanned: boolean
+        examBanned?: boolean | null
         examBannedReason?: string | null
         suspended?: boolean | null
         suspendedReason?: string | null
@@ -350271,7 +348742,7 @@ export namespace Prisma {
         manualFinalScore?: number | null
         examPostponedReason?: boolean | null
         examPostponed?: string | null
-        examBanned: boolean
+        examBanned?: boolean | null
         examBannedReason?: string | null
         suspended?: boolean | null
         suspendedReason?: string | null
@@ -350292,7 +348763,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -350315,7 +348786,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -350337,7 +348808,7 @@ export namespace Prisma {
         manualFinalScore?: number | null
         examPostponedReason?: boolean | null
         examPostponed?: string | null
-        examBanned: boolean
+        examBanned?: boolean | null
         examBannedReason?: string | null
         suspended?: boolean | null
         suspendedReason?: string | null
@@ -350358,7 +348829,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -350379,7 +348850,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -353279,6 +351750,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -353296,6 +351769,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -353327,6 +351801,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -353341,6 +351817,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -353369,6 +351846,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -353386,6 +351865,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -353417,6 +351897,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -353431,6 +351913,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -353462,6 +351945,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -353476,6 +351961,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -353495,6 +351981,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -353526,6 +352014,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -353540,6 +352030,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -354238,6 +352729,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
         students?: StudentCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateInput = {
         id?: string
@@ -354252,6 +352744,7 @@ export namespace Prisma {
         dM_Tinh_NewId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -354266,6 +352759,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
         students?: StudentUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -354280,6 +352774,7 @@ export namespace Prisma {
         dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationCreateManyInput = {
         id?: string
@@ -354423,7 +352918,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassCreateNestedManyWithoutDefenseRoomsInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutRoomInput
         classSchedules?: ClassScheduleCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomCreateNestedManyWithoutRoomInput
     };
     export type RoomUncheckedCreateInput = {
         id?: string
@@ -354446,7 +352941,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassUncheckedCreateNestedManyWithoutDefenseRoomsInput
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutRoomInput
         classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutRoomInput
     };
     export type RoomUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -354469,7 +352964,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassUpdateManyWithoutDefenseRoomsNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutRoomNestedInput
         classSchedules?: ClassScheduleUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutRoomNestedInput
     };
     export type RoomUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -354492,7 +352987,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutRoomNestedInput
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutRoomNestedInput
     };
     export type RoomCreateManyInput = {
         id?: string
@@ -355810,7 +354305,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -355868,7 +354362,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -355926,7 +354419,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -355984,7 +354476,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -364447,7 +362938,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
-        answers?: AnswerCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateInput = {
         id?: string
@@ -364469,7 +362959,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
-        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -364491,7 +362980,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -364513,7 +363001,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionCreateManyInput = {
         id?: string
@@ -364819,109 +363306,6 @@ export namespace Prisma {
         content?: StringFieldUpdateOperationsInput | string
         correctOrder?: IntFieldUpdateOperationsInput | number
     };
-    export type AnswerCreateInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        isCorrect?: boolean | null
-        score?: number | null
-        comment?: string | null
-        essayAnswer: string
-        session: ExamSessionCreateNestedOneWithoutAnswersInput
-        question: QuestionCreateNestedOneWithoutAnswersInput
-    };
-    export type AnswerUncheckedCreateInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        sessionId: string
-        questionId: string
-        isCorrect?: boolean | null
-        score?: number | null
-        comment?: string | null
-        essayAnswer: string
-    };
-    export type AnswerUpdateInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
-        session?: ExamSessionUpdateOneRequiredWithoutAnswersNestedInput
-        question?: QuestionUpdateOneRequiredWithoutAnswersNestedInput
-    };
-    export type AnswerUncheckedUpdateInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        sessionId?: StringFieldUpdateOperationsInput | string
-        questionId?: StringFieldUpdateOperationsInput | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
-    };
-    export type AnswerCreateManyInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        sessionId: string
-        questionId: string
-        isCorrect?: boolean | null
-        score?: number | null
-        comment?: string | null
-        essayAnswer: string
-    };
-    export type AnswerUpdateManyMutationInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
-    };
-    export type AnswerUncheckedUpdateManyInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        sessionId?: StringFieldUpdateOperationsInput | string
-        questionId?: StringFieldUpdateOperationsInput | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
-    };
     export type ExamCreateInput = {
         id?: string
         code?: string | null
@@ -364932,21 +363316,16 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank: QuestionBankCreateNestedOneWithoutExamInput
-        room?: RoomCreateNestedManyWithoutExamInput
+        lockExamCode?: boolean
+        startTime: string
+        questionBank?: QuestionBankCreateNestedOneWithoutExamInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
+        room?: RoomCreateNestedManyWithoutExamInput
         examBank?: ExamBankCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomCreateNestedManyWithoutExamInput
     };
     export type ExamUncheckedCreateInput = {
         id?: string
@@ -364958,21 +363337,16 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        questionBankId: string
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        room?: RoomUncheckedCreateNestedManyWithoutExamInput
+        questionBankId?: string | null
+        lockExamCode?: boolean
+        startTime: string
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
+        room?: RoomUncheckedCreateNestedManyWithoutExamInput
         examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxUncheckedCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutExamInput
     };
     export type ExamUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -364984,21 +363358,16 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        questionBank?: QuestionBankUpdateOneRequiredWithoutExamNestedInput
-        room?: RoomUpdateManyWithoutExamNestedInput
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
+        room?: RoomUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutExamNestedInput
     };
     export type ExamUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365010,21 +363379,16 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
+        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUncheckedUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutExamNestedInput
     };
     export type ExamCreateManyInput = {
         id?: string
@@ -365036,15 +363400,9 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        questionBankId: string
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
+        questionBankId?: string | null
+        lockExamCode?: boolean
+        startTime: string
     };
     export type ExamUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365056,14 +363414,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
     };
     export type ExamUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365075,15 +363427,88 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+    };
+    export type ExamRoomCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        exam: ExamCreateNestedOneWithoutExamRoomsInput
+        room: RoomCreateNestedOneWithoutExamRoomsInput
+        examSessions?: ExamSessionCreateNestedManyWithoutExamRoomInput
+    };
+    export type ExamRoomUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        examId: string
+        roomId: string
+        examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput
+    };
+    export type ExamRoomUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
+        room?: RoomUpdateOneRequiredWithoutExamRoomsNestedInput
+        examSessions?: ExamSessionUpdateManyWithoutExamRoomNestedInput
+    };
+    export type ExamRoomUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examId?: StringFieldUpdateOperationsInput | string
+        roomId?: StringFieldUpdateOperationsInput | string
+        examSessions?: ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput
+    };
+    export type ExamRoomCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        examId: string
+        roomId: string
+    };
+    export type ExamRoomUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type ExamRoomUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examId?: StringFieldUpdateOperationsInput | string
+        roomId?: StringFieldUpdateOperationsInput | string
     };
     export type TestStructureRuleCreateInput = {
         id?: string
@@ -365189,9 +363614,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        examCode: string
         exam: ExamCreateNestedOneWithoutExamBankInput
-        examSession?: ExamSessionCreateNestedManyWithoutExamBankInput
         questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankUncheckedCreateInput = {
@@ -365203,8 +363626,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
-        examCode: string
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutExamBankInput
         questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankUpdateInput = {
@@ -365215,9 +363636,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examCode?: StringFieldUpdateOperationsInput | string
         exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
-        examSession?: ExamSessionUpdateManyWithoutExamBankNestedInput
         questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateInput = {
@@ -365229,8 +363648,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
-        examCode?: StringFieldUpdateOperationsInput | string
-        examSession?: ExamSessionUncheckedUpdateManyWithoutExamBankNestedInput
         questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankCreateManyInput = {
@@ -365242,7 +363659,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
-        examCode: string
     };
     export type ExamBankUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365252,7 +363668,6 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examCode?: StringFieldUpdateOperationsInput | string
     };
     export type ExamBankUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365263,7 +363678,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
-        examCode?: StringFieldUpdateOperationsInput | string
     };
     export type ExamBankQuestionCreateInput = {
         id?: string
@@ -365347,93 +363761,6 @@ export namespace Prisma {
         questionId?: StringFieldUpdateOperationsInput | string
         order?: NullableIntFieldUpdateOperationsInput | number | null
     };
-    export type ExamFaxCreateInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        fax: string
-        score?: Decimal | DecimalJsLike | number | string | null
-        exam: ExamCreateNestedOneWithoutExamFaxInput
-        examSession?: ExamSessionCreateNestedOneWithoutExamFaxInput
-    };
-    export type ExamFaxUncheckedCreateInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        examId: string
-        fax: string
-        score?: Decimal | DecimalJsLike | number | string | null
-        examSession?: ExamSessionUncheckedCreateNestedOneWithoutExamFaxInput
-    };
-    export type ExamFaxUpdateInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        fax?: StringFieldUpdateOperationsInput | string
-        score?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-        exam?: ExamUpdateOneRequiredWithoutExamFaxNestedInput
-        examSession?: ExamSessionUpdateOneWithoutExamFaxNestedInput
-    };
-    export type ExamFaxUncheckedUpdateInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examId?: StringFieldUpdateOperationsInput | string
-        fax?: StringFieldUpdateOperationsInput | string
-        score?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-        examSession?: ExamSessionUncheckedUpdateOneWithoutExamFaxNestedInput
-    };
-    export type ExamFaxCreateManyInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        examId: string
-        fax: string
-        score?: Decimal | DecimalJsLike | number | string | null
-    };
-    export type ExamFaxUpdateManyMutationInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        fax?: StringFieldUpdateOperationsInput | string
-        score?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    };
-    export type ExamFaxUncheckedUpdateManyInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examId?: StringFieldUpdateOperationsInput | string
-        fax?: StringFieldUpdateOperationsInput | string
-        score?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    };
     export type ExamSessionCreateInput = {
         id?: string
         code?: string | null
@@ -365442,14 +363769,10 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        student?: StudentCreateNestedOneWithoutExamSessionInput
+        examCode?: string | null
         exam: ExamCreateNestedOneWithoutExamSessionsInput
-        room?: RoomCreateNestedOneWithoutExamSessionInput
-        examBank?: ExamBankCreateNestedOneWithoutExamSessionInput
-        answers?: AnswerCreateNestedManyWithoutSessionInput
-        examFax?: ExamFaxCreateNestedOneWithoutExamSessionInput
+        examRoom: ExamRoomCreateNestedOneWithoutExamSessionsInput
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutExamSessionInput
     };
     export type ExamSessionUncheckedCreateInput = {
         id?: string
@@ -365459,14 +363782,10 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
         examId: string
-        roomId?: string | null
-        examBankId?: string | null
-        examFaxId?: string | null
-        answers?: AnswerUncheckedCreateNestedManyWithoutSessionInput
+        examRoomId: string
+        studentSubjectScoreId: string
+        examCode?: string | null
     };
     export type ExamSessionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365476,14 +363795,10 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        student?: StudentUpdateOneWithoutExamSessionNestedInput
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
         exam?: ExamUpdateOneRequiredWithoutExamSessionsNestedInput
-        room?: RoomUpdateOneWithoutExamSessionNestedInput
-        examBank?: ExamBankUpdateOneWithoutExamSessionNestedInput
-        answers?: AnswerUpdateManyWithoutSessionNestedInput
-        examFax?: ExamFaxUpdateOneWithoutExamSessionNestedInput
+        examRoom?: ExamRoomUpdateOneRequiredWithoutExamSessionsNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutExamSessionNestedInput
     };
     export type ExamSessionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365493,14 +363808,10 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
-        answers?: AnswerUncheckedUpdateManyWithoutSessionNestedInput
+        examRoomId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ExamSessionCreateManyInput = {
         id?: string
@@ -365510,13 +363821,10 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
         examId: string
-        roomId?: string | null
-        examBankId?: string | null
-        examFaxId?: string | null
+        examRoomId: string
+        studentSubjectScoreId: string
+        examCode?: string | null
     };
     export type ExamSessionUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365526,8 +363834,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ExamSessionUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365537,13 +363844,10 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
+        examRoomId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type AcademicWarningRuleCreateInput = {
         id?: string
@@ -373697,6 +372001,14 @@ export namespace Prisma {
         is?: SubjectClassWhereInput | null
         isNot?: SubjectClassWhereInput | null
     };
+    export type ExamNullableScalarRelationFilter = {
+        is?: ExamWhereInput | null
+        isNot?: ExamWhereInput | null
+    };
+    export type ExamSessionNullableScalarRelationFilter = {
+        is?: ExamSessionWhereInput | null
+        isNot?: ExamSessionWhereInput | null
+    };
     export type StudentGraduationApplicationListRelationFilter = {
         every?: StudentGraduationApplicationWhereInput
         some?: StudentGraduationApplicationWhereInput
@@ -373764,6 +372076,8 @@ export namespace Prisma {
         suspendedReason?: SortOrder
         repeated?: SortOrder
         repeatedReason?: SortOrder
+        isImproving?: SortOrder
+        examId?: SortOrder
     };
     export type StudentSubjectScoreAvgOrderByAggregateInput = {
         attendanceScore?: SortOrder
@@ -373798,6 +372112,8 @@ export namespace Prisma {
         suspendedReason?: SortOrder
         repeated?: SortOrder
         repeatedReason?: SortOrder
+        isImproving?: SortOrder
+        examId?: SortOrder
     };
     export type StudentSubjectScoreMinOrderByAggregateInput = {
         id?: SortOrder
@@ -373825,6 +372141,8 @@ export namespace Prisma {
         suspendedReason?: SortOrder
         repeated?: SortOrder
         repeatedReason?: SortOrder
+        isImproving?: SortOrder
+        examId?: SortOrder
     };
     export type StudentSubjectScoreSumOrderByAggregateInput = {
         attendanceScore?: SortOrder
@@ -375842,13 +374160,13 @@ export namespace Prisma {
         notIn?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
         not?: NestedEnumExamTypeNullableFilter<$PrismaModel> | $Enums.ExamType | null
     };
-    export type ExamNullableScalarRelationFilter = {
-        is?: ExamWhereInput | null
-        isNot?: ExamWhereInput | null
-    };
     export type RoomNullableScalarRelationFilter = {
         is?: RoomWhereInput | null
         isNot?: RoomWhereInput | null
+    };
+    export type TrainingLocationNullableScalarRelationFilter = {
+        is?: TrainingLocationWhereInput | null
+        isNot?: TrainingLocationWhereInput | null
     };
     export type ClassScheduleListRelationFilter = {
         every?: ClassScheduleWhereInput
@@ -375905,6 +374223,8 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrder
+        sendLecturerAssignmentAt?: SortOrder
+        submitLecturerAssignmentAt?: SortOrder
         examDate?: SortOrder
         examType?: SortOrder
         examId?: SortOrder
@@ -375919,6 +374239,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrder
+        trainingLocationId?: SortOrder
         lecturerId?: SortOrder
         extraLecturerId?: SortOrder
         enterGradeLecturerId?: SortOrder
@@ -375944,6 +374265,8 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrder
+        sendLecturerAssignmentAt?: SortOrder
+        submitLecturerAssignmentAt?: SortOrder
         examDate?: SortOrder
         examType?: SortOrder
         examId?: SortOrder
@@ -375958,6 +374281,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrder
+        trainingLocationId?: SortOrder
         lecturerId?: SortOrder
         extraLecturerId?: SortOrder
         enterGradeLecturerId?: SortOrder
@@ -375980,6 +374304,8 @@ export namespace Prisma {
         semesterId?: SortOrder
         cancelled?: SortOrder
         lecturerAssignmentDeadline?: SortOrder
+        sendLecturerAssignmentAt?: SortOrder
+        submitLecturerAssignmentAt?: SortOrder
         examDate?: SortOrder
         examType?: SortOrder
         examId?: SortOrder
@@ -375994,6 +374320,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrder
+        trainingLocationId?: SortOrder
         lecturerId?: SortOrder
         extraLecturerId?: SortOrder
         enterGradeLecturerId?: SortOrder
@@ -376464,10 +374791,6 @@ export namespace Prisma {
         dM_TinhId?: SortOrder
         dM_Tinh_NewId?: SortOrder
     };
-    export type TrainingLocationNullableScalarRelationFilter = {
-        is?: TrainingLocationWhereInput | null
-        isNot?: TrainingLocationWhereInput | null
-    };
     export type BuildingOrderByRelevanceInput = {
         fields: BuildingOrderByRelevanceFieldEnum | BuildingOrderByRelevanceFieldEnum[]
         sort: SortOrder
@@ -376524,15 +374847,15 @@ export namespace Prisma {
         some?: ExamWhereInput
         none?: ExamWhereInput
     };
-    export type ExamSessionListRelationFilter = {
-        every?: ExamSessionWhereInput
-        some?: ExamSessionWhereInput
-        none?: ExamSessionWhereInput
+    export type ExamRoomListRelationFilter = {
+        every?: ExamRoomWhereInput
+        some?: ExamRoomWhereInput
+        none?: ExamRoomWhereInput
     };
     export type ExamOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
-    export type ExamSessionOrderByRelationAggregateInput = {
+    export type ExamRoomOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type RoomOrderByRelevanceInput = {
@@ -382643,11 +380966,6 @@ export namespace Prisma {
         some?: ExamBankQuestionWhereInput
         none?: ExamBankQuestionWhereInput
     };
-    export type AnswerListRelationFilter = {
-        every?: AnswerWhereInput
-        some?: AnswerWhereInput
-        none?: AnswerWhereInput
-    };
     export type MultipleChoiceOptionOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -382658,9 +380976,6 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type ExamBankQuestionOrderByRelationAggregateInput = {
-        _count?: SortOrder
-    };
-    export type AnswerOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type QuestionOrderByRelevanceInput = {
@@ -382890,90 +381205,30 @@ export namespace Prisma {
     export type OrderingItemSumOrderByAggregateInput = {
         correctOrder?: SortOrder
     };
-    export type ExamSessionScalarRelationFilter = {
-        is?: ExamSessionWhereInput
-        isNot?: ExamSessionWhereInput
-    };
-    export type AnswerOrderByRelevanceInput = {
-        fields: AnswerOrderByRelevanceFieldEnum | AnswerOrderByRelevanceFieldEnum[]
-        sort: SortOrder
-        search: string
-    };
-    export type AnswerSessionIdQuestionIdCompoundUniqueInput = {
-        sessionId: string
-        questionId: string
-    };
-    export type AnswerCountOrderByAggregateInput = {
-        id?: SortOrder
-        code?: SortOrder
-        active?: SortOrder
-        description?: SortOrder
-        deletedAt?: SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        sessionId?: SortOrder
-        questionId?: SortOrder
-        isCorrect?: SortOrder
-        score?: SortOrder
-        comment?: SortOrder
-        essayAnswer?: SortOrder
-    };
-    export type AnswerAvgOrderByAggregateInput = {
-        score?: SortOrder
-    };
-    export type AnswerMaxOrderByAggregateInput = {
-        id?: SortOrder
-        code?: SortOrder
-        active?: SortOrder
-        description?: SortOrder
-        deletedAt?: SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        sessionId?: SortOrder
-        questionId?: SortOrder
-        isCorrect?: SortOrder
-        score?: SortOrder
-        comment?: SortOrder
-        essayAnswer?: SortOrder
-    };
-    export type AnswerMinOrderByAggregateInput = {
-        id?: SortOrder
-        code?: SortOrder
-        active?: SortOrder
-        description?: SortOrder
-        deletedAt?: SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        sessionId?: SortOrder
-        questionId?: SortOrder
-        isCorrect?: SortOrder
-        score?: SortOrder
-        comment?: SortOrder
-        essayAnswer?: SortOrder
-    };
-    export type AnswerSumOrderByAggregateInput = {
-        score?: SortOrder
-    };
     export type EnumExamStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.ExamStatus | EnumExamStatusFieldRefInput<$PrismaModel>
         in?: $Enums.ExamStatus[] | ListEnumExamStatusFieldRefInput<$PrismaModel>
         notIn?: $Enums.ExamStatus[] | ListEnumExamStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumExamStatusFilter<$PrismaModel> | $Enums.ExamStatus
     };
+    export type QuestionBankNullableScalarRelationFilter = {
+        is?: QuestionBankWhereInput | null
+        isNot?: QuestionBankWhereInput | null
+    };
     export type ExamBankListRelationFilter = {
         every?: ExamBankWhereInput
         some?: ExamBankWhereInput
         none?: ExamBankWhereInput
     };
-    export type ExamFaxListRelationFilter = {
-        every?: ExamFaxWhereInput
-        some?: ExamFaxWhereInput
-        none?: ExamFaxWhereInput
+    export type ExamSessionListRelationFilter = {
+        every?: ExamSessionWhereInput
+        some?: ExamSessionWhereInput
+        none?: ExamSessionWhereInput
     };
     export type ExamBankOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
-    export type ExamFaxOrderByRelationAggregateInput = {
+    export type ExamSessionOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type ExamOrderByRelevanceInput = {
@@ -382992,19 +381247,8 @@ export namespace Prisma {
         title?: SortOrder
         status?: SortOrder
         questionBankId?: SortOrder
+        lockExamCode?: SortOrder
         startTime?: SortOrder
-        endTime?: SortOrder
-        duration?: SortOrder
-        passScore?: SortOrder
-        maxScore?: SortOrder
-        shuffleQuestions?: SortOrder
-        shuffleAnswers?: SortOrder
-        showResult?: SortOrder
-    };
-    export type ExamAvgOrderByAggregateInput = {
-        duration?: SortOrder
-        passScore?: SortOrder
-        maxScore?: SortOrder
     };
     export type ExamMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -383017,14 +381261,8 @@ export namespace Prisma {
         title?: SortOrder
         status?: SortOrder
         questionBankId?: SortOrder
+        lockExamCode?: SortOrder
         startTime?: SortOrder
-        endTime?: SortOrder
-        duration?: SortOrder
-        passScore?: SortOrder
-        maxScore?: SortOrder
-        shuffleQuestions?: SortOrder
-        shuffleAnswers?: SortOrder
-        showResult?: SortOrder
     };
     export type ExamMinOrderByAggregateInput = {
         id?: SortOrder
@@ -383037,19 +381275,8 @@ export namespace Prisma {
         title?: SortOrder
         status?: SortOrder
         questionBankId?: SortOrder
+        lockExamCode?: SortOrder
         startTime?: SortOrder
-        endTime?: SortOrder
-        duration?: SortOrder
-        passScore?: SortOrder
-        maxScore?: SortOrder
-        shuffleQuestions?: SortOrder
-        shuffleAnswers?: SortOrder
-        showResult?: SortOrder
-    };
-    export type ExamSumOrderByAggregateInput = {
-        duration?: SortOrder
-        passScore?: SortOrder
-        maxScore?: SortOrder
     };
     export type EnumExamStatusWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.ExamStatus | EnumExamStatusFieldRefInput<$PrismaModel>
@@ -383063,6 +381290,52 @@ export namespace Prisma {
     export type ExamScalarRelationFilter = {
         is?: ExamWhereInput
         isNot?: ExamWhereInput
+    };
+    export type RoomScalarRelationFilter = {
+        is?: RoomWhereInput
+        isNot?: RoomWhereInput
+    };
+    export type ExamRoomOrderByRelevanceInput = {
+        fields: ExamRoomOrderByRelevanceFieldEnum | ExamRoomOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ExamRoomExamIdRoomIdCompoundUniqueInput = {
+        examId: string
+        roomId: string
+    };
+    export type ExamRoomCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        examId?: SortOrder
+        roomId?: SortOrder
+    };
+    export type ExamRoomMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        examId?: SortOrder
+        roomId?: SortOrder
+    };
+    export type ExamRoomMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        examId?: SortOrder
+        roomId?: SortOrder
     };
     export type KnowledgeBlockScalarRelationFilter = {
         is?: KnowledgeBlockWhereInput
@@ -383134,10 +381407,6 @@ export namespace Prisma {
         sort: SortOrder
         search: string
     };
-    export type ExamBankExamIdExamCodeCompoundUniqueInput = {
-        examId: string
-        examCode: string
-    };
     export type ExamBankCountOrderByAggregateInput = {
         id?: SortOrder
         code?: SortOrder
@@ -383147,7 +381416,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
-        examCode?: SortOrder
     };
     export type ExamBankMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -383158,7 +381426,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
-        examCode?: SortOrder
     };
     export type ExamBankMinOrderByAggregateInput = {
         id?: SortOrder
@@ -383169,7 +381436,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
-        examCode?: SortOrder
     };
     export type ExamBankScalarRelationFilter = {
         is?: ExamBankWhereInput
@@ -383230,76 +381496,17 @@ export namespace Prisma {
     export type ExamBankQuestionSumOrderByAggregateInput = {
         order?: SortOrder
     };
-    export type ExamSessionNullableScalarRelationFilter = {
-        is?: ExamSessionWhereInput | null
-        isNot?: ExamSessionWhereInput | null
-    };
-    export type ExamFaxOrderByRelevanceInput = {
-        fields: ExamFaxOrderByRelevanceFieldEnum | ExamFaxOrderByRelevanceFieldEnum[]
-        sort: SortOrder
-        search: string
-    };
-    export type ExamFaxExamIdFaxCompoundUniqueInput = {
-        examId: string
-        fax: string
-    };
-    export type ExamFaxCountOrderByAggregateInput = {
-        id?: SortOrder
-        code?: SortOrder
-        active?: SortOrder
-        description?: SortOrder
-        deletedAt?: SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        examId?: SortOrder
-        fax?: SortOrder
-        score?: SortOrder
-    };
-    export type ExamFaxAvgOrderByAggregateInput = {
-        score?: SortOrder
-    };
-    export type ExamFaxMaxOrderByAggregateInput = {
-        id?: SortOrder
-        code?: SortOrder
-        active?: SortOrder
-        description?: SortOrder
-        deletedAt?: SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        examId?: SortOrder
-        fax?: SortOrder
-        score?: SortOrder
-    };
-    export type ExamFaxMinOrderByAggregateInput = {
-        id?: SortOrder
-        code?: SortOrder
-        active?: SortOrder
-        description?: SortOrder
-        deletedAt?: SortOrder
-        createdAt?: SortOrder
-        updatedAt?: SortOrder
-        examId?: SortOrder
-        fax?: SortOrder
-        score?: SortOrder
-    };
-    export type ExamFaxSumOrderByAggregateInput = {
-        score?: SortOrder
-    };
-    export type ExamBankNullableScalarRelationFilter = {
-        is?: ExamBankWhereInput | null
-        isNot?: ExamBankWhereInput | null
-    };
-    export type ExamFaxNullableScalarRelationFilter = {
-        is?: ExamFaxWhereInput | null
-        isNot?: ExamFaxWhereInput | null
+    export type ExamRoomScalarRelationFilter = {
+        is?: ExamRoomWhereInput
+        isNot?: ExamRoomWhereInput
     };
     export type ExamSessionOrderByRelevanceInput = {
         fields: ExamSessionOrderByRelevanceFieldEnum | ExamSessionOrderByRelevanceFieldEnum[]
         sort: SortOrder
         search: string
     };
-    export type ExamSessionStudentIdExamIdCompoundUniqueInput = {
-        studentId: string
+    export type ExamSessionExamCodeExamIdCompoundUniqueInput = {
+        examCode: string
         examId: string
     };
     export type ExamSessionCountOrderByAggregateInput = {
@@ -383310,13 +381517,10 @@ export namespace Prisma {
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        startTime?: SortOrder
-        endTime?: SortOrder
-        studentId?: SortOrder
         examId?: SortOrder
-        roomId?: SortOrder
-        examBankId?: SortOrder
-        examFaxId?: SortOrder
+        examRoomId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        examCode?: SortOrder
     };
     export type ExamSessionMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -383326,13 +381530,10 @@ export namespace Prisma {
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        startTime?: SortOrder
-        endTime?: SortOrder
-        studentId?: SortOrder
         examId?: SortOrder
-        roomId?: SortOrder
-        examBankId?: SortOrder
-        examFaxId?: SortOrder
+        examRoomId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        examCode?: SortOrder
     };
     export type ExamSessionMinOrderByAggregateInput = {
         id?: SortOrder
@@ -383342,13 +381543,10 @@ export namespace Prisma {
         deletedAt?: SortOrder
         createdAt?: SortOrder
         updatedAt?: SortOrder
-        startTime?: SortOrder
-        endTime?: SortOrder
-        studentId?: SortOrder
         examId?: SortOrder
-        roomId?: SortOrder
-        examBankId?: SortOrder
-        examFaxId?: SortOrder
+        examRoomId?: SortOrder
+        studentSubjectScoreId?: SortOrder
+        examCode?: SortOrder
     };
     export type AcademicWarningRuleOrderByRelevanceInput = {
         fields: AcademicWarningRuleOrderByRelevanceFieldEnum | AcademicWarningRuleOrderByRelevanceFieldEnum[]
@@ -390588,6 +388786,16 @@ export namespace Prisma {
         connectOrCreate?: StudentCreateOrConnectWithoutSubjectClassStudentInput
         connect?: StudentWhereUniqueInput
     };
+    export type ExamCreateNestedOneWithoutStudentSubjectScoreInput = {
+        create?: XOR<ExamCreateWithoutStudentSubjectScoreInput, ExamUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: ExamCreateOrConnectWithoutStudentSubjectScoreInput
+        connect?: ExamWhereUniqueInput
+    };
+    export type ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput = {
+        create?: XOR<ExamSessionCreateWithoutStudentSubjectScoreInput, ExamSessionUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: ExamSessionCreateOrConnectWithoutStudentSubjectScoreInput
+        connect?: ExamSessionWhereUniqueInput
+    };
     export type StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
         connectOrCreate?: StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput | StudentGraduationApplicationCreateOrConnectWithoutGpaScoreInput[]
@@ -390621,6 +388829,11 @@ export namespace Prisma {
         connectOrCreate?: StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryCreateOrConnectWithoutStudentSubjectScoreInput[]
         createMany?: StudentSubjectScoreHistoryCreateManyStudentSubjectScoreInputEnvelope
         connect?: StudentSubjectScoreHistoryWhereUniqueInput | StudentSubjectScoreHistoryWhereUniqueInput[]
+    };
+    export type ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput = {
+        create?: XOR<ExamSessionCreateWithoutStudentSubjectScoreInput, ExamSessionUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: ExamSessionCreateOrConnectWithoutStudentSubjectScoreInput
+        connect?: ExamSessionWhereUniqueInput
     };
     export type StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
@@ -390692,6 +388905,24 @@ export namespace Prisma {
         upsert?: StudentUpsertWithoutSubjectClassStudentInput
         connect?: StudentWhereUniqueInput
         update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutSubjectClassStudentInput, StudentUpdateWithoutSubjectClassStudentInput>, StudentUncheckedUpdateWithoutSubjectClassStudentInput>
+    };
+    export type ExamUpdateOneWithoutStudentSubjectScoreNestedInput = {
+        create?: XOR<ExamCreateWithoutStudentSubjectScoreInput, ExamUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: ExamCreateOrConnectWithoutStudentSubjectScoreInput
+        upsert?: ExamUpsertWithoutStudentSubjectScoreInput
+        disconnect?: ExamWhereInput | boolean
+        delete?: ExamWhereInput | boolean
+        connect?: ExamWhereUniqueInput
+        update?: XOR<XOR<ExamUpdateToOneWithWhereWithoutStudentSubjectScoreInput, ExamUpdateWithoutStudentSubjectScoreInput>, ExamUncheckedUpdateWithoutStudentSubjectScoreInput>
+    };
+    export type ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput = {
+        create?: XOR<ExamSessionCreateWithoutStudentSubjectScoreInput, ExamSessionUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: ExamSessionCreateOrConnectWithoutStudentSubjectScoreInput
+        upsert?: ExamSessionUpsertWithoutStudentSubjectScoreInput
+        disconnect?: ExamSessionWhereInput | boolean
+        delete?: ExamSessionWhereInput | boolean
+        connect?: ExamSessionWhereUniqueInput
+        update?: XOR<XOR<ExamSessionUpdateToOneWithWhereWithoutStudentSubjectScoreInput, ExamSessionUpdateWithoutStudentSubjectScoreInput>, ExamSessionUncheckedUpdateWithoutStudentSubjectScoreInput>
     };
     export type StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
@@ -390768,6 +388999,15 @@ export namespace Prisma {
         update?: StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpdateWithWhereUniqueWithoutStudentSubjectScoreInput[]
         updateMany?: StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput | StudentSubjectScoreHistoryUpdateManyWithWhereWithoutStudentSubjectScoreInput[]
         deleteMany?: StudentSubjectScoreHistoryScalarWhereInput | StudentSubjectScoreHistoryScalarWhereInput[]
+    };
+    export type ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput = {
+        create?: XOR<ExamSessionCreateWithoutStudentSubjectScoreInput, ExamSessionUncheckedCreateWithoutStudentSubjectScoreInput>
+        connectOrCreate?: ExamSessionCreateOrConnectWithoutStudentSubjectScoreInput
+        upsert?: ExamSessionUpsertWithoutStudentSubjectScoreInput
+        disconnect?: ExamSessionWhereInput | boolean
+        delete?: ExamSessionWhereInput | boolean
+        connect?: ExamSessionWhereUniqueInput
+        update?: XOR<XOR<ExamSessionUpdateToOneWithWhereWithoutStudentSubjectScoreInput, ExamSessionUpdateWithoutStudentSubjectScoreInput>, ExamSessionUncheckedUpdateWithoutStudentSubjectScoreInput>
     };
     export type StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput = {
         create?: XOR<StudentGraduationApplicationCreateWithoutGpaScoreInput, StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput> | StudentGraduationApplicationCreateWithoutGpaScoreInput[] | StudentGraduationApplicationUncheckedCreateWithoutGpaScoreInput[]
@@ -394029,6 +392269,11 @@ export namespace Prisma {
         connectOrCreate?: RoomCreateOrConnectWithoutSubjectClassesInput
         connect?: RoomWhereUniqueInput
     };
+    export type TrainingLocationCreateNestedOneWithoutSubjectClassesInput = {
+        create?: XOR<TrainingLocationCreateWithoutSubjectClassesInput, TrainingLocationUncheckedCreateWithoutSubjectClassesInput>
+        connectOrCreate?: TrainingLocationCreateOrConnectWithoutSubjectClassesInput
+        connect?: TrainingLocationWhereUniqueInput
+    };
     export type LecturerCreateNestedOneWithoutMainSubjectClassesInput = {
         create?: XOR<LecturerCreateWithoutMainSubjectClassesInput, LecturerUncheckedCreateWithoutMainSubjectClassesInput>
         connectOrCreate?: LecturerCreateOrConnectWithoutMainSubjectClassesInput
@@ -394188,6 +392433,15 @@ export namespace Prisma {
         delete?: RoomWhereInput | boolean
         connect?: RoomWhereUniqueInput
         update?: XOR<XOR<RoomUpdateToOneWithWhereWithoutSubjectClassesInput, RoomUpdateWithoutSubjectClassesInput>, RoomUncheckedUpdateWithoutSubjectClassesInput>
+    };
+    export type TrainingLocationUpdateOneWithoutSubjectClassesNestedInput = {
+        create?: XOR<TrainingLocationCreateWithoutSubjectClassesInput, TrainingLocationUncheckedCreateWithoutSubjectClassesInput>
+        connectOrCreate?: TrainingLocationCreateOrConnectWithoutSubjectClassesInput
+        upsert?: TrainingLocationUpsertWithoutSubjectClassesInput
+        disconnect?: TrainingLocationWhereInput | boolean
+        delete?: TrainingLocationWhereInput | boolean
+        connect?: TrainingLocationWhereUniqueInput
+        update?: XOR<XOR<TrainingLocationUpdateToOneWithWhereWithoutSubjectClassesInput, TrainingLocationUpdateWithoutSubjectClassesInput>, TrainingLocationUncheckedUpdateWithoutSubjectClassesInput>
     };
     export type LecturerUpdateOneWithoutMainSubjectClassesNestedInput = {
         create?: XOR<LecturerCreateWithoutMainSubjectClassesInput, LecturerUncheckedCreateWithoutMainSubjectClassesInput>
@@ -395324,6 +393578,12 @@ export namespace Prisma {
         createMany?: BuildingCreateManyTrainingLocationInputEnvelope
         connect?: BuildingWhereUniqueInput | BuildingWhereUniqueInput[]
     };
+    export type SubjectClassCreateNestedManyWithoutTrainingLocationInput = {
+        create?: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput> | SubjectClassCreateWithoutTrainingLocationInput[] | SubjectClassUncheckedCreateWithoutTrainingLocationInput[]
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutTrainingLocationInput | SubjectClassCreateOrConnectWithoutTrainingLocationInput[]
+        createMany?: SubjectClassCreateManyTrainingLocationInputEnvelope
+        connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+    };
     export type StudentUncheckedCreateNestedManyWithoutTrainingLocationInput = {
         create?: XOR<StudentCreateWithoutTrainingLocationInput, StudentUncheckedCreateWithoutTrainingLocationInput> | StudentCreateWithoutTrainingLocationInput[] | StudentUncheckedCreateWithoutTrainingLocationInput[]
         connectOrCreate?: StudentCreateOrConnectWithoutTrainingLocationInput | StudentCreateOrConnectWithoutTrainingLocationInput[]
@@ -395335,6 +393595,12 @@ export namespace Prisma {
         connectOrCreate?: BuildingCreateOrConnectWithoutTrainingLocationInput | BuildingCreateOrConnectWithoutTrainingLocationInput[]
         createMany?: BuildingCreateManyTrainingLocationInputEnvelope
         connect?: BuildingWhereUniqueInput | BuildingWhereUniqueInput[]
+    };
+    export type SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput = {
+        create?: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput> | SubjectClassCreateWithoutTrainingLocationInput[] | SubjectClassUncheckedCreateWithoutTrainingLocationInput[]
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutTrainingLocationInput | SubjectClassCreateOrConnectWithoutTrainingLocationInput[]
+        createMany?: SubjectClassCreateManyTrainingLocationInputEnvelope
+        connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
     };
     export type DM_TinhUpdateOneWithoutTrainingLocationNestedInput = {
         create?: XOR<DM_TinhCreateWithoutTrainingLocationInput, DM_TinhUncheckedCreateWithoutTrainingLocationInput>
@@ -395380,6 +393646,19 @@ export namespace Prisma {
         updateMany?: BuildingUpdateManyWithWhereWithoutTrainingLocationInput | BuildingUpdateManyWithWhereWithoutTrainingLocationInput[]
         deleteMany?: BuildingScalarWhereInput | BuildingScalarWhereInput[]
     };
+    export type SubjectClassUpdateManyWithoutTrainingLocationNestedInput = {
+        create?: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput> | SubjectClassCreateWithoutTrainingLocationInput[] | SubjectClassUncheckedCreateWithoutTrainingLocationInput[]
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutTrainingLocationInput | SubjectClassCreateOrConnectWithoutTrainingLocationInput[]
+        upsert?: SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput | SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput[]
+        createMany?: SubjectClassCreateManyTrainingLocationInputEnvelope
+        set?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        disconnect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        delete?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        update?: SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput | SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput[]
+        updateMany?: SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput | SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput[]
+        deleteMany?: SubjectClassScalarWhereInput | SubjectClassScalarWhereInput[]
+    };
     export type StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput = {
         create?: XOR<StudentCreateWithoutTrainingLocationInput, StudentUncheckedCreateWithoutTrainingLocationInput> | StudentCreateWithoutTrainingLocationInput[] | StudentUncheckedCreateWithoutTrainingLocationInput[]
         connectOrCreate?: StudentCreateOrConnectWithoutTrainingLocationInput | StudentCreateOrConnectWithoutTrainingLocationInput[]
@@ -395405,6 +393684,19 @@ export namespace Prisma {
         update?: BuildingUpdateWithWhereUniqueWithoutTrainingLocationInput | BuildingUpdateWithWhereUniqueWithoutTrainingLocationInput[]
         updateMany?: BuildingUpdateManyWithWhereWithoutTrainingLocationInput | BuildingUpdateManyWithWhereWithoutTrainingLocationInput[]
         deleteMany?: BuildingScalarWhereInput | BuildingScalarWhereInput[]
+    };
+    export type SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput = {
+        create?: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput> | SubjectClassCreateWithoutTrainingLocationInput[] | SubjectClassUncheckedCreateWithoutTrainingLocationInput[]
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutTrainingLocationInput | SubjectClassCreateOrConnectWithoutTrainingLocationInput[]
+        upsert?: SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput | SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput[]
+        createMany?: SubjectClassCreateManyTrainingLocationInputEnvelope
+        set?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        disconnect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        delete?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        update?: SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput | SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput[]
+        updateMany?: SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput | SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput[]
+        deleteMany?: SubjectClassScalarWhereInput | SubjectClassScalarWhereInput[]
     };
     export type TrainingLocationCreateNestedOneWithoutBuildingsInput = {
         create?: XOR<TrainingLocationCreateWithoutBuildingsInput, TrainingLocationUncheckedCreateWithoutBuildingsInput>
@@ -395491,11 +393783,11 @@ export namespace Prisma {
         createMany?: ClassScheduleCreateManyRoomInputEnvelope
         connect?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
     };
-    export type ExamSessionCreateNestedManyWithoutRoomInput = {
-        create?: XOR<ExamSessionCreateWithoutRoomInput, ExamSessionUncheckedCreateWithoutRoomInput> | ExamSessionCreateWithoutRoomInput[] | ExamSessionUncheckedCreateWithoutRoomInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutRoomInput | ExamSessionCreateOrConnectWithoutRoomInput[]
-        createMany?: ExamSessionCreateManyRoomInputEnvelope
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+    export type ExamRoomCreateNestedManyWithoutRoomInput = {
+        create?: XOR<ExamRoomCreateWithoutRoomInput, ExamRoomUncheckedCreateWithoutRoomInput> | ExamRoomCreateWithoutRoomInput[] | ExamRoomUncheckedCreateWithoutRoomInput[]
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutRoomInput | ExamRoomCreateOrConnectWithoutRoomInput[]
+        createMany?: ExamRoomCreateManyRoomInputEnvelope
+        connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
     };
     export type ExamUncheckedCreateNestedManyWithoutRoomInput = {
         create?: XOR<ExamCreateWithoutRoomInput, ExamUncheckedCreateWithoutRoomInput> | ExamCreateWithoutRoomInput[] | ExamUncheckedCreateWithoutRoomInput[]
@@ -395525,11 +393817,11 @@ export namespace Prisma {
         createMany?: ClassScheduleCreateManyRoomInputEnvelope
         connect?: ClassScheduleWhereUniqueInput | ClassScheduleWhereUniqueInput[]
     };
-    export type ExamSessionUncheckedCreateNestedManyWithoutRoomInput = {
-        create?: XOR<ExamSessionCreateWithoutRoomInput, ExamSessionUncheckedCreateWithoutRoomInput> | ExamSessionCreateWithoutRoomInput[] | ExamSessionUncheckedCreateWithoutRoomInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutRoomInput | ExamSessionCreateOrConnectWithoutRoomInput[]
-        createMany?: ExamSessionCreateManyRoomInputEnvelope
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+    export type ExamRoomUncheckedCreateNestedManyWithoutRoomInput = {
+        create?: XOR<ExamRoomCreateWithoutRoomInput, ExamRoomUncheckedCreateWithoutRoomInput> | ExamRoomCreateWithoutRoomInput[] | ExamRoomUncheckedCreateWithoutRoomInput[]
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutRoomInput | ExamRoomCreateOrConnectWithoutRoomInput[]
+        createMany?: ExamRoomCreateManyRoomInputEnvelope
+        connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
     };
     export type BuildingUpdateOneWithoutRoomsNestedInput = {
         create?: XOR<BuildingCreateWithoutRoomsInput, BuildingUncheckedCreateWithoutRoomsInput>
@@ -395603,18 +393895,18 @@ export namespace Prisma {
         updateMany?: ClassScheduleUpdateManyWithWhereWithoutRoomInput | ClassScheduleUpdateManyWithWhereWithoutRoomInput[]
         deleteMany?: ClassScheduleScalarWhereInput | ClassScheduleScalarWhereInput[]
     };
-    export type ExamSessionUpdateManyWithoutRoomNestedInput = {
-        create?: XOR<ExamSessionCreateWithoutRoomInput, ExamSessionUncheckedCreateWithoutRoomInput> | ExamSessionCreateWithoutRoomInput[] | ExamSessionUncheckedCreateWithoutRoomInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutRoomInput | ExamSessionCreateOrConnectWithoutRoomInput[]
-        upsert?: ExamSessionUpsertWithWhereUniqueWithoutRoomInput | ExamSessionUpsertWithWhereUniqueWithoutRoomInput[]
-        createMany?: ExamSessionCreateManyRoomInputEnvelope
-        set?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        disconnect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        delete?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        update?: ExamSessionUpdateWithWhereUniqueWithoutRoomInput | ExamSessionUpdateWithWhereUniqueWithoutRoomInput[]
-        updateMany?: ExamSessionUpdateManyWithWhereWithoutRoomInput | ExamSessionUpdateManyWithWhereWithoutRoomInput[]
-        deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
+    export type ExamRoomUpdateManyWithoutRoomNestedInput = {
+        create?: XOR<ExamRoomCreateWithoutRoomInput, ExamRoomUncheckedCreateWithoutRoomInput> | ExamRoomCreateWithoutRoomInput[] | ExamRoomUncheckedCreateWithoutRoomInput[]
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutRoomInput | ExamRoomCreateOrConnectWithoutRoomInput[]
+        upsert?: ExamRoomUpsertWithWhereUniqueWithoutRoomInput | ExamRoomUpsertWithWhereUniqueWithoutRoomInput[]
+        createMany?: ExamRoomCreateManyRoomInputEnvelope
+        set?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        disconnect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        delete?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        update?: ExamRoomUpdateWithWhereUniqueWithoutRoomInput | ExamRoomUpdateWithWhereUniqueWithoutRoomInput[]
+        updateMany?: ExamRoomUpdateManyWithWhereWithoutRoomInput | ExamRoomUpdateManyWithWhereWithoutRoomInput[]
+        deleteMany?: ExamRoomScalarWhereInput | ExamRoomScalarWhereInput[]
     };
     export type ExamUncheckedUpdateManyWithoutRoomNestedInput = {
         create?: XOR<ExamCreateWithoutRoomInput, ExamUncheckedCreateWithoutRoomInput> | ExamCreateWithoutRoomInput[] | ExamUncheckedCreateWithoutRoomInput[]
@@ -395679,18 +393971,18 @@ export namespace Prisma {
         updateMany?: ClassScheduleUpdateManyWithWhereWithoutRoomInput | ClassScheduleUpdateManyWithWhereWithoutRoomInput[]
         deleteMany?: ClassScheduleScalarWhereInput | ClassScheduleScalarWhereInput[]
     };
-    export type ExamSessionUncheckedUpdateManyWithoutRoomNestedInput = {
-        create?: XOR<ExamSessionCreateWithoutRoomInput, ExamSessionUncheckedCreateWithoutRoomInput> | ExamSessionCreateWithoutRoomInput[] | ExamSessionUncheckedCreateWithoutRoomInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutRoomInput | ExamSessionCreateOrConnectWithoutRoomInput[]
-        upsert?: ExamSessionUpsertWithWhereUniqueWithoutRoomInput | ExamSessionUpsertWithWhereUniqueWithoutRoomInput[]
-        createMany?: ExamSessionCreateManyRoomInputEnvelope
-        set?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        disconnect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        delete?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        update?: ExamSessionUpdateWithWhereUniqueWithoutRoomInput | ExamSessionUpdateWithWhereUniqueWithoutRoomInput[]
-        updateMany?: ExamSessionUpdateManyWithWhereWithoutRoomInput | ExamSessionUpdateManyWithWhereWithoutRoomInput[]
-        deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
+    export type ExamRoomUncheckedUpdateManyWithoutRoomNestedInput = {
+        create?: XOR<ExamRoomCreateWithoutRoomInput, ExamRoomUncheckedCreateWithoutRoomInput> | ExamRoomCreateWithoutRoomInput[] | ExamRoomUncheckedCreateWithoutRoomInput[]
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutRoomInput | ExamRoomCreateOrConnectWithoutRoomInput[]
+        upsert?: ExamRoomUpsertWithWhereUniqueWithoutRoomInput | ExamRoomUpsertWithWhereUniqueWithoutRoomInput[]
+        createMany?: ExamRoomCreateManyRoomInputEnvelope
+        set?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        disconnect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        delete?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        update?: ExamRoomUpdateWithWhereUniqueWithoutRoomInput | ExamRoomUpdateWithWhereUniqueWithoutRoomInput[]
+        updateMany?: ExamRoomUpdateManyWithWhereWithoutRoomInput | ExamRoomUpdateManyWithWhereWithoutRoomInput[]
+        deleteMany?: ExamRoomScalarWhereInput | ExamRoomScalarWhereInput[]
     };
     export type DM_DonViCreateNestedOneWithoutTrainingFieldsInput = {
         create?: XOR<DM_DonViCreateWithoutTrainingFieldsInput, DM_DonViUncheckedCreateWithoutTrainingFieldsInput>
@@ -396762,12 +395054,6 @@ export namespace Prisma {
         createMany?: StudentThesisRegistrationCreateManyStudentInputEnvelope
         connect?: StudentThesisRegistrationWhereUniqueInput | StudentThesisRegistrationWhereUniqueInput[]
     };
-    export type ExamSessionCreateNestedManyWithoutStudentInput = {
-        create?: XOR<ExamSessionCreateWithoutStudentInput, ExamSessionUncheckedCreateWithoutStudentInput> | ExamSessionCreateWithoutStudentInput[] | ExamSessionUncheckedCreateWithoutStudentInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutStudentInput | ExamSessionCreateOrConnectWithoutStudentInput[]
-        createMany?: ExamSessionCreateManyStudentInputEnvelope
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-    };
     export type DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput = {
         create?: XOR<DiplomaVerificationApplicationCreateWithoutStudentInput, DiplomaVerificationApplicationUncheckedCreateWithoutStudentInput> | DiplomaVerificationApplicationCreateWithoutStudentInput[] | DiplomaVerificationApplicationUncheckedCreateWithoutStudentInput[]
         connectOrCreate?: DiplomaVerificationApplicationCreateOrConnectWithoutStudentInput | DiplomaVerificationApplicationCreateOrConnectWithoutStudentInput[]
@@ -396906,12 +395192,6 @@ export namespace Prisma {
         connectOrCreate?: StudentThesisRegistrationCreateOrConnectWithoutStudentInput | StudentThesisRegistrationCreateOrConnectWithoutStudentInput[]
         createMany?: StudentThesisRegistrationCreateManyStudentInputEnvelope
         connect?: StudentThesisRegistrationWhereUniqueInput | StudentThesisRegistrationWhereUniqueInput[]
-    };
-    export type ExamSessionUncheckedCreateNestedManyWithoutStudentInput = {
-        create?: XOR<ExamSessionCreateWithoutStudentInput, ExamSessionUncheckedCreateWithoutStudentInput> | ExamSessionCreateWithoutStudentInput[] | ExamSessionUncheckedCreateWithoutStudentInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutStudentInput | ExamSessionCreateOrConnectWithoutStudentInput[]
-        createMany?: ExamSessionCreateManyStudentInputEnvelope
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
     };
     export type DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput = {
         create?: XOR<DiplomaVerificationApplicationCreateWithoutStudentInput, DiplomaVerificationApplicationUncheckedCreateWithoutStudentInput> | DiplomaVerificationApplicationCreateWithoutStudentInput[] | DiplomaVerificationApplicationUncheckedCreateWithoutStudentInput[]
@@ -397267,19 +395547,6 @@ export namespace Prisma {
         updateMany?: StudentThesisRegistrationUpdateManyWithWhereWithoutStudentInput | StudentThesisRegistrationUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: StudentThesisRegistrationScalarWhereInput | StudentThesisRegistrationScalarWhereInput[]
     };
-    export type ExamSessionUpdateManyWithoutStudentNestedInput = {
-        create?: XOR<ExamSessionCreateWithoutStudentInput, ExamSessionUncheckedCreateWithoutStudentInput> | ExamSessionCreateWithoutStudentInput[] | ExamSessionUncheckedCreateWithoutStudentInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutStudentInput | ExamSessionCreateOrConnectWithoutStudentInput[]
-        upsert?: ExamSessionUpsertWithWhereUniqueWithoutStudentInput | ExamSessionUpsertWithWhereUniqueWithoutStudentInput[]
-        createMany?: ExamSessionCreateManyStudentInputEnvelope
-        set?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        disconnect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        delete?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        update?: ExamSessionUpdateWithWhereUniqueWithoutStudentInput | ExamSessionUpdateWithWhereUniqueWithoutStudentInput[]
-        updateMany?: ExamSessionUpdateManyWithWhereWithoutStudentInput | ExamSessionUpdateManyWithWhereWithoutStudentInput[]
-        deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
-    };
     export type DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput = {
         create?: XOR<DiplomaVerificationApplicationCreateWithoutStudentInput, DiplomaVerificationApplicationUncheckedCreateWithoutStudentInput> | DiplomaVerificationApplicationCreateWithoutStudentInput[] | DiplomaVerificationApplicationUncheckedCreateWithoutStudentInput[]
         connectOrCreate?: DiplomaVerificationApplicationCreateOrConnectWithoutStudentInput | DiplomaVerificationApplicationCreateOrConnectWithoutStudentInput[]
@@ -397577,19 +395844,6 @@ export namespace Prisma {
         update?: StudentThesisRegistrationUpdateWithWhereUniqueWithoutStudentInput | StudentThesisRegistrationUpdateWithWhereUniqueWithoutStudentInput[]
         updateMany?: StudentThesisRegistrationUpdateManyWithWhereWithoutStudentInput | StudentThesisRegistrationUpdateManyWithWhereWithoutStudentInput[]
         deleteMany?: StudentThesisRegistrationScalarWhereInput | StudentThesisRegistrationScalarWhereInput[]
-    };
-    export type ExamSessionUncheckedUpdateManyWithoutStudentNestedInput = {
-        create?: XOR<ExamSessionCreateWithoutStudentInput, ExamSessionUncheckedCreateWithoutStudentInput> | ExamSessionCreateWithoutStudentInput[] | ExamSessionUncheckedCreateWithoutStudentInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutStudentInput | ExamSessionCreateOrConnectWithoutStudentInput[]
-        upsert?: ExamSessionUpsertWithWhereUniqueWithoutStudentInput | ExamSessionUpsertWithWhereUniqueWithoutStudentInput[]
-        createMany?: ExamSessionCreateManyStudentInputEnvelope
-        set?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        disconnect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        delete?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        update?: ExamSessionUpdateWithWhereUniqueWithoutStudentInput | ExamSessionUpdateWithWhereUniqueWithoutStudentInput[]
-        updateMany?: ExamSessionUpdateManyWithWhereWithoutStudentInput | ExamSessionUpdateManyWithWhereWithoutStudentInput[]
-        deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
     };
     export type DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput = {
         create?: XOR<DiplomaVerificationApplicationCreateWithoutStudentInput, DiplomaVerificationApplicationUncheckedCreateWithoutStudentInput> | DiplomaVerificationApplicationCreateWithoutStudentInput[] | DiplomaVerificationApplicationUncheckedCreateWithoutStudentInput[]
@@ -403902,12 +402156,6 @@ export namespace Prisma {
         createMany?: ExamBankQuestionCreateManyQuestionInputEnvelope
         connect?: ExamBankQuestionWhereUniqueInput | ExamBankQuestionWhereUniqueInput[]
     };
-    export type AnswerCreateNestedManyWithoutQuestionInput = {
-        create?: XOR<AnswerCreateWithoutQuestionInput, AnswerUncheckedCreateWithoutQuestionInput> | AnswerCreateWithoutQuestionInput[] | AnswerUncheckedCreateWithoutQuestionInput[]
-        connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
-        createMany?: AnswerCreateManyQuestionInputEnvelope
-        connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-    };
     export type MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput = {
         create?: XOR<MultipleChoiceOptionCreateWithoutQuestionInput, MultipleChoiceOptionUncheckedCreateWithoutQuestionInput> | MultipleChoiceOptionCreateWithoutQuestionInput[] | MultipleChoiceOptionUncheckedCreateWithoutQuestionInput[]
         connectOrCreate?: MultipleChoiceOptionCreateOrConnectWithoutQuestionInput | MultipleChoiceOptionCreateOrConnectWithoutQuestionInput[]
@@ -403931,12 +402179,6 @@ export namespace Prisma {
         connectOrCreate?: ExamBankQuestionCreateOrConnectWithoutQuestionInput | ExamBankQuestionCreateOrConnectWithoutQuestionInput[]
         createMany?: ExamBankQuestionCreateManyQuestionInputEnvelope
         connect?: ExamBankQuestionWhereUniqueInput | ExamBankQuestionWhereUniqueInput[]
-    };
-    export type AnswerUncheckedCreateNestedManyWithoutQuestionInput = {
-        create?: XOR<AnswerCreateWithoutQuestionInput, AnswerUncheckedCreateWithoutQuestionInput> | AnswerCreateWithoutQuestionInput[] | AnswerUncheckedCreateWithoutQuestionInput[]
-        connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
-        createMany?: AnswerCreateManyQuestionInputEnvelope
-        connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
     };
     export type EnumQuestionTypeFieldUpdateOperationsInput = {
         set?: $Enums.QuestionType
@@ -404018,19 +402260,6 @@ export namespace Prisma {
         updateMany?: ExamBankQuestionUpdateManyWithWhereWithoutQuestionInput | ExamBankQuestionUpdateManyWithWhereWithoutQuestionInput[]
         deleteMany?: ExamBankQuestionScalarWhereInput | ExamBankQuestionScalarWhereInput[]
     };
-    export type AnswerUpdateManyWithoutQuestionNestedInput = {
-        create?: XOR<AnswerCreateWithoutQuestionInput, AnswerUncheckedCreateWithoutQuestionInput> | AnswerCreateWithoutQuestionInput[] | AnswerUncheckedCreateWithoutQuestionInput[]
-        connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
-        upsert?: AnswerUpsertWithWhereUniqueWithoutQuestionInput | AnswerUpsertWithWhereUniqueWithoutQuestionInput[]
-        createMany?: AnswerCreateManyQuestionInputEnvelope
-        set?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        disconnect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        delete?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        update?: AnswerUpdateWithWhereUniqueWithoutQuestionInput | AnswerUpdateWithWhereUniqueWithoutQuestionInput[]
-        updateMany?: AnswerUpdateManyWithWhereWithoutQuestionInput | AnswerUpdateManyWithWhereWithoutQuestionInput[]
-        deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
-    };
     export type MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput = {
         create?: XOR<MultipleChoiceOptionCreateWithoutQuestionInput, MultipleChoiceOptionUncheckedCreateWithoutQuestionInput> | MultipleChoiceOptionCreateWithoutQuestionInput[] | MultipleChoiceOptionUncheckedCreateWithoutQuestionInput[]
         connectOrCreate?: MultipleChoiceOptionCreateOrConnectWithoutQuestionInput | MultipleChoiceOptionCreateOrConnectWithoutQuestionInput[]
@@ -404083,19 +402312,6 @@ export namespace Prisma {
         updateMany?: ExamBankQuestionUpdateManyWithWhereWithoutQuestionInput | ExamBankQuestionUpdateManyWithWhereWithoutQuestionInput[]
         deleteMany?: ExamBankQuestionScalarWhereInput | ExamBankQuestionScalarWhereInput[]
     };
-    export type AnswerUncheckedUpdateManyWithoutQuestionNestedInput = {
-        create?: XOR<AnswerCreateWithoutQuestionInput, AnswerUncheckedCreateWithoutQuestionInput> | AnswerCreateWithoutQuestionInput[] | AnswerUncheckedCreateWithoutQuestionInput[]
-        connectOrCreate?: AnswerCreateOrConnectWithoutQuestionInput | AnswerCreateOrConnectWithoutQuestionInput[]
-        upsert?: AnswerUpsertWithWhereUniqueWithoutQuestionInput | AnswerUpsertWithWhereUniqueWithoutQuestionInput[]
-        createMany?: AnswerCreateManyQuestionInputEnvelope
-        set?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        disconnect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        delete?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        update?: AnswerUpdateWithWhereUniqueWithoutQuestionInput | AnswerUpdateWithWhereUniqueWithoutQuestionInput[]
-        updateMany?: AnswerUpdateManyWithWhereWithoutQuestionInput | AnswerUpdateManyWithWhereWithoutQuestionInput[]
-        deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
-    };
     export type QuestionCreateNestedOneWithoutMultipleChoiceOptionsInput = {
         create?: XOR<QuestionCreateWithoutMultipleChoiceOptionsInput, QuestionUncheckedCreateWithoutMultipleChoiceOptionsInput>
         connectOrCreate?: QuestionCreateOrConnectWithoutMultipleChoiceOptionsInput
@@ -404132,45 +402348,27 @@ export namespace Prisma {
         connect?: QuestionWhereUniqueInput
         update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutOrderingItemsInput, QuestionUpdateWithoutOrderingItemsInput>, QuestionUncheckedUpdateWithoutOrderingItemsInput>
     };
-    export type ExamSessionCreateNestedOneWithoutAnswersInput = {
-        create?: XOR<ExamSessionCreateWithoutAnswersInput, ExamSessionUncheckedCreateWithoutAnswersInput>
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutAnswersInput
-        connect?: ExamSessionWhereUniqueInput
-    };
-    export type QuestionCreateNestedOneWithoutAnswersInput = {
-        create?: XOR<QuestionCreateWithoutAnswersInput, QuestionUncheckedCreateWithoutAnswersInput>
-        connectOrCreate?: QuestionCreateOrConnectWithoutAnswersInput
-        connect?: QuestionWhereUniqueInput
-    };
-    export type ExamSessionUpdateOneRequiredWithoutAnswersNestedInput = {
-        create?: XOR<ExamSessionCreateWithoutAnswersInput, ExamSessionUncheckedCreateWithoutAnswersInput>
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutAnswersInput
-        upsert?: ExamSessionUpsertWithoutAnswersInput
-        connect?: ExamSessionWhereUniqueInput
-        update?: XOR<XOR<ExamSessionUpdateToOneWithWhereWithoutAnswersInput, ExamSessionUpdateWithoutAnswersInput>, ExamSessionUncheckedUpdateWithoutAnswersInput>
-    };
-    export type QuestionUpdateOneRequiredWithoutAnswersNestedInput = {
-        create?: XOR<QuestionCreateWithoutAnswersInput, QuestionUncheckedCreateWithoutAnswersInput>
-        connectOrCreate?: QuestionCreateOrConnectWithoutAnswersInput
-        upsert?: QuestionUpsertWithoutAnswersInput
-        connect?: QuestionWhereUniqueInput
-        update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutAnswersInput, QuestionUpdateWithoutAnswersInput>, QuestionUncheckedUpdateWithoutAnswersInput>
-    };
     export type QuestionBankCreateNestedOneWithoutExamInput = {
         create?: XOR<QuestionBankCreateWithoutExamInput, QuestionBankUncheckedCreateWithoutExamInput>
         connectOrCreate?: QuestionBankCreateOrConnectWithoutExamInput
         connect?: QuestionBankWhereUniqueInput
-    };
-    export type RoomCreateNestedManyWithoutExamInput = {
-        create?: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput> | RoomCreateWithoutExamInput[] | RoomUncheckedCreateWithoutExamInput[]
-        connectOrCreate?: RoomCreateOrConnectWithoutExamInput | RoomCreateOrConnectWithoutExamInput[]
-        connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
     };
     export type SubjectClassCreateNestedManyWithoutExamInput = {
         create?: XOR<SubjectClassCreateWithoutExamInput, SubjectClassUncheckedCreateWithoutExamInput> | SubjectClassCreateWithoutExamInput[] | SubjectClassUncheckedCreateWithoutExamInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutExamInput | SubjectClassCreateOrConnectWithoutExamInput[]
         createMany?: SubjectClassCreateManyExamInputEnvelope
         connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+    };
+    export type StudentSubjectScoreCreateNestedManyWithoutExamInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutExamInput, StudentSubjectScoreUncheckedCreateWithoutExamInput> | StudentSubjectScoreCreateWithoutExamInput[] | StudentSubjectScoreUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutExamInput | StudentSubjectScoreCreateOrConnectWithoutExamInput[]
+        createMany?: StudentSubjectScoreCreateManyExamInputEnvelope
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+    };
+    export type RoomCreateNestedManyWithoutExamInput = {
+        create?: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput> | RoomCreateWithoutExamInput[] | RoomUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: RoomCreateOrConnectWithoutExamInput | RoomCreateOrConnectWithoutExamInput[]
+        connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
     };
     export type ExamBankCreateNestedManyWithoutExamInput = {
         create?: XOR<ExamBankCreateWithoutExamInput, ExamBankUncheckedCreateWithoutExamInput> | ExamBankCreateWithoutExamInput[] | ExamBankUncheckedCreateWithoutExamInput[]
@@ -404190,22 +402388,28 @@ export namespace Prisma {
         createMany?: ExamSessionCreateManyExamInputEnvelope
         connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
     };
-    export type ExamFaxCreateNestedManyWithoutExamInput = {
-        create?: XOR<ExamFaxCreateWithoutExamInput, ExamFaxUncheckedCreateWithoutExamInput> | ExamFaxCreateWithoutExamInput[] | ExamFaxUncheckedCreateWithoutExamInput[]
-        connectOrCreate?: ExamFaxCreateOrConnectWithoutExamInput | ExamFaxCreateOrConnectWithoutExamInput[]
-        createMany?: ExamFaxCreateManyExamInputEnvelope
-        connect?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
-    };
-    export type RoomUncheckedCreateNestedManyWithoutExamInput = {
-        create?: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput> | RoomCreateWithoutExamInput[] | RoomUncheckedCreateWithoutExamInput[]
-        connectOrCreate?: RoomCreateOrConnectWithoutExamInput | RoomCreateOrConnectWithoutExamInput[]
-        connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+    export type ExamRoomCreateNestedManyWithoutExamInput = {
+        create?: XOR<ExamRoomCreateWithoutExamInput, ExamRoomUncheckedCreateWithoutExamInput> | ExamRoomCreateWithoutExamInput[] | ExamRoomUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutExamInput | ExamRoomCreateOrConnectWithoutExamInput[]
+        createMany?: ExamRoomCreateManyExamInputEnvelope
+        connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
     };
     export type SubjectClassUncheckedCreateNestedManyWithoutExamInput = {
         create?: XOR<SubjectClassCreateWithoutExamInput, SubjectClassUncheckedCreateWithoutExamInput> | SubjectClassCreateWithoutExamInput[] | SubjectClassUncheckedCreateWithoutExamInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutExamInput | SubjectClassCreateOrConnectWithoutExamInput[]
         createMany?: SubjectClassCreateManyExamInputEnvelope
         connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+    };
+    export type StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutExamInput, StudentSubjectScoreUncheckedCreateWithoutExamInput> | StudentSubjectScoreCreateWithoutExamInput[] | StudentSubjectScoreUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutExamInput | StudentSubjectScoreCreateOrConnectWithoutExamInput[]
+        createMany?: StudentSubjectScoreCreateManyExamInputEnvelope
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+    };
+    export type RoomUncheckedCreateNestedManyWithoutExamInput = {
+        create?: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput> | RoomCreateWithoutExamInput[] | RoomUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: RoomCreateOrConnectWithoutExamInput | RoomCreateOrConnectWithoutExamInput[]
+        connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
     };
     export type ExamBankUncheckedCreateNestedManyWithoutExamInput = {
         create?: XOR<ExamBankCreateWithoutExamInput, ExamBankUncheckedCreateWithoutExamInput> | ExamBankCreateWithoutExamInput[] | ExamBankUncheckedCreateWithoutExamInput[]
@@ -404225,33 +402429,23 @@ export namespace Prisma {
         createMany?: ExamSessionCreateManyExamInputEnvelope
         connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
     };
-    export type ExamFaxUncheckedCreateNestedManyWithoutExamInput = {
-        create?: XOR<ExamFaxCreateWithoutExamInput, ExamFaxUncheckedCreateWithoutExamInput> | ExamFaxCreateWithoutExamInput[] | ExamFaxUncheckedCreateWithoutExamInput[]
-        connectOrCreate?: ExamFaxCreateOrConnectWithoutExamInput | ExamFaxCreateOrConnectWithoutExamInput[]
-        createMany?: ExamFaxCreateManyExamInputEnvelope
-        connect?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
+    export type ExamRoomUncheckedCreateNestedManyWithoutExamInput = {
+        create?: XOR<ExamRoomCreateWithoutExamInput, ExamRoomUncheckedCreateWithoutExamInput> | ExamRoomCreateWithoutExamInput[] | ExamRoomUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutExamInput | ExamRoomCreateOrConnectWithoutExamInput[]
+        createMany?: ExamRoomCreateManyExamInputEnvelope
+        connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
     };
     export type EnumExamStatusFieldUpdateOperationsInput = {
         set?: $Enums.ExamStatus
     };
-    export type QuestionBankUpdateOneRequiredWithoutExamNestedInput = {
+    export type QuestionBankUpdateOneWithoutExamNestedInput = {
         create?: XOR<QuestionBankCreateWithoutExamInput, QuestionBankUncheckedCreateWithoutExamInput>
         connectOrCreate?: QuestionBankCreateOrConnectWithoutExamInput
         upsert?: QuestionBankUpsertWithoutExamInput
+        disconnect?: QuestionBankWhereInput | boolean
+        delete?: QuestionBankWhereInput | boolean
         connect?: QuestionBankWhereUniqueInput
         update?: XOR<XOR<QuestionBankUpdateToOneWithWhereWithoutExamInput, QuestionBankUpdateWithoutExamInput>, QuestionBankUncheckedUpdateWithoutExamInput>
-    };
-    export type RoomUpdateManyWithoutExamNestedInput = {
-        create?: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput> | RoomCreateWithoutExamInput[] | RoomUncheckedCreateWithoutExamInput[]
-        connectOrCreate?: RoomCreateOrConnectWithoutExamInput | RoomCreateOrConnectWithoutExamInput[]
-        upsert?: RoomUpsertWithWhereUniqueWithoutExamInput | RoomUpsertWithWhereUniqueWithoutExamInput[]
-        set?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
-        disconnect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
-        delete?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
-        connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
-        update?: RoomUpdateWithWhereUniqueWithoutExamInput | RoomUpdateWithWhereUniqueWithoutExamInput[]
-        updateMany?: RoomUpdateManyWithWhereWithoutExamInput | RoomUpdateManyWithWhereWithoutExamInput[]
-        deleteMany?: RoomScalarWhereInput | RoomScalarWhereInput[]
     };
     export type SubjectClassUpdateManyWithoutExamNestedInput = {
         create?: XOR<SubjectClassCreateWithoutExamInput, SubjectClassUncheckedCreateWithoutExamInput> | SubjectClassCreateWithoutExamInput[] | SubjectClassUncheckedCreateWithoutExamInput[]
@@ -404265,6 +402459,31 @@ export namespace Prisma {
         update?: SubjectClassUpdateWithWhereUniqueWithoutExamInput | SubjectClassUpdateWithWhereUniqueWithoutExamInput[]
         updateMany?: SubjectClassUpdateManyWithWhereWithoutExamInput | SubjectClassUpdateManyWithWhereWithoutExamInput[]
         deleteMany?: SubjectClassScalarWhereInput | SubjectClassScalarWhereInput[]
+    };
+    export type StudentSubjectScoreUpdateManyWithoutExamNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutExamInput, StudentSubjectScoreUncheckedCreateWithoutExamInput> | StudentSubjectScoreCreateWithoutExamInput[] | StudentSubjectScoreUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutExamInput | StudentSubjectScoreCreateOrConnectWithoutExamInput[]
+        upsert?: StudentSubjectScoreUpsertWithWhereUniqueWithoutExamInput | StudentSubjectScoreUpsertWithWhereUniqueWithoutExamInput[]
+        createMany?: StudentSubjectScoreCreateManyExamInputEnvelope
+        set?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        delete?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        update?: StudentSubjectScoreUpdateWithWhereUniqueWithoutExamInput | StudentSubjectScoreUpdateWithWhereUniqueWithoutExamInput[]
+        updateMany?: StudentSubjectScoreUpdateManyWithWhereWithoutExamInput | StudentSubjectScoreUpdateManyWithWhereWithoutExamInput[]
+        deleteMany?: StudentSubjectScoreScalarWhereInput | StudentSubjectScoreScalarWhereInput[]
+    };
+    export type RoomUpdateManyWithoutExamNestedInput = {
+        create?: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput> | RoomCreateWithoutExamInput[] | RoomUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: RoomCreateOrConnectWithoutExamInput | RoomCreateOrConnectWithoutExamInput[]
+        upsert?: RoomUpsertWithWhereUniqueWithoutExamInput | RoomUpsertWithWhereUniqueWithoutExamInput[]
+        set?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+        disconnect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+        delete?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+        connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+        update?: RoomUpdateWithWhereUniqueWithoutExamInput | RoomUpdateWithWhereUniqueWithoutExamInput[]
+        updateMany?: RoomUpdateManyWithWhereWithoutExamInput | RoomUpdateManyWithWhereWithoutExamInput[]
+        deleteMany?: RoomScalarWhereInput | RoomScalarWhereInput[]
     };
     export type ExamBankUpdateManyWithoutExamNestedInput = {
         create?: XOR<ExamBankCreateWithoutExamInput, ExamBankUncheckedCreateWithoutExamInput> | ExamBankCreateWithoutExamInput[] | ExamBankUncheckedCreateWithoutExamInput[]
@@ -404305,30 +402524,18 @@ export namespace Prisma {
         updateMany?: ExamSessionUpdateManyWithWhereWithoutExamInput | ExamSessionUpdateManyWithWhereWithoutExamInput[]
         deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
     };
-    export type ExamFaxUpdateManyWithoutExamNestedInput = {
-        create?: XOR<ExamFaxCreateWithoutExamInput, ExamFaxUncheckedCreateWithoutExamInput> | ExamFaxCreateWithoutExamInput[] | ExamFaxUncheckedCreateWithoutExamInput[]
-        connectOrCreate?: ExamFaxCreateOrConnectWithoutExamInput | ExamFaxCreateOrConnectWithoutExamInput[]
-        upsert?: ExamFaxUpsertWithWhereUniqueWithoutExamInput | ExamFaxUpsertWithWhereUniqueWithoutExamInput[]
-        createMany?: ExamFaxCreateManyExamInputEnvelope
-        set?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
-        disconnect?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
-        delete?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
-        connect?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
-        update?: ExamFaxUpdateWithWhereUniqueWithoutExamInput | ExamFaxUpdateWithWhereUniqueWithoutExamInput[]
-        updateMany?: ExamFaxUpdateManyWithWhereWithoutExamInput | ExamFaxUpdateManyWithWhereWithoutExamInput[]
-        deleteMany?: ExamFaxScalarWhereInput | ExamFaxScalarWhereInput[]
-    };
-    export type RoomUncheckedUpdateManyWithoutExamNestedInput = {
-        create?: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput> | RoomCreateWithoutExamInput[] | RoomUncheckedCreateWithoutExamInput[]
-        connectOrCreate?: RoomCreateOrConnectWithoutExamInput | RoomCreateOrConnectWithoutExamInput[]
-        upsert?: RoomUpsertWithWhereUniqueWithoutExamInput | RoomUpsertWithWhereUniqueWithoutExamInput[]
-        set?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
-        disconnect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
-        delete?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
-        connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
-        update?: RoomUpdateWithWhereUniqueWithoutExamInput | RoomUpdateWithWhereUniqueWithoutExamInput[]
-        updateMany?: RoomUpdateManyWithWhereWithoutExamInput | RoomUpdateManyWithWhereWithoutExamInput[]
-        deleteMany?: RoomScalarWhereInput | RoomScalarWhereInput[]
+    export type ExamRoomUpdateManyWithoutExamNestedInput = {
+        create?: XOR<ExamRoomCreateWithoutExamInput, ExamRoomUncheckedCreateWithoutExamInput> | ExamRoomCreateWithoutExamInput[] | ExamRoomUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutExamInput | ExamRoomCreateOrConnectWithoutExamInput[]
+        upsert?: ExamRoomUpsertWithWhereUniqueWithoutExamInput | ExamRoomUpsertWithWhereUniqueWithoutExamInput[]
+        createMany?: ExamRoomCreateManyExamInputEnvelope
+        set?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        disconnect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        delete?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        update?: ExamRoomUpdateWithWhereUniqueWithoutExamInput | ExamRoomUpdateWithWhereUniqueWithoutExamInput[]
+        updateMany?: ExamRoomUpdateManyWithWhereWithoutExamInput | ExamRoomUpdateManyWithWhereWithoutExamInput[]
+        deleteMany?: ExamRoomScalarWhereInput | ExamRoomScalarWhereInput[]
     };
     export type SubjectClassUncheckedUpdateManyWithoutExamNestedInput = {
         create?: XOR<SubjectClassCreateWithoutExamInput, SubjectClassUncheckedCreateWithoutExamInput> | SubjectClassCreateWithoutExamInput[] | SubjectClassUncheckedCreateWithoutExamInput[]
@@ -404342,6 +402549,31 @@ export namespace Prisma {
         update?: SubjectClassUpdateWithWhereUniqueWithoutExamInput | SubjectClassUpdateWithWhereUniqueWithoutExamInput[]
         updateMany?: SubjectClassUpdateManyWithWhereWithoutExamInput | SubjectClassUpdateManyWithWhereWithoutExamInput[]
         deleteMany?: SubjectClassScalarWhereInput | SubjectClassScalarWhereInput[]
+    };
+    export type StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutExamInput, StudentSubjectScoreUncheckedCreateWithoutExamInput> | StudentSubjectScoreCreateWithoutExamInput[] | StudentSubjectScoreUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutExamInput | StudentSubjectScoreCreateOrConnectWithoutExamInput[]
+        upsert?: StudentSubjectScoreUpsertWithWhereUniqueWithoutExamInput | StudentSubjectScoreUpsertWithWhereUniqueWithoutExamInput[]
+        createMany?: StudentSubjectScoreCreateManyExamInputEnvelope
+        set?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        disconnect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        delete?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        connect?: StudentSubjectScoreWhereUniqueInput | StudentSubjectScoreWhereUniqueInput[]
+        update?: StudentSubjectScoreUpdateWithWhereUniqueWithoutExamInput | StudentSubjectScoreUpdateWithWhereUniqueWithoutExamInput[]
+        updateMany?: StudentSubjectScoreUpdateManyWithWhereWithoutExamInput | StudentSubjectScoreUpdateManyWithWhereWithoutExamInput[]
+        deleteMany?: StudentSubjectScoreScalarWhereInput | StudentSubjectScoreScalarWhereInput[]
+    };
+    export type RoomUncheckedUpdateManyWithoutExamNestedInput = {
+        create?: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput> | RoomCreateWithoutExamInput[] | RoomUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: RoomCreateOrConnectWithoutExamInput | RoomCreateOrConnectWithoutExamInput[]
+        upsert?: RoomUpsertWithWhereUniqueWithoutExamInput | RoomUpsertWithWhereUniqueWithoutExamInput[]
+        set?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+        disconnect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+        delete?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+        connect?: RoomWhereUniqueInput | RoomWhereUniqueInput[]
+        update?: RoomUpdateWithWhereUniqueWithoutExamInput | RoomUpdateWithWhereUniqueWithoutExamInput[]
+        updateMany?: RoomUpdateManyWithWhereWithoutExamInput | RoomUpdateManyWithWhereWithoutExamInput[]
+        deleteMany?: RoomScalarWhereInput | RoomScalarWhereInput[]
     };
     export type ExamBankUncheckedUpdateManyWithoutExamNestedInput = {
         create?: XOR<ExamBankCreateWithoutExamInput, ExamBankUncheckedCreateWithoutExamInput> | ExamBankCreateWithoutExamInput[] | ExamBankUncheckedCreateWithoutExamInput[]
@@ -404382,18 +402614,80 @@ export namespace Prisma {
         updateMany?: ExamSessionUpdateManyWithWhereWithoutExamInput | ExamSessionUpdateManyWithWhereWithoutExamInput[]
         deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
     };
-    export type ExamFaxUncheckedUpdateManyWithoutExamNestedInput = {
-        create?: XOR<ExamFaxCreateWithoutExamInput, ExamFaxUncheckedCreateWithoutExamInput> | ExamFaxCreateWithoutExamInput[] | ExamFaxUncheckedCreateWithoutExamInput[]
-        connectOrCreate?: ExamFaxCreateOrConnectWithoutExamInput | ExamFaxCreateOrConnectWithoutExamInput[]
-        upsert?: ExamFaxUpsertWithWhereUniqueWithoutExamInput | ExamFaxUpsertWithWhereUniqueWithoutExamInput[]
-        createMany?: ExamFaxCreateManyExamInputEnvelope
-        set?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
-        disconnect?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
-        delete?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
-        connect?: ExamFaxWhereUniqueInput | ExamFaxWhereUniqueInput[]
-        update?: ExamFaxUpdateWithWhereUniqueWithoutExamInput | ExamFaxUpdateWithWhereUniqueWithoutExamInput[]
-        updateMany?: ExamFaxUpdateManyWithWhereWithoutExamInput | ExamFaxUpdateManyWithWhereWithoutExamInput[]
-        deleteMany?: ExamFaxScalarWhereInput | ExamFaxScalarWhereInput[]
+    export type ExamRoomUncheckedUpdateManyWithoutExamNestedInput = {
+        create?: XOR<ExamRoomCreateWithoutExamInput, ExamRoomUncheckedCreateWithoutExamInput> | ExamRoomCreateWithoutExamInput[] | ExamRoomUncheckedCreateWithoutExamInput[]
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutExamInput | ExamRoomCreateOrConnectWithoutExamInput[]
+        upsert?: ExamRoomUpsertWithWhereUniqueWithoutExamInput | ExamRoomUpsertWithWhereUniqueWithoutExamInput[]
+        createMany?: ExamRoomCreateManyExamInputEnvelope
+        set?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        disconnect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        delete?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+        update?: ExamRoomUpdateWithWhereUniqueWithoutExamInput | ExamRoomUpdateWithWhereUniqueWithoutExamInput[]
+        updateMany?: ExamRoomUpdateManyWithWhereWithoutExamInput | ExamRoomUpdateManyWithWhereWithoutExamInput[]
+        deleteMany?: ExamRoomScalarWhereInput | ExamRoomScalarWhereInput[]
+    };
+    export type ExamCreateNestedOneWithoutExamRoomsInput = {
+        create?: XOR<ExamCreateWithoutExamRoomsInput, ExamUncheckedCreateWithoutExamRoomsInput>
+        connectOrCreate?: ExamCreateOrConnectWithoutExamRoomsInput
+        connect?: ExamWhereUniqueInput
+    };
+    export type RoomCreateNestedOneWithoutExamRoomsInput = {
+        create?: XOR<RoomCreateWithoutExamRoomsInput, RoomUncheckedCreateWithoutExamRoomsInput>
+        connectOrCreate?: RoomCreateOrConnectWithoutExamRoomsInput
+        connect?: RoomWhereUniqueInput
+    };
+    export type ExamSessionCreateNestedManyWithoutExamRoomInput = {
+        create?: XOR<ExamSessionCreateWithoutExamRoomInput, ExamSessionUncheckedCreateWithoutExamRoomInput> | ExamSessionCreateWithoutExamRoomInput[] | ExamSessionUncheckedCreateWithoutExamRoomInput[]
+        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamRoomInput | ExamSessionCreateOrConnectWithoutExamRoomInput[]
+        createMany?: ExamSessionCreateManyExamRoomInputEnvelope
+        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+    };
+    export type ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput = {
+        create?: XOR<ExamSessionCreateWithoutExamRoomInput, ExamSessionUncheckedCreateWithoutExamRoomInput> | ExamSessionCreateWithoutExamRoomInput[] | ExamSessionUncheckedCreateWithoutExamRoomInput[]
+        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamRoomInput | ExamSessionCreateOrConnectWithoutExamRoomInput[]
+        createMany?: ExamSessionCreateManyExamRoomInputEnvelope
+        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+    };
+    export type ExamUpdateOneRequiredWithoutExamRoomsNestedInput = {
+        create?: XOR<ExamCreateWithoutExamRoomsInput, ExamUncheckedCreateWithoutExamRoomsInput>
+        connectOrCreate?: ExamCreateOrConnectWithoutExamRoomsInput
+        upsert?: ExamUpsertWithoutExamRoomsInput
+        connect?: ExamWhereUniqueInput
+        update?: XOR<XOR<ExamUpdateToOneWithWhereWithoutExamRoomsInput, ExamUpdateWithoutExamRoomsInput>, ExamUncheckedUpdateWithoutExamRoomsInput>
+    };
+    export type RoomUpdateOneRequiredWithoutExamRoomsNestedInput = {
+        create?: XOR<RoomCreateWithoutExamRoomsInput, RoomUncheckedCreateWithoutExamRoomsInput>
+        connectOrCreate?: RoomCreateOrConnectWithoutExamRoomsInput
+        upsert?: RoomUpsertWithoutExamRoomsInput
+        connect?: RoomWhereUniqueInput
+        update?: XOR<XOR<RoomUpdateToOneWithWhereWithoutExamRoomsInput, RoomUpdateWithoutExamRoomsInput>, RoomUncheckedUpdateWithoutExamRoomsInput>
+    };
+    export type ExamSessionUpdateManyWithoutExamRoomNestedInput = {
+        create?: XOR<ExamSessionCreateWithoutExamRoomInput, ExamSessionUncheckedCreateWithoutExamRoomInput> | ExamSessionCreateWithoutExamRoomInput[] | ExamSessionUncheckedCreateWithoutExamRoomInput[]
+        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamRoomInput | ExamSessionCreateOrConnectWithoutExamRoomInput[]
+        upsert?: ExamSessionUpsertWithWhereUniqueWithoutExamRoomInput | ExamSessionUpsertWithWhereUniqueWithoutExamRoomInput[]
+        createMany?: ExamSessionCreateManyExamRoomInputEnvelope
+        set?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+        disconnect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+        delete?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+        update?: ExamSessionUpdateWithWhereUniqueWithoutExamRoomInput | ExamSessionUpdateWithWhereUniqueWithoutExamRoomInput[]
+        updateMany?: ExamSessionUpdateManyWithWhereWithoutExamRoomInput | ExamSessionUpdateManyWithWhereWithoutExamRoomInput[]
+        deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
+    };
+    export type ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput = {
+        create?: XOR<ExamSessionCreateWithoutExamRoomInput, ExamSessionUncheckedCreateWithoutExamRoomInput> | ExamSessionCreateWithoutExamRoomInput[] | ExamSessionUncheckedCreateWithoutExamRoomInput[]
+        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamRoomInput | ExamSessionCreateOrConnectWithoutExamRoomInput[]
+        upsert?: ExamSessionUpsertWithWhereUniqueWithoutExamRoomInput | ExamSessionUpsertWithWhereUniqueWithoutExamRoomInput[]
+        createMany?: ExamSessionCreateManyExamRoomInputEnvelope
+        set?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+        disconnect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+        delete?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
+        update?: ExamSessionUpdateWithWhereUniqueWithoutExamRoomInput | ExamSessionUpdateWithWhereUniqueWithoutExamRoomInput[]
+        updateMany?: ExamSessionUpdateManyWithWhereWithoutExamRoomInput | ExamSessionUpdateManyWithWhereWithoutExamRoomInput[]
+        deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
     };
     export type ExamCreateNestedOneWithoutTestStructureRulesInput = {
         create?: XOR<ExamCreateWithoutTestStructureRulesInput, ExamUncheckedCreateWithoutTestStructureRulesInput>
@@ -404424,23 +402718,11 @@ export namespace Prisma {
         connectOrCreate?: ExamCreateOrConnectWithoutExamBankInput
         connect?: ExamWhereUniqueInput
     };
-    export type ExamSessionCreateNestedManyWithoutExamBankInput = {
-        create?: XOR<ExamSessionCreateWithoutExamBankInput, ExamSessionUncheckedCreateWithoutExamBankInput> | ExamSessionCreateWithoutExamBankInput[] | ExamSessionUncheckedCreateWithoutExamBankInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamBankInput | ExamSessionCreateOrConnectWithoutExamBankInput[]
-        createMany?: ExamSessionCreateManyExamBankInputEnvelope
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-    };
     export type ExamBankQuestionCreateNestedManyWithoutExamBankInput = {
         create?: XOR<ExamBankQuestionCreateWithoutExamBankInput, ExamBankQuestionUncheckedCreateWithoutExamBankInput> | ExamBankQuestionCreateWithoutExamBankInput[] | ExamBankQuestionUncheckedCreateWithoutExamBankInput[]
         connectOrCreate?: ExamBankQuestionCreateOrConnectWithoutExamBankInput | ExamBankQuestionCreateOrConnectWithoutExamBankInput[]
         createMany?: ExamBankQuestionCreateManyExamBankInputEnvelope
         connect?: ExamBankQuestionWhereUniqueInput | ExamBankQuestionWhereUniqueInput[]
-    };
-    export type ExamSessionUncheckedCreateNestedManyWithoutExamBankInput = {
-        create?: XOR<ExamSessionCreateWithoutExamBankInput, ExamSessionUncheckedCreateWithoutExamBankInput> | ExamSessionCreateWithoutExamBankInput[] | ExamSessionUncheckedCreateWithoutExamBankInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamBankInput | ExamSessionCreateOrConnectWithoutExamBankInput[]
-        createMany?: ExamSessionCreateManyExamBankInputEnvelope
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
     };
     export type ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput = {
         create?: XOR<ExamBankQuestionCreateWithoutExamBankInput, ExamBankQuestionUncheckedCreateWithoutExamBankInput> | ExamBankQuestionCreateWithoutExamBankInput[] | ExamBankQuestionUncheckedCreateWithoutExamBankInput[]
@@ -404455,19 +402737,6 @@ export namespace Prisma {
         connect?: ExamWhereUniqueInput
         update?: XOR<XOR<ExamUpdateToOneWithWhereWithoutExamBankInput, ExamUpdateWithoutExamBankInput>, ExamUncheckedUpdateWithoutExamBankInput>
     };
-    export type ExamSessionUpdateManyWithoutExamBankNestedInput = {
-        create?: XOR<ExamSessionCreateWithoutExamBankInput, ExamSessionUncheckedCreateWithoutExamBankInput> | ExamSessionCreateWithoutExamBankInput[] | ExamSessionUncheckedCreateWithoutExamBankInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamBankInput | ExamSessionCreateOrConnectWithoutExamBankInput[]
-        upsert?: ExamSessionUpsertWithWhereUniqueWithoutExamBankInput | ExamSessionUpsertWithWhereUniqueWithoutExamBankInput[]
-        createMany?: ExamSessionCreateManyExamBankInputEnvelope
-        set?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        disconnect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        delete?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        update?: ExamSessionUpdateWithWhereUniqueWithoutExamBankInput | ExamSessionUpdateWithWhereUniqueWithoutExamBankInput[]
-        updateMany?: ExamSessionUpdateManyWithWhereWithoutExamBankInput | ExamSessionUpdateManyWithWhereWithoutExamBankInput[]
-        deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
-    };
     export type ExamBankQuestionUpdateManyWithoutExamBankNestedInput = {
         create?: XOR<ExamBankQuestionCreateWithoutExamBankInput, ExamBankQuestionUncheckedCreateWithoutExamBankInput> | ExamBankQuestionCreateWithoutExamBankInput[] | ExamBankQuestionUncheckedCreateWithoutExamBankInput[]
         connectOrCreate?: ExamBankQuestionCreateOrConnectWithoutExamBankInput | ExamBankQuestionCreateOrConnectWithoutExamBankInput[]
@@ -404480,19 +402749,6 @@ export namespace Prisma {
         update?: ExamBankQuestionUpdateWithWhereUniqueWithoutExamBankInput | ExamBankQuestionUpdateWithWhereUniqueWithoutExamBankInput[]
         updateMany?: ExamBankQuestionUpdateManyWithWhereWithoutExamBankInput | ExamBankQuestionUpdateManyWithWhereWithoutExamBankInput[]
         deleteMany?: ExamBankQuestionScalarWhereInput | ExamBankQuestionScalarWhereInput[]
-    };
-    export type ExamSessionUncheckedUpdateManyWithoutExamBankNestedInput = {
-        create?: XOR<ExamSessionCreateWithoutExamBankInput, ExamSessionUncheckedCreateWithoutExamBankInput> | ExamSessionCreateWithoutExamBankInput[] | ExamSessionUncheckedCreateWithoutExamBankInput[]
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamBankInput | ExamSessionCreateOrConnectWithoutExamBankInput[]
-        upsert?: ExamSessionUpsertWithWhereUniqueWithoutExamBankInput | ExamSessionUpsertWithWhereUniqueWithoutExamBankInput[]
-        createMany?: ExamSessionCreateManyExamBankInputEnvelope
-        set?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        disconnect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        delete?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        connect?: ExamSessionWhereUniqueInput | ExamSessionWhereUniqueInput[]
-        update?: ExamSessionUpdateWithWhereUniqueWithoutExamBankInput | ExamSessionUpdateWithWhereUniqueWithoutExamBankInput[]
-        updateMany?: ExamSessionUpdateManyWithWhereWithoutExamBankInput | ExamSessionUpdateManyWithWhereWithoutExamBankInput[]
-        deleteMany?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
     };
     export type ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput = {
         create?: XOR<ExamBankQuestionCreateWithoutExamBankInput, ExamBankQuestionUncheckedCreateWithoutExamBankInput> | ExamBankQuestionCreateWithoutExamBankInput[] | ExamBankQuestionUncheckedCreateWithoutExamBankInput[]
@@ -404531,91 +402787,20 @@ export namespace Prisma {
         connect?: QuestionWhereUniqueInput
         update?: XOR<XOR<QuestionUpdateToOneWithWhereWithoutSessionQuestionsInput, QuestionUpdateWithoutSessionQuestionsInput>, QuestionUncheckedUpdateWithoutSessionQuestionsInput>
     };
-    export type ExamCreateNestedOneWithoutExamFaxInput = {
-        create?: XOR<ExamCreateWithoutExamFaxInput, ExamUncheckedCreateWithoutExamFaxInput>
-        connectOrCreate?: ExamCreateOrConnectWithoutExamFaxInput
-        connect?: ExamWhereUniqueInput
-    };
-    export type ExamSessionCreateNestedOneWithoutExamFaxInput = {
-        create?: XOR<ExamSessionCreateWithoutExamFaxInput, ExamSessionUncheckedCreateWithoutExamFaxInput>
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamFaxInput
-        connect?: ExamSessionWhereUniqueInput
-    };
-    export type ExamSessionUncheckedCreateNestedOneWithoutExamFaxInput = {
-        create?: XOR<ExamSessionCreateWithoutExamFaxInput, ExamSessionUncheckedCreateWithoutExamFaxInput>
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamFaxInput
-        connect?: ExamSessionWhereUniqueInput
-    };
-    export type ExamUpdateOneRequiredWithoutExamFaxNestedInput = {
-        create?: XOR<ExamCreateWithoutExamFaxInput, ExamUncheckedCreateWithoutExamFaxInput>
-        connectOrCreate?: ExamCreateOrConnectWithoutExamFaxInput
-        upsert?: ExamUpsertWithoutExamFaxInput
-        connect?: ExamWhereUniqueInput
-        update?: XOR<XOR<ExamUpdateToOneWithWhereWithoutExamFaxInput, ExamUpdateWithoutExamFaxInput>, ExamUncheckedUpdateWithoutExamFaxInput>
-    };
-    export type ExamSessionUpdateOneWithoutExamFaxNestedInput = {
-        create?: XOR<ExamSessionCreateWithoutExamFaxInput, ExamSessionUncheckedCreateWithoutExamFaxInput>
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamFaxInput
-        upsert?: ExamSessionUpsertWithoutExamFaxInput
-        disconnect?: ExamSessionWhereInput | boolean
-        delete?: ExamSessionWhereInput | boolean
-        connect?: ExamSessionWhereUniqueInput
-        update?: XOR<XOR<ExamSessionUpdateToOneWithWhereWithoutExamFaxInput, ExamSessionUpdateWithoutExamFaxInput>, ExamSessionUncheckedUpdateWithoutExamFaxInput>
-    };
-    export type ExamSessionUncheckedUpdateOneWithoutExamFaxNestedInput = {
-        create?: XOR<ExamSessionCreateWithoutExamFaxInput, ExamSessionUncheckedCreateWithoutExamFaxInput>
-        connectOrCreate?: ExamSessionCreateOrConnectWithoutExamFaxInput
-        upsert?: ExamSessionUpsertWithoutExamFaxInput
-        disconnect?: ExamSessionWhereInput | boolean
-        delete?: ExamSessionWhereInput | boolean
-        connect?: ExamSessionWhereUniqueInput
-        update?: XOR<XOR<ExamSessionUpdateToOneWithWhereWithoutExamFaxInput, ExamSessionUpdateWithoutExamFaxInput>, ExamSessionUncheckedUpdateWithoutExamFaxInput>
-    };
-    export type StudentCreateNestedOneWithoutExamSessionInput = {
-        create?: XOR<StudentCreateWithoutExamSessionInput, StudentUncheckedCreateWithoutExamSessionInput>
-        connectOrCreate?: StudentCreateOrConnectWithoutExamSessionInput
-        connect?: StudentWhereUniqueInput
-    };
     export type ExamCreateNestedOneWithoutExamSessionsInput = {
         create?: XOR<ExamCreateWithoutExamSessionsInput, ExamUncheckedCreateWithoutExamSessionsInput>
         connectOrCreate?: ExamCreateOrConnectWithoutExamSessionsInput
         connect?: ExamWhereUniqueInput
     };
-    export type RoomCreateNestedOneWithoutExamSessionInput = {
-        create?: XOR<RoomCreateWithoutExamSessionInput, RoomUncheckedCreateWithoutExamSessionInput>
-        connectOrCreate?: RoomCreateOrConnectWithoutExamSessionInput
-        connect?: RoomWhereUniqueInput
+    export type ExamRoomCreateNestedOneWithoutExamSessionsInput = {
+        create?: XOR<ExamRoomCreateWithoutExamSessionsInput, ExamRoomUncheckedCreateWithoutExamSessionsInput>
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutExamSessionsInput
+        connect?: ExamRoomWhereUniqueInput
     };
-    export type ExamBankCreateNestedOneWithoutExamSessionInput = {
-        create?: XOR<ExamBankCreateWithoutExamSessionInput, ExamBankUncheckedCreateWithoutExamSessionInput>
-        connectOrCreate?: ExamBankCreateOrConnectWithoutExamSessionInput
-        connect?: ExamBankWhereUniqueInput
-    };
-    export type AnswerCreateNestedManyWithoutSessionInput = {
-        create?: XOR<AnswerCreateWithoutSessionInput, AnswerUncheckedCreateWithoutSessionInput> | AnswerCreateWithoutSessionInput[] | AnswerUncheckedCreateWithoutSessionInput[]
-        connectOrCreate?: AnswerCreateOrConnectWithoutSessionInput | AnswerCreateOrConnectWithoutSessionInput[]
-        createMany?: AnswerCreateManySessionInputEnvelope
-        connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-    };
-    export type ExamFaxCreateNestedOneWithoutExamSessionInput = {
-        create?: XOR<ExamFaxCreateWithoutExamSessionInput, ExamFaxUncheckedCreateWithoutExamSessionInput>
-        connectOrCreate?: ExamFaxCreateOrConnectWithoutExamSessionInput
-        connect?: ExamFaxWhereUniqueInput
-    };
-    export type AnswerUncheckedCreateNestedManyWithoutSessionInput = {
-        create?: XOR<AnswerCreateWithoutSessionInput, AnswerUncheckedCreateWithoutSessionInput> | AnswerCreateWithoutSessionInput[] | AnswerUncheckedCreateWithoutSessionInput[]
-        connectOrCreate?: AnswerCreateOrConnectWithoutSessionInput | AnswerCreateOrConnectWithoutSessionInput[]
-        createMany?: AnswerCreateManySessionInputEnvelope
-        connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-    };
-    export type StudentUpdateOneWithoutExamSessionNestedInput = {
-        create?: XOR<StudentCreateWithoutExamSessionInput, StudentUncheckedCreateWithoutExamSessionInput>
-        connectOrCreate?: StudentCreateOrConnectWithoutExamSessionInput
-        upsert?: StudentUpsertWithoutExamSessionInput
-        disconnect?: StudentWhereInput | boolean
-        delete?: StudentWhereInput | boolean
-        connect?: StudentWhereUniqueInput
-        update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutExamSessionInput, StudentUpdateWithoutExamSessionInput>, StudentUncheckedUpdateWithoutExamSessionInput>
+    export type StudentSubjectScoreCreateNestedOneWithoutExamSessionInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutExamSessionInput, StudentSubjectScoreUncheckedCreateWithoutExamSessionInput>
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutExamSessionInput
+        connect?: StudentSubjectScoreWhereUniqueInput
     };
     export type ExamUpdateOneRequiredWithoutExamSessionsNestedInput = {
         create?: XOR<ExamCreateWithoutExamSessionsInput, ExamUncheckedCreateWithoutExamSessionsInput>
@@ -404624,58 +402809,19 @@ export namespace Prisma {
         connect?: ExamWhereUniqueInput
         update?: XOR<XOR<ExamUpdateToOneWithWhereWithoutExamSessionsInput, ExamUpdateWithoutExamSessionsInput>, ExamUncheckedUpdateWithoutExamSessionsInput>
     };
-    export type RoomUpdateOneWithoutExamSessionNestedInput = {
-        create?: XOR<RoomCreateWithoutExamSessionInput, RoomUncheckedCreateWithoutExamSessionInput>
-        connectOrCreate?: RoomCreateOrConnectWithoutExamSessionInput
-        upsert?: RoomUpsertWithoutExamSessionInput
-        disconnect?: RoomWhereInput | boolean
-        delete?: RoomWhereInput | boolean
-        connect?: RoomWhereUniqueInput
-        update?: XOR<XOR<RoomUpdateToOneWithWhereWithoutExamSessionInput, RoomUpdateWithoutExamSessionInput>, RoomUncheckedUpdateWithoutExamSessionInput>
+    export type ExamRoomUpdateOneRequiredWithoutExamSessionsNestedInput = {
+        create?: XOR<ExamRoomCreateWithoutExamSessionsInput, ExamRoomUncheckedCreateWithoutExamSessionsInput>
+        connectOrCreate?: ExamRoomCreateOrConnectWithoutExamSessionsInput
+        upsert?: ExamRoomUpsertWithoutExamSessionsInput
+        connect?: ExamRoomWhereUniqueInput
+        update?: XOR<XOR<ExamRoomUpdateToOneWithWhereWithoutExamSessionsInput, ExamRoomUpdateWithoutExamSessionsInput>, ExamRoomUncheckedUpdateWithoutExamSessionsInput>
     };
-    export type ExamBankUpdateOneWithoutExamSessionNestedInput = {
-        create?: XOR<ExamBankCreateWithoutExamSessionInput, ExamBankUncheckedCreateWithoutExamSessionInput>
-        connectOrCreate?: ExamBankCreateOrConnectWithoutExamSessionInput
-        upsert?: ExamBankUpsertWithoutExamSessionInput
-        disconnect?: ExamBankWhereInput | boolean
-        delete?: ExamBankWhereInput | boolean
-        connect?: ExamBankWhereUniqueInput
-        update?: XOR<XOR<ExamBankUpdateToOneWithWhereWithoutExamSessionInput, ExamBankUpdateWithoutExamSessionInput>, ExamBankUncheckedUpdateWithoutExamSessionInput>
-    };
-    export type AnswerUpdateManyWithoutSessionNestedInput = {
-        create?: XOR<AnswerCreateWithoutSessionInput, AnswerUncheckedCreateWithoutSessionInput> | AnswerCreateWithoutSessionInput[] | AnswerUncheckedCreateWithoutSessionInput[]
-        connectOrCreate?: AnswerCreateOrConnectWithoutSessionInput | AnswerCreateOrConnectWithoutSessionInput[]
-        upsert?: AnswerUpsertWithWhereUniqueWithoutSessionInput | AnswerUpsertWithWhereUniqueWithoutSessionInput[]
-        createMany?: AnswerCreateManySessionInputEnvelope
-        set?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        disconnect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        delete?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        update?: AnswerUpdateWithWhereUniqueWithoutSessionInput | AnswerUpdateWithWhereUniqueWithoutSessionInput[]
-        updateMany?: AnswerUpdateManyWithWhereWithoutSessionInput | AnswerUpdateManyWithWhereWithoutSessionInput[]
-        deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
-    };
-    export type ExamFaxUpdateOneWithoutExamSessionNestedInput = {
-        create?: XOR<ExamFaxCreateWithoutExamSessionInput, ExamFaxUncheckedCreateWithoutExamSessionInput>
-        connectOrCreate?: ExamFaxCreateOrConnectWithoutExamSessionInput
-        upsert?: ExamFaxUpsertWithoutExamSessionInput
-        disconnect?: ExamFaxWhereInput | boolean
-        delete?: ExamFaxWhereInput | boolean
-        connect?: ExamFaxWhereUniqueInput
-        update?: XOR<XOR<ExamFaxUpdateToOneWithWhereWithoutExamSessionInput, ExamFaxUpdateWithoutExamSessionInput>, ExamFaxUncheckedUpdateWithoutExamSessionInput>
-    };
-    export type AnswerUncheckedUpdateManyWithoutSessionNestedInput = {
-        create?: XOR<AnswerCreateWithoutSessionInput, AnswerUncheckedCreateWithoutSessionInput> | AnswerCreateWithoutSessionInput[] | AnswerUncheckedCreateWithoutSessionInput[]
-        connectOrCreate?: AnswerCreateOrConnectWithoutSessionInput | AnswerCreateOrConnectWithoutSessionInput[]
-        upsert?: AnswerUpsertWithWhereUniqueWithoutSessionInput | AnswerUpsertWithWhereUniqueWithoutSessionInput[]
-        createMany?: AnswerCreateManySessionInputEnvelope
-        set?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        disconnect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        delete?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        connect?: AnswerWhereUniqueInput | AnswerWhereUniqueInput[]
-        update?: AnswerUpdateWithWhereUniqueWithoutSessionInput | AnswerUpdateWithWhereUniqueWithoutSessionInput[]
-        updateMany?: AnswerUpdateManyWithWhereWithoutSessionInput | AnswerUpdateManyWithWhereWithoutSessionInput[]
-        deleteMany?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
+    export type StudentSubjectScoreUpdateOneRequiredWithoutExamSessionNestedInput = {
+        create?: XOR<StudentSubjectScoreCreateWithoutExamSessionInput, StudentSubjectScoreUncheckedCreateWithoutExamSessionInput>
+        connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutExamSessionInput
+        upsert?: StudentSubjectScoreUpsertWithoutExamSessionInput
+        connect?: StudentSubjectScoreWhereUniqueInput
+        update?: XOR<XOR<StudentSubjectScoreUpdateToOneWithWhereWithoutExamSessionInput, StudentSubjectScoreUpdateWithoutExamSessionInput>, StudentSubjectScoreUncheckedUpdateWithoutExamSessionInput>
     };
     export type AcademicWarningRuleCreatetupleInput = {
         set: string[]
@@ -409734,7 +407880,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -409791,7 +407936,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -409921,7 +408065,7 @@ export namespace Prisma {
         manualFinalScore?: number | null
         examPostponedReason?: boolean | null
         examPostponed?: string | null
-        examBanned: boolean
+        examBanned?: boolean | null
         examBannedReason?: string | null
         suspended?: boolean | null
         suspendedReason?: string | null
@@ -409943,7 +408087,7 @@ export namespace Prisma {
         manualFinalScore?: number | null
         examPostponedReason?: boolean | null
         examPostponed?: string | null
-        examBanned: boolean
+        examBanned?: boolean | null
         examBannedReason?: string | null
         suspended?: boolean | null
         suspendedReason?: string | null
@@ -412955,7 +411099,7 @@ export namespace Prisma {
         manualFinalScore?: FloatNullableFilter<"StudentSubjectScoreHistory"> | number | null
         examPostponedReason?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
         examPostponed?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
-        examBanned?: BoolFilter<"StudentSubjectScoreHistory"> | boolean
+        examBanned?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
         examBannedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
         suspended?: BoolNullableFilter<"StudentSubjectScoreHistory"> | boolean | null
         suspendedReason?: StringNullableFilter<"StudentSubjectScoreHistory"> | string | null
@@ -438436,7 +436580,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -438493,7 +436636,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -441248,6 +439390,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
         students?: StudentCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateWithoutDM_TinhInput = {
         id?: string
@@ -441261,6 +439404,7 @@ export namespace Prisma {
         dM_Tinh_NewId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationCreateOrConnectWithoutDM_TinhInput = {
         where: TrainingLocationWhereUniqueInput
@@ -442634,6 +440778,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
         students?: StudentCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput = {
         id?: string
@@ -442647,6 +440792,7 @@ export namespace Prisma {
         dM_TinhId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput = {
         where: TrainingLocationWhereUniqueInput
@@ -447853,7 +445999,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
@@ -447910,7 +446055,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
@@ -448080,7 +446224,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
@@ -448137,7 +446280,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
@@ -448508,6 +446650,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -448525,6 +446669,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -448555,6 +446700,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -448569,6 +446716,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -448741,7 +446889,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -448798,7 +446945,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -448808,6 +446954,78 @@ export namespace Prisma {
     export type StudentCreateOrConnectWithoutSubjectClassStudentInput = {
         where: StudentWhereUniqueInput
         create: XOR<StudentCreateWithoutSubjectClassStudentInput, StudentUncheckedCreateWithoutSubjectClassStudentInput>
+    };
+    export type ExamCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title: string
+        status?: $Enums.ExamStatus
+        lockExamCode?: boolean
+        startTime: string
+        questionBank?: QuestionBankCreateNestedOneWithoutExamInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
+        room?: RoomCreateNestedManyWithoutExamInput
+        examBank?: ExamBankCreateNestedManyWithoutExamInput
+        testStructureRules?: TestStructureRuleCreateNestedManyWithoutExamInput
+        examSessions?: ExamSessionCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomCreateNestedManyWithoutExamInput
+    };
+    export type ExamUncheckedCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title: string
+        status?: $Enums.ExamStatus
+        questionBankId?: string | null
+        lockExamCode?: boolean
+        startTime: string
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
+        room?: RoomUncheckedCreateNestedManyWithoutExamInput
+        examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
+        testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutExamInput
+        examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutExamInput
+    };
+    export type ExamCreateOrConnectWithoutStudentSubjectScoreInput = {
+        where: ExamWhereUniqueInput
+        create: XOR<ExamCreateWithoutStudentSubjectScoreInput, ExamUncheckedCreateWithoutStudentSubjectScoreInput>
+    };
+    export type ExamSessionCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        examCode?: string | null
+        exam: ExamCreateNestedOneWithoutExamSessionsInput
+        examRoom: ExamRoomCreateNestedOneWithoutExamSessionsInput
+    };
+    export type ExamSessionUncheckedCreateWithoutStudentSubjectScoreInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        examId: string
+        examRoomId: string
+        examCode?: string | null
+    };
+    export type ExamSessionCreateOrConnectWithoutStudentSubjectScoreInput = {
+        where: ExamSessionWhereUniqueInput
+        create: XOR<ExamSessionCreateWithoutStudentSubjectScoreInput, ExamSessionUncheckedCreateWithoutStudentSubjectScoreInput>
     };
     export type StudentGraduationApplicationCreateWithoutGpaScoreInput = {
         id?: string
@@ -449000,7 +447218,7 @@ export namespace Prisma {
         manualFinalScore?: number | null
         examPostponedReason?: boolean | null
         examPostponed?: string | null
-        examBanned: boolean
+        examBanned?: boolean | null
         examBannedReason?: string | null
         suspended?: boolean | null
         suspendedReason?: string | null
@@ -449021,7 +447239,7 @@ export namespace Prisma {
         manualFinalScore?: number | null
         examPostponedReason?: boolean | null
         examPostponed?: string | null
-        examBanned: boolean
+        examBanned?: boolean | null
         examBannedReason?: string | null
         suspended?: boolean | null
         suspendedReason?: string | null
@@ -449059,6 +447277,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -449076,6 +447296,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -449106,6 +447327,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -449120,6 +447343,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -449302,7 +447526,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -449359,12 +447582,93 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
         noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
+    };
+    export type ExamUpsertWithoutStudentSubjectScoreInput = {
+        update: XOR<ExamUpdateWithoutStudentSubjectScoreInput, ExamUncheckedUpdateWithoutStudentSubjectScoreInput>
+        create: XOR<ExamCreateWithoutStudentSubjectScoreInput, ExamUncheckedCreateWithoutStudentSubjectScoreInput>
+        where?: ExamWhereInput
+    };
+    export type ExamUpdateToOneWithWhereWithoutStudentSubjectScoreInput = {
+        where?: ExamWhereInput
+        data: XOR<ExamUpdateWithoutStudentSubjectScoreInput, ExamUncheckedUpdateWithoutStudentSubjectScoreInput>
+    };
+    export type ExamUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: StringFieldUpdateOperationsInput | string
+        status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
+        room?: RoomUpdateManyWithoutExamNestedInput
+        examBank?: ExamBankUpdateManyWithoutExamNestedInput
+        testStructureRules?: TestStructureRuleUpdateManyWithoutExamNestedInput
+        examSessions?: ExamSessionUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutExamNestedInput
+    };
+    export type ExamUncheckedUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: StringFieldUpdateOperationsInput | string
+        status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
+        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
+        examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
+        testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutExamNestedInput
+        examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutExamNestedInput
+    };
+    export type ExamSessionUpsertWithoutStudentSubjectScoreInput = {
+        update: XOR<ExamSessionUpdateWithoutStudentSubjectScoreInput, ExamSessionUncheckedUpdateWithoutStudentSubjectScoreInput>
+        create: XOR<ExamSessionCreateWithoutStudentSubjectScoreInput, ExamSessionUncheckedCreateWithoutStudentSubjectScoreInput>
+        where?: ExamSessionWhereInput
+    };
+    export type ExamSessionUpdateToOneWithWhereWithoutStudentSubjectScoreInput = {
+        where?: ExamSessionWhereInput
+        data: XOR<ExamSessionUpdateWithoutStudentSubjectScoreInput, ExamSessionUncheckedUpdateWithoutStudentSubjectScoreInput>
+    };
+    export type ExamSessionUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
+        exam?: ExamUpdateOneRequiredWithoutExamSessionsNestedInput
+        examRoom?: ExamRoomUpdateOneRequiredWithoutExamSessionsNestedInput
+    };
+    export type ExamSessionUncheckedUpdateWithoutStudentSubjectScoreInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examId?: StringFieldUpdateOperationsInput | string
+        examRoomId?: StringFieldUpdateOperationsInput | string
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutGpaScoreInput = {
         where: StudentGraduationApplicationWhereUniqueInput
@@ -449534,9 +447838,12 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -449569,6 +447876,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -449925,9 +448235,12 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -449960,6 +448273,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -450308,9 +448624,12 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -450343,6 +448662,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -450425,9 +448747,12 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -450460,6 +448785,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -450589,7 +448917,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -450646,7 +448973,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -450845,7 +449171,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -450902,7 +449227,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -450958,9 +449282,12 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -450993,6 +449320,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -451069,9 +449399,12 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -451104,6 +449437,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -451229,7 +449565,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -451286,7 +449621,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -451487,7 +449821,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -451544,7 +449877,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -451967,6 +450299,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -451983,6 +450317,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -452013,6 +450348,8 @@ export namespace Prisma {
         trainingObjectTypeId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -452027,6 +450364,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -452563,6 +450901,8 @@ export namespace Prisma {
         semesterId?: StringFilter<"SubjectClass"> | string
         cancelled?: BoolFilter<"SubjectClass"> | boolean
         lecturerAssignmentDeadline?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
+        sendLecturerAssignmentAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
+        submitLecturerAssignmentAt?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examDate?: DateTimeNullableFilter<"SubjectClass"> | Date | string | null
         examType?: EnumExamTypeNullableFilter<"SubjectClass"> | $Enums.ExamType | null
         examId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -452577,6 +450917,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFilter<"SubjectClass"> | boolean
         scoreChecked?: BoolFilter<"SubjectClass"> | boolean
         roomId?: StringNullableFilter<"SubjectClass"> | string | null
+        trainingLocationId?: StringNullableFilter<"SubjectClass"> | string | null
         lecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         extraLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         enterGradeLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -454468,7 +452809,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -454525,7 +452865,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -454586,7 +452925,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -454643,7 +452981,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -454970,7 +453307,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -455027,7 +453363,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -455139,6 +453474,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -455156,6 +453493,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -455186,6 +453524,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -455200,6 +453540,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -455409,7 +453750,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -455466,7 +453806,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -455532,7 +453871,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -455589,7 +453927,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -457082,7 +455419,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -457139,7 +455475,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -457204,7 +455539,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -457261,7 +455595,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -458819,6 +457152,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -458835,6 +457170,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -458865,6 +457201,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -458879,6 +457217,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -458923,8 +457262,11 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -458957,6 +457299,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -459593,6 +457938,8 @@ export namespace Prisma {
         suspendedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
         repeated?: BoolFilter<"StudentSubjectScore"> | boolean
         repeatedReason?: StringNullableFilter<"StudentSubjectScore"> | string | null
+        isImproving?: BoolFilter<"StudentSubjectScore"> | boolean
+        examId?: StringNullableFilter<"StudentSubjectScore"> | string | null
     };
     export type DocumentFileUpsertWithWhereUniqueWithoutSubjectVersionInput = {
         where: DocumentFileWhereUniqueInput
@@ -461614,6 +459961,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -461631,6 +459980,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -461661,6 +460011,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -461675,6 +460027,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -461742,7 +460095,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
@@ -461799,7 +460151,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
@@ -461874,6 +460225,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -461891,6 +460244,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -461921,6 +460275,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -461935,6 +460291,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -462007,7 +460364,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
@@ -462064,7 +460420,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
@@ -462290,20 +460645,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank: QuestionBankCreateNestedOneWithoutExamInput
+        lockExamCode?: boolean
+        startTime: string
+        questionBank?: QuestionBankCreateNestedOneWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
         room?: RoomCreateNestedManyWithoutExamInput
         examBank?: ExamBankCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomCreateNestedManyWithoutExamInput
     };
     export type ExamUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -462315,20 +460665,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        questionBankId: string
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
+        questionBankId?: string | null
+        lockExamCode?: boolean
+        startTime: string
+        studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
         room?: RoomUncheckedCreateNestedManyWithoutExamInput
         examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxUncheckedCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutExamInput
     };
     export type ExamCreateOrConnectWithoutSubjectClassInput = {
         where: ExamWhereUniqueInput
@@ -462354,7 +460699,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassCreateNestedManyWithoutDefenseRoomsInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutRoomInput
         classSchedules?: ClassScheduleCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomCreateNestedManyWithoutRoomInput
     };
     export type RoomUncheckedCreateWithoutSubjectClassesInput = {
         id?: string
@@ -462376,11 +460721,43 @@ export namespace Prisma {
         defenseRooms?: SubjectClassUncheckedCreateNestedManyWithoutDefenseRoomsInput
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutRoomInput
         classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutRoomInput
     };
     export type RoomCreateOrConnectWithoutSubjectClassesInput = {
         where: RoomWhereUniqueInput
         create: XOR<RoomCreateWithoutSubjectClassesInput, RoomUncheckedCreateWithoutSubjectClassesInput>
+    };
+    export type TrainingLocationCreateWithoutSubjectClassesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
+        dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
+        students?: StudentCreateNestedManyWithoutTrainingLocationInput
+        buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+    };
+    export type TrainingLocationUncheckedCreateWithoutSubjectClassesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        dM_TinhId?: string | null
+        dM_Tinh_NewId?: string | null
+        students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
+        buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+    };
+    export type TrainingLocationCreateOrConnectWithoutSubjectClassesInput = {
+        where: TrainingLocationWhereUniqueInput
+        create: XOR<TrainingLocationCreateWithoutSubjectClassesInput, TrainingLocationUncheckedCreateWithoutSubjectClassesInput>
     };
     export type LecturerCreateWithoutMainSubjectClassesInput = {
         id?: string
@@ -462585,8 +460962,11 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -462619,6 +460999,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -462900,7 +461283,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassCreateNestedManyWithoutRoomInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutRoomInput
         classSchedules?: ClassScheduleCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomCreateNestedManyWithoutRoomInput
     };
     export type RoomUncheckedCreateWithoutDefenseRoomsInput = {
         id?: string
@@ -462922,7 +461305,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutRoomInput
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutRoomInput
         classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutRoomInput
     };
     export type RoomCreateOrConnectWithoutDefenseRoomsInput = {
         where: RoomWhereUniqueInput
@@ -463280,20 +461663,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        questionBank?: QuestionBankUpdateOneRequiredWithoutExamNestedInput
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
         room?: RoomUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutExamNestedInput
     };
     export type ExamUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463305,20 +461683,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
         room?: RoomUncheckedUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUncheckedUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutExamNestedInput
     };
     export type RoomUpsertWithoutSubjectClassesInput = {
         update: XOR<RoomUpdateWithoutSubjectClassesInput, RoomUncheckedUpdateWithoutSubjectClassesInput>
@@ -463349,7 +461722,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassUpdateManyWithoutDefenseRoomsNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutRoomNestedInput
         classSchedules?: ClassScheduleUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutRoomNestedInput
     };
     export type RoomUncheckedUpdateWithoutSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463371,7 +461744,44 @@ export namespace Prisma {
         defenseRooms?: SubjectClassUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutRoomNestedInput
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutRoomNestedInput
+    };
+    export type TrainingLocationUpsertWithoutSubjectClassesInput = {
+        update: XOR<TrainingLocationUpdateWithoutSubjectClassesInput, TrainingLocationUncheckedUpdateWithoutSubjectClassesInput>
+        create: XOR<TrainingLocationCreateWithoutSubjectClassesInput, TrainingLocationUncheckedCreateWithoutSubjectClassesInput>
+        where?: TrainingLocationWhereInput
+    };
+    export type TrainingLocationUpdateToOneWithWhereWithoutSubjectClassesInput = {
+        where?: TrainingLocationWhereInput
+        data: XOR<TrainingLocationUpdateWithoutSubjectClassesInput, TrainingLocationUncheckedUpdateWithoutSubjectClassesInput>
+    };
+    export type TrainingLocationUpdateWithoutSubjectClassesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
+        dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
+        students?: StudentUpdateManyWithoutTrainingLocationNestedInput
+        buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+    };
+    export type TrainingLocationUncheckedUpdateWithoutSubjectClassesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
+        students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type LecturerUpsertWithoutMainSubjectClassesInput = {
         update: XOR<LecturerUpdateWithoutMainSubjectClassesInput, LecturerUncheckedUpdateWithoutMainSubjectClassesInput>
@@ -463784,6 +462194,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -463801,6 +462213,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -463831,6 +462244,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -463845,6 +462260,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -463885,6 +462301,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -463902,6 +462320,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -463932,6 +462351,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -463946,6 +462367,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -463973,6 +462395,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -463990,6 +462414,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -464020,6 +462445,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -464034,6 +462461,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -464070,7 +462498,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassCreateNestedManyWithoutRoomInput
         defenseRooms?: SubjectClassCreateNestedManyWithoutDefenseRoomsInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomCreateNestedManyWithoutRoomInput
     };
     export type RoomUncheckedCreateWithoutClassSchedulesInput = {
         id?: string
@@ -464092,7 +462520,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutRoomInput
         defenseRooms?: SubjectClassUncheckedCreateNestedManyWithoutDefenseRoomsInput
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutRoomInput
     };
     export type RoomCreateOrConnectWithoutClassSchedulesInput = {
         where: RoomWhereUniqueInput
@@ -464334,6 +462762,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -464351,6 +462781,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -464381,6 +462812,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -464395,6 +462828,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -464436,7 +462870,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassUpdateManyWithoutRoomNestedInput
         defenseRooms?: SubjectClassUpdateManyWithoutDefenseRoomsNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutRoomNestedInput
     };
     export type RoomUncheckedUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -464458,7 +462892,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutRoomNestedInput
         defenseRooms?: SubjectClassUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutRoomNestedInput
     };
     export type LecturerUpsertWithoutClassSchedulesInput = {
         update: XOR<LecturerUpdateWithoutClassSchedulesInput, LecturerUncheckedUpdateWithoutClassSchedulesInput>
@@ -465082,7 +463516,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -465139,7 +463572,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -465203,6 +463635,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -465219,6 +463653,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -465249,6 +463684,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -465263,6 +463700,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -465814,7 +464252,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -465871,7 +464308,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -465945,7 +464381,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -466002,7 +464437,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -466166,7 +464600,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -466223,7 +464656,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -466399,7 +464831,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -466456,7 +464887,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -466707,7 +465137,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -466764,7 +465193,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -466809,6 +465237,108 @@ export namespace Prisma {
     };
     export type BuildingCreateManyTrainingLocationInputEnvelope = {
         data: BuildingCreateManyTrainingLocationInput | BuildingCreateManyTrainingLocationInput[]
+        skipDuplicates?: boolean
+    };
+    export type SubjectClassCreateWithoutTrainingLocationInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        code: string
+        name: string
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        schedule?: $Enums.SubjectClassSchedule | null
+        maxStudent: number
+        cancelled?: boolean
+        lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
+        examDate?: Date | string | null
+        examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
+        scoreDeadline?: Date | string | null
+        examScoreDeadline?: Date | string | null
+        enteredScore?: boolean
+        enteredExamScore?: boolean
+        issuedScoreAt?: Date | string | null
+        isLockScore?: boolean
+        isLockExamScore?: boolean
+        scoreSubmitted?: boolean
+        scoreChecked?: boolean
+        subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
+        semester: SemesterCreateNestedOneWithoutSubjectClassesInput
+        exam?: ExamCreateNestedOneWithoutSubjectClassInput
+        room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
+        extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
+        enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
+        fixedClasses?: FixedClassCreateNestedManyWithoutSubjectClassesInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutSubjectClassInput
+        thesisProjects?: ThesisProjectCreateNestedManyWithoutSubjectClassInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
+        defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
+    };
+    export type SubjectClassUncheckedCreateWithoutTrainingLocationInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        code: string
+        name: string
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        subjectId: string
+        schedule?: $Enums.SubjectClassSchedule | null
+        maxStudent: number
+        trainingObjectTypeId: string
+        semesterId: string
+        cancelled?: boolean
+        lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
+        examDate?: Date | string | null
+        examType?: $Enums.ExamType | null
+        examId?: string | null
+        scoreDeadLineStart?: Date | string | null
+        scoreDeadline?: Date | string | null
+        examScoreDeadline?: Date | string | null
+        enteredScore?: boolean
+        enteredExamScore?: boolean
+        issuedScoreAt?: Date | string | null
+        isLockScore?: boolean
+        isLockExamScore?: boolean
+        scoreSubmitted?: boolean
+        scoreChecked?: boolean
+        roomId?: string | null
+        lecturerId?: string | null
+        extraLecturerId?: string | null
+        enterGradeLecturerId?: string | null
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
+        fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSubjectClassesInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutSubjectClassInput
+        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSubjectClassInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
+        defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
+    };
+    export type SubjectClassCreateOrConnectWithoutTrainingLocationInput = {
+        where: SubjectClassWhereUniqueInput
+        create: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput>
+    };
+    export type SubjectClassCreateManyTrainingLocationInputEnvelope = {
+        data: SubjectClassCreateManyTrainingLocationInput | SubjectClassCreateManyTrainingLocationInput[]
         skipDuplicates?: boolean
     };
     export type DM_TinhUpsertWithoutTrainingLocationInput = {
@@ -466966,6 +465496,19 @@ export namespace Prisma {
         floor?: IntNullableFilter<"Building"> | number | null
         trainingLocationId?: StringNullableFilter<"Building"> | string | null
     };
+    export type SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput = {
+        where: SubjectClassWhereUniqueInput
+        update: XOR<SubjectClassUpdateWithoutTrainingLocationInput, SubjectClassUncheckedUpdateWithoutTrainingLocationInput>
+        create: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput>
+    };
+    export type SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput = {
+        where: SubjectClassWhereUniqueInput
+        data: XOR<SubjectClassUpdateWithoutTrainingLocationInput, SubjectClassUncheckedUpdateWithoutTrainingLocationInput>
+    };
+    export type SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput = {
+        where: SubjectClassScalarWhereInput
+        data: XOR<SubjectClassUpdateManyMutationInput, SubjectClassUncheckedUpdateManyWithoutTrainingLocationInput>
+    };
     export type TrainingLocationCreateWithoutBuildingsInput = {
         id?: string
         code?: string | null
@@ -466978,6 +465521,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
         dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
         students?: StudentCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateWithoutBuildingsInput = {
         id?: string
@@ -466991,6 +465535,7 @@ export namespace Prisma {
         dM_TinhId?: string | null
         dM_Tinh_NewId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationCreateOrConnectWithoutBuildingsInput = {
         where: TrainingLocationWhereUniqueInput
@@ -467016,7 +465561,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassCreateNestedManyWithoutDefenseRoomsInput
         thesisProject?: ThesisProjectCreateNestedManyWithoutRoomInput
         classSchedules?: ClassScheduleCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomCreateNestedManyWithoutRoomInput
     };
     export type RoomUncheckedCreateWithoutBuildingInput = {
         id?: string
@@ -467038,7 +465583,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassUncheckedCreateNestedManyWithoutDefenseRoomsInput
         thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutRoomInput
         classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutRoomInput
     };
     export type RoomCreateOrConnectWithoutBuildingInput = {
         where: RoomWhereUniqueInput
@@ -467069,6 +465614,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
         dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
         students?: StudentUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateWithoutBuildingsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -467082,6 +465628,7 @@ export namespace Prisma {
         dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type RoomUpsertWithWhereUniqueWithoutBuildingInput = {
         where: RoomWhereUniqueInput
@@ -467134,20 +465681,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank: QuestionBankCreateNestedOneWithoutExamInput
+        lockExamCode?: boolean
+        startTime: string
+        questionBank?: QuestionBankCreateNestedOneWithoutExamInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
         examBank?: ExamBankCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomCreateNestedManyWithoutExamInput
     };
     export type ExamUncheckedCreateWithoutRoomInput = {
         id?: string
@@ -467159,20 +465701,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        questionBankId: string
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
+        questionBankId?: string | null
+        lockExamCode?: boolean
+        startTime: string
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
         examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxUncheckedCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutExamInput
     };
     export type ExamCreateOrConnectWithoutRoomInput = {
         where: ExamWhereUniqueInput
@@ -467193,6 +465730,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -467209,6 +465748,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -467240,6 +465780,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -467253,6 +465795,7 @@ export namespace Prisma {
         isLockExamScore?: boolean
         scoreSubmitted?: boolean
         scoreChecked?: boolean
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -467289,6 +465832,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -467306,6 +465851,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -467336,6 +465882,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -467350,6 +465898,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -467498,7 +466047,7 @@ export namespace Prisma {
         data: ClassScheduleCreateManyRoomInput | ClassScheduleCreateManyRoomInput[]
         skipDuplicates?: boolean
     };
-    export type ExamSessionCreateWithoutRoomInput = {
+    export type ExamRoomCreateWithoutRoomInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -467506,15 +466055,10 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        student?: StudentCreateNestedOneWithoutExamSessionInput
-        exam: ExamCreateNestedOneWithoutExamSessionsInput
-        examBank?: ExamBankCreateNestedOneWithoutExamSessionInput
-        answers?: AnswerCreateNestedManyWithoutSessionInput
-        examFax?: ExamFaxCreateNestedOneWithoutExamSessionInput
+        exam: ExamCreateNestedOneWithoutExamRoomsInput
+        examSessions?: ExamSessionCreateNestedManyWithoutExamRoomInput
     };
-    export type ExamSessionUncheckedCreateWithoutRoomInput = {
+    export type ExamRoomUncheckedCreateWithoutRoomInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -467522,20 +466066,15 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
         examId: string
-        examBankId?: string | null
-        examFaxId?: string | null
-        answers?: AnswerUncheckedCreateNestedManyWithoutSessionInput
+        examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput
     };
-    export type ExamSessionCreateOrConnectWithoutRoomInput = {
-        where: ExamSessionWhereUniqueInput
-        create: XOR<ExamSessionCreateWithoutRoomInput, ExamSessionUncheckedCreateWithoutRoomInput>
+    export type ExamRoomCreateOrConnectWithoutRoomInput = {
+        where: ExamRoomWhereUniqueInput
+        create: XOR<ExamRoomCreateWithoutRoomInput, ExamRoomUncheckedCreateWithoutRoomInput>
     };
-    export type ExamSessionCreateManyRoomInputEnvelope = {
-        data: ExamSessionCreateManyRoomInput | ExamSessionCreateManyRoomInput[]
+    export type ExamRoomCreateManyRoomInputEnvelope = {
+        data: ExamRoomCreateManyRoomInput | ExamRoomCreateManyRoomInput[]
         skipDuplicates?: boolean
     };
     export type BuildingUpsertWithoutRoomsInput = {
@@ -467597,15 +466136,9 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"Exam"> | Date | string
         title?: StringFilter<"Exam"> | string
         status?: EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
-        questionBankId?: StringFilter<"Exam"> | string
-        startTime?: DateTimeFilter<"Exam"> | Date | string
-        endTime?: DateTimeFilter<"Exam"> | Date | string
-        duration?: IntFilter<"Exam"> | number
-        passScore?: FloatFilter<"Exam"> | number
-        maxScore?: FloatFilter<"Exam"> | number
-        shuffleQuestions?: BoolFilter<"Exam"> | boolean
-        shuffleAnswers?: BoolFilter<"Exam"> | boolean
-        showResult?: BoolFilter<"Exam"> | boolean
+        questionBankId?: StringNullableFilter<"Exam"> | string | null
+        lockExamCode?: BoolFilter<"Exam"> | boolean
+        startTime?: StringFilter<"Exam"> | string
     };
     export type SubjectClassUpsertWithWhereUniqueWithoutRoomInput = {
         where: SubjectClassWhereUniqueInput
@@ -467659,37 +466192,32 @@ export namespace Prisma {
         where: ClassScheduleScalarWhereInput
         data: XOR<ClassScheduleUpdateManyMutationInput, ClassScheduleUncheckedUpdateManyWithoutRoomInput>
     };
-    export type ExamSessionUpsertWithWhereUniqueWithoutRoomInput = {
-        where: ExamSessionWhereUniqueInput
-        update: XOR<ExamSessionUpdateWithoutRoomInput, ExamSessionUncheckedUpdateWithoutRoomInput>
-        create: XOR<ExamSessionCreateWithoutRoomInput, ExamSessionUncheckedCreateWithoutRoomInput>
+    export type ExamRoomUpsertWithWhereUniqueWithoutRoomInput = {
+        where: ExamRoomWhereUniqueInput
+        update: XOR<ExamRoomUpdateWithoutRoomInput, ExamRoomUncheckedUpdateWithoutRoomInput>
+        create: XOR<ExamRoomCreateWithoutRoomInput, ExamRoomUncheckedCreateWithoutRoomInput>
     };
-    export type ExamSessionUpdateWithWhereUniqueWithoutRoomInput = {
-        where: ExamSessionWhereUniqueInput
-        data: XOR<ExamSessionUpdateWithoutRoomInput, ExamSessionUncheckedUpdateWithoutRoomInput>
+    export type ExamRoomUpdateWithWhereUniqueWithoutRoomInput = {
+        where: ExamRoomWhereUniqueInput
+        data: XOR<ExamRoomUpdateWithoutRoomInput, ExamRoomUncheckedUpdateWithoutRoomInput>
     };
-    export type ExamSessionUpdateManyWithWhereWithoutRoomInput = {
-        where: ExamSessionScalarWhereInput
-        data: XOR<ExamSessionUpdateManyMutationInput, ExamSessionUncheckedUpdateManyWithoutRoomInput>
+    export type ExamRoomUpdateManyWithWhereWithoutRoomInput = {
+        where: ExamRoomScalarWhereInput
+        data: XOR<ExamRoomUpdateManyMutationInput, ExamRoomUncheckedUpdateManyWithoutRoomInput>
     };
-    export type ExamSessionScalarWhereInput = {
-        AND?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
-        OR?: ExamSessionScalarWhereInput[]
-        NOT?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
-        id?: StringFilter<"ExamSession"> | string
-        code?: StringNullableFilter<"ExamSession"> | string | null
-        active?: BoolFilter<"ExamSession"> | boolean
-        description?: StringNullableFilter<"ExamSession"> | string | null
-        deletedAt?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
-        createdAt?: DateTimeFilter<"ExamSession"> | Date | string
-        updatedAt?: DateTimeFilter<"ExamSession"> | Date | string
-        startTime?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
-        endTime?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
-        studentId?: StringNullableFilter<"ExamSession"> | string | null
-        examId?: StringFilter<"ExamSession"> | string
-        roomId?: StringNullableFilter<"ExamSession"> | string | null
-        examBankId?: StringNullableFilter<"ExamSession"> | string | null
-        examFaxId?: StringNullableFilter<"ExamSession"> | string | null
+    export type ExamRoomScalarWhereInput = {
+        AND?: ExamRoomScalarWhereInput | ExamRoomScalarWhereInput[]
+        OR?: ExamRoomScalarWhereInput[]
+        NOT?: ExamRoomScalarWhereInput | ExamRoomScalarWhereInput[]
+        id?: StringFilter<"ExamRoom"> | string
+        code?: StringNullableFilter<"ExamRoom"> | string | null
+        active?: BoolFilter<"ExamRoom"> | boolean
+        description?: StringNullableFilter<"ExamRoom"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ExamRoom"> | Date | string | null
+        createdAt?: DateTimeFilter<"ExamRoom"> | Date | string
+        updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
+        examId?: StringFilter<"ExamRoom"> | string
+        roomId?: StringFilter<"ExamRoom"> | string
     };
     export type DM_DonViCreateWithoutTrainingFieldsInput = {
         Id?: string
@@ -470762,6 +469290,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
         dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
         buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateWithoutStudentsInput = {
         id?: string
@@ -470775,6 +469304,7 @@ export namespace Prisma {
         dM_TinhId?: string | null
         dM_Tinh_NewId?: string | null
         buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationCreateOrConnectWithoutStudentsInput = {
         where: TrainingLocationWhereUniqueInput
@@ -470995,8 +469525,11 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -471029,6 +469562,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -472370,46 +470906,6 @@ export namespace Prisma {
         data: StudentThesisRegistrationCreateManyStudentInput | StudentThesisRegistrationCreateManyStudentInput[]
         skipDuplicates?: boolean
     };
-    export type ExamSessionCreateWithoutStudentInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        exam: ExamCreateNestedOneWithoutExamSessionsInput
-        room?: RoomCreateNestedOneWithoutExamSessionInput
-        examBank?: ExamBankCreateNestedOneWithoutExamSessionInput
-        answers?: AnswerCreateNestedManyWithoutSessionInput
-        examFax?: ExamFaxCreateNestedOneWithoutExamSessionInput
-    };
-    export type ExamSessionUncheckedCreateWithoutStudentInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        examId: string
-        roomId?: string | null
-        examBankId?: string | null
-        examFaxId?: string | null
-        answers?: AnswerUncheckedCreateNestedManyWithoutSessionInput
-    };
-    export type ExamSessionCreateOrConnectWithoutStudentInput = {
-        where: ExamSessionWhereUniqueInput
-        create: XOR<ExamSessionCreateWithoutStudentInput, ExamSessionUncheckedCreateWithoutStudentInput>
-    };
-    export type ExamSessionCreateManyStudentInputEnvelope = {
-        data: ExamSessionCreateManyStudentInput | ExamSessionCreateManyStudentInput[]
-        skipDuplicates?: boolean
-    };
     export type DiplomaVerificationApplicationCreateWithoutStudentInput = {
         id?: string
         code?: string | null
@@ -472635,6 +471131,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
         dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
         buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateWithoutStudentsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -472648,6 +471145,7 @@ export namespace Prisma {
         dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
         buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type PriorityObjectUpsertWithWhereUniqueWithoutStudentsInput = {
         where: PriorityObjectWhereUniqueInput
@@ -473850,19 +472348,6 @@ export namespace Prisma {
         where: StudentThesisRegistrationScalarWhereInput
         data: XOR<StudentThesisRegistrationUpdateManyMutationInput, StudentThesisRegistrationUncheckedUpdateManyWithoutStudentInput>
     };
-    export type ExamSessionUpsertWithWhereUniqueWithoutStudentInput = {
-        where: ExamSessionWhereUniqueInput
-        update: XOR<ExamSessionUpdateWithoutStudentInput, ExamSessionUncheckedUpdateWithoutStudentInput>
-        create: XOR<ExamSessionCreateWithoutStudentInput, ExamSessionUncheckedCreateWithoutStudentInput>
-    };
-    export type ExamSessionUpdateWithWhereUniqueWithoutStudentInput = {
-        where: ExamSessionWhereUniqueInput
-        data: XOR<ExamSessionUpdateWithoutStudentInput, ExamSessionUncheckedUpdateWithoutStudentInput>
-    };
-    export type ExamSessionUpdateManyWithWhereWithoutStudentInput = {
-        where: ExamSessionScalarWhereInput
-        data: XOR<ExamSessionUpdateManyMutationInput, ExamSessionUncheckedUpdateManyWithoutStudentInput>
-    };
     export type DiplomaVerificationApplicationUpsertWithWhereUniqueWithoutStudentInput = {
         where: DiplomaVerificationApplicationWhereUniqueInput
         update: XOR<DiplomaVerificationApplicationUpdateWithoutStudentInput, DiplomaVerificationApplicationUncheckedUpdateWithoutStudentInput>
@@ -474053,7 +472538,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -474110,7 +472594,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -474232,7 +472715,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -474289,7 +472771,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -474403,7 +472884,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -474460,7 +472940,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -474564,7 +473043,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -474621,7 +473099,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -474869,7 +473346,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -474926,7 +473402,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -477695,7 +476170,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -477752,7 +476226,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -478006,7 +476479,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -478063,7 +476535,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -478557,7 +477028,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -478614,7 +477084,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -478719,7 +477188,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -478776,7 +477244,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -479542,6 +478009,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -479559,6 +478028,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
@@ -479589,6 +478059,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -479603,6 +478075,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
@@ -479638,6 +478111,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -479655,6 +478130,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
@@ -479685,6 +478161,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -479699,6 +478177,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         enterGradeLecturerId?: string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
@@ -479734,6 +478213,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -479751,6 +478232,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
@@ -479781,6 +478263,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -479795,6 +478279,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
@@ -482258,7 +480743,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -482315,7 +480799,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -482497,7 +480980,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -482554,7 +481036,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -482698,6 +481179,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -482715,6 +481198,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -482745,6 +481229,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -482759,6 +481245,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -483019,7 +481506,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassCreateNestedManyWithoutRoomInput
         defenseRooms?: SubjectClassCreateNestedManyWithoutDefenseRoomsInput
         classSchedules?: ClassScheduleCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomCreateNestedManyWithoutRoomInput
     };
     export type RoomUncheckedCreateWithoutThesisProjectInput = {
         id?: string
@@ -483041,7 +481528,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutRoomInput
         defenseRooms?: SubjectClassUncheckedCreateNestedManyWithoutDefenseRoomsInput
         classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutRoomInput
     };
     export type RoomCreateOrConnectWithoutThesisProjectInput = {
         where: RoomWhereUniqueInput
@@ -483273,6 +481760,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -483290,6 +481779,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -483320,6 +481810,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -483334,6 +481826,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -483619,7 +482112,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassUpdateManyWithoutRoomNestedInput
         defenseRooms?: SubjectClassUpdateManyWithoutDefenseRoomsNestedInput
         classSchedules?: ClassScheduleUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutRoomNestedInput
     };
     export type RoomUncheckedUpdateWithoutThesisProjectInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -483641,7 +482134,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutRoomNestedInput
         defenseRooms?: SubjectClassUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutRoomNestedInput
     };
     export type DefenseSessionUpsertWithoutThesisProjectInput = {
         update: XOR<DefenseSessionUpdateWithoutThesisProjectInput, DefenseSessionUncheckedUpdateWithoutThesisProjectInput>
@@ -483961,7 +482454,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -484018,7 +482510,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -484052,9 +482543,12 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -484087,6 +482581,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -484324,7 +482821,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -484381,7 +482877,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -484420,9 +482915,12 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -484455,6 +482953,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -484933,6 +483434,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -484950,6 +483453,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -484980,6 +483484,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -484994,6 +483500,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -490282,6 +488789,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -490299,6 +488808,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -490329,6 +488839,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -490343,6 +488855,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -492232,7 +490745,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -492289,7 +490801,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -492488,7 +490999,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -492545,7 +491055,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -495159,7 +493668,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -495216,7 +493724,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -495376,7 +493883,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -495433,7 +493939,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -495752,7 +494257,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -495809,7 +494313,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -495909,9 +494412,12 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -495944,6 +494450,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -495977,9 +494486,12 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
         subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
         subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
         student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
@@ -496012,6 +494524,9 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
@@ -496129,7 +494644,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -496186,7 +494700,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -496576,7 +495089,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -496633,7 +495145,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -496998,7 +495509,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -497055,7 +495565,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -498332,7 +496841,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
         notes?: NoteCreateNestedManyWithoutStudentInput
@@ -498389,7 +496897,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
         notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
@@ -498610,7 +497117,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
         notes?: NoteUpdateManyWithoutStudentNestedInput
@@ -498667,7 +497173,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
         notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
@@ -498724,7 +497229,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -498781,7 +497285,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -499017,7 +497520,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -499074,7 +497576,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -499242,7 +497743,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -499299,7 +497799,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -499479,7 +497978,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -499536,7 +498034,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -499852,7 +498349,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
-        answers?: AnswerCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutQuestionBankInput = {
         id?: string
@@ -499873,7 +498369,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
-        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutQuestionBankInput = {
         where: QuestionWhereUniqueInput
@@ -499893,20 +498388,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        room?: RoomCreateNestedManyWithoutExamInput
+        lockExamCode?: boolean
+        startTime: string
         subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
+        room?: RoomCreateNestedManyWithoutExamInput
         examBank?: ExamBankCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomCreateNestedManyWithoutExamInput
     };
     export type ExamUncheckedCreateWithoutQuestionBankInput = {
         id?: string
@@ -499918,20 +498408,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        room?: RoomUncheckedCreateNestedManyWithoutExamInput
+        lockExamCode?: boolean
+        startTime: string
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
+        room?: RoomUncheckedCreateNestedManyWithoutExamInput
         examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxUncheckedCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutExamInput
     };
     export type ExamCreateOrConnectWithoutQuestionBankInput = {
         where: ExamWhereUniqueInput
@@ -500117,7 +498602,6 @@ export namespace Prisma {
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
-        answers?: AnswerCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutDifficultyInput = {
         id?: string
@@ -500138,7 +498622,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
-        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutDifficultyInput = {
         where: QuestionWhereUniqueInput
@@ -500286,7 +498769,6 @@ export namespace Prisma {
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
-        answers?: AnswerCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutKnowledgeBlockInput = {
         id?: string
@@ -500307,7 +498789,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
-        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutKnowledgeBlockInput = {
         where: QuestionWhereUniqueInput
@@ -500709,42 +499190,6 @@ export namespace Prisma {
         data: ExamBankQuestionCreateManyQuestionInput | ExamBankQuestionCreateManyQuestionInput[]
         skipDuplicates?: boolean
     };
-    export type AnswerCreateWithoutQuestionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        isCorrect?: boolean | null
-        score?: number | null
-        comment?: string | null
-        essayAnswer: string
-        session: ExamSessionCreateNestedOneWithoutAnswersInput
-    };
-    export type AnswerUncheckedCreateWithoutQuestionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        sessionId: string
-        isCorrect?: boolean | null
-        score?: number | null
-        comment?: string | null
-        essayAnswer: string
-    };
-    export type AnswerCreateOrConnectWithoutQuestionInput = {
-        where: AnswerWhereUniqueInput
-        create: XOR<AnswerCreateWithoutQuestionInput, AnswerUncheckedCreateWithoutQuestionInput>
-    };
-    export type AnswerCreateManyQuestionInputEnvelope = {
-        data: AnswerCreateManyQuestionInput | AnswerCreateManyQuestionInput[]
-        skipDuplicates?: boolean
-    };
     export type MultipleChoiceOptionUpsertWithWhereUniqueWithoutQuestionInput = {
         where: MultipleChoiceOptionWhereUniqueInput
         update: XOR<MultipleChoiceOptionUpdateWithoutQuestionInput, MultipleChoiceOptionUncheckedUpdateWithoutQuestionInput>
@@ -500955,37 +499400,6 @@ export namespace Prisma {
         questionId?: StringFilter<"ExamBankQuestion"> | string
         order?: IntNullableFilter<"ExamBankQuestion"> | number | null
     };
-    export type AnswerUpsertWithWhereUniqueWithoutQuestionInput = {
-        where: AnswerWhereUniqueInput
-        update: XOR<AnswerUpdateWithoutQuestionInput, AnswerUncheckedUpdateWithoutQuestionInput>
-        create: XOR<AnswerCreateWithoutQuestionInput, AnswerUncheckedCreateWithoutQuestionInput>
-    };
-    export type AnswerUpdateWithWhereUniqueWithoutQuestionInput = {
-        where: AnswerWhereUniqueInput
-        data: XOR<AnswerUpdateWithoutQuestionInput, AnswerUncheckedUpdateWithoutQuestionInput>
-    };
-    export type AnswerUpdateManyWithWhereWithoutQuestionInput = {
-        where: AnswerScalarWhereInput
-        data: XOR<AnswerUpdateManyMutationInput, AnswerUncheckedUpdateManyWithoutQuestionInput>
-    };
-    export type AnswerScalarWhereInput = {
-        AND?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
-        OR?: AnswerScalarWhereInput[]
-        NOT?: AnswerScalarWhereInput | AnswerScalarWhereInput[]
-        id?: StringFilter<"Answer"> | string
-        code?: StringNullableFilter<"Answer"> | string | null
-        active?: BoolFilter<"Answer"> | boolean
-        description?: StringNullableFilter<"Answer"> | string | null
-        deletedAt?: DateTimeNullableFilter<"Answer"> | Date | string | null
-        createdAt?: DateTimeFilter<"Answer"> | Date | string
-        updatedAt?: DateTimeFilter<"Answer"> | Date | string
-        sessionId?: StringFilter<"Answer"> | string
-        questionId?: StringFilter<"Answer"> | string
-        isCorrect?: BoolNullableFilter<"Answer"> | boolean | null
-        score?: FloatNullableFilter<"Answer"> | number | null
-        comment?: StringNullableFilter<"Answer"> | string | null
-        essayAnswer?: StringFilter<"Answer"> | string
-    };
     export type QuestionCreateWithoutMultipleChoiceOptionsInput = {
         id?: string
         code?: string | null
@@ -501005,7 +499419,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
-        answers?: AnswerCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutMultipleChoiceOptionsInput = {
         id?: string
@@ -501026,7 +499439,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
-        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutMultipleChoiceOptionsInput = {
         where: QuestionWhereUniqueInput
@@ -501060,7 +499472,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutMultipleChoiceOptionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -501081,7 +499492,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionCreateWithoutFillInBlankSlotsInput = {
         id?: string
@@ -501102,7 +499512,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
-        answers?: AnswerCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutFillInBlankSlotsInput = {
         id?: string
@@ -501123,7 +499532,6 @@ export namespace Prisma {
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
-        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutFillInBlankSlotsInput = {
         where: QuestionWhereUniqueInput
@@ -501157,7 +499565,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutFillInBlankSlotsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -501178,7 +499585,6 @@ export namespace Prisma {
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionCreateWithoutOrderingItemsInput = {
         id?: string
@@ -501199,7 +499605,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
         sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
-        answers?: AnswerCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutOrderingItemsInput = {
         id?: string
@@ -501220,7 +499625,6 @@ export namespace Prisma {
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
-        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutOrderingItemsInput = {
         where: QuestionWhereUniqueInput
@@ -501254,7 +499658,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutOrderingItemsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -501274,181 +499677,6 @@ export namespace Prisma {
         difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
-        sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
-    };
-    export type ExamSessionCreateWithoutAnswersInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        student?: StudentCreateNestedOneWithoutExamSessionInput
-        exam: ExamCreateNestedOneWithoutExamSessionsInput
-        room?: RoomCreateNestedOneWithoutExamSessionInput
-        examBank?: ExamBankCreateNestedOneWithoutExamSessionInput
-        examFax?: ExamFaxCreateNestedOneWithoutExamSessionInput
-    };
-    export type ExamSessionUncheckedCreateWithoutAnswersInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
-        examId: string
-        roomId?: string | null
-        examBankId?: string | null
-        examFaxId?: string | null
-    };
-    export type ExamSessionCreateOrConnectWithoutAnswersInput = {
-        where: ExamSessionWhereUniqueInput
-        create: XOR<ExamSessionCreateWithoutAnswersInput, ExamSessionUncheckedCreateWithoutAnswersInput>
-    };
-    export type QuestionCreateWithoutAnswersInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        content: string
-        type?: $Enums.QuestionType
-        point?: number
-        explanation?: string | null
-        isAutoGraded?: boolean
-        multipleChoiceOptions?: MultipleChoiceOptionCreateNestedManyWithoutQuestionInput
-        fillInBlankSlots?: FillInBlankSlotCreateNestedManyWithoutQuestionInput
-        orderingItems?: OrderingItemCreateNestedManyWithoutQuestionInput
-        questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
-        knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
-        difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
-        sessionQuestions?: ExamBankQuestionCreateNestedManyWithoutQuestionInput
-    };
-    export type QuestionUncheckedCreateWithoutAnswersInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        content: string
-        type?: $Enums.QuestionType
-        point?: number
-        explanation?: string | null
-        isAutoGraded?: boolean
-        questionBankId: string
-        knowledgeBlockId?: string | null
-        difficultyId?: string | null
-        multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
-        fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
-        orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
-        sessionQuestions?: ExamBankQuestionUncheckedCreateNestedManyWithoutQuestionInput
-    };
-    export type QuestionCreateOrConnectWithoutAnswersInput = {
-        where: QuestionWhereUniqueInput
-        create: XOR<QuestionCreateWithoutAnswersInput, QuestionUncheckedCreateWithoutAnswersInput>
-    };
-    export type ExamSessionUpsertWithoutAnswersInput = {
-        update: XOR<ExamSessionUpdateWithoutAnswersInput, ExamSessionUncheckedUpdateWithoutAnswersInput>
-        create: XOR<ExamSessionCreateWithoutAnswersInput, ExamSessionUncheckedCreateWithoutAnswersInput>
-        where?: ExamSessionWhereInput
-    };
-    export type ExamSessionUpdateToOneWithWhereWithoutAnswersInput = {
-        where?: ExamSessionWhereInput
-        data: XOR<ExamSessionUpdateWithoutAnswersInput, ExamSessionUncheckedUpdateWithoutAnswersInput>
-    };
-    export type ExamSessionUpdateWithoutAnswersInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        student?: StudentUpdateOneWithoutExamSessionNestedInput
-        exam?: ExamUpdateOneRequiredWithoutExamSessionsNestedInput
-        room?: RoomUpdateOneWithoutExamSessionNestedInput
-        examBank?: ExamBankUpdateOneWithoutExamSessionNestedInput
-        examFax?: ExamFaxUpdateOneWithoutExamSessionNestedInput
-    };
-    export type ExamSessionUncheckedUpdateWithoutAnswersInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
-        examId?: StringFieldUpdateOperationsInput | string
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
-    };
-    export type QuestionUpsertWithoutAnswersInput = {
-        update: XOR<QuestionUpdateWithoutAnswersInput, QuestionUncheckedUpdateWithoutAnswersInput>
-        create: XOR<QuestionCreateWithoutAnswersInput, QuestionUncheckedCreateWithoutAnswersInput>
-        where?: QuestionWhereInput
-    };
-    export type QuestionUpdateToOneWithWhereWithoutAnswersInput = {
-        where?: QuestionWhereInput
-        data: XOR<QuestionUpdateWithoutAnswersInput, QuestionUncheckedUpdateWithoutAnswersInput>
-    };
-    export type QuestionUpdateWithoutAnswersInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        content?: StringFieldUpdateOperationsInput | string
-        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
-        point?: FloatFieldUpdateOperationsInput | number
-        explanation?: NullableStringFieldUpdateOperationsInput | string | null
-        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        multipleChoiceOptions?: MultipleChoiceOptionUpdateManyWithoutQuestionNestedInput
-        fillInBlankSlots?: FillInBlankSlotUpdateManyWithoutQuestionNestedInput
-        orderingItems?: OrderingItemUpdateManyWithoutQuestionNestedInput
-        questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
-        knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
-        difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
-        sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
-    };
-    export type QuestionUncheckedUpdateWithoutAnswersInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        content?: StringFieldUpdateOperationsInput | string
-        type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
-        point?: FloatFieldUpdateOperationsInput | number
-        explanation?: NullableStringFieldUpdateOperationsInput | string | null
-        isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
-        difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
-        multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
-        fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
-        orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionBankCreateWithoutExamInput = {
@@ -501479,54 +499707,6 @@ export namespace Prisma {
         where: QuestionBankWhereUniqueInput
         create: XOR<QuestionBankCreateWithoutExamInput, QuestionBankUncheckedCreateWithoutExamInput>
     };
-    export type RoomCreateWithoutExamInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        name: string
-        trainingRoom?: boolean
-        computerRoom?: boolean
-        laboratoryRoom?: boolean
-        examRoom?: boolean
-        capacity: number
-        examCapacity?: number | null
-        building?: BuildingCreateNestedOneWithoutRoomsInput
-        subjectClasses?: SubjectClassCreateNestedManyWithoutRoomInput
-        defenseRooms?: SubjectClassCreateNestedManyWithoutDefenseRoomsInput
-        thesisProject?: ThesisProjectCreateNestedManyWithoutRoomInput
-        classSchedules?: ClassScheduleCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionCreateNestedManyWithoutRoomInput
-    };
-    export type RoomUncheckedCreateWithoutExamInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        name: string
-        trainingRoom?: boolean
-        computerRoom?: boolean
-        laboratoryRoom?: boolean
-        examRoom?: boolean
-        capacity: number
-        examCapacity?: number | null
-        buildingId?: string | null
-        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutRoomInput
-        defenseRooms?: SubjectClassUncheckedCreateNestedManyWithoutDefenseRoomsInput
-        thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutRoomInput
-        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutRoomInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutRoomInput
-    };
-    export type RoomCreateOrConnectWithoutExamInput = {
-        where: RoomWhereUniqueInput
-        create: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput>
-    };
     export type SubjectClassCreateWithoutExamInput = {
         id?: string
         active?: boolean
@@ -501542,6 +499722,8 @@ export namespace Prisma {
         maxStudent: number
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -501558,6 +499740,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -501589,6 +499772,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -501602,6 +499787,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -501623,6 +499809,132 @@ export namespace Prisma {
         data: SubjectClassCreateManyExamInput | SubjectClassCreateManyExamInput[]
         skipDuplicates?: boolean
     };
+    export type StudentSubjectScoreCreateWithoutExamInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        isImproving?: boolean
+        subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
+        subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
+        student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        examSession?: ExamSessionCreateNestedOneWithoutStudentSubjectScoreInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreUncheckedCreateWithoutExamInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        subjectClassId?: string | null
+        subjectVersionId: string
+        studentId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        isImproving?: boolean
+        examSession?: ExamSessionUncheckedCreateNestedOneWithoutStudentSubjectScoreInput
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+    };
+    export type StudentSubjectScoreCreateOrConnectWithoutExamInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        create: XOR<StudentSubjectScoreCreateWithoutExamInput, StudentSubjectScoreUncheckedCreateWithoutExamInput>
+    };
+    export type StudentSubjectScoreCreateManyExamInputEnvelope = {
+        data: StudentSubjectScoreCreateManyExamInput | StudentSubjectScoreCreateManyExamInput[]
+        skipDuplicates?: boolean
+    };
+    export type RoomCreateWithoutExamInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        trainingRoom?: boolean
+        computerRoom?: boolean
+        laboratoryRoom?: boolean
+        examRoom?: boolean
+        capacity: number
+        examCapacity?: number | null
+        building?: BuildingCreateNestedOneWithoutRoomsInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutRoomInput
+        defenseRooms?: SubjectClassCreateNestedManyWithoutDefenseRoomsInput
+        thesisProject?: ThesisProjectCreateNestedManyWithoutRoomInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomCreateNestedManyWithoutRoomInput
+    };
+    export type RoomUncheckedCreateWithoutExamInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        trainingRoom?: boolean
+        computerRoom?: boolean
+        laboratoryRoom?: boolean
+        examRoom?: boolean
+        capacity: number
+        examCapacity?: number | null
+        buildingId?: string | null
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutRoomInput
+        defenseRooms?: SubjectClassUncheckedCreateNestedManyWithoutDefenseRoomsInput
+        thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutRoomInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutRoomInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutRoomInput
+    };
+    export type RoomCreateOrConnectWithoutExamInput = {
+        where: RoomWhereUniqueInput
+        create: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput>
+    };
     export type ExamBankCreateWithoutExamInput = {
         id?: string
         code?: string | null
@@ -501631,8 +499943,6 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        examCode: string
-        examSession?: ExamSessionCreateNestedManyWithoutExamBankInput
         questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankUncheckedCreateWithoutExamInput = {
@@ -501643,8 +499953,6 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        examCode: string
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutExamBankInput
         questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankCreateOrConnectWithoutExamInput = {
@@ -501697,13 +500005,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        student?: StudentCreateNestedOneWithoutExamSessionInput
-        room?: RoomCreateNestedOneWithoutExamSessionInput
-        examBank?: ExamBankCreateNestedOneWithoutExamSessionInput
-        answers?: AnswerCreateNestedManyWithoutSessionInput
-        examFax?: ExamFaxCreateNestedOneWithoutExamSessionInput
+        examCode?: string | null
+        examRoom: ExamRoomCreateNestedOneWithoutExamSessionsInput
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutExamSessionInput
     };
     export type ExamSessionUncheckedCreateWithoutExamInput = {
         id?: string
@@ -501713,13 +500017,9 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
-        roomId?: string | null
-        examBankId?: string | null
-        examFaxId?: string | null
-        answers?: AnswerUncheckedCreateNestedManyWithoutSessionInput
+        examRoomId: string
+        studentSubjectScoreId: string
+        examCode?: string | null
     };
     export type ExamSessionCreateOrConnectWithoutExamInput = {
         where: ExamSessionWhereUniqueInput
@@ -501729,7 +500029,7 @@ export namespace Prisma {
         data: ExamSessionCreateManyExamInput | ExamSessionCreateManyExamInput[]
         skipDuplicates?: boolean
     };
-    export type ExamFaxCreateWithoutExamInput = {
+    export type ExamRoomCreateWithoutExamInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -501737,11 +500037,10 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        fax: string
-        score?: Decimal | DecimalJsLike | number | string | null
-        examSession?: ExamSessionCreateNestedOneWithoutExamFaxInput
+        room: RoomCreateNestedOneWithoutExamRoomsInput
+        examSessions?: ExamSessionCreateNestedManyWithoutExamRoomInput
     };
-    export type ExamFaxUncheckedCreateWithoutExamInput = {
+    export type ExamRoomUncheckedCreateWithoutExamInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -501749,16 +500048,15 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        fax: string
-        score?: Decimal | DecimalJsLike | number | string | null
-        examSession?: ExamSessionUncheckedCreateNestedOneWithoutExamFaxInput
+        roomId: string
+        examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput
     };
-    export type ExamFaxCreateOrConnectWithoutExamInput = {
-        where: ExamFaxWhereUniqueInput
-        create: XOR<ExamFaxCreateWithoutExamInput, ExamFaxUncheckedCreateWithoutExamInput>
+    export type ExamRoomCreateOrConnectWithoutExamInput = {
+        where: ExamRoomWhereUniqueInput
+        create: XOR<ExamRoomCreateWithoutExamInput, ExamRoomUncheckedCreateWithoutExamInput>
     };
-    export type ExamFaxCreateManyExamInputEnvelope = {
-        data: ExamFaxCreateManyExamInput | ExamFaxCreateManyExamInput[]
+    export type ExamRoomCreateManyExamInputEnvelope = {
+        data: ExamRoomCreateManyExamInput | ExamRoomCreateManyExamInput[]
         skipDuplicates?: boolean
     };
     export type QuestionBankUpsertWithoutExamInput = {
@@ -501794,19 +500092,6 @@ export namespace Prisma {
         subjectVersionId?: StringFieldUpdateOperationsInput | string
         questions?: QuestionUncheckedUpdateManyWithoutQuestionBankNestedInput
     };
-    export type RoomUpsertWithWhereUniqueWithoutExamInput = {
-        where: RoomWhereUniqueInput
-        update: XOR<RoomUpdateWithoutExamInput, RoomUncheckedUpdateWithoutExamInput>
-        create: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput>
-    };
-    export type RoomUpdateWithWhereUniqueWithoutExamInput = {
-        where: RoomWhereUniqueInput
-        data: XOR<RoomUpdateWithoutExamInput, RoomUncheckedUpdateWithoutExamInput>
-    };
-    export type RoomUpdateManyWithWhereWithoutExamInput = {
-        where: RoomScalarWhereInput
-        data: XOR<RoomUpdateManyMutationInput, RoomUncheckedUpdateManyWithoutExamInput>
-    };
     export type SubjectClassUpsertWithWhereUniqueWithoutExamInput = {
         where: SubjectClassWhereUniqueInput
         update: XOR<SubjectClassUpdateWithoutExamInput, SubjectClassUncheckedUpdateWithoutExamInput>
@@ -501819,6 +500104,32 @@ export namespace Prisma {
     export type SubjectClassUpdateManyWithWhereWithoutExamInput = {
         where: SubjectClassScalarWhereInput
         data: XOR<SubjectClassUpdateManyMutationInput, SubjectClassUncheckedUpdateManyWithoutExamInput>
+    };
+    export type StudentSubjectScoreUpsertWithWhereUniqueWithoutExamInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        update: XOR<StudentSubjectScoreUpdateWithoutExamInput, StudentSubjectScoreUncheckedUpdateWithoutExamInput>
+        create: XOR<StudentSubjectScoreCreateWithoutExamInput, StudentSubjectScoreUncheckedCreateWithoutExamInput>
+    };
+    export type StudentSubjectScoreUpdateWithWhereUniqueWithoutExamInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        data: XOR<StudentSubjectScoreUpdateWithoutExamInput, StudentSubjectScoreUncheckedUpdateWithoutExamInput>
+    };
+    export type StudentSubjectScoreUpdateManyWithWhereWithoutExamInput = {
+        where: StudentSubjectScoreScalarWhereInput
+        data: XOR<StudentSubjectScoreUpdateManyMutationInput, StudentSubjectScoreUncheckedUpdateManyWithoutExamInput>
+    };
+    export type RoomUpsertWithWhereUniqueWithoutExamInput = {
+        where: RoomWhereUniqueInput
+        update: XOR<RoomUpdateWithoutExamInput, RoomUncheckedUpdateWithoutExamInput>
+        create: XOR<RoomCreateWithoutExamInput, RoomUncheckedCreateWithoutExamInput>
+    };
+    export type RoomUpdateWithWhereUniqueWithoutExamInput = {
+        where: RoomWhereUniqueInput
+        data: XOR<RoomUpdateWithoutExamInput, RoomUncheckedUpdateWithoutExamInput>
+    };
+    export type RoomUpdateManyWithWhereWithoutExamInput = {
+        where: RoomScalarWhereInput
+        data: XOR<RoomUpdateManyMutationInput, RoomUncheckedUpdateManyWithoutExamInput>
     };
     export type ExamBankUpsertWithWhereUniqueWithoutExamInput = {
         where: ExamBankWhereUniqueInput
@@ -501845,7 +500156,6 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ExamBank"> | Date | string
         updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
         examId?: StringFilter<"ExamBank"> | string
-        examCode?: StringFilter<"ExamBank"> | string
     };
     export type TestStructureRuleUpsertWithWhereUniqueWithoutExamInput = {
         where: TestStructureRuleWhereUniqueInput
@@ -501873,33 +500183,273 @@ export namespace Prisma {
         where: ExamSessionScalarWhereInput
         data: XOR<ExamSessionUpdateManyMutationInput, ExamSessionUncheckedUpdateManyWithoutExamInput>
     };
-    export type ExamFaxUpsertWithWhereUniqueWithoutExamInput = {
-        where: ExamFaxWhereUniqueInput
-        update: XOR<ExamFaxUpdateWithoutExamInput, ExamFaxUncheckedUpdateWithoutExamInput>
-        create: XOR<ExamFaxCreateWithoutExamInput, ExamFaxUncheckedCreateWithoutExamInput>
+    export type ExamSessionScalarWhereInput = {
+        AND?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
+        OR?: ExamSessionScalarWhereInput[]
+        NOT?: ExamSessionScalarWhereInput | ExamSessionScalarWhereInput[]
+        id?: StringFilter<"ExamSession"> | string
+        code?: StringNullableFilter<"ExamSession"> | string | null
+        active?: BoolFilter<"ExamSession"> | boolean
+        description?: StringNullableFilter<"ExamSession"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ExamSession"> | Date | string | null
+        createdAt?: DateTimeFilter<"ExamSession"> | Date | string
+        updatedAt?: DateTimeFilter<"ExamSession"> | Date | string
+        examId?: StringFilter<"ExamSession"> | string
+        examRoomId?: StringFilter<"ExamSession"> | string
+        studentSubjectScoreId?: StringFilter<"ExamSession"> | string
+        examCode?: StringNullableFilter<"ExamSession"> | string | null
     };
-    export type ExamFaxUpdateWithWhereUniqueWithoutExamInput = {
-        where: ExamFaxWhereUniqueInput
-        data: XOR<ExamFaxUpdateWithoutExamInput, ExamFaxUncheckedUpdateWithoutExamInput>
+    export type ExamRoomUpsertWithWhereUniqueWithoutExamInput = {
+        where: ExamRoomWhereUniqueInput
+        update: XOR<ExamRoomUpdateWithoutExamInput, ExamRoomUncheckedUpdateWithoutExamInput>
+        create: XOR<ExamRoomCreateWithoutExamInput, ExamRoomUncheckedCreateWithoutExamInput>
     };
-    export type ExamFaxUpdateManyWithWhereWithoutExamInput = {
-        where: ExamFaxScalarWhereInput
-        data: XOR<ExamFaxUpdateManyMutationInput, ExamFaxUncheckedUpdateManyWithoutExamInput>
+    export type ExamRoomUpdateWithWhereUniqueWithoutExamInput = {
+        where: ExamRoomWhereUniqueInput
+        data: XOR<ExamRoomUpdateWithoutExamInput, ExamRoomUncheckedUpdateWithoutExamInput>
     };
-    export type ExamFaxScalarWhereInput = {
-        AND?: ExamFaxScalarWhereInput | ExamFaxScalarWhereInput[]
-        OR?: ExamFaxScalarWhereInput[]
-        NOT?: ExamFaxScalarWhereInput | ExamFaxScalarWhereInput[]
-        id?: StringFilter<"ExamFax"> | string
-        code?: StringNullableFilter<"ExamFax"> | string | null
-        active?: BoolFilter<"ExamFax"> | boolean
-        description?: StringNullableFilter<"ExamFax"> | string | null
-        deletedAt?: DateTimeNullableFilter<"ExamFax"> | Date | string | null
-        createdAt?: DateTimeFilter<"ExamFax"> | Date | string
-        updatedAt?: DateTimeFilter<"ExamFax"> | Date | string
-        examId?: StringFilter<"ExamFax"> | string
-        fax?: StringFilter<"ExamFax"> | string
-        score?: DecimalNullableFilter<"ExamFax"> | Decimal | DecimalJsLike | number | string | null
+    export type ExamRoomUpdateManyWithWhereWithoutExamInput = {
+        where: ExamRoomScalarWhereInput
+        data: XOR<ExamRoomUpdateManyMutationInput, ExamRoomUncheckedUpdateManyWithoutExamInput>
+    };
+    export type ExamCreateWithoutExamRoomsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title: string
+        status?: $Enums.ExamStatus
+        lockExamCode?: boolean
+        startTime: string
+        questionBank?: QuestionBankCreateNestedOneWithoutExamInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
+        room?: RoomCreateNestedManyWithoutExamInput
+        examBank?: ExamBankCreateNestedManyWithoutExamInput
+        testStructureRules?: TestStructureRuleCreateNestedManyWithoutExamInput
+        examSessions?: ExamSessionCreateNestedManyWithoutExamInput
+    };
+    export type ExamUncheckedCreateWithoutExamRoomsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title: string
+        status?: $Enums.ExamStatus
+        questionBankId?: string | null
+        lockExamCode?: boolean
+        startTime: string
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
+        room?: RoomUncheckedCreateNestedManyWithoutExamInput
+        examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
+        testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutExamInput
+        examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamInput
+    };
+    export type ExamCreateOrConnectWithoutExamRoomsInput = {
+        where: ExamWhereUniqueInput
+        create: XOR<ExamCreateWithoutExamRoomsInput, ExamUncheckedCreateWithoutExamRoomsInput>
+    };
+    export type RoomCreateWithoutExamRoomsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        trainingRoom?: boolean
+        computerRoom?: boolean
+        laboratoryRoom?: boolean
+        examRoom?: boolean
+        capacity: number
+        examCapacity?: number | null
+        building?: BuildingCreateNestedOneWithoutRoomsInput
+        exam?: ExamCreateNestedManyWithoutRoomInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutRoomInput
+        defenseRooms?: SubjectClassCreateNestedManyWithoutDefenseRoomsInput
+        thesisProject?: ThesisProjectCreateNestedManyWithoutRoomInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutRoomInput
+    };
+    export type RoomUncheckedCreateWithoutExamRoomsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        trainingRoom?: boolean
+        computerRoom?: boolean
+        laboratoryRoom?: boolean
+        examRoom?: boolean
+        capacity: number
+        examCapacity?: number | null
+        buildingId?: string | null
+        exam?: ExamUncheckedCreateNestedManyWithoutRoomInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutRoomInput
+        defenseRooms?: SubjectClassUncheckedCreateNestedManyWithoutDefenseRoomsInput
+        thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutRoomInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutRoomInput
+    };
+    export type RoomCreateOrConnectWithoutExamRoomsInput = {
+        where: RoomWhereUniqueInput
+        create: XOR<RoomCreateWithoutExamRoomsInput, RoomUncheckedCreateWithoutExamRoomsInput>
+    };
+    export type ExamSessionCreateWithoutExamRoomInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        examCode?: string | null
+        exam: ExamCreateNestedOneWithoutExamSessionsInput
+        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutExamSessionInput
+    };
+    export type ExamSessionUncheckedCreateWithoutExamRoomInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        examId: string
+        studentSubjectScoreId: string
+        examCode?: string | null
+    };
+    export type ExamSessionCreateOrConnectWithoutExamRoomInput = {
+        where: ExamSessionWhereUniqueInput
+        create: XOR<ExamSessionCreateWithoutExamRoomInput, ExamSessionUncheckedCreateWithoutExamRoomInput>
+    };
+    export type ExamSessionCreateManyExamRoomInputEnvelope = {
+        data: ExamSessionCreateManyExamRoomInput | ExamSessionCreateManyExamRoomInput[]
+        skipDuplicates?: boolean
+    };
+    export type ExamUpsertWithoutExamRoomsInput = {
+        update: XOR<ExamUpdateWithoutExamRoomsInput, ExamUncheckedUpdateWithoutExamRoomsInput>
+        create: XOR<ExamCreateWithoutExamRoomsInput, ExamUncheckedCreateWithoutExamRoomsInput>
+        where?: ExamWhereInput
+    };
+    export type ExamUpdateToOneWithWhereWithoutExamRoomsInput = {
+        where?: ExamWhereInput
+        data: XOR<ExamUpdateWithoutExamRoomsInput, ExamUncheckedUpdateWithoutExamRoomsInput>
+    };
+    export type ExamUpdateWithoutExamRoomsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: StringFieldUpdateOperationsInput | string
+        status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
+        room?: RoomUpdateManyWithoutExamNestedInput
+        examBank?: ExamBankUpdateManyWithoutExamNestedInput
+        testStructureRules?: TestStructureRuleUpdateManyWithoutExamNestedInput
+        examSessions?: ExamSessionUpdateManyWithoutExamNestedInput
+    };
+    export type ExamUncheckedUpdateWithoutExamRoomsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: StringFieldUpdateOperationsInput | string
+        status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
+        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
+        examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
+        testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutExamNestedInput
+        examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
+    };
+    export type RoomUpsertWithoutExamRoomsInput = {
+        update: XOR<RoomUpdateWithoutExamRoomsInput, RoomUncheckedUpdateWithoutExamRoomsInput>
+        create: XOR<RoomCreateWithoutExamRoomsInput, RoomUncheckedCreateWithoutExamRoomsInput>
+        where?: RoomWhereInput
+    };
+    export type RoomUpdateToOneWithWhereWithoutExamRoomsInput = {
+        where?: RoomWhereInput
+        data: XOR<RoomUpdateWithoutExamRoomsInput, RoomUncheckedUpdateWithoutExamRoomsInput>
+    };
+    export type RoomUpdateWithoutExamRoomsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
+        computerRoom?: BoolFieldUpdateOperationsInput | boolean
+        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
+        examRoom?: BoolFieldUpdateOperationsInput | boolean
+        capacity?: IntFieldUpdateOperationsInput | number
+        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+        building?: BuildingUpdateOneWithoutRoomsNestedInput
+        exam?: ExamUpdateManyWithoutRoomNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutRoomNestedInput
+        defenseRooms?: SubjectClassUpdateManyWithoutDefenseRoomsNestedInput
+        thesisProject?: ThesisProjectUpdateManyWithoutRoomNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutRoomNestedInput
+    };
+    export type RoomUncheckedUpdateWithoutExamRoomsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
+        computerRoom?: BoolFieldUpdateOperationsInput | boolean
+        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
+        examRoom?: BoolFieldUpdateOperationsInput | boolean
+        capacity?: IntFieldUpdateOperationsInput | number
+        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+        buildingId?: NullableStringFieldUpdateOperationsInput | string | null
+        exam?: ExamUncheckedUpdateManyWithoutRoomNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutRoomNestedInput
+        defenseRooms?: SubjectClassUncheckedUpdateManyWithoutDefenseRoomsNestedInput
+        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutRoomNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
+    };
+    export type ExamSessionUpsertWithWhereUniqueWithoutExamRoomInput = {
+        where: ExamSessionWhereUniqueInput
+        update: XOR<ExamSessionUpdateWithoutExamRoomInput, ExamSessionUncheckedUpdateWithoutExamRoomInput>
+        create: XOR<ExamSessionCreateWithoutExamRoomInput, ExamSessionUncheckedCreateWithoutExamRoomInput>
+    };
+    export type ExamSessionUpdateWithWhereUniqueWithoutExamRoomInput = {
+        where: ExamSessionWhereUniqueInput
+        data: XOR<ExamSessionUpdateWithoutExamRoomInput, ExamSessionUncheckedUpdateWithoutExamRoomInput>
+    };
+    export type ExamSessionUpdateManyWithWhereWithoutExamRoomInput = {
+        where: ExamSessionScalarWhereInput
+        data: XOR<ExamSessionUpdateManyMutationInput, ExamSessionUncheckedUpdateManyWithoutExamRoomInput>
     };
     export type ExamCreateWithoutTestStructureRulesInput = {
         id?: string
@@ -501911,20 +500461,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank: QuestionBankCreateNestedOneWithoutExamInput
-        room?: RoomCreateNestedManyWithoutExamInput
+        lockExamCode?: boolean
+        startTime: string
+        questionBank?: QuestionBankCreateNestedOneWithoutExamInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
+        room?: RoomCreateNestedManyWithoutExamInput
         examBank?: ExamBankCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomCreateNestedManyWithoutExamInput
     };
     export type ExamUncheckedCreateWithoutTestStructureRulesInput = {
         id?: string
@@ -501936,20 +500481,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        questionBankId: string
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        room?: RoomUncheckedCreateNestedManyWithoutExamInput
+        questionBankId?: string | null
+        lockExamCode?: boolean
+        startTime: string
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
+        room?: RoomUncheckedCreateNestedManyWithoutExamInput
         examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxUncheckedCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutExamInput
     };
     export type ExamCreateOrConnectWithoutTestStructureRulesInput = {
         where: ExamWhereUniqueInput
@@ -502002,20 +500542,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        questionBank?: QuestionBankUpdateOneRequiredWithoutExamNestedInput
-        room?: RoomUpdateManyWithoutExamNestedInput
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
+        room?: RoomUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutExamNestedInput
     };
     export type ExamUncheckedUpdateWithoutTestStructureRulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -502027,20 +500562,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
+        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUncheckedUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutExamNestedInput
     };
     export type KnowledgeBlockUpsertWithoutStructureRulesInput = {
         update: XOR<KnowledgeBlockUpdateWithoutStructureRulesInput, KnowledgeBlockUncheckedUpdateWithoutStructureRulesInput>
@@ -502085,20 +500615,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank: QuestionBankCreateNestedOneWithoutExamInput
-        room?: RoomCreateNestedManyWithoutExamInput
+        lockExamCode?: boolean
+        startTime: string
+        questionBank?: QuestionBankCreateNestedOneWithoutExamInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
+        room?: RoomCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomCreateNestedManyWithoutExamInput
     };
     export type ExamUncheckedCreateWithoutExamBankInput = {
         id?: string
@@ -502110,64 +500635,19 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        questionBankId: string
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        room?: RoomUncheckedCreateNestedManyWithoutExamInput
+        questionBankId?: string | null
+        lockExamCode?: boolean
+        startTime: string
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
+        room?: RoomUncheckedCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutExamInput
         examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxUncheckedCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutExamInput
     };
     export type ExamCreateOrConnectWithoutExamBankInput = {
         where: ExamWhereUniqueInput
         create: XOR<ExamCreateWithoutExamBankInput, ExamUncheckedCreateWithoutExamBankInput>
-    };
-    export type ExamSessionCreateWithoutExamBankInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        student?: StudentCreateNestedOneWithoutExamSessionInput
-        exam: ExamCreateNestedOneWithoutExamSessionsInput
-        room?: RoomCreateNestedOneWithoutExamSessionInput
-        answers?: AnswerCreateNestedManyWithoutSessionInput
-        examFax?: ExamFaxCreateNestedOneWithoutExamSessionInput
-    };
-    export type ExamSessionUncheckedCreateWithoutExamBankInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
-        examId: string
-        roomId?: string | null
-        examFaxId?: string | null
-        answers?: AnswerUncheckedCreateNestedManyWithoutSessionInput
-    };
-    export type ExamSessionCreateOrConnectWithoutExamBankInput = {
-        where: ExamSessionWhereUniqueInput
-        create: XOR<ExamSessionCreateWithoutExamBankInput, ExamSessionUncheckedCreateWithoutExamBankInput>
-    };
-    export type ExamSessionCreateManyExamBankInputEnvelope = {
-        data: ExamSessionCreateManyExamBankInput | ExamSessionCreateManyExamBankInput[]
-        skipDuplicates?: boolean
     };
     export type ExamBankQuestionCreateWithoutExamBankInput = {
         id?: string
@@ -502218,20 +500698,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        questionBank?: QuestionBankUpdateOneRequiredWithoutExamNestedInput
-        room?: RoomUpdateManyWithoutExamNestedInput
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
+        room?: RoomUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutExamNestedInput
     };
     export type ExamUncheckedUpdateWithoutExamBankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -502243,33 +500718,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
+        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUncheckedUpdateManyWithoutExamNestedInput
-    };
-    export type ExamSessionUpsertWithWhereUniqueWithoutExamBankInput = {
-        where: ExamSessionWhereUniqueInput
-        update: XOR<ExamSessionUpdateWithoutExamBankInput, ExamSessionUncheckedUpdateWithoutExamBankInput>
-        create: XOR<ExamSessionCreateWithoutExamBankInput, ExamSessionUncheckedCreateWithoutExamBankInput>
-    };
-    export type ExamSessionUpdateWithWhereUniqueWithoutExamBankInput = {
-        where: ExamSessionWhereUniqueInput
-        data: XOR<ExamSessionUpdateWithoutExamBankInput, ExamSessionUncheckedUpdateWithoutExamBankInput>
-    };
-    export type ExamSessionUpdateManyWithWhereWithoutExamBankInput = {
-        where: ExamSessionScalarWhereInput
-        data: XOR<ExamSessionUpdateManyMutationInput, ExamSessionUncheckedUpdateManyWithoutExamBankInput>
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutExamNestedInput
     };
     export type ExamBankQuestionUpsertWithWhereUniqueWithoutExamBankInput = {
         where: ExamBankQuestionWhereUniqueInput
@@ -502292,9 +500749,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        examCode: string
         exam: ExamCreateNestedOneWithoutExamBankInput
-        examSession?: ExamSessionCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankUncheckedCreateWithoutQuestionsInput = {
         id?: string
@@ -502305,8 +500760,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
-        examCode: string
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankCreateOrConnectWithoutQuestionsInput = {
         where: ExamBankWhereUniqueInput
@@ -502331,7 +500784,6 @@ export namespace Prisma {
         questionBank: QuestionBankCreateNestedOneWithoutQuestionsInput
         knowledgeBlock?: KnowledgeBlockCreateNestedOneWithoutQuestionsInput
         difficulty?: DifficultyCreateNestedOneWithoutQuestionsInput
-        answers?: AnswerCreateNestedManyWithoutQuestionInput
     };
     export type QuestionUncheckedCreateWithoutSessionQuestionsInput = {
         id?: string
@@ -502352,7 +500804,6 @@ export namespace Prisma {
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedCreateNestedManyWithoutQuestionInput
         fillInBlankSlots?: FillInBlankSlotUncheckedCreateNestedManyWithoutQuestionInput
         orderingItems?: OrderingItemUncheckedCreateNestedManyWithoutQuestionInput
-        answers?: AnswerUncheckedCreateNestedManyWithoutQuestionInput
     };
     export type QuestionCreateOrConnectWithoutSessionQuestionsInput = {
         where: QuestionWhereUniqueInput
@@ -502375,9 +500826,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examCode?: StringFieldUpdateOperationsInput | string
         exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
-        examSession?: ExamSessionUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateWithoutQuestionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -502388,8 +500837,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
-        examCode?: StringFieldUpdateOperationsInput | string
-        examSession?: ExamSessionUncheckedUpdateManyWithoutExamBankNestedInput
     };
     export type QuestionUpsertWithoutSessionQuestionsInput = {
         update: XOR<QuestionUpdateWithoutSessionQuestionsInput, QuestionUncheckedUpdateWithoutSessionQuestionsInput>
@@ -502419,7 +500866,6 @@ export namespace Prisma {
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
-        answers?: AnswerUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutSessionQuestionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -502440,315 +500886,6 @@ export namespace Prisma {
         multipleChoiceOptions?: MultipleChoiceOptionUncheckedUpdateManyWithoutQuestionNestedInput
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
-    };
-    export type ExamCreateWithoutExamFaxInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        title: string
-        status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank: QuestionBankCreateNestedOneWithoutExamInput
-        room?: RoomCreateNestedManyWithoutExamInput
-        subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
-        examBank?: ExamBankCreateNestedManyWithoutExamInput
-        testStructureRules?: TestStructureRuleCreateNestedManyWithoutExamInput
-        examSessions?: ExamSessionCreateNestedManyWithoutExamInput
-    };
-    export type ExamUncheckedCreateWithoutExamFaxInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        title: string
-        status?: $Enums.ExamStatus
-        questionBankId: string
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        room?: RoomUncheckedCreateNestedManyWithoutExamInput
-        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
-        examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
-        testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutExamInput
-        examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamInput
-    };
-    export type ExamCreateOrConnectWithoutExamFaxInput = {
-        where: ExamWhereUniqueInput
-        create: XOR<ExamCreateWithoutExamFaxInput, ExamUncheckedCreateWithoutExamFaxInput>
-    };
-    export type ExamSessionCreateWithoutExamFaxInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        student?: StudentCreateNestedOneWithoutExamSessionInput
-        exam: ExamCreateNestedOneWithoutExamSessionsInput
-        room?: RoomCreateNestedOneWithoutExamSessionInput
-        examBank?: ExamBankCreateNestedOneWithoutExamSessionInput
-        answers?: AnswerCreateNestedManyWithoutSessionInput
-    };
-    export type ExamSessionUncheckedCreateWithoutExamFaxInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
-        examId: string
-        roomId?: string | null
-        examBankId?: string | null
-        answers?: AnswerUncheckedCreateNestedManyWithoutSessionInput
-    };
-    export type ExamSessionCreateOrConnectWithoutExamFaxInput = {
-        where: ExamSessionWhereUniqueInput
-        create: XOR<ExamSessionCreateWithoutExamFaxInput, ExamSessionUncheckedCreateWithoutExamFaxInput>
-    };
-    export type ExamUpsertWithoutExamFaxInput = {
-        update: XOR<ExamUpdateWithoutExamFaxInput, ExamUncheckedUpdateWithoutExamFaxInput>
-        create: XOR<ExamCreateWithoutExamFaxInput, ExamUncheckedCreateWithoutExamFaxInput>
-        where?: ExamWhereInput
-    };
-    export type ExamUpdateToOneWithWhereWithoutExamFaxInput = {
-        where?: ExamWhereInput
-        data: XOR<ExamUpdateWithoutExamFaxInput, ExamUncheckedUpdateWithoutExamFaxInput>
-    };
-    export type ExamUpdateWithoutExamFaxInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        title?: StringFieldUpdateOperationsInput | string
-        status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        questionBank?: QuestionBankUpdateOneRequiredWithoutExamNestedInput
-        room?: RoomUpdateManyWithoutExamNestedInput
-        subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
-        examBank?: ExamBankUpdateManyWithoutExamNestedInput
-        testStructureRules?: TestStructureRuleUpdateManyWithoutExamNestedInput
-        examSessions?: ExamSessionUpdateManyWithoutExamNestedInput
-    };
-    export type ExamUncheckedUpdateWithoutExamFaxInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        title?: StringFieldUpdateOperationsInput | string
-        status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
-        subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
-        examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
-        testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutExamNestedInput
-        examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
-    };
-    export type ExamSessionUpsertWithoutExamFaxInput = {
-        update: XOR<ExamSessionUpdateWithoutExamFaxInput, ExamSessionUncheckedUpdateWithoutExamFaxInput>
-        create: XOR<ExamSessionCreateWithoutExamFaxInput, ExamSessionUncheckedCreateWithoutExamFaxInput>
-        where?: ExamSessionWhereInput
-    };
-    export type ExamSessionUpdateToOneWithWhereWithoutExamFaxInput = {
-        where?: ExamSessionWhereInput
-        data: XOR<ExamSessionUpdateWithoutExamFaxInput, ExamSessionUncheckedUpdateWithoutExamFaxInput>
-    };
-    export type ExamSessionUpdateWithoutExamFaxInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        student?: StudentUpdateOneWithoutExamSessionNestedInput
-        exam?: ExamUpdateOneRequiredWithoutExamSessionsNestedInput
-        room?: RoomUpdateOneWithoutExamSessionNestedInput
-        examBank?: ExamBankUpdateOneWithoutExamSessionNestedInput
-        answers?: AnswerUpdateManyWithoutSessionNestedInput
-    };
-    export type ExamSessionUncheckedUpdateWithoutExamFaxInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
-        examId?: StringFieldUpdateOperationsInput | string
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        answers?: AnswerUncheckedUpdateManyWithoutSessionNestedInput
-    };
-    export type StudentCreateWithoutExamSessionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        entryScore?: number | null
-        note?: string | null
-        from?: Date | string | null
-        to?: Date | string | null
-        unionLeader?: string | null
-        status?: $Enums.StudentStatus
-        academicWarningLevel?: number
-        disciplinaryWarningLevel?: number
-        suspended?: boolean
-        expelled?: boolean
-        foreignLangPass?: boolean
-        ITCertificationPass?: boolean
-        strengthTrainingPass?: boolean
-        militaryTrainingPass?: boolean
-        trainingLocation?: TrainingLocationCreateNestedOneWithoutStudentsInput
-        priorityObject?: PriorityObjectCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassCreateNestedOneWithoutUnionLeaderInput
-        fixedClass?: FixedClassCreateNestedOneWithoutStudentsInput
-        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutStudentInput
-        userProfile: UserProfileCreateNestedOneWithoutEducationAndTrainingInput
-        trainingLevel?: TrainingLevelCreateNestedOneWithoutStudentsInput
-        trainingObjectType?: TrainingObjectTypeCreateNestedOneWithoutStudentsInput
-        trainingType?: TrainingTypeCreateNestedOneWithoutStudentsInput
-        trainingForm?: TrainingFormCreateNestedOneWithoutStudentsInput
-        registrationArea?: DM_KhuVuc_DiaLyCreateNestedOneWithoutStudentInput
-        curriculumVersion?: CurriculumVersionCreateNestedOneWithoutStudentsInput
-        curriculumVersionParallel?: CurriculumVersionCreateNestedOneWithoutStudentCurriculumVersionParallelInput
-        studentTrainingScore?: StudentTrainingScoreCreateNestedManyWithoutStudentInput
-        studentSemesterResult?: StudentSemesterResultCreateNestedManyWithoutStudentInput
-        studentYearResult?: StudentYearResultCreateNestedManyWithoutStudentInput
-        scholarshipAwards?: ScholarshipAwardCreateNestedManyWithoutStudentInput
-        archivedCertificate?: ArchivedCertificateCreateNestedManyWithoutStudentInput
-        archivedAward?: ArchivedAwardCreateNestedManyWithoutStudentInput
-        academicWarning?: AcademicWarningCreateNestedManyWithoutStudentInput
-        disciplinaryWarning?: DisciplinaryWarningCreateNestedManyWithoutStudentInput
-        studentAcademicDecision?: StudentAcademicDecisionCreateNestedManyWithoutStudentInput
-        graduationApplications?: StudentGraduationApplicationCreateNestedManyWithoutStudentInput
-        graduationDecision?: GraduationDecisionCreateNestedOneWithoutStudentInput
-        surveySessions?: SurveySessionCreateNestedManyWithoutStudentInput
-        notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
-        researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
-        thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
-        studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
-        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
-        notes?: NoteCreateNestedManyWithoutStudentInput
-        noteFolders?: NoteFolderCreateNestedManyWithoutStudentInput
-    };
-    export type StudentUncheckedCreateWithoutExamSessionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        entryScore?: number | null
-        note?: string | null
-        from?: Date | string | null
-        to?: Date | string | null
-        trainingLocationId?: string | null
-        unionLeader?: string | null
-        status?: $Enums.StudentStatus
-        fixedClassId?: string | null
-        userProfileId: string
-        trainingLevelId?: string | null
-        trainingObjectTypeId?: string | null
-        trainingTypeId?: string | null
-        trainingFormId?: string | null
-        registrationAreaId?: string | null
-        curriculumVersionId?: string | null
-        curriculumVersionParallelId?: string | null
-        academicWarningLevel?: number
-        disciplinaryWarningLevel?: number
-        suspended?: boolean
-        expelled?: boolean
-        foreignLangPass?: boolean
-        ITCertificationPass?: boolean
-        strengthTrainingPass?: boolean
-        militaryTrainingPass?: boolean
-        priorityObject?: PriorityObjectUncheckedCreateNestedManyWithoutStudentsInput
-        classMonitor?: FixedClassUncheckedCreateNestedOneWithoutClassMonitorInput
-        unionLeaderOf?: FixedClassUncheckedCreateNestedOneWithoutUnionLeaderInput
-        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutStudentInput
-        studentTrainingScore?: StudentTrainingScoreUncheckedCreateNestedManyWithoutStudentInput
-        studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutStudentInput
-        studentYearResult?: StudentYearResultUncheckedCreateNestedManyWithoutStudentInput
-        scholarshipAwards?: ScholarshipAwardUncheckedCreateNestedManyWithoutStudentInput
-        archivedCertificate?: ArchivedCertificateUncheckedCreateNestedManyWithoutStudentInput
-        archivedAward?: ArchivedAwardUncheckedCreateNestedManyWithoutStudentInput
-        academicWarning?: AcademicWarningUncheckedCreateNestedManyWithoutStudentInput
-        disciplinaryWarning?: DisciplinaryWarningUncheckedCreateNestedManyWithoutStudentInput
-        studentAcademicDecision?: StudentAcademicDecisionUncheckedCreateNestedManyWithoutStudentInput
-        graduationApplications?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutStudentInput
-        graduationDecision?: GraduationDecisionUncheckedCreateNestedOneWithoutStudentInput
-        surveySessions?: SurveySessionUncheckedCreateNestedManyWithoutStudentInput
-        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
-        researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
-        studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
-        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
-        notes?: NoteUncheckedCreateNestedManyWithoutStudentInput
-        noteFolders?: NoteFolderUncheckedCreateNestedManyWithoutStudentInput
-    };
-    export type StudentCreateOrConnectWithoutExamSessionInput = {
-        where: StudentWhereUniqueInput
-        create: XOR<StudentCreateWithoutExamSessionInput, StudentUncheckedCreateWithoutExamSessionInput>
     };
     export type ExamCreateWithoutExamSessionsInput = {
         id?: string
@@ -502760,20 +500897,15 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        questionBank: QuestionBankCreateNestedOneWithoutExamInput
-        room?: RoomCreateNestedManyWithoutExamInput
+        lockExamCode?: boolean
+        startTime: string
+        questionBank?: QuestionBankCreateNestedOneWithoutExamInput
         subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
+        room?: RoomCreateNestedManyWithoutExamInput
         examBank?: ExamBankCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomCreateNestedManyWithoutExamInput
     };
     export type ExamUncheckedCreateWithoutExamSessionsInput = {
         id?: string
@@ -502785,26 +500917,21 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        questionBankId: string
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
-        room?: RoomUncheckedCreateNestedManyWithoutExamInput
+        questionBankId?: string | null
+        lockExamCode?: boolean
+        startTime: string
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
+        room?: RoomUncheckedCreateNestedManyWithoutExamInput
         examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
         testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutExamInput
-        examFax?: ExamFaxUncheckedCreateNestedManyWithoutExamInput
+        examRooms?: ExamRoomUncheckedCreateNestedManyWithoutExamInput
     };
     export type ExamCreateOrConnectWithoutExamSessionsInput = {
         where: ExamWhereUniqueInput
         create: XOR<ExamCreateWithoutExamSessionsInput, ExamUncheckedCreateWithoutExamSessionsInput>
     };
-    export type RoomCreateWithoutExamSessionInput = {
+    export type ExamRoomCreateWithoutExamSessionsInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -502812,59 +500939,10 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        name: string
-        trainingRoom?: boolean
-        computerRoom?: boolean
-        laboratoryRoom?: boolean
-        examRoom?: boolean
-        capacity: number
-        examCapacity?: number | null
-        building?: BuildingCreateNestedOneWithoutRoomsInput
-        exam?: ExamCreateNestedManyWithoutRoomInput
-        subjectClasses?: SubjectClassCreateNestedManyWithoutRoomInput
-        defenseRooms?: SubjectClassCreateNestedManyWithoutDefenseRoomsInput
-        thesisProject?: ThesisProjectCreateNestedManyWithoutRoomInput
-        classSchedules?: ClassScheduleCreateNestedManyWithoutRoomInput
+        exam: ExamCreateNestedOneWithoutExamRoomsInput
+        room: RoomCreateNestedOneWithoutExamRoomsInput
     };
-    export type RoomUncheckedCreateWithoutExamSessionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        name: string
-        trainingRoom?: boolean
-        computerRoom?: boolean
-        laboratoryRoom?: boolean
-        examRoom?: boolean
-        capacity: number
-        examCapacity?: number | null
-        buildingId?: string | null
-        exam?: ExamUncheckedCreateNestedManyWithoutRoomInput
-        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutRoomInput
-        defenseRooms?: SubjectClassUncheckedCreateNestedManyWithoutDefenseRoomsInput
-        thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutRoomInput
-        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutRoomInput
-    };
-    export type RoomCreateOrConnectWithoutExamSessionInput = {
-        where: RoomWhereUniqueInput
-        create: XOR<RoomCreateWithoutExamSessionInput, RoomUncheckedCreateWithoutExamSessionInput>
-    };
-    export type ExamBankCreateWithoutExamSessionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        examCode: string
-        exam: ExamCreateNestedOneWithoutExamBankInput
-        questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
-    };
-    export type ExamBankUncheckedCreateWithoutExamSessionInput = {
+    export type ExamRoomUncheckedCreateWithoutExamSessionsInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -502873,14 +500951,13 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
-        examCode: string
-        questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
+        roomId: string
     };
-    export type ExamBankCreateOrConnectWithoutExamSessionInput = {
-        where: ExamBankWhereUniqueInput
-        create: XOR<ExamBankCreateWithoutExamSessionInput, ExamBankUncheckedCreateWithoutExamSessionInput>
+    export type ExamRoomCreateOrConnectWithoutExamSessionsInput = {
+        where: ExamRoomWhereUniqueInput
+        create: XOR<ExamRoomCreateWithoutExamSessionsInput, ExamRoomUncheckedCreateWithoutExamSessionsInput>
     };
-    export type AnswerCreateWithoutSessionInput = {
+    export type StudentSubjectScoreCreateWithoutExamSessionInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -502888,13 +500965,34 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        isCorrect?: boolean | null
-        score?: number | null
-        comment?: string | null
-        essayAnswer: string
-        question: QuestionCreateNestedOneWithoutAnswersInput
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        isImproving?: boolean
+        subjectClass?: SubjectClassCreateNestedOneWithoutSubjectClassStudentInput
+        subjectVersion: SubjectVersionCreateNestedOneWithoutStudentSubjectScoreInput
+        student: StudentCreateNestedOneWithoutSubjectClassStudentInput
+        exam?: ExamCreateNestedOneWithoutStudentSubjectScoreInput
+        graduationGpaScores?: StudentGraduationApplicationCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryCreateNestedManyWithoutStudentSubjectScoreInput
     };
-    export type AnswerUncheckedCreateWithoutSessionInput = {
+    export type StudentSubjectScoreUncheckedCreateWithoutExamSessionInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -502902,170 +501000,36 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        questionId: string
-        isCorrect?: boolean | null
-        score?: number | null
-        comment?: string | null
-        essayAnswer: string
+        subjectClassId?: string | null
+        subjectVersionId: string
+        studentId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutGpaScoreInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedCreateNestedManyWithoutSupplementaryScoreInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedCreateNestedManyWithoutStudentSubjectScoreInput
     };
-    export type AnswerCreateOrConnectWithoutSessionInput = {
-        where: AnswerWhereUniqueInput
-        create: XOR<AnswerCreateWithoutSessionInput, AnswerUncheckedCreateWithoutSessionInput>
-    };
-    export type AnswerCreateManySessionInputEnvelope = {
-        data: AnswerCreateManySessionInput | AnswerCreateManySessionInput[]
-        skipDuplicates?: boolean
-    };
-    export type ExamFaxCreateWithoutExamSessionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        fax: string
-        score?: Decimal | DecimalJsLike | number | string | null
-        exam: ExamCreateNestedOneWithoutExamFaxInput
-    };
-    export type ExamFaxUncheckedCreateWithoutExamSessionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        examId: string
-        fax: string
-        score?: Decimal | DecimalJsLike | number | string | null
-    };
-    export type ExamFaxCreateOrConnectWithoutExamSessionInput = {
-        where: ExamFaxWhereUniqueInput
-        create: XOR<ExamFaxCreateWithoutExamSessionInput, ExamFaxUncheckedCreateWithoutExamSessionInput>
-    };
-    export type StudentUpsertWithoutExamSessionInput = {
-        update: XOR<StudentUpdateWithoutExamSessionInput, StudentUncheckedUpdateWithoutExamSessionInput>
-        create: XOR<StudentCreateWithoutExamSessionInput, StudentUncheckedCreateWithoutExamSessionInput>
-        where?: StudentWhereInput
-    };
-    export type StudentUpdateToOneWithWhereWithoutExamSessionInput = {
-        where?: StudentWhereInput
-        data: XOR<StudentUpdateWithoutExamSessionInput, StudentUncheckedUpdateWithoutExamSessionInput>
-    };
-    export type StudentUpdateWithoutExamSessionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
-        note?: NullableStringFieldUpdateOperationsInput | string | null
-        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-        academicWarningLevel?: IntFieldUpdateOperationsInput | number
-        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
-        suspended?: BoolFieldUpdateOperationsInput | boolean
-        expelled?: BoolFieldUpdateOperationsInput | boolean
-        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
-        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
-        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        trainingLocation?: TrainingLocationUpdateOneWithoutStudentsNestedInput
-        priorityObject?: PriorityObjectUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUpdateOneWithoutUnionLeaderNestedInput
-        fixedClass?: FixedClassUpdateOneWithoutStudentsNestedInput
-        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutStudentNestedInput
-        userProfile?: UserProfileUpdateOneRequiredWithoutEducationAndTrainingNestedInput
-        trainingLevel?: TrainingLevelUpdateOneWithoutStudentsNestedInput
-        trainingObjectType?: TrainingObjectTypeUpdateOneWithoutStudentsNestedInput
-        trainingType?: TrainingTypeUpdateOneWithoutStudentsNestedInput
-        trainingForm?: TrainingFormUpdateOneWithoutStudentsNestedInput
-        registrationArea?: DM_KhuVuc_DiaLyUpdateOneWithoutStudentNestedInput
-        curriculumVersion?: CurriculumVersionUpdateOneWithoutStudentsNestedInput
-        curriculumVersionParallel?: CurriculumVersionUpdateOneWithoutStudentCurriculumVersionParallelNestedInput
-        studentTrainingScore?: StudentTrainingScoreUpdateManyWithoutStudentNestedInput
-        studentSemesterResult?: StudentSemesterResultUpdateManyWithoutStudentNestedInput
-        studentYearResult?: StudentYearResultUpdateManyWithoutStudentNestedInput
-        scholarshipAwards?: ScholarshipAwardUpdateManyWithoutStudentNestedInput
-        archivedCertificate?: ArchivedCertificateUpdateManyWithoutStudentNestedInput
-        archivedAward?: ArchivedAwardUpdateManyWithoutStudentNestedInput
-        academicWarning?: AcademicWarningUpdateManyWithoutStudentNestedInput
-        disciplinaryWarning?: DisciplinaryWarningUpdateManyWithoutStudentNestedInput
-        studentAcademicDecision?: StudentAcademicDecisionUpdateManyWithoutStudentNestedInput
-        graduationApplications?: StudentGraduationApplicationUpdateManyWithoutStudentNestedInput
-        graduationDecision?: GraduationDecisionUpdateOneWithoutStudentNestedInput
-        surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
-        notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
-        researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
-        thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
-        studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
-        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
-        notes?: NoteUpdateManyWithoutStudentNestedInput
-        noteFolders?: NoteFolderUpdateManyWithoutStudentNestedInput
-    };
-    export type StudentUncheckedUpdateWithoutExamSessionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
-        note?: NullableStringFieldUpdateOperationsInput | string | null
-        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
-        unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
-        status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-        fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
-        userProfileId?: StringFieldUpdateOperationsInput | string
-        trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingObjectTypeId?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingTypeId?: NullableStringFieldUpdateOperationsInput | string | null
-        trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
-        registrationAreaId?: NullableStringFieldUpdateOperationsInput | string | null
-        curriculumVersionId?: NullableStringFieldUpdateOperationsInput | string | null
-        curriculumVersionParallelId?: NullableStringFieldUpdateOperationsInput | string | null
-        academicWarningLevel?: IntFieldUpdateOperationsInput | number
-        disciplinaryWarningLevel?: IntFieldUpdateOperationsInput | number
-        suspended?: BoolFieldUpdateOperationsInput | boolean
-        expelled?: BoolFieldUpdateOperationsInput | boolean
-        foreignLangPass?: BoolFieldUpdateOperationsInput | boolean
-        ITCertificationPass?: BoolFieldUpdateOperationsInput | boolean
-        strengthTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        militaryTrainingPass?: BoolFieldUpdateOperationsInput | boolean
-        priorityObject?: PriorityObjectUncheckedUpdateManyWithoutStudentsNestedInput
-        classMonitor?: FixedClassUncheckedUpdateOneWithoutClassMonitorNestedInput
-        unionLeaderOf?: FixedClassUncheckedUpdateOneWithoutUnionLeaderNestedInput
-        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutStudentNestedInput
-        studentTrainingScore?: StudentTrainingScoreUncheckedUpdateManyWithoutStudentNestedInput
-        studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutStudentNestedInput
-        studentYearResult?: StudentYearResultUncheckedUpdateManyWithoutStudentNestedInput
-        scholarshipAwards?: ScholarshipAwardUncheckedUpdateManyWithoutStudentNestedInput
-        archivedCertificate?: ArchivedCertificateUncheckedUpdateManyWithoutStudentNestedInput
-        archivedAward?: ArchivedAwardUncheckedUpdateManyWithoutStudentNestedInput
-        academicWarning?: AcademicWarningUncheckedUpdateManyWithoutStudentNestedInput
-        disciplinaryWarning?: DisciplinaryWarningUncheckedUpdateManyWithoutStudentNestedInput
-        studentAcademicDecision?: StudentAcademicDecisionUncheckedUpdateManyWithoutStudentNestedInput
-        graduationApplications?: StudentGraduationApplicationUncheckedUpdateManyWithoutStudentNestedInput
-        graduationDecision?: GraduationDecisionUncheckedUpdateOneWithoutStudentNestedInput
-        surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
-        notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
-        researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
-        studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
-        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
-        notes?: NoteUncheckedUpdateManyWithoutStudentNestedInput
-        noteFolders?: NoteFolderUncheckedUpdateManyWithoutStudentNestedInput
+    export type StudentSubjectScoreCreateOrConnectWithoutExamSessionInput = {
+        where: StudentSubjectScoreWhereUniqueInput
+        create: XOR<StudentSubjectScoreCreateWithoutExamSessionInput, StudentSubjectScoreUncheckedCreateWithoutExamSessionInput>
     };
     export type ExamUpsertWithoutExamSessionsInput = {
         update: XOR<ExamUpdateWithoutExamSessionsInput, ExamUncheckedUpdateWithoutExamSessionsInput>
@@ -503086,20 +501050,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        questionBank?: QuestionBankUpdateOneRequiredWithoutExamNestedInput
-        room?: RoomUpdateManyWithoutExamNestedInput
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
+        room?: RoomUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutExamNestedInput
     };
     export type ExamUncheckedUpdateWithoutExamSessionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -503111,31 +501070,26 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
+        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUncheckedUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutExamNestedInput
     };
-    export type RoomUpsertWithoutExamSessionInput = {
-        update: XOR<RoomUpdateWithoutExamSessionInput, RoomUncheckedUpdateWithoutExamSessionInput>
-        create: XOR<RoomCreateWithoutExamSessionInput, RoomUncheckedCreateWithoutExamSessionInput>
-        where?: RoomWhereInput
+    export type ExamRoomUpsertWithoutExamSessionsInput = {
+        update: XOR<ExamRoomUpdateWithoutExamSessionsInput, ExamRoomUncheckedUpdateWithoutExamSessionsInput>
+        create: XOR<ExamRoomCreateWithoutExamSessionsInput, ExamRoomUncheckedCreateWithoutExamSessionsInput>
+        where?: ExamRoomWhereInput
     };
-    export type RoomUpdateToOneWithWhereWithoutExamSessionInput = {
-        where?: RoomWhereInput
-        data: XOR<RoomUpdateWithoutExamSessionInput, RoomUncheckedUpdateWithoutExamSessionInput>
+    export type ExamRoomUpdateToOneWithWhereWithoutExamSessionsInput = {
+        where?: ExamRoomWhereInput
+        data: XOR<ExamRoomUpdateWithoutExamSessionsInput, ExamRoomUncheckedUpdateWithoutExamSessionsInput>
     };
-    export type RoomUpdateWithoutExamSessionInput = {
+    export type ExamRoomUpdateWithoutExamSessionsInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -503143,64 +501097,10 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
-        computerRoom?: BoolFieldUpdateOperationsInput | boolean
-        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
-        examRoom?: BoolFieldUpdateOperationsInput | boolean
-        capacity?: IntFieldUpdateOperationsInput | number
-        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-        building?: BuildingUpdateOneWithoutRoomsNestedInput
-        exam?: ExamUpdateManyWithoutRoomNestedInput
-        subjectClasses?: SubjectClassUpdateManyWithoutRoomNestedInput
-        defenseRooms?: SubjectClassUpdateManyWithoutDefenseRoomsNestedInput
-        thesisProject?: ThesisProjectUpdateManyWithoutRoomNestedInput
-        classSchedules?: ClassScheduleUpdateManyWithoutRoomNestedInput
+        exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
+        room?: RoomUpdateOneRequiredWithoutExamRoomsNestedInput
     };
-    export type RoomUncheckedUpdateWithoutExamSessionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
-        computerRoom?: BoolFieldUpdateOperationsInput | boolean
-        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
-        examRoom?: BoolFieldUpdateOperationsInput | boolean
-        capacity?: IntFieldUpdateOperationsInput | number
-        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-        buildingId?: NullableStringFieldUpdateOperationsInput | string | null
-        exam?: ExamUncheckedUpdateManyWithoutRoomNestedInput
-        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutRoomNestedInput
-        defenseRooms?: SubjectClassUncheckedUpdateManyWithoutDefenseRoomsNestedInput
-        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutRoomNestedInput
-        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
-    };
-    export type ExamBankUpsertWithoutExamSessionInput = {
-        update: XOR<ExamBankUpdateWithoutExamSessionInput, ExamBankUncheckedUpdateWithoutExamSessionInput>
-        create: XOR<ExamBankCreateWithoutExamSessionInput, ExamBankUncheckedCreateWithoutExamSessionInput>
-        where?: ExamBankWhereInput
-    };
-    export type ExamBankUpdateToOneWithWhereWithoutExamSessionInput = {
-        where?: ExamBankWhereInput
-        data: XOR<ExamBankUpdateWithoutExamSessionInput, ExamBankUncheckedUpdateWithoutExamSessionInput>
-    };
-    export type ExamBankUpdateWithoutExamSessionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examCode?: StringFieldUpdateOperationsInput | string
-        exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
-        questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
-    };
-    export type ExamBankUncheckedUpdateWithoutExamSessionInput = {
+    export type ExamRoomUncheckedUpdateWithoutExamSessionsInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -503209,32 +501109,18 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
-        examCode?: StringFieldUpdateOperationsInput | string
-        questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
+        roomId?: StringFieldUpdateOperationsInput | string
     };
-    export type AnswerUpsertWithWhereUniqueWithoutSessionInput = {
-        where: AnswerWhereUniqueInput
-        update: XOR<AnswerUpdateWithoutSessionInput, AnswerUncheckedUpdateWithoutSessionInput>
-        create: XOR<AnswerCreateWithoutSessionInput, AnswerUncheckedCreateWithoutSessionInput>
+    export type StudentSubjectScoreUpsertWithoutExamSessionInput = {
+        update: XOR<StudentSubjectScoreUpdateWithoutExamSessionInput, StudentSubjectScoreUncheckedUpdateWithoutExamSessionInput>
+        create: XOR<StudentSubjectScoreCreateWithoutExamSessionInput, StudentSubjectScoreUncheckedCreateWithoutExamSessionInput>
+        where?: StudentSubjectScoreWhereInput
     };
-    export type AnswerUpdateWithWhereUniqueWithoutSessionInput = {
-        where: AnswerWhereUniqueInput
-        data: XOR<AnswerUpdateWithoutSessionInput, AnswerUncheckedUpdateWithoutSessionInput>
+    export type StudentSubjectScoreUpdateToOneWithWhereWithoutExamSessionInput = {
+        where?: StudentSubjectScoreWhereInput
+        data: XOR<StudentSubjectScoreUpdateWithoutExamSessionInput, StudentSubjectScoreUncheckedUpdateWithoutExamSessionInput>
     };
-    export type AnswerUpdateManyWithWhereWithoutSessionInput = {
-        where: AnswerScalarWhereInput
-        data: XOR<AnswerUpdateManyMutationInput, AnswerUncheckedUpdateManyWithoutSessionInput>
-    };
-    export type ExamFaxUpsertWithoutExamSessionInput = {
-        update: XOR<ExamFaxUpdateWithoutExamSessionInput, ExamFaxUncheckedUpdateWithoutExamSessionInput>
-        create: XOR<ExamFaxCreateWithoutExamSessionInput, ExamFaxUncheckedCreateWithoutExamSessionInput>
-        where?: ExamFaxWhereInput
-    };
-    export type ExamFaxUpdateToOneWithWhereWithoutExamSessionInput = {
-        where?: ExamFaxWhereInput
-        data: XOR<ExamFaxUpdateWithoutExamSessionInput, ExamFaxUncheckedUpdateWithoutExamSessionInput>
-    };
-    export type ExamFaxUpdateWithoutExamSessionInput = {
+    export type StudentSubjectScoreUpdateWithoutExamSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -503242,11 +501128,34 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        fax?: StringFieldUpdateOperationsInput | string
-        score?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-        exam?: ExamUpdateOneRequiredWithoutExamFaxNestedInput
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
+        subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
+        student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
     };
-    export type ExamFaxUncheckedUpdateWithoutExamSessionInput = {
+    export type StudentSubjectScoreUncheckedUpdateWithoutExamSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -503254,9 +501163,32 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examId?: StringFieldUpdateOperationsInput | string
-        fax?: StringFieldUpdateOperationsInput | string
-        score?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
     };
     export type TrainingCourseCreateWithoutAcademicWarningRuleInput = {
         id?: string
@@ -503550,7 +501482,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -503607,7 +501538,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -503769,7 +501699,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -503826,7 +501755,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -503953,7 +501881,6 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutStudentInput
@@ -504010,7 +501937,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetStudentsInput
         researchRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutStudentInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutStudentInput
-        examSession?: ExamSessionUncheckedCreateNestedManyWithoutStudentInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedCreateNestedManyWithoutStudentInput
         studentScoreConvert?: StudentScoreConvertUncheckedCreateNestedManyWithoutStudentInput
         classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutStudentInput
@@ -504158,7 +502084,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -504215,7 +502140,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -507196,7 +505120,7 @@ export namespace Prisma {
         manualFinalScore?: number | null
         examPostponedReason?: boolean | null
         examPostponed?: string | null
-        examBanned: boolean
+        examBanned?: boolean | null
         examBannedReason?: string | null
         suspended?: boolean | null
         suspendedReason?: string | null
@@ -508403,7 +506327,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -508460,7 +506383,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -508562,7 +506484,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -508584,7 +506506,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -508605,7 +506527,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -515120,7 +513042,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -515177,7 +513098,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -519451,6 +517371,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
         students?: StudentUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateWithoutDM_TinhInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -519464,6 +517385,7 @@ export namespace Prisma {
         dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateManyWithoutDM_TinhInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -521675,6 +519597,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
         students?: StudentUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateWithoutDM_Tinh_NewInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -521688,6 +519611,7 @@ export namespace Prisma {
         dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -528672,7 +526596,7 @@ export namespace Prisma {
         manualFinalScore?: number | null
         examPostponedReason?: boolean | null
         examPostponed?: string | null
-        examBanned: boolean
+        examBanned?: boolean | null
         examBannedReason?: string | null
         suspended?: boolean | null
         suspendedReason?: string | null
@@ -528902,7 +526826,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528923,7 +526847,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -528944,7 +526868,7 @@ export namespace Prisma {
         manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
         examPostponedReason?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examPostponed?: NullableStringFieldUpdateOperationsInput | string | null
-        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: NullableBoolFieldUpdateOperationsInput | boolean | null
         examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
         suspended?: NullableBoolFieldUpdateOperationsInput | boolean | null
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529601,6 +527525,8 @@ export namespace Prisma {
         trainingObjectTypeId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -529615,6 +527541,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -529800,6 +527727,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -529816,6 +527745,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -529846,6 +527776,8 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529860,6 +527792,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529890,6 +527823,8 @@ export namespace Prisma {
         trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529904,6 +527839,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531566,7 +529502,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -531623,7 +529558,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -531677,6 +529611,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -531694,6 +529630,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -531724,6 +529661,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531738,6 +529677,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531768,6 +529708,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531782,6 +529724,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -532652,7 +530595,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -532709,7 +530651,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -532798,7 +530739,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -532855,7 +530795,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -533376,6 +531315,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -533390,6 +531331,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -533419,6 +531361,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
     };
     export type DocumentFileCreateManySubjectVersionInput = {
         id?: string
@@ -534182,6 +532126,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -534198,6 +532144,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -534228,6 +532175,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534242,6 +532191,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534272,6 +532222,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534286,6 +532238,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534313,8 +532266,11 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -534347,6 +532303,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -534379,6 +532338,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type DocumentFileUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -534947,6 +532908,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
     };
     export type ClassScheduleCreateManySubjectClassInput = {
         id?: string
@@ -535048,8 +533011,11 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -535082,6 +533048,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -535114,6 +533083,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type FixedClassUpdateWithoutSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -535451,7 +533422,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassUpdateManyWithoutRoomNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutRoomNestedInput
         classSchedules?: ClassScheduleUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutRoomNestedInput
     };
     export type RoomUncheckedUpdateWithoutDefenseRoomsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -535473,7 +533444,7 @@ export namespace Prisma {
         subjectClasses?: SubjectClassUncheckedUpdateManyWithoutRoomNestedInput
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutRoomNestedInput
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutRoomNestedInput
     };
     export type RoomUncheckedUpdateManyWithoutDefenseRoomsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -535781,6 +533752,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -535795,6 +533768,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -536266,7 +534240,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -536323,7 +534296,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -536415,6 +534387,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -536431,6 +534405,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -536461,6 +534436,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536475,6 +534452,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536505,6 +534483,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536519,6 +534499,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -536810,7 +534791,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -536867,7 +534847,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -536989,7 +534968,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -537046,7 +535024,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -537325,7 +535302,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -537382,7 +535358,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -537575,7 +535550,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -537632,7 +535606,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -537774,6 +535747,44 @@ export namespace Prisma {
         name: string
         floor?: number | null
     };
+    export type SubjectClassCreateManyTrainingLocationInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        code: string
+        name: string
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        subjectId: string
+        schedule?: $Enums.SubjectClassSchedule | null
+        maxStudent: number
+        trainingObjectTypeId: string
+        semesterId: string
+        cancelled?: boolean
+        lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
+        examDate?: Date | string | null
+        examType?: $Enums.ExamType | null
+        examId?: string | null
+        scoreDeadLineStart?: Date | string | null
+        scoreDeadline?: Date | string | null
+        examScoreDeadline?: Date | string | null
+        enteredScore?: boolean
+        enteredExamScore?: boolean
+        issuedScoreAt?: Date | string | null
+        isLockScore?: boolean
+        isLockExamScore?: boolean
+        scoreSubmitted?: boolean
+        scoreChecked?: boolean
+        roomId?: string | null
+        lecturerId?: string | null
+        extraLecturerId?: string | null
+        enterGradeLecturerId?: string | null
+    };
     export type StudentUpdateWithoutTrainingLocationInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -537824,7 +535835,6 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -537881,7 +535891,6 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetStudentsNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -537955,6 +535964,138 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         floor?: NullableIntFieldUpdateOperationsInput | number | null
     };
+    export type SubjectClassUpdateWithoutTrainingLocationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+        maxStudent?: IntFieldUpdateOperationsInput | number
+        cancelled?: BoolFieldUpdateOperationsInput | boolean
+        lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enteredScore?: BoolFieldUpdateOperationsInput | boolean
+        enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+        issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isLockScore?: BoolFieldUpdateOperationsInput | boolean
+        isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+        scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+        scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
+        semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
+        exam?: ExamUpdateOneWithoutSubjectClassNestedInput
+        room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
+        extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
+        enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
+        fixedClasses?: FixedClassUpdateManyWithoutSubjectClassesNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutSubjectClassNestedInput
+        thesisProjects?: ThesisProjectUpdateManyWithoutSubjectClassNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
+        defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
+    };
+    export type SubjectClassUncheckedUpdateWithoutTrainingLocationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subjectId?: StringFieldUpdateOperationsInput | string
+        schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+        maxStudent?: IntFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        cancelled?: BoolFieldUpdateOperationsInput | boolean
+        lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enteredScore?: BoolFieldUpdateOperationsInput | boolean
+        enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+        issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isLockScore?: BoolFieldUpdateOperationsInput | boolean
+        isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+        scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+        scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
+        fixedClasses?: FixedClassUncheckedUpdateManyWithoutSubjectClassesNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutSubjectClassNestedInput
+        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSubjectClassNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
+        defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
+    };
+    export type SubjectClassUncheckedUpdateManyWithoutTrainingLocationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subjectId?: StringFieldUpdateOperationsInput | string
+        schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+        maxStudent?: IntFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        cancelled?: BoolFieldUpdateOperationsInput | boolean
+        lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enteredScore?: BoolFieldUpdateOperationsInput | boolean
+        enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+        issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isLockScore?: BoolFieldUpdateOperationsInput | boolean
+        isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+        scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+        scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type RoomCreateManyBuildingInput = {
         id?: string
         code?: string | null
@@ -537991,7 +536132,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassUpdateManyWithoutDefenseRoomsNestedInput
         thesisProject?: ThesisProjectUpdateManyWithoutRoomNestedInput
         classSchedules?: ClassScheduleUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutRoomNestedInput
     };
     export type RoomUncheckedUpdateWithoutBuildingInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538013,7 +536154,7 @@ export namespace Prisma {
         defenseRooms?: SubjectClassUncheckedUpdateManyWithoutDefenseRoomsNestedInput
         thesisProject?: ThesisProjectUncheckedUpdateManyWithoutRoomNestedInput
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutRoomNestedInput
     };
     export type RoomUncheckedUpdateManyWithoutBuildingInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538049,6 +536190,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -538062,6 +536205,7 @@ export namespace Prisma {
         isLockExamScore?: boolean
         scoreSubmitted?: boolean
         scoreChecked?: boolean
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -538118,7 +536262,7 @@ export namespace Prisma {
         originalScheduleId?: string | null
         cancelReason?: string | null
     };
-    export type ExamSessionCreateManyRoomInput = {
+    export type ExamRoomCreateManyRoomInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -538126,12 +536270,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
         examId: string
-        examBankId?: string | null
-        examFaxId?: string | null
     };
     export type ExamUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538143,20 +536282,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        questionBank?: QuestionBankUpdateOneRequiredWithoutExamNestedInput
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
+        questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
         subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutExamNestedInput
     };
     export type ExamUncheckedUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538168,20 +536302,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUncheckedUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutExamNestedInput
     };
     export type ExamUncheckedUpdateManyWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538193,15 +536322,9 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        questionBankId?: StringFieldUpdateOperationsInput | string
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
+        questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
     };
     export type SubjectClassUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -538218,6 +536341,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -538234,6 +536359,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -538265,6 +536391,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538278,6 +536406,7 @@ export namespace Prisma {
         isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538309,6 +536438,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538322,6 +536453,7 @@ export namespace Prisma {
         isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538341,6 +536473,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -538358,6 +536492,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -538388,6 +536523,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538402,6 +536539,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538432,6 +536570,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538446,6 +536586,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -538618,7 +536759,7 @@ export namespace Prisma {
         originalScheduleId?: NullableStringFieldUpdateOperationsInput | string | null
         cancelReason?: NullableStringFieldUpdateOperationsInput | string | null
     };
-    export type ExamSessionUpdateWithoutRoomInput = {
+    export type ExamRoomUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -538626,15 +536767,10 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        student?: StudentUpdateOneWithoutExamSessionNestedInput
-        exam?: ExamUpdateOneRequiredWithoutExamSessionsNestedInput
-        examBank?: ExamBankUpdateOneWithoutExamSessionNestedInput
-        answers?: AnswerUpdateManyWithoutSessionNestedInput
-        examFax?: ExamFaxUpdateOneWithoutExamSessionNestedInput
+        exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
+        examSessions?: ExamSessionUpdateManyWithoutExamRoomNestedInput
     };
-    export type ExamSessionUncheckedUpdateWithoutRoomInput = {
+    export type ExamRoomUncheckedUpdateWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -538642,15 +536778,10 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
-        answers?: AnswerUncheckedUpdateManyWithoutSessionNestedInput
+        examSessions?: ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput
     };
-    export type ExamSessionUncheckedUpdateManyWithoutRoomInput = {
+    export type ExamRoomUncheckedUpdateManyWithoutRoomInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -538658,12 +536789,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
         examId?: StringFieldUpdateOperationsInput | string
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type TrainingFieldOnTrainingObjectTypeCreateManyTrainingFieldInput = {
         id?: string
@@ -540040,6 +538166,8 @@ export namespace Prisma {
         suspendedReason?: string | null
         repeated?: boolean
         repeatedReason?: string | null
+        isImproving?: boolean
+        examId?: string | null
     };
     export type StudentTrainingScoreCreateManyStudentInput = {
         id?: string
@@ -540269,21 +538397,6 @@ export namespace Prisma {
         reviewedById?: string | null
         reviewNote?: string | null
     };
-    export type ExamSessionCreateManyStudentInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        examId: string
-        roomId?: string | null
-        examBankId?: string | null
-        examFaxId?: string | null
-    };
     export type DiplomaVerificationApplicationCreateManyStudentInput = {
         id?: string
         code?: string | null
@@ -540409,8 +538522,11 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -540443,6 +538559,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -540475,6 +538594,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentTrainingScoreUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -541243,53 +539364,6 @@ export namespace Prisma {
         reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
     };
-    export type ExamSessionUpdateWithoutStudentInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        exam?: ExamUpdateOneRequiredWithoutExamSessionsNestedInput
-        room?: RoomUpdateOneWithoutExamSessionNestedInput
-        examBank?: ExamBankUpdateOneWithoutExamSessionNestedInput
-        answers?: AnswerUpdateManyWithoutSessionNestedInput
-        examFax?: ExamFaxUpdateOneWithoutExamSessionNestedInput
-    };
-    export type ExamSessionUncheckedUpdateWithoutStudentInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        examId?: StringFieldUpdateOperationsInput | string
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
-        answers?: AnswerUncheckedUpdateManyWithoutSessionNestedInput
-    };
-    export type ExamSessionUncheckedUpdateManyWithoutStudentInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        examId?: StringFieldUpdateOperationsInput | string
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
-    };
     export type DiplomaVerificationApplicationUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -541807,7 +539881,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionUpdateManyWithoutStudentNestedInput
         researchRegistrations?: StudentResearchRegistrationUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutStudentNestedInput
@@ -541864,7 +539937,6 @@ export namespace Prisma {
         surveySessions?: SurveySessionUncheckedUpdateManyWithoutStudentNestedInput
         researchRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutStudentNestedInput
         thesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutStudentNestedInput
         diplomaVerificationApplication?: DiplomaVerificationApplicationUncheckedUpdateManyWithoutStudentNestedInput
         studentScoreConvert?: StudentScoreConvertUncheckedUpdateManyWithoutStudentNestedInput
         classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutStudentNestedInput
@@ -542724,6 +540796,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -542738,6 +540812,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
     };
@@ -542759,6 +540834,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -542773,6 +540850,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         enterGradeLecturerId?: string | null
     };
@@ -542794,6 +540872,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         examId?: string | null
@@ -542808,6 +540888,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
     };
@@ -543004,6 +541085,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543021,6 +541104,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
@@ -543051,6 +541135,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543065,6 +541151,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
@@ -543095,6 +541182,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543109,6 +541198,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -543127,6 +541217,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543144,6 +541236,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
@@ -543174,6 +541267,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543188,6 +541283,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
@@ -543218,6 +541314,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543232,6 +541330,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -543250,6 +541349,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -543267,6 +541368,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
@@ -543297,6 +541399,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543311,6 +541415,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
@@ -543341,6 +541446,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -543355,6 +541462,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -544765,6 +542873,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -544782,6 +542892,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -544812,6 +542923,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544826,6 +542939,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544856,6 +542970,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544870,6 +542986,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546732,6 +544849,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -546749,6 +544868,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -546779,6 +544899,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546793,6 +544915,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546823,6 +544946,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         examId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -546837,6 +544962,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -548128,9 +546254,12 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -548163,6 +546292,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -548195,6 +546327,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentSubjectScoreUpdateWithoutGraduationSupplementaryScoreInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -548219,9 +546353,12 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
         subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
         subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        exam?: ExamUpdateOneWithoutStudentSubjectScoreNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -548254,6 +546391,9 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
         graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
         certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
         awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
@@ -548286,6 +546426,8 @@ export namespace Prisma {
         suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
         repeated?: BoolFieldUpdateOperationsInput | boolean
         repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type RankingConditionCreateManyRankingInput = {
         id?: string
@@ -549083,14 +547225,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         title: string
         status?: $Enums.ExamStatus
-        startTime: Date | string
-        endTime: Date | string
-        duration: number
-        passScore?: number
-        maxScore?: number
-        shuffleQuestions?: boolean
-        shuffleAnswers?: boolean
-        showResult?: boolean
+        lockExamCode?: boolean
+        startTime: string
     };
     export type QuestionUpdateWithoutQuestionBankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549111,7 +547247,6 @@ export namespace Prisma {
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutQuestionBankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549132,7 +547267,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateManyWithoutQuestionBankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549160,20 +547294,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        room?: RoomUpdateManyWithoutExamNestedInput
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
         subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
+        room?: RoomUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutExamNestedInput
     };
     export type ExamUncheckedUpdateWithoutQuestionBankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549185,20 +547314,15 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
-        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
+        studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
+        room?: RoomUncheckedUpdateManyWithoutExamNestedInput
         examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
         testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutExamNestedInput
         examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
-        examFax?: ExamFaxUncheckedUpdateManyWithoutExamNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutExamNestedInput
     };
     export type ExamUncheckedUpdateManyWithoutQuestionBankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549210,14 +547334,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         title?: StringFieldUpdateOperationsInput | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
-        startTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        endTime?: DateTimeFieldUpdateOperationsInput | Date | string
-        duration?: IntFieldUpdateOperationsInput | number
-        passScore?: FloatFieldUpdateOperationsInput | number
-        maxScore?: FloatFieldUpdateOperationsInput | number
-        shuffleQuestions?: BoolFieldUpdateOperationsInput | boolean
-        shuffleAnswers?: BoolFieldUpdateOperationsInput | boolean
-        showResult?: BoolFieldUpdateOperationsInput | boolean
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
+        startTime?: StringFieldUpdateOperationsInput | string
     };
     export type QuestionCreateManyDifficultyInput = {
         id?: string
@@ -549254,7 +547372,6 @@ export namespace Prisma {
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         knowledgeBlock?: KnowledgeBlockUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutDifficultyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549275,7 +547392,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateManyWithoutDifficultyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549341,7 +547457,6 @@ export namespace Prisma {
         questionBank?: QuestionBankUpdateOneRequiredWithoutQuestionsNestedInput
         difficulty?: DifficultyUpdateOneWithoutQuestionsNestedInput
         sessionQuestions?: ExamBankQuestionUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateWithoutKnowledgeBlockInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549362,7 +547477,6 @@ export namespace Prisma {
         fillInBlankSlots?: FillInBlankSlotUncheckedUpdateManyWithoutQuestionNestedInput
         orderingItems?: OrderingItemUncheckedUpdateManyWithoutQuestionNestedInput
         sessionQuestions?: ExamBankQuestionUncheckedUpdateManyWithoutQuestionNestedInput
-        answers?: AnswerUncheckedUpdateManyWithoutQuestionNestedInput
     };
     export type QuestionUncheckedUpdateManyWithoutKnowledgeBlockInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549463,20 +547577,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         examBankId: string
         order?: number | null
-    };
-    export type AnswerCreateManyQuestionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        sessionId: string
-        isCorrect?: boolean | null
-        score?: number | null
-        comment?: string | null
-        essayAnswer: string
     };
     export type MultipleChoiceOptionUpdateWithoutQuestionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549613,48 +547713,6 @@ export namespace Prisma {
         examBankId?: StringFieldUpdateOperationsInput | string
         order?: NullableIntFieldUpdateOperationsInput | number | null
     };
-    export type AnswerUpdateWithoutQuestionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
-        session?: ExamSessionUpdateOneRequiredWithoutAnswersNestedInput
-    };
-    export type AnswerUncheckedUpdateWithoutQuestionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        sessionId?: StringFieldUpdateOperationsInput | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
-    };
-    export type AnswerUncheckedUpdateManyWithoutQuestionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        sessionId?: StringFieldUpdateOperationsInput | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
-    };
     export type SubjectClassCreateManyExamInput = {
         id?: string
         active?: boolean
@@ -549673,6 +547731,8 @@ export namespace Prisma {
         semesterId: string
         cancelled?: boolean
         lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
         examDate?: Date | string | null
         examType?: $Enums.ExamType | null
         scoreDeadLineStart?: Date | string | null
@@ -549686,9 +547746,38 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
+    };
+    export type StudentSubjectScoreCreateManyExamInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        subjectClassId?: string | null
+        subjectVersionId: string
+        studentId: string
+        attendanceScore?: number | null
+        midtermScore?: number | null
+        examScore?: number | null
+        finalScore?: Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: number | null
+        examPostponed?: boolean
+        examPostponedReason?: string | null
+        exempted?: boolean
+        withdrew?: boolean
+        examBanned?: boolean
+        examBannedReason?: string | null
+        suspended?: boolean
+        suspendedReason?: string | null
+        repeated?: boolean
+        repeatedReason?: string | null
+        isImproving?: boolean
     };
     export type ExamBankCreateManyExamInput = {
         id?: string
@@ -549698,7 +547787,6 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        examCode: string
     };
     export type TestStructureRuleCreateManyExamInput = {
         id?: string
@@ -549721,14 +547809,11 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
-        roomId?: string | null
-        examBankId?: string | null
-        examFaxId?: string | null
+        examRoomId: string
+        studentSubjectScoreId: string
+        examCode?: string | null
     };
-    export type ExamFaxCreateManyExamInput = {
+    export type ExamRoomCreateManyExamInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -549736,69 +547821,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        fax: string
-        score?: Decimal | DecimalJsLike | number | string | null
-    };
-    export type RoomUpdateWithoutExamInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
-        computerRoom?: BoolFieldUpdateOperationsInput | boolean
-        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
-        examRoom?: BoolFieldUpdateOperationsInput | boolean
-        capacity?: IntFieldUpdateOperationsInput | number
-        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-        building?: BuildingUpdateOneWithoutRoomsNestedInput
-        subjectClasses?: SubjectClassUpdateManyWithoutRoomNestedInput
-        defenseRooms?: SubjectClassUpdateManyWithoutDefenseRoomsNestedInput
-        thesisProject?: ThesisProjectUpdateManyWithoutRoomNestedInput
-        classSchedules?: ClassScheduleUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUpdateManyWithoutRoomNestedInput
-    };
-    export type RoomUncheckedUpdateWithoutExamInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
-        computerRoom?: BoolFieldUpdateOperationsInput | boolean
-        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
-        examRoom?: BoolFieldUpdateOperationsInput | boolean
-        capacity?: IntFieldUpdateOperationsInput | number
-        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-        buildingId?: NullableStringFieldUpdateOperationsInput | string | null
-        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutRoomNestedInput
-        defenseRooms?: SubjectClassUncheckedUpdateManyWithoutDefenseRoomsNestedInput
-        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutRoomNestedInput
-        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
-        examSession?: ExamSessionUncheckedUpdateManyWithoutRoomNestedInput
-    };
-    export type RoomUncheckedUpdateManyWithoutExamInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
-        computerRoom?: BoolFieldUpdateOperationsInput | boolean
-        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
-        examRoom?: BoolFieldUpdateOperationsInput | boolean
-        capacity?: IntFieldUpdateOperationsInput | number
-        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-        buildingId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId: string
     };
     export type SubjectClassUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549815,6 +547838,8 @@ export namespace Prisma {
         maxStudent?: IntFieldUpdateOperationsInput | number
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549831,6 +547856,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -549862,6 +547888,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549875,6 +547903,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -549906,6 +547935,8 @@ export namespace Prisma {
         semesterId?: StringFieldUpdateOperationsInput | string
         cancelled?: BoolFieldUpdateOperationsInput | boolean
         lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
         scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -549919,9 +547950,169 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type StudentSubjectScoreUpdateWithoutExamInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        subjectClass?: SubjectClassUpdateOneWithoutSubjectClassStudentNestedInput
+        subjectVersion?: SubjectVersionUpdateOneRequiredWithoutStudentSubjectScoreNestedInput
+        student?: StudentUpdateOneRequiredWithoutSubjectClassStudentNestedInput
+        examSession?: ExamSessionUpdateOneWithoutStudentSubjectScoreNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type StudentSubjectScoreUncheckedUpdateWithoutExamInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+        examSession?: ExamSessionUncheckedUpdateOneWithoutStudentSubjectScoreNestedInput
+        graduationGpaScores?: StudentGraduationApplicationUncheckedUpdateManyWithoutGpaScoreNestedInput
+        graduationSupplementaryScore?: StudentGraduationApplicationUncheckedUpdateManyWithoutSupplementaryScoreNestedInput
+        certificates?: ArchivedCertificateOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        awards?: ArchivedAwardOnStudentSubjectScoreUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentThesisRegistration?: StudentThesisRegistrationUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+        studentSubjectScoreHistory?: StudentSubjectScoreHistoryUncheckedUpdateManyWithoutStudentSubjectScoreNestedInput
+    };
+    export type StudentSubjectScoreUncheckedUpdateManyWithoutExamInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectVersionId?: StringFieldUpdateOperationsInput | string
+        studentId?: StringFieldUpdateOperationsInput | string
+        attendanceScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        midtermScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        finalScore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        manualFinalScore?: NullableFloatFieldUpdateOperationsInput | number | null
+        examPostponed?: BoolFieldUpdateOperationsInput | boolean
+        examPostponedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        exempted?: BoolFieldUpdateOperationsInput | boolean
+        withdrew?: BoolFieldUpdateOperationsInput | boolean
+        examBanned?: BoolFieldUpdateOperationsInput | boolean
+        examBannedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        suspended?: BoolFieldUpdateOperationsInput | boolean
+        suspendedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        repeated?: BoolFieldUpdateOperationsInput | boolean
+        repeatedReason?: NullableStringFieldUpdateOperationsInput | string | null
+        isImproving?: BoolFieldUpdateOperationsInput | boolean
+    };
+    export type RoomUpdateWithoutExamInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
+        computerRoom?: BoolFieldUpdateOperationsInput | boolean
+        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
+        examRoom?: BoolFieldUpdateOperationsInput | boolean
+        capacity?: IntFieldUpdateOperationsInput | number
+        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+        building?: BuildingUpdateOneWithoutRoomsNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutRoomNestedInput
+        defenseRooms?: SubjectClassUpdateManyWithoutDefenseRoomsNestedInput
+        thesisProject?: ThesisProjectUpdateManyWithoutRoomNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUpdateManyWithoutRoomNestedInput
+    };
+    export type RoomUncheckedUpdateWithoutExamInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
+        computerRoom?: BoolFieldUpdateOperationsInput | boolean
+        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
+        examRoom?: BoolFieldUpdateOperationsInput | boolean
+        capacity?: IntFieldUpdateOperationsInput | number
+        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+        buildingId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutRoomNestedInput
+        defenseRooms?: SubjectClassUncheckedUpdateManyWithoutDefenseRoomsNestedInput
+        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutRoomNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
+        examRooms?: ExamRoomUncheckedUpdateManyWithoutRoomNestedInput
+    };
+    export type RoomUncheckedUpdateManyWithoutExamInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        trainingRoom?: BoolFieldUpdateOperationsInput | boolean
+        computerRoom?: BoolFieldUpdateOperationsInput | boolean
+        laboratoryRoom?: BoolFieldUpdateOperationsInput | boolean
+        examRoom?: BoolFieldUpdateOperationsInput | boolean
+        capacity?: IntFieldUpdateOperationsInput | number
+        examCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+        buildingId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ExamBankUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549931,8 +548122,6 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examCode?: StringFieldUpdateOperationsInput | string
-        examSession?: ExamSessionUpdateManyWithoutExamBankNestedInput
         questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateWithoutExamInput = {
@@ -549943,8 +548132,6 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examCode?: StringFieldUpdateOperationsInput | string
-        examSession?: ExamSessionUncheckedUpdateManyWithoutExamBankNestedInput
         questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateManyWithoutExamInput = {
@@ -549955,7 +548142,6 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        examCode?: StringFieldUpdateOperationsInput | string
     };
     export type TestStructureRuleUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -550004,13 +548190,9 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        student?: StudentUpdateOneWithoutExamSessionNestedInput
-        room?: RoomUpdateOneWithoutExamSessionNestedInput
-        examBank?: ExamBankUpdateOneWithoutExamSessionNestedInput
-        answers?: AnswerUpdateManyWithoutSessionNestedInput
-        examFax?: ExamFaxUpdateOneWithoutExamSessionNestedInput
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
+        examRoom?: ExamRoomUpdateOneRequiredWithoutExamSessionsNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutExamSessionNestedInput
     };
     export type ExamSessionUncheckedUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -550020,13 +548202,9 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
-        answers?: AnswerUncheckedUpdateManyWithoutSessionNestedInput
+        examRoomId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ExamSessionUncheckedUpdateManyWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -550036,14 +548214,11 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examBankId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
+        examRoomId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
     };
-    export type ExamFaxUpdateWithoutExamInput = {
+    export type ExamRoomUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -550051,11 +548226,10 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        fax?: StringFieldUpdateOperationsInput | string
-        score?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-        examSession?: ExamSessionUpdateOneWithoutExamFaxNestedInput
+        room?: RoomUpdateOneRequiredWithoutExamRoomsNestedInput
+        examSessions?: ExamSessionUpdateManyWithoutExamRoomNestedInput
     };
-    export type ExamFaxUncheckedUpdateWithoutExamInput = {
+    export type ExamRoomUncheckedUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -550063,11 +548237,10 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        fax?: StringFieldUpdateOperationsInput | string
-        score?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-        examSession?: ExamSessionUncheckedUpdateOneWithoutExamFaxNestedInput
+        roomId?: StringFieldUpdateOperationsInput | string
+        examSessions?: ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput
     };
-    export type ExamFaxUncheckedUpdateManyWithoutExamInput = {
+    export type ExamRoomUncheckedUpdateManyWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
         active?: BoolFieldUpdateOperationsInput | boolean
@@ -550075,10 +548248,9 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        fax?: StringFieldUpdateOperationsInput | string
-        score?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+        roomId?: StringFieldUpdateOperationsInput | string
     };
-    export type ExamSessionCreateManyExamBankInput = {
+    export type ExamSessionCreateManyExamRoomInput = {
         id?: string
         code?: string | null
         active?: boolean
@@ -550086,12 +548258,45 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        startTime?: Date | string | null
-        endTime?: Date | string | null
-        studentId?: string | null
         examId: string
-        roomId?: string | null
-        examFaxId?: string | null
+        studentSubjectScoreId: string
+        examCode?: string | null
+    };
+    export type ExamSessionUpdateWithoutExamRoomInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
+        exam?: ExamUpdateOneRequiredWithoutExamSessionsNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutExamSessionNestedInput
+    };
+    export type ExamSessionUncheckedUpdateWithoutExamRoomInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ExamSessionUncheckedUpdateManyWithoutExamRoomInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        examCode?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ExamBankQuestionCreateManyExamBankInput = {
         id?: string
@@ -550103,53 +548308,6 @@ export namespace Prisma {
         updatedAt?: Date | string
         questionId: string
         order?: number | null
-    };
-    export type ExamSessionUpdateWithoutExamBankInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        student?: StudentUpdateOneWithoutExamSessionNestedInput
-        exam?: ExamUpdateOneRequiredWithoutExamSessionsNestedInput
-        room?: RoomUpdateOneWithoutExamSessionNestedInput
-        answers?: AnswerUpdateManyWithoutSessionNestedInput
-        examFax?: ExamFaxUpdateOneWithoutExamSessionNestedInput
-    };
-    export type ExamSessionUncheckedUpdateWithoutExamBankInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
-        examId?: StringFieldUpdateOperationsInput | string
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
-        answers?: AnswerUncheckedUpdateManyWithoutSessionNestedInput
-    };
-    export type ExamSessionUncheckedUpdateManyWithoutExamBankInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        studentId?: NullableStringFieldUpdateOperationsInput | string | null
-        examId?: StringFieldUpdateOperationsInput | string
-        roomId?: NullableStringFieldUpdateOperationsInput | string | null
-        examFaxId?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type ExamBankQuestionUpdateWithoutExamBankInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -550183,62 +548341,6 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         questionId?: StringFieldUpdateOperationsInput | string
         order?: NullableIntFieldUpdateOperationsInput | number | null
-    };
-    export type AnswerCreateManySessionInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        questionId: string
-        isCorrect?: boolean | null
-        score?: number | null
-        comment?: string | null
-        essayAnswer: string
-    };
-    export type AnswerUpdateWithoutSessionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
-        question?: QuestionUpdateOneRequiredWithoutAnswersNestedInput
-    };
-    export type AnswerUncheckedUpdateWithoutSessionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        questionId?: StringFieldUpdateOperationsInput | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
-    };
-    export type AnswerUncheckedUpdateManyWithoutSessionInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        questionId?: StringFieldUpdateOperationsInput | string
-        isCorrect?: NullableBoolFieldUpdateOperationsInput | boolean | null
-        score?: NullableFloatFieldUpdateOperationsInput | number | null
-        comment?: NullableStringFieldUpdateOperationsInput | string | null
-        essayAnswer?: StringFieldUpdateOperationsInput | string
     };
     export type AcademicWarningUpdateWithoutRulesInput = {
         id?: StringFieldUpdateOperationsInput | string

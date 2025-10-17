@@ -370,18 +370,18 @@ const Table = <T extends Record<string, unknown>>({
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
                     const [input, setInput] = useState('')
-                    const [optionsSerch, setOptionsSerch] = useState(item?.options || [])
+                    const [optionsSearch, setOptionsSearch] = useState(item?.options || [])
                     const handleSearch = async (value: string) => {
                         if (!value.trim()) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                             return
                         }
 
                         try {
                             const response = searchVietnamese(item?.options || [], value.trim())
-                            setOptionsSerch(response)
+                            setOptionsSearch(response)
                         } catch (_error: unknown) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                         }
                     }
                     return (
@@ -407,7 +407,7 @@ const Table = <T extends Record<string, unknown>>({
                                         }}
                                         style={{ height: 36, width: '100%', marginBottom: 16 }}
                                     />
-                                    {!input && optionsSerch.length > 0 && (
+                                    {!input && optionsSearch.length > 0 && (
                                         <Checkbox
                                             onChange={(e: CheckboxChangeEvent) =>
                                                 onCheckAllChange(item, e)
@@ -433,7 +433,7 @@ const Table = <T extends Record<string, unknown>>({
                                             ] as string[]
                                         }
                                         onChange={(e: string[]) => onCheckChange(item, e)}
-                                        options={optionsSerch}
+                                        options={optionsSearch}
                                     />
                                 </div>
                             )}
@@ -497,20 +497,20 @@ const Table = <T extends Record<string, unknown>>({
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
                     const [input, setInput] = useState('')
-                    const [optionsSerch, setOptionsSerch] = useState(item?.options || [])
+                    const [optionsSearch, setOptionsSearch] = useState(item?.options || [])
                     const [checkStrictly, setCheckStrictly] = useState(false)
 
                     const handleSearchTree = async (value: string) => {
                         if (!value.trim()) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                             return
                         }
 
                         try {
                             const response = searchVietnameseTree(item?.options || [], value.trim())
-                            setOptionsSerch(response)
+                            setOptionsSearch(response)
                         } catch (_error: unknown) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                         }
                     }
                     return (
@@ -539,7 +539,7 @@ const Table = <T extends Record<string, unknown>>({
                                 checkable={true}
                                 defaultExpandAll={true}
                                 multiple={true}
-                                treeData={optionsSerch}
+                                treeData={optionsSearch}
                                 checkedKeys={
                                     filtersTable[item.dataIndex as keyof FilterProps] as string[]
                                 }

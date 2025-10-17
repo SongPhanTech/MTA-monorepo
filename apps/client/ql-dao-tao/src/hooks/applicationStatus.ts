@@ -1,4 +1,4 @@
-import { ApplicationStatus } from '@workspace/db'
+import { ApplicationStatus } from '@workspace/db/client'
 
 export type ApplicationStatusOption = {
     value: ApplicationStatus

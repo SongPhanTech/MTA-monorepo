@@ -3,7 +3,7 @@
 import type React from 'react'
 import { Table } from 'antd'
 import type { TableProps, ColumnType } from 'antd/es/table'
-import { FilterProps } from '@constants/type'
+import type { FilterProps } from '@constants/type'
 
 export interface NestedColumn<T = any> extends Omit<ColumnType<T>, 'render'> {
     type?: 'input' | 'select' | 'order'
@@ -116,7 +116,7 @@ export function NestedCollapsibleTable<T extends Record<string, any>>({
 
         items.forEach((item, index) => {
             map[item[key]] = index // Lưu vị trí của item trong mảng gốc
-            // @ts-ignore
+            // @ts-expect-error
             items[index].children = [] as T[]
         })
 

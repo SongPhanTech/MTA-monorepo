@@ -3,7 +3,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import type { StudentSubjectScore, SubjectVersion } from '@workspace/db'
+import type { StudentSubjectScore, SubjectVersion } from '@workspace/db/client'
 import {
     useCreateManyStudentSubjectScore,
     useDeleteManyStudentSubjectScore,

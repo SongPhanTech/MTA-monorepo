@@ -8,7 +8,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import type { ArchivedAward, StudentSubjectScore } from '@workspace/db'
+import type { ArchivedAward, StudentSubjectScore } from '@workspace/db/client'
 import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,

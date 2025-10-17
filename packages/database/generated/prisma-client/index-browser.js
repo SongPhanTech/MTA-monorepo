@@ -1453,7 +1453,9 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   suspended: 'suspended',
   suspendedReason: 'suspendedReason',
   repeated: 'repeated',
-  repeatedReason: 'repeatedReason'
+  repeatedReason: 'repeatedReason',
+  isImproving: 'isImproving',
+  examId: 'examId'
 };
 
 exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
@@ -1899,6 +1901,8 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   semesterId: 'semesterId',
   cancelled: 'cancelled',
   lecturerAssignmentDeadline: 'lecturerAssignmentDeadline',
+  sendLecturerAssignmentAt: 'sendLecturerAssignmentAt',
+  submitLecturerAssignmentAt: 'submitLecturerAssignmentAt',
   examDate: 'examDate',
   examType: 'examType',
   examId: 'examId',
@@ -1913,6 +1917,7 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   scoreSubmitted: 'scoreSubmitted',
   scoreChecked: 'scoreChecked',
   roomId: 'roomId',
+  trainingLocationId: 'trainingLocationId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
   enterGradeLecturerId: 'enterGradeLecturerId'
@@ -3546,22 +3551,6 @@ exports.Prisma.OrderingItemScalarFieldEnum = {
   correctOrder: 'correctOrder'
 };
 
-exports.Prisma.AnswerScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  sessionId: 'sessionId',
-  questionId: 'questionId',
-  isCorrect: 'isCorrect',
-  score: 'score',
-  comment: 'comment',
-  essayAnswer: 'essayAnswer'
-};
-
 exports.Prisma.ExamScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3573,14 +3562,20 @@ exports.Prisma.ExamScalarFieldEnum = {
   title: 'title',
   status: 'status',
   questionBankId: 'questionBankId',
-  startTime: 'startTime',
-  endTime: 'endTime',
-  duration: 'duration',
-  passScore: 'passScore',
-  maxScore: 'maxScore',
-  shuffleQuestions: 'shuffleQuestions',
-  shuffleAnswers: 'shuffleAnswers',
-  showResult: 'showResult'
+  lockExamCode: 'lockExamCode',
+  startTime: 'startTime'
+};
+
+exports.Prisma.ExamRoomScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  examId: 'examId',
+  roomId: 'roomId'
 };
 
 exports.Prisma.TestStructureRuleScalarFieldEnum = {
@@ -3606,8 +3601,7 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  examId: 'examId',
-  examCode: 'examCode'
+  examId: 'examId'
 };
 
 exports.Prisma.ExamBankQuestionScalarFieldEnum = {
@@ -3623,19 +3617,6 @@ exports.Prisma.ExamBankQuestionScalarFieldEnum = {
   order: 'order'
 };
 
-exports.Prisma.ExamFaxScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  examId: 'examId',
-  fax: 'fax',
-  score: 'score'
-};
-
 exports.Prisma.ExamSessionScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3644,13 +3625,10 @@ exports.Prisma.ExamSessionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  startTime: 'startTime',
-  endTime: 'endTime',
-  studentId: 'studentId',
   examId: 'examId',
-  roomId: 'roomId',
-  examBankId: 'examBankId',
-  examFaxId: 'examFaxId'
+  examRoomId: 'examRoomId',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  examCode: 'examCode'
 };
 
 exports.Prisma.AcademicWarningRuleScalarFieldEnum = {
@@ -4949,7 +4927,8 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
   suspendedReason: 'suspendedReason',
-  repeatedReason: 'repeatedReason'
+  repeatedReason: 'repeatedReason',
+  examId: 'examId'
 };
 
 exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
@@ -5207,6 +5186,7 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   semesterId: 'semesterId',
   examId: 'examId',
   roomId: 'roomId',
+  trainingLocationId: 'trainingLocationId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
   enterGradeLecturerId: 'enterGradeLecturerId'
@@ -6168,22 +6148,21 @@ exports.Prisma.OrderingItemOrderByRelevanceFieldEnum = {
   content: 'content'
 };
 
-exports.Prisma.AnswerOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  sessionId: 'sessionId',
-  questionId: 'questionId',
-  comment: 'comment',
-  essayAnswer: 'essayAnswer'
-};
-
 exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
   title: 'title',
-  questionBankId: 'questionBankId'
+  questionBankId: 'questionBankId',
+  startTime: 'startTime'
+};
+
+exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  examId: 'examId',
+  roomId: 'roomId'
 };
 
 exports.Prisma.TestStructureRuleOrderByRelevanceFieldEnum = {
@@ -6198,8 +6177,7 @@ exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  examId: 'examId',
-  examCode: 'examCode'
+  examId: 'examId'
 };
 
 exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
@@ -6210,23 +6188,14 @@ exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
   questionId: 'questionId'
 };
 
-exports.Prisma.ExamFaxOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  examId: 'examId',
-  fax: 'fax'
-};
-
 exports.Prisma.ExamSessionOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  studentId: 'studentId',
   examId: 'examId',
-  roomId: 'roomId',
-  examBankId: 'examBankId',
-  examFaxId: 'examFaxId'
+  examRoomId: 'examRoomId',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  examCode: 'examCode'
 };
 
 exports.Prisma.AcademicWarningRuleOrderByRelevanceFieldEnum = {
@@ -7069,12 +7038,11 @@ exports.Prisma.ModelName = {
   MultipleChoiceOption: 'MultipleChoiceOption',
   FillInBlankSlot: 'FillInBlankSlot',
   OrderingItem: 'OrderingItem',
-  Answer: 'Answer',
   Exam: 'Exam',
+  ExamRoom: 'ExamRoom',
   TestStructureRule: 'TestStructureRule',
   ExamBank: 'ExamBank',
   ExamBankQuestion: 'ExamBankQuestion',
-  ExamFax: 'ExamFax',
   ExamSession: 'ExamSession',
   AcademicWarningRule: 'AcademicWarningRule',
   AcademicWarning: 'AcademicWarning',

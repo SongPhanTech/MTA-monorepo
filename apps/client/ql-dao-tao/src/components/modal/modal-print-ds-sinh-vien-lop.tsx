@@ -1,6 +1,6 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { GENDER_MEAN } from '@constants/constants'
-import type { DM_DonVi, FixedClass, Student, TrainingCourse } from '@workspace/db'
+import type { DM_DonVi, FixedClass, Student, TrainingCourse } from '@workspace/db/client'
 import { Button, Modal } from 'antd'
 import dayjs from 'dayjs'
 import { useRef } from 'react'

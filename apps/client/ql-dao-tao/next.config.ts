@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     transpilePackages: [
         '@t3-oss/env-nextjs',
         '@t3-oss/env-core',
-        '@workspace/db',
+        '@workspace/db/client',
         '@workspace/router',
         '@workspace/ui',
     ],

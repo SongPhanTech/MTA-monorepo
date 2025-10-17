@@ -5,7 +5,7 @@ import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import { buildOrgTree } from '@lib/utils'
-import type { FixedClass, TrainingCourse } from '@workspace/db'
+import type { FixedClass, TrainingCourse } from '@workspace/db/client'
 import {
     useCountStudent,
     useFindManyDM_DonVi,
@@ -94,10 +94,10 @@ const DiemTrungBinhKyHoc = () => {
                 }:{},
                  ...(!!filters.trainingCourseId || !!filters.fixedClassId?{
                     fixedClass: {
-                        ...(!!filters.fixedClassId?{
+                        ...(filters.fixedClassId?{
                             id: filters.fixedClassId
                         }:{}),
-                         ...(!!filters.trainingCourseId?{
+                         ...(filters.trainingCourseId?{
                              trainingCourseId: filters.trainingCourseId,
                         }:{}),
                     }
@@ -161,10 +161,10 @@ const DiemTrungBinhKyHoc = () => {
         const { data: fixedClassData = [] } = useFindManyFixedClass({
             orderBy: { name: 'asc' },
             where: {
-                 ...(!!filters.managementOrganizationId?{
+                 ...(filters.managementOrganizationId?{
                     managementOrganizationId: filters.managementOrganizationId,
                  }:{}),
-                   ...(!!filters.trainingCourseId?{
+                   ...(filters.trainingCourseId?{
                     trainingCourseId: filters.trainingCourseId,
                  }:{})
             },

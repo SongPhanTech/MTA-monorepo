@@ -32,7 +32,7 @@ import type {
     TrainingCourse,
     TrainingObjectTypes,
     UserProfile,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import type { UploadFile, UploadProps } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 
@@ -108,6 +108,7 @@ export type FilterProps = {
     admissionQuota?: 'asc' | 'desc'
     semesterStart?: string
     curriculumVersion?: string[]
+    curriculumVersionParallel?: string[]
     managementOrganization?: string[]
     graduated?: boolean
     trainingLevel?: string[]

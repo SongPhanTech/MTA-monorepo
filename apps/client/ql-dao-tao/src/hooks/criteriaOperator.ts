@@ -1,4 +1,4 @@
-import type { CriteriaOperator } from '@workspace/db'
+import type { CriteriaOperator } from '@workspace/db/client'
 import { criteriaOperatorOptions } from '@workspace/libs/constants'
 
 export const useCriteriaOperatorOptions = () => {

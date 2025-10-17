@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const ExamOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "title", "questionBankId"])
+export const ExamOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "title", "questionBankId", "startTime"])

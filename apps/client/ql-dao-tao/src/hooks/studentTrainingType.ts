@@ -1,4 +1,4 @@
-import { StudentTrainingType } from '@workspace/db'
+import { StudentTrainingType } from '@workspace/db/client'
 
 export type StudentTrainingTypeOption = {
     value: StudentTrainingType
