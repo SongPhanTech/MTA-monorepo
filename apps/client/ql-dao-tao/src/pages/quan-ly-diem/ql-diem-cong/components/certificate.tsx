@@ -1,4 +1,5 @@
-import Table from '@components/commons/table'
+import TableCollapse from '@components/commons/tableCollapse'
+import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -8,6 +9,7 @@ import {
     useCountCertificate,
     useFindManyCertificate,
     useUpdateCertificate,
+    useUpdateCertificateOnSubject,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -35,6 +37,13 @@ export default function Certificate() {
         tag: 'PutCertificateScoreModal',
     })
 
+    const { onOpen: onOpenCertificateOnSubject } = useDisclosure<{
+        id: string
+        certificateId: string
+    }>({
+        tag: 'PutCertificateOnSubjectScoreModal',
+    })
+
     const handleModal = () => {
         onOpen()
     }
@@ -44,6 +53,7 @@ export default function Certificate() {
     // )
 
     const { mutateAsync: updateCertificate } = useUpdateCertificate()
+    const { mutateAsync: updateCertificateOnSubject } = useUpdateCertificateOnSubject()
     async function handleDelete(id: string) {
         try {
             showSpinner()
@@ -66,22 +76,56 @@ export default function Certificate() {
         }
     }
 
-        const where = useMemo(() => {
-            return {
-                ...(filters.name && filters.name !== ''
-                    ? {
-                          name: {
-                              contains: filters.name,
-                              mode: 'insensitive' as const,
-                          },
-                      }
-                    : {}),
+    async function handleDeleteCertificateOnSubject(id: string) {
+        try {
+            showSpinner()
+            await updateCertificate({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
             }
-        }, [filters])
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const where = useMemo(() => {
+        return {
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+        }
+    }, [filters])
 
     const { data: dataTable = [], refetch } = useFindManyCertificate({
         where,
-        include: { subjects:true,_count: true },
+        include: {
+            subjects: {
+                include: {
+                    subject: true,
+                    certificate: {
+                        include: {
+                            archivedCertificate: true,
+                        },
+                    },
+                },
+            },
+            archivedCertificate: true,
+        },
         orderBy: [
             // ...emptyObjectIf(
             //     [
@@ -146,7 +190,7 @@ export default function Certificate() {
                 </Col>
 
                 <Col span={24}>
-                    <Table
+                    <TableCollapse
                         rowKey="id"
                         id="training-category"
                         filters={filters}
@@ -154,62 +198,135 @@ export default function Certificate() {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
+                        headerTitleKey={({ code, name }) =>
+                            `${[code, name].filter(Boolean).join(' - ')}`
+                        }
                         columns={[
-                            {
-                                title: 'STT',
-                                width: 30,
-                                align: 'center',
-                                fixed: 'left',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
                             {
                                 title: 'Tên chứng chỉ',
                                 dataIndex: 'name',
                                 align: 'center',
                                 width: 200,
                                 type: 'input',
+                                render: (__, record) => {
+                                    return record?.certificate?.name || ''
+                                },
+                            },
+                            {
+                                title: 'Điểm phiên',
+                                dataIndex: 'finalScore',
+                                width: 200,
+                                align: 'center',
+                                type: 'order',
+                            },
+                            {
+                                title: 'Môn học có thể cộng điểm',
+                                dataIndex: 'subjects',
+                                width: 300,
+                                align: 'center',
+                                type: 'input',
+                                render: (__, record) => {
+                                    console.log(record)
+
+                                    return record?.subject?.name || ''
+                                },
                             },
                             {
                                 title: 'Thao tác',
                                 width: 60,
                                 align: 'center',
-                                fixed: 'right',
                                 hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
                                     'SUA',
                                     'XOA'
                                 ),
-                                render: (_, { id, _count }) => {
-                                    if (!_count?.studentSubjectScore) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
-                                                    'SUA'
-                                                ) && (
-                                                    <EditIcon
-                                                        onClick={onOpen.bind(null, id)}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                )}
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
-                                                    'XOA'
-                                                ) && (
-                                                    <DeleteIcon
-                                                        popConfirm={{
-                                                            onConfirm: () => handleDelete(id),
-                                                        }}
-                                                    />
-                                                )}
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
+                                render: (_, { id, certificateId, certificate }) => {
+                                    console.log(certificate)
+
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                'SUA'
+                                            ) && (
+                                                <EditIcon
+                                                    disabled={
+                                                        certificate?.archivedCertificate?.length > 0
+                                                    }
+                                                    onClick={() => {
+                                                        onOpenCertificateOnSubject({
+                                                            id: id,
+                                                            certificateId: certificateId,
+                                                        })
+                                                    }}
+                                                />
+                                            )}
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                'XOA'
+                                            ) && (
+                                                <DeleteIcon
+                                                    disabled={
+                                                        certificate?.archivedCertificate?.length > 0
+                                                    }
+                                                    popConfirm={{
+                                                        onConfirm: () =>
+                                                            handleDeleteCertificateOnSubject(id),
+                                                    }}
+                                                />
+                                            )}
+                                        </Row>
+                                    )
                                 },
                             },
                         ]}
+                        childrenFieldName="subjects"
+                        defaultExpandAll
+                        headerRight={({ id, archivedCertificate, subjects }) => (
+                            <div className="flex gap-2.5 w-[85px] items-center">
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_DANH_MUC_XU_LY_HOC_TAP,
+                                    'THEM'
+                                ) && (
+                                    <CreateIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            onOpenCertificateOnSubject({
+                                                id: '',
+                                                certificateId: id,
+                                            })
+                                        }}
+                                        title="Thêm mới cấu hình"
+                                    />
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    'SUA'
+                                ) && (
+                                    <EditIcon
+                                        disabled={
+                                            archivedCertificate?.length > 0 || subjects?.length > 0
+                                        }
+                                        onClick={() => {
+                                            onOpen.bind(null, id)
+                                        }}
+                                    />
+                                )}
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    'XOA'
+                                ) && (
+                                    <DeleteIcon
+                                        disabled={
+                                            archivedCertificate?.length > 0 || subjects?.length > 0
+                                        }
+                                        popConfirm={{
+                                            onConfirm: () => handleDelete(id),
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        )}
                         data={dataTable}
                         pagination={{
                             current: currentPage,

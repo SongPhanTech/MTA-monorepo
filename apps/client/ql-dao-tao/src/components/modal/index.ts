@@ -95,6 +95,8 @@ import ModalPreviewUpload from './modal-preview-upload-ctdt'
 import ModalChuyenLopLuuBan from './modal-chuyen-lop-luu-ban'
 import ModalViewHistoryChange from './modal-xem-lich-su-thay-doi'
 import PutArchivedAwardModal from './put-archived-award'
+import PutCertificateOnSubjectScoreModal from './put-certificate-on-subject'
+import PutCertificateArchivedModal from './put-archived-certificate'
 export {
     ModalViewHistoryChange,
     PutUpdateProfileModal,
@@ -192,5 +194,7 @@ export {
     PutStudentScoreConvertModal,
     ModalPreviewUpload,
     ModalChuyenLopLuuBan,
-    PutArchivedAwardModal
+    PutArchivedAwardModal,
+    PutCertificateOnSubjectScoreModal,
+    PutCertificateArchivedModal
 }

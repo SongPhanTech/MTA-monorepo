@@ -1,4 +1,5 @@
 import { queryClient } from '@api/index'
+import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
 import type { Certificate } from '@workspace/db/client'
@@ -7,7 +8,7 @@ import {
     useFindUniqueCertificate,
     useUpdateCertificate,
 } from '@workspace/db/hooks'
-import { Form, message } from 'antd'
+import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
@@ -94,11 +95,11 @@ const PutCertificateScoreModal = () => {
             title={id ? 'Chỉnh sửa điểm chứng chỉ' : 'Thêm mới điểm chứng chỉ'}
             className="w-[500px]"
         >
-            {/* <Col span={24}>
+            <Col span={24}>
                 <FormItem form={form} name="name" label="Tên chứng chỉ" required>
                     <Input placeholder="Nhập tên chứng chỉ" />
                 </FormItem>
-            </Col> */}
+            </Col>
             {/* <Col span={24}>
                 <FormItem form={form} name="finalScore" label="Điểm tương đương">
                     <InputNumber

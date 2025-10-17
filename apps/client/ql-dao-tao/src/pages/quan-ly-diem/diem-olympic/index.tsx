@@ -17,7 +17,7 @@ import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-export default function ClassSubject() {
+export default function ArchivedAward() {
    const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
         const [open, setOpen] = useState(false)
@@ -150,11 +150,13 @@ export default function ClassSubject() {
     }
     const handleAprove = async (status:string) => {
         try {
+            console.log(selectedRowKeys);
+            
             if(selectedRowKeys?.length>0){
                 let listSqlTransaction: any = []
                 listSqlTransaction = [
                     ...listSqlTransaction,
-                    selectedRowKeys.map((item: any) => {
+                    ...selectedRowKeys.map((item: any) => {
                         return {
                             model: 'ArchivedAward',
                             operation: 'update',
@@ -362,6 +364,6 @@ export default function ClassSubject() {
     )
 }
 
-ClassSubject.getLayout = function getLayout(page: React.ReactElement) {
+ArchivedAward.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
