@@ -25,6 +25,15 @@ import { Trash2 } from 'lucide-react'
 import { PlusOutlined } from '@ant-design/icons'
 import type { TableColumnsType } from 'antd'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { $Enums } from '@workspace/db/client'
+
+const ScoreConvertStatus = $Enums.ScoreConvertStatus
+type ScoreConvertStatus = $Enums.ScoreConvertStatus
+const statusOptions = [
+    { label: 'Chờ duyệt', value: ScoreConvertStatus.PENDING },
+    { label: 'Đã duyệt', value: ScoreConvertStatus.APPROVED },
+    { label: 'Không được duyệt', value: ScoreConvertStatus.REJECTED },
+]
 
 export type PutStudentScoreConvert = StudentScoreConvert & {
     subjectScoreConvert: Partial<SubjectScoreConvert>[]
@@ -35,15 +44,11 @@ const PutStudentScoreConvertModal = () => {
     const [form] = Form.useForm<PutStudentScoreConvert>()
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [studentKeyword, setStudentKeyword] = useState<string>('')
-    const originalStatusRef = useRef<Record<string, 'PENDING' | 'APPROVED' | 'REJECTED'>>({})
+    const originalStatusRef = useRef<Record<string, ScoreConvertStatus>>({})
     const initialSubjectsRef = useRef<Partial<SubjectScoreConvert>[]>([])
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { showSpinner, hideSpinner } = useSpinner()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{ id: string; mode: 'view' | 'edit' }>({
         tag: 'PutStudentScoreConvertModal',
         onClose: () => {
             form.resetFields()
@@ -52,7 +57,9 @@ const PutStudentScoreConvertModal = () => {
             setSelectedRowKeys([])
         },
     })
+    const id = input?.id
     const isEdit = !!id
+    const isViewMode = input?.mode === 'view'
     const selectedSubjects = Form.useWatch('subjectScoreConvert', form) || []
     const selectedSubjectIds = useMemo(
         () => new Set(selectedSubjects.map((s: any) => s?.subjectVersionId).filter(Boolean)),
@@ -73,7 +80,7 @@ const PutStudentScoreConvertModal = () => {
                         },
                     },
                 },
-                { code: { contains: studentKeyword } },
+                { code: { contains: studentKeyword, mode: 'insensitive' } },
             ],
         },
         include: { userProfile: true },
@@ -138,7 +145,7 @@ const PutStudentScoreConvertModal = () => {
             id?: string
             subjectVersionId?: string
             score?: number | string
-            status?: 'PENDING' | 'APPROVED' | 'REJECTED'
+            status?: ScoreConvertStatus
         }>
 
         const toCreate = rows
@@ -150,7 +157,9 @@ const PutStudentScoreConvertModal = () => {
             }))
 
         const toUpdate = rows
-            .filter((r) => !!r.id && originalStatusRef.current[r.id] !== 'APPROVED')
+            .filter(
+                (r) => !!r.id && originalStatusRef.current[r.id] !== ScoreConvertStatus.APPROVED
+            )
             .map((r) => ({
                 where: { id: r.id },
                 data: {
@@ -178,8 +187,8 @@ const PutStudentScoreConvertModal = () => {
                     .filter(
                         (row) =>
                             row.id &&
-                            row.status === 'APPROVED' &&
-                            originalStatusRef.current[row.id] !== 'APPROVED'
+                            row.status === ScoreConvertStatus.APPROVED &&
+                            originalStatusRef.current[row.id] !== ScoreConvertStatus.APPROVED
                     )
                     .map((row) => ({
                         studentId: output.studentId,
@@ -204,13 +213,13 @@ const PutStudentScoreConvertModal = () => {
                                                 name: file.name,
                                                 path: file.path,
                                                 mimeType: file.mimeType,
-                                                size: Number(file.size),
+                                                size: file.size,
                                             },
                                             update: {
                                                 name: file.name,
                                                 path: file.path,
                                                 mimeType: file.mimeType,
-                                                size: Number(file.size),
+                                                size: file.size,
                                             },
                                         })),
 
@@ -220,7 +229,7 @@ const PutStudentScoreConvertModal = () => {
                                             name: file.name,
                                             path: file.path,
                                             mimeType: file.mimeType,
-                                            size: Number(file.size),
+                                            size: file.size,
                                         })),
 
                                     disconnect: document
@@ -280,9 +289,9 @@ const PutStudentScoreConvertModal = () => {
                 })
                 message.success('Thêm mới thành công')
             }
-            queryClient.invalidateQueries({
-                queryKey: ['StudentScoreConvert'],
-            })
+            // queryClient.invalidateQueries({
+            //     queryKey: ['StudentScoreConvert'],
+            // })
             onClose()
         } catch (error: any) {
             message.error(error?.info?.message || 'Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -335,14 +344,17 @@ const PutStudentScoreConvertModal = () => {
         }
     }, [initialValue, isOpen, form])
 
-    const handleQuickStatusChange = (newStatus: 'PENDING' | 'APPROVED' | 'REJECTED') => {
+    const handleQuickStatusChange = (newStatus: ScoreConvertStatus) => {
         if (!newStatus || selectedRowKeys.length === 0) return
 
         const allSubjects = form.getFieldValue('subjectScoreConvert') || []
         const updatedSubjects = allSubjects.map((subject: any, index: number) => {
             if (selectedRowKeys.includes(index)) {
                 const subjectId = subject?.id
-                if (!subjectId || originalStatusRef.current[subjectId] !== 'APPROVED') {
+                if (
+                    !subjectId ||
+                    originalStatusRef.current[subjectId] !== ScoreConvertStatus.APPROVED
+                ) {
                     return { ...subject, status: newStatus }
                 }
             }
@@ -360,7 +372,15 @@ const PutStudentScoreConvertModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa phiếu chuyển trường' : 'Thêm mới phiếu chuyển trường'}
+            title={
+                isViewMode
+                    ? 'Xem chi tiết phiếu chuyển trường'
+                    : id
+                      ? 'Chỉnh sửa phiếu chuyển trường'
+                      : 'Thêm mới phiếu chuyển trường'
+            }
+            okButtonProps={{ style: { display: isViewMode ? 'none' : 'inline-block' } }}
+            cancelText={isViewMode ? 'Đóng' : 'Hủy'}
             className="w-[60vw]"
         >
             <Col span={24}>
@@ -371,7 +391,7 @@ const PutStudentScoreConvertModal = () => {
                         loading={loadingStudents}
                         filterOption={false}
                         onSearch={(v) => setStudentKeyword(v)}
-                        disabled={isEdit}
+                        disabled={isEdit || isViewMode}
                         options={studentList.map((s: any) => {
                             const fullName =
                                 s?.userProfile?.fullName ??
@@ -413,6 +433,7 @@ const PutStudentScoreConvertModal = () => {
                                                             ]) || !selectedSubjectIds.has(opt.value)
                                                 )}
                                                 disabled={
+                                                    isViewMode ||
                                                     !selectedStudentId ||
                                                     !allSubjectOptions.length ||
                                                     originalStatusRef.current[
@@ -421,7 +442,7 @@ const PutStudentScoreConvertModal = () => {
                                                             record.name,
                                                             'id',
                                                         ])
-                                                    ] === 'APPROVED'
+                                                    ] === ScoreConvertStatus.APPROVED
                                                 }
                                             />
                                         </FormItem>
@@ -445,13 +466,14 @@ const PutStudentScoreConvertModal = () => {
                                                     step={0.1}
                                                     style={{ width: '100%' }}
                                                     disabled={
+                                                        isViewMode ||
                                                         originalStatusRef.current[
                                                             form.getFieldValue([
                                                                 'subjectScoreConvert',
                                                                 record.name,
                                                                 'id',
                                                             ])
-                                                        ] === 'APPROVED'
+                                                        ] === ScoreConvertStatus.APPROVED
                                                     }
                                                 />
                                             </FormItem>
@@ -459,7 +481,7 @@ const PutStudentScoreConvertModal = () => {
                                                 <FormItem
                                                     form={form}
                                                     name={[record.name, 'status']}
-                                                    initialValue="PENDING"
+                                                    initialValue={ScoreConvertStatus.PENDING}
                                                     hidden
                                                 />
                                             )}
@@ -483,22 +505,16 @@ const PutStudentScoreConvertModal = () => {
                                             <Select
                                                 style={{ width: '100%' }}
                                                 disabled={
+                                                    isViewMode ||
                                                     originalStatusRef.current[
                                                         form.getFieldValue([
                                                             'subjectScoreConvert',
                                                             record.name,
                                                             'id',
                                                         ])
-                                                    ] === 'APPROVED'
+                                                    ] === ScoreConvertStatus.APPROVED
                                                 }
-                                                options={[
-                                                    { label: 'Chờ duyệt', value: 'PENDING' },
-                                                    { label: 'Đã duyệt', value: 'APPROVED' },
-                                                    {
-                                                        label: 'Không được duyệt',
-                                                        value: 'REJECTED',
-                                                    },
-                                                ]}
+                                                options={statusOptions}
                                             />
                                         </FormItem>
                                     ),
@@ -522,7 +538,7 @@ const PutStudentScoreConvertModal = () => {
                                                     record.name,
                                                     'id',
                                                 ])
-                                            ] === 'APPROVED'
+                                            ] === ScoreConvertStatus.APPROVED || isViewMode
                                         }
                                     />
                                 ),
@@ -539,8 +555,10 @@ const PutStudentScoreConvertModal = () => {
                                             <Button
                                                 type="dashed"
                                                 icon={<PlusOutlined />}
-                                                onClick={() => add({ status: 'PENDING' })}
-                                                disabled={!selectedStudentId}
+                                                onClick={() =>
+                                                    add({ status: ScoreConvertStatus.PENDING })
+                                                }
+                                                disabled={!selectedStudentId || isViewMode}
                                             >
                                                 Thêm môn
                                             </Button>
@@ -552,15 +570,10 @@ const PutStudentScoreConvertModal = () => {
                                                     style={{ width: 200 }}
                                                     onChange={handleQuickStatusChange}
                                                     value={null}
-                                                    disabled={selectedRowKeys.length === 0}
-                                                    options={[
-                                                        { label: 'Chờ duyệt', value: 'PENDING' },
-                                                        { label: 'Đã duyệt', value: 'APPROVED' },
-                                                        {
-                                                            label: 'Không được duyệt',
-                                                            value: 'REJECTED',
-                                                        },
-                                                    ]}
+                                                    disabled={
+                                                        selectedRowKeys.length === 0 || isViewMode
+                                                    }
+                                                    options={statusOptions}
                                                 />
                                             )}
                                         </Col>
@@ -576,6 +589,7 @@ const PutStudentScoreConvertModal = () => {
                                             selectedRowKeys,
                                             onChange: setSelectedRowKeys,
                                             getCheckboxProps: (record) => {
+                                                if (isViewMode) return { disabled: true }
                                                 const subject = form.getFieldValue([
                                                     'subjectScoreConvert',
                                                     record.name,
@@ -583,7 +597,7 @@ const PutStudentScoreConvertModal = () => {
                                                 const isApproved =
                                                     subject?.id &&
                                                     originalStatusRef.current[subject.id] ===
-                                                        'APPROVED'
+                                                        ScoreConvertStatus.APPROVED
                                                 return { disabled: isApproved }
                                             },
                                         }}
@@ -603,6 +617,7 @@ const PutStudentScoreConvertModal = () => {
                         data={document}
                         relationId={id ?? ''}
                         relationType="studentScoreConvertId"
+                        // disabled={isViewMode} // Thêm disable vào component
                     />
                     {/* </div> */}
                 </FormItem>
@@ -610,7 +625,7 @@ const PutStudentScoreConvertModal = () => {
 
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
+                    <Input.TextArea placeholder="Nhập mô tả" disabled={isViewMode} />
                 </FormItem>
             </Col>
         </PutFormModal>
