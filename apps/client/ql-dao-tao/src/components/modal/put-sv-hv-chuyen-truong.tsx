@@ -12,8 +12,8 @@ import {
     useCreateStudentScoreConvert,
     useFindUniqueStudent,
     useFindUniqueStudentScoreConvert,
-    useUpdateStudentScoreConvert,
     useFindManyStudent,
+    useCreateManyStudentSubjectScore,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, message, InputNumber, Button, Select, Row, Table } from 'antd'
 import dayjs from 'dayjs'
@@ -24,6 +24,7 @@ import DocumentPaths from '@components/commons/documentPaths'
 import { Trash2 } from 'lucide-react'
 import { PlusOutlined } from '@ant-design/icons'
 import type { TableColumnsType } from 'antd'
+import { sqlTransaction } from '@workspace/libs/api/model'
 
 export type PutStudentScoreConvert = StudentScoreConvert & {
     subjectScoreConvert: Partial<SubjectScoreConvert>[]
@@ -104,6 +105,8 @@ const PutStudentScoreConvertModal = () => {
         { enabled: !!selectedStudentId }
     )
 
+    const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
+
     const allSubjectOptions = useMemo(() => {
         const cv =
             selectedStudent?.curriculumVersion ?? selectedStudent?.fixedClass?.curriculumVersion
@@ -127,7 +130,6 @@ const PutStudentScoreConvertModal = () => {
     }, [selectedStudent])
 
     const { mutateAsync: createStudentScoreConvert } = useCreateStudentScoreConvert()
-    const { mutateAsync: updateStudentScoreConvert } = useUpdateStudentScoreConvert()
 
     async function onOk(output?: PutStudentScoreConvert) {
         if (!output) return
@@ -172,56 +174,87 @@ const PutStudentScoreConvertModal = () => {
         try {
             showSpinner()
             if (id) {
-                await updateStudentScoreConvert({
-                    where: { id },
-                    data: {
+                const scoresToCreate = rows
+                    .filter(
+                        (row) =>
+                            row.id &&
+                            row.status === 'APPROVED' &&
+                            originalStatusRef.current[row.id] !== 'APPROVED'
+                    )
+                    .map((row) => ({
                         studentId: output.studentId,
-                        description: output.description,
-                        documentFiles: {
-                            upsert: (output.documentFiles || [])
-                                .filter((file) => !!file.id)
-                                .map((file) => ({
-                                    where: { id: file.id },
-                                    create: {
-                                        name: file.name,
-                                        path: file.path,
-                                        mimeType: file.mimeType,
-                                        size: file.size,
-                                    },
-                                    update: {
-                                        name: file.name,
-                                        path: file.path,
-                                        mimeType: file.mimeType,
-                                        size: file.size,
-                                    },
-                                })),
+                        subjectVersionId: row.subjectVersionId,
+                        manualFinalScore: Number(row.score),
+                    }))
+                const listSqlTransaction: any[] = [
+                    {
+                        model: 'StudentScoreConvert',
+                        operation: 'update',
+                        data: {
+                            where: { id },
+                            data: {
+                                studentId: output.studentId,
+                                description: output.description,
+                                documentFiles: {
+                                    upsert: (output.documentFiles || [])
+                                        .filter((file) => !!file.id)
+                                        .map((file) => ({
+                                            where: { id: file.id },
+                                            create: {
+                                                name: file.name,
+                                                path: file.path,
+                                                mimeType: file.mimeType,
+                                                size: Number(file.size),
+                                            },
+                                            update: {
+                                                name: file.name,
+                                                path: file.path,
+                                                mimeType: file.mimeType,
+                                                size: Number(file.size),
+                                            },
+                                        })),
 
-                            create: (output.documentFiles || [])
-                                .filter((file) => !file.id)
-                                .map((file) => ({
-                                    name: file.name,
-                                    path: file.path,
-                                    mimeType: file.mimeType,
-                                    size: file.size,
-                                })),
+                                    create: (output.documentFiles || [])
+                                        .filter((file) => !file.id)
+                                        .map((file) => ({
+                                            name: file.name,
+                                            path: file.path,
+                                            mimeType: file.mimeType,
+                                            size: Number(file.size),
+                                        })),
 
-                            disconnect: document
-                                .filter(
-                                    (initialFile) =>
-                                        !output.documentFiles?.some(
-                                            (finalFile) => finalFile.id === initialFile.id
+                                    disconnect: document
+                                        .filter(
+                                            (initialFile) =>
+                                                !output.documentFiles?.some(
+                                                    (finalFile) => finalFile.id === initialFile.id
+                                                )
                                         )
-                                )
-                                .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
-                        },
-                        subjectScoreConvert: {
-                            ...(toCreate.length
-                                ? { createMany: { data: toCreate, skipDuplicates: true } }
-                                : {}),
-                            ...(toUpdate.length ? { update: toUpdate } : {}),
-                            ...(toDelete.length ? { delete: toDelete } : {}),
+                                        .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
+                                },
+                                subjectScoreConvert: {
+                                    ...(toCreate.length ? { create: toCreate } : {}),
+                                    ...(toUpdate.length ? { update: toUpdate } : {}),
+                                    ...(toDelete.length ? { delete: toDelete } : {}),
+                                },
+                            },
                         },
                     },
+                ]
+                if (scoresToCreate.length > 0) {
+                    listSqlTransaction.push({
+                        model: 'StudentSubjectScore',
+                        operation: 'createMany',
+                        data: {
+                            data: scoresToCreate,
+                            skipDuplicates: true,
+                        },
+                    })
+                }
+
+                await sqlTransaction(listSqlTransaction)
+                queryClient.invalidateQueries({
+                    queryKey: ['zenstack', 'StudentScoreConvert'],
                 })
                 message.success('Cập nhật thành công')
             } else {
