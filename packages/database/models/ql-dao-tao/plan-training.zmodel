@@ -829,7 +829,9 @@ model SubjectClass extends BaseNoCode {
   semesterId                 String
 
   cancelled                  Boolean               @default(false) // đã hủy lớp
+  
   lecturerAssignmentDeadline DateTime? // hạn phân công giảng dạy
+  sendLecturerAssignmentAt   DateTime? // ngày gửi phân công giảng dạy
   submitLecturerAssignmentAt DateTime? // ngày nộp phân công giảng dạy
   examDate                   DateTime? // ngày thi
 

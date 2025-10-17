@@ -10462,6 +10462,10 @@ const metadata = {
                     name: "lecturerAssignmentDeadline",
                     type: "DateTime",
                     isOptional: true,
+                }, sendLecturerAssignmentAt: {
+                    name: "sendLecturerAssignmentAt",
+                    type: "DateTime",
+                    isOptional: true,
                 }, submitLecturerAssignmentAt: {
                     name: "submitLecturerAssignmentAt",
                     type: "DateTime",

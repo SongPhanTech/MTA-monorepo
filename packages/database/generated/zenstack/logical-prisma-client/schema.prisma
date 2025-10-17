@@ -3256,6 +3256,7 @@ model SubjectClass {
   semesterId                 String
   cancelled                  Boolean               @default(false)
   lecturerAssignmentDeadline DateTime?
+  sendLecturerAssignmentAt   DateTime?
   submitLecturerAssignmentAt DateTime?
   examDate                   DateTime?
   examType                   ExamType?

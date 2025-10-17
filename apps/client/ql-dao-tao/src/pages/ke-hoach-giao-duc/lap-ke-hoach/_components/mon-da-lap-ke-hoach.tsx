@@ -116,7 +116,7 @@ export default function MonDaLapKeHoach() {
                 }
             }}
         >
-            <Row  align="top" justify="space-between">
+            <Row align="top" justify="space-between">
                 <Col span={16}>
                     <Form.Item className="m-0" name="searchText">
                         <Input
@@ -135,7 +135,7 @@ export default function MonDaLapKeHoach() {
                         />
                     </Form.Item>
                 </Col>
-                <Col span={8} >
+                <Col span={8}>
                     <Flex justify="end" gap={4}>
                         <Button
                             type="primary"
@@ -143,72 +143,81 @@ export default function MonDaLapKeHoach() {
                                 exportFromTemplate({
                                     templateUrl:
                                         '/lms/templates/ke-hoach-dao-tao/ke-hoach-mo-lop.xlsx',
-                                    data: {
-                                        hoc_ky: semesterData?.name ?? '',
-                                        nam_hoc: semesterData?.schoolYear?.name ?? '',
-                                    },
-                                    tableStartCell: { row: 7, col: 1 },
-                                    rows: planTraining?.planTrainingSubjects.flatMap(
-                                        (item, index) =>
-                                            item.fixedClasses.map((fc, idx) => {
-                                                const rowSpan =
-                                                    idx === 0 ? item.fixedClasses.length : 1
-                                                return {
-                                                    cells: [
-                                                        {
-                                                            value: index + 1,
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: item.subjectVersion?.code,
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: item.subjectVersion?.name,
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: item.subjectVersion?.credit,
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: `${fc.code}`,
-                                                            align: 'center',
-                                                        },
-                                                        {
-                                                            value: `${fc._count.students ?? 0}`,
-                                                            align: 'center',
-                                                        },
-                                                        {
-                                                            value: '',
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value: item.fixedClasses.reduce(
-                                                                (sum, fc) =>
-                                                                    sum +
-                                                                    (fc._count?.students ?? 0),
-                                                                0
-                                                            ),
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                        {
-                                                            value:
-                                                                item.subjectVersion
-                                                                    .managementOrganization?.sMa ??
-                                                                '',
-                                                            align: 'center',
-                                                            rowSpan,
-                                                        },
-                                                    ],
-                                                }
-                                            })
-                                    ),
+                                    sheets: [
+                                        {
+                                            sheet: 'KeHoachMoLop',
+                                            data: {
+                                                hoc_ky: semesterData?.name ?? '',
+                                                nam_hoc: semesterData?.schoolYear?.name ?? '',
+                                            },
+                                            tableStartCell: { row: 7, col: 1 },
+                                            rows: planTraining?.planTrainingSubjects.flatMap(
+                                                (item, index) =>
+                                                    item.fixedClasses.map((fc, idx) => {
+                                                        const rowSpan =
+                                                            idx === 0 ? item.fixedClasses.length : 1
+                                                        return {
+                                                            cells: [
+                                                                {
+                                                                    value: index + 1,
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: item.subjectVersion
+                                                                        ?.code,
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: item.subjectVersion
+                                                                        ?.name,
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: item.subjectVersion
+                                                                        ?.credit,
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: `${fc.code}`,
+                                                                    align: 'center',
+                                                                },
+                                                                {
+                                                                    value: `${fc._count.students ?? 0}`,
+                                                                    align: 'center',
+                                                                },
+                                                                {
+                                                                    value: '',
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value: item.fixedClasses.reduce(
+                                                                        (sum, fc) =>
+                                                                            sum +
+                                                                            (fc._count?.students ??
+                                                                                0),
+                                                                        0
+                                                                    ),
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                                {
+                                                                    value:
+                                                                        item.subjectVersion
+                                                                            .managementOrganization
+                                                                            ?.sMa ?? '',
+                                                                    align: 'center',
+                                                                    rowSpan,
+                                                                },
+                                                            ],
+                                                        }
+                                                    })
+                                            ),
+                                        },
+                                    ],
                                     fileName: `ke-hoach-mo-lop-mon-hoc-${semesterData?.name}-${semesterData?.schoolYear.name}.xlsx`,
                                 })
                             }

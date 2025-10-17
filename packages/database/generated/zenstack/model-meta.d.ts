@@ -18450,6 +18450,11 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
+                sendLecturerAssignmentAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 submitLecturerAssignmentAt: {
                     name: string;
                     type: string;

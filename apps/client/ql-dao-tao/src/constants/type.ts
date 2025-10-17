@@ -21,7 +21,7 @@ import type { ColumnsType } from 'antd/es/table'
 export type FilterProps = {
     searchText?: string
     trainingObjectTypes?: string[]
-    pcgd?:boolean
+    pcgd?:boolean[]
     name?: string | ''
     code?: string | ''
     sort?: string

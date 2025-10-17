@@ -1901,6 +1901,7 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   semesterId: 'semesterId',
   cancelled: 'cancelled',
   lecturerAssignmentDeadline: 'lecturerAssignmentDeadline',
+  sendLecturerAssignmentAt: 'sendLecturerAssignmentAt',
   submitLecturerAssignmentAt: 'submitLecturerAssignmentAt',
   examDate: 'examDate',
   examType: 'examType',

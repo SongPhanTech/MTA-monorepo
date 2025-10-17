@@ -245,7 +245,7 @@ const PutOneSubjectClassModal = () => {
             </Col>
 
             <Col span={12}>
-                <FormItem form={form} name="schedule" label="Kíp học" required>
+                <FormItem form={form} name="schedule" label="Kíp học">
                     <Select
                         placeholder="Chọn kíp học"
                         options={Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
@@ -261,7 +261,7 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="trainingLocationId" label="Địa điểm" required>
+                <FormItem form={form} name="trainingLocationId" label="Địa điểm">
                     <Select
                         placeholder="Chọn địa điểm"
                         options={trainingLocationData.map((item) => {
@@ -280,7 +280,7 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="roomId" label="Chọn phòng học" required>
+                <FormItem form={form} name="roomId" label="Chọn phòng học">
                     <Select
                         placeholder="Chọn phòng học"
                         options={roomData.map((item) => {
@@ -294,7 +294,7 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="maxStudent" label="Số SV tối đa" required>
+                <FormItem form={form} name="maxStudent" label="Số SV tối đa">
                     <InputNumber
                         type="number"
                         min={1}
@@ -407,7 +407,7 @@ const PutOneSubjectClassModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="examType" label="Hình thức thi" required>
+                <FormItem form={form} name="examType" label="Hình thức thi">
                     <Select placeholder="Chọn hình thức thi" options={options} />
                 </FormItem>
             </Col>

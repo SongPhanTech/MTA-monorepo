@@ -4,7 +4,7 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingMajor } from '@workspace/db/client'
+import { $Enums, type TrainingMajor } from '@workspace/db/client'
 import type { FixedClass, SubjectClass } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,
@@ -34,6 +34,7 @@ interface OpenSubjectClassForm {
             code: string | null
             maxStudent: number
             countOld: number
+            examType?: $Enums.ExamType | null
         }
     >
     subjectClassToFixedClass?: Record<
@@ -191,13 +192,6 @@ export default function SubjectOpeningPlan() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res, refetch } = useFindFirstPlanTraining(
         {
-            // page: `${currentPage}`,
-            // pageSize: `${numberOfPages}`,
-            // semesterId: semesterId as string,
-            // search: searchText,
-            // trainingCourseId,
-            // trainingMajorId,
-            // trainingObjectTypeId: trainingObjectTypeId || '',
             where: {
                 semesterId: semesterId as string,
                 trainingObjectTypeId: trainingObjectTypeId || '',
@@ -307,18 +301,7 @@ export default function SubjectOpeningPlan() {
                 data.reduce(
                     (acc, cur) => {
                         if (!acc) {
-                            return {
-                                [cur.subjectVersionId]: {
-                                    count: cur.subjectVersion.subjectClass.length ?? 0,
-                                    name: cur.subjectVersion?.name,
-                                    code: cur.subjectVersion?.code,
-                                    maxStudent: cur.fixedClasses.reduce(
-                                        (sum, fc) => sum + (fc._count?.students ?? 0),
-                                        0
-                                    ),
-                                    countOld: cur.subjectVersion.subjectClass.length ?? 0,
-                                },
-                            }
+                            return {}
                         }
                         acc[cur.subjectVersionId] = {
                             count: cur.subjectVersion.subjectClass.length ?? 0,
@@ -329,6 +312,7 @@ export default function SubjectOpeningPlan() {
                                 0
                             ),
                             countOld: cur.subjectVersion.subjectClass.length ?? 0,
+                            examType: cur.subjectVersion?.examType,
                         }
                         return acc
                     },
@@ -457,6 +441,8 @@ export default function SubjectOpeningPlan() {
                                     code: `${subjectVersion.code} ${String(index + 1)}`,
                                     name: subjectVersion.name,
                                     maxStudent: subjectVersion.count,
+                                    examType: subjectVersion.examType,
+                                    schedule: $Enums.SubjectClassSchedule.MORNING,
                                 }))
                             ),
                     },
@@ -837,6 +823,14 @@ export default function SubjectOpeningPlan() {
                                                     'subjectClassNumber',
                                                     record?.subjectVersionId,
                                                     'countOld',
+                                                ]}
+                                                hidden
+                                            />{' '}
+                                            <Form.Item
+                                                name={[
+                                                    'subjectClassNumber',
+                                                    record?.subjectVersionId,
+                                                    'examType',
                                                 ]}
                                                 hidden
                                             />
