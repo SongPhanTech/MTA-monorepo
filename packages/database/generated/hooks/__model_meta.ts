@@ -10033,6 +10033,20 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
+                }, trainingLocation: {
+                    name: "trainingLocation",
+                    type: "TrainingLocation",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'subjectClasses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingLocationId" },
+                }, trainingLocationId: {
+                    name: "trainingLocationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingLocation',
                 }, mainLecturer: {
                     name: "mainLecturer",
                     type: "Lecturer",
@@ -10804,6 +10818,12 @@ const metadata = {
                 }, buildings: {
                     name: "buildings",
                     type: "Building",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingLocation',
+                }, subjectClasses: {
+                    name: "subjectClasses",
+                    type: "SubjectClass",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingLocation',

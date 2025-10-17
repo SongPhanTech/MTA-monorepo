@@ -10548,6 +10548,21 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
+                }, trainingLocation: {
+                    name: "trainingLocation",
+                    type: "TrainingLocation",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassTrainingLocation" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectClasses',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingLocationId" },
+                }, trainingLocationId: {
+                    name: "trainingLocationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingLocation',
                 }, mainLecturer: {
                     name: "mainLecturer",
                     type: "Lecturer",
@@ -11370,6 +11385,13 @@ const metadata = {
                     type: "Building",
                     isDataModel: true,
                     isArray: true,
+                    backLink: 'trainingLocation',
+                }, subjectClasses: {
+                    name: "subjectClasses",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ClassTrainingLocation" }] }],
                     backLink: 'trainingLocation',
                 },
             }, uniqueConstraints: {

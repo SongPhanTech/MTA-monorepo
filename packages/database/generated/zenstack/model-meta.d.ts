@@ -18609,6 +18609,34 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                trainingLocation: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                trainingLocationId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
                 mainLecturer: {
                     name: string;
                     type: string;
@@ -20044,6 +20072,20 @@ declare const metadata: {
                     type: string;
                     isDataModel: boolean;
                     isArray: boolean;
+                    backLink: string;
+                };
+                subjectClasses: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
                     backLink: string;
                 };
             };

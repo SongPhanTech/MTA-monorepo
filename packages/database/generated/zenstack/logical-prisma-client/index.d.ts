@@ -7455,6 +7455,7 @@ export namespace Prisma {
         scoreSubmitted: 'scoreSubmitted',
         scoreChecked: 'scoreChecked',
         roomId: 'roomId',
+        trainingLocationId: 'trainingLocationId',
         lecturerId: 'lecturerId',
         extraLecturerId: 'extraLecturerId',
         enterGradeLecturerId: 'enterGradeLecturerId'
@@ -10475,6 +10476,7 @@ export namespace Prisma {
         semesterId: 'semesterId',
         examId: 'examId',
         roomId: 'roomId',
+        trainingLocationId: 'trainingLocationId',
         lecturerId: 'lecturerId',
         extraLecturerId: 'extraLecturerId',
         enterGradeLecturerId: 'enterGradeLecturerId'
@@ -49813,6 +49815,7 @@ export namespace Prisma {
         semester<T extends SemesterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SemesterDefaultArgs<ExtArgs>>): Prisma__SemesterClient<$Result.GetResult<Prisma.$SemesterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         exam<T extends SubjectClass$examArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$examArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         room<T extends SubjectClass$roomArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$roomArgs<ExtArgs>>): Prisma__RoomClient<$Result.GetResult<Prisma.$RoomPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        trainingLocation<T extends SubjectClass$trainingLocationArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$trainingLocationArgs<ExtArgs>>): Prisma__TrainingLocationClient<$Result.GetResult<Prisma.$TrainingLocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         mainLecturer<T extends SubjectClass$mainLecturerArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$mainLecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         extraLecturer<T extends SubjectClass$extraLecturerArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$extraLecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         enterGradeLecturer<T extends SubjectClass$enterGradeLecturerArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClass$enterGradeLecturerArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -49884,6 +49887,7 @@ export namespace Prisma {
         readonly scoreSubmitted: FieldRef<"SubjectClass", 'Boolean'>;
         readonly scoreChecked: FieldRef<"SubjectClass", 'Boolean'>;
         readonly roomId: FieldRef<"SubjectClass", 'String'>;
+        readonly trainingLocationId: FieldRef<"SubjectClass", 'String'>;
         readonly lecturerId: FieldRef<"SubjectClass", 'String'>;
         readonly extraLecturerId: FieldRef<"SubjectClass", 'String'>;
         readonly enterGradeLecturerId: FieldRef<"SubjectClass", 'String'>;
@@ -52934,6 +52938,7 @@ export namespace Prisma {
         dM_Tinh_New<T extends TrainingLocation$dM_Tinh_NewArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$dM_Tinh_NewArgs<ExtArgs>>): Prisma__DM_Tinh_NewClient<$Result.GetResult<Prisma.$DM_Tinh_NewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         students<T extends TrainingLocation$studentsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         buildings<T extends TrainingLocation$buildingsArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$buildingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BuildingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        subjectClasses<T extends TrainingLocation$subjectClassesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingLocation$subjectClassesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -126967,10 +126972,12 @@ export namespace Prisma {
     export type TrainingLocationCountOutputType = {
         students: number
         buildings: number
+        subjectClasses: number
     };
     export type TrainingLocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         students?: boolean | TrainingLocationCountOutputTypeCountStudentsArgs
         buildings?: boolean | TrainingLocationCountOutputTypeCountBuildingsArgs
+        subjectClasses?: boolean | TrainingLocationCountOutputTypeCountSubjectClassesArgs
     };
     /**
      * TrainingLocationCountOutputType without action
@@ -126992,6 +126999,12 @@ export namespace Prisma {
      */
     export type TrainingLocationCountOutputTypeCountBuildingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: BuildingWhereInput
+    };
+    /**
+     * TrainingLocationCountOutputType without action
+     */
+    export type TrainingLocationCountOutputTypeCountSubjectClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SubjectClassWhereInput
     };
     /**
      * Count Type BuildingCountOutputType
@@ -207111,6 +207124,7 @@ export namespace Prisma {
         scoreSubmitted: boolean | null
         scoreChecked: boolean | null
         roomId: string | null
+        trainingLocationId: string | null
         lecturerId: string | null
         extraLecturerId: string | null
         enterGradeLecturerId: string | null
@@ -207149,6 +207163,7 @@ export namespace Prisma {
         scoreSubmitted: boolean | null
         scoreChecked: boolean | null
         roomId: string | null
+        trainingLocationId: string | null
         lecturerId: string | null
         extraLecturerId: string | null
         enterGradeLecturerId: string | null
@@ -207187,6 +207202,7 @@ export namespace Prisma {
         scoreSubmitted: number
         scoreChecked: number
         roomId: number
+        trainingLocationId: number
         lecturerId: number
         extraLecturerId: number
         enterGradeLecturerId: number
@@ -207232,6 +207248,7 @@ export namespace Prisma {
         scoreSubmitted?: true
         scoreChecked?: true
         roomId?: true
+        trainingLocationId?: true
         lecturerId?: true
         extraLecturerId?: true
         enterGradeLecturerId?: true
@@ -207270,6 +207287,7 @@ export namespace Prisma {
         scoreSubmitted?: true
         scoreChecked?: true
         roomId?: true
+        trainingLocationId?: true
         lecturerId?: true
         extraLecturerId?: true
         enterGradeLecturerId?: true
@@ -207308,6 +207326,7 @@ export namespace Prisma {
         scoreSubmitted?: true
         scoreChecked?: true
         roomId?: true
+        trainingLocationId?: true
         lecturerId?: true
         extraLecturerId?: true
         enterGradeLecturerId?: true
@@ -207427,6 +207446,7 @@ export namespace Prisma {
         scoreSubmitted: boolean
         scoreChecked: boolean
         roomId: string | null
+        trainingLocationId: string | null
         lecturerId: string | null
         extraLecturerId: string | null
         enterGradeLecturerId: string | null
@@ -207482,6 +207502,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: boolean
+        trainingLocationId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
@@ -207490,6 +207511,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -207538,6 +207560,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: boolean
+        trainingLocationId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
@@ -207546,6 +207569,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -207584,6 +207608,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: boolean
+        trainingLocationId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
@@ -207592,6 +207617,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -207630,17 +207656,19 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: boolean
+        trainingLocationId?: boolean
         lecturerId?: boolean
         extraLecturerId?: boolean
         enterGradeLecturerId?: boolean
     };
-    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "sendLecturerAssignmentAt" | "submitLecturerAssignmentAt" | "examDate" | "examType" | "examId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "roomId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
+    export type SubjectClassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "code" | "name" | "startDate" | "endDate" | "subjectId" | "schedule" | "maxStudent" | "trainingObjectTypeId" | "semesterId" | "cancelled" | "lecturerAssignmentDeadline" | "sendLecturerAssignmentAt" | "submitLecturerAssignmentAt" | "examDate" | "examType" | "examId" | "scoreDeadLineStart" | "scoreDeadline" | "examScoreDeadline" | "enteredScore" | "enteredExamScore" | "issuedScoreAt" | "isLockScore" | "isLockExamScore" | "scoreSubmitted" | "scoreChecked" | "roomId" | "trainingLocationId" | "lecturerId" | "extraLecturerId" | "enterGradeLecturerId", ExtArgs["result"]["subjectClass"]>;
     export type SubjectClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         subject?: boolean | SubjectVersionDefaultArgs<ExtArgs>
         trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -207661,6 +207689,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -207671,6 +207700,7 @@ export namespace Prisma {
         semester?: boolean | SemesterDefaultArgs<ExtArgs>
         exam?: boolean | SubjectClass$examArgs<ExtArgs>
         room?: boolean | SubjectClass$roomArgs<ExtArgs>
+        trainingLocation?: boolean | SubjectClass$trainingLocationArgs<ExtArgs>
         mainLecturer?: boolean | SubjectClass$mainLecturerArgs<ExtArgs>
         extraLecturer?: boolean | SubjectClass$extraLecturerArgs<ExtArgs>
         enterGradeLecturer?: boolean | SubjectClass$enterGradeLecturerArgs<ExtArgs>
@@ -207683,6 +207713,7 @@ export namespace Prisma {
             semester: Prisma.$SemesterPayload<ExtArgs>
             exam: Prisma.$ExamPayload<ExtArgs> | null
             room: Prisma.$RoomPayload<ExtArgs> | null
+            trainingLocation: Prisma.$TrainingLocationPayload<ExtArgs> | null
             mainLecturer: Prisma.$LecturerPayload<ExtArgs> | null
             extraLecturer: Prisma.$LecturerPayload<ExtArgs> | null
             enterGradeLecturer: Prisma.$LecturerPayload<ExtArgs> | null
@@ -207739,6 +207770,7 @@ export namespace Prisma {
             scoreSubmitted: boolean
             scoreChecked: boolean
             roomId: string | null
+            trainingLocationId: string | null
             lecturerId: string | null
             extraLecturerId: string | null
             enterGradeLecturerId: string | null
@@ -208161,6 +208193,24 @@ export namespace Prisma {
          */
         include?: RoomInclude<ExtArgs> | null
         where?: RoomWhereInput
+    };
+    /**
+     * SubjectClass.trainingLocation
+     */
+    export type SubjectClass$trainingLocationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the TrainingLocation
+         */
+        select?: TrainingLocationSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the TrainingLocation
+         */
+        omit?: TrainingLocationOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: TrainingLocationInclude<ExtArgs> | null
+        where?: TrainingLocationWhereInput
     };
     /**
      * SubjectClass.mainLecturer
@@ -213909,6 +213959,7 @@ export namespace Prisma {
         dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
         students?: boolean | TrainingLocation$studentsArgs<ExtArgs>
         buildings?: boolean | TrainingLocation$buildingsArgs<ExtArgs>
+        subjectClasses?: boolean | TrainingLocation$subjectClassesArgs<ExtArgs>
         _count?: boolean | TrainingLocationCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingLocation"]>;
     export type TrainingLocationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -213957,6 +214008,7 @@ export namespace Prisma {
         dM_Tinh_New?: boolean | TrainingLocation$dM_Tinh_NewArgs<ExtArgs>
         students?: boolean | TrainingLocation$studentsArgs<ExtArgs>
         buildings?: boolean | TrainingLocation$buildingsArgs<ExtArgs>
+        subjectClasses?: boolean | TrainingLocation$subjectClassesArgs<ExtArgs>
         _count?: boolean | TrainingLocationCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type TrainingLocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -213974,6 +214026,7 @@ export namespace Prisma {
             dM_Tinh_New: Prisma.$DM_Tinh_NewPayload<ExtArgs> | null
             students: Prisma.$StudentPayload<ExtArgs>[]
             buildings: Prisma.$BuildingPayload<ExtArgs>[]
+            subjectClasses: Prisma.$SubjectClassPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -214451,6 +214504,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: BuildingScalarFieldEnum | BuildingScalarFieldEnum[]
+    };
+    /**
+     * TrainingLocation.subjectClasses
+     */
+    export type TrainingLocation$subjectClassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClass
+         */
+        select?: SubjectClassSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClass
+         */
+        omit?: SubjectClassOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassInclude<ExtArgs> | null
+        where?: SubjectClassWhereInput
+        orderBy?: SubjectClassOrderByWithRelationInput | SubjectClassOrderByWithRelationInput[]
+        cursor?: SubjectClassWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SubjectClassScalarFieldEnum | SubjectClassScalarFieldEnum[]
     };
     /**
      * TrainingLocation without action
@@ -325999,6 +326075,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFilter<"SubjectClass"> | boolean
         scoreChecked?: BoolFilter<"SubjectClass"> | boolean
         roomId?: StringNullableFilter<"SubjectClass"> | string | null
+        trainingLocationId?: StringNullableFilter<"SubjectClass"> | string | null
         lecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         extraLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         enterGradeLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -326007,6 +326084,7 @@ export namespace Prisma {
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
         exam?: XOR<ExamNullableScalarRelationFilter, ExamWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
+        trainingLocation?: XOR<TrainingLocationNullableScalarRelationFilter, TrainingLocationWhereInput> | null
         mainLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         extraLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         enterGradeLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -326054,6 +326132,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrderInput | SortOrder
+        trainingLocationId?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         extraLecturerId?: SortOrderInput | SortOrder
         enterGradeLecturerId?: SortOrderInput | SortOrder
@@ -326062,6 +326141,7 @@ export namespace Prisma {
         semester?: SemesterOrderByWithRelationInput
         exam?: ExamOrderByWithRelationInput
         room?: RoomOrderByWithRelationInput
+        trainingLocation?: TrainingLocationOrderByWithRelationInput
         mainLecturer?: LecturerOrderByWithRelationInput
         extraLecturer?: LecturerOrderByWithRelationInput
         enterGradeLecturer?: LecturerOrderByWithRelationInput
@@ -326113,6 +326193,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFilter<"SubjectClass"> | boolean
         scoreChecked?: BoolFilter<"SubjectClass"> | boolean
         roomId?: StringNullableFilter<"SubjectClass"> | string | null
+        trainingLocationId?: StringNullableFilter<"SubjectClass"> | string | null
         lecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         extraLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         enterGradeLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -326121,6 +326202,7 @@ export namespace Prisma {
         semester?: XOR<SemesterScalarRelationFilter, SemesterWhereInput>
         exam?: XOR<ExamNullableScalarRelationFilter, ExamWhereInput> | null
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
+        trainingLocation?: XOR<TrainingLocationNullableScalarRelationFilter, TrainingLocationWhereInput> | null
         mainLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         extraLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         enterGradeLecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -326168,6 +326250,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrderInput | SortOrder
+        trainingLocationId?: SortOrderInput | SortOrder
         lecturerId?: SortOrderInput | SortOrder
         extraLecturerId?: SortOrderInput | SortOrder
         enterGradeLecturerId?: SortOrderInput | SortOrder
@@ -326214,6 +326297,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
         scoreChecked?: BoolWithAggregatesFilter<"SubjectClass"> | boolean
         roomId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
+        trainingLocationId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         lecturerId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         extraLecturerId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
         enterGradeLecturerId?: StringNullableWithAggregatesFilter<"SubjectClass"> | string | null
@@ -326850,6 +326934,7 @@ export namespace Prisma {
         dM_Tinh_New?: XOR<DM_Tinh_NewNullableScalarRelationFilter, DM_Tinh_NewWhereInput> | null
         students?: StudentListRelationFilter
         buildings?: BuildingListRelationFilter
+        subjectClasses?: SubjectClassListRelationFilter
     };
     export type TrainingLocationOrderByWithRelationInput = {
         id?: SortOrder
@@ -326866,6 +326951,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewOrderByWithRelationInput
         students?: StudentOrderByRelationAggregateInput
         buildings?: BuildingOrderByRelationAggregateInput
+        subjectClasses?: SubjectClassOrderByRelationAggregateInput
         _relevance?: TrainingLocationOrderByRelevanceInput
     };
     export type TrainingLocationWhereUniqueInput = Prisma.AtLeast<{
@@ -326886,6 +326972,7 @@ export namespace Prisma {
         dM_Tinh_New?: XOR<DM_Tinh_NewNullableScalarRelationFilter, DM_Tinh_NewWhereInput> | null
         students?: StudentListRelationFilter
         buildings?: BuildingListRelationFilter
+        subjectClasses?: SubjectClassListRelationFilter
     }, "id" | "code" | "name">;
     export type TrainingLocationOrderByWithAggregationInput = {
         id?: SortOrder
@@ -351682,6 +351769,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -351729,6 +351817,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -351776,6 +351865,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -351823,6 +351913,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -351870,6 +351961,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -351938,6 +352030,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -352636,6 +352729,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
         students?: StudentCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateInput = {
         id?: string
@@ -352650,6 +352744,7 @@ export namespace Prisma {
         dM_Tinh_NewId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -352664,6 +352759,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
         students?: StudentUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -352678,6 +352774,7 @@ export namespace Prisma {
         dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationCreateManyInput = {
         id?: string
@@ -374067,6 +374164,10 @@ export namespace Prisma {
         is?: RoomWhereInput | null
         isNot?: RoomWhereInput | null
     };
+    export type TrainingLocationNullableScalarRelationFilter = {
+        is?: TrainingLocationWhereInput | null
+        isNot?: TrainingLocationWhereInput | null
+    };
     export type ClassScheduleListRelationFilter = {
         every?: ClassScheduleWhereInput
         some?: ClassScheduleWhereInput
@@ -374138,6 +374239,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrder
+        trainingLocationId?: SortOrder
         lecturerId?: SortOrder
         extraLecturerId?: SortOrder
         enterGradeLecturerId?: SortOrder
@@ -374179,6 +374281,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrder
+        trainingLocationId?: SortOrder
         lecturerId?: SortOrder
         extraLecturerId?: SortOrder
         enterGradeLecturerId?: SortOrder
@@ -374217,6 +374320,7 @@ export namespace Prisma {
         scoreSubmitted?: SortOrder
         scoreChecked?: SortOrder
         roomId?: SortOrder
+        trainingLocationId?: SortOrder
         lecturerId?: SortOrder
         extraLecturerId?: SortOrder
         enterGradeLecturerId?: SortOrder
@@ -374686,10 +374790,6 @@ export namespace Prisma {
         name?: SortOrder
         dM_TinhId?: SortOrder
         dM_Tinh_NewId?: SortOrder
-    };
-    export type TrainingLocationNullableScalarRelationFilter = {
-        is?: TrainingLocationWhereInput | null
-        isNot?: TrainingLocationWhereInput | null
     };
     export type BuildingOrderByRelevanceInput = {
         fields: BuildingOrderByRelevanceFieldEnum | BuildingOrderByRelevanceFieldEnum[]
@@ -392169,6 +392269,11 @@ export namespace Prisma {
         connectOrCreate?: RoomCreateOrConnectWithoutSubjectClassesInput
         connect?: RoomWhereUniqueInput
     };
+    export type TrainingLocationCreateNestedOneWithoutSubjectClassesInput = {
+        create?: XOR<TrainingLocationCreateWithoutSubjectClassesInput, TrainingLocationUncheckedCreateWithoutSubjectClassesInput>
+        connectOrCreate?: TrainingLocationCreateOrConnectWithoutSubjectClassesInput
+        connect?: TrainingLocationWhereUniqueInput
+    };
     export type LecturerCreateNestedOneWithoutMainSubjectClassesInput = {
         create?: XOR<LecturerCreateWithoutMainSubjectClassesInput, LecturerUncheckedCreateWithoutMainSubjectClassesInput>
         connectOrCreate?: LecturerCreateOrConnectWithoutMainSubjectClassesInput
@@ -392328,6 +392433,15 @@ export namespace Prisma {
         delete?: RoomWhereInput | boolean
         connect?: RoomWhereUniqueInput
         update?: XOR<XOR<RoomUpdateToOneWithWhereWithoutSubjectClassesInput, RoomUpdateWithoutSubjectClassesInput>, RoomUncheckedUpdateWithoutSubjectClassesInput>
+    };
+    export type TrainingLocationUpdateOneWithoutSubjectClassesNestedInput = {
+        create?: XOR<TrainingLocationCreateWithoutSubjectClassesInput, TrainingLocationUncheckedCreateWithoutSubjectClassesInput>
+        connectOrCreate?: TrainingLocationCreateOrConnectWithoutSubjectClassesInput
+        upsert?: TrainingLocationUpsertWithoutSubjectClassesInput
+        disconnect?: TrainingLocationWhereInput | boolean
+        delete?: TrainingLocationWhereInput | boolean
+        connect?: TrainingLocationWhereUniqueInput
+        update?: XOR<XOR<TrainingLocationUpdateToOneWithWhereWithoutSubjectClassesInput, TrainingLocationUpdateWithoutSubjectClassesInput>, TrainingLocationUncheckedUpdateWithoutSubjectClassesInput>
     };
     export type LecturerUpdateOneWithoutMainSubjectClassesNestedInput = {
         create?: XOR<LecturerCreateWithoutMainSubjectClassesInput, LecturerUncheckedCreateWithoutMainSubjectClassesInput>
@@ -393464,6 +393578,12 @@ export namespace Prisma {
         createMany?: BuildingCreateManyTrainingLocationInputEnvelope
         connect?: BuildingWhereUniqueInput | BuildingWhereUniqueInput[]
     };
+    export type SubjectClassCreateNestedManyWithoutTrainingLocationInput = {
+        create?: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput> | SubjectClassCreateWithoutTrainingLocationInput[] | SubjectClassUncheckedCreateWithoutTrainingLocationInput[]
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutTrainingLocationInput | SubjectClassCreateOrConnectWithoutTrainingLocationInput[]
+        createMany?: SubjectClassCreateManyTrainingLocationInputEnvelope
+        connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+    };
     export type StudentUncheckedCreateNestedManyWithoutTrainingLocationInput = {
         create?: XOR<StudentCreateWithoutTrainingLocationInput, StudentUncheckedCreateWithoutTrainingLocationInput> | StudentCreateWithoutTrainingLocationInput[] | StudentUncheckedCreateWithoutTrainingLocationInput[]
         connectOrCreate?: StudentCreateOrConnectWithoutTrainingLocationInput | StudentCreateOrConnectWithoutTrainingLocationInput[]
@@ -393475,6 +393595,12 @@ export namespace Prisma {
         connectOrCreate?: BuildingCreateOrConnectWithoutTrainingLocationInput | BuildingCreateOrConnectWithoutTrainingLocationInput[]
         createMany?: BuildingCreateManyTrainingLocationInputEnvelope
         connect?: BuildingWhereUniqueInput | BuildingWhereUniqueInput[]
+    };
+    export type SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput = {
+        create?: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput> | SubjectClassCreateWithoutTrainingLocationInput[] | SubjectClassUncheckedCreateWithoutTrainingLocationInput[]
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutTrainingLocationInput | SubjectClassCreateOrConnectWithoutTrainingLocationInput[]
+        createMany?: SubjectClassCreateManyTrainingLocationInputEnvelope
+        connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
     };
     export type DM_TinhUpdateOneWithoutTrainingLocationNestedInput = {
         create?: XOR<DM_TinhCreateWithoutTrainingLocationInput, DM_TinhUncheckedCreateWithoutTrainingLocationInput>
@@ -393520,6 +393646,19 @@ export namespace Prisma {
         updateMany?: BuildingUpdateManyWithWhereWithoutTrainingLocationInput | BuildingUpdateManyWithWhereWithoutTrainingLocationInput[]
         deleteMany?: BuildingScalarWhereInput | BuildingScalarWhereInput[]
     };
+    export type SubjectClassUpdateManyWithoutTrainingLocationNestedInput = {
+        create?: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput> | SubjectClassCreateWithoutTrainingLocationInput[] | SubjectClassUncheckedCreateWithoutTrainingLocationInput[]
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutTrainingLocationInput | SubjectClassCreateOrConnectWithoutTrainingLocationInput[]
+        upsert?: SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput | SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput[]
+        createMany?: SubjectClassCreateManyTrainingLocationInputEnvelope
+        set?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        disconnect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        delete?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        update?: SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput | SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput[]
+        updateMany?: SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput | SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput[]
+        deleteMany?: SubjectClassScalarWhereInput | SubjectClassScalarWhereInput[]
+    };
     export type StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput = {
         create?: XOR<StudentCreateWithoutTrainingLocationInput, StudentUncheckedCreateWithoutTrainingLocationInput> | StudentCreateWithoutTrainingLocationInput[] | StudentUncheckedCreateWithoutTrainingLocationInput[]
         connectOrCreate?: StudentCreateOrConnectWithoutTrainingLocationInput | StudentCreateOrConnectWithoutTrainingLocationInput[]
@@ -393545,6 +393684,19 @@ export namespace Prisma {
         update?: BuildingUpdateWithWhereUniqueWithoutTrainingLocationInput | BuildingUpdateWithWhereUniqueWithoutTrainingLocationInput[]
         updateMany?: BuildingUpdateManyWithWhereWithoutTrainingLocationInput | BuildingUpdateManyWithWhereWithoutTrainingLocationInput[]
         deleteMany?: BuildingScalarWhereInput | BuildingScalarWhereInput[]
+    };
+    export type SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput = {
+        create?: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput> | SubjectClassCreateWithoutTrainingLocationInput[] | SubjectClassUncheckedCreateWithoutTrainingLocationInput[]
+        connectOrCreate?: SubjectClassCreateOrConnectWithoutTrainingLocationInput | SubjectClassCreateOrConnectWithoutTrainingLocationInput[]
+        upsert?: SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput | SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput[]
+        createMany?: SubjectClassCreateManyTrainingLocationInputEnvelope
+        set?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        disconnect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        delete?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        connect?: SubjectClassWhereUniqueInput | SubjectClassWhereUniqueInput[]
+        update?: SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput | SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput[]
+        updateMany?: SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput | SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput[]
+        deleteMany?: SubjectClassScalarWhereInput | SubjectClassScalarWhereInput[]
     };
     export type TrainingLocationCreateNestedOneWithoutBuildingsInput = {
         create?: XOR<TrainingLocationCreateWithoutBuildingsInput, TrainingLocationUncheckedCreateWithoutBuildingsInput>
@@ -439238,6 +439390,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
         students?: StudentCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateWithoutDM_TinhInput = {
         id?: string
@@ -439251,6 +439404,7 @@ export namespace Prisma {
         dM_Tinh_NewId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationCreateOrConnectWithoutDM_TinhInput = {
         where: TrainingLocationWhereUniqueInput
@@ -440624,6 +440778,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
         students?: StudentCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateWithoutDM_Tinh_NewInput = {
         id?: string
@@ -440637,6 +440792,7 @@ export namespace Prisma {
         dM_TinhId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
         buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationCreateOrConnectWithoutDM_Tinh_NewInput = {
         where: TrainingLocationWhereUniqueInput
@@ -446513,6 +446669,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -446559,6 +446716,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -447138,6 +447296,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -447184,6 +447343,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -450157,6 +450317,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -450203,6 +450364,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -450755,6 +450917,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFilter<"SubjectClass"> | boolean
         scoreChecked?: BoolFilter<"SubjectClass"> | boolean
         roomId?: StringNullableFilter<"SubjectClass"> | string | null
+        trainingLocationId?: StringNullableFilter<"SubjectClass"> | string | null
         lecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         extraLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
         enterGradeLecturerId?: StringNullableFilter<"SubjectClass"> | string | null
@@ -453330,6 +453493,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -453376,6 +453540,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -457005,6 +457170,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -457051,6 +457217,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -459813,6 +459980,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -459859,6 +460027,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -460075,6 +460244,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -460121,6 +460291,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -460555,6 +460726,38 @@ export namespace Prisma {
     export type RoomCreateOrConnectWithoutSubjectClassesInput = {
         where: RoomWhereUniqueInput
         create: XOR<RoomCreateWithoutSubjectClassesInput, RoomUncheckedCreateWithoutSubjectClassesInput>
+    };
+    export type TrainingLocationCreateWithoutSubjectClassesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
+        dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
+        students?: StudentCreateNestedManyWithoutTrainingLocationInput
+        buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+    };
+    export type TrainingLocationUncheckedCreateWithoutSubjectClassesInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        dM_TinhId?: string | null
+        dM_Tinh_NewId?: string | null
+        students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
+        buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+    };
+    export type TrainingLocationCreateOrConnectWithoutSubjectClassesInput = {
+        where: TrainingLocationWhereUniqueInput
+        create: XOR<TrainingLocationCreateWithoutSubjectClassesInput, TrainingLocationUncheckedCreateWithoutSubjectClassesInput>
     };
     export type LecturerCreateWithoutMainSubjectClassesInput = {
         id?: string
@@ -461543,6 +461746,43 @@ export namespace Prisma {
         classSchedules?: ClassScheduleUncheckedUpdateManyWithoutRoomNestedInput
         examRooms?: ExamRoomUncheckedUpdateManyWithoutRoomNestedInput
     };
+    export type TrainingLocationUpsertWithoutSubjectClassesInput = {
+        update: XOR<TrainingLocationUpdateWithoutSubjectClassesInput, TrainingLocationUncheckedUpdateWithoutSubjectClassesInput>
+        create: XOR<TrainingLocationCreateWithoutSubjectClassesInput, TrainingLocationUncheckedCreateWithoutSubjectClassesInput>
+        where?: TrainingLocationWhereInput
+    };
+    export type TrainingLocationUpdateToOneWithWhereWithoutSubjectClassesInput = {
+        where?: TrainingLocationWhereInput
+        data: XOR<TrainingLocationUpdateWithoutSubjectClassesInput, TrainingLocationUncheckedUpdateWithoutSubjectClassesInput>
+    };
+    export type TrainingLocationUpdateWithoutSubjectClassesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
+        dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
+        students?: StudentUpdateManyWithoutTrainingLocationNestedInput
+        buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+    };
+    export type TrainingLocationUncheckedUpdateWithoutSubjectClassesInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
+        dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
+        students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+    };
     export type LecturerUpsertWithoutMainSubjectClassesInput = {
         update: XOR<LecturerUpdateWithoutMainSubjectClassesInput, LecturerUncheckedUpdateWithoutMainSubjectClassesInput>
         create: XOR<LecturerCreateWithoutMainSubjectClassesInput, LecturerUncheckedCreateWithoutMainSubjectClassesInput>
@@ -461973,6 +462213,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -462019,6 +462260,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -462078,6 +462320,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -462124,6 +462367,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -462170,6 +462414,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -462216,6 +462461,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -462535,6 +462781,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -462581,6 +462828,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -463405,6 +463653,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -463451,6 +463700,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -464989,6 +465239,108 @@ export namespace Prisma {
         data: BuildingCreateManyTrainingLocationInput | BuildingCreateManyTrainingLocationInput[]
         skipDuplicates?: boolean
     };
+    export type SubjectClassCreateWithoutTrainingLocationInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        code: string
+        name: string
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        schedule?: $Enums.SubjectClassSchedule | null
+        maxStudent: number
+        cancelled?: boolean
+        lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
+        examDate?: Date | string | null
+        examType?: $Enums.ExamType | null
+        scoreDeadLineStart?: Date | string | null
+        scoreDeadline?: Date | string | null
+        examScoreDeadline?: Date | string | null
+        enteredScore?: boolean
+        enteredExamScore?: boolean
+        issuedScoreAt?: Date | string | null
+        isLockScore?: boolean
+        isLockExamScore?: boolean
+        scoreSubmitted?: boolean
+        scoreChecked?: boolean
+        subject: SubjectVersionCreateNestedOneWithoutSubjectClassInput
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
+        semester: SemesterCreateNestedOneWithoutSubjectClassesInput
+        exam?: ExamCreateNestedOneWithoutSubjectClassInput
+        room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
+        extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
+        enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
+        subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
+        fixedClasses?: FixedClassCreateNestedManyWithoutSubjectClassesInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutSubjectClassInput
+        thesisProjects?: ThesisProjectCreateNestedManyWithoutSubjectClassInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutSubjectClassInput
+        defenseRooms?: RoomCreateNestedManyWithoutDefenseRoomsInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutSubjectClassesInput
+        classRegisterLogs?: ClassRegisterLogsCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeCreateNestedManyWithoutSubjectClassInput
+    };
+    export type SubjectClassUncheckedCreateWithoutTrainingLocationInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        code: string
+        name: string
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        subjectId: string
+        schedule?: $Enums.SubjectClassSchedule | null
+        maxStudent: number
+        trainingObjectTypeId: string
+        semesterId: string
+        cancelled?: boolean
+        lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
+        examDate?: Date | string | null
+        examType?: $Enums.ExamType | null
+        examId?: string | null
+        scoreDeadLineStart?: Date | string | null
+        scoreDeadline?: Date | string | null
+        examScoreDeadline?: Date | string | null
+        enteredScore?: boolean
+        enteredExamScore?: boolean
+        issuedScoreAt?: Date | string | null
+        isLockScore?: boolean
+        isLockExamScore?: boolean
+        scoreSubmitted?: boolean
+        scoreChecked?: boolean
+        roomId?: string | null
+        lecturerId?: string | null
+        extraLecturerId?: string | null
+        enterGradeLecturerId?: string | null
+        subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
+        fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutSubjectClassesInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutSubjectClassInput
+        thesisProjects?: ThesisProjectUncheckedCreateNestedManyWithoutSubjectClassInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutSubjectClassInput
+        defenseRooms?: RoomUncheckedCreateNestedManyWithoutDefenseRoomsInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutSubjectClassesInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedCreateNestedManyWithoutSubjectClassInput
+        subjectClassTimes?: SubjectClassTimeUncheckedCreateNestedManyWithoutSubjectClassInput
+    };
+    export type SubjectClassCreateOrConnectWithoutTrainingLocationInput = {
+        where: SubjectClassWhereUniqueInput
+        create: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput>
+    };
+    export type SubjectClassCreateManyTrainingLocationInputEnvelope = {
+        data: SubjectClassCreateManyTrainingLocationInput | SubjectClassCreateManyTrainingLocationInput[]
+        skipDuplicates?: boolean
+    };
     export type DM_TinhUpsertWithoutTrainingLocationInput = {
         update: XOR<DM_TinhUpdateWithoutTrainingLocationInput, DM_TinhUncheckedUpdateWithoutTrainingLocationInput>
         create: XOR<DM_TinhCreateWithoutTrainingLocationInput, DM_TinhUncheckedCreateWithoutTrainingLocationInput>
@@ -465144,6 +465496,19 @@ export namespace Prisma {
         floor?: IntNullableFilter<"Building"> | number | null
         trainingLocationId?: StringNullableFilter<"Building"> | string | null
     };
+    export type SubjectClassUpsertWithWhereUniqueWithoutTrainingLocationInput = {
+        where: SubjectClassWhereUniqueInput
+        update: XOR<SubjectClassUpdateWithoutTrainingLocationInput, SubjectClassUncheckedUpdateWithoutTrainingLocationInput>
+        create: XOR<SubjectClassCreateWithoutTrainingLocationInput, SubjectClassUncheckedCreateWithoutTrainingLocationInput>
+    };
+    export type SubjectClassUpdateWithWhereUniqueWithoutTrainingLocationInput = {
+        where: SubjectClassWhereUniqueInput
+        data: XOR<SubjectClassUpdateWithoutTrainingLocationInput, SubjectClassUncheckedUpdateWithoutTrainingLocationInput>
+    };
+    export type SubjectClassUpdateManyWithWhereWithoutTrainingLocationInput = {
+        where: SubjectClassScalarWhereInput
+        data: XOR<SubjectClassUpdateManyMutationInput, SubjectClassUncheckedUpdateManyWithoutTrainingLocationInput>
+    };
     export type TrainingLocationCreateWithoutBuildingsInput = {
         id?: string
         code?: string | null
@@ -465156,6 +465521,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
         dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
         students?: StudentCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateWithoutBuildingsInput = {
         id?: string
@@ -465169,6 +465535,7 @@ export namespace Prisma {
         dM_TinhId?: string | null
         dM_Tinh_NewId?: string | null
         students?: StudentUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationCreateOrConnectWithoutBuildingsInput = {
         where: TrainingLocationWhereUniqueInput
@@ -465247,6 +465614,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
         dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
         students?: StudentUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateWithoutBuildingsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -465260,6 +465628,7 @@ export namespace Prisma {
         dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type RoomUpsertWithWhereUniqueWithoutBuildingInput = {
         where: RoomWhereUniqueInput
@@ -465379,6 +465748,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -465425,6 +465795,7 @@ export namespace Prisma {
         isLockExamScore?: boolean
         scoreSubmitted?: boolean
         scoreChecked?: boolean
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -465480,6 +465851,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -465526,6 +465898,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -468917,6 +469290,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhCreateNestedOneWithoutTrainingLocationInput
         dM_Tinh_New?: DM_Tinh_NewCreateNestedOneWithoutTrainingLocationInput
         buildings?: BuildingCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationUncheckedCreateWithoutStudentsInput = {
         id?: string
@@ -468930,6 +469304,7 @@ export namespace Prisma {
         dM_TinhId?: string | null
         dM_Tinh_NewId?: string | null
         buildings?: BuildingUncheckedCreateNestedManyWithoutTrainingLocationInput
+        subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutTrainingLocationInput
     };
     export type TrainingLocationCreateOrConnectWithoutStudentsInput = {
         where: TrainingLocationWhereUniqueInput
@@ -470756,6 +471131,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
         dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
         buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateWithoutStudentsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -470769,6 +471145,7 @@ export namespace Prisma {
         dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
         dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
         buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type PriorityObjectUpsertWithWhereUniqueWithoutStudentsInput = {
         where: PriorityObjectWhereUniqueInput
@@ -477651,6 +478028,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
@@ -477697,6 +478075,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
@@ -477751,6 +478130,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
@@ -477797,6 +478177,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         enterGradeLecturerId?: string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
@@ -477851,6 +478232,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         subjectClassStudent?: StudentSubjectScoreCreateNestedManyWithoutSubjectClassInput
@@ -477897,6 +478279,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedCreateNestedManyWithoutSubjectClassInput
@@ -480815,6 +481198,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -480861,6 +481245,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -481394,6 +481779,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -481440,6 +481826,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -483066,6 +483453,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -483112,6 +483500,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -488419,6 +488808,7 @@ export namespace Prisma {
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         exam?: ExamCreateNestedOneWithoutSubjectClassInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -488465,6 +488855,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -499349,6 +499740,7 @@ export namespace Prisma {
         trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutSubjectClassInput
         semester: SemesterCreateNestedOneWithoutSubjectClassesInput
         room?: RoomCreateNestedOneWithoutSubjectClassesInput
+        trainingLocation?: TrainingLocationCreateNestedOneWithoutSubjectClassesInput
         mainLecturer?: LecturerCreateNestedOneWithoutMainSubjectClassesInput
         extraLecturer?: LecturerCreateNestedOneWithoutExtraSubjectClassesInput
         enterGradeLecturer?: LecturerCreateNestedOneWithoutEnterGradeClassesInput
@@ -499395,6 +499787,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -516978,6 +517371,7 @@ export namespace Prisma {
         dM_Tinh_New?: DM_Tinh_NewUpdateOneWithoutTrainingLocationNestedInput
         students?: StudentUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateWithoutDM_TinhInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -516991,6 +517385,7 @@ export namespace Prisma {
         dM_Tinh_NewId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateManyWithoutDM_TinhInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -519202,6 +519597,7 @@ export namespace Prisma {
         dM_Tinh?: DM_TinhUpdateOneWithoutTrainingLocationNestedInput
         students?: StudentUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateWithoutDM_Tinh_NewInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -519215,6 +519611,7 @@ export namespace Prisma {
         dM_TinhId?: NullableStringFieldUpdateOperationsInput | string | null
         students?: StudentUncheckedUpdateManyWithoutTrainingLocationNestedInput
         buildings?: BuildingUncheckedUpdateManyWithoutTrainingLocationNestedInput
+        subjectClasses?: SubjectClassUncheckedUpdateManyWithoutTrainingLocationNestedInput
     };
     export type TrainingLocationUncheckedUpdateManyWithoutDM_Tinh_NewInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -527144,6 +527541,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -527347,6 +527745,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -527393,6 +527792,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -527439,6 +527839,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529229,6 +529630,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -529275,6 +529677,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -529321,6 +529724,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -530927,6 +531331,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -531739,6 +532144,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -531785,6 +532191,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -531831,6 +532238,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -533360,6 +533768,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -533996,6 +534405,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -534042,6 +534452,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -534088,6 +534499,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535335,6 +535747,44 @@ export namespace Prisma {
         name: string
         floor?: number | null
     };
+    export type SubjectClassCreateManyTrainingLocationInput = {
+        id?: string
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        code: string
+        name: string
+        startDate?: Date | string | null
+        endDate?: Date | string | null
+        subjectId: string
+        schedule?: $Enums.SubjectClassSchedule | null
+        maxStudent: number
+        trainingObjectTypeId: string
+        semesterId: string
+        cancelled?: boolean
+        lecturerAssignmentDeadline?: Date | string | null
+        sendLecturerAssignmentAt?: Date | string | null
+        submitLecturerAssignmentAt?: Date | string | null
+        examDate?: Date | string | null
+        examType?: $Enums.ExamType | null
+        examId?: string | null
+        scoreDeadLineStart?: Date | string | null
+        scoreDeadline?: Date | string | null
+        examScoreDeadline?: Date | string | null
+        enteredScore?: boolean
+        enteredExamScore?: boolean
+        issuedScoreAt?: Date | string | null
+        isLockScore?: boolean
+        isLockExamScore?: boolean
+        scoreSubmitted?: boolean
+        scoreChecked?: boolean
+        roomId?: string | null
+        lecturerId?: string | null
+        extraLecturerId?: string | null
+        enterGradeLecturerId?: string | null
+    };
     export type StudentUpdateWithoutTrainingLocationInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535514,6 +535964,138 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         floor?: NullableIntFieldUpdateOperationsInput | number | null
     };
+    export type SubjectClassUpdateWithoutTrainingLocationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+        maxStudent?: IntFieldUpdateOperationsInput | number
+        cancelled?: BoolFieldUpdateOperationsInput | boolean
+        lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enteredScore?: BoolFieldUpdateOperationsInput | boolean
+        enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+        issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isLockScore?: BoolFieldUpdateOperationsInput | boolean
+        isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+        scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+        scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        subject?: SubjectVersionUpdateOneRequiredWithoutSubjectClassNestedInput
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
+        semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
+        exam?: ExamUpdateOneWithoutSubjectClassNestedInput
+        room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
+        extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
+        enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
+        subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
+        fixedClasses?: FixedClassUpdateManyWithoutSubjectClassesNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutSubjectClassNestedInput
+        thesisProjects?: ThesisProjectUpdateManyWithoutSubjectClassNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutSubjectClassNestedInput
+        defenseRooms?: RoomUpdateManyWithoutDefenseRoomsNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutSubjectClassesNestedInput
+        classRegisterLogs?: ClassRegisterLogsUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUpdateManyWithoutSubjectClassNestedInput
+    };
+    export type SubjectClassUncheckedUpdateWithoutTrainingLocationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subjectId?: StringFieldUpdateOperationsInput | string
+        schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+        maxStudent?: IntFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        cancelled?: BoolFieldUpdateOperationsInput | boolean
+        lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enteredScore?: BoolFieldUpdateOperationsInput | boolean
+        enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+        issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isLockScore?: BoolFieldUpdateOperationsInput | boolean
+        isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+        scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+        scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
+        fixedClasses?: FixedClassUncheckedUpdateManyWithoutSubjectClassesNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutSubjectClassNestedInput
+        thesisProjects?: ThesisProjectUncheckedUpdateManyWithoutSubjectClassNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutSubjectClassNestedInput
+        defenseRooms?: RoomUncheckedUpdateManyWithoutDefenseRoomsNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutSubjectClassesNestedInput
+        classRegisterLogs?: ClassRegisterLogsUncheckedUpdateManyWithoutSubjectClassNestedInput
+        subjectClassTimes?: SubjectClassTimeUncheckedUpdateManyWithoutSubjectClassNestedInput
+    };
+    export type SubjectClassUncheckedUpdateManyWithoutTrainingLocationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        code?: StringFieldUpdateOperationsInput | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subjectId?: StringFieldUpdateOperationsInput | string
+        schedule?: NullableEnumSubjectClassScheduleFieldUpdateOperationsInput | $Enums.SubjectClassSchedule | null
+        maxStudent?: IntFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        semesterId?: StringFieldUpdateOperationsInput | string
+        cancelled?: BoolFieldUpdateOperationsInput | boolean
+        lecturerAssignmentDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        sendLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        submitLecturerAssignmentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examType?: NullableEnumExamTypeFieldUpdateOperationsInput | $Enums.ExamType | null
+        examId?: NullableStringFieldUpdateOperationsInput | string | null
+        scoreDeadLineStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        scoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        examScoreDeadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        enteredScore?: BoolFieldUpdateOperationsInput | boolean
+        enteredExamScore?: BoolFieldUpdateOperationsInput | boolean
+        issuedScoreAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isLockScore?: BoolFieldUpdateOperationsInput | boolean
+        isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
+        scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
+        scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+        enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type RoomCreateManyBuildingInput = {
         id?: string
         code?: string | null
@@ -535623,6 +536205,7 @@ export namespace Prisma {
         isLockExamScore?: boolean
         scoreSubmitted?: boolean
         scoreChecked?: boolean
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -535776,6 +536359,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -535822,6 +536406,7 @@ export namespace Prisma {
         isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535868,6 +536453,7 @@ export namespace Prisma {
         isLockExamScore?: BoolFieldUpdateOperationsInput | boolean
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535906,6 +536492,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -535952,6 +536539,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -535998,6 +536586,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -540223,6 +540812,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
     };
@@ -540260,6 +540850,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         enterGradeLecturerId?: string | null
     };
@@ -540297,6 +540888,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
     };
@@ -540512,6 +541104,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
@@ -540558,6 +541151,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
@@ -540604,6 +541198,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -540641,6 +541236,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
@@ -540687,6 +541283,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
@@ -540733,6 +541330,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -540770,6 +541368,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         subjectClassStudent?: StudentSubjectScoreUpdateManyWithoutSubjectClassNestedInput
@@ -540816,6 +541415,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         subjectClassStudent?: StudentSubjectScoreUncheckedUpdateManyWithoutSubjectClassNestedInput
@@ -540862,6 +541462,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
     };
@@ -542291,6 +542892,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -542337,6 +542939,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -542383,6 +542986,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544264,6 +544868,7 @@ export namespace Prisma {
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         exam?: ExamUpdateOneWithoutSubjectClassNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -544310,6 +544915,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -544356,6 +544962,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -547139,6 +547746,7 @@ export namespace Prisma {
         scoreSubmitted?: boolean
         scoreChecked?: boolean
         roomId?: string | null
+        trainingLocationId?: string | null
         lecturerId?: string | null
         extraLecturerId?: string | null
         enterGradeLecturerId?: string | null
@@ -547248,6 +547856,7 @@ export namespace Prisma {
         trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutSubjectClassNestedInput
         semester?: SemesterUpdateOneRequiredWithoutSubjectClassesNestedInput
         room?: RoomUpdateOneWithoutSubjectClassesNestedInput
+        trainingLocation?: TrainingLocationUpdateOneWithoutSubjectClassesNestedInput
         mainLecturer?: LecturerUpdateOneWithoutMainSubjectClassesNestedInput
         extraLecturer?: LecturerUpdateOneWithoutExtraSubjectClassesNestedInput
         enterGradeLecturer?: LecturerUpdateOneWithoutEnterGradeClassesNestedInput
@@ -547294,6 +547903,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -547340,6 +547950,7 @@ export namespace Prisma {
         scoreSubmitted?: BoolFieldUpdateOperationsInput | boolean
         scoreChecked?: BoolFieldUpdateOperationsInput | boolean
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
         lecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         extraLecturerId?: NullableStringFieldUpdateOperationsInput | string | null
         enterGradeLecturerId?: NullableStringFieldUpdateOperationsInput | string | null

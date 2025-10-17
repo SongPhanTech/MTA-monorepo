@@ -829,7 +829,7 @@ model SubjectClass extends BaseNoCode {
   semesterId                 String
 
   cancelled                  Boolean               @default(false) // đã hủy lớp
-  
+
   lecturerAssignmentDeadline DateTime? // hạn phân công giảng dạy
   sendLecturerAssignmentAt   DateTime? // ngày gửi phân công giảng dạy
   submitLecturerAssignmentAt DateTime? // ngày nộp phân công giảng dạy
@@ -866,6 +866,9 @@ model SubjectClass extends BaseNoCode {
 
   room                       Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
   roomId                     String?
+
+  trainingLocation           TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocationId         String?
 
   mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
   lecturerId                 String?

@@ -17,9 +17,11 @@ import { $Enums, type Prisma, type SubjectClassSchedule } from '@workspace/db/cl
 import {
     useCountSubjectClass,
     useDeleteSubjectClass,
+    useFindManyBuilding,
     useFindManyDM_DonVi,
     useFindManySubjectClass,
     useFindManyTrainingCourse,
+    useFindManyTrainingLocation,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -28,7 +30,19 @@ import { useAbility, useOrgPermissions } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
-import { Button, Checkbox, Col, Flex, Form, message, Popconfirm, Popover, Row, Switch } from 'antd'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    message,
+    Popconfirm,
+    Popover,
+    Row,
+    Switch,
+    TreeSelect,
+} from 'antd'
 import type { Dayjs } from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
@@ -82,6 +96,7 @@ type TeachingAssignmentForm = {
             lecturerAssignmentDeadline: Dayjs | null
             examType: $Enums.ExamType | null
             roomId: string | null
+            trainingLocationId: string | null
         }
     >
 }
@@ -341,15 +356,8 @@ export default function TeachingAssignment() {
                         userProfile: true,
                     },
                 },
-                room: {
-                    include: {
-                        building: {
-                            include: {
-                                trainingLocation: true,
-                            },
-                        },
-                    },
-                },
+                room: true,
+                trainingLocation: true,
                 subjectClassStudent: true,
                 subjectClassTimes: true,
             },
@@ -459,6 +467,24 @@ export default function TeachingAssignment() {
         where: { trainingObjectTypeId, deletedAt: null, active: true },
     })
 
+    const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
+        orderBy: { name: 'asc' },
+        where: { deletedAt: null, active: true },
+    })
+
+    const { data: buildingData = [] } = useFindManyBuilding({
+        orderBy: { name: 'asc' },
+        where: { deletedAt: null, active: true },
+        include: {
+            rooms: {
+                where: {
+                    deletedAt: null,
+                    active: true,
+                },
+            },
+        },
+    })
+
     async function handleSaveData(values: TeachingAssignmentForm) {
         try {
             setIsEdit(false)
@@ -476,6 +502,9 @@ export default function TeachingAssignment() {
                             lecturerAssignmentDeadline: subjectClass.lecturerAssignmentDeadline
                                 ? subjectClass.lecturerAssignmentDeadline?.toDate()
                                 : null,
+                            examType: subjectClass.examType,
+                            roomId: subjectClass.roomId,
+                            trainingLocationId: subjectClass.trainingLocationId,
                         },
                     },
                 }))
@@ -593,6 +622,7 @@ export default function TeachingAssignment() {
                             : null,
                         examType: curr.examType,
                         roomId: curr.roomId,
+                        trainingLocationId: curr.trainingLocationId,
                     }
                     return acc
                 },
@@ -801,6 +831,11 @@ export default function TeachingAssignment() {
                                                                 name: true,
                                                             },
                                                         },
+                                                        trainingLocation: {
+                                                            select: {
+                                                                name: true,
+                                                            },
+                                                        },
                                                     },
                                                 },
                                             },
@@ -866,6 +901,9 @@ export default function TeachingAssignment() {
                                                 }
                                             }>
                                             room: {
+                                                name: string
+                                            }
+                                            trainingLocation: {
                                                 name: string
                                             }
                                         }>
@@ -1079,7 +1117,11 @@ export default function TeachingAssignment() {
                                                                                         .join(', '),
                                                                                 },
                                                                                 {
-                                                                                    value: '',
+                                                                                    value:
+                                                                                        item
+                                                                                            .trainingLocation
+                                                                                            ?.name ??
+                                                                                        '',
                                                                                 },
                                                                                 {
                                                                                     value:
@@ -1388,24 +1430,102 @@ export default function TeachingAssignment() {
                                             '-'
                                         ),
                                 },
-
                                 {
                                     title: 'Khu vực',
-                                    dataIndex: 'room',
+                                    dataIndex: 'trainingLocationId',
                                     align: 'center',
                                     width: 150,
                                     type: 'input',
-                                    render: (value) =>
-                                        value?.building?.trainingLocation?.name
-                                            ? value?.building?.trainingLocation?.name
-                                            : '',
+                                    render: (_, record) =>
+                                        isEdit ? (
+                                            <FormItem
+                                                form={form}
+                                                name={[
+                                                    'subjectClass',
+                                                    record.id,
+                                                    'trainingLocationId',
+                                                ]}
+                                            >
+                                                <Select
+                                                    options={trainingLocationData.map((e) => ({
+                                                        label: e.name,
+                                                        value: e.id,
+                                                    }))}
+                                                    allowClear
+                                                    showSearch
+                                                    filterOption={(input, option) =>
+                                                        (option?.label ?? '')
+                                                            .toString()
+                                                            .toLowerCase()
+                                                            .includes(input.toLowerCase())
+                                                    }
+                                                    dropdownStyle={{
+                                                        width: 400,
+                                                        maxHeight: 400,
+                                                    }}
+                                                    disabled={!isEdit}
+                                                />
+                                            </FormItem>
+                                        ) : record.trainingLocation ? (
+                                            record.trainingLocation?.name
+                                        ) : (
+                                            '-'
+                                        ),
                                 },
                                 {
                                     title: 'Phòng học',
-                                    dataIndex: 'room',
+                                    dataIndex: 'roomId',
                                     align: 'center',
-                                    width: 120,
-                                    render: (value) => value?.name || '',
+                                    width: 200,
+                                    render: (_, record) =>
+                                        isEdit ? (
+                                            <FormItem
+                                                form={form}
+                                                name={['subjectClass', record.id, 'roomId']}
+                                            >
+                                                <TreeSelect
+                                                    treeData={buildingData
+                                                        .filter(
+                                                            (e) =>
+                                                                e.trainingLocationId ===
+                                                                (form.getFieldValue([
+                                                                    'subjectClass',
+                                                                    record.id,
+                                                                    'trainingLocationId',
+                                                                ]) ?? record.trainingLocationId)
+                                                        )
+                                                        .map((e) => ({
+                                                            label: e.name,
+                                                            value: e.id,
+                                                            selectable: false,
+                                                            children: e.rooms.map((room) => ({
+                                                                label: room.name,
+                                                                value: room.id,
+                                                                selectable: true,
+                                                            })),
+                                                        }))}
+                                                    filterTreeNode={(input, option) =>
+                                                        (option?.title ?? '')
+                                                            .toString()
+                                                            .toLowerCase()
+                                                            .includes(input.toLowerCase())
+                                                    }
+                                                    showSearch
+                                                    allowClear
+                                                    treeNodeFilterProp="title"
+                                                    multiple={false}
+                                                    showCheckedStrategy="SHOW_CHILD"
+                                                    dropdownStyle={{
+                                                        width: 400,
+                                                        maxHeight: 400,
+                                                    }}
+                                                />
+                                            </FormItem>
+                                        ) : record.room ? (
+                                            record.room?.name
+                                        ) : (
+                                            '-'
+                                        ),
                                 },
                                 {
                                     title: 'Giảng viên nhập điểm',

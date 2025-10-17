@@ -2965,6 +2965,8 @@ model SubjectClass {
   scoreChecked               Boolean               @default(false)
   room                       Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
   roomId                     String?
+  trainingLocation           TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocationId         String?
   mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
   lecturerId                 String?
   extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
@@ -3127,20 +3129,21 @@ model TrainingForm {
 
 /// địa điểm đào tạo
 model TrainingLocation {
-  id            String       @id() @default(cuid())
-  code          String?      @unique()
-  active        Boolean      @default(true)
-  description   String?      @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now()) @updatedAt()
-  name          String       @unique()
-  dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId     String?      @db.Uuid()
-  dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
-  dM_Tinh_NewId String?      @db.Uuid()
-  students      Student[]
-  buildings     Building[]
+  id             String         @id() @default(cuid())
+  code           String?        @unique()
+  active         Boolean        @default(true)
+  description    String?        @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now()) @updatedAt()
+  name           String         @unique()
+  dM_Tinh        DM_Tinh?       @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId      String?        @db.Uuid()
+  dM_Tinh_New    DM_Tinh_New?   @relation(fields: [dM_Tinh_NewId], references: [Id])
+  dM_Tinh_NewId  String?        @db.Uuid()
+  students       Student[]
+  buildings      Building[]
+  subjectClasses SubjectClass[] @relation("ClassTrainingLocation")
 
   @@schema("ql-dao-tao")
 }

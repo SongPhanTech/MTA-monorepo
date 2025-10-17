@@ -1917,6 +1917,7 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   scoreSubmitted: 'scoreSubmitted',
   scoreChecked: 'scoreChecked',
   roomId: 'roomId',
+  trainingLocationId: 'trainingLocationId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
   enterGradeLecturerId: 'enterGradeLecturerId'
@@ -5185,6 +5186,7 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   semesterId: 'semesterId',
   examId: 'examId',
   roomId: 'roomId',
+  trainingLocationId: 'trainingLocationId',
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
   enterGradeLecturerId: 'enterGradeLecturerId'
