@@ -197,7 +197,6 @@ export default function OlympicAwards() {
                                                     label: `${i?.name}`,
                                                 }
                                             })}
-                                            key="subjectClass"
                                         />
                                     ) : (
                                         ''
@@ -215,16 +214,16 @@ export default function OlympicAwards() {
                                     'XOA'
                                 ),
                                 render: (_, { id, _count }) => {
-                                    if (!_count?.archivedAward) {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 {can(
+
                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
                                                     'SUA'
                                                 ) && (
                                                     <EditIcon
+                                                        disabled={_count?.subjects > 0 || _count?.archivedAward > 0}
                                                         onClick={onOpen.bind(null, id)}
-                                                        className="text-sm text-blue-700 cursor-pointer"
                                                     />
                                                 )}
                                                 {can(
@@ -232,6 +231,7 @@ export default function OlympicAwards() {
                                                     'XOA'
                                                 ) && (
                                                     <DeleteIcon
+                                                        disabled={_count?.subjects > 0 || _count?.archivedAward > 0}
                                                         popConfirm={{
                                                             onConfirm: () => handleDelete(id),
                                                         }}
@@ -239,8 +239,7 @@ export default function OlympicAwards() {
                                                 )}
                                             </Row>
                                         )
-                                    }
-                                    return ''
+                                 
                                 },
                             },
                         ]}

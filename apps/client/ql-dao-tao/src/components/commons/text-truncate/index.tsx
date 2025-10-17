@@ -2,9 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 type TypeProps = {
     arr: { key: string; label: string }[]
-    key: string
 }
-export default function TextTruncate({ arr, key }: TypeProps) {
+export default function TextTruncate({ arr }: TypeProps) {
     const [show, setShow] = useState(false)
     const [showButton, setShowButton] = useState(false)
     const textRef = useRef<HTMLDivElement>(null)

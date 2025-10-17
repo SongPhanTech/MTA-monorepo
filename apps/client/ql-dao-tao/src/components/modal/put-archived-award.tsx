@@ -221,8 +221,6 @@ const PutArchivedAwardModal = () => {
                             form.setFieldsValue({
                                 bonusScore: option.bonusScore
                             })
-                            console.log(form.getFieldsValue());
-                            
                         }}
                     />
                 </FormItem>
@@ -255,7 +253,7 @@ const PutArchivedAwardModal = () => {
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">
-                <FormItem form={form} name="date" label="Giải thưởng">
+                <FormItem form={form} name="documentFiles" label="Minh chứng">
                     <DocumentPaths
                         form={form}
                         data={document}
