@@ -1988,7 +1988,7 @@ importers:
     devDependencies:
       '@paralleldrive/cuid2':
         specifier: github:paralleldrive/cuid2
-        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/76ad3fe7122f3baa01aa437baa2284afbbede2a8
+        version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/fe7195520565b4c5550555bc82101baaed253825
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
@@ -3382,8 +3382,8 @@ packages:
   '@paralleldrive/cuid2@2.2.2':
     resolution: {integrity: sha512-ZOBkgDwEdoYVlSeRbYYXs0S9MejQofiVYoTbKzy/6GQa39/q5tQU2IX46+shYnUkpEl3wc+J6wRlar7r2EK2xA==}
 
-  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/76ad3fe7122f3baa01aa437baa2284afbbede2a8':
-    resolution: {tarball: https://codeload.github.com/paralleldrive/cuid2/tar.gz/76ad3fe7122f3baa01aa437baa2284afbbede2a8}
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/fe7195520565b4c5550555bc82101baaed253825':
+    resolution: {tarball: https://codeload.github.com/paralleldrive/cuid2/tar.gz/fe7195520565b4c5550555bc82101baaed253825}
     version: 2.2.2
 
   '@pkgjs/parseargs@0.11.0':
@@ -10481,7 +10481,7 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.8.0
 
-  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/76ad3fe7122f3baa01aa437baa2284afbbede2a8':
+  '@paralleldrive/cuid2@https://codeload.github.com/paralleldrive/cuid2/tar.gz/fe7195520565b4c5550555bc82101baaed253825':
     dependencies:
       '@noble/hashes': 1.8.0
 
