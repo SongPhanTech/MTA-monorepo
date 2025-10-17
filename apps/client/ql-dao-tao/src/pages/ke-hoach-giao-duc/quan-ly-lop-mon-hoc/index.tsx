@@ -883,7 +883,6 @@ export default function TeachingAssignment() {
                                             sTen: string
                                             sParentId: string
                                         }>
-                                        console.log('payload', payload)
 
                                         const hocKy = (() => {
                                             if (
