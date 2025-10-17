@@ -744,7 +744,7 @@ model ClassRegisterSessionCredit extends Base {
   classRegisterSessionId String
   minCredit              Int                     @default(0) // tối thiểu số tín chỉ phải đăng ký
   maxCredit              Int                     @default(25)        // tối đa số tín chỉ được đăng ký
-  baseScore              AcademicRankingBaseType
+  baseScore              AcademicRankingBaseType @default(Base10) // loại điểm làm cơ sở tính toán
   base10Min              Float?
   base10Max              Float?
   base4Min               Float?
