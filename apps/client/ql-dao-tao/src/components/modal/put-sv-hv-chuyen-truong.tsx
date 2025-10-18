@@ -12,16 +12,28 @@ import {
     useCreateStudentScoreConvert,
     useFindUniqueStudent,
     useFindUniqueStudentScoreConvert,
-    useUpdateStudentScoreConvert,
     useFindManyStudent,
+    useCreateManyStudentSubjectScore,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, InputNumber, Button, Select, Row } from 'antd'
+import { Col, Form, Input, message, InputNumber, Button, Select, Row, Table } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import DocumentPaths from '@components/commons/documentPaths'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { Trash2 } from 'lucide-react'
+import { PlusOutlined } from '@ant-design/icons'
+import type { TableColumnsType } from 'antd'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { $Enums } from '@workspace/db/client'
+
+const ScoreConvertStatus = $Enums.ScoreConvertStatus
+type ScoreConvertStatus = $Enums.ScoreConvertStatus
+const statusOptions = [
+    { label: 'Chờ duyệt', value: ScoreConvertStatus.PENDING },
+    { label: 'Đã duyệt', value: ScoreConvertStatus.APPROVED },
+    { label: 'Không được duyệt', value: ScoreConvertStatus.REJECTED },
+]
 
 export type PutStudentScoreConvert = StudentScoreConvert & {
     subjectScoreConvert: Partial<SubjectScoreConvert>[]
@@ -32,22 +44,22 @@ const PutStudentScoreConvertModal = () => {
     const [form] = Form.useForm<PutStudentScoreConvert>()
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [studentKeyword, setStudentKeyword] = useState<string>('')
-    const originalStatusRef = useRef<Record<string, 'PENDING' | 'APPROVED' | 'REJECTED'>>({})
+    const originalStatusRef = useRef<Record<string, ScoreConvertStatus>>({})
     const initialSubjectsRef = useRef<Partial<SubjectScoreConvert>[]>([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { showSpinner, hideSpinner } = useSpinner()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{ id: string; mode: 'view' | 'edit' }>({
         tag: 'PutStudentScoreConvertModal',
         onClose: () => {
             form.resetFields()
             setDocument([])
             setStudentKeyword('')
+            setSelectedRowKeys([])
         },
     })
+    const id = input?.id
     const isEdit = !!id
+    const isViewMode = input?.mode === 'view'
     const selectedSubjects = Form.useWatch('subjectScoreConvert', form) || []
     const selectedSubjectIds = useMemo(
         () => new Set(selectedSubjects.map((s: any) => s?.subjectVersionId).filter(Boolean)),
@@ -56,16 +68,20 @@ const PutStudentScoreConvertModal = () => {
     const { data: studentList = [], isFetching: loadingStudents } = useFindManyStudent({
         where: {
             active: true,
-            userProfile: {
-                is: {
-                    OR: [
-                        { firstName: { contains: studentKeyword, mode: 'insensitive' } },
-                        { lastName: { contains: studentKeyword, mode: 'insensitive' } },
-                        { fullname: { contains: studentKeyword, mode: 'insensitive' } },
-                    ],
+            OR: [
+                {
+                    userProfile: {
+                        is: {
+                            OR: [
+                                { firstName: { contains: studentKeyword, mode: 'insensitive' } },
+                                { lastName: { contains: studentKeyword, mode: 'insensitive' } },
+                                { fullname: { contains: studentKeyword, mode: 'insensitive' } },
+                            ],
+                        },
+                    },
                 },
-            },
-            OR: [{ code: { contains: studentKeyword, mode: 'insensitive' } }],
+                { code: { contains: studentKeyword, mode: 'insensitive' } },
+            ],
         },
         include: { userProfile: true },
         take: 20,
@@ -77,15 +93,7 @@ const PutStudentScoreConvertModal = () => {
             include: {
                 curriculumVersion: {
                     include: {
-                        trainingBlocks: {
-                            include: {
-                                subjects: {
-                                    include: {
-                                        subject: true,
-                                    },
-                                },
-                            },
-                        },
+                        trainingBlocks: { include: { subjects: { include: { subject: true } } } },
                     },
                 },
                 fixedClass: {
@@ -93,13 +101,7 @@ const PutStudentScoreConvertModal = () => {
                         curriculumVersion: {
                             include: {
                                 trainingBlocks: {
-                                    include: {
-                                        subjects: {
-                                            include: {
-                                                subject: true,
-                                            },
-                                        },
-                                    },
+                                    include: { subjects: { include: { subject: true } } },
                                 },
                             },
                         },
@@ -109,6 +111,8 @@ const PutStudentScoreConvertModal = () => {
         },
         { enabled: !!selectedStudentId }
     )
+
+    const { mutateAsync: createManyStudentSubjectScore } = useCreateManyStudentSubjectScore()
 
     const allSubjectOptions = useMemo(() => {
         const cv =
@@ -133,7 +137,6 @@ const PutStudentScoreConvertModal = () => {
     }, [selectedStudent])
 
     const { mutateAsync: createStudentScoreConvert } = useCreateStudentScoreConvert()
-    const { mutateAsync: updateStudentScoreConvert } = useUpdateStudentScoreConvert()
 
     async function onOk(output?: PutStudentScoreConvert) {
         if (!output) return
@@ -142,7 +145,7 @@ const PutStudentScoreConvertModal = () => {
             id?: string
             subjectVersionId?: string
             score?: number | string
-            status?: 'PENDING' | 'APPROVED' | 'REJECTED'
+            status?: ScoreConvertStatus
         }>
 
         const toCreate = rows
@@ -150,10 +153,13 @@ const PutStudentScoreConvertModal = () => {
             .map((r) => ({
                 subjectVersionId: r.subjectVersionId ?? '',
                 score: Number(r.score),
+                status: r.status,
             }))
 
         const toUpdate = rows
-            .filter((r) => !!r.id && originalStatusRef.current[r.id] !== 'APPROVED')
+            .filter(
+                (r) => !!r.id && originalStatusRef.current[r.id] !== ScoreConvertStatus.APPROVED
+            )
             .map((r) => ({
                 where: { id: r.id },
                 data: {
@@ -177,56 +183,87 @@ const PutStudentScoreConvertModal = () => {
         try {
             showSpinner()
             if (id) {
-                await updateStudentScoreConvert({
-                    where: { id },
-                    data: {
+                const scoresToCreate = rows
+                    .filter(
+                        (row) =>
+                            row.id &&
+                            row.status === ScoreConvertStatus.APPROVED &&
+                            originalStatusRef.current[row.id] !== ScoreConvertStatus.APPROVED
+                    )
+                    .map((row) => ({
                         studentId: output.studentId,
-                        description: output.description,
-                        documentFiles: {
-                            upsert: (output.documentFiles || [])
-                                .filter((file) => !!file.id)
-                                .map((file) => ({
-                                    where: { id: file.id },
-                                    create: {
-                                        name: file.name,
-                                        path: file.path,
-                                        mimeType: file.mimeType,
-                                        size: file.size,
-                                    },
-                                    update: {
-                                        name: file.name,
-                                        path: file.path,
-                                        mimeType: file.mimeType,
-                                        size: file.size,
-                                    },
-                                })),
+                        subjectVersionId: row.subjectVersionId,
+                        manualFinalScore: Number(row.score),
+                    }))
+                const listSqlTransaction: any[] = [
+                    {
+                        model: 'StudentScoreConvert',
+                        operation: 'update',
+                        data: {
+                            where: { id },
+                            data: {
+                                studentId: output.studentId,
+                                description: output.description,
+                                documentFiles: {
+                                    upsert: (output.documentFiles || [])
+                                        .filter((file) => !!file.id)
+                                        .map((file) => ({
+                                            where: { id: file.id },
+                                            create: {
+                                                name: file.name,
+                                                path: file.path,
+                                                mimeType: file.mimeType,
+                                                size: file.size,
+                                            },
+                                            update: {
+                                                name: file.name,
+                                                path: file.path,
+                                                mimeType: file.mimeType,
+                                                size: file.size,
+                                            },
+                                        })),
 
-                            create: (output.documentFiles || [])
-                                .filter((file) => !file.id)
-                                .map((file) => ({
-                                    name: file.name,
-                                    path: file.path,
-                                    mimeType: file.mimeType,
-                                    size: file.size,
-                                })),
+                                    create: (output.documentFiles || [])
+                                        .filter((file) => !file.id)
+                                        .map((file) => ({
+                                            name: file.name,
+                                            path: file.path,
+                                            mimeType: file.mimeType,
+                                            size: file.size,
+                                        })),
 
-                            disconnect: document
-                                .filter(
-                                    (initialFile) =>
-                                        !output.documentFiles?.some(
-                                            (finalFile) => finalFile.id === initialFile.id
+                                    disconnect: document
+                                        .filter(
+                                            (initialFile) =>
+                                                !output.documentFiles?.some(
+                                                    (finalFile) => finalFile.id === initialFile.id
+                                                )
                                         )
-                                )
-                                .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
-                        },
-                        subjectScoreConvert: {
-                            ...(toCreate.length
-                                ? { createMany: { data: toCreate, skipDuplicates: true } }
-                                : {}),
-                            ...(toUpdate.length ? { update: toUpdate } : {}),
-                            ...(toDelete.length ? { delete: toDelete } : {}),
+                                        .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
+                                },
+                                subjectScoreConvert: {
+                                    ...(toCreate.length ? { create: toCreate } : {}),
+                                    ...(toUpdate.length ? { update: toUpdate } : {}),
+                                    ...(toDelete.length ? { delete: toDelete } : {}),
+                                },
+                            },
                         },
                     },
+                ]
+                if (scoresToCreate.length > 0) {
+                    listSqlTransaction.push({
+                        model: 'StudentSubjectScore',
+                        operation: 'createMany',
+                        data: {
+                            data: scoresToCreate,
+                            skipDuplicates: true,
+                        },
+                    })
+                }
+
+                await sqlTransaction(listSqlTransaction)
+                queryClient.invalidateQueries({
+                    queryKey: ['zenstack', 'StudentScoreConvert'],
                 })
                 message.success('Cập nhật thành công')
             } else {
@@ -252,9 +289,9 @@ const PutStudentScoreConvertModal = () => {
                 })
                 message.success('Thêm mới thành công')
             }
-            queryClient.invalidateQueries({
-                queryKey: ['StudentScoreConvert'],
-            })
+            // queryClient.invalidateQueries({
+            //     queryKey: ['StudentScoreConvert'],
+            // })
             onClose()
         } catch (error: any) {
             message.error(error?.info?.message || 'Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -307,6 +344,27 @@ const PutStudentScoreConvertModal = () => {
         }
     }, [initialValue, isOpen, form])
 
+    const handleQuickStatusChange = (newStatus: ScoreConvertStatus) => {
+        if (!newStatus || selectedRowKeys.length === 0) return
+
+        const allSubjects = form.getFieldValue('subjectScoreConvert') || []
+        const updatedSubjects = allSubjects.map((subject: any, index: number) => {
+            if (selectedRowKeys.includes(index)) {
+                const subjectId = subject?.id
+                if (
+                    !subjectId ||
+                    originalStatusRef.current[subjectId] !== ScoreConvertStatus.APPROVED
+                ) {
+                    return { ...subject, status: newStatus }
+                }
+            }
+            return subject
+        })
+
+        form.setFieldsValue({ subjectScoreConvert: updatedSubjects })
+        setSelectedRowKeys([]) // Bỏ chọn các hàng sau khi cập nhật
+    }
+
     return (
         <PutFormModal
             open={isOpen}
@@ -314,19 +372,26 @@ const PutStudentScoreConvertModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa phiếu chuyển trường' : 'Thêm mới phiếu chuyển trường'}
-            className="w-[50vw]"
+            title={
+                isViewMode
+                    ? 'Xem chi tiết phiếu chuyển trường'
+                    : id
+                      ? 'Chỉnh sửa phiếu chuyển trường'
+                      : 'Thêm mới phiếu chuyển trường'
+            }
+            okButtonProps={{ style: { display: isViewMode ? 'none' : 'inline-block' } }}
+            cancelText={isViewMode ? 'Đóng' : 'Hủy'}
+            className="w-[60vw]"
         >
             <Col span={24}>
                 <FormItem form={form} name="studentId" label="Sinh viên" required>
                     <Select
                         showSearch
                         placeholder="Chọn sinh viên"
-                        allowClear
                         loading={loadingStudents}
                         filterOption={false}
                         onSearch={(v) => setStudentKeyword(v)}
-                        disabled={isEdit}
+                        disabled={isEdit || isViewMode}
                         options={studentList.map((s: any) => {
                             const fullName =
                                 s?.userProfile?.fullName ??
@@ -342,154 +407,225 @@ const PutStudentScoreConvertModal = () => {
             <Col span={24}>
                 <FormItem form={form} name="subjectScoreConvert" label="Môn cần quy đổi điểm">
                     <Form.List name="subjectScoreConvert">
-                        {(fields, { add, remove }) => (
-                            <>
-                                {fields.map(({ key, name }) => (
-                                    <Form.Item noStyle shouldUpdate key={key}>
-                                        {({ getFieldValue }) => {
-                                            const row =
-                                                getFieldValue(['subjectScoreConvert', name]) || {}
-                                            const rowId: string | undefined = row?.id
-                                            const isApproved =
-                                                !!id &&
-                                                !!rowId &&
-                                                originalStatusRef.current[rowId] === 'APPROVED'
-                                            const optionsForThisRow = allSubjectOptions.filter(
-                                                (opt) =>
-                                                    opt.value === row.subjectVersionId ||
-                                                    !selectedSubjectIds.has(opt.value)
-                                            )
-                                            return (
-                                                <Row
-                                                    gutter={12}
-                                                    align="bottom"
-                                                    style={{ marginBottom: 8 }}
-                                                >
-                                                    <Col flex="auto">
-                                                        <FormItem
-                                                            form={form}
-                                                            name={[name, 'subjectVersionId']}
-                                                            label="Môn học (CTĐT)"
-                                                            required
-                                                        >
-                                                            <Select
-                                                                showSearch
-                                                                placeholder={
-                                                                    selectedStudentId
-                                                                        ? 'Chọn môn theo CTĐT'
-                                                                        : 'Chọn sinh viên để tải CTĐT'
-                                                                }
-                                                                optionFilterProp="label"
-                                                                options={optionsForThisRow}
-                                                                disabled={
-                                                                    !selectedStudentId ||
-                                                                    !allSubjectOptions.length ||
-                                                                    isApproved
-                                                                }
-                                                            />
-                                                        </FormItem>
-                                                    </Col>
+                        {(fields, { add, remove }) => {
+                            const columns: TableColumnsType<any> = [
+                                {
+                                    title: 'Môn học (CTĐT)',
+                                    render: (_, record) => (
+                                        <FormItem
+                                            form={form}
+                                            name={[record.name, 'subjectVersionId']}
+                                            required
+                                            noStyle
+                                        >
+                                            <Select
+                                                showSearch
+                                                placeholder="Chọn môn theo CTĐT"
+                                                optionFilterProp="label"
+                                                style={{ width: '100%' }}
+                                                options={allSubjectOptions.filter(
+                                                    (opt) =>
+                                                        opt.value ===
+                                                            form.getFieldValue([
+                                                                'subjectScoreConvert',
+                                                                record.name,
+                                                                'subjectVersionId',
+                                                            ]) || !selectedSubjectIds.has(opt.value)
+                                                )}
+                                                disabled={
+                                                    isViewMode ||
+                                                    !selectedStudentId ||
+                                                    !allSubjectOptions.length ||
+                                                    originalStatusRef.current[
+                                                        form.getFieldValue([
+                                                            'subjectScoreConvert',
+                                                            record.name,
+                                                            'id',
+                                                        ])
+                                                    ] === ScoreConvertStatus.APPROVED
+                                                }
+                                            />
+                                        </FormItem>
+                                    ),
+                                },
+                                {
+                                    title: 'Điểm',
+                                    width: 140,
+                                    align: 'center',
+                                    render: (_, record) => (
+                                        <>
+                                            <FormItem
+                                                form={form}
+                                                name={[record.name, 'score']}
+                                                required
+                                                noStyle
+                                            >
+                                                <InputNumber
+                                                    min={0}
+                                                    max={10}
+                                                    step={0.1}
+                                                    style={{ width: '100%' }}
+                                                    disabled={
+                                                        isViewMode ||
+                                                        originalStatusRef.current[
+                                                            form.getFieldValue([
+                                                                'subjectScoreConvert',
+                                                                record.name,
+                                                                'id',
+                                                            ])
+                                                        ] === ScoreConvertStatus.APPROVED
+                                                    }
+                                                />
+                                            </FormItem>
+                                            {!isEdit && (
+                                                <FormItem
+                                                    form={form}
+                                                    name={[record.name, 'status']}
+                                                    initialValue={ScoreConvertStatus.PENDING}
+                                                    hidden
+                                                />
+                                            )}
+                                        </>
+                                    ),
+                                },
+                            ]
 
-                                                    <Col>
-                                                        <FormItem
-                                                            form={form}
-                                                            name={[name, 'score']}
-                                                            label="Điểm"
-                                                            required
-                                                        >
-                                                            <InputNumber
-                                                                min={0}
-                                                                max={10}
-                                                                step={0.1}
-                                                                className="w-[120px]"
-                                                                disabled={isApproved}
-                                                            />
-                                                        </FormItem>
-                                                    </Col>
+                            if (isEdit) {
+                                columns.push({
+                                    title: 'Trạng thái',
+                                    width: 180,
+                                    align: 'center',
+                                    render: (_, record) => (
+                                        <FormItem
+                                            form={form}
+                                            name={[record.name, 'status']}
+                                            required
+                                            noStyle
+                                        >
+                                            <Select
+                                                style={{ width: '100%' }}
+                                                disabled={
+                                                    isViewMode ||
+                                                    originalStatusRef.current[
+                                                        form.getFieldValue([
+                                                            'subjectScoreConvert',
+                                                            record.name,
+                                                            'id',
+                                                        ])
+                                                    ] === ScoreConvertStatus.APPROVED
+                                                }
+                                                options={statusOptions}
+                                            />
+                                        </FormItem>
+                                    ),
+                                })
+                            }
 
-                                                    {/* Trạng thái: chỉ hiện khi EDIT; CREATE thì giấu và set mặc định PENDING */}
-                                                    {isEdit ? (
-                                                        <Col>
-                                                            <FormItem
-                                                                form={form}
-                                                                name={[name, 'status']}
-                                                                label="Trạng thái"
-                                                                required
-                                                            >
-                                                                <Select
-                                                                    style={{ width: 160 }}
-                                                                    disabled={isApproved}
-                                                                    options={[
-                                                                        {
-                                                                            label: 'Chờ duyệt',
-                                                                            value: 'PENDING',
-                                                                        },
-                                                                        {
-                                                                            label: 'Đã duyệt',
-                                                                            value: 'APPROVED',
-                                                                        },
-                                                                        {
-                                                                            label: 'Không được duyệt',
-                                                                            value: 'REJECTED',
-                                                                        },
-                                                                    ]}
-                                                                />
-                                                            </FormItem>
-                                                        </Col>
-                                                    ) : (
-                                                        <FormItem
-                                                            form={form}
-                                                            name={[name, 'status']}
-                                                            initialValue="PENDING"
-                                                            hidden
-                                                        />
-                                                    )}
+                            columns.push({
+                                title: 'Xóa',
+                                width: 60,
+                                align: 'center',
+                                render: (_, record) => (
+                                    <Button
+                                        danger
+                                        type="text"
+                                        icon={<Trash2 size={16} />}
+                                        onClick={() => remove(record.name)}
+                                        disabled={
+                                            originalStatusRef.current[
+                                                form.getFieldValue([
+                                                    'subjectScoreConvert',
+                                                    record.name,
+                                                    'id',
+                                                ])
+                                            ] === ScoreConvertStatus.APPROVED || isViewMode
+                                        }
+                                    />
+                                ),
+                            })
 
-                                                    <Col>
-                                                        <Button
-                                                            danger
-                                                            type="text"
-                                                            icon={<MinusCircleOutlined />}
-                                                            onClick={() => remove(name)}
-                                                            disabled={isApproved} // không xóa khi đã APPROVED
-                                                        />
-                                                    </Col>
-                                                </Row>
-                                            )
+                            return (
+                                <>
+                                    <Row
+                                        justify="space-between"
+                                        align="middle"
+                                        style={{ marginBottom: 16 }}
+                                    >
+                                        <Col>
+                                            <Button
+                                                type="dashed"
+                                                icon={<PlusOutlined />}
+                                                onClick={() =>
+                                                    add({ status: ScoreConvertStatus.PENDING })
+                                                }
+                                                disabled={!selectedStudentId || isViewMode}
+                                            >
+                                                Thêm môn
+                                            </Button>
+                                        </Col>
+                                        <Col>
+                                            {isEdit && (
+                                                <Select
+                                                    placeholder="Đổi trạng thái nhanh"
+                                                    style={{ width: 200 }}
+                                                    onChange={handleQuickStatusChange}
+                                                    value={null}
+                                                    disabled={
+                                                        selectedRowKeys.length === 0 || isViewMode
+                                                    }
+                                                    options={statusOptions}
+                                                />
+                                            )}
+                                        </Col>
+                                    </Row>
+
+                                    <Table
+                                        bordered
+                                        size="small"
+                                        pagination={false}
+                                        dataSource={fields}
+                                        rowKey="key"
+                                        rowSelection={{
+                                            selectedRowKeys,
+                                            onChange: setSelectedRowKeys,
+                                            getCheckboxProps: (record) => {
+                                                if (isViewMode) return { disabled: true }
+                                                const subject = form.getFieldValue([
+                                                    'subjectScoreConvert',
+                                                    record.name,
+                                                ])
+                                                const isApproved =
+                                                    subject?.id &&
+                                                    originalStatusRef.current[subject.id] ===
+                                                        ScoreConvertStatus.APPROVED
+                                                return { disabled: isApproved }
+                                            },
                                         }}
-                                    </Form.Item>
-                                ))}
-
-                                <Button
-                                    type="dashed"
-                                    icon={<PlusOutlined />}
-                                    onClick={() => add()}
-                                    disabled={!selectedStudentId}
-                                >
-                                    Thêm môn
-                                </Button>
-                            </>
-                        )}
+                                        columns={columns}
+                                    />
+                                </>
+                            )
+                        }}
                     </Form.List>
                 </FormItem>
             </Col>
             <Col span={24}>
                 <FormItem form={form} name="documentFiles" label="Tài liệu minh chứng">
-                    <div style={{ maxHeight: 220, overflowY: 'auto', overflowX: 'hidden' }}>
-                        <DocumentPaths
-                            form={form}
-                            data={document}
-                            relationId={id ?? ''}
-                            relationType="studentScoreConvertId"
-                        />
-                    </div>
+                    {/* <div style={{ maxHeight: 220, overflowY: 'auto', overflowX: 'hidden' }}> */}
+                    <DocumentPaths
+                        form={form}
+                        data={document}
+                        relationId={id ?? ''}
+                        relationType="studentScoreConvertId"
+                        // disabled={isViewMode} // Thêm disable vào component
+                    />
+                    {/* </div> */}
                 </FormItem>
             </Col>
 
-            {/* Mô tả */}
             <Col span={24}>
                 <FormItem form={form} name="description" label="Mô tả">
-                    <Input.TextArea placeholder="Nhập mô tả" />
+                    <Input.TextArea placeholder="Nhập mô tả" disabled={isViewMode} />
                 </FormItem>
             </Col>
         </PutFormModal>

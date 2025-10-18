@@ -1,42 +1,45 @@
-import Table from '@components/commons/table'
-import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
-import { DEFAULT_PAGINATE_SIZE, SCORE_CONVERT_STATUS } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
+import type React from 'react'
+import { useMemo, useState } from 'react'
+import { Button, Col, Flex, message, Row, Select, Tag } from 'antd'
 import DefaultLayout from '@layouts/default-layout'
-import { formatDate } from '@lib/utils'
-import type { $Enums } from '@workspace/db'
+import Table from '@components/commons/table'
+import EditIcon from '@components/icons/edit'
+import DeleteIcon from '@components/icons/delete'
+import ViewIcon from '@components/icons/view'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+import useSpinner from '@hooks/spinner'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import {
     useCountStudentScoreConvert,
     useFindManyStudentScoreConvert,
     useUpdateStudentScoreConvert,
 } from '@workspace/db/hooks'
-import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Select, Tag } from 'antd'
-import type React from 'react'
-import { useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
+import { DEFAULT_PAGINATE_SIZE, SCORE_CONVERT_STATUS } from '@constants/constants'
+import { formatDate } from '@lib/utils'
+import { $Enums } from '@workspace/db/client'
+import type { SubjectScoreConvert } from '@workspace/db/client'
 
-type LeafStatus = keyof typeof $Enums.ScoreConvertStatus
+const ScoreConvertStatus = $Enums.ScoreConvertStatus
+type LeafStatus = $Enums.ScoreConvertStatus
 type AggregateStatus = LeafStatus | 'PARTIAL'
 
 function computeAggregateStatus(items: { status: LeafStatus }[]): AggregateStatus | null {
     if (!items || items.length === 0) {
         return null
     }
-    const hasPending = items.some((i) => i.status === 'PENDING')
-    const hasApproved = items.some((i) => i.status === 'APPROVED')
-    const hasRejected = items.some((i) => i.status === 'REJECTED')
-    if (hasPending) return 'PENDING'
+    const hasPending = items.some((i) => i.status === ScoreConvertStatus.PENDING)
+    const hasApproved = items.some((i) => i.status === ScoreConvertStatus.APPROVED)
+    const hasRejected = items.some((i) => i.status === ScoreConvertStatus.REJECTED)
+    if (hasPending) return ScoreConvertStatus.PENDING
     if (hasApproved && hasRejected) return 'PARTIAL'
-    if (hasApproved) return 'APPROVED'
-    return 'REJECTED'
+    if (hasApproved) return ScoreConvertStatus.APPROVED
+    return ScoreConvertStatus.REJECTED
 }
 
 export default function StudentScoreConvertPage() {
     const { can, canSome } = useAbility()
-    const { onOpen } = useDisclosure<string>({
+    const { onOpen } = useDisclosure<{ id: string; mode: 'view' | 'edit' }>({
         tag: 'PutStudentScoreConvertModal',
     })
     const { showSpinner, hideSpinner } = useSpinner()
@@ -70,40 +73,78 @@ export default function StudentScoreConvertPage() {
             ? {}
             : {
                   student: {
-                      code: { contains: filters.code },
+                      code: { contains: filters.code, mode: 'insensitive' as const },
                   },
               }
         const st = filters.formStatus
         let byStatus = {}
         if (st) {
             switch (st) {
-                case 'PENDING':
-                    byStatus = { subjectScoreConvert: { some: { status: 'PENDING' } } }
+                case ScoreConvertStatus.PENDING:
+                    byStatus = {
+                        subjectScoreConvert: { some: { status: ScoreConvertStatus.PENDING } },
+                    }
                     break
-                case 'APPROVED':
+                case ScoreConvertStatus.APPROVED:
                     byStatus = {
                         AND: [
-                            { subjectScoreConvert: { some: { status: 'APPROVED' } } },
-                            { subjectScoreConvert: { none: { status: 'PENDING' } } },
-                            { subjectScoreConvert: { none: { status: 'REJECTED' } } },
+                            {
+                                subjectScoreConvert: {
+                                    some: { status: ScoreConvertStatus.APPROVED },
+                                },
+                            },
+                            {
+                                subjectScoreConvert: {
+                                    none: { status: ScoreConvertStatus.PENDING },
+                                },
+                            },
+                            {
+                                subjectScoreConvert: {
+                                    none: { status: ScoreConvertStatus.REJECTED },
+                                },
+                            },
                         ],
                     }
                     break
-                case 'REJECTED':
+                case ScoreConvertStatus.REJECTED:
                     byStatus = {
                         AND: [
-                            { subjectScoreConvert: { some: { status: 'REJECTED' } } },
-                            { subjectScoreConvert: { none: { status: 'PENDING' } } },
-                            { subjectScoreConvert: { none: { status: 'APPROVED' } } },
+                            {
+                                subjectScoreConvert: {
+                                    some: { status: ScoreConvertStatus.REJECTED },
+                                },
+                            },
+                            {
+                                subjectScoreConvert: {
+                                    none: { status: ScoreConvertStatus.PENDING },
+                                },
+                            },
+                            {
+                                subjectScoreConvert: {
+                                    none: { status: ScoreConvertStatus.APPROVED },
+                                },
+                            },
                         ],
                     }
                     break
                 case 'PARTIAL':
                     byStatus = {
                         AND: [
-                            { subjectScoreConvert: { some: { status: 'APPROVED' } } },
-                            { subjectScoreConvert: { some: { status: 'REJECTED' } } },
-                            { subjectScoreConvert: { none: { status: 'PENDING' } } },
+                            {
+                                subjectScoreConvert: {
+                                    some: { status: ScoreConvertStatus.APPROVED },
+                                },
+                            },
+                            {
+                                subjectScoreConvert: {
+                                    some: { status: ScoreConvertStatus.REJECTED },
+                                },
+                            },
+                            {
+                                subjectScoreConvert: {
+                                    none: { status: ScoreConvertStatus.PENDING },
+                                },
+                            },
                         ],
                     }
                     break
@@ -247,12 +288,12 @@ export default function StudentScoreConvertPage() {
                                         record.subjectScoreConvert || []
                                     )
                                     if (!status) {
-                                        return '_'
+                                        return null
                                     }
                                     const colorMap: Record<AggregateStatus, string> = {
-                                        PENDING: 'gold',
-                                        APPROVED: 'green',
-                                        REJECTED: 'red',
+                                        [ScoreConvertStatus.PENDING]: 'gold',
+                                        [ScoreConvertStatus.APPROVED]: 'green',
+                                        [ScoreConvertStatus.REJECTED]: 'red',
                                         PARTIAL: 'blue',
                                     }
                                     return (
@@ -268,32 +309,57 @@ export default function StudentScoreConvertPage() {
                                 align: 'center',
                                 hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                                    'XEM',
                                     'SUA',
                                     'XOA'
                                 ),
-                                render: (_, { id }) => (
-                                    <Row className="justify-center gap-2">
-                                        {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
-                                            'SUA'
-                                        ) && (
-                                            <EditIcon
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                            />
-                                        )}
-                                        {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
-                                            'XOA'
-                                        ) && (
-                                            <DeleteIcon
-                                                popConfirm={{
-                                                    onConfirm: () => handleDelete(id),
-                                                }}
-                                            />
-                                        )}
-                                    </Row>
-                                ),
+                                render: (_, record) => {
+                                    const { id } = record
+                                    const hasAnyApprovedSubject =
+                                        record.subjectScoreConvert?.some(
+                                            (subject: SubjectScoreConvert) =>
+                                                subject.status === ScoreConvertStatus.APPROVED
+                                        ) ?? false
+                                    const status = computeAggregateStatus(
+                                        record.subjectScoreConvert || []
+                                    )
+                                    const allApproved = status === ScoreConvertStatus.APPROVED
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                                                'XEM'
+                                            ) && (
+                                                <ViewIcon
+                                                    onClick={() => onOpen({ id, mode: 'view' })}
+                                                    className="text-sm text-gray-700 cursor-pointer"
+                                                />
+                                            )}
+
+                                            {!allApproved &&
+                                                can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={() => onOpen({ id, mode: 'edit' })}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                            {!hasAnyApprovedSubject &&
+                                                can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () => handleDelete(id),
+                                                        }}
+                                                    />
+                                                )}
+                                        </Row>
+                                    )
+                                },
                             },
                         ]}
                         data={data}
