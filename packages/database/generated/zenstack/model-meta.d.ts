@@ -37970,6 +37970,10 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                examCode: {
+                    name: string;
+                    type: string;
+                };
                 questions: {
                     name: string;
                     type: string;
@@ -37987,8 +37991,12 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
+                examId_examCode: {
+                    name: string;
+                    fields: string[];
+                };
             };
-            attributes: {
+            attributes: ({
                 name: string;
                 args: ({
                     name: string;
@@ -37997,7 +38005,13 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            }[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
         };
         examBankQuestion: {
             name: string;

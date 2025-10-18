@@ -19997,6 +19997,9 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'exam',
+                }, examCode: {
+                    name: "examCode",
+                    type: "String",
                 }, questions: {
                     name: "questions",
                     type: "ExamBankQuestion",
@@ -20011,6 +20014,9 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, examId_examCode: {
+                    name: "examId_examCode",
+                    fields: ["examId", "examCode"]
                 },
             },
         },

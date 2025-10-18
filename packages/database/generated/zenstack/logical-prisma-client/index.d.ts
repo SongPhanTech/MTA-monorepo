@@ -9031,7 +9031,8 @@ export namespace Prisma {
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
-        examId: 'examId'
+        examId: 'examId',
+        examCode: 'examCode'
     };
     export const ExamBankQuestionScalarFieldEnum: {
         id: 'id',
@@ -11359,7 +11360,8 @@ export namespace Prisma {
         id: 'id',
         code: 'code',
         description: 'description',
-        examId: 'examId'
+        examId: 'examId',
+        examCode: 'examCode'
     };
     export const ExamBankQuestionOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -91708,6 +91710,7 @@ export namespace Prisma {
         readonly createdAt: FieldRef<"ExamBank", 'DateTime'>;
         readonly updatedAt: FieldRef<"ExamBank", 'DateTime'>;
         readonly examId: FieldRef<"ExamBank", 'String'>;
+        readonly examCode: FieldRef<"ExamBank", 'String'>;
     }
 
     export interface ExamBankQuestionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -290392,6 +290395,7 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         examId: string | null
+        examCode: string | null
     };
     export type ExamBankMaxAggregateOutputType = {
         id: string | null
@@ -290402,6 +290406,7 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         examId: string | null
+        examCode: string | null
     };
     export type ExamBankCountAggregateOutputType = {
         id: number
@@ -290412,6 +290417,7 @@ export namespace Prisma {
         createdAt: number
         updatedAt: number
         examId: number
+        examCode: number
         _all: number
     };
     export type ExamBankMinAggregateInputType = {
@@ -290423,6 +290429,7 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         examId?: true
+        examCode?: true
     };
     export type ExamBankMaxAggregateInputType = {
         id?: true
@@ -290433,6 +290440,7 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         examId?: true
+        examCode?: true
     };
     export type ExamBankCountAggregateInputType = {
         id?: true
@@ -290443,6 +290451,7 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         examId?: true
+        examCode?: true
         _all?: true
     };
     export type ExamBankAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -290520,6 +290529,7 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         examId: string
+        examCode: string
         _count: ExamBankCountAggregateOutputType | null
         _min: ExamBankMinAggregateOutputType | null
         _max: ExamBankMaxAggregateOutputType | null
@@ -290545,6 +290555,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         examId?: boolean
+        examCode?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
         questions?: boolean | ExamBank$questionsArgs<ExtArgs>
         _count?: boolean | ExamBankCountOutputTypeDefaultArgs<ExtArgs>
@@ -290558,6 +290569,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         examId?: boolean
+        examCode?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examBank"]>;
     export type ExamBankSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -290569,6 +290581,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         examId?: boolean
+        examCode?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["examBank"]>;
     export type ExamBankSelectScalar = {
@@ -290580,8 +290593,9 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         examId?: boolean
+        examCode?: boolean
     };
-    export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId", ExtArgs["result"]["examBank"]>;
+    export type ExamBankOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "examCode", ExtArgs["result"]["examBank"]>;
     export type ExamBankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         exam?: boolean | ExamDefaultArgs<ExtArgs>
         questions?: boolean | ExamBank$questionsArgs<ExtArgs>
@@ -290608,6 +290622,7 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             examId: string
+            examCode: string
         }, ExtArgs["result"]["examBank"]>
         composites: {}
     };
@@ -336814,6 +336829,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ExamBank"> | Date | string
         updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
         examId?: StringFilter<"ExamBank"> | string
+        examCode?: StringFilter<"ExamBank"> | string
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
         questions?: ExamBankQuestionListRelationFilter
     };
@@ -336826,6 +336842,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
+        examCode?: SortOrder
         exam?: ExamOrderByWithRelationInput
         questions?: ExamBankQuestionOrderByRelationAggregateInput
         _relevance?: ExamBankOrderByRelevanceInput
@@ -336833,6 +336850,7 @@ export namespace Prisma {
     export type ExamBankWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
+        examId_examCode?: ExamBankExamIdExamCodeCompoundUniqueInput
         AND?: ExamBankWhereInput | ExamBankWhereInput[]
         OR?: ExamBankWhereInput[]
         NOT?: ExamBankWhereInput | ExamBankWhereInput[]
@@ -336842,9 +336860,10 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ExamBank"> | Date | string
         updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
         examId?: StringFilter<"ExamBank"> | string
+        examCode?: StringFilter<"ExamBank"> | string
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
         questions?: ExamBankQuestionListRelationFilter
-    }, "id" | "code">;
+    }, "id" | "code" | "examId_examCode">;
     export type ExamBankOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -336854,6 +336873,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
+        examCode?: SortOrder
         _count?: ExamBankCountOrderByAggregateInput
         _max?: ExamBankMaxOrderByAggregateInput
         _min?: ExamBankMinOrderByAggregateInput
@@ -336870,6 +336890,7 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"ExamBank"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"ExamBank"> | Date | string
         examId?: StringWithAggregatesFilter<"ExamBank"> | string
+        examCode?: StringWithAggregatesFilter<"ExamBank"> | string
     };
     export type ExamBankQuestionWhereInput = {
         AND?: ExamBankQuestionWhereInput | ExamBankQuestionWhereInput[]
@@ -363614,6 +363635,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        examCode: string
         exam: ExamCreateNestedOneWithoutExamBankInput
         questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
     };
@@ -363626,6 +363648,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
+        examCode: string
         questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankUpdateInput = {
@@ -363636,6 +363659,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examCode?: StringFieldUpdateOperationsInput | string
         exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
         questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
     };
@@ -363648,6 +363672,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
+        examCode?: StringFieldUpdateOperationsInput | string
         questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankCreateManyInput = {
@@ -363659,6 +363684,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
+        examCode: string
     };
     export type ExamBankUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -363668,6 +363694,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examCode?: StringFieldUpdateOperationsInput | string
     };
     export type ExamBankUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -363678,6 +363705,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
+        examCode?: StringFieldUpdateOperationsInput | string
     };
     export type ExamBankQuestionCreateInput = {
         id?: string
@@ -381407,6 +381435,10 @@ export namespace Prisma {
         sort: SortOrder
         search: string
     };
+    export type ExamBankExamIdExamCodeCompoundUniqueInput = {
+        examId: string
+        examCode: string
+    };
     export type ExamBankCountOrderByAggregateInput = {
         id?: SortOrder
         code?: SortOrder
@@ -381416,6 +381448,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
+        examCode?: SortOrder
     };
     export type ExamBankMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -381426,6 +381459,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
+        examCode?: SortOrder
     };
     export type ExamBankMinOrderByAggregateInput = {
         id?: SortOrder
@@ -381436,6 +381470,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         examId?: SortOrder
+        examCode?: SortOrder
     };
     export type ExamBankScalarRelationFilter = {
         is?: ExamBankWhereInput
@@ -499943,6 +499978,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        examCode: string
         questions?: ExamBankQuestionCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankUncheckedCreateWithoutExamInput = {
@@ -499953,6 +499989,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        examCode: string
         questions?: ExamBankQuestionUncheckedCreateNestedManyWithoutExamBankInput
     };
     export type ExamBankCreateOrConnectWithoutExamInput = {
@@ -500156,6 +500193,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ExamBank"> | Date | string
         updatedAt?: DateTimeFilter<"ExamBank"> | Date | string
         examId?: StringFilter<"ExamBank"> | string
+        examCode?: StringFilter<"ExamBank"> | string
     };
     export type TestStructureRuleUpsertWithWhereUniqueWithoutExamInput = {
         where: TestStructureRuleWhereUniqueInput
@@ -500749,6 +500787,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        examCode: string
         exam: ExamCreateNestedOneWithoutExamBankInput
     };
     export type ExamBankUncheckedCreateWithoutQuestionsInput = {
@@ -500760,6 +500799,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
+        examCode: string
     };
     export type ExamBankCreateOrConnectWithoutQuestionsInput = {
         where: ExamBankWhereUniqueInput
@@ -500826,6 +500866,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examCode?: StringFieldUpdateOperationsInput | string
         exam?: ExamUpdateOneRequiredWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateWithoutQuestionsInput = {
@@ -500837,6 +500878,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
+        examCode?: StringFieldUpdateOperationsInput | string
     };
     export type QuestionUpsertWithoutSessionQuestionsInput = {
         update: XOR<QuestionUpdateWithoutSessionQuestionsInput, QuestionUncheckedUpdateWithoutSessionQuestionsInput>
@@ -547787,6 +547829,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        examCode: string
     };
     export type TestStructureRuleCreateManyExamInput = {
         id?: string
@@ -548122,6 +548165,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examCode?: StringFieldUpdateOperationsInput | string
         questions?: ExamBankQuestionUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateWithoutExamInput = {
@@ -548132,6 +548176,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examCode?: StringFieldUpdateOperationsInput | string
         questions?: ExamBankQuestionUncheckedUpdateManyWithoutExamBankNestedInput
     };
     export type ExamBankUncheckedUpdateManyWithoutExamInput = {
@@ -548142,6 +548187,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        examCode?: StringFieldUpdateOperationsInput | string
     };
     export type TestStructureRuleUpdateWithoutExamInput = {
         id?: StringFieldUpdateOperationsInput | string

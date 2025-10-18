@@ -21141,6 +21141,9 @@ const metadata = {
                     type: "String",
                     isForeignKey: true,
                     relationField: 'exam',
+                }, examCode: {
+                    name: "examCode",
+                    type: "String",
                 }, questions: {
                     name: "questions",
                     type: "ExamBankQuestion",
@@ -21155,9 +21158,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, examId_examCode: {
+                    name: "examId_examCode",
+                    fields: ["examId", "examCode"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         examBankQuestion: {
             name: 'ExamBankQuestion', fields: {

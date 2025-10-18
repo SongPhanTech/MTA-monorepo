@@ -3601,7 +3601,8 @@ exports.Prisma.ExamBankScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  examId: 'examId'
+  examId: 'examId',
+  examCode: 'examCode'
 };
 
 exports.Prisma.ExamBankQuestionScalarFieldEnum = {
@@ -6177,7 +6178,8 @@ exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  examId: 'examId'
+  examId: 'examId',
+  examCode: 'examCode'
 };
 
 exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {

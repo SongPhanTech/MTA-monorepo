@@ -5410,8 +5410,10 @@ model ExamBank {
   updatedAt   DateTime           @default(now()) @updatedAt()
   exam        Exam               @relation(fields: [examId], references: [id])
   examId      String
+  examCode    String
   questions   ExamBankQuestion[]
 
+  @@unique([examId, examCode])
   @@schema("khao-thi")
 }
 

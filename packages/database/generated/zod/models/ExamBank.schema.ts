@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    examCode: z.string(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -56,7 +57,8 @@ export const ExamBankPrismaUpdateSchema = z.object({
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date())
+    updatedAt: z.coerce.date().default(() => new Date()),
+    examCode: z.string()
 }).partial().passthrough();
 
 
