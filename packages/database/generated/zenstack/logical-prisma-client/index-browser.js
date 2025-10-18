@@ -3563,7 +3563,8 @@ exports.Prisma.ExamScalarFieldEnum = {
   status: 'status',
   questionBankId: 'questionBankId',
   lockExamCode: 'lockExamCode',
-  startTime: 'startTime'
+  startTime: 'startTime',
+  duration: 'duration'
 };
 
 exports.Prisma.ExamRoomScalarFieldEnum = {

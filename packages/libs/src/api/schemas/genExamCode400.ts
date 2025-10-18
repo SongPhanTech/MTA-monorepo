@@ -4,6 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExamFaxesItem } from './examFaxesItem'
 
-export type ExamFaxes = ExamFaxesItem[]
+export type GenExamCode400 = {
+    message: string
+}

@@ -15,10 +15,10 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore } from '@workspace/ui'
-import { Button, Col, DatePicker, Flex, Form, Input, InputNumber, message, Row, Select } from 'antd'
-import dayjs from 'dayjs'
+import { Button, Col, Flex, Form, Input, InputNumber, message, Row, Select, TimePicker } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
+import dayjs from 'dayjs'
 export type PutExamType = Exam & {
     subjectClass: string[]
     semesterId?: string
@@ -72,8 +72,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
         if (initialValue) {
             form.setFieldsValue({
                 ...initialValue,
-                startTime: dayjs(initialValue.startTime),
-                endTime: dayjs(initialValue.endTime),
                 subjectClass: initialValue.subjectClass?.map((sc) => sc.id),
                 semesterId: initialValue.subjectClass?.[0]?.semesterId || '',
                 room: initialValue.room?.map((r) => r.id),
@@ -84,9 +82,9 @@ export default function Information({ id, selectedIds }: InformationProps) {
         } else {
             form.setFieldsValue({
                 status: ExamStatus.DRAFT,
-                shuffleQuestions: true,
-                shuffleAnswers: true,
-                showResult: false,
+                // shuffleQuestions: true,
+                // shuffleAnswers: true,
+                // showResult: false,
             })
         }
     }, [initialValue])
@@ -101,17 +99,16 @@ export default function Information({ id, selectedIds }: InformationProps) {
             const data = {
                 title: output.title,
                 status: output.status,
-                questionBank: {
-                    connect: {
-                        id: output.questionBankId,
-                    },
-                },
+                // questionBank: {
+                //     connect: {
+                //         id: output.questionBankId,
+                //     },
+                // },
                 startTime: output.startTime,
-                endTime: output.endTime,
                 duration: output.duration,
-                shuffleQuestions: output.shuffleQuestions,
-                shuffleAnswers: output.shuffleAnswers,
-                showResult: output.showResult,
+                // shuffleQuestions: output.shuffleQuestions,
+                // shuffleAnswers: output.shuffleAnswers,
+                // showResult: output.showResult,
             }
             const res = await sqlTransaction([
                 {
@@ -144,6 +141,9 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         subjectClass: {
                             set: output.subjectClass?.map((item) => ({ id: item })) || [],
                         },
+                        studentSubjectScore: {
+                            set: studentScores.map((item) => ({ id: item.id })) || [],
+                        },
                         room: {
                             set: output.room?.map((item) => ({ id: item })) || [],
                         },
@@ -153,25 +153,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                     },
                 })
 
-                if (hasSubjectClassChanged) {
-                    await sqlTransaction([
-                        {
-                            model: 'ExamSession',
-                            operation: 'deleteMany',
-                            data: { where: { examId: id } },
-                        },
-                    ])
-
-                    if (output.subjectClass?.length && studentScores.length) {
-                        await createManyExamSession({
-                            data: studentScores.map((s) => ({
-                                studentId: s.studentId,
-                                examId: id,
-                            })),
-                            skipDuplicates: true,
-                        })
-                    }
-                }
                 message.success('Cập nhật thành công')
             } else {
                 const newExam = await createExam({
@@ -180,23 +161,14 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         subjectClass: {
                             connect: output.subjectClass?.map((item) => ({ id: item })) || [],
                         },
+                        studentSubjectScore: {
+                            connect: studentScores.map((item) => ({ id: item.id })) || [],
+                        },
                         room: {
                             connect: output.room?.map((item) => ({ id: item })) || [],
                         },
                     },
                 })
-
-                if (output.subjectClass?.length && newExam?.id) {
-                    if (studentScores.length) {
-                        await createManyExamSession({
-                            data: studentScores.map((s) => ({
-                                studentId: s.studentId,
-                                examId: newExam.id,
-                            })),
-                            skipDuplicates: true,
-                        })
-                    }
-                }
 
                 message.success('Thêm mới thành công')
                 router.push(`${ROUTER_PATH.KHAO_THI.THIET_LAP_DE_THI_DS_KY_THI}/${newExam?.id}`)
@@ -280,19 +252,21 @@ export default function Information({ id, selectedIds }: InformationProps) {
                     </FormItem>
                 </Col>
                 <Col span={12}>
-                    <FormItem form={form} name="startTime" label="Thời gian bắt đầu" required>
-                        <DatePicker
-                            format={{
-                                format: 'DD/MM/YYYY',
-                                type: 'mask',
-                            }}
+                    <FormItem
+                        form={form}
+                        name="startTime"
+                        label="Thời gian bắt đầu"
+                        normalize={(_, value) => dayjs(value).format('HH:mm')}
+                    >
+                        <TimePicker
+                            format={{ format: 'HH:mm', type: 'mask' }}
                             className="w-full"
                             placeholder="Chọn thời gian bắt đầu"
                             disabled={!isDraft}
                         />
                     </FormItem>
                 </Col>
-                <Col span={12}>
+                {/* <Col span={12}>
                     <FormItem form={form} name="endTime" label="Thời gian kết thúc" required>
                         <DatePicker
                             format={{
@@ -309,7 +283,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                             disabled={!isDraft}
                         />
                     </FormItem>
-                </Col>
+                </Col> */}
                 <Col span={12}>
                     <FormItem form={form} name="status" label="Trạng thái" required>
                         <Select

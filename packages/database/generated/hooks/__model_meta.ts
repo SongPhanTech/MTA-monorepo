@@ -9658,6 +9658,7 @@ const metadata = {
                 }, baseScore: {
                     name: "baseScore",
                     type: "AcademicRankingBaseType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, base10Min: {
                     name: "base10Min",
                     type: "Float",
@@ -19747,6 +19748,9 @@ const metadata = {
                 }, startTime: {
                     name: "startTime",
                     type: "String",
+                }, duration: {
+                    name: "duration",
+                    type: "Int",
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -19848,12 +19852,14 @@ const metadata = {
                     name: "room",
                     type: "Room",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'examRooms',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "roomId" },
                 }, roomId: {
                     name: "roomId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
                 }, examSessions: {

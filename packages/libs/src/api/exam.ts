@@ -23,8 +23,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { customExamFetch } from './custom-instance'
 import type {
     AnswerStatisticsResponse,
-    ExamFaxes,
-    ExamSessions,
+    ExamCodes,
     ExportReportSurvey,
     ExportReportSurvey400,
     ExportReportSurvey404,
@@ -37,9 +36,9 @@ import type {
     GenExamBank404,
     GenExamBankResult,
     GenExamCode,
+    GenExamCode400,
+    GenExamCode404,
     GenExamCodeResult,
-    GenExamFax400,
-    GenExamFax404,
     GetAnswerStatisticsByLevel404,
     GetAnswerStatisticsByLevelParams,
     GetDissatisfiedCountByFacultyParams,
@@ -57,10 +56,8 @@ import type {
     GetSurveyStatisticsBySemesterParams,
     HourlyAggregateResponse,
     ParticipationByTypeResponse,
-    SaveExamFaxes400,
-    SaveExamFaxesResult,
-    SaveExamSessions400,
-    SaveExamSessionsResult,
+    SaveExamCodesResult,
+    SaveExamScore400,
     SavePublicSurvey400,
     SavePublicSurvey404,
     SaveSurveyRequest,
@@ -454,39 +451,39 @@ export const useGenExamBank = <TError = GenExamBank400 | GenExamBank404, TContex
  * Sinh phách cho kỳ thi
  * @summary Sinh phách cho kỳ thi
  */
-export type genExamFaxResponse200 = {
+export type genExamCodeResponse200 = {
     data: GenExamCodeResult
     status: 200
 }
 
-export type genExamFaxResponse400 = {
-    data: GenExamFax400
+export type genExamCodeResponse400 = {
+    data: GenExamCode400
     status: 400
 }
 
-export type genExamFaxResponse404 = {
-    data: GenExamFax404
+export type genExamCodeResponse404 = {
+    data: GenExamCode404
     status: 404
 }
 
-export type genExamFaxResponseComposite =
-    | genExamFaxResponse200
-    | genExamFaxResponse400
-    | genExamFaxResponse404
+export type genExamCodeResponseComposite =
+    | genExamCodeResponse200
+    | genExamCodeResponse400
+    | genExamCodeResponse404
 
-export type genExamFaxResponse = genExamFaxResponseComposite & {
+export type genExamCodeResponse = genExamCodeResponseComposite & {
     headers: Headers
 }
 
-export const getGenExamFaxUrl = () => {
-    return '/api/exam/gex-exam-fax'
+export const getGenExamCodeUrl = () => {
+    return '/api/exam/gex-exam-code'
 }
 
-export const genExamFax = async (
+export const genExamCode = async (
     genExamCode: GenExamCode,
     options?: RequestInit
-): Promise<genExamFaxResponse> => {
-    return customExamFetch<genExamFaxResponse>(getGenExamFaxUrl(), {
+): Promise<genExamCodeResponse> => {
+    return customExamFetch<genExamCodeResponse>(getGenExamCodeUrl(), {
         ...options,
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -494,24 +491,24 @@ export const genExamFax = async (
     })
 }
 
-export const getGenExamFaxMutationOptions = <
-    TError = GenExamFax400 | GenExamFax404,
+export const getGenExamCodeMutationOptions = <
+    TError = GenExamCode400 | GenExamCode404,
     TContext = unknown,
 >(options?: {
     mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof genExamFax>>,
+        Awaited<ReturnType<typeof genExamCode>>,
         TError,
         { data: GenExamCode },
         TContext
     >
     request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
-    Awaited<ReturnType<typeof genExamFax>>,
+    Awaited<ReturnType<typeof genExamCode>>,
     TError,
     { data: GenExamCode },
     TContext
 > => {
-    const mutationKey = ['genExamFax']
+    const mutationKey = ['genExamCode']
     const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
@@ -519,28 +516,28 @@ export const getGenExamFaxMutationOptions = <
         : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof genExamFax>>,
+        Awaited<ReturnType<typeof genExamCode>>,
         { data: GenExamCode }
     > = (props) => {
         const { data } = props ?? {}
 
-        return genExamFax(data, requestOptions)
+        return genExamCode(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
 }
 
-export type GenExamFaxMutationResult = NonNullable<Awaited<ReturnType<typeof genExamFax>>>
-export type GenExamFaxMutationBody = GenExamCode
-export type GenExamFaxMutationError = GenExamFax400 | GenExamFax404
+export type GenExamCodeMutationResult = NonNullable<Awaited<ReturnType<typeof genExamCode>>>
+export type GenExamCodeMutationBody = GenExamCode
+export type GenExamCodeMutationError = GenExamCode400 | GenExamCode404
 
 /**
  * @summary Sinh phách cho kỳ thi
  */
-export const useGenExamFax = <TError = GenExamFax400 | GenExamFax404, TContext = unknown>(
+export const useGenExamCode = <TError = GenExamCode400 | GenExamCode404, TContext = unknown>(
     options?: {
         mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof genExamFax>>,
+            Awaited<ReturnType<typeof genExamCode>>,
             TError,
             { data: GenExamCode },
             TContext
@@ -549,12 +546,12 @@ export const useGenExamFax = <TError = GenExamFax400 | GenExamFax404, TContext =
     },
     queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof genExamFax>>,
+    Awaited<ReturnType<typeof genExamCode>>,
     TError,
     { data: GenExamCode },
     TContext
 > => {
-    const mutationOptions = getGenExamFaxMutationOptions(options)
+    const mutationOptions = getGenExamCodeMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -563,56 +560,56 @@ export const useGenExamFax = <TError = GenExamFax400 | GenExamFax404, TContext =
  * Lưu điểm theo phách
  * @summary Lưu điểm theo phách
  */
-export type saveExamFaxesResponse200 = {
-    data: SaveExamFaxesResult
+export type saveExamScoreResponse200 = {
+    data: SaveExamCodesResult
     status: 200
 }
 
-export type saveExamFaxesResponse400 = {
-    data: SaveExamFaxes400
+export type saveExamScoreResponse400 = {
+    data: SaveExamScore400
     status: 400
 }
 
-export type saveExamFaxesResponseComposite = saveExamFaxesResponse200 | saveExamFaxesResponse400
+export type saveExamScoreResponseComposite = saveExamScoreResponse200 | saveExamScoreResponse400
 
-export type saveExamFaxesResponse = saveExamFaxesResponseComposite & {
+export type saveExamScoreResponse = saveExamScoreResponseComposite & {
     headers: Headers
 }
 
-export const getSaveExamFaxesUrl = () => {
-    return '/api/exam/save-exam-faxes'
+export const getSaveExamScoreUrl = () => {
+    return '/api/exam/save-exam-score'
 }
 
-export const saveExamFaxes = async (
-    examFaxes: ExamFaxes,
+export const saveExamScore = async (
+    examCodes: ExamCodes,
     options?: RequestInit
-): Promise<saveExamFaxesResponse> => {
-    return customExamFetch<saveExamFaxesResponse>(getSaveExamFaxesUrl(), {
+): Promise<saveExamScoreResponse> => {
+    return customExamFetch<saveExamScoreResponse>(getSaveExamScoreUrl(), {
         ...options,
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(examFaxes),
+        body: JSON.stringify(examCodes),
     })
 }
 
-export const getSaveExamFaxesMutationOptions = <
-    TError = SaveExamFaxes400,
+export const getSaveExamScoreMutationOptions = <
+    TError = SaveExamScore400,
     TContext = unknown,
 >(options?: {
     mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof saveExamFaxes>>,
+        Awaited<ReturnType<typeof saveExamScore>>,
         TError,
-        { data: ExamFaxes },
+        { data: ExamCodes },
         TContext
     >
     request?: SecondParameter<typeof customExamFetch>
 }): UseMutationOptions<
-    Awaited<ReturnType<typeof saveExamFaxes>>,
+    Awaited<ReturnType<typeof saveExamScore>>,
     TError,
-    { data: ExamFaxes },
+    { data: ExamCodes },
     TContext
 > => {
-    const mutationKey = ['saveExamFaxes']
+    const mutationKey = ['saveExamScore']
     const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
@@ -620,147 +617,42 @@ export const getSaveExamFaxesMutationOptions = <
         : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof saveExamFaxes>>,
-        { data: ExamFaxes }
+        Awaited<ReturnType<typeof saveExamScore>>,
+        { data: ExamCodes }
     > = (props) => {
         const { data } = props ?? {}
 
-        return saveExamFaxes(data, requestOptions)
+        return saveExamScore(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
 }
 
-export type SaveExamFaxesMutationResult = NonNullable<Awaited<ReturnType<typeof saveExamFaxes>>>
-export type SaveExamFaxesMutationBody = ExamFaxes
-export type SaveExamFaxesMutationError = SaveExamFaxes400
+export type SaveExamScoreMutationResult = NonNullable<Awaited<ReturnType<typeof saveExamScore>>>
+export type SaveExamScoreMutationBody = ExamCodes
+export type SaveExamScoreMutationError = SaveExamScore400
 
 /**
  * @summary Lưu điểm theo phách
  */
-export const useSaveExamFaxes = <TError = SaveExamFaxes400, TContext = unknown>(
+export const useSaveExamScore = <TError = SaveExamScore400, TContext = unknown>(
     options?: {
         mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof saveExamFaxes>>,
+            Awaited<ReturnType<typeof saveExamScore>>,
             TError,
-            { data: ExamFaxes },
+            { data: ExamCodes },
             TContext
         >
         request?: SecondParameter<typeof customExamFetch>
     },
     queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof saveExamFaxes>>,
+    Awaited<ReturnType<typeof saveExamScore>>,
     TError,
-    { data: ExamFaxes },
+    { data: ExamCodes },
     TContext
 > => {
-    const mutationOptions = getSaveExamFaxesMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Lưu phách và điểm thi
- * @summary Lưu kết quả thi
- */
-export type saveExamSessionsResponse200 = {
-    data: SaveExamSessionsResult
-    status: 200
-}
-
-export type saveExamSessionsResponse400 = {
-    data: SaveExamSessions400
-    status: 400
-}
-
-export type saveExamSessionsResponseComposite =
-    | saveExamSessionsResponse200
-    | saveExamSessionsResponse400
-
-export type saveExamSessionsResponse = saveExamSessionsResponseComposite & {
-    headers: Headers
-}
-
-export const getSaveExamSessionsUrl = () => {
-    return '/api/exam/save-exam-sessions'
-}
-
-export const saveExamSessions = async (
-    examSessions: ExamSessions,
-    options?: RequestInit
-): Promise<saveExamSessionsResponse> => {
-    return customExamFetch<saveExamSessionsResponse>(getSaveExamSessionsUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(examSessions),
-    })
-}
-
-export const getSaveExamSessionsMutationOptions = <
-    TError = SaveExamSessions400,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof saveExamSessions>>,
-        TError,
-        { data: ExamSessions },
-        TContext
-    >
-    request?: SecondParameter<typeof customExamFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof saveExamSessions>>,
-    TError,
-    { data: ExamSessions },
-    TContext
-> => {
-    const mutationKey = ['saveExamSessions']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof saveExamSessions>>,
-        { data: ExamSessions }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return saveExamSessions(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type SaveExamSessionsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof saveExamSessions>>
->
-export type SaveExamSessionsMutationBody = ExamSessions
-export type SaveExamSessionsMutationError = SaveExamSessions400
-
-/**
- * @summary Lưu kết quả thi
- */
-export const useSaveExamSessions = <TError = SaveExamSessions400, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof saveExamSessions>>,
-            TError,
-            { data: ExamSessions },
-            TContext
-        >
-        request?: SecondParameter<typeof customExamFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof saveExamSessions>>,
-    TError,
-    { data: ExamSessions },
-    TContext
-> => {
-    const mutationOptions = getSaveExamSessionsMutationOptions(options)
+    const mutationOptions = getSaveExamScoreMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

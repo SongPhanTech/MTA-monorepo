@@ -17904,6 +17904,12 @@ declare const metadata: {
                 baseScore: {
                     name: string;
                     type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
                 };
                 base10Min: {
                     name: string;
@@ -37496,6 +37502,10 @@ declare const metadata: {
                     name: string;
                     type: string;
                 };
+                duration: {
+                    name: string;
+                    type: string;
+                };
                 subjectClass: {
                     name: string;
                     type: string;
@@ -37663,6 +37673,7 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
@@ -37679,6 +37690,7 @@ declare const metadata: {
                 roomId: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                     isForeignKey: boolean;
                     relationField: string;
                 };

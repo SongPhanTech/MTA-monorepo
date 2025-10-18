@@ -2872,7 +2872,7 @@ model ClassRegisterSessionCredit {
   classRegisterSessionId String
   minCredit              Int                     @default(0)
   maxCredit              Int                     @default(25)
-  baseScore              AcademicRankingBaseType
+  baseScore              AcademicRankingBaseType @default(Base10)
   base10Min              Float?
   base10Max              Float?
   base4Min               Float?
@@ -5346,6 +5346,7 @@ model Exam {
   lockExamCode        Boolean               @default(false)
   /// thời gian thi
   startTime           String
+  duration            Int
   /// Lớp môn học
   subjectClass        SubjectClass[]
   /// thí sinh
@@ -5370,8 +5371,8 @@ model ExamRoom {
   updatedAt    DateTime      @default(now()) @updatedAt()
   exam         Exam          @relation(fields: [examId], references: [id])
   examId       String
-  room         Room          @relation(fields: [roomId], references: [id])
-  roomId       String
+  room         Room?         @relation(fields: [roomId], references: [id])
+  roomId       String?
   examSessions ExamSession[]
 
   @@unique([examId, roomId])

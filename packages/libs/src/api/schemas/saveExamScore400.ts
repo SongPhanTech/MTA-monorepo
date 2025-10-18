@@ -5,8 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExamSessionsItem = {
-    id: string
-    /** @nullable */
-    examFaxId?: string | null
+export type SaveExamScore400 = {
+    message: string
 }

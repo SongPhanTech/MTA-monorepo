@@ -20,6 +20,7 @@ const baseSchema = z.object({
     status: ExamStatusSchema,
     lockExamCode: z.boolean().default(false),
     startTime: z.string(),
+    duration: z.number(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -72,7 +73,8 @@ export const ExamPrismaUpdateSchema = z.object({
     title: z.string(),
     status: ExamStatusSchema,
     lockExamCode: z.boolean().default(false),
-    startTime: z.string()
+    startTime: z.string(),
+    duration: z.union([z.number(), z.record(z.unknown())])
 }).partial().passthrough();
 
 

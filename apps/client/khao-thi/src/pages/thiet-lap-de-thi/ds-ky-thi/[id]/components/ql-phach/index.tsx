@@ -2,81 +2,76 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { emptyObjectIf } from '@workspace/constant'
 import { ExamStatus } from '@workspace/db'
-import { useCountExamFax, useFindManyExamFax, useFindUniqueExam } from '@workspace/db/hooks'
-import { useSaveExamFaxes } from '@workspace/libs/api/exam'
-import { Button, Col, Flex, Input, InputNumber, message, Row } from 'antd'
+import { useCountExamSession, useFindManyExamSession, useFindUniqueExam } from '@workspace/db/hooks'
+import { genExamCode, useSaveExamScore } from '@workspace/libs/api/exam'
+import { Button, Col, Flex, InputNumber, message, Row } from 'antd'
 import { Edit, Shuffle } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface ExamFaxProps {
     id: string
 }
 
-export default function ExamFax({ id }: ExamFaxProps) {
+export default function ManageExamCode({ id }: ExamFaxProps) {
     const { showSpinner, hideSpinner } = useSpinner()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
-        fax: '',
+        examCode: '',
         score: undefined,
     })
-    const [editedData, setEditedData] = useState<Record<string, { fax?: string; score?: number }>>(
+    const [editedData, setEditedData] = useState<Record<string, { id?: string; score?: number }>>(
         {}
     )
 
-    const { onOpen: onOpenModaLSinhFax } = useDisclosure<string>({
-        tag: 'ModalSinhFax',
-        onClose: () => {
-            refetch()
-            refetchCount()
-        },
-    })
+    const handleGenExamCode = async () => {
+        try {
+            showSpinner()
+            const res = await genExamCode({ examId: id })
+            if (res.status === 400 || res.status === 404) {
+                message.error(res.data.message)
+                return
+            }
+            message.success('Sinh phách thành công')
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
 
     const where = useMemo(
         () => ({
             examId: id,
-            ...(filters.fax && {
-                fax: {
-                    contains: filters.fax,
+            ...(filters.examCode && {
+                examCode: {
+                    contains: filters.examCode,
                     mode: 'insensitive' as const,
                 },
             }),
+            deletedAt: null,
         }),
-        [id, filters.fax]
+        [id, filters.examCode]
     )
 
-    const { data = [], refetch } = useFindManyExamFax(
+    const { data = [], refetch } = useFindManyExamSession(
         {
             where,
-            include: {},
-            orderBy: [
-                ...emptyObjectIf(
-                    [
-                        {
-                            score: filters.score,
-                        },
-                    ],
-                    !!filters.score
-                ),
-            ],
+            include: {
+                studentSubjectScore: { select: { examScore: true } },
+            },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
         { enabled: !!id }
     )
 
-    const { data: count, refetch: refetchCount } = useCountExamFax(
-        {
-            where: {
-                ...where,
-                deletedAt: null,
-            },
-        },
-        { enabled: !!id }
-    )
+    const { data: count, refetch: refetchCount } = useCountExamSession({ where }, { enabled: !!id })
 
     const { data: initialValue } = useFindUniqueExam(
         {
@@ -90,19 +85,17 @@ export default function ExamFax({ id }: ExamFaxProps) {
         return initialValue?.status === ExamStatus.FINISHED
     }, [id, initialValue?.status])
 
-    const { mutateAsync: updateManyExamFaxes } = useSaveExamFaxes()
+    const { mutateAsync: updateManyExamFaxes } = useSaveExamScore()
     async function handleUpdateExamFaxes() {
         try {
             showSpinner()
 
             const updates = Object.entries(editedData).map(([id, values]) => {
                 const original = data.find((d) => d.id === id)
-
-                const scoreValue = values.score ?? original?.score ?? null
+                const scoreValue = values.score ?? original?.studentSubjectScore.examScore ?? null
 
                 return {
                     id,
-                    fax: values.fax ?? original?.fax ?? null,
                     score: scoreValue !== null ? Number(scoreValue) : null,
                 }
             })
@@ -146,10 +139,7 @@ export default function ExamFax({ id }: ExamFaxProps) {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end" gap={4}>
-                                <Button
-                                    disabled={!isFinished}
-                                    onClick={() => onOpenModaLSinhFax(id)}
-                                >
+                                <Button disabled={!isFinished} onClick={() => handleGenExamCode()}>
                                     <Shuffle />
                                     Sinh phách tự động
                                 </Button>
@@ -184,25 +174,10 @@ export default function ExamFax({ id }: ExamFaxProps) {
                             },
                             {
                                 title: 'Phách',
-                                dataIndex: 'fax',
+                                dataIndex: 'examCode',
                                 width: 120,
                                 align: 'center',
                                 type: 'input',
-                                render: (_, record) => (
-                                    <Input
-                                        value={editedData[record.id]?.fax ?? record.fax ?? ''}
-                                        onChange={(e) =>
-                                            setEditedData((prev) => ({
-                                                ...prev,
-                                                [record.id]: {
-                                                    ...prev[record.id],
-                                                    fax: e.target.value,
-                                                },
-                                            }))
-                                        }
-                                        disabled={!isFinished}
-                                    />
-                                ),
                             },
                             {
                                 title: 'Điểm',
@@ -214,7 +189,11 @@ export default function ExamFax({ id }: ExamFaxProps) {
                                     <InputNumber
                                         min={0}
                                         type="number"
-                                        value={editedData[record.id]?.score ?? record.score ?? ''}
+                                        value={
+                                            editedData[record.id]?.score ??
+                                            record.studentSubjectScore.examScore ??
+                                            ''
+                                        }
                                         onChange={(e) =>
                                             setEditedData((prev) => ({
                                                 ...prev,

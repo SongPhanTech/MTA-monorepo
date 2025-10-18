@@ -4,7 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { ExamId } from './examId'
 
-export type SaveExamFaxes400 = {
-    message: string
-}
+export type GenExamCodeExamId = ExamId & unknown

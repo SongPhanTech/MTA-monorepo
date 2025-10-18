@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * Số bắt đầu
- */
-export type Start = number
+export interface SaveExamCodesResult {
+    success: boolean
+    message: string
+}

@@ -5,10 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExamFaxesItem = {
+export type ExamCodesItem = {
     id: string
-    /** @nullable */
-    fax?: string | null
     /** @nullable */
     score?: number | null
 }

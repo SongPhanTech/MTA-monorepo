@@ -1,6 +1,6 @@
 import ExcelJS from 'exceljs'
-import * as XLSX from 'xlsx'
 import { saveAs } from 'file-saver'
+import * as XLSX from 'xlsx'
 
 /** ──────────────── Types ──────────────── */
 export interface TableCell {
@@ -222,7 +222,7 @@ async function handleExcelJSExport(
         new Blob([outBuffer], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         }),
-        fileName.endsWith('.xlsx') ? fileName : fileName + '.xlsx'
+        fileName.endsWith('.xlsx') ? fileName : `${fileName}.xlsx`
     )
 }
 
@@ -322,6 +322,6 @@ async function handleSheetJSExport(
     const out = XLSX.write(wb, { bookType: 'xls', type: 'array' })
     saveAs(
         new Blob([out], { type: 'application/vnd.ms-excel' }),
-        fileName.endsWith('.xls') ? fileName : fileName + '.xls'
+        fileName.endsWith('.xls') ? fileName : `${fileName}.xls`
     )
 }

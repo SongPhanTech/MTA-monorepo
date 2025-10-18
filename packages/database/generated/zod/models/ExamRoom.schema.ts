@@ -18,13 +18,13 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     exam: z.record(z.unknown()),
-    room: z.record(z.unknown()),
+    room: z.record(z.unknown()).optional(),
     examSessions: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     examId: z.string(),
-    roomId: z.string(),
+    roomId: z.string().nullish(),
 }
 );
 

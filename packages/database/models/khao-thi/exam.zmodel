@@ -197,6 +197,7 @@ model Exam extends Base {
 
   /// thời gian thi
   startTime           String // format: HH:mm
+  duration            Int
 
   // passScore          Float               @default(5) // Điểm đạt
   // maxScore           Float               @default(10) // Điểm tối đa
@@ -222,8 +223,8 @@ model Exam extends Base {
 model ExamRoom extends Base {
   exam         Exam          @relation(fields: [examId], references: [id])
   examId       String
-  room         Room          @relation(fields: [roomId], references: [id])
-  roomId       String
+  room         Room?         @relation(fields: [roomId], references: [id])
+  roomId       String?
 
   examSessions ExamSession[]
 
