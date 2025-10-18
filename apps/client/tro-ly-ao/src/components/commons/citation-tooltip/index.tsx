@@ -12,9 +12,10 @@ interface Citation {
 
 interface CitationTooltipProps {
     citation: Citation
+    onClick?: () => void
 }
 
-export default function CitationTooltip({ citation }: CitationTooltipProps) {
+export default function CitationTooltip({ citation, onClick }: CitationTooltipProps) {
     const [isHovered, setIsHovered] = useState(false)
     const [isVisible, setIsVisible] = useState(false)
     const [position, setPosition] = useState({
@@ -167,7 +168,13 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
                 className="inline-flex items-center justify-center w-5 h-5 ml-0.5 text-xs font-semibold text-[#108850] bg-[#e8f5f0] rounded-full cursor-pointer hover:bg-[#108850] hover:text-white transition-all border border-[#108850]"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={() => setIsHovered(!isHovered)}
+                onClick={() => {
+                    if (onClick) {
+                        onClick()
+                    } else {
+                        setIsHovered(!isHovered)
+                    }
+                }}
             >
                 {citation.index}
             </span>

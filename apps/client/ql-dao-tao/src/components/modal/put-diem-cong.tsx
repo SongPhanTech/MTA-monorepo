@@ -16,8 +16,8 @@ import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Select from '@components/commons/select'
-export type PutAward = Award &{
-    subjects:string[]
+export type PutAward = Award & {
+    subjects: string[]
 }
 dayjs.locale('vi')
 const PutOlympicScoreModal = () => {
@@ -36,7 +36,7 @@ const PutOlympicScoreModal = () => {
     const { mutateAsync: createAward } = useCreateAward()
     const { mutateAsync: updateAward } = useUpdateAward()
     const { data: subjectData = [] } = useFindManySubject()
-    async function onOk({ subjects,...rest }: PutAward) {
+    async function onOk({ subjects, ...rest }: PutAward) {
         try {
             showSpinner()
             if (id) {
@@ -53,10 +53,10 @@ const PutOlympicScoreModal = () => {
                     data: {
                         ...rest,
                         subjects: {
-                        connect: (subjects || []).map((id) => ({ id })),
+                            connect: (subjects || []).map((id) => ({ id })),
                         },
                     },
-                    })
+                })
                 message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
@@ -123,7 +123,7 @@ const PutOlympicScoreModal = () => {
                     />
                 </FormItem>
             </Col>
-              <Col span={24} className="mb-4">
+            <Col span={24} className="mb-4">
                 <FormItem form={form} name="subjects" label="Môn được cộng điểm" required>
                     <Select
                         mode="multiple"

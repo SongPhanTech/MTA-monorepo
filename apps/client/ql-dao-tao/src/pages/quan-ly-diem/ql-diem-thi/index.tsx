@@ -214,15 +214,11 @@ export default function SubjectClassScore() {
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.midtermScore,
-                                    examScore: item.examScore
-                                        ? item.examScore
-                                        : newData?.examScore,
+                                    examScore: item.examScore ? item.examScore : newData?.examScore,
                                     description: item.description
                                         ? item.description
                                         : newData?.description,
-                                    suspended: item.suspended
-                                        ? item.suspended
-                                        : newData?.suspended,
+                                    suspended: item.suspended ? item.suspended : newData?.suspended,
                                     suspendedReason: item.suspendedReason
                                         ? item.suspendedReason
                                         : newData?.suspendedReason,
@@ -251,17 +247,13 @@ export default function SubjectClassScore() {
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.midtermScore,
-                                    examScore: item.examScore
-                                        ? item.examScore
-                                        : newData?.examScore,
+                                    examScore: item.examScore ? item.examScore : newData?.examScore,
                                     finalScore: item?.finalScore,
                                     manualFinalScore: item?.manualFinalScore,
                                     description: item.description
                                         ? item.description
                                         : newData?.description,
-                                    suspended: item.suspended
-                                        ? item.suspended
-                                        : newData?.suspended,
+                                    suspended: item.suspended ? item.suspended : newData?.suspended,
                                     suspendedReason: item.suspendedReason
                                         ? item.suspendedReason
                                         : newData?.suspendedReason,
@@ -580,14 +572,14 @@ export default function SubjectClassScore() {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const disabledForm: boolean = useMemo(() => {
         return !(
-            (can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
-                dataDetailSubjectClass?.examScoreDeadline &&
-                dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
-                !dataDetailSubjectClass?.isLockExamScore &&
-                ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
-                    profileId === listUser.P13) ||
-                    (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
-                        profileId !== listUser.P13)))
+            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
+            dataDetailSubjectClass?.examScoreDeadline &&
+            dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
+            !dataDetailSubjectClass?.isLockExamScore &&
+            ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
+                profileId === listUser.P13) ||
+                (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
+                    profileId !== listUser.P13))
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
@@ -617,7 +609,7 @@ export default function SubjectClassScore() {
     // // biome-ignore lint/correctness/useExhaustiveDependencies: <formTable>
     // useEffect(() => {
     //     if (subjectClassId) {
-            
+
     //     }
     // }, [subjectClassId])
 

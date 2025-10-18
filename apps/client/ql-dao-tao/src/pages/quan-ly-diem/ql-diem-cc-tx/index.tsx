@@ -518,13 +518,13 @@ export default function SubjectClassScore() {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const disabledForm: boolean = useMemo(() => {
         return !(
-            (can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
-                dataDetailSubjectClass?.scoreDeadLineStart &&
-                dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&
-                dataDetailSubjectClass?.scoreDeadline &&
-                dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
-                !dataDetailSubjectClass?.isLockScore &&
-                profileId !== listUser.P13)
+            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
+            dataDetailSubjectClass?.scoreDeadLineStart &&
+            dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&
+            dataDetailSubjectClass?.scoreDeadline &&
+            dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
+            !dataDetailSubjectClass?.isLockScore &&
+            profileId !== listUser.P13
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
@@ -574,7 +574,7 @@ export default function SubjectClassScore() {
     // useEffect(() => {
     //     if (subjectClassId) {
     //         setIsChanged(false)
-          
+
     //     }
     // }, [subjectClassId])
 
@@ -617,7 +617,7 @@ export default function SubjectClassScore() {
                                     })}
                                     defaultValue={subjectClassId}
                                     onChange={(value) => {
-                                          formTable.setFieldsValue([])
+                                        formTable.setFieldsValue([])
                                         router.push(
                                             `/quan-ly-diem/ql-diem-cc-tx?subjectClassId=${value}`
                                         )
