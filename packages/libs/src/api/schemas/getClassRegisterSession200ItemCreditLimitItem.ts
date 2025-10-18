@@ -4,6 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { GetClassRegisterSession200ItemCreditLimitItemBaseScore } from './getClassRegisterSession200ItemCreditLimitItemBaseScore'
 import type { GetClassRegisterSession200ItemCreditLimitItemClassRegisterSession } from './getClassRegisterSession200ItemCreditLimitItemClassRegisterSession'
 
 export type GetClassRegisterSession200ItemCreditLimitItem = {
@@ -21,6 +22,15 @@ export type GetClassRegisterSession200ItemCreditLimitItem = {
     updatedAt?: string | null
     minCredit?: number
     maxCredit?: number
+    baseScore: GetClassRegisterSession200ItemCreditLimitItemBaseScore
+    /** @nullable */
+    base10Min?: number | null
+    /** @nullable */
+    base10Max?: number | null
+    /** @nullable */
+    base4Min?: number | null
+    /** @nullable */
+    base4Max?: number | null
     classRegisterSessionId: string
     classRegisterSession?: GetClassRegisterSession200ItemCreditLimitItemClassRegisterSession
 }
