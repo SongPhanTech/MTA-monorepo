@@ -3,7 +3,7 @@ import TreeSelectDepartment from '@components/commons/department-select/TreeSele
 import FormItem from '@components/commons/form-item'
 import LectureTreeSelect from '@components/commons/lecture-select-multi/TreeSelectLecture'
 import Select from '@components/commons/select'
-import Table from '@components/commons/table'
+import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE, SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
@@ -19,7 +19,6 @@ import {
     useDeleteSubjectClass,
     useFindManyBuilding,
     useFindManyDM_DonVi,
-    useFindManySubjectClass,
     useFindManyTrainingCourse,
     useFindManyTrainingLocation,
     useUpdateManySubjectClass,
@@ -329,79 +328,173 @@ export default function TeachingAssignment() {
         [filters, semesterId, trainingObjectTypeId, isBoMon]
     )
 
-    const { data = [], refetch } = useFindManySubjectClass(
+    const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
         {
-            where: {
-                ...where,
-            },
             include: {
-                semester: true,
-                mainLecturer: {
-                    include: {
-                        userProfile: true,
+                subjectVersions: {
+                    select: {
+                        subjectClass: {
+                            where: {
+                                ...where,
+                            },
+                            include: {
+                                semester: true,
+                                mainLecturer: {
+                                    include: {
+                                        userProfile: true,
+                                    },
+                                },
+                                subject: {
+                                    include: {
+                                        managementOrganization: true,
+                                    },
+                                },
+                                extraLecturer: {
+                                    include: {
+                                        userProfile: true,
+                                    },
+                                },
+                                enterGradeLecturer: {
+                                    include: {
+                                        userProfile: true,
+                                    },
+                                },
+                                room: true,
+                                trainingLocation: true,
+                                subjectClassStudent: true,
+                                subjectClassTimes: true,
+                            },
+                            orderBy: [
+                                ...emptyObjectIf(
+                                    [
+                                        {
+                                            subject: {
+                                                credit: filters.credit,
+                                            },
+                                        },
+                                    ],
+                                    !!filters.credit
+                                ),
+                                ...emptyObjectIf(
+                                    [
+                                        {
+                                            maxStudent: filters.maxStudent,
+                                        },
+                                    ],
+                                    !!filters.maxStudent
+                                ),
+                                ...emptyObjectIf(
+                                    [
+                                        {
+                                            subjectClassStudent: {
+                                                _count: filters.subjectClassStudent,
+                                            },
+                                        },
+                                    ],
+                                    !!filters.subjectClassStudent
+                                ),
+                                {
+                                    code: 'asc',
+                                },
+                            ],
+                            take: numberOfPages,
+                            skip: (currentPage - 1) * numberOfPages,
+                        },
                     },
                 },
-                subject: {
-                    include: {
-                        managementOrganization: true,
-                    },
-                },
-                extraLecturer: {
-                    include: {
-                        userProfile: true,
-                    },
-                },
-                enterGradeLecturer: {
-                    include: {
-                        userProfile: true,
-                    },
-                },
-                room: true,
-                trainingLocation: true,
-                subjectClassStudent: true,
-                subjectClassTimes: true,
             },
-            orderBy: [
-                ...emptyObjectIf(
-                    [
-                        {
-                            subject: {
-                                credit: filters.credit,
+            where: {
+                bActive: true,
+                subjectVersions: {
+                    some: {
+                        subjectClass: {
+                            some: {
+                                ...where,
                             },
                         },
-                    ],
-                    !!filters.credit
-                ),
-                ...emptyObjectIf(
-                    [
-                        {
-                            maxStudent: filters.maxStudent,
-                        },
-                    ],
-                    !!filters.maxStudent
-                ),
-                ...emptyObjectIf(
-                    [
-                        {
-                            subjectClassStudent: {
-                                _count: filters.subjectClassStudent,
-                            },
-                        },
-                    ],
-                    !!filters.subjectClassStudent
-                ),
-                {
-                    code: 'asc',
+                    },
                 },
-            ],
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
+            },
         },
         {
             enabled: !!semesterId && !!trainingObjectTypeId,
             refetchOnWindowFocus: false,
         }
     )
+
+    // const { data = [], refetch } = useFindManySubjectClass(
+    //     {
+    //         where: {
+    //             ...where,
+    //         },
+    //         include: {
+    //             semester: true,
+    //             mainLecturer: {
+    //                 include: {
+    //                     userProfile: true,
+    //                 },
+    //             },
+    //             subject: {
+    //                 include: {
+    //                     managementOrganization: true,
+    //                 },
+    //             },
+    //             extraLecturer: {
+    //                 include: {
+    //                     userProfile: true,
+    //                 },
+    //             },
+    //             enterGradeLecturer: {
+    //                 include: {
+    //                     userProfile: true,
+    //                 },
+    //             },
+    //             room: true,
+    //             trainingLocation: true,
+    //             subjectClassStudent: true,
+    //             subjectClassTimes: true,
+    //         },
+    //         orderBy: [
+    //             ...emptyObjectIf(
+    //                 [
+    //                     {
+    //                         subject: {
+    //                             credit: filters.credit,
+    //                         },
+    //                     },
+    //                 ],
+    //                 !!filters.credit
+    //             ),
+    //             ...emptyObjectIf(
+    //                 [
+    //                     {
+    //                         maxStudent: filters.maxStudent,
+    //                     },
+    //                 ],
+    //                 !!filters.maxStudent
+    //             ),
+    //             ...emptyObjectIf(
+    //                 [
+    //                     {
+    //                         subjectClassStudent: {
+    //                             _count: filters.subjectClassStudent,
+    //                         },
+    //                     },
+    //                 ],
+    //                 !!filters.subjectClassStudent
+    //             ),
+    //             {
+    //                 code: 'asc',
+    //             },
+    //         ],
+    //         take: numberOfPages,
+    //         skip: (currentPage - 1) * numberOfPages,
+    //     },
+    //     {
+    //         enabled: !!semesterId && !!trainingObjectTypeId,
+    //         refetchOnWindowFocus: false,
+    //     }
+    // )
 
     const { data: count } = useCountSubjectClass({
         where: {
@@ -582,23 +675,35 @@ export default function TeachingAssignment() {
     })
 
     const dataWithRowSpan = useMemo(() => {
-        if (data) {
+        if (dmDonViData) {
             const countSubjectClassBySubjectId: Record<string, number> = {}
-            data.forEach((subjectClass) => {
-                countSubjectClassBySubjectId[subjectClass.subjectId] =
-                    (countSubjectClassBySubjectId[subjectClass.subjectId] || 0) + 1
+            dmDonViData.forEach((dmDonVi) => {
+                dmDonVi.subjectVersions.forEach((sv) => {
+                    sv.subjectClass.forEach((subjectClass) => {
+                        countSubjectClassBySubjectId[subjectClass.subjectId] =
+                            (countSubjectClassBySubjectId[subjectClass.subjectId] || 0) + 1
+                    })
+                })
             })
-            return data.map((subjectClass) => {
-                const cloneCount = countSubjectClassBySubjectId[subjectClass.subjectId]
-                countSubjectClassBySubjectId[subjectClass.subjectId] = 0
-                return {
-                    ...subjectClass,
-                    rowSpan: cloneCount,
-                }
-            })
+
+            const mapWithCount = dmDonViData.map((dmDonVi) => ({
+                ...dmDonVi,
+                id: dmDonVi.Id,
+                children: dmDonVi.subjectVersions.flatMap((sv) =>
+                    sv.subjectClass.map((subjectClass) => {
+                        const cloneCount = countSubjectClassBySubjectId[subjectClass.subjectId]
+                        countSubjectClassBySubjectId[subjectClass.subjectId] = 0
+                        return {
+                            ...subjectClass,
+                            rowSpan: cloneCount,
+                        }
+                    })
+                ),
+            }))
+            return mapWithCount
         }
         return []
-    }, [data])
+    }, [dmDonViData])
 
     const handleModal = () => {
         onOpen()
@@ -611,23 +716,25 @@ export default function TeachingAssignment() {
 
     const resetForm = useCallback(() => {
         form.setFieldsValue({
-            subjectClass: dataWithRowSpan.reduce(
-                (acc, curr) => {
-                    acc[curr.id] = {
-                        lecturerId: curr.lecturerId,
-                        extraLecturerId: curr.extraLecturerId,
-                        enterGradeLecturerId: curr.enterGradeLecturerId,
-                        lecturerAssignmentDeadline: curr.lecturerAssignmentDeadline
-                            ? dayjs(curr.lecturerAssignmentDeadline)
-                            : null,
-                        examType: curr.examType,
-                        roomId: curr.roomId,
-                        trainingLocationId: curr.trainingLocationId,
-                    }
-                    return acc
-                },
-                {} as TeachingAssignmentForm['subjectClass']
-            ),
+            subjectClass: dataWithRowSpan
+                .flatMap((e) => e.children)
+                .reduce(
+                    (acc, curr) => {
+                        acc[curr.id] = {
+                            lecturerId: curr.lecturerId,
+                            extraLecturerId: curr.extraLecturerId,
+                            enterGradeLecturerId: curr.enterGradeLecturerId,
+                            lecturerAssignmentDeadline: curr.lecturerAssignmentDeadline
+                                ? dayjs(curr.lecturerAssignmentDeadline)
+                                : null,
+                            examType: curr.examType,
+                            roomId: curr.roomId,
+                            trainingLocationId: curr.trainingLocationId,
+                        }
+                        return acc
+                    },
+                    {} as TeachingAssignmentForm['subjectClass']
+                ),
         })
     }, [dataWithRowSpan, form])
 
@@ -699,14 +806,14 @@ export default function TeachingAssignment() {
                                 <Button
                                     onClick={() => form.submit()}
                                     type="primary"
-                                    disabled={!data.length}
+                                    disabled={!dmDonViData.length}
                                 >
                                     Lưu
                                 </Button>
                                 <Button
                                     onClick={() => handleCancel()}
                                     type="primary"
-                                    disabled={!data.length}
+                                    disabled={!dmDonViData.length}
                                 >
                                     Hủy
                                 </Button>
@@ -720,7 +827,7 @@ export default function TeachingAssignment() {
                                     onClick={() => setIsEdit(true)}
                                     //TODO: handle save
                                     type="primary"
-                                    disabled={!data.length}
+                                    disabled={!dmDonViData.length}
                                 >
                                     2.PCGD
                                 </Button>
@@ -744,7 +851,7 @@ export default function TeachingAssignment() {
                                 <Button
                                     //TODO: handle save
                                     type="primary"
-                                    disabled={!data.length}
+                                    disabled={!dmDonViData.length}
                                 >
                                     3.Gửi PCGD
                                 </Button>
@@ -1215,22 +1322,14 @@ export default function TeachingAssignment() {
                                 giảng dạy.
                             </p>
                         )}
-                        <Table
+                        <TableCollapse
                             rowKey="id"
-                            id="training-category"
                             filters={filters}
                             setFilters={(value) => {
                                 setFilters(value)
                                 setCurrentPage(1)
                             }}
                             columns={[
-                                {
-                                    title: 'TT',
-                                    width: 35,
-                                    align: 'center',
-                                    render: (_, __, index) =>
-                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                                },
                                 {
                                     title: 'PCGD',
                                     align: 'center',
@@ -1244,9 +1343,9 @@ export default function TeachingAssignment() {
                                     render: (_, record) => (
                                         <Checkbox
                                             checked={
-                                                record.lecturerId &&
-                                                record.extraLecturerId &&
-                                                record.submitLecturerAssignmentAt
+                                                !!record.lecturerId &&
+                                                !!record.extraLecturerId &&
+                                                !!record.submitLecturerAssignmentAt
                                             }
                                         />
                                     ),
@@ -1369,7 +1468,7 @@ export default function TeachingAssignment() {
                                                             : []
                                                     }
                                                     organizationId={
-                                                        record?.subject?.managementOrganizationId
+                                                        record?.subject?.managementOrganizationId ?? ''
                                                     }
                                                 />
                                             </FormItem>
@@ -1666,7 +1765,9 @@ export default function TeachingAssignment() {
                                     },
                                 },
                             ]}
+                            headerTitleKey={'sTen'}
                             data={dataWithRowSpan}
+                            childrenFieldName="children"
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
