@@ -95,52 +95,52 @@ const PutArchivedAwardModal = () => {
                         awardId: rest.awardId,
                         studentId: rest.studentId,
                         date: rest.date,
-                        bonusScore:rest?.bonusScore||0,
-                         documentFiles: {
-                        upsert: (rest.documentFiles || [])
-                            .filter((file) => !!file.id)
-                            .map((file) => ({
-                                where: { id: file.id },
-                                create: {
+                        bonusScore: rest?.bonusScore || 0,
+                        documentFiles: {
+                            upsert: (rest.documentFiles || [])
+                                .filter((file) => !!file.id)
+                                .map((file) => ({
+                                    where: { id: file.id },
+                                    create: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                        curriculum: { connect: { id } },
+                                    },
+                                    update: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                    },
+                                })),
+                            create: (rest.documentFiles || [])
+                                .filter((file) => !file.id)
+                                .map((file) => ({
                                     name: file.name,
                                     path: file.path,
                                     mimeType: file.mimeType,
                                     size: file.size,
-                                    curriculum: { connect: { id } },
-                                },
-                                update: {
-                                    name: file.name,
-                                    path: file.path,
-                                    mimeType: file.mimeType,
-                                    size: file.size,
-                                },
-                            })),
-                        create: (rest.documentFiles || [])
-                            .filter((file) => !file.id)
-                            .map((file) => ({
-                                name: file.name,
-                                path: file.path,
-                                mimeType: file.mimeType,
-                                size: file.size,
-                            })),
-                        disconnect: document
-                            .filter(
-                                (existing) =>
-                                    !rest.documentFiles?.some((f) => f.id === existing.id)
-                            )
-                            .map((file) => ({ id: file.id })),
-                    },
+                                })),
+                            disconnect: document
+                                .filter(
+                                    (existing) =>
+                                        !rest.documentFiles?.some((f) => f.id === existing.id)
+                                )
+                                .map((file) => ({ id: file.id })),
+                        },
                     },
                     where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
                 await createArchivedAward({
-                   data: {
+                    data: {
                         awardId: rest.awardId,
                         studentId: rest.studentId,
                         date: rest.date,
-                        bonusScore:rest?.bonusScore||0,
+                        bonusScore: rest?.bonusScore || 0,
                         documentFiles: {
                             create: (rest.documentFiles || []).map((file) => ({
                                 name: file.name,
@@ -150,7 +150,7 @@ const PutArchivedAwardModal = () => {
                             })),
                         },
                     },
-                    })
+                })
                 message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
@@ -215,19 +215,19 @@ const PutArchivedAwardModal = () => {
                         options={awardData.map((item) => ({
                             label: item.name,
                             value: item.id,
-                            bonusScore: item?.bonusScore
+                            bonusScore: item?.bonusScore,
                         }))}
-                        onChange={(value, option:any) => {
+                        onChange={(value, option: any) => {
                             form.setFieldsValue({
-                                bonusScore: option.bonusScore
+                                bonusScore: option.bonusScore,
                             })
                         }}
                     />
                 </FormItem>
             </Col>
-                    <Col span={24} className="mb-4">
+            <Col span={24} className="mb-4">
                 <FormItem form={form} name="bonusScore" label="Điểm cộng" required>
-                    <InputNumber disabled min={1} className="w-full" placeholder='Nhập điểm' />
+                    <InputNumber disabled min={1} className="w-full" placeholder="Nhập điểm" />
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">
@@ -242,14 +242,14 @@ const PutArchivedAwardModal = () => {
                         }))}
                         onSearch={(value) => {
                             console.log(value)
-                            setFilters({...filters,textSearch: value})
+                            setFilters({ ...filters, textSearch: value })
                         }}
                     />
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">
                 <FormItem form={form} name="date" label="Thời gian nhận giải thưởng">
-                    <DatePicker format="DD/MM/YYYY" className="w-full" placeholder='Chọn ngày' />
+                    <DatePicker format="DD/MM/YYYY" className="w-full" placeholder="Chọn ngày" />
                 </FormItem>
             </Col>
             <Col span={24} className="mb-4">

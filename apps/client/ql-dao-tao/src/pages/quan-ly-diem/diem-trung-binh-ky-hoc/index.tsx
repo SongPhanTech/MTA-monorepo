@@ -41,7 +41,7 @@ const DiemTrungBinhKyHoc = () => {
         name: '',
         trainingCourseId: undefined,
         managementOrganizationId: undefined,
-        fixedClassId:undefined
+        fixedClassId: undefined,
     })
     const { getStudentTrainingTypeLabel, getStudentTrainingTypeColor } =
         useStudentTrainingTypeOptions()
@@ -56,53 +56,60 @@ const DiemTrungBinhKyHoc = () => {
                     semesterId,
                 },
             },
-             ...(
-                    (filters.code && filters.code !== '')||filters.name && filters.name !== ''
-                )?{
-                    userProfile: {
-                        ...(filters.code && filters.code !== ''
-                            ? {
-                                  code: {
-                                      contains: filters.code,
-                                      mode: 'insensitive' as const,
-                                  },
-                              }
-                            : {}),
-                        ...(filters.name && filters.name !== ''
-                            ?{ OR: [
-                                {
-                                  fullname: {
-                                      contains: filters.name,
-                                      mode: 'insensitive' as const,
-                                  },
-                                },
-                               {
-                                  firstName: {
-                                      contains: filters.name,
-                                      mode: 'insensitive' as const,
-                                  },
-                                },
-                                 {
-                                  lastName: {
-                                      contains: filters.name,
-                                      mode: 'insensitive' as const,
-                                  },
-                                },
-                            ] }
-                            : {}),
-                }
-                }:{},
-                 ...(!!filters.trainingCourseId || !!filters.fixedClassId?{
-                    fixedClass: {
-                        ...(filters.fixedClassId?{
-                            id: filters.fixedClassId
-                        }:{}),
-                         ...(filters.trainingCourseId?{
-                             trainingCourseId: filters.trainingCourseId,
-                        }:{}),
-                    }
-                 }:{})
-                
+            ...((filters.code && filters.code !== '') || (filters.name && filters.name !== '')
+                ? {
+                      userProfile: {
+                          ...(filters.code && filters.code !== ''
+                              ? {
+                                    code: {
+                                        contains: filters.code,
+                                        mode: 'insensitive' as const,
+                                    },
+                                }
+                              : {}),
+                          ...(filters.name && filters.name !== ''
+                              ? {
+                                    OR: [
+                                        {
+                                            fullname: {
+                                                contains: filters.name,
+                                                mode: 'insensitive' as const,
+                                            },
+                                        },
+                                        {
+                                            firstName: {
+                                                contains: filters.name,
+                                                mode: 'insensitive' as const,
+                                            },
+                                        },
+                                        {
+                                            lastName: {
+                                                contains: filters.name,
+                                                mode: 'insensitive' as const,
+                                            },
+                                        },
+                                    ],
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
+            ...(!!filters.trainingCourseId || !!filters.fixedClassId
+                ? {
+                      fixedClass: {
+                          ...(filters.fixedClassId
+                              ? {
+                                    id: filters.fixedClassId,
+                                }
+                              : {}),
+                          ...(filters.trainingCourseId
+                              ? {
+                                    trainingCourseId: filters.trainingCourseId,
+                                }
+                              : {}),
+                      },
+                  }
+                : {}),
         }
     }, [filters])
 
@@ -112,14 +119,14 @@ const DiemTrungBinhKyHoc = () => {
             include: {
                 studentSemesterResult: {
                     where: {
-                                semesterId,
-                            },
+                        semesterId,
+                    },
                 },
-               userProfile:true,
+                userProfile: true,
                 fixedClass: {
-                    include:{
-                        trainingCourse: true
-                    }
+                    include: {
+                        trainingCourse: true,
+                    },
                 },
             },
             orderBy: [
@@ -154,21 +161,25 @@ const DiemTrungBinhKyHoc = () => {
         orderBy: { name: 'asc' },
         where: {
             trainingObjectTypeId,
-            semesterStartId:semesterId
+            semesterStartId: semesterId,
         },
     })
 
-        const { data: fixedClassData = [] } = useFindManyFixedClass({
-            orderBy: { name: 'asc' },
-            where: {
-                 ...(filters.managementOrganizationId?{
-                    managementOrganizationId: filters.managementOrganizationId,
-                 }:{}),
-                   ...(filters.trainingCourseId?{
-                    trainingCourseId: filters.trainingCourseId,
-                 }:{})
-            },
-        })
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
+        orderBy: { name: 'asc' },
+        where: {
+            ...(filters.managementOrganizationId
+                ? {
+                      managementOrganizationId: filters.managementOrganizationId,
+                  }
+                : {}),
+            ...(filters.trainingCourseId
+                ? {
+                      trainingCourseId: filters.trainingCourseId,
+                  }
+                : {}),
+        },
+    })
 
     const { data: managementOrganizationData = [] } = useFindManyDM_DonVi({
         orderBy: { sTen: 'asc' },
@@ -263,7 +274,7 @@ const DiemTrungBinhKyHoc = () => {
                                         />
                                     </Form.Item>
                                 </Col> */}
-                                           <Col span={8}>
+                                <Col span={8}>
                                     <Form.Item className="mb-0" name="managementOrganizationId">
                                         <TreeSelect
                                             placeholder="Chọn đơn vị quản lý"
@@ -295,16 +306,14 @@ const DiemTrungBinhKyHoc = () => {
                                     </Form.Item>
                                 </Col>
 
-                                            <Col span={8}>
+                                <Col span={8}>
                                     <Form.Item className="mb-0" name="fixedClassId">
                                         <Select
                                             placeholder="Lớp quản lý"
-                                            options={fixedClassData.map(
-                                                (i: FixedClass) => ({
-                                                    value: i.id,
-                                                    label: `${i?.code} - ${i.name}`,
-                                                })
-                                            )}
+                                            options={fixedClassData.map((i: FixedClass) => ({
+                                                value: i.id,
+                                                label: `${i?.code} - ${i.name}`,
+                                            }))}
                                             onChange={(val) =>
                                                 handleFilterChange('fixedClassId', val)
                                             }
@@ -312,7 +321,6 @@ const DiemTrungBinhKyHoc = () => {
                                         />
                                     </Form.Item>
                                 </Col>
-                     
                             </Flex>
                         </Col>
                         <Col span={6}>
