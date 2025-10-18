@@ -22,7 +22,7 @@ export default function OlympicAwards() {
         name: '',
         bonusScore: undefined,
         count: undefined,
-        subjects: undefined
+        subjects: undefined,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -68,18 +68,18 @@ export default function OlympicAwards() {
                       },
                   }
                 : {}),
-                  ...(filters.subjects && filters.subjects !== ''
+            ...(filters.subjects && filters.subjects !== ''
                 ? {
-                    subjects:{
-                        some: {
-                            name: {
-                                contains: filters.subjects,
-                                mode: 'insensitive' as const,
-                            },
-                        }
-                    }
+                      subjects: {
+                          some: {
+                              name: {
+                                  contains: filters.subjects,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                      },
                   }
-                : {})
+                : {}),
         }
     }, [filters])
 
@@ -146,8 +146,6 @@ export default function OlympicAwards() {
                                 )}
                             </Flex>
                         </Col>
-
-                 
                     </Row>
                 </Col>
 
@@ -214,32 +212,36 @@ export default function OlympicAwards() {
                                     'XOA'
                                 ),
                                 render: (_, { id, _count }) => {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                {can(
-
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
-                                                    'SUA'
-                                                ) && (
-                                                    <EditIcon
-                                                        disabled={_count?.subjects > 0 || _count?.archivedAward > 0}
-                                                        onClick={onOpen.bind(null, id)}
-                                                    />
-                                                )}
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
-                                                    'XOA'
-                                                ) && (
-                                                    <DeleteIcon
-                                                        disabled={_count?.subjects > 0 || _count?.archivedAward > 0}
-                                                        popConfirm={{
-                                                            onConfirm: () => handleDelete(id),
-                                                        }}
-                                                    />
-                                                )}
-                                            </Row>
-                                        )
-                                 
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                'SUA'
+                                            ) && (
+                                                <EditIcon
+                                                    disabled={
+                                                        _count?.subjects > 0 ||
+                                                        _count?.archivedAward > 0
+                                                    }
+                                                    onClick={onOpen.bind(null, id)}
+                                                />
+                                            )}
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                'XOA'
+                                            ) && (
+                                                <DeleteIcon
+                                                    disabled={
+                                                        _count?.subjects > 0 ||
+                                                        _count?.archivedAward > 0
+                                                    }
+                                                    popConfirm={{
+                                                        onConfirm: () => handleDelete(id),
+                                                    }}
+                                                />
+                                            )}
+                                        </Row>
+                                    )
                                 },
                             },
                         ]}

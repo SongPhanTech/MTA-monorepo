@@ -13,6 +13,7 @@ import ReactMarkdown from 'react-markdown'
 import { fetchHoiDap, fetchHoiDapFaq } from '@/api/hoi-dap'
 import ChatInput from '@components/commons/input-chat-bot'
 import CitationTooltip from '@components/commons/citation-tooltip'
+import DocumentSidebar from '@components/commons/document-sidebar'
 import ChatLayout from '@layouts/chat-layout'
 
 interface Citation {
@@ -75,6 +76,8 @@ export default function Page() {
     const [isUserScrolling, setIsUserScrolling] = useState(false)
     const [showScrollButton, setShowScrollButton] = useState(false)
     const [hasAutoReplied, setHasAutoReplied] = useState(false)
+    const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
+    const [selectedCitationContent, setSelectedCitationContent] = useState<string | null>(null)
 
     const { mutateAsync: updateConversation } = useUpdateConversation()
 
@@ -365,6 +368,16 @@ export default function Page() {
         }
     }
 
+    const handleCitationClick = (citation: Citation) => {
+        setSelectedDocumentId(citation.document_id)
+        setSelectedCitationContent(citation.content)
+    }
+
+    const handleCloseSidebar = () => {
+        setSelectedDocumentId(null)
+        setSelectedCitationContent(null)
+    }
+
     useEffect(() => {
         if (messageList) {
             const sortedMessages = [...messageList].sort(
@@ -532,6 +545,11 @@ export default function Page() {
                                                                                     citation={
                                                                                         citation
                                                                                     }
+                                                                                    onClick={() =>
+                                                                                        handleCitationClick(
+                                                                                            citation
+                                                                                        )
+                                                                                    }
                                                                                 />
                                                                             ))}
                                                                     </div>
@@ -587,6 +605,12 @@ export default function Page() {
                     />
                 </div>
             </div>
+
+            <DocumentSidebar
+                documentId={selectedDocumentId}
+                citationContent={selectedCitationContent}
+                onClose={handleCloseSidebar}
+            />
         </div>
     )
 }

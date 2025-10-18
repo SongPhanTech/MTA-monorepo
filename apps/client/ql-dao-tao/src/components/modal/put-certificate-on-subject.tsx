@@ -11,7 +11,7 @@ import {
     useFindUniqueCertificateOnSubject,
     useUpdateCertificateOnSubject,
 } from '@workspace/db/hooks'
-import { Col, Form,  InputNumber, message } from 'antd'
+import { Col, Form, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
@@ -22,11 +22,7 @@ dayjs.locale('vi')
 const PutCertificateOnSubjectScoreModal = () => {
     const [form] = Form.useForm<PutCertificateOnSubject>()
     const [_targetDisabled, setTargetDisabled] = useState(true)
-    const {
-        isOpen,
-        onClose,
-        input,
-    } = useDisclosure<{id: string, certificateId: string}>({
+    const { isOpen, onClose, input } = useDisclosure<{ id: string; certificateId: string }>({
         tag: 'PutCertificateOnSubjectScoreModal',
         onClose: form.resetFields,
     })
@@ -40,9 +36,9 @@ const PutCertificateOnSubjectScoreModal = () => {
             if (input?.id) {
                 await updateCertificateOnSubject({
                     data: {
-                       subjectId: rest.subjectId,
+                        subjectId: rest.subjectId,
                         certificateId: rest.certificateId,
-                        finalScore: rest.finalScore
+                        finalScore: rest.finalScore,
                     },
                     where: { id: input?.id },
                 })
@@ -68,28 +64,28 @@ const PutCertificateOnSubjectScoreModal = () => {
             hideSpinner()
         }
     }
-     const { data: subjectData = [] } = useFindManySubject()
+    const { data: subjectData = [] } = useFindManySubject()
     const { data: level } = useFindUniqueCertificateOnSubject(
         {
-            where: { id:input?.id },
+            where: { id: input?.id },
         },
         { enabled: !!input?.id }
     )
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        console.log('level', input?.certificateId);
-        
+        console.log('level', input?.certificateId)
+
         if (level) {
             setTargetDisabled(false)
             form.setFieldsValue({
                 ...level,
-                certificateId: input?.certificateId
+                certificateId: input?.certificateId,
             })
         } else {
             form.setFieldsValue({
                 active: true,
-                certificateId: input?.certificateId
+                certificateId: input?.certificateId,
             })
         }
     }, [level])
@@ -101,19 +97,25 @@ const PutCertificateOnSubjectScoreModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={input?.id ? 'Chỉnh sửa chứng chỉ theo môn học' : 'Thêm mới chứng chỉ theo môn học'}
+            title={
+                input?.id ? 'Chỉnh sửa chứng chỉ theo môn học' : 'Thêm mới chứng chỉ theo môn học'
+            }
             className="w-[600px]"
         >
-                    <Col span={24} className="mb-0 hidden">
-                <FormItem form={form} name="certificateId" label="" required>
-                </FormItem>
+            <Col span={24} className="mb-0 hidden">
+                <FormItem form={form} name="certificateId" label="" required></FormItem>
             </Col>
-                    <Col span={24} className="mb-4">
+            <Col span={24} className="mb-4">
                 <FormItem form={form} name="finalScore" label="Điểm phiên cho môn học" required>
-                    <InputNumber min={1} max={10} className="w-full" placeholder='Nhập điểm phiên cho môn học' />
+                    <InputNumber
+                        min={1}
+                        max={10}
+                        className="w-full"
+                        placeholder="Nhập điểm phiên cho môn học"
+                    />
                 </FormItem>
             </Col>
-                          <Col span={24} className="mb-4">
+            <Col span={24} className="mb-4">
                 <FormItem form={form} name="subjectId" label="Môn được quy đổi" required>
                     <Select
                         allowClear

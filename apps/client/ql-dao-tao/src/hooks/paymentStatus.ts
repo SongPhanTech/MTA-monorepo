@@ -37,13 +37,16 @@ export const useArchivedCertificateStatusOptions = () => {
         { value: ArchivedCertificateStatus.CANCEL, label: 'Hủy', color: 'red' },
     ]
 
-    const getArchivedCertificateStatusStatusLabel = (value: PaymentStatus | null | undefined): string => {
+    const getArchivedCertificateStatusStatusLabel = (
+        value: PaymentStatus | null | undefined
+    ): string => {
         return archivedCertificateStatusOptions.find((opt) => opt.value === value)?.label || ''
     }
 
-
     const getArchivedCertificateStatusColor = (value: PaymentStatus | null | undefined): string => {
-        return archivedCertificateStatusOptions.find((opt) => opt.value === value)?.color || 'default'
+        return (
+            archivedCertificateStatusOptions.find((opt) => opt.value === value)?.color || 'default'
+        )
     }
 
     return {

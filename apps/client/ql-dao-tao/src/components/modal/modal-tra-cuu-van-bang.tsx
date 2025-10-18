@@ -1,4 +1,7 @@
-import { type DiplomaVerificationApplication, DiplomaVerificationStatus } from '@workspace/db/client'
+import {
+    type DiplomaVerificationApplication,
+    DiplomaVerificationStatus,
+} from '@workspace/db/client'
 import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'

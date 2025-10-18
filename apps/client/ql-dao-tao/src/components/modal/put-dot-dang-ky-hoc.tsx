@@ -278,11 +278,7 @@ const PutClassRegisterSession = () => {
                             title: 'TC Tối thiểu',
                             align: 'center',
                             render: (_, record: any) => (
-                                <FormItem
-                                    form={form}
-                                    required
-                                    name="minCredit"
-                                >
+                                <FormItem form={form} required name="minCredit">
                                     <InputNumber
                                         type="number"
                                         className="w-full"
@@ -298,11 +294,7 @@ const PutClassRegisterSession = () => {
                             title: 'TC Tối đa',
                             align: 'center',
                             render: (_, record: any) => (
-                                <FormItem
-                                    form={form}
-                                    required
-                                    name="maxCredit"
-                                >
+                                <FormItem form={form} required name="maxCredit">
                                     <InputNumber
                                         type="number"
                                         className="w-full"

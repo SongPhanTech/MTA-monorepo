@@ -5,7 +5,10 @@ import type { FilterProps } from '@constants/type'
 import { useDiplomaVerificationStatusOptions } from '@hooks/diplomaVerificationStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { type DiplomaVerificationApplication, DiplomaVerificationStatus } from '@workspace/db/client'
+import {
+    type DiplomaVerificationApplication,
+    DiplomaVerificationStatus,
+} from '@workspace/db/client'
 import {
     useCountDiplomaVerificationApplication,
     useFindManyDiplomaVerificationApplication,

@@ -196,5 +196,5 @@ export {
     ModalChuyenLopLuuBan,
     PutArchivedAwardModal,
     PutCertificateOnSubjectScoreModal,
-    PutCertificateArchivedModal
+    PutCertificateArchivedModal,
 }

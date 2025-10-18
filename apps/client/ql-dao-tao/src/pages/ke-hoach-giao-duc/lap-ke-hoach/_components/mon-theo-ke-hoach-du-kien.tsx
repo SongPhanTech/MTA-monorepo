@@ -299,7 +299,7 @@ export default function MonTheoKeHoachDuKien() {
                 }
             }}
         >
-            <Row >
+            <Row>
                 <Col span={20}>
                     <Flex gap={4}>
                         <Col span={8}>
