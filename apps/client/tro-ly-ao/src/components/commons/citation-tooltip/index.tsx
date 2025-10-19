@@ -7,7 +7,6 @@ interface Citation {
     index: number
     content: string
     document_id: string
-    document_type: string
 }
 
 interface CitationTooltipProps {
@@ -31,8 +30,24 @@ export default function CitationTooltip({ citation, onClick }: CitationTooltipPr
     const { data: document } = useFindUniqueDocument(
         {
             where: { id: citation.document_id },
-            include: {
-                topic: true,
+            select: {
+                id: true,
+                title: true,
+                uri: true,
+                topics: {
+                    select: {
+                        topic: {
+                            select: {
+                                name: true,
+                            },
+                        },
+                    },
+                },
+                classification: {
+                    select: {
+                        name: true,
+                    },
+                },
             },
         },
         {
@@ -100,7 +115,7 @@ export default function CitationTooltip({ citation, onClick }: CitationTooltipPr
     const tooltipContent = isHovered ? (
         <div
             ref={tooltipRef}
-            className="fixed z-[9999] rounded-lg shadow-lg border border-gray-200 w-[400px] max-w-[calc(100vw-48px)] transition-opacity duration-150 ease-in-out"
+            className="fixed z-[9999] rounded-lg shadow-lg border border-gray-200 w-[400px] max-w-[calc(100vw-48px)] transition-opacity duration-150 ease-in-out bg-gray-50"
             style={{
                 top: `${position.top}px`,
                 left: `${position.left}px`,
@@ -108,7 +123,6 @@ export default function CitationTooltip({ citation, onClick }: CitationTooltipPr
                     position.placement === 'top' ? 'translate(-50%, -100%)' : 'translate(-50%, 0)',
                 opacity: isVisible ? 1 : 0,
                 fontFamily: '"Noto Serif", serif',
-                backgroundColor: '#F0F2F7',
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -145,11 +159,27 @@ export default function CitationTooltip({ citation, onClick }: CitationTooltipPr
                             </div>
                         )}
 
-                        {document?.topic?.name && (
+                        {document?.topics && document.topics.length > 0 && (
+                            <div className="text-xs text-gray-500 flex items-start gap-1">
+                                <span className="mt-0.5">Chủ đề:</span>
+                                <div className="flex flex-wrap gap-1">
+                                    {document.topics.map((dt) => (
+                                        <span
+                                            key={dt.topic?.name}
+                                            className="px-1.5 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium"
+                                        >
+                                            {dt.topic?.name}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {document?.classification?.name && (
                             <div className="text-xs text-gray-500 flex items-center gap-1">
-                                <span>Chủ đề:</span>
-                                <span className="font-medium text-gray-700">
-                                    {document.topic.name}
+                                <span>Phân loại:</span>
+                                <span className="px-1.5 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">
+                                    {document.classification.name}
                                 </span>
                             </div>
                         )}
