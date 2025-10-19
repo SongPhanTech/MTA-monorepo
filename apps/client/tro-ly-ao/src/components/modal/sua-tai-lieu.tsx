@@ -64,7 +64,6 @@ const SuaTaiLieu = () => {
         if (!documentId) return
 
         try {
-            // Bước 1: Update document
             await updateDocument({
                 where: { id: documentId },
                 data: {
@@ -73,14 +72,12 @@ const SuaTaiLieu = () => {
                 },
             })
 
-            // Bước 2: Xóa tất cả DocumentTopic cũ
             await deleteManyDocumentTopic({
                 where: {
                     documentId: documentId,
                 },
             })
 
-            // Bước 3: Tạo DocumentTopic mới
             if (values.topicIds.length > 0) {
                 await createManyDocumentTopic({
                     data: values.topicIds.map((topicId) => ({

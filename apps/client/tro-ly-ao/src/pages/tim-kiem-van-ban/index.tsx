@@ -217,7 +217,8 @@ export default function Page() {
                             <div>
                                 <p className="font-semibold text-gray-700">Loại tài liệu</p>
                                 <div className="flex flex-wrap gap-1 mt-1">
-                                    {selectedDocument.topics && selectedDocument.topics.length > 0 ? (
+                                    {selectedDocument.topics &&
+                                    selectedDocument.topics.length > 0 ? (
                                         selectedDocument.topics.map((dt) => (
                                             <Tag key={dt.id} color="blue">
                                                 {dt.topic?.name}
