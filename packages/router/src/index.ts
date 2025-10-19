@@ -495,6 +495,11 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CHU_DE,
                     },
                     {
+                        id: 'TRO_LY_AO_QUAN_TRI_LOAI_TAI_LIEU',
+                        label: 'Loại tài liệu',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_LOAI_TAI_LIEU,
+                    },
+                    {
                         id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU,
                         label: 'Dữ liệu',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU,

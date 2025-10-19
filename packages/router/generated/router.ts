@@ -26,7 +26,6 @@ export default {
     "QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI": "/ql-tu-danh-gia-ctdt/tieu-chuan-tieu-chi",
     "THIET_LAP_DE_THI_DS_KY_THI_ID_COMPONENTS_CAU_HINH_SINH_DE": "/thiet-lap-de-thi/ds-ky-thi/[id]/components/cau-hinh-sinh-de",
     "THIET_LAP_DE_THI_DS_KY_THI_ID_COMPONENTS_DANH_SACH_DE_THI": "/thiet-lap-de-thi/ds-ky-thi/[id]/components/danh-sach-de-thi",
-    "THIET_LAP_DE_THI_DS_KY_THI_ID_COMPONENTS_QL_BAI_THI": "/thiet-lap-de-thi/ds-ky-thi/[id]/components/ql-bai-thi",
     "THIET_LAP_DE_THI_DS_KY_THI_ID_COMPONENTS_QL_PHACH": "/thiet-lap-de-thi/ds-ky-thi/[id]/components/ql-phach",
     "THIET_LAP_DE_THI_DS_KY_THI_ID_COMPONENTS_THONG_TIN_KY_THI": "/thiet-lap-de-thi/ds-ky-thi/[id]/components/thong-tin-ky-thi",
     "THIET_LAP_DE_THI_DS_KY_THI_ID": "/thiet-lap-de-thi/ds-ky-thi/[id]",
@@ -159,6 +158,7 @@ export default {
     "QUAN_TRI_CAU_HINH_THAM_SO": "/quan-tri/cau-hinh/tham-so",
     "QUAN_TRI_CHU_DE": "/quan-tri/chu-de",
     "QUAN_TRI_DU_LIEU": "/quan-tri/du-lieu",
+    "QUAN_TRI_LOAI_TAI_LIEU": "/quan-tri/loai-tai-lieu",
     "TIM_KIEM_VAN_BAN": "/tim-kiem-van-ban",
     "TRO_LY_AO": "/tro-ly-ao",
     "XU_LY_VAN_BAN": "/xu-ly-van-ban"
