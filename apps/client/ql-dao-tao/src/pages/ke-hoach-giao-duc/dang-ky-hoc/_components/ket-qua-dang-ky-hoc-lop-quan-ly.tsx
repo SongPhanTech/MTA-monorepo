@@ -48,8 +48,21 @@ export default function KeQuaDangKyHocLopQuanLy() {
         },
         include: {
             mainLecturer: {
-                include: {
-                    userProfile: true,
+                select: {
+                    userProfile: {
+                        select: {
+                            fullname: true,
+                        },
+                    },
+                },
+            },
+            extraLecturer: {
+                select: {
+                    userProfile: {
+                        select: {
+                            fullname: true,
+                        },
+                    },
                 },
             },
             subject: true,
@@ -61,6 +74,11 @@ export default function KeQuaDangKyHocLopQuanLy() {
             room: {
                 include: {
                     building: true,
+                },
+            },
+            trainingLocation: {
+                select: {
+                    name: true,
                 },
             },
         },
@@ -149,11 +167,10 @@ export default function KeQuaDangKyHocLopQuanLy() {
                 selectedRow={selectedRowKey}
                 columns={[
                     {
-                        title: 'STT',
+                        title: 'TT',
                         dataIndex: '',
-                        width: 60,
+                        width: 35,
                         align: 'center',
-                        fixed: 'left',
                         render: (_, __, index) =>
                             index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                     },
@@ -162,12 +179,12 @@ export default function KeQuaDangKyHocLopQuanLy() {
                         dataIndex: 'name',
                         align: 'center',
                         width: 200,
-                        fixed: 'left',
                     },
                     {
                         title: 'Thời gian học',
                         dataIndex: 'startDate',
-                        width: 150,
+                        width: 120,
+                        align: 'center',
                         render: (value: string) => dayjs(value).format('DD/MM/YYYY'),
                     },
                     {
@@ -185,14 +202,20 @@ export default function KeQuaDangKyHocLopQuanLy() {
                     {
                         title: 'Giảng viên 1',
                         dataIndex: ['mainLecturer', 'userProfile'],
-                        width: 250,
-                        render: (record) => record && `${record.code} - ${record.fullname}`,
+                        width: 150,
+                        render: (record) => record && `${record.fullname}`,
+                    },
+                    {
+                        title: 'Giảng viên 2',
+                        dataIndex: ['extraLecturer', 'userProfile'],
+                        width: 150,
+                        render: (record) => record && `${record.fullname}`,
                     },
                     {
                         title: 'Số tín chỉ',
                         dataIndex: ['subject', 'credit'],
                         align: 'center',
-                        width: 120,
+                        width: 100,
                     },
                     {
                         title: 'Hình thức thi',
@@ -203,13 +226,7 @@ export default function KeQuaDangKyHocLopQuanLy() {
                     },
                     {
                         title: 'Địa điểm',
-                        dataIndex: ['room', 'building', 'name'],
-                        align: 'center',
-                        width: 180,
-                    },
-                    {
-                        title: 'Phòng học',
-                        dataIndex: ['room', 'name'],
+                        dataIndex: ['trainingLocation', 'name'],
                         align: 'center',
                         width: 180,
                     },
@@ -233,7 +250,6 @@ export default function KeQuaDangKyHocLopQuanLy() {
                     {
                         title: 'Lớp QL đã ĐK',
                         align: 'center',
-                        fixed: 'right',
                         width: 150,
                         render: (__, record: any) => {
                             return record?.fixedClasses.length ? (

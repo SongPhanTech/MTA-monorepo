@@ -2,11 +2,16 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useFindFirstPlanTraining, useFindUniqueSemester } from '@workspace/db/hooks'
+import useSpinner from '@hooks/spinner'
+import {
+    useDeleteManyPlanTrainingSubject,
+    useFindFirstPlanTraining,
+    useFindUniqueSemester,
+} from '@workspace/db/hooks'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
@@ -41,6 +46,7 @@ export default function MonDaLapKeHoach() {
             enabled: !!semesterId,
         }
     )
+
     const { data: planTraining } = useFindFirstPlanTraining(
         {
             where: {
@@ -90,17 +96,23 @@ export default function MonDaLapKeHoach() {
                     },
                 },
                 _count: {
-                    select: { planTrainingSubjects: {
-                        where:{
-                            deletedAt: null,
-                            active: true,
-                        }
-                    } },
+                    select: {
+                        planTrainingSubjects: {
+                            where: {
+                                deletedAt: null,
+                                active: true,
+                            },
+                        },
+                    },
                 },
             },
         },
         { enabled: !!semesterId && !!trainingObjectTypeId }
     )
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const { mutateAsync: deleteManyPlanTrainingSubject } = useDeleteManyPlanTrainingSubject()
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -228,13 +240,29 @@ export default function MonDaLapKeHoach() {
                         >
                             Xuất kế hoạch
                         </Button>
-                        <Button
-                            onClick={() => {}}
-                            disabled={!subjectSelected.length}
-                            type="primary"
+                        <Popconfirm
+                            title="Bạn có chắc chắn xoá các môn đã lập kế hoạch đã chọn?"
+                            onConfirm={async () => {
+                                try {
+                                    showSpinner()
+                                    await deleteManyPlanTrainingSubject({
+                                        where: {
+                                           subjectVersionId: { in: subjectSelected },
+                                        },
+                                    })
+                                    message.success('Xoá môn đã lập kế hoạch thành công')
+                                    form.resetFields()
+                                } catch (error) {
+                                    console.log(error)
+                                    message.error('Xoá môn đã lập kế hoạch thất bại')
+                                }
+                                hideSpinner()
+                            }}
                         >
-                            Xoá
-                        </Button>
+                            <Button disabled={!subjectSelected.length} type="primary">
+                                Xoá
+                            </Button>
+                        </Popconfirm>
                     </Flex>
                 </Col>
                 <Form.Item hidden name="subjectSelected" />

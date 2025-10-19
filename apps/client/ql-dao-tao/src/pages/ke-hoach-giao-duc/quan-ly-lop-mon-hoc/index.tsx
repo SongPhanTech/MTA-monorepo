@@ -128,6 +128,9 @@ export default function TeachingAssignment() {
     })
 
     const [form] = Form.useForm<TeachingAssignmentForm>()
+
+    const subjectClassForm = Form.useWatch('subjectClass', form)
+
     const [formBaoDay] = Form.useForm<BaoDayForm>()
 
     const { id: semesterId } = useSemesterStore()
@@ -589,15 +592,15 @@ export default function TeachingAssignment() {
                     data: {
                         where: { id },
                         data: {
-                            lecturerId: subjectClass.lecturerId,
-                            extraLecturerId: subjectClass.extraLecturerId,
-                            enterGradeLecturerId: subjectClass.enterGradeLecturerId,
+                            lecturerId: subjectClass.lecturerId ?? null,
+                            extraLecturerId: subjectClass.extraLecturerId ?? null,
+                            enterGradeLecturerId: subjectClass.enterGradeLecturerId ?? null,
                             lecturerAssignmentDeadline: subjectClass.lecturerAssignmentDeadline
                                 ? subjectClass.lecturerAssignmentDeadline?.toDate()
                                 : null,
-                            examType: subjectClass.examType,
-                            roomId: subjectClass.roomId,
-                            trainingLocationId: subjectClass.trainingLocationId,
+                            examType: subjectClass.examType ?? null,
+                            roomId: subjectClass.roomId ?? null,
+                            trainingLocationId: subjectClass.trainingLocationId ?? null,
                         },
                     },
                 }))
@@ -1468,7 +1471,8 @@ export default function TeachingAssignment() {
                                                             : []
                                                     }
                                                     organizationId={
-                                                        record?.subject?.managementOrganizationId ?? ''
+                                                        record?.subject?.managementOrganizationId ??
+                                                        ''
                                                     }
                                                 />
                                             </FormItem>
@@ -1584,14 +1588,15 @@ export default function TeachingAssignment() {
                                             >
                                                 <TreeSelect
                                                     treeData={buildingData
-                                                        .filter(
-                                                            (e) =>
-                                                                e.trainingLocationId ===
-                                                                (form.getFieldValue([
-                                                                    'subjectClass',
-                                                                    record.id,
-                                                                    'trainingLocationId',
-                                                                ]) ?? record.trainingLocationId)
+                                                        .filter((e) =>
+                                                            subjectClassForm[record.id]
+                                                                ?.trainingLocationId ||
+                                                            record.trainingLocationId
+                                                                ? e.trainingLocationId ===
+                                                                  (subjectClassForm[record.id]
+                                                                      ?.trainingLocationId ||
+                                                                      record.trainingLocationId)
+                                                                : true
                                                         )
                                                         .map((e) => ({
                                                             label: e.name,

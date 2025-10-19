@@ -737,6 +737,86 @@ export default function SubjectOpeningPlan() {
                                     align: 'center',
                                 },
                                 {
+                                    title: 'Số SV max',
+                                    width: 150,
+                                    align: 'center',
+                                    render: (_, record,idx) => (
+                                        <>
+                                            <Form.Item
+                                                name={[
+                                                    'subjectClassNumber',
+                                                    record?.subjectVersionId,
+                                                    'maxStudent',
+                                                ]}
+                                                required
+                                            >
+                                                <InputNumber
+                                                    step={0}
+                                                    id={`svmax-${record?.subjectVersionId}`}
+                                                    controls={false}
+                                                    onKeyDown={(e) => {
+                                                        if (
+                                                            e.key === 'ArrowUp' ||
+                                                            e.key === 'ArrowDown'
+                                                        ) {
+                                                            e.preventDefault()
+                                                            e.stopPropagation()
+                                                            if (!data) return
+                                                            const nextId =
+                                                                data[
+                                                                    idx +
+                                                                        (e.key === 'ArrowUp'
+                                                                            ? -1
+                                                                            : 1)
+                                                                ]?.subjectVersionId
+                                                            document
+                                                                .getElementById(`svmax-${nextId}`)
+                                                                ?.focus()
+                                                            return
+                                                            // Handle the logic for ArrowUp key press
+                                                        }
+
+                                                        const allowedKeys = [
+                                                            'Backspace',
+                                                            'Delete',
+                                                            'ArrowLeft',
+                                                            'ArrowRight',
+                                                            'Tab',
+                                                            'Meta',
+                                                            'Control',
+                                                        ]
+                                                        if (
+                                                            !/[0-9]/.test(e.key) &&
+                                                            !allowedKeys.includes(e.key)
+                                                        ) {
+                                                            e.preventDefault()
+                                                        }
+                                                    }}
+                                                />
+                                            </Form.Item>
+                                        </>
+                                    ),
+                                },
+                                {
+                                    title: 'Khu vực',
+                                    width: 150,
+                                    align: 'center',
+                                    render: (_, record) => (
+                                        <>
+                                            <Form.Item
+                                                name={[
+                                                    'subjectClassNumber',
+                                                    record?.subjectVersionId,
+                                                    'trainingLocationId',
+                                                ]}
+                                                required
+                                            >
+                                                <Select />
+                                            </Form.Item>
+                                        </>
+                                    ),
+                                },
+                                {
                                     title: 'Số lớp MH',
                                     width: 80,
                                     align: 'center',

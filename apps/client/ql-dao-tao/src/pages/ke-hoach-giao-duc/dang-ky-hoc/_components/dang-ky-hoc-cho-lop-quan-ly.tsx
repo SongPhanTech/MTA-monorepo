@@ -53,11 +53,6 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
             active: true,
         },
         include: {
-            mainLecturer: {
-                include: {
-                    userProfile: true,
-                },
-            },
             subject: true,
             fixedClasses: {
                 include: {
@@ -74,10 +69,10 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                     },
                 },
             },
-            room: {
-                include: {
-                    building: true,
-                },
+            trainingLocation: {
+                select:{
+                    name: true,
+                }
             },
             subjectClassTimes: true,
         },
@@ -137,14 +132,14 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
 
     return (
         <div>
-            <Row gutter={[16, 16]} align="top" justify="space-between">
+            <Row  align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>
                         <Col span={8}>
-                            <Form.Item name="searchText">
+                            <Form.Item className='m-0' name="searchText">
                                 <Input
                                     id="search"
-                                    placeholder="Nhập tên lớp..."
+                                    placeholder="Tìm kiếm..."
                                     onChange={(e) =>
                                         handleFilterChange('searchText', e.target.value)
                                     }
@@ -210,7 +205,7 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                     },
                     {
                         title: 'Khu vực',
-                        dataIndex: ['room', 'building', 'name'],
+                        dataIndex: ['trainingLocation', 'name'],
                         align: 'center',
                         width: 120,
                     },
