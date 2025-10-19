@@ -70,9 +70,9 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                 },
             },
             trainingLocation: {
-                select:{
+                select: {
                     name: true,
-                }
+                },
             },
             subjectClassTimes: true,
         },
@@ -132,11 +132,11 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
 
     return (
         <div>
-            <Row  align="top" justify="space-between">
+            <Row align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>
                         <Col span={8}>
-                            <Form.Item className='m-0' name="searchText">
+                            <Form.Item className="m-0" name="searchText">
                                 <Input
                                     id="search"
                                     placeholder="Tìm kiếm..."

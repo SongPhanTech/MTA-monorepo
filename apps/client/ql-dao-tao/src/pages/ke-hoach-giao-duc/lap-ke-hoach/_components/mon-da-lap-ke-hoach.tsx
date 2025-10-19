@@ -247,7 +247,7 @@ export default function MonDaLapKeHoach() {
                                     showSpinner()
                                     await deleteManyPlanTrainingSubject({
                                         where: {
-                                           subjectVersionId: { in: subjectSelected },
+                                            subjectVersionId: { in: subjectSelected },
                                         },
                                     })
                                     message.success('Xoá môn đã lập kế hoạch thành công')

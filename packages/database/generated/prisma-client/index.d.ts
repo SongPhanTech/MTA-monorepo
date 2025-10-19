@@ -179,6 +179,11 @@ export type UserSession = $Result.DefaultSelection<Prisma.$UserSessionPayload>
  */
 export type Document = $Result.DefaultSelection<Prisma.$DocumentPayload>
 /**
+ * Model DocumentTopic
+ * 
+ */
+export type DocumentTopic = $Result.DefaultSelection<Prisma.$DocumentTopicPayload>
+/**
  * Model FAQ
  * 
  */
@@ -208,6 +213,11 @@ export type CitationMessage = $Result.DefaultSelection<Prisma.$CitationMessagePa
  * 
  */
 export type Topic = $Result.DefaultSelection<Prisma.$TopicPayload>
+/**
+ * Model DocumentClassification
+ * 
+ */
+export type DocumentClassification = $Result.DefaultSelection<Prisma.$DocumentClassificationPayload>
 /**
  * Model DM_CapBac
  * 
@@ -2453,6 +2463,16 @@ export class PrismaClient<
   get document(): Prisma.DocumentDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.documentTopic`: Exposes CRUD operations for the **DocumentTopic** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DocumentTopics
+    * const documentTopics = await prisma.documentTopic.findMany()
+    * ```
+    */
+  get documentTopic(): Prisma.DocumentTopicDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.fAQ`: Exposes CRUD operations for the **FAQ** model.
     * Example usage:
     * ```ts
@@ -2511,6 +2531,16 @@ export class PrismaClient<
     * ```
     */
   get topic(): Prisma.TopicDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.documentClassification`: Exposes CRUD operations for the **DocumentClassification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DocumentClassifications
+    * const documentClassifications = await prisma.documentClassification.findMany()
+    * ```
+    */
+  get documentClassification(): Prisma.DocumentClassificationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.dM_CapBac`: Exposes CRUD operations for the **DM_CapBac** model.
@@ -5024,12 +5054,14 @@ export namespace Prisma {
     ChatBotConfig: 'ChatBotConfig',
     UserSession: 'UserSession',
     Document: 'Document',
+    DocumentTopic: 'DocumentTopic',
     FAQ: 'FAQ',
     Prompt: 'Prompt',
     Conversation: 'Conversation',
     Message: 'Message',
     CitationMessage: 'CitationMessage',
     Topic: 'Topic',
+    DocumentClassification: 'DocumentClassification',
     DM_CapBac: 'DM_CapBac',
     DM_ChucDanh: 'DM_ChucDanh',
     DM_ChucVu: 'DM_ChucVu',
@@ -5252,7 +5284,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "testStructureRule" | "examBank" | "examBankQuestion" | "examSession" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+      modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoom" | "testStructureRule" | "examBank" | "examBankQuestion" | "examSession" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -7698,6 +7730,80 @@ export namespace Prisma {
           }
         }
       }
+      DocumentTopic: {
+        payload: Prisma.$DocumentTopicPayload<ExtArgs>
+        fields: Prisma.DocumentTopicFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DocumentTopicFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DocumentTopicFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload>
+          }
+          findFirst: {
+            args: Prisma.DocumentTopicFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DocumentTopicFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload>
+          }
+          findMany: {
+            args: Prisma.DocumentTopicFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload>[]
+          }
+          create: {
+            args: Prisma.DocumentTopicCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload>
+          }
+          createMany: {
+            args: Prisma.DocumentTopicCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DocumentTopicCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload>[]
+          }
+          delete: {
+            args: Prisma.DocumentTopicDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload>
+          }
+          update: {
+            args: Prisma.DocumentTopicUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload>
+          }
+          deleteMany: {
+            args: Prisma.DocumentTopicDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DocumentTopicUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DocumentTopicUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload>[]
+          }
+          upsert: {
+            args: Prisma.DocumentTopicUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentTopicPayload>
+          }
+          aggregate: {
+            args: Prisma.DocumentTopicAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDocumentTopic>
+          }
+          groupBy: {
+            args: Prisma.DocumentTopicGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DocumentTopicGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DocumentTopicCountArgs<ExtArgs>
+            result: $Utils.Optional<DocumentTopicCountAggregateOutputType> | number
+          }
+        }
+      }
       FAQ: {
         payload: Prisma.$FAQPayload<ExtArgs>
         fields: Prisma.FAQFieldRefs
@@ -8139,6 +8245,80 @@ export namespace Prisma {
           count: {
             args: Prisma.TopicCountArgs<ExtArgs>
             result: $Utils.Optional<TopicCountAggregateOutputType> | number
+          }
+        }
+      }
+      DocumentClassification: {
+        payload: Prisma.$DocumentClassificationPayload<ExtArgs>
+        fields: Prisma.DocumentClassificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DocumentClassificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DocumentClassificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload>
+          }
+          findFirst: {
+            args: Prisma.DocumentClassificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DocumentClassificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload>
+          }
+          findMany: {
+            args: Prisma.DocumentClassificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload>[]
+          }
+          create: {
+            args: Prisma.DocumentClassificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload>
+          }
+          createMany: {
+            args: Prisma.DocumentClassificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DocumentClassificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload>[]
+          }
+          delete: {
+            args: Prisma.DocumentClassificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload>
+          }
+          update: {
+            args: Prisma.DocumentClassificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.DocumentClassificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DocumentClassificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DocumentClassificationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload>[]
+          }
+          upsert: {
+            args: Prisma.DocumentClassificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DocumentClassificationPayload>
+          }
+          aggregate: {
+            args: Prisma.DocumentClassificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDocumentClassification>
+          }
+          groupBy: {
+            args: Prisma.DocumentClassificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DocumentClassificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DocumentClassificationCountArgs<ExtArgs>
+            result: $Utils.Optional<DocumentClassificationCountAggregateOutputType> | number
           }
         }
       }
@@ -23359,12 +23539,14 @@ export namespace Prisma {
     chatBotConfig?: ChatBotConfigOmit
     userSession?: UserSessionOmit
     document?: DocumentOmit
+    documentTopic?: DocumentTopicOmit
     fAQ?: FAQOmit
     prompt?: PromptOmit
     conversation?: ConversationOmit
     message?: MessageOmit
     citationMessage?: CitationMessageOmit
     topic?: TopicOmit
+    documentClassification?: DocumentClassificationOmit
     dM_CapBac?: DM_CapBacOmit
     dM_ChucDanh?: DM_ChucDanhOmit
     dM_ChucVu?: DM_ChucVuOmit
@@ -24156,6 +24338,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type DocumentCountOutputType
+   */
+
+  export type DocumentCountOutputType = {
+    topics: number
+  }
+
+  export type DocumentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    topics?: boolean | DocumentCountOutputTypeCountTopicsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DocumentCountOutputType without action
+   */
+  export type DocumentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentCountOutputType
+     */
+    select?: DocumentCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DocumentCountOutputType without action
+   */
+  export type DocumentCountOutputTypeCountTopicsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentTopicWhereInput
+  }
+
+
+  /**
    * Count Type ConversationCountOutputType
    */
 
@@ -24250,7 +24463,7 @@ export namespace Prisma {
    * TopicCountOutputType without action
    */
   export type TopicCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DocumentWhereInput
+    where?: DocumentTopicWhereInput
   }
 
   /**
@@ -24272,6 +24485,37 @@ export namespace Prisma {
    */
   export type TopicCountOutputTypeCountConversationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ConversationWhereInput
+  }
+
+
+  /**
+   * Count Type DocumentClassificationCountOutputType
+   */
+
+  export type DocumentClassificationCountOutputType = {
+    documents: number
+  }
+
+  export type DocumentClassificationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    documents?: boolean | DocumentClassificationCountOutputTypeCountDocumentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DocumentClassificationCountOutputType without action
+   */
+  export type DocumentClassificationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassificationCountOutputType
+     */
+    select?: DocumentClassificationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DocumentClassificationCountOutputType without action
+   */
+  export type DocumentClassificationCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentWhereInput
   }
 
 
@@ -71175,10 +71419,10 @@ export namespace Prisma {
     title: string | null
     body: string | null
     status: $Enums.DocumentStatus | null
+    classificationId: string | null
     uri: string | null
     fileType: string | null
     fileSize: number | null
-    topicId: string | null
     reason: string | null
     uploadedById: string | null
     approvedById: string | null
@@ -71195,10 +71439,10 @@ export namespace Prisma {
     title: string | null
     body: string | null
     status: $Enums.DocumentStatus | null
+    classificationId: string | null
     uri: string | null
     fileType: string | null
     fileSize: number | null
-    topicId: string | null
     reason: string | null
     uploadedById: string | null
     approvedById: string | null
@@ -71215,10 +71459,10 @@ export namespace Prisma {
     title: number
     body: number
     status: number
+    classificationId: number
     uri: number
     fileType: number
     fileSize: number
-    topicId: number
     reason: number
     uploadedById: number
     approvedById: number
@@ -71245,10 +71489,10 @@ export namespace Prisma {
     title?: true
     body?: true
     status?: true
+    classificationId?: true
     uri?: true
     fileType?: true
     fileSize?: true
-    topicId?: true
     reason?: true
     uploadedById?: true
     approvedById?: true
@@ -71265,10 +71509,10 @@ export namespace Prisma {
     title?: true
     body?: true
     status?: true
+    classificationId?: true
     uri?: true
     fileType?: true
     fileSize?: true
-    topicId?: true
     reason?: true
     uploadedById?: true
     approvedById?: true
@@ -71285,10 +71529,10 @@ export namespace Prisma {
     title?: true
     body?: true
     status?: true
+    classificationId?: true
     uri?: true
     fileType?: true
     fileSize?: true
-    topicId?: true
     reason?: true
     uploadedById?: true
     approvedById?: true
@@ -71392,10 +71636,10 @@ export namespace Prisma {
     title: string | null
     body: string | null
     status: $Enums.DocumentStatus
+    classificationId: string | null
     uri: string | null
     fileType: string | null
     fileSize: number | null
-    topicId: string | null
     reason: string | null
     uploadedById: string
     approvedById: string | null
@@ -71431,16 +71675,18 @@ export namespace Prisma {
     title?: boolean
     body?: boolean
     status?: boolean
+    classificationId?: boolean
     uri?: boolean
     fileType?: boolean
     fileSize?: boolean
-    topicId?: boolean
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
-    topic?: boolean | Document$topicArgs<ExtArgs>
+    classification?: boolean | Document$classificationArgs<ExtArgs>
     uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
+    topics?: boolean | Document$topicsArgs<ExtArgs>
+    _count?: boolean | DocumentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
 
   export type DocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -71454,14 +71700,14 @@ export namespace Prisma {
     title?: boolean
     body?: boolean
     status?: boolean
+    classificationId?: boolean
     uri?: boolean
     fileType?: boolean
     fileSize?: boolean
-    topicId?: boolean
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
-    topic?: boolean | Document$topicArgs<ExtArgs>
+    classification?: boolean | Document$classificationArgs<ExtArgs>
     uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
@@ -71477,14 +71723,14 @@ export namespace Prisma {
     title?: boolean
     body?: boolean
     status?: boolean
+    classificationId?: boolean
     uri?: boolean
     fileType?: boolean
     fileSize?: boolean
-    topicId?: boolean
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
-    topic?: boolean | Document$topicArgs<ExtArgs>
+    classification?: boolean | Document$classificationArgs<ExtArgs>
     uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
@@ -71500,28 +71746,30 @@ export namespace Prisma {
     title?: boolean
     body?: boolean
     status?: boolean
+    classificationId?: boolean
     uri?: boolean
     fileType?: boolean
     fileSize?: boolean
-    topicId?: boolean
     reason?: boolean
     uploadedById?: boolean
     approvedById?: boolean
   }
 
-  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "body" | "status" | "uri" | "fileType" | "fileSize" | "topicId" | "reason" | "uploadedById" | "approvedById", ExtArgs["result"]["document"]>
+  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "body" | "status" | "classificationId" | "uri" | "fileType" | "fileSize" | "reason" | "uploadedById" | "approvedById", ExtArgs["result"]["document"]>
   export type DocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    topic?: boolean | Document$topicArgs<ExtArgs>
+    classification?: boolean | Document$classificationArgs<ExtArgs>
     uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
+    topics?: boolean | Document$topicsArgs<ExtArgs>
+    _count?: boolean | DocumentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    topic?: boolean | Document$topicArgs<ExtArgs>
+    classification?: boolean | Document$classificationArgs<ExtArgs>
     uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }
   export type DocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    topic?: boolean | Document$topicArgs<ExtArgs>
+    classification?: boolean | Document$classificationArgs<ExtArgs>
     uploadedBy?: boolean | UserProfileDefaultArgs<ExtArgs>
     approvedBy?: boolean | Document$approvedByArgs<ExtArgs>
   }
@@ -71529,9 +71777,10 @@ export namespace Prisma {
   export type $DocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Document"
     objects: {
-      topic: Prisma.$TopicPayload<ExtArgs> | null
+      classification: Prisma.$DocumentClassificationPayload<ExtArgs> | null
       uploadedBy: Prisma.$UserProfilePayload<ExtArgs>
       approvedBy: Prisma.$UserProfilePayload<ExtArgs> | null
+      topics: Prisma.$DocumentTopicPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -71544,10 +71793,10 @@ export namespace Prisma {
       title: string | null
       body: string | null
       status: $Enums.DocumentStatus
+      classificationId: string | null
       uri: string | null
       fileType: string | null
       fileSize: number | null
-      topicId: string | null
       reason: string | null
       uploadedById: string
       approvedById: string | null
@@ -71945,9 +72194,10 @@ export namespace Prisma {
    */
   export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    topic<T extends Document$topicArgs<ExtArgs> = {}>(args?: Subset<T, Document$topicArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    classification<T extends Document$classificationArgs<ExtArgs> = {}>(args?: Subset<T, Document$classificationArgs<ExtArgs>>): Prisma__DocumentClassificationClient<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     uploadedBy<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     approvedBy<T extends Document$approvedByArgs<ExtArgs> = {}>(args?: Subset<T, Document$approvedByArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    topics<T extends Document$topicsArgs<ExtArgs> = {}>(args?: Subset<T, Document$topicsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -71987,10 +72237,10 @@ export namespace Prisma {
     readonly title: FieldRef<"Document", 'String'>
     readonly body: FieldRef<"Document", 'String'>
     readonly status: FieldRef<"Document", 'DocumentStatus'>
+    readonly classificationId: FieldRef<"Document", 'String'>
     readonly uri: FieldRef<"Document", 'String'>
     readonly fileType: FieldRef<"Document", 'String'>
     readonly fileSize: FieldRef<"Document", 'Int'>
-    readonly topicId: FieldRef<"Document", 'String'>
     readonly reason: FieldRef<"Document", 'String'>
     readonly uploadedById: FieldRef<"Document", 'String'>
     readonly approvedById: FieldRef<"Document", 'String'>
@@ -72390,22 +72640,22 @@ export namespace Prisma {
   }
 
   /**
-   * Document.topic
+   * Document.classification
    */
-  export type Document$topicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Document$classificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Topic
+     * Select specific fields to fetch from the DocumentClassification
      */
-    select?: TopicSelect<ExtArgs> | null
+    select?: DocumentClassificationSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Topic
+     * Omit specific fields from the DocumentClassification
      */
-    omit?: TopicOmit<ExtArgs> | null
+    omit?: DocumentClassificationOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TopicInclude<ExtArgs> | null
-    where?: TopicWhereInput
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    where?: DocumentClassificationWhereInput
   }
 
   /**
@@ -72428,6 +72678,30 @@ export namespace Prisma {
   }
 
   /**
+   * Document.topics
+   */
+  export type Document$topicsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    where?: DocumentTopicWhereInput
+    orderBy?: DocumentTopicOrderByWithRelationInput | DocumentTopicOrderByWithRelationInput[]
+    cursor?: DocumentTopicWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentTopicScalarFieldEnum | DocumentTopicScalarFieldEnum[]
+  }
+
+  /**
    * Document without action
    */
   export type DocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -72443,6 +72717,1124 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: DocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DocumentTopic
+   */
+
+  export type AggregateDocumentTopic = {
+    _count: DocumentTopicCountAggregateOutputType | null
+    _min: DocumentTopicMinAggregateOutputType | null
+    _max: DocumentTopicMaxAggregateOutputType | null
+  }
+
+  export type DocumentTopicMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    documentId: string | null
+    topicId: string | null
+  }
+
+  export type DocumentTopicMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    documentId: string | null
+    topicId: string | null
+  }
+
+  export type DocumentTopicCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    documentId: number
+    topicId: number
+    _all: number
+  }
+
+
+  export type DocumentTopicMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    documentId?: true
+    topicId?: true
+  }
+
+  export type DocumentTopicMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    documentId?: true
+    topicId?: true
+  }
+
+  export type DocumentTopicCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    documentId?: true
+    topicId?: true
+    _all?: true
+  }
+
+  export type DocumentTopicAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DocumentTopic to aggregate.
+     */
+    where?: DocumentTopicWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentTopics to fetch.
+     */
+    orderBy?: DocumentTopicOrderByWithRelationInput | DocumentTopicOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DocumentTopicWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentTopics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentTopics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DocumentTopics
+    **/
+    _count?: true | DocumentTopicCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DocumentTopicMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DocumentTopicMaxAggregateInputType
+  }
+
+  export type GetDocumentTopicAggregateType<T extends DocumentTopicAggregateArgs> = {
+        [P in keyof T & keyof AggregateDocumentTopic]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDocumentTopic[P]>
+      : GetScalarType<T[P], AggregateDocumentTopic[P]>
+  }
+
+
+
+
+  export type DocumentTopicGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentTopicWhereInput
+    orderBy?: DocumentTopicOrderByWithAggregationInput | DocumentTopicOrderByWithAggregationInput[]
+    by: DocumentTopicScalarFieldEnum[] | DocumentTopicScalarFieldEnum
+    having?: DocumentTopicScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DocumentTopicCountAggregateInputType | true
+    _min?: DocumentTopicMinAggregateInputType
+    _max?: DocumentTopicMaxAggregateInputType
+  }
+
+  export type DocumentTopicGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    documentId: string
+    topicId: string
+    _count: DocumentTopicCountAggregateOutputType | null
+    _min: DocumentTopicMinAggregateOutputType | null
+    _max: DocumentTopicMaxAggregateOutputType | null
+  }
+
+  type GetDocumentTopicGroupByPayload<T extends DocumentTopicGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DocumentTopicGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DocumentTopicGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DocumentTopicGroupByOutputType[P]>
+            : GetScalarType<T[P], DocumentTopicGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DocumentTopicSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    documentId?: boolean
+    topicId?: boolean
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
+    topic?: boolean | TopicDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["documentTopic"]>
+
+  export type DocumentTopicSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    documentId?: boolean
+    topicId?: boolean
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
+    topic?: boolean | TopicDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["documentTopic"]>
+
+  export type DocumentTopicSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    documentId?: boolean
+    topicId?: boolean
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
+    topic?: boolean | TopicDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["documentTopic"]>
+
+  export type DocumentTopicSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    documentId?: boolean
+    topicId?: boolean
+  }
+
+  export type DocumentTopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "documentId" | "topicId", ExtArgs["result"]["documentTopic"]>
+  export type DocumentTopicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
+    topic?: boolean | TopicDefaultArgs<ExtArgs>
+  }
+  export type DocumentTopicIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
+    topic?: boolean | TopicDefaultArgs<ExtArgs>
+  }
+  export type DocumentTopicIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
+    topic?: boolean | TopicDefaultArgs<ExtArgs>
+  }
+
+  export type $DocumentTopicPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DocumentTopic"
+    objects: {
+      document: Prisma.$DocumentPayload<ExtArgs>
+      topic: Prisma.$TopicPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      documentId: string
+      topicId: string
+    }, ExtArgs["result"]["documentTopic"]>
+    composites: {}
+  }
+
+  type DocumentTopicGetPayload<S extends boolean | null | undefined | DocumentTopicDefaultArgs> = $Result.GetResult<Prisma.$DocumentTopicPayload, S>
+
+  type DocumentTopicCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DocumentTopicFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DocumentTopicCountAggregateInputType | true
+    }
+
+  export interface DocumentTopicDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DocumentTopic'], meta: { name: 'DocumentTopic' } }
+    /**
+     * Find zero or one DocumentTopic that matches the filter.
+     * @param {DocumentTopicFindUniqueArgs} args - Arguments to find a DocumentTopic
+     * @example
+     * // Get one DocumentTopic
+     * const documentTopic = await prisma.documentTopic.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DocumentTopicFindUniqueArgs>(args: SelectSubset<T, DocumentTopicFindUniqueArgs<ExtArgs>>): Prisma__DocumentTopicClient<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DocumentTopic that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DocumentTopicFindUniqueOrThrowArgs} args - Arguments to find a DocumentTopic
+     * @example
+     * // Get one DocumentTopic
+     * const documentTopic = await prisma.documentTopic.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DocumentTopicFindUniqueOrThrowArgs>(args: SelectSubset<T, DocumentTopicFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DocumentTopicClient<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DocumentTopic that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentTopicFindFirstArgs} args - Arguments to find a DocumentTopic
+     * @example
+     * // Get one DocumentTopic
+     * const documentTopic = await prisma.documentTopic.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DocumentTopicFindFirstArgs>(args?: SelectSubset<T, DocumentTopicFindFirstArgs<ExtArgs>>): Prisma__DocumentTopicClient<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DocumentTopic that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentTopicFindFirstOrThrowArgs} args - Arguments to find a DocumentTopic
+     * @example
+     * // Get one DocumentTopic
+     * const documentTopic = await prisma.documentTopic.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DocumentTopicFindFirstOrThrowArgs>(args?: SelectSubset<T, DocumentTopicFindFirstOrThrowArgs<ExtArgs>>): Prisma__DocumentTopicClient<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DocumentTopics that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentTopicFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DocumentTopics
+     * const documentTopics = await prisma.documentTopic.findMany()
+     * 
+     * // Get first 10 DocumentTopics
+     * const documentTopics = await prisma.documentTopic.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const documentTopicWithIdOnly = await prisma.documentTopic.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DocumentTopicFindManyArgs>(args?: SelectSubset<T, DocumentTopicFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DocumentTopic.
+     * @param {DocumentTopicCreateArgs} args - Arguments to create a DocumentTopic.
+     * @example
+     * // Create one DocumentTopic
+     * const DocumentTopic = await prisma.documentTopic.create({
+     *   data: {
+     *     // ... data to create a DocumentTopic
+     *   }
+     * })
+     * 
+     */
+    create<T extends DocumentTopicCreateArgs>(args: SelectSubset<T, DocumentTopicCreateArgs<ExtArgs>>): Prisma__DocumentTopicClient<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DocumentTopics.
+     * @param {DocumentTopicCreateManyArgs} args - Arguments to create many DocumentTopics.
+     * @example
+     * // Create many DocumentTopics
+     * const documentTopic = await prisma.documentTopic.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DocumentTopicCreateManyArgs>(args?: SelectSubset<T, DocumentTopicCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DocumentTopics and returns the data saved in the database.
+     * @param {DocumentTopicCreateManyAndReturnArgs} args - Arguments to create many DocumentTopics.
+     * @example
+     * // Create many DocumentTopics
+     * const documentTopic = await prisma.documentTopic.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DocumentTopics and only return the `id`
+     * const documentTopicWithIdOnly = await prisma.documentTopic.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DocumentTopicCreateManyAndReturnArgs>(args?: SelectSubset<T, DocumentTopicCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DocumentTopic.
+     * @param {DocumentTopicDeleteArgs} args - Arguments to delete one DocumentTopic.
+     * @example
+     * // Delete one DocumentTopic
+     * const DocumentTopic = await prisma.documentTopic.delete({
+     *   where: {
+     *     // ... filter to delete one DocumentTopic
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DocumentTopicDeleteArgs>(args: SelectSubset<T, DocumentTopicDeleteArgs<ExtArgs>>): Prisma__DocumentTopicClient<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DocumentTopic.
+     * @param {DocumentTopicUpdateArgs} args - Arguments to update one DocumentTopic.
+     * @example
+     * // Update one DocumentTopic
+     * const documentTopic = await prisma.documentTopic.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DocumentTopicUpdateArgs>(args: SelectSubset<T, DocumentTopicUpdateArgs<ExtArgs>>): Prisma__DocumentTopicClient<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DocumentTopics.
+     * @param {DocumentTopicDeleteManyArgs} args - Arguments to filter DocumentTopics to delete.
+     * @example
+     * // Delete a few DocumentTopics
+     * const { count } = await prisma.documentTopic.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DocumentTopicDeleteManyArgs>(args?: SelectSubset<T, DocumentTopicDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DocumentTopics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentTopicUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DocumentTopics
+     * const documentTopic = await prisma.documentTopic.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DocumentTopicUpdateManyArgs>(args: SelectSubset<T, DocumentTopicUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DocumentTopics and returns the data updated in the database.
+     * @param {DocumentTopicUpdateManyAndReturnArgs} args - Arguments to update many DocumentTopics.
+     * @example
+     * // Update many DocumentTopics
+     * const documentTopic = await prisma.documentTopic.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DocumentTopics and only return the `id`
+     * const documentTopicWithIdOnly = await prisma.documentTopic.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DocumentTopicUpdateManyAndReturnArgs>(args: SelectSubset<T, DocumentTopicUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DocumentTopic.
+     * @param {DocumentTopicUpsertArgs} args - Arguments to update or create a DocumentTopic.
+     * @example
+     * // Update or create a DocumentTopic
+     * const documentTopic = await prisma.documentTopic.upsert({
+     *   create: {
+     *     // ... data to create a DocumentTopic
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DocumentTopic we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DocumentTopicUpsertArgs>(args: SelectSubset<T, DocumentTopicUpsertArgs<ExtArgs>>): Prisma__DocumentTopicClient<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DocumentTopics.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentTopicCountArgs} args - Arguments to filter DocumentTopics to count.
+     * @example
+     * // Count the number of DocumentTopics
+     * const count = await prisma.documentTopic.count({
+     *   where: {
+     *     // ... the filter for the DocumentTopics we want to count
+     *   }
+     * })
+    **/
+    count<T extends DocumentTopicCountArgs>(
+      args?: Subset<T, DocumentTopicCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DocumentTopicCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DocumentTopic.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentTopicAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DocumentTopicAggregateArgs>(args: Subset<T, DocumentTopicAggregateArgs>): Prisma.PrismaPromise<GetDocumentTopicAggregateType<T>>
+
+    /**
+     * Group by DocumentTopic.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentTopicGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DocumentTopicGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DocumentTopicGroupByArgs['orderBy'] }
+        : { orderBy?: DocumentTopicGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DocumentTopicGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDocumentTopicGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DocumentTopic model
+   */
+  readonly fields: DocumentTopicFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DocumentTopic.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DocumentTopicClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    document<T extends DocumentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DocumentDefaultArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    topic<T extends TopicDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TopicDefaultArgs<ExtArgs>>): Prisma__TopicClient<$Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DocumentTopic model
+   */
+  interface DocumentTopicFieldRefs {
+    readonly id: FieldRef<"DocumentTopic", 'String'>
+    readonly code: FieldRef<"DocumentTopic", 'String'>
+    readonly active: FieldRef<"DocumentTopic", 'Boolean'>
+    readonly description: FieldRef<"DocumentTopic", 'String'>
+    readonly deletedAt: FieldRef<"DocumentTopic", 'DateTime'>
+    readonly createdAt: FieldRef<"DocumentTopic", 'DateTime'>
+    readonly updatedAt: FieldRef<"DocumentTopic", 'DateTime'>
+    readonly documentId: FieldRef<"DocumentTopic", 'String'>
+    readonly topicId: FieldRef<"DocumentTopic", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DocumentTopic findUnique
+   */
+  export type DocumentTopicFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentTopic to fetch.
+     */
+    where: DocumentTopicWhereUniqueInput
+  }
+
+  /**
+   * DocumentTopic findUniqueOrThrow
+   */
+  export type DocumentTopicFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentTopic to fetch.
+     */
+    where: DocumentTopicWhereUniqueInput
+  }
+
+  /**
+   * DocumentTopic findFirst
+   */
+  export type DocumentTopicFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentTopic to fetch.
+     */
+    where?: DocumentTopicWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentTopics to fetch.
+     */
+    orderBy?: DocumentTopicOrderByWithRelationInput | DocumentTopicOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DocumentTopics.
+     */
+    cursor?: DocumentTopicWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentTopics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentTopics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DocumentTopics.
+     */
+    distinct?: DocumentTopicScalarFieldEnum | DocumentTopicScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentTopic findFirstOrThrow
+   */
+  export type DocumentTopicFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentTopic to fetch.
+     */
+    where?: DocumentTopicWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentTopics to fetch.
+     */
+    orderBy?: DocumentTopicOrderByWithRelationInput | DocumentTopicOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DocumentTopics.
+     */
+    cursor?: DocumentTopicWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentTopics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentTopics.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DocumentTopics.
+     */
+    distinct?: DocumentTopicScalarFieldEnum | DocumentTopicScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentTopic findMany
+   */
+  export type DocumentTopicFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentTopics to fetch.
+     */
+    where?: DocumentTopicWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentTopics to fetch.
+     */
+    orderBy?: DocumentTopicOrderByWithRelationInput | DocumentTopicOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DocumentTopics.
+     */
+    cursor?: DocumentTopicWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentTopics from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentTopics.
+     */
+    skip?: number
+    distinct?: DocumentTopicScalarFieldEnum | DocumentTopicScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentTopic create
+   */
+  export type DocumentTopicCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DocumentTopic.
+     */
+    data: XOR<DocumentTopicCreateInput, DocumentTopicUncheckedCreateInput>
+  }
+
+  /**
+   * DocumentTopic createMany
+   */
+  export type DocumentTopicCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DocumentTopics.
+     */
+    data: DocumentTopicCreateManyInput | DocumentTopicCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DocumentTopic createManyAndReturn
+   */
+  export type DocumentTopicCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * The data used to create many DocumentTopics.
+     */
+    data: DocumentTopicCreateManyInput | DocumentTopicCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DocumentTopic update
+   */
+  export type DocumentTopicUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DocumentTopic.
+     */
+    data: XOR<DocumentTopicUpdateInput, DocumentTopicUncheckedUpdateInput>
+    /**
+     * Choose, which DocumentTopic to update.
+     */
+    where: DocumentTopicWhereUniqueInput
+  }
+
+  /**
+   * DocumentTopic updateMany
+   */
+  export type DocumentTopicUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DocumentTopics.
+     */
+    data: XOR<DocumentTopicUpdateManyMutationInput, DocumentTopicUncheckedUpdateManyInput>
+    /**
+     * Filter which DocumentTopics to update
+     */
+    where?: DocumentTopicWhereInput
+    /**
+     * Limit how many DocumentTopics to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DocumentTopic updateManyAndReturn
+   */
+  export type DocumentTopicUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * The data used to update DocumentTopics.
+     */
+    data: XOR<DocumentTopicUpdateManyMutationInput, DocumentTopicUncheckedUpdateManyInput>
+    /**
+     * Filter which DocumentTopics to update
+     */
+    where?: DocumentTopicWhereInput
+    /**
+     * Limit how many DocumentTopics to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DocumentTopic upsert
+   */
+  export type DocumentTopicUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DocumentTopic to update in case it exists.
+     */
+    where: DocumentTopicWhereUniqueInput
+    /**
+     * In case the DocumentTopic found by the `where` argument doesn't exist, create a new DocumentTopic with this data.
+     */
+    create: XOR<DocumentTopicCreateInput, DocumentTopicUncheckedCreateInput>
+    /**
+     * In case the DocumentTopic was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DocumentTopicUpdateInput, DocumentTopicUncheckedUpdateInput>
+  }
+
+  /**
+   * DocumentTopic delete
+   */
+  export type DocumentTopicDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
+    /**
+     * Filter which DocumentTopic to delete.
+     */
+    where: DocumentTopicWhereUniqueInput
+  }
+
+  /**
+   * DocumentTopic deleteMany
+   */
+  export type DocumentTopicDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DocumentTopics to delete
+     */
+    where?: DocumentTopicWhereInput
+    /**
+     * Limit how many DocumentTopics to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DocumentTopic without action
+   */
+  export type DocumentTopicDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentTopic
+     */
+    select?: DocumentTopicSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentTopic
+     */
+    omit?: DocumentTopicOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentTopicInclude<ExtArgs> | null
   }
 
 
@@ -78696,7 +80088,7 @@ export namespace Prisma {
   export type $TopicPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Topic"
     objects: {
-      documents: Prisma.$DocumentPayload<ExtArgs>[]
+      documents: Prisma.$DocumentTopicPayload<ExtArgs>[]
       faqs: Prisma.$FAQPayload<ExtArgs>[]
       prompts: Prisma.$PromptPayload<ExtArgs>[]
       conversations: Prisma.$ConversationPayload<ExtArgs>[]
@@ -79105,7 +80497,7 @@ export namespace Prisma {
    */
   export interface Prisma__TopicClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    documents<T extends Topic$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documents<T extends Topic$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentTopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     faqs<T extends Topic$faqsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$faqsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FAQPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     prompts<T extends Topic$promptsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$promptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PromptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     conversations<T extends Topic$conversationsArgs<ExtArgs> = {}>(args?: Subset<T, Topic$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -79539,23 +80931,23 @@ export namespace Prisma {
    */
   export type Topic$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Document
+     * Select specific fields to fetch from the DocumentTopic
      */
-    select?: DocumentSelect<ExtArgs> | null
+    select?: DocumentTopicSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Document
+     * Omit specific fields from the DocumentTopic
      */
-    omit?: DocumentOmit<ExtArgs> | null
+    omit?: DocumentTopicOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: DocumentInclude<ExtArgs> | null
-    where?: DocumentWhereInput
-    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
-    cursor?: DocumentWhereUniqueInput
+    include?: DocumentTopicInclude<ExtArgs> | null
+    where?: DocumentTopicWhereInput
+    orderBy?: DocumentTopicOrderByWithRelationInput | DocumentTopicOrderByWithRelationInput[]
+    cursor?: DocumentTopicWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+    distinct?: DocumentTopicScalarFieldEnum | DocumentTopicScalarFieldEnum[]
   }
 
   /**
@@ -79646,6 +81038,1115 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: TopicInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model DocumentClassification
+   */
+
+  export type AggregateDocumentClassification = {
+    _count: DocumentClassificationCountAggregateOutputType | null
+    _min: DocumentClassificationMinAggregateOutputType | null
+    _max: DocumentClassificationMaxAggregateOutputType | null
+  }
+
+  export type DocumentClassificationMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    name: string | null
+  }
+
+  export type DocumentClassificationMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    active: boolean | null
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    name: string | null
+  }
+
+  export type DocumentClassificationCountAggregateOutputType = {
+    id: number
+    code: number
+    active: number
+    description: number
+    deletedAt: number
+    createdAt: number
+    updatedAt: number
+    name: number
+    _all: number
+  }
+
+
+  export type DocumentClassificationMinAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    name?: true
+  }
+
+  export type DocumentClassificationMaxAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    name?: true
+  }
+
+  export type DocumentClassificationCountAggregateInputType = {
+    id?: true
+    code?: true
+    active?: true
+    description?: true
+    deletedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    name?: true
+    _all?: true
+  }
+
+  export type DocumentClassificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DocumentClassification to aggregate.
+     */
+    where?: DocumentClassificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentClassifications to fetch.
+     */
+    orderBy?: DocumentClassificationOrderByWithRelationInput | DocumentClassificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DocumentClassificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentClassifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentClassifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DocumentClassifications
+    **/
+    _count?: true | DocumentClassificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DocumentClassificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DocumentClassificationMaxAggregateInputType
+  }
+
+  export type GetDocumentClassificationAggregateType<T extends DocumentClassificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateDocumentClassification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDocumentClassification[P]>
+      : GetScalarType<T[P], AggregateDocumentClassification[P]>
+  }
+
+
+
+
+  export type DocumentClassificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DocumentClassificationWhereInput
+    orderBy?: DocumentClassificationOrderByWithAggregationInput | DocumentClassificationOrderByWithAggregationInput[]
+    by: DocumentClassificationScalarFieldEnum[] | DocumentClassificationScalarFieldEnum
+    having?: DocumentClassificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DocumentClassificationCountAggregateInputType | true
+    _min?: DocumentClassificationMinAggregateInputType
+    _max?: DocumentClassificationMaxAggregateInputType
+  }
+
+  export type DocumentClassificationGroupByOutputType = {
+    id: string
+    code: string | null
+    active: boolean
+    description: string | null
+    deletedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    name: string
+    _count: DocumentClassificationCountAggregateOutputType | null
+    _min: DocumentClassificationMinAggregateOutputType | null
+    _max: DocumentClassificationMaxAggregateOutputType | null
+  }
+
+  type GetDocumentClassificationGroupByPayload<T extends DocumentClassificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DocumentClassificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DocumentClassificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DocumentClassificationGroupByOutputType[P]>
+            : GetScalarType<T[P], DocumentClassificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DocumentClassificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    name?: boolean
+    documents?: boolean | DocumentClassification$documentsArgs<ExtArgs>
+    _count?: boolean | DocumentClassificationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["documentClassification"]>
+
+  export type DocumentClassificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["documentClassification"]>
+
+  export type DocumentClassificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["documentClassification"]>
+
+  export type DocumentClassificationSelectScalar = {
+    id?: boolean
+    code?: boolean
+    active?: boolean
+    description?: boolean
+    deletedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    name?: boolean
+  }
+
+  export type DocumentClassificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name", ExtArgs["result"]["documentClassification"]>
+  export type DocumentClassificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    documents?: boolean | DocumentClassification$documentsArgs<ExtArgs>
+    _count?: boolean | DocumentClassificationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type DocumentClassificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type DocumentClassificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $DocumentClassificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DocumentClassification"
+    objects: {
+      documents: Prisma.$DocumentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string | null
+      active: boolean
+      description: string | null
+      deletedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+      name: string
+    }, ExtArgs["result"]["documentClassification"]>
+    composites: {}
+  }
+
+  type DocumentClassificationGetPayload<S extends boolean | null | undefined | DocumentClassificationDefaultArgs> = $Result.GetResult<Prisma.$DocumentClassificationPayload, S>
+
+  type DocumentClassificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DocumentClassificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DocumentClassificationCountAggregateInputType | true
+    }
+
+  export interface DocumentClassificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DocumentClassification'], meta: { name: 'DocumentClassification' } }
+    /**
+     * Find zero or one DocumentClassification that matches the filter.
+     * @param {DocumentClassificationFindUniqueArgs} args - Arguments to find a DocumentClassification
+     * @example
+     * // Get one DocumentClassification
+     * const documentClassification = await prisma.documentClassification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DocumentClassificationFindUniqueArgs>(args: SelectSubset<T, DocumentClassificationFindUniqueArgs<ExtArgs>>): Prisma__DocumentClassificationClient<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DocumentClassification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DocumentClassificationFindUniqueOrThrowArgs} args - Arguments to find a DocumentClassification
+     * @example
+     * // Get one DocumentClassification
+     * const documentClassification = await prisma.documentClassification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DocumentClassificationFindUniqueOrThrowArgs>(args: SelectSubset<T, DocumentClassificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DocumentClassificationClient<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DocumentClassification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentClassificationFindFirstArgs} args - Arguments to find a DocumentClassification
+     * @example
+     * // Get one DocumentClassification
+     * const documentClassification = await prisma.documentClassification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DocumentClassificationFindFirstArgs>(args?: SelectSubset<T, DocumentClassificationFindFirstArgs<ExtArgs>>): Prisma__DocumentClassificationClient<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DocumentClassification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentClassificationFindFirstOrThrowArgs} args - Arguments to find a DocumentClassification
+     * @example
+     * // Get one DocumentClassification
+     * const documentClassification = await prisma.documentClassification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DocumentClassificationFindFirstOrThrowArgs>(args?: SelectSubset<T, DocumentClassificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__DocumentClassificationClient<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DocumentClassifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentClassificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DocumentClassifications
+     * const documentClassifications = await prisma.documentClassification.findMany()
+     * 
+     * // Get first 10 DocumentClassifications
+     * const documentClassifications = await prisma.documentClassification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const documentClassificationWithIdOnly = await prisma.documentClassification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DocumentClassificationFindManyArgs>(args?: SelectSubset<T, DocumentClassificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DocumentClassification.
+     * @param {DocumentClassificationCreateArgs} args - Arguments to create a DocumentClassification.
+     * @example
+     * // Create one DocumentClassification
+     * const DocumentClassification = await prisma.documentClassification.create({
+     *   data: {
+     *     // ... data to create a DocumentClassification
+     *   }
+     * })
+     * 
+     */
+    create<T extends DocumentClassificationCreateArgs>(args: SelectSubset<T, DocumentClassificationCreateArgs<ExtArgs>>): Prisma__DocumentClassificationClient<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DocumentClassifications.
+     * @param {DocumentClassificationCreateManyArgs} args - Arguments to create many DocumentClassifications.
+     * @example
+     * // Create many DocumentClassifications
+     * const documentClassification = await prisma.documentClassification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DocumentClassificationCreateManyArgs>(args?: SelectSubset<T, DocumentClassificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DocumentClassifications and returns the data saved in the database.
+     * @param {DocumentClassificationCreateManyAndReturnArgs} args - Arguments to create many DocumentClassifications.
+     * @example
+     * // Create many DocumentClassifications
+     * const documentClassification = await prisma.documentClassification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DocumentClassifications and only return the `id`
+     * const documentClassificationWithIdOnly = await prisma.documentClassification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DocumentClassificationCreateManyAndReturnArgs>(args?: SelectSubset<T, DocumentClassificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DocumentClassification.
+     * @param {DocumentClassificationDeleteArgs} args - Arguments to delete one DocumentClassification.
+     * @example
+     * // Delete one DocumentClassification
+     * const DocumentClassification = await prisma.documentClassification.delete({
+     *   where: {
+     *     // ... filter to delete one DocumentClassification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DocumentClassificationDeleteArgs>(args: SelectSubset<T, DocumentClassificationDeleteArgs<ExtArgs>>): Prisma__DocumentClassificationClient<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DocumentClassification.
+     * @param {DocumentClassificationUpdateArgs} args - Arguments to update one DocumentClassification.
+     * @example
+     * // Update one DocumentClassification
+     * const documentClassification = await prisma.documentClassification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DocumentClassificationUpdateArgs>(args: SelectSubset<T, DocumentClassificationUpdateArgs<ExtArgs>>): Prisma__DocumentClassificationClient<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DocumentClassifications.
+     * @param {DocumentClassificationDeleteManyArgs} args - Arguments to filter DocumentClassifications to delete.
+     * @example
+     * // Delete a few DocumentClassifications
+     * const { count } = await prisma.documentClassification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DocumentClassificationDeleteManyArgs>(args?: SelectSubset<T, DocumentClassificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DocumentClassifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentClassificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DocumentClassifications
+     * const documentClassification = await prisma.documentClassification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DocumentClassificationUpdateManyArgs>(args: SelectSubset<T, DocumentClassificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DocumentClassifications and returns the data updated in the database.
+     * @param {DocumentClassificationUpdateManyAndReturnArgs} args - Arguments to update many DocumentClassifications.
+     * @example
+     * // Update many DocumentClassifications
+     * const documentClassification = await prisma.documentClassification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DocumentClassifications and only return the `id`
+     * const documentClassificationWithIdOnly = await prisma.documentClassification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DocumentClassificationUpdateManyAndReturnArgs>(args: SelectSubset<T, DocumentClassificationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DocumentClassification.
+     * @param {DocumentClassificationUpsertArgs} args - Arguments to update or create a DocumentClassification.
+     * @example
+     * // Update or create a DocumentClassification
+     * const documentClassification = await prisma.documentClassification.upsert({
+     *   create: {
+     *     // ... data to create a DocumentClassification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DocumentClassification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DocumentClassificationUpsertArgs>(args: SelectSubset<T, DocumentClassificationUpsertArgs<ExtArgs>>): Prisma__DocumentClassificationClient<$Result.GetResult<Prisma.$DocumentClassificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DocumentClassifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentClassificationCountArgs} args - Arguments to filter DocumentClassifications to count.
+     * @example
+     * // Count the number of DocumentClassifications
+     * const count = await prisma.documentClassification.count({
+     *   where: {
+     *     // ... the filter for the DocumentClassifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends DocumentClassificationCountArgs>(
+      args?: Subset<T, DocumentClassificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DocumentClassificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DocumentClassification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentClassificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DocumentClassificationAggregateArgs>(args: Subset<T, DocumentClassificationAggregateArgs>): Prisma.PrismaPromise<GetDocumentClassificationAggregateType<T>>
+
+    /**
+     * Group by DocumentClassification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DocumentClassificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DocumentClassificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DocumentClassificationGroupByArgs['orderBy'] }
+        : { orderBy?: DocumentClassificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DocumentClassificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDocumentClassificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DocumentClassification model
+   */
+  readonly fields: DocumentClassificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DocumentClassification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DocumentClassificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    documents<T extends DocumentClassification$documentsArgs<ExtArgs> = {}>(args?: Subset<T, DocumentClassification$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DocumentClassification model
+   */
+  interface DocumentClassificationFieldRefs {
+    readonly id: FieldRef<"DocumentClassification", 'String'>
+    readonly code: FieldRef<"DocumentClassification", 'String'>
+    readonly active: FieldRef<"DocumentClassification", 'Boolean'>
+    readonly description: FieldRef<"DocumentClassification", 'String'>
+    readonly deletedAt: FieldRef<"DocumentClassification", 'DateTime'>
+    readonly createdAt: FieldRef<"DocumentClassification", 'DateTime'>
+    readonly updatedAt: FieldRef<"DocumentClassification", 'DateTime'>
+    readonly name: FieldRef<"DocumentClassification", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DocumentClassification findUnique
+   */
+  export type DocumentClassificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentClassification to fetch.
+     */
+    where: DocumentClassificationWhereUniqueInput
+  }
+
+  /**
+   * DocumentClassification findUniqueOrThrow
+   */
+  export type DocumentClassificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentClassification to fetch.
+     */
+    where: DocumentClassificationWhereUniqueInput
+  }
+
+  /**
+   * DocumentClassification findFirst
+   */
+  export type DocumentClassificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentClassification to fetch.
+     */
+    where?: DocumentClassificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentClassifications to fetch.
+     */
+    orderBy?: DocumentClassificationOrderByWithRelationInput | DocumentClassificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DocumentClassifications.
+     */
+    cursor?: DocumentClassificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentClassifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentClassifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DocumentClassifications.
+     */
+    distinct?: DocumentClassificationScalarFieldEnum | DocumentClassificationScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentClassification findFirstOrThrow
+   */
+  export type DocumentClassificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentClassification to fetch.
+     */
+    where?: DocumentClassificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentClassifications to fetch.
+     */
+    orderBy?: DocumentClassificationOrderByWithRelationInput | DocumentClassificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DocumentClassifications.
+     */
+    cursor?: DocumentClassificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentClassifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentClassifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DocumentClassifications.
+     */
+    distinct?: DocumentClassificationScalarFieldEnum | DocumentClassificationScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentClassification findMany
+   */
+  export type DocumentClassificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    /**
+     * Filter, which DocumentClassifications to fetch.
+     */
+    where?: DocumentClassificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DocumentClassifications to fetch.
+     */
+    orderBy?: DocumentClassificationOrderByWithRelationInput | DocumentClassificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DocumentClassifications.
+     */
+    cursor?: DocumentClassificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DocumentClassifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DocumentClassifications.
+     */
+    skip?: number
+    distinct?: DocumentClassificationScalarFieldEnum | DocumentClassificationScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentClassification create
+   */
+  export type DocumentClassificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DocumentClassification.
+     */
+    data: XOR<DocumentClassificationCreateInput, DocumentClassificationUncheckedCreateInput>
+  }
+
+  /**
+   * DocumentClassification createMany
+   */
+  export type DocumentClassificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DocumentClassifications.
+     */
+    data: DocumentClassificationCreateManyInput | DocumentClassificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DocumentClassification createManyAndReturn
+   */
+  export type DocumentClassificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * The data used to create many DocumentClassifications.
+     */
+    data: DocumentClassificationCreateManyInput | DocumentClassificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DocumentClassification update
+   */
+  export type DocumentClassificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DocumentClassification.
+     */
+    data: XOR<DocumentClassificationUpdateInput, DocumentClassificationUncheckedUpdateInput>
+    /**
+     * Choose, which DocumentClassification to update.
+     */
+    where: DocumentClassificationWhereUniqueInput
+  }
+
+  /**
+   * DocumentClassification updateMany
+   */
+  export type DocumentClassificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DocumentClassifications.
+     */
+    data: XOR<DocumentClassificationUpdateManyMutationInput, DocumentClassificationUncheckedUpdateManyInput>
+    /**
+     * Filter which DocumentClassifications to update
+     */
+    where?: DocumentClassificationWhereInput
+    /**
+     * Limit how many DocumentClassifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DocumentClassification updateManyAndReturn
+   */
+  export type DocumentClassificationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * The data used to update DocumentClassifications.
+     */
+    data: XOR<DocumentClassificationUpdateManyMutationInput, DocumentClassificationUncheckedUpdateManyInput>
+    /**
+     * Filter which DocumentClassifications to update
+     */
+    where?: DocumentClassificationWhereInput
+    /**
+     * Limit how many DocumentClassifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DocumentClassification upsert
+   */
+  export type DocumentClassificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DocumentClassification to update in case it exists.
+     */
+    where: DocumentClassificationWhereUniqueInput
+    /**
+     * In case the DocumentClassification found by the `where` argument doesn't exist, create a new DocumentClassification with this data.
+     */
+    create: XOR<DocumentClassificationCreateInput, DocumentClassificationUncheckedCreateInput>
+    /**
+     * In case the DocumentClassification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DocumentClassificationUpdateInput, DocumentClassificationUncheckedUpdateInput>
+  }
+
+  /**
+   * DocumentClassification delete
+   */
+  export type DocumentClassificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
+    /**
+     * Filter which DocumentClassification to delete.
+     */
+    where: DocumentClassificationWhereUniqueInput
+  }
+
+  /**
+   * DocumentClassification deleteMany
+   */
+  export type DocumentClassificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DocumentClassifications to delete
+     */
+    where?: DocumentClassificationWhereInput
+    /**
+     * Limit how many DocumentClassifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DocumentClassification.documents
+   */
+  export type DocumentClassification$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Document
+     */
+    select?: DocumentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Document
+     */
+    omit?: DocumentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentInclude<ExtArgs> | null
+    where?: DocumentWhereInput
+    orderBy?: DocumentOrderByWithRelationInput | DocumentOrderByWithRelationInput[]
+    cursor?: DocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DocumentScalarFieldEnum | DocumentScalarFieldEnum[]
+  }
+
+  /**
+   * DocumentClassification without action
+   */
+  export type DocumentClassificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentClassification
+     */
+    select?: DocumentClassificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DocumentClassification
+     */
+    omit?: DocumentClassificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DocumentClassificationInclude<ExtArgs> | null
   }
 
 
@@ -332157,16 +334658,31 @@ export namespace Prisma {
     title: 'title',
     body: 'body',
     status: 'status',
+    classificationId: 'classificationId',
     uri: 'uri',
     fileType: 'fileType',
     fileSize: 'fileSize',
-    topicId: 'topicId',
     reason: 'reason',
     uploadedById: 'uploadedById',
     approvedById: 'approvedById'
   };
 
   export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
+
+
+  export const DocumentTopicScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    documentId: 'documentId',
+    topicId: 'topicId'
+  };
+
+  export type DocumentTopicScalarFieldEnum = (typeof DocumentTopicScalarFieldEnum)[keyof typeof DocumentTopicScalarFieldEnum]
 
 
   export const FAQScalarFieldEnum: {
@@ -332270,6 +334786,20 @@ export namespace Prisma {
   };
 
   export type TopicScalarFieldEnum = (typeof TopicScalarFieldEnum)[keyof typeof TopicScalarFieldEnum]
+
+
+  export const DocumentClassificationScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    active: 'active',
+    description: 'description',
+    deletedAt: 'deletedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    name: 'name'
+  };
+
+  export type DocumentClassificationScalarFieldEnum = (typeof DocumentClassificationScalarFieldEnum)[keyof typeof DocumentClassificationScalarFieldEnum]
 
 
   export const DM_CapBacScalarFieldEnum: {
@@ -336650,15 +339180,26 @@ export namespace Prisma {
     description: 'description',
     title: 'title',
     body: 'body',
+    classificationId: 'classificationId',
     uri: 'uri',
     fileType: 'fileType',
-    topicId: 'topicId',
     reason: 'reason',
     uploadedById: 'uploadedById',
     approvedById: 'approvedById'
   };
 
   export type DocumentOrderByRelevanceFieldEnum = (typeof DocumentOrderByRelevanceFieldEnum)[keyof typeof DocumentOrderByRelevanceFieldEnum]
+
+
+  export const DocumentTopicOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    documentId: 'documentId',
+    topicId: 'topicId'
+  };
+
+  export type DocumentTopicOrderByRelevanceFieldEnum = (typeof DocumentTopicOrderByRelevanceFieldEnum)[keyof typeof DocumentTopicOrderByRelevanceFieldEnum]
 
 
   export const FAQOrderByRelevanceFieldEnum: {
@@ -336734,6 +339275,16 @@ export namespace Prisma {
   };
 
   export type TopicOrderByRelevanceFieldEnum = (typeof TopicOrderByRelevanceFieldEnum)[keyof typeof TopicOrderByRelevanceFieldEnum]
+
+
+  export const DocumentClassificationOrderByRelevanceFieldEnum: {
+    id: 'id',
+    code: 'code',
+    description: 'description',
+    name: 'name'
+  };
+
+  export type DocumentClassificationOrderByRelevanceFieldEnum = (typeof DocumentClassificationOrderByRelevanceFieldEnum)[keyof typeof DocumentClassificationOrderByRelevanceFieldEnum]
 
 
   export const DM_CapBacOrderByRelevanceFieldEnum: {
@@ -343836,16 +346387,17 @@ export namespace Prisma {
     title?: StringNullableFilter<"Document"> | string | null
     body?: StringNullableFilter<"Document"> | string | null
     status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
+    classificationId?: StringNullableFilter<"Document"> | string | null
     uri?: StringNullableFilter<"Document"> | string | null
     fileType?: StringNullableFilter<"Document"> | string | null
     fileSize?: IntNullableFilter<"Document"> | number | null
-    topicId?: StringNullableFilter<"Document"> | string | null
     reason?: StringNullableFilter<"Document"> | string | null
     uploadedById?: StringFilter<"Document"> | string
     approvedById?: StringNullableFilter<"Document"> | string | null
-    topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
+    classification?: XOR<DocumentClassificationNullableScalarRelationFilter, DocumentClassificationWhereInput> | null
     uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+    topics?: DocumentTopicListRelationFilter
   }
 
   export type DocumentOrderByWithRelationInput = {
@@ -343859,16 +346411,17 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder
     body?: SortOrderInput | SortOrder
     status?: SortOrder
+    classificationId?: SortOrderInput | SortOrder
     uri?: SortOrderInput | SortOrder
     fileType?: SortOrderInput | SortOrder
     fileSize?: SortOrderInput | SortOrder
-    topicId?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     uploadedById?: SortOrder
     approvedById?: SortOrderInput | SortOrder
-    topic?: TopicOrderByWithRelationInput
+    classification?: DocumentClassificationOrderByWithRelationInput
     uploadedBy?: UserProfileOrderByWithRelationInput
     approvedBy?: UserProfileOrderByWithRelationInput
+    topics?: DocumentTopicOrderByRelationAggregateInput
     _relevance?: DocumentOrderByRelevanceInput
   }
 
@@ -343886,16 +346439,17 @@ export namespace Prisma {
     title?: StringNullableFilter<"Document"> | string | null
     body?: StringNullableFilter<"Document"> | string | null
     status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
+    classificationId?: StringNullableFilter<"Document"> | string | null
     uri?: StringNullableFilter<"Document"> | string | null
     fileType?: StringNullableFilter<"Document"> | string | null
     fileSize?: IntNullableFilter<"Document"> | number | null
-    topicId?: StringNullableFilter<"Document"> | string | null
     reason?: StringNullableFilter<"Document"> | string | null
     uploadedById?: StringFilter<"Document"> | string
     approvedById?: StringNullableFilter<"Document"> | string | null
-    topic?: XOR<TopicNullableScalarRelationFilter, TopicWhereInput> | null
+    classification?: XOR<DocumentClassificationNullableScalarRelationFilter, DocumentClassificationWhereInput> | null
     uploadedBy?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
     approvedBy?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+    topics?: DocumentTopicListRelationFilter
   }, "id" | "code">
 
   export type DocumentOrderByWithAggregationInput = {
@@ -343909,10 +346463,10 @@ export namespace Prisma {
     title?: SortOrderInput | SortOrder
     body?: SortOrderInput | SortOrder
     status?: SortOrder
+    classificationId?: SortOrderInput | SortOrder
     uri?: SortOrderInput | SortOrder
     fileType?: SortOrderInput | SortOrder
     fileSize?: SortOrderInput | SortOrder
-    topicId?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     uploadedById?: SortOrder
     approvedById?: SortOrderInput | SortOrder
@@ -343937,13 +346491,93 @@ export namespace Prisma {
     title?: StringNullableWithAggregatesFilter<"Document"> | string | null
     body?: StringNullableWithAggregatesFilter<"Document"> | string | null
     status?: EnumDocumentStatusWithAggregatesFilter<"Document"> | $Enums.DocumentStatus
+    classificationId?: StringNullableWithAggregatesFilter<"Document"> | string | null
     uri?: StringNullableWithAggregatesFilter<"Document"> | string | null
     fileType?: StringNullableWithAggregatesFilter<"Document"> | string | null
     fileSize?: IntNullableWithAggregatesFilter<"Document"> | number | null
-    topicId?: StringNullableWithAggregatesFilter<"Document"> | string | null
     reason?: StringNullableWithAggregatesFilter<"Document"> | string | null
     uploadedById?: StringWithAggregatesFilter<"Document"> | string
     approvedById?: StringNullableWithAggregatesFilter<"Document"> | string | null
+  }
+
+  export type DocumentTopicWhereInput = {
+    AND?: DocumentTopicWhereInput | DocumentTopicWhereInput[]
+    OR?: DocumentTopicWhereInput[]
+    NOT?: DocumentTopicWhereInput | DocumentTopicWhereInput[]
+    id?: StringFilter<"DocumentTopic"> | string
+    code?: StringNullableFilter<"DocumentTopic"> | string | null
+    active?: BoolFilter<"DocumentTopic"> | boolean
+    description?: StringNullableFilter<"DocumentTopic"> | string | null
+    deletedAt?: DateTimeNullableFilter<"DocumentTopic"> | Date | string | null
+    createdAt?: DateTimeFilter<"DocumentTopic"> | Date | string
+    updatedAt?: DateTimeFilter<"DocumentTopic"> | Date | string
+    documentId?: StringFilter<"DocumentTopic"> | string
+    topicId?: StringFilter<"DocumentTopic"> | string
+    document?: XOR<DocumentScalarRelationFilter, DocumentWhereInput>
+    topic?: XOR<TopicScalarRelationFilter, TopicWhereInput>
+  }
+
+  export type DocumentTopicOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    documentId?: SortOrder
+    topicId?: SortOrder
+    document?: DocumentOrderByWithRelationInput
+    topic?: TopicOrderByWithRelationInput
+    _relevance?: DocumentTopicOrderByRelevanceInput
+  }
+
+  export type DocumentTopicWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    documentId_topicId?: DocumentTopicDocumentIdTopicIdCompoundUniqueInput
+    AND?: DocumentTopicWhereInput | DocumentTopicWhereInput[]
+    OR?: DocumentTopicWhereInput[]
+    NOT?: DocumentTopicWhereInput | DocumentTopicWhereInput[]
+    active?: BoolFilter<"DocumentTopic"> | boolean
+    description?: StringNullableFilter<"DocumentTopic"> | string | null
+    deletedAt?: DateTimeNullableFilter<"DocumentTopic"> | Date | string | null
+    createdAt?: DateTimeFilter<"DocumentTopic"> | Date | string
+    updatedAt?: DateTimeFilter<"DocumentTopic"> | Date | string
+    documentId?: StringFilter<"DocumentTopic"> | string
+    topicId?: StringFilter<"DocumentTopic"> | string
+    document?: XOR<DocumentScalarRelationFilter, DocumentWhereInput>
+    topic?: XOR<TopicScalarRelationFilter, TopicWhereInput>
+  }, "id" | "code" | "documentId_topicId">
+
+  export type DocumentTopicOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    documentId?: SortOrder
+    topicId?: SortOrder
+    _count?: DocumentTopicCountOrderByAggregateInput
+    _max?: DocumentTopicMaxOrderByAggregateInput
+    _min?: DocumentTopicMinOrderByAggregateInput
+  }
+
+  export type DocumentTopicScalarWhereWithAggregatesInput = {
+    AND?: DocumentTopicScalarWhereWithAggregatesInput | DocumentTopicScalarWhereWithAggregatesInput[]
+    OR?: DocumentTopicScalarWhereWithAggregatesInput[]
+    NOT?: DocumentTopicScalarWhereWithAggregatesInput | DocumentTopicScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DocumentTopic"> | string
+    code?: StringNullableWithAggregatesFilter<"DocumentTopic"> | string | null
+    active?: BoolWithAggregatesFilter<"DocumentTopic"> | boolean
+    description?: StringNullableWithAggregatesFilter<"DocumentTopic"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"DocumentTopic"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DocumentTopic"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DocumentTopic"> | Date | string
+    documentId?: StringWithAggregatesFilter<"DocumentTopic"> | string
+    topicId?: StringWithAggregatesFilter<"DocumentTopic"> | string
   }
 
   export type FAQWhereInput = {
@@ -344424,7 +347058,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Topic"> | Date | string
     name?: StringFilter<"Topic"> | string
     type?: StringFilter<"Topic"> | string
-    documents?: DocumentListRelationFilter
+    documents?: DocumentTopicListRelationFilter
     faqs?: FAQListRelationFilter
     prompts?: PromptListRelationFilter
     conversations?: ConversationListRelationFilter
@@ -344440,7 +347074,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     name?: SortOrder
     type?: SortOrder
-    documents?: DocumentOrderByRelationAggregateInput
+    documents?: DocumentTopicOrderByRelationAggregateInput
     faqs?: FAQOrderByRelationAggregateInput
     prompts?: PromptOrderByRelationAggregateInput
     conversations?: ConversationOrderByRelationAggregateInput
@@ -344460,7 +347094,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Topic"> | Date | string
     name?: StringFilter<"Topic"> | string
     type?: StringFilter<"Topic"> | string
-    documents?: DocumentListRelationFilter
+    documents?: DocumentTopicListRelationFilter
     faqs?: FAQListRelationFilter
     prompts?: PromptListRelationFilter
     conversations?: ConversationListRelationFilter
@@ -344494,6 +347128,77 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Topic"> | Date | string
     name?: StringWithAggregatesFilter<"Topic"> | string
     type?: StringWithAggregatesFilter<"Topic"> | string
+  }
+
+  export type DocumentClassificationWhereInput = {
+    AND?: DocumentClassificationWhereInput | DocumentClassificationWhereInput[]
+    OR?: DocumentClassificationWhereInput[]
+    NOT?: DocumentClassificationWhereInput | DocumentClassificationWhereInput[]
+    id?: StringFilter<"DocumentClassification"> | string
+    code?: StringNullableFilter<"DocumentClassification"> | string | null
+    active?: BoolFilter<"DocumentClassification"> | boolean
+    description?: StringNullableFilter<"DocumentClassification"> | string | null
+    deletedAt?: DateTimeNullableFilter<"DocumentClassification"> | Date | string | null
+    createdAt?: DateTimeFilter<"DocumentClassification"> | Date | string
+    updatedAt?: DateTimeFilter<"DocumentClassification"> | Date | string
+    name?: StringFilter<"DocumentClassification"> | string
+    documents?: DocumentListRelationFilter
+  }
+
+  export type DocumentClassificationOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
+    documents?: DocumentOrderByRelationAggregateInput
+    _relevance?: DocumentClassificationOrderByRelevanceInput
+  }
+
+  export type DocumentClassificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    name?: string
+    AND?: DocumentClassificationWhereInput | DocumentClassificationWhereInput[]
+    OR?: DocumentClassificationWhereInput[]
+    NOT?: DocumentClassificationWhereInput | DocumentClassificationWhereInput[]
+    active?: BoolFilter<"DocumentClassification"> | boolean
+    description?: StringNullableFilter<"DocumentClassification"> | string | null
+    deletedAt?: DateTimeNullableFilter<"DocumentClassification"> | Date | string | null
+    createdAt?: DateTimeFilter<"DocumentClassification"> | Date | string
+    updatedAt?: DateTimeFilter<"DocumentClassification"> | Date | string
+    documents?: DocumentListRelationFilter
+  }, "id" | "code" | "name">
+
+  export type DocumentClassificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrderInput | SortOrder
+    active?: SortOrder
+    description?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
+    _count?: DocumentClassificationCountOrderByAggregateInput
+    _max?: DocumentClassificationMaxOrderByAggregateInput
+    _min?: DocumentClassificationMinOrderByAggregateInput
+  }
+
+  export type DocumentClassificationScalarWhereWithAggregatesInput = {
+    AND?: DocumentClassificationScalarWhereWithAggregatesInput | DocumentClassificationScalarWhereWithAggregatesInput[]
+    OR?: DocumentClassificationScalarWhereWithAggregatesInput[]
+    NOT?: DocumentClassificationScalarWhereWithAggregatesInput | DocumentClassificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DocumentClassification"> | string
+    code?: StringNullableWithAggregatesFilter<"DocumentClassification"> | string | null
+    active?: BoolWithAggregatesFilter<"DocumentClassification"> | boolean
+    description?: StringNullableWithAggregatesFilter<"DocumentClassification"> | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"DocumentClassification"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"DocumentClassification"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DocumentClassification"> | Date | string
+    name?: StringWithAggregatesFilter<"DocumentClassification"> | string
   }
 
   export type DM_CapBacWhereInput = {
@@ -369707,9 +372412,10 @@ export namespace Prisma {
     fileType?: string | null
     fileSize?: number | null
     reason?: string | null
-    topic?: TopicCreateNestedOneWithoutDocumentsInput
+    classification?: DocumentClassificationCreateNestedOneWithoutDocumentsInput
     uploadedBy: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
     approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
+    topics?: DocumentTopicCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentUncheckedCreateInput = {
@@ -369723,13 +372429,14 @@ export namespace Prisma {
     title?: string | null
     body?: string | null
     status?: $Enums.DocumentStatus
+    classificationId?: string | null
     uri?: string | null
     fileType?: string | null
     fileSize?: number | null
-    topicId?: string | null
     reason?: string | null
     uploadedById: string
     approvedById?: string | null
+    topics?: DocumentTopicUncheckedCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentUpdateInput = {
@@ -369747,9 +372454,10 @@ export namespace Prisma {
     fileType?: NullableStringFieldUpdateOperationsInput | string | null
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    topic?: TopicUpdateOneWithoutDocumentsNestedInput
+    classification?: DocumentClassificationUpdateOneWithoutDocumentsNestedInput
     uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
     approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
+    topics?: DocumentTopicUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentUncheckedUpdateInput = {
@@ -369763,13 +372471,14 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     body?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    classificationId?: NullableStringFieldUpdateOperationsInput | string | null
     uri?: NullableStringFieldUpdateOperationsInput | string | null
     fileType?: NullableStringFieldUpdateOperationsInput | string | null
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    topicId?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     uploadedById?: StringFieldUpdateOperationsInput | string
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    topics?: DocumentTopicUncheckedUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentCreateManyInput = {
@@ -369783,10 +372492,10 @@ export namespace Prisma {
     title?: string | null
     body?: string | null
     status?: $Enums.DocumentStatus
+    classificationId?: string | null
     uri?: string | null
     fileType?: string | null
     fileSize?: number | null
-    topicId?: string | null
     reason?: string | null
     uploadedById: string
     approvedById?: string | null
@@ -369820,13 +372529,95 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     body?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    classificationId?: NullableStringFieldUpdateOperationsInput | string | null
     uri?: NullableStringFieldUpdateOperationsInput | string | null
     fileType?: NullableStringFieldUpdateOperationsInput | string | null
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    topicId?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     uploadedById?: StringFieldUpdateOperationsInput | string
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DocumentTopicCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    document: DocumentCreateNestedOneWithoutTopicsInput
+    topic: TopicCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type DocumentTopicUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documentId: string
+    topicId: string
+  }
+
+  export type DocumentTopicUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    document?: DocumentUpdateOneRequiredWithoutTopicsNestedInput
+    topic?: TopicUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type DocumentTopicUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documentId?: StringFieldUpdateOperationsInput | string
+    topicId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DocumentTopicCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    documentId: string
+    topicId: string
+  }
+
+  export type DocumentTopicUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DocumentTopicUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    documentId?: StringFieldUpdateOperationsInput | string
+    topicId?: StringFieldUpdateOperationsInput | string
   }
 
   export type FAQCreateInput = {
@@ -370349,7 +373140,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
-    documents?: DocumentCreateNestedManyWithoutTopicInput
+    documents?: DocumentTopicCreateNestedManyWithoutTopicInput
     faqs?: FAQCreateNestedManyWithoutTopicInput
     prompts?: PromptCreateNestedManyWithoutTopicInput
     conversations?: ConversationCreateNestedManyWithoutTopicInput
@@ -370365,7 +373156,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
-    documents?: DocumentUncheckedCreateNestedManyWithoutTopicInput
+    documents?: DocumentTopicUncheckedCreateNestedManyWithoutTopicInput
     faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
     prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
@@ -370381,7 +373172,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    documents?: DocumentUpdateManyWithoutTopicNestedInput
+    documents?: DocumentTopicUpdateManyWithoutTopicNestedInput
     faqs?: FAQUpdateManyWithoutTopicNestedInput
     prompts?: PromptUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUpdateManyWithoutTopicNestedInput
@@ -370397,7 +373188,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    documents?: DocumentUncheckedUpdateManyWithoutTopicNestedInput
+    documents?: DocumentTopicUncheckedUpdateManyWithoutTopicNestedInput
     faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
     prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
@@ -370437,6 +373228,87 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DocumentClassificationCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    documents?: DocumentCreateNestedManyWithoutClassificationInput
+  }
+
+  export type DocumentClassificationUncheckedCreateInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    documents?: DocumentUncheckedCreateNestedManyWithoutClassificationInput
+  }
+
+  export type DocumentClassificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    documents?: DocumentUpdateManyWithoutClassificationNestedInput
+  }
+
+  export type DocumentClassificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    documents?: DocumentUncheckedUpdateManyWithoutClassificationNestedInput
+  }
+
+  export type DocumentClassificationCreateManyInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+  }
+
+  export type DocumentClassificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DocumentClassificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type DM_CapBacCreateInput = {
@@ -397196,14 +400068,24 @@ export namespace Prisma {
     not?: NestedEnumDocumentStatusFilter<$PrismaModel> | $Enums.DocumentStatus
   }
 
-  export type TopicNullableScalarRelationFilter = {
-    is?: TopicWhereInput | null
-    isNot?: TopicWhereInput | null
+  export type DocumentClassificationNullableScalarRelationFilter = {
+    is?: DocumentClassificationWhereInput | null
+    isNot?: DocumentClassificationWhereInput | null
   }
 
   export type UserProfileNullableScalarRelationFilter = {
     is?: UserProfileWhereInput | null
     isNot?: UserProfileWhereInput | null
+  }
+
+  export type DocumentTopicListRelationFilter = {
+    every?: DocumentTopicWhereInput
+    some?: DocumentTopicWhereInput
+    none?: DocumentTopicWhereInput
+  }
+
+  export type DocumentTopicOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type DocumentOrderByRelevanceInput = {
@@ -397223,10 +400105,10 @@ export namespace Prisma {
     title?: SortOrder
     body?: SortOrder
     status?: SortOrder
+    classificationId?: SortOrder
     uri?: SortOrder
     fileType?: SortOrder
     fileSize?: SortOrder
-    topicId?: SortOrder
     reason?: SortOrder
     uploadedById?: SortOrder
     approvedById?: SortOrder
@@ -397247,10 +400129,10 @@ export namespace Prisma {
     title?: SortOrder
     body?: SortOrder
     status?: SortOrder
+    classificationId?: SortOrder
     uri?: SortOrder
     fileType?: SortOrder
     fileSize?: SortOrder
-    topicId?: SortOrder
     reason?: SortOrder
     uploadedById?: SortOrder
     approvedById?: SortOrder
@@ -397267,10 +400149,10 @@ export namespace Prisma {
     title?: SortOrder
     body?: SortOrder
     status?: SortOrder
+    classificationId?: SortOrder
     uri?: SortOrder
     fileType?: SortOrder
     fileSize?: SortOrder
-    topicId?: SortOrder
     reason?: SortOrder
     uploadedById?: SortOrder
     approvedById?: SortOrder
@@ -397288,6 +400170,68 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDocumentStatusFilter<$PrismaModel>
     _max?: NestedEnumDocumentStatusFilter<$PrismaModel>
+  }
+
+  export type DocumentScalarRelationFilter = {
+    is?: DocumentWhereInput
+    isNot?: DocumentWhereInput
+  }
+
+  export type TopicScalarRelationFilter = {
+    is?: TopicWhereInput
+    isNot?: TopicWhereInput
+  }
+
+  export type DocumentTopicOrderByRelevanceInput = {
+    fields: DocumentTopicOrderByRelevanceFieldEnum | DocumentTopicOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type DocumentTopicDocumentIdTopicIdCompoundUniqueInput = {
+    documentId: string
+    topicId: string
+  }
+
+  export type DocumentTopicCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    documentId?: SortOrder
+    topicId?: SortOrder
+  }
+
+  export type DocumentTopicMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    documentId?: SortOrder
+    topicId?: SortOrder
+  }
+
+  export type DocumentTopicMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    documentId?: SortOrder
+    topicId?: SortOrder
+  }
+
+  export type TopicNullableScalarRelationFilter = {
+    is?: TopicWhereInput | null
+    isNot?: TopicWhereInput | null
   }
 
   export type FAQOrderByRelevanceInput = {
@@ -397649,6 +400593,45 @@ export namespace Prisma {
     updatedAt?: SortOrder
     name?: SortOrder
     type?: SortOrder
+  }
+
+  export type DocumentClassificationOrderByRelevanceInput = {
+    fields: DocumentClassificationOrderByRelevanceFieldEnum | DocumentClassificationOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type DocumentClassificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
+  }
+
+  export type DocumentClassificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
+  }
+
+  export type DocumentClassificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    active?: SortOrder
+    description?: SortOrder
+    deletedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    name?: SortOrder
   }
 
   export type DM_CapBacOrderByRelevanceInput = {
@@ -415634,10 +418617,10 @@ export namespace Prisma {
     deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
-  export type TopicCreateNestedOneWithoutDocumentsInput = {
-    create?: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
-    connectOrCreate?: TopicCreateOrConnectWithoutDocumentsInput
-    connect?: TopicWhereUniqueInput
+  export type DocumentClassificationCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<DocumentClassificationCreateWithoutDocumentsInput, DocumentClassificationUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: DocumentClassificationCreateOrConnectWithoutDocumentsInput
+    connect?: DocumentClassificationWhereUniqueInput
   }
 
   export type UserProfileCreateNestedOneWithoutDocumentsUploadedInput = {
@@ -415652,18 +418635,32 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput
   }
 
+  export type DocumentTopicCreateNestedManyWithoutDocumentInput = {
+    create?: XOR<DocumentTopicCreateWithoutDocumentInput, DocumentTopicUncheckedCreateWithoutDocumentInput> | DocumentTopicCreateWithoutDocumentInput[] | DocumentTopicUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: DocumentTopicCreateOrConnectWithoutDocumentInput | DocumentTopicCreateOrConnectWithoutDocumentInput[]
+    createMany?: DocumentTopicCreateManyDocumentInputEnvelope
+    connect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+  }
+
+  export type DocumentTopicUncheckedCreateNestedManyWithoutDocumentInput = {
+    create?: XOR<DocumentTopicCreateWithoutDocumentInput, DocumentTopicUncheckedCreateWithoutDocumentInput> | DocumentTopicCreateWithoutDocumentInput[] | DocumentTopicUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: DocumentTopicCreateOrConnectWithoutDocumentInput | DocumentTopicCreateOrConnectWithoutDocumentInput[]
+    createMany?: DocumentTopicCreateManyDocumentInputEnvelope
+    connect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+  }
+
   export type EnumDocumentStatusFieldUpdateOperationsInput = {
     set?: $Enums.DocumentStatus
   }
 
-  export type TopicUpdateOneWithoutDocumentsNestedInput = {
-    create?: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
-    connectOrCreate?: TopicCreateOrConnectWithoutDocumentsInput
-    upsert?: TopicUpsertWithoutDocumentsInput
-    disconnect?: TopicWhereInput | boolean
-    delete?: TopicWhereInput | boolean
-    connect?: TopicWhereUniqueInput
-    update?: XOR<XOR<TopicUpdateToOneWithWhereWithoutDocumentsInput, TopicUpdateWithoutDocumentsInput>, TopicUncheckedUpdateWithoutDocumentsInput>
+  export type DocumentClassificationUpdateOneWithoutDocumentsNestedInput = {
+    create?: XOR<DocumentClassificationCreateWithoutDocumentsInput, DocumentClassificationUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: DocumentClassificationCreateOrConnectWithoutDocumentsInput
+    upsert?: DocumentClassificationUpsertWithoutDocumentsInput
+    disconnect?: DocumentClassificationWhereInput | boolean
+    delete?: DocumentClassificationWhereInput | boolean
+    connect?: DocumentClassificationWhereUniqueInput
+    update?: XOR<XOR<DocumentClassificationUpdateToOneWithWhereWithoutDocumentsInput, DocumentClassificationUpdateWithoutDocumentsInput>, DocumentClassificationUncheckedUpdateWithoutDocumentsInput>
   }
 
   export type UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput = {
@@ -415682,6 +418679,62 @@ export namespace Prisma {
     delete?: UserProfileWhereInput | boolean
     connect?: UserProfileWhereUniqueInput
     update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutDocumentsApprovedInput, UserProfileUpdateWithoutDocumentsApprovedInput>, UserProfileUncheckedUpdateWithoutDocumentsApprovedInput>
+  }
+
+  export type DocumentTopicUpdateManyWithoutDocumentNestedInput = {
+    create?: XOR<DocumentTopicCreateWithoutDocumentInput, DocumentTopicUncheckedCreateWithoutDocumentInput> | DocumentTopicCreateWithoutDocumentInput[] | DocumentTopicUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: DocumentTopicCreateOrConnectWithoutDocumentInput | DocumentTopicCreateOrConnectWithoutDocumentInput[]
+    upsert?: DocumentTopicUpsertWithWhereUniqueWithoutDocumentInput | DocumentTopicUpsertWithWhereUniqueWithoutDocumentInput[]
+    createMany?: DocumentTopicCreateManyDocumentInputEnvelope
+    set?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    disconnect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    delete?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    connect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    update?: DocumentTopicUpdateWithWhereUniqueWithoutDocumentInput | DocumentTopicUpdateWithWhereUniqueWithoutDocumentInput[]
+    updateMany?: DocumentTopicUpdateManyWithWhereWithoutDocumentInput | DocumentTopicUpdateManyWithWhereWithoutDocumentInput[]
+    deleteMany?: DocumentTopicScalarWhereInput | DocumentTopicScalarWhereInput[]
+  }
+
+  export type DocumentTopicUncheckedUpdateManyWithoutDocumentNestedInput = {
+    create?: XOR<DocumentTopicCreateWithoutDocumentInput, DocumentTopicUncheckedCreateWithoutDocumentInput> | DocumentTopicCreateWithoutDocumentInput[] | DocumentTopicUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: DocumentTopicCreateOrConnectWithoutDocumentInput | DocumentTopicCreateOrConnectWithoutDocumentInput[]
+    upsert?: DocumentTopicUpsertWithWhereUniqueWithoutDocumentInput | DocumentTopicUpsertWithWhereUniqueWithoutDocumentInput[]
+    createMany?: DocumentTopicCreateManyDocumentInputEnvelope
+    set?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    disconnect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    delete?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    connect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    update?: DocumentTopicUpdateWithWhereUniqueWithoutDocumentInput | DocumentTopicUpdateWithWhereUniqueWithoutDocumentInput[]
+    updateMany?: DocumentTopicUpdateManyWithWhereWithoutDocumentInput | DocumentTopicUpdateManyWithWhereWithoutDocumentInput[]
+    deleteMany?: DocumentTopicScalarWhereInput | DocumentTopicScalarWhereInput[]
+  }
+
+  export type DocumentCreateNestedOneWithoutTopicsInput = {
+    create?: XOR<DocumentCreateWithoutTopicsInput, DocumentUncheckedCreateWithoutTopicsInput>
+    connectOrCreate?: DocumentCreateOrConnectWithoutTopicsInput
+    connect?: DocumentWhereUniqueInput
+  }
+
+  export type TopicCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: TopicCreateOrConnectWithoutDocumentsInput
+    connect?: TopicWhereUniqueInput
+  }
+
+  export type DocumentUpdateOneRequiredWithoutTopicsNestedInput = {
+    create?: XOR<DocumentCreateWithoutTopicsInput, DocumentUncheckedCreateWithoutTopicsInput>
+    connectOrCreate?: DocumentCreateOrConnectWithoutTopicsInput
+    upsert?: DocumentUpsertWithoutTopicsInput
+    connect?: DocumentWhereUniqueInput
+    update?: XOR<XOR<DocumentUpdateToOneWithWhereWithoutTopicsInput, DocumentUpdateWithoutTopicsInput>, DocumentUncheckedUpdateWithoutTopicsInput>
+  }
+
+  export type TopicUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: TopicCreateOrConnectWithoutDocumentsInput
+    upsert?: TopicUpsertWithoutDocumentsInput
+    connect?: TopicWhereUniqueInput
+    update?: XOR<XOR<TopicUpdateToOneWithWhereWithoutDocumentsInput, TopicUpdateWithoutDocumentsInput>, TopicUncheckedUpdateWithoutDocumentsInput>
   }
 
   export type TopicCreateNestedOneWithoutFaqsInput = {
@@ -415914,11 +418967,11 @@ export namespace Prisma {
     update?: XOR<XOR<MessageUpdateToOneWithWhereWithoutCitationsInput, MessageUpdateWithoutCitationsInput>, MessageUncheckedUpdateWithoutCitationsInput>
   }
 
-  export type DocumentCreateNestedManyWithoutTopicInput = {
-    create?: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput> | DocumentCreateWithoutTopicInput[] | DocumentUncheckedCreateWithoutTopicInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutTopicInput | DocumentCreateOrConnectWithoutTopicInput[]
-    createMany?: DocumentCreateManyTopicInputEnvelope
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  export type DocumentTopicCreateNestedManyWithoutTopicInput = {
+    create?: XOR<DocumentTopicCreateWithoutTopicInput, DocumentTopicUncheckedCreateWithoutTopicInput> | DocumentTopicCreateWithoutTopicInput[] | DocumentTopicUncheckedCreateWithoutTopicInput[]
+    connectOrCreate?: DocumentTopicCreateOrConnectWithoutTopicInput | DocumentTopicCreateOrConnectWithoutTopicInput[]
+    createMany?: DocumentTopicCreateManyTopicInputEnvelope
+    connect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
   }
 
   export type FAQCreateNestedManyWithoutTopicInput = {
@@ -415942,11 +418995,11 @@ export namespace Prisma {
     connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
-  export type DocumentUncheckedCreateNestedManyWithoutTopicInput = {
-    create?: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput> | DocumentCreateWithoutTopicInput[] | DocumentUncheckedCreateWithoutTopicInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutTopicInput | DocumentCreateOrConnectWithoutTopicInput[]
-    createMany?: DocumentCreateManyTopicInputEnvelope
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  export type DocumentTopicUncheckedCreateNestedManyWithoutTopicInput = {
+    create?: XOR<DocumentTopicCreateWithoutTopicInput, DocumentTopicUncheckedCreateWithoutTopicInput> | DocumentTopicCreateWithoutTopicInput[] | DocumentTopicUncheckedCreateWithoutTopicInput[]
+    connectOrCreate?: DocumentTopicCreateOrConnectWithoutTopicInput | DocumentTopicCreateOrConnectWithoutTopicInput[]
+    createMany?: DocumentTopicCreateManyTopicInputEnvelope
+    connect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
   }
 
   export type FAQUncheckedCreateNestedManyWithoutTopicInput = {
@@ -415970,18 +419023,18 @@ export namespace Prisma {
     connect?: ConversationWhereUniqueInput | ConversationWhereUniqueInput[]
   }
 
-  export type DocumentUpdateManyWithoutTopicNestedInput = {
-    create?: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput> | DocumentCreateWithoutTopicInput[] | DocumentUncheckedCreateWithoutTopicInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutTopicInput | DocumentCreateOrConnectWithoutTopicInput[]
-    upsert?: DocumentUpsertWithWhereUniqueWithoutTopicInput | DocumentUpsertWithWhereUniqueWithoutTopicInput[]
-    createMany?: DocumentCreateManyTopicInputEnvelope
-    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    update?: DocumentUpdateWithWhereUniqueWithoutTopicInput | DocumentUpdateWithWhereUniqueWithoutTopicInput[]
-    updateMany?: DocumentUpdateManyWithWhereWithoutTopicInput | DocumentUpdateManyWithWhereWithoutTopicInput[]
-    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  export type DocumentTopicUpdateManyWithoutTopicNestedInput = {
+    create?: XOR<DocumentTopicCreateWithoutTopicInput, DocumentTopicUncheckedCreateWithoutTopicInput> | DocumentTopicCreateWithoutTopicInput[] | DocumentTopicUncheckedCreateWithoutTopicInput[]
+    connectOrCreate?: DocumentTopicCreateOrConnectWithoutTopicInput | DocumentTopicCreateOrConnectWithoutTopicInput[]
+    upsert?: DocumentTopicUpsertWithWhereUniqueWithoutTopicInput | DocumentTopicUpsertWithWhereUniqueWithoutTopicInput[]
+    createMany?: DocumentTopicCreateManyTopicInputEnvelope
+    set?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    disconnect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    delete?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    connect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    update?: DocumentTopicUpdateWithWhereUniqueWithoutTopicInput | DocumentTopicUpdateWithWhereUniqueWithoutTopicInput[]
+    updateMany?: DocumentTopicUpdateManyWithWhereWithoutTopicInput | DocumentTopicUpdateManyWithWhereWithoutTopicInput[]
+    deleteMany?: DocumentTopicScalarWhereInput | DocumentTopicScalarWhereInput[]
   }
 
   export type FAQUpdateManyWithoutTopicNestedInput = {
@@ -416026,18 +419079,18 @@ export namespace Prisma {
     deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
   }
 
-  export type DocumentUncheckedUpdateManyWithoutTopicNestedInput = {
-    create?: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput> | DocumentCreateWithoutTopicInput[] | DocumentUncheckedCreateWithoutTopicInput[]
-    connectOrCreate?: DocumentCreateOrConnectWithoutTopicInput | DocumentCreateOrConnectWithoutTopicInput[]
-    upsert?: DocumentUpsertWithWhereUniqueWithoutTopicInput | DocumentUpsertWithWhereUniqueWithoutTopicInput[]
-    createMany?: DocumentCreateManyTopicInputEnvelope
-    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
-    update?: DocumentUpdateWithWhereUniqueWithoutTopicInput | DocumentUpdateWithWhereUniqueWithoutTopicInput[]
-    updateMany?: DocumentUpdateManyWithWhereWithoutTopicInput | DocumentUpdateManyWithWhereWithoutTopicInput[]
-    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  export type DocumentTopicUncheckedUpdateManyWithoutTopicNestedInput = {
+    create?: XOR<DocumentTopicCreateWithoutTopicInput, DocumentTopicUncheckedCreateWithoutTopicInput> | DocumentTopicCreateWithoutTopicInput[] | DocumentTopicUncheckedCreateWithoutTopicInput[]
+    connectOrCreate?: DocumentTopicCreateOrConnectWithoutTopicInput | DocumentTopicCreateOrConnectWithoutTopicInput[]
+    upsert?: DocumentTopicUpsertWithWhereUniqueWithoutTopicInput | DocumentTopicUpsertWithWhereUniqueWithoutTopicInput[]
+    createMany?: DocumentTopicCreateManyTopicInputEnvelope
+    set?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    disconnect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    delete?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    connect?: DocumentTopicWhereUniqueInput | DocumentTopicWhereUniqueInput[]
+    update?: DocumentTopicUpdateWithWhereUniqueWithoutTopicInput | DocumentTopicUpdateWithWhereUniqueWithoutTopicInput[]
+    updateMany?: DocumentTopicUpdateManyWithWhereWithoutTopicInput | DocumentTopicUpdateManyWithWhereWithoutTopicInput[]
+    deleteMany?: DocumentTopicScalarWhereInput | DocumentTopicScalarWhereInput[]
   }
 
   export type FAQUncheckedUpdateManyWithoutTopicNestedInput = {
@@ -416080,6 +419133,48 @@ export namespace Prisma {
     update?: ConversationUpdateWithWhereUniqueWithoutTopicInput | ConversationUpdateWithWhereUniqueWithoutTopicInput[]
     updateMany?: ConversationUpdateManyWithWhereWithoutTopicInput | ConversationUpdateManyWithWhereWithoutTopicInput[]
     deleteMany?: ConversationScalarWhereInput | ConversationScalarWhereInput[]
+  }
+
+  export type DocumentCreateNestedManyWithoutClassificationInput = {
+    create?: XOR<DocumentCreateWithoutClassificationInput, DocumentUncheckedCreateWithoutClassificationInput> | DocumentCreateWithoutClassificationInput[] | DocumentUncheckedCreateWithoutClassificationInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutClassificationInput | DocumentCreateOrConnectWithoutClassificationInput[]
+    createMany?: DocumentCreateManyClassificationInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  }
+
+  export type DocumentUncheckedCreateNestedManyWithoutClassificationInput = {
+    create?: XOR<DocumentCreateWithoutClassificationInput, DocumentUncheckedCreateWithoutClassificationInput> | DocumentCreateWithoutClassificationInput[] | DocumentUncheckedCreateWithoutClassificationInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutClassificationInput | DocumentCreateOrConnectWithoutClassificationInput[]
+    createMany?: DocumentCreateManyClassificationInputEnvelope
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+  }
+
+  export type DocumentUpdateManyWithoutClassificationNestedInput = {
+    create?: XOR<DocumentCreateWithoutClassificationInput, DocumentUncheckedCreateWithoutClassificationInput> | DocumentCreateWithoutClassificationInput[] | DocumentUncheckedCreateWithoutClassificationInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutClassificationInput | DocumentCreateOrConnectWithoutClassificationInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutClassificationInput | DocumentUpsertWithWhereUniqueWithoutClassificationInput[]
+    createMany?: DocumentCreateManyClassificationInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutClassificationInput | DocumentUpdateWithWhereUniqueWithoutClassificationInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutClassificationInput | DocumentUpdateManyWithWhereWithoutClassificationInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutClassificationNestedInput = {
+    create?: XOR<DocumentCreateWithoutClassificationInput, DocumentUncheckedCreateWithoutClassificationInput> | DocumentCreateWithoutClassificationInput[] | DocumentUncheckedCreateWithoutClassificationInput[]
+    connectOrCreate?: DocumentCreateOrConnectWithoutClassificationInput | DocumentCreateOrConnectWithoutClassificationInput[]
+    upsert?: DocumentUpsertWithWhereUniqueWithoutClassificationInput | DocumentUpsertWithWhereUniqueWithoutClassificationInput[]
+    createMany?: DocumentCreateManyClassificationInputEnvelope
+    set?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    disconnect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    delete?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    connect?: DocumentWhereUniqueInput | DocumentWhereUniqueInput[]
+    update?: DocumentUpdateWithWhereUniqueWithoutClassificationInput | DocumentUpdateWithWhereUniqueWithoutClassificationInput[]
+    updateMany?: DocumentUpdateManyWithWhereWithoutClassificationInput | DocumentUpdateManyWithWhereWithoutClassificationInput[]
+    deleteMany?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
   }
 
   export type UserProfileCreateNestedManyWithoutRankInput = {
@@ -440645,8 +443740,9 @@ export namespace Prisma {
     fileType?: string | null
     fileSize?: number | null
     reason?: string | null
-    topic?: TopicCreateNestedOneWithoutDocumentsInput
+    classification?: DocumentClassificationCreateNestedOneWithoutDocumentsInput
     approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
+    topics?: DocumentTopicCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentUncheckedCreateWithoutUploadedByInput = {
@@ -440660,12 +443756,13 @@ export namespace Prisma {
     title?: string | null
     body?: string | null
     status?: $Enums.DocumentStatus
+    classificationId?: string | null
     uri?: string | null
     fileType?: string | null
     fileSize?: number | null
-    topicId?: string | null
     reason?: string | null
     approvedById?: string | null
+    topics?: DocumentTopicUncheckedCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentCreateOrConnectWithoutUploadedByInput = {
@@ -440693,8 +443790,9 @@ export namespace Prisma {
     fileType?: string | null
     fileSize?: number | null
     reason?: string | null
-    topic?: TopicCreateNestedOneWithoutDocumentsInput
+    classification?: DocumentClassificationCreateNestedOneWithoutDocumentsInput
     uploadedBy: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
+    topics?: DocumentTopicCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentUncheckedCreateWithoutApprovedByInput = {
@@ -440708,12 +443806,13 @@ export namespace Prisma {
     title?: string | null
     body?: string | null
     status?: $Enums.DocumentStatus
+    classificationId?: string | null
     uri?: string | null
     fileType?: string | null
     fileSize?: number | null
-    topicId?: string | null
     reason?: string | null
     uploadedById: string
+    topics?: DocumentTopicUncheckedCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentCreateOrConnectWithoutApprovedByInput = {
@@ -443952,10 +447051,10 @@ export namespace Prisma {
     title?: StringNullableFilter<"Document"> | string | null
     body?: StringNullableFilter<"Document"> | string | null
     status?: EnumDocumentStatusFilter<"Document"> | $Enums.DocumentStatus
+    classificationId?: StringNullableFilter<"Document"> | string | null
     uri?: StringNullableFilter<"Document"> | string | null
     fileType?: StringNullableFilter<"Document"> | string | null
     fileSize?: IntNullableFilter<"Document"> | number | null
-    topicId?: StringNullableFilter<"Document"> | string | null
     reason?: StringNullableFilter<"Document"> | string | null
     uploadedById?: StringFilter<"Document"> | string
     approvedById?: StringNullableFilter<"Document"> | string | null
@@ -462146,7 +465245,7 @@ export namespace Prisma {
     data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutSessionInput>
   }
 
-  export type TopicCreateWithoutDocumentsInput = {
+  export type DocumentClassificationCreateWithoutDocumentsInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -462155,13 +465254,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     name: string
-    type: string
-    faqs?: FAQCreateNestedManyWithoutTopicInput
-    prompts?: PromptCreateNestedManyWithoutTopicInput
-    conversations?: ConversationCreateNestedManyWithoutTopicInput
   }
 
-  export type TopicUncheckedCreateWithoutDocumentsInput = {
+  export type DocumentClassificationUncheckedCreateWithoutDocumentsInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -462170,15 +465265,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     name: string
-    type: string
-    faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
-    prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
-    conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
   }
 
-  export type TopicCreateOrConnectWithoutDocumentsInput = {
-    where: TopicWhereUniqueInput
-    create: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
+  export type DocumentClassificationCreateOrConnectWithoutDocumentsInput = {
+    where: DocumentClassificationWhereUniqueInput
+    create: XOR<DocumentClassificationCreateWithoutDocumentsInput, DocumentClassificationUncheckedCreateWithoutDocumentsInput>
   }
 
   export type UserProfileCreateWithoutDocumentsUploadedInput = {
@@ -462815,18 +465906,50 @@ export namespace Prisma {
     create: XOR<UserProfileCreateWithoutDocumentsApprovedInput, UserProfileUncheckedCreateWithoutDocumentsApprovedInput>
   }
 
-  export type TopicUpsertWithoutDocumentsInput = {
-    update: XOR<TopicUpdateWithoutDocumentsInput, TopicUncheckedUpdateWithoutDocumentsInput>
-    create: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
-    where?: TopicWhereInput
+  export type DocumentTopicCreateWithoutDocumentInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    topic: TopicCreateNestedOneWithoutDocumentsInput
   }
 
-  export type TopicUpdateToOneWithWhereWithoutDocumentsInput = {
-    where?: TopicWhereInput
-    data: XOR<TopicUpdateWithoutDocumentsInput, TopicUncheckedUpdateWithoutDocumentsInput>
+  export type DocumentTopicUncheckedCreateWithoutDocumentInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    topicId: string
   }
 
-  export type TopicUpdateWithoutDocumentsInput = {
+  export type DocumentTopicCreateOrConnectWithoutDocumentInput = {
+    where: DocumentTopicWhereUniqueInput
+    create: XOR<DocumentTopicCreateWithoutDocumentInput, DocumentTopicUncheckedCreateWithoutDocumentInput>
+  }
+
+  export type DocumentTopicCreateManyDocumentInputEnvelope = {
+    data: DocumentTopicCreateManyDocumentInput | DocumentTopicCreateManyDocumentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DocumentClassificationUpsertWithoutDocumentsInput = {
+    update: XOR<DocumentClassificationUpdateWithoutDocumentsInput, DocumentClassificationUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<DocumentClassificationCreateWithoutDocumentsInput, DocumentClassificationUncheckedCreateWithoutDocumentsInput>
+    where?: DocumentClassificationWhereInput
+  }
+
+  export type DocumentClassificationUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: DocumentClassificationWhereInput
+    data: XOR<DocumentClassificationUpdateWithoutDocumentsInput, DocumentClassificationUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type DocumentClassificationUpdateWithoutDocumentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -462835,13 +465958,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    faqs?: FAQUpdateManyWithoutTopicNestedInput
-    prompts?: PromptUpdateManyWithoutTopicNestedInput
-    conversations?: ConversationUpdateManyWithoutTopicNestedInput
   }
 
-  export type TopicUncheckedUpdateWithoutDocumentsInput = {
+  export type DocumentClassificationUncheckedUpdateWithoutDocumentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -462850,10 +465969,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
-    prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
-    conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
   }
 
   export type UserProfileUpsertWithoutDocumentsUploadedInput = {
@@ -463502,6 +466617,209 @@ export namespace Prisma {
     changeLog?: ChangeLogUncheckedUpdateManyWithoutUserProfileNestedInput
   }
 
+  export type DocumentTopicUpsertWithWhereUniqueWithoutDocumentInput = {
+    where: DocumentTopicWhereUniqueInput
+    update: XOR<DocumentTopicUpdateWithoutDocumentInput, DocumentTopicUncheckedUpdateWithoutDocumentInput>
+    create: XOR<DocumentTopicCreateWithoutDocumentInput, DocumentTopicUncheckedCreateWithoutDocumentInput>
+  }
+
+  export type DocumentTopicUpdateWithWhereUniqueWithoutDocumentInput = {
+    where: DocumentTopicWhereUniqueInput
+    data: XOR<DocumentTopicUpdateWithoutDocumentInput, DocumentTopicUncheckedUpdateWithoutDocumentInput>
+  }
+
+  export type DocumentTopicUpdateManyWithWhereWithoutDocumentInput = {
+    where: DocumentTopicScalarWhereInput
+    data: XOR<DocumentTopicUpdateManyMutationInput, DocumentTopicUncheckedUpdateManyWithoutDocumentInput>
+  }
+
+  export type DocumentTopicScalarWhereInput = {
+    AND?: DocumentTopicScalarWhereInput | DocumentTopicScalarWhereInput[]
+    OR?: DocumentTopicScalarWhereInput[]
+    NOT?: DocumentTopicScalarWhereInput | DocumentTopicScalarWhereInput[]
+    id?: StringFilter<"DocumentTopic"> | string
+    code?: StringNullableFilter<"DocumentTopic"> | string | null
+    active?: BoolFilter<"DocumentTopic"> | boolean
+    description?: StringNullableFilter<"DocumentTopic"> | string | null
+    deletedAt?: DateTimeNullableFilter<"DocumentTopic"> | Date | string | null
+    createdAt?: DateTimeFilter<"DocumentTopic"> | Date | string
+    updatedAt?: DateTimeFilter<"DocumentTopic"> | Date | string
+    documentId?: StringFilter<"DocumentTopic"> | string
+    topicId?: StringFilter<"DocumentTopic"> | string
+  }
+
+  export type DocumentCreateWithoutTopicsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    reason?: string | null
+    classification?: DocumentClassificationCreateNestedOneWithoutDocumentsInput
+    uploadedBy: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
+    approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
+  }
+
+  export type DocumentUncheckedCreateWithoutTopicsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    classificationId?: string | null
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    reason?: string | null
+    uploadedById: string
+    approvedById?: string | null
+  }
+
+  export type DocumentCreateOrConnectWithoutTopicsInput = {
+    where: DocumentWhereUniqueInput
+    create: XOR<DocumentCreateWithoutTopicsInput, DocumentUncheckedCreateWithoutTopicsInput>
+  }
+
+  export type TopicCreateWithoutDocumentsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    type: string
+    faqs?: FAQCreateNestedManyWithoutTopicInput
+    prompts?: PromptCreateNestedManyWithoutTopicInput
+    conversations?: ConversationCreateNestedManyWithoutTopicInput
+  }
+
+  export type TopicUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    type: string
+    faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
+    prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
+  }
+
+  export type TopicCreateOrConnectWithoutDocumentsInput = {
+    where: TopicWhereUniqueInput
+    create: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type DocumentUpsertWithoutTopicsInput = {
+    update: XOR<DocumentUpdateWithoutTopicsInput, DocumentUncheckedUpdateWithoutTopicsInput>
+    create: XOR<DocumentCreateWithoutTopicsInput, DocumentUncheckedCreateWithoutTopicsInput>
+    where?: DocumentWhereInput
+  }
+
+  export type DocumentUpdateToOneWithWhereWithoutTopicsInput = {
+    where?: DocumentWhereInput
+    data: XOR<DocumentUpdateWithoutTopicsInput, DocumentUncheckedUpdateWithoutTopicsInput>
+  }
+
+  export type DocumentUpdateWithoutTopicsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    classification?: DocumentClassificationUpdateOneWithoutDocumentsNestedInput
+    uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
+    approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
+  }
+
+  export type DocumentUncheckedUpdateWithoutTopicsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    classificationId?: NullableStringFieldUpdateOperationsInput | string | null
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TopicUpsertWithoutDocumentsInput = {
+    update: XOR<TopicUpdateWithoutDocumentsInput, TopicUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<TopicCreateWithoutDocumentsInput, TopicUncheckedCreateWithoutDocumentsInput>
+    where?: TopicWhereInput
+  }
+
+  export type TopicUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: TopicWhereInput
+    data: XOR<TopicUpdateWithoutDocumentsInput, TopicUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type TopicUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    faqs?: FAQUpdateManyWithoutTopicNestedInput
+    prompts?: PromptUpdateManyWithoutTopicNestedInput
+    conversations?: ConversationUpdateManyWithoutTopicNestedInput
+  }
+
+  export type TopicUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
+    prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
+  }
+
   export type TopicCreateWithoutFaqsInput = {
     id?: string
     code?: string | null
@@ -463512,7 +466830,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
-    documents?: DocumentCreateNestedManyWithoutTopicInput
+    documents?: DocumentTopicCreateNestedManyWithoutTopicInput
     prompts?: PromptCreateNestedManyWithoutTopicInput
     conversations?: ConversationCreateNestedManyWithoutTopicInput
   }
@@ -463527,7 +466845,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
-    documents?: DocumentUncheckedCreateNestedManyWithoutTopicInput
+    documents?: DocumentTopicUncheckedCreateNestedManyWithoutTopicInput
     prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
   }
@@ -464192,7 +467510,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    documents?: DocumentUpdateManyWithoutTopicNestedInput
+    documents?: DocumentTopicUpdateManyWithoutTopicNestedInput
     prompts?: PromptUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUpdateManyWithoutTopicNestedInput
   }
@@ -464207,7 +467525,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    documents?: DocumentUncheckedUpdateManyWithoutTopicNestedInput
+    documents?: DocumentTopicUncheckedUpdateManyWithoutTopicNestedInput
     prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
   }
@@ -464868,7 +468186,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
-    documents?: DocumentCreateNestedManyWithoutTopicInput
+    documents?: DocumentTopicCreateNestedManyWithoutTopicInput
     faqs?: FAQCreateNestedManyWithoutTopicInput
     conversations?: ConversationCreateNestedManyWithoutTopicInput
   }
@@ -464883,7 +468201,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
-    documents?: DocumentUncheckedCreateNestedManyWithoutTopicInput
+    documents?: DocumentTopicUncheckedCreateNestedManyWithoutTopicInput
     faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutTopicInput
   }
@@ -464914,7 +468232,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    documents?: DocumentUpdateManyWithoutTopicNestedInput
+    documents?: DocumentTopicUpdateManyWithoutTopicNestedInput
     faqs?: FAQUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUpdateManyWithoutTopicNestedInput
   }
@@ -464929,7 +468247,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    documents?: DocumentUncheckedUpdateManyWithoutTopicNestedInput
+    documents?: DocumentTopicUncheckedUpdateManyWithoutTopicNestedInput
     faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutTopicNestedInput
   }
@@ -465292,7 +468610,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
-    documents?: DocumentCreateNestedManyWithoutTopicInput
+    documents?: DocumentTopicCreateNestedManyWithoutTopicInput
     faqs?: FAQCreateNestedManyWithoutTopicInput
     prompts?: PromptCreateNestedManyWithoutTopicInput
   }
@@ -465307,7 +468625,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     type: string
-    documents?: DocumentUncheckedCreateNestedManyWithoutTopicInput
+    documents?: DocumentTopicUncheckedCreateNestedManyWithoutTopicInput
     faqs?: FAQUncheckedCreateNestedManyWithoutTopicInput
     prompts?: PromptUncheckedCreateNestedManyWithoutTopicInput
   }
@@ -465734,7 +469052,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    documents?: DocumentUpdateManyWithoutTopicNestedInput
+    documents?: DocumentTopicUpdateManyWithoutTopicNestedInput
     faqs?: FAQUpdateManyWithoutTopicNestedInput
     prompts?: PromptUpdateManyWithoutTopicNestedInput
   }
@@ -465749,7 +469067,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    documents?: DocumentUncheckedUpdateManyWithoutTopicNestedInput
+    documents?: DocumentTopicUncheckedUpdateManyWithoutTopicNestedInput
     faqs?: FAQUncheckedUpdateManyWithoutTopicNestedInput
     prompts?: PromptUncheckedUpdateManyWithoutTopicNestedInput
   }
@@ -465998,7 +469316,7 @@ export namespace Prisma {
     sender?: EnumMessageSenderFieldUpdateOperationsInput | $Enums.MessageSender
   }
 
-  export type DocumentCreateWithoutTopicInput = {
+  export type DocumentTopicCreateWithoutTopicInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -466006,18 +469324,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title?: string | null
-    body?: string | null
-    status?: $Enums.DocumentStatus
-    uri?: string | null
-    fileType?: string | null
-    fileSize?: number | null
-    reason?: string | null
-    uploadedBy: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
-    approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
+    document: DocumentCreateNestedOneWithoutTopicsInput
   }
 
-  export type DocumentUncheckedCreateWithoutTopicInput = {
+  export type DocumentTopicUncheckedCreateWithoutTopicInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -466025,24 +469335,16 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title?: string | null
-    body?: string | null
-    status?: $Enums.DocumentStatus
-    uri?: string | null
-    fileType?: string | null
-    fileSize?: number | null
-    reason?: string | null
-    uploadedById: string
-    approvedById?: string | null
+    documentId: string
   }
 
-  export type DocumentCreateOrConnectWithoutTopicInput = {
-    where: DocumentWhereUniqueInput
-    create: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput>
+  export type DocumentTopicCreateOrConnectWithoutTopicInput = {
+    where: DocumentTopicWhereUniqueInput
+    create: XOR<DocumentTopicCreateWithoutTopicInput, DocumentTopicUncheckedCreateWithoutTopicInput>
   }
 
-  export type DocumentCreateManyTopicInputEnvelope = {
-    data: DocumentCreateManyTopicInput | DocumentCreateManyTopicInput[]
+  export type DocumentTopicCreateManyTopicInputEnvelope = {
+    data: DocumentTopicCreateManyTopicInput | DocumentTopicCreateManyTopicInput[]
     skipDuplicates?: boolean
   }
 
@@ -466162,20 +469464,20 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type DocumentUpsertWithWhereUniqueWithoutTopicInput = {
-    where: DocumentWhereUniqueInput
-    update: XOR<DocumentUpdateWithoutTopicInput, DocumentUncheckedUpdateWithoutTopicInput>
-    create: XOR<DocumentCreateWithoutTopicInput, DocumentUncheckedCreateWithoutTopicInput>
+  export type DocumentTopicUpsertWithWhereUniqueWithoutTopicInput = {
+    where: DocumentTopicWhereUniqueInput
+    update: XOR<DocumentTopicUpdateWithoutTopicInput, DocumentTopicUncheckedUpdateWithoutTopicInput>
+    create: XOR<DocumentTopicCreateWithoutTopicInput, DocumentTopicUncheckedCreateWithoutTopicInput>
   }
 
-  export type DocumentUpdateWithWhereUniqueWithoutTopicInput = {
-    where: DocumentWhereUniqueInput
-    data: XOR<DocumentUpdateWithoutTopicInput, DocumentUncheckedUpdateWithoutTopicInput>
+  export type DocumentTopicUpdateWithWhereUniqueWithoutTopicInput = {
+    where: DocumentTopicWhereUniqueInput
+    data: XOR<DocumentTopicUpdateWithoutTopicInput, DocumentTopicUncheckedUpdateWithoutTopicInput>
   }
 
-  export type DocumentUpdateManyWithWhereWithoutTopicInput = {
-    where: DocumentScalarWhereInput
-    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutTopicInput>
+  export type DocumentTopicUpdateManyWithWhereWithoutTopicInput = {
+    where: DocumentTopicScalarWhereInput
+    data: XOR<DocumentTopicUpdateManyMutationInput, DocumentTopicUncheckedUpdateManyWithoutTopicInput>
   }
 
   export type FAQUpsertWithWhereUniqueWithoutTopicInput = {
@@ -466241,6 +469543,72 @@ export namespace Prisma {
   export type ConversationUpdateManyWithWhereWithoutTopicInput = {
     where: ConversationScalarWhereInput
     data: XOR<ConversationUpdateManyMutationInput, ConversationUncheckedUpdateManyWithoutTopicInput>
+  }
+
+  export type DocumentCreateWithoutClassificationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    reason?: string | null
+    uploadedBy: UserProfileCreateNestedOneWithoutDocumentsUploadedInput
+    approvedBy?: UserProfileCreateNestedOneWithoutDocumentsApprovedInput
+    topics?: DocumentTopicCreateNestedManyWithoutDocumentInput
+  }
+
+  export type DocumentUncheckedCreateWithoutClassificationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    reason?: string | null
+    uploadedById: string
+    approvedById?: string | null
+    topics?: DocumentTopicUncheckedCreateNestedManyWithoutDocumentInput
+  }
+
+  export type DocumentCreateOrConnectWithoutClassificationInput = {
+    where: DocumentWhereUniqueInput
+    create: XOR<DocumentCreateWithoutClassificationInput, DocumentUncheckedCreateWithoutClassificationInput>
+  }
+
+  export type DocumentCreateManyClassificationInputEnvelope = {
+    data: DocumentCreateManyClassificationInput | DocumentCreateManyClassificationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DocumentUpsertWithWhereUniqueWithoutClassificationInput = {
+    where: DocumentWhereUniqueInput
+    update: XOR<DocumentUpdateWithoutClassificationInput, DocumentUncheckedUpdateWithoutClassificationInput>
+    create: XOR<DocumentCreateWithoutClassificationInput, DocumentUncheckedCreateWithoutClassificationInput>
+  }
+
+  export type DocumentUpdateWithWhereUniqueWithoutClassificationInput = {
+    where: DocumentWhereUniqueInput
+    data: XOR<DocumentUpdateWithoutClassificationInput, DocumentUncheckedUpdateWithoutClassificationInput>
+  }
+
+  export type DocumentUpdateManyWithWhereWithoutClassificationInput = {
+    where: DocumentScalarWhereInput
+    data: XOR<DocumentUpdateManyMutationInput, DocumentUncheckedUpdateManyWithoutClassificationInput>
   }
 
   export type UserProfileCreateWithoutRankInput = {
@@ -543060,10 +546428,10 @@ export namespace Prisma {
     title?: string | null
     body?: string | null
     status?: $Enums.DocumentStatus
+    classificationId?: string | null
     uri?: string | null
     fileType?: string | null
     fileSize?: number | null
-    topicId?: string | null
     reason?: string | null
     approvedById?: string | null
   }
@@ -543079,10 +546447,10 @@ export namespace Prisma {
     title?: string | null
     body?: string | null
     status?: $Enums.DocumentStatus
+    classificationId?: string | null
     uri?: string | null
     fileType?: string | null
     fileSize?: number | null
-    topicId?: string | null
     reason?: string | null
     uploadedById: string
   }
@@ -544621,8 +547989,9 @@ export namespace Prisma {
     fileType?: NullableStringFieldUpdateOperationsInput | string | null
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    topic?: TopicUpdateOneWithoutDocumentsNestedInput
+    classification?: DocumentClassificationUpdateOneWithoutDocumentsNestedInput
     approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
+    topics?: DocumentTopicUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentUncheckedUpdateWithoutUploadedByInput = {
@@ -544636,12 +548005,13 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     body?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    classificationId?: NullableStringFieldUpdateOperationsInput | string | null
     uri?: NullableStringFieldUpdateOperationsInput | string | null
     fileType?: NullableStringFieldUpdateOperationsInput | string | null
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    topicId?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    topics?: DocumentTopicUncheckedUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentUncheckedUpdateManyWithoutUploadedByInput = {
@@ -544655,10 +548025,10 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     body?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    classificationId?: NullableStringFieldUpdateOperationsInput | string | null
     uri?: NullableStringFieldUpdateOperationsInput | string | null
     fileType?: NullableStringFieldUpdateOperationsInput | string | null
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    topicId?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     approvedById?: NullableStringFieldUpdateOperationsInput | string | null
   }
@@ -544678,8 +548048,9 @@ export namespace Prisma {
     fileType?: NullableStringFieldUpdateOperationsInput | string | null
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
-    topic?: TopicUpdateOneWithoutDocumentsNestedInput
+    classification?: DocumentClassificationUpdateOneWithoutDocumentsNestedInput
     uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
+    topics?: DocumentTopicUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentUncheckedUpdateWithoutApprovedByInput = {
@@ -544693,12 +548064,13 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     body?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    classificationId?: NullableStringFieldUpdateOperationsInput | string | null
     uri?: NullableStringFieldUpdateOperationsInput | string | null
     fileType?: NullableStringFieldUpdateOperationsInput | string | null
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    topicId?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     uploadedById?: StringFieldUpdateOperationsInput | string
+    topics?: DocumentTopicUncheckedUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentUncheckedUpdateManyWithoutApprovedByInput = {
@@ -544712,10 +548084,10 @@ export namespace Prisma {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     body?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    classificationId?: NullableStringFieldUpdateOperationsInput | string | null
     uri?: NullableStringFieldUpdateOperationsInput | string | null
     fileType?: NullableStringFieldUpdateOperationsInput | string | null
     fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    topicId?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     uploadedById?: StringFieldUpdateOperationsInput | string
   }
@@ -545832,6 +549204,50 @@ export namespace Prisma {
     topicId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type DocumentTopicCreateManyDocumentInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    topicId: string
+  }
+
+  export type DocumentTopicUpdateWithoutDocumentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    topic?: TopicUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type DocumentTopicUncheckedUpdateWithoutDocumentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    topicId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type DocumentTopicUncheckedUpdateManyWithoutDocumentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    topicId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type MessageCreateManyConversationInput = {
     id?: string
     code?: string | null
@@ -545938,7 +549354,7 @@ export namespace Prisma {
     documentType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type DocumentCreateManyTopicInput = {
+  export type DocumentTopicCreateManyTopicInput = {
     id?: string
     code?: string | null
     active?: boolean
@@ -545946,15 +549362,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title?: string | null
-    body?: string | null
-    status?: $Enums.DocumentStatus
-    uri?: string | null
-    fileType?: string | null
-    fileSize?: number | null
-    reason?: string | null
-    uploadedById: string
-    approvedById?: string | null
+    documentId: string
   }
 
   export type FAQCreateManyTopicInput = {
@@ -545999,7 +549407,7 @@ export namespace Prisma {
     sessionId?: string | null
   }
 
-  export type DocumentUpdateWithoutTopicInput = {
+  export type DocumentTopicUpdateWithoutTopicInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -546007,18 +549415,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    uri?: NullableStringFieldUpdateOperationsInput | string | null
-    fileType?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
-    approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
+    document?: DocumentUpdateOneRequiredWithoutTopicsNestedInput
   }
 
-  export type DocumentUncheckedUpdateWithoutTopicInput = {
+  export type DocumentTopicUncheckedUpdateWithoutTopicInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -546026,18 +549426,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    uri?: NullableStringFieldUpdateOperationsInput | string | null
-    fileType?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedById?: StringFieldUpdateOperationsInput | string
-    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    documentId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type DocumentUncheckedUpdateManyWithoutTopicInput = {
+  export type DocumentTopicUncheckedUpdateManyWithoutTopicInput = {
     id?: StringFieldUpdateOperationsInput | string
     code?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
@@ -546045,15 +549437,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
-    uri?: NullableStringFieldUpdateOperationsInput | string | null
-    fileType?: NullableStringFieldUpdateOperationsInput | string | null
-    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    uploadedById?: StringFieldUpdateOperationsInput | string
-    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    documentId?: StringFieldUpdateOperationsInput | string
   }
 
   export type FAQUpdateWithoutTopicInput = {
@@ -546182,6 +549566,84 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DocumentCreateManyClassificationInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    title?: string | null
+    body?: string | null
+    status?: $Enums.DocumentStatus
+    uri?: string | null
+    fileType?: string | null
+    fileSize?: number | null
+    reason?: string | null
+    uploadedById: string
+    approvedById?: string | null
+  }
+
+  export type DocumentUpdateWithoutClassificationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedBy?: UserProfileUpdateOneRequiredWithoutDocumentsUploadedNestedInput
+    approvedBy?: UserProfileUpdateOneWithoutDocumentsApprovedNestedInput
+    topics?: DocumentTopicUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type DocumentUncheckedUpdateWithoutClassificationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
+    topics?: DocumentTopicUncheckedUpdateManyWithoutDocumentNestedInput
+  }
+
+  export type DocumentUncheckedUpdateManyWithoutClassificationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    title?: NullableStringFieldUpdateOperationsInput | string | null
+    body?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus
+    uri?: NullableStringFieldUpdateOperationsInput | string | null
+    fileType?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedById?: StringFieldUpdateOperationsInput | string
+    approvedById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserProfileCreateManyRankInput = {

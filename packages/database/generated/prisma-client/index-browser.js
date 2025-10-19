@@ -724,13 +724,25 @@ exports.Prisma.DocumentScalarFieldEnum = {
   title: 'title',
   body: 'body',
   status: 'status',
+  classificationId: 'classificationId',
   uri: 'uri',
   fileType: 'fileType',
   fileSize: 'fileSize',
-  topicId: 'topicId',
   reason: 'reason',
   uploadedById: 'uploadedById',
   approvedById: 'approvedById'
+};
+
+exports.Prisma.DocumentTopicScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  documentId: 'documentId',
+  topicId: 'topicId'
 };
 
 exports.Prisma.FAQScalarFieldEnum = {
@@ -816,6 +828,17 @@ exports.Prisma.TopicScalarFieldEnum = {
   updatedAt: 'updatedAt',
   name: 'name',
   type: 'type'
+};
+
+exports.Prisma.DocumentClassificationScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name'
 };
 
 exports.Prisma.DM_CapBacScalarFieldEnum = {
@@ -4473,12 +4496,20 @@ exports.Prisma.DocumentOrderByRelevanceFieldEnum = {
   description: 'description',
   title: 'title',
   body: 'body',
+  classificationId: 'classificationId',
   uri: 'uri',
   fileType: 'fileType',
-  topicId: 'topicId',
   reason: 'reason',
   uploadedById: 'uploadedById',
   approvedById: 'approvedById'
+};
+
+exports.Prisma.DocumentTopicOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  documentId: 'documentId',
+  topicId: 'topicId'
 };
 
 exports.Prisma.FAQOrderByRelevanceFieldEnum = {
@@ -4536,6 +4567,13 @@ exports.Prisma.TopicOrderByRelevanceFieldEnum = {
   description: 'description',
   name: 'name',
   type: 'type'
+};
+
+exports.Prisma.DocumentClassificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name'
 };
 
 exports.Prisma.DM_CapBacOrderByRelevanceFieldEnum = {
@@ -6872,12 +6910,14 @@ exports.Prisma.ModelName = {
   ChatBotConfig: 'ChatBotConfig',
   UserSession: 'UserSession',
   Document: 'Document',
+  DocumentTopic: 'DocumentTopic',
   FAQ: 'FAQ',
   Prompt: 'Prompt',
   Conversation: 'Conversation',
   Message: 'Message',
   CitationMessage: 'CitationMessage',
   Topic: 'Topic',
+  DocumentClassification: 'DocumentClassification',
   DM_CapBac: 'DM_CapBac',
   DM_ChucDanh: 'DM_ChucDanh',
   DM_ChucVu: 'DM_ChucVu',

@@ -17,19 +17,30 @@ model UserSession extends Base {
   conversation Conversation[]
 }
 model Document extends Base {
-  title        String?
-  body         String?        @db.Text
-  status       DocumentStatus @default(PENDING)
-  uri          String?
-  fileType     String?
-  fileSize     Int?
-  topic        Topic?         @relation(fields: [topicId], references: [id])
-  topicId      String?
-  reason       String?
-  uploadedBy   UserProfile    @relation("DocumentUploaded", fields: [uploadedById], references: [id])
-  uploadedById String         @default(auth().id)
-  approvedBy   UserProfile?   @relation("DocumentApproved", fields: [approvedById], references: [id])
-  approvedById String?
+  title              String?
+  body               String?                  @db.Text
+  status             DocumentStatus           @default(PENDING)
+  classification     DocumentClassification?  @relation(fields: [classificationId], references: [id]) // Phân loại: mới ban hành, hết hạn, còn hiệu lực...
+  classificationId   String?
+  uri                String?
+  fileType           String?
+  fileSize           Int?
+  reason             String?
+  uploadedBy         UserProfile              @relation("DocumentUploaded", fields: [uploadedById], references: [id])
+  uploadedById       String                   @default(auth().id)
+  approvedBy         UserProfile?             @relation("DocumentApproved", fields: [approvedById], references: [id])
+  approvedById       String?
+  topics             DocumentTopic[]         
+  @@schema("tro-ly-ao")
+}
+
+model DocumentTopic extends Base {
+  document   Document @relation(fields: [documentId], references: [id])
+  documentId String
+  topic      Topic    @relation(fields: [topicId], references: [id])
+  topicId    String
+
+  @@unique([documentId, topicId])
   @@schema("tro-ly-ao")
 }
 
@@ -91,8 +102,8 @@ model CitationMessage extends Base {
 
 model Topic extends Base {
   name          String
-  type          String // Ví dụ: GENERAL_ADMISSIONS_INFORMATION
-  documents     Document[]
+  type          String
+  documents     DocumentTopic[] 
   faqs          FAQ[]
   prompts       Prompt[]
   conversations Conversation[]
@@ -110,5 +121,11 @@ enum DocumentStatus {
   PENDING
   APPROVE
   DENY
+  @@schema("tro-ly-ao")
+}
+
+model DocumentClassification extends Base {
+  name      String     @unique // Ví dụ: Mới ban hành, Còn hiệu lực, Hết hạn, Đã thay thế, Lưu trữ
+  documents Document[]
   @@schema("tro-ly-ao")
 }

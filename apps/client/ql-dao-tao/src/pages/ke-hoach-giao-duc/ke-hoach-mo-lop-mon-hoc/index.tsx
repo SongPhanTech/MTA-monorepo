@@ -740,7 +740,7 @@ export default function SubjectOpeningPlan() {
                                     title: 'Số SV max',
                                     width: 150,
                                     align: 'center',
-                                    render: (_, record,idx) => (
+                                    render: (_, record, idx) => (
                                         <>
                                             <Form.Item
                                                 name={[
