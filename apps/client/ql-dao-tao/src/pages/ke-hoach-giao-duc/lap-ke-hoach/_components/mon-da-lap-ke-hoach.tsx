@@ -89,9 +89,13 @@ export default function MonDaLapKeHoach() {
                         },
                     },
                 },
-
                 _count: {
-                    select: { planTrainingSubjects: true },
+                    select: { planTrainingSubjects: {
+                        where:{
+                            deletedAt: null,
+                            active: true,
+                        }
+                    } },
                 },
             },
         },
