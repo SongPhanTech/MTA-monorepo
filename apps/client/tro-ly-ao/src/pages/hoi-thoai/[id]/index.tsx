@@ -20,7 +20,6 @@ interface Citation {
     index: number
     content: string
     document_id: string
-    document_type: string
     metadata?: any
 }
 
@@ -251,7 +250,6 @@ export default function Page() {
                                                         content: citation.content,
                                                         index: citation.index,
                                                         documentId: citation.document_id,
-                                                        documentType: citation.document_type,
                                                     })),
                                                 },
                                             },
@@ -302,7 +300,6 @@ export default function Page() {
                                                         content: citation.content,
                                                         index: citation.index,
                                                         documentId: citation.document_id,
-                                                        documentType: citation.document_type,
                                                     })),
                                                 },
                                             },
@@ -393,7 +390,6 @@ export default function Page() {
                         index: citation.index || 0,
                         content: citation.content || '',
                         document_id: citation.documentId || '',
-                        document_type: citation.documentType || '',
                         metadata: {},
                     })) || [],
             }))

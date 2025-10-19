@@ -1,4 +1,4 @@
-import { AuditOutlined, EyeOutlined } from '@ant-design/icons'
+import { AuditOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import DeleteIcon from '@components/icons/delete'
@@ -61,6 +61,10 @@ function Page() {
     const { onOpen: openPreviewTaiLieu } = useDisclosure<string>({
         tag: 'PreviewTaiLieu',
     })
+
+    const { onOpen: openSuaTaiLieu } = useDisclosure<string>({
+        tag: 'SuaTaiLieu',
+    })
     const { data: totalCountDocument = 0 } = useCountDocument()
     // Count pending documents
     const { data: totalPendingDocument = 0 } = useCountDocument({
@@ -69,7 +73,12 @@ function Page() {
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
-            topic: true,
+            topics: {
+                include: {
+                    topic: true,
+                },
+            },
+            classification: true,
         },
         where: {
             status: filters.status,
@@ -264,8 +273,45 @@ function Page() {
                                 },
                                 {
                                     title: 'Loại tài liệu',
-                                    dataIndex: 'topic',
-                                    render: (topic) => topic?.name || 'Chưa phân loại',
+                                    dataIndex: 'topics',
+                                    width: 200,
+                                    render: (topics: any[]) => {
+                                        if (!topics || topics.length === 0) {
+                                            return (
+                                                <span className="text-gray-400">
+                                                    Chưa phân loại
+                                                </span>
+                                            )
+                                        }
+                                        const maxDisplay = 1
+                                        const displayTopics = topics.slice(0, maxDisplay)
+                                        const remaining = topics.length - maxDisplay
+
+                                        return (
+                                            <div className="flex flex-wrap gap-1">
+                                                {displayTopics.map((dt) => (
+                                                    <Tag key={dt.id} color="blue">
+                                                        {dt.topic?.name}
+                                                    </Tag>
+                                                ))}
+                                                {remaining > 0 && (
+                                                    <Tag color="default">+{remaining}</Tag>
+                                                )}
+                                            </div>
+                                        )
+                                    },
+                                },
+                                {
+                                    title: 'Phân loại',
+                                    dataIndex: 'classification',
+                                    width: 160,
+                                    align: 'center',
+                                    render: (classification: any) => {
+                                        if (!classification) {
+                                            return <span className="text-gray-400">-</span>
+                                        }
+                                        return <Tag color="purple">{classification.name}</Tag>
+                                    },
                                 },
                                 {
                                     title: 'Người tải lên',
@@ -338,7 +384,13 @@ function Page() {
                                                     />
                                                 </Tooltip>
                                             )}
-                                            <Tooltip title="Xem chi tiết" placement="leftTop">
+                                            <Tooltip title="Chỉnh sửa" placement="top">
+                                                <EditOutlined
+                                                    onClick={() => openSuaTaiLieu(record.id)}
+                                                    className="text-orange-600 cursor-pointer text-lg"
+                                                />
+                                            </Tooltip>
+                                            <Tooltip title="Xem chi tiết" placement="top">
                                                 <EyeOutlined
                                                     onClick={() => openPreviewTaiLieu(record.id)}
                                                     className="text-blue-700 cursor-pointer text-lg"

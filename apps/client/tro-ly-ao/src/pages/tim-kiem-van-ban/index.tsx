@@ -21,7 +21,12 @@ export default function Page() {
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
-            topic: true,
+            topics: {
+                include: {
+                    topic: true,
+                },
+            },
+            classification: true,
         },
         where: {
             status: $Enums.DocumentStatus.APPROVE,
@@ -123,15 +128,37 @@ export default function Page() {
                                                     {item.title || 'Không có tiêu đề'}
                                                 </h3>
                                                 <div className="flex items-center flex-wrap gap-3 text-sm text-gray-600">
-                                                    {item.topic?.name && (
-                                                        <div>
+                                                    {item.topics && item.topics.length > 0 && (
+                                                        <div className="flex flex-wrap gap-1">
+                                                            {item.topics.slice(0, 1).map((dt) => (
+                                                                <Tag
+                                                                    key={dt.id}
+                                                                    color="#028850"
+                                                                    className="border-0 m-0"
+                                                                >
+                                                                    {dt.topic?.name}
+                                                                </Tag>
+                                                            ))}
+                                                            {item.topics.length > 1 && (
+                                                                <Tag
+                                                                    color="default"
+                                                                    className="border-0 m-0"
+                                                                >
+                                                                    +{item.topics.length - 1}
+                                                                </Tag>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                    {item.classification && (
+                                                        <>
+                                                            <span>•</span>
                                                             <Tag
-                                                                color="#028850"
+                                                                color="purple"
                                                                 className="border-0 m-0"
                                                             >
-                                                                {item.topic.name}
+                                                                {item.classification.name}
                                                             </Tag>
-                                                        </div>
+                                                        </>
                                                     )}
                                                     <span>•</span>
                                                     <span className="font-medium">
@@ -185,12 +212,31 @@ export default function Page() {
                                 {selectedDocument.title}
                             </span>
                         </div>
-                        <Divider style={{ margin: '2px 0' }} />{' '}
+                        <Divider style={{ margin: '2px 0' }} />
                         <div className="space-y-2 text-sm">
-                            {' '}
                             <div>
                                 <p className="font-semibold text-gray-700">Loại tài liệu</p>
-                                <p>{selectedDocument.topic?.name || 'Chưa phân loại'}</p>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                    {selectedDocument.topics && selectedDocument.topics.length > 0 ? (
+                                        selectedDocument.topics.map((dt) => (
+                                            <Tag key={dt.id} color="blue">
+                                                {dt.topic?.name}
+                                            </Tag>
+                                        ))
+                                    ) : (
+                                        <span className="text-gray-400">Chưa phân loại</span>
+                                    )}
+                                </div>
+                            </div>
+                            <div>
+                                <p className="font-semibold text-gray-700">Phân loại</p>
+                                {selectedDocument.classification ? (
+                                    <Tag color="purple" className="mt-1">
+                                        {selectedDocument.classification.name}
+                                    </Tag>
+                                ) : (
+                                    <span className="text-gray-400">-</span>
+                                )}
                             </div>
                             <div>
                                 <p className="font-semibold text-gray-700">Kích thước</p>

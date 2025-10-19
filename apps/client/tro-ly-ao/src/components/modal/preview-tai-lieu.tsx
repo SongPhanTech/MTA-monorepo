@@ -3,7 +3,7 @@ import { FileUploadIcon } from '@components/commons/upload'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import { useDeleteDocument, useFindFirstDocument } from '@workspace/db/hooks'
-import { Button, Divider, Modal, message } from 'antd'
+import { Button, Divider, Modal, message, Tag } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const PreviewTaiLieu = () => {
@@ -19,7 +19,12 @@ const PreviewTaiLieu = () => {
         where: { id },
         include: {
             uploadedBy: true,
-            topic: true,
+            topics: {
+                include: {
+                    topic: true,
+                },
+            },
+            classification: true,
         },
     })
 
@@ -63,7 +68,25 @@ const PreviewTaiLieu = () => {
                     <span className="font-semibold text-base">Thông tin về tài liệu</span>
                     <div>
                         <p className="font-semibold">Loại tài liệu</p>
-                        <p>{selectedDocument.topic?.name || 'Chưa phân loại'}</p>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                            {selectedDocument.topics && selectedDocument.topics.length > 0 ? (
+                                selectedDocument.topics.map((dt) => (
+                                    <Tag key={dt.id} color="blue">
+                                        {dt.topic?.name}
+                                    </Tag>
+                                ))
+                            ) : (
+                                <span className="text-gray-400">Chưa phân loại</span>
+                            )}
+                        </div>
+                    </div>
+                    <div>
+                        <p className="font-semibold">Phân loại</p>
+                        {selectedDocument.classification ? (
+                            <Tag color="purple">{selectedDocument.classification.name}</Tag>
+                        ) : (
+                            <span className="text-gray-400">-</span>
+                        )}
                     </div>
                     <div>
                         <p className="font-semibold">Kích thước</p>
