@@ -3503,6 +3503,20 @@ const metadata = {
                     name: "status",
                     type: "DocumentStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, classification: {
+                    name: "classification",
+                    type: "DocumentClassification",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'documents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "classificationId" },
+                }, classificationId: {
+                    name: "classificationId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'classification',
                 }, uri: {
                     name: "uri",
                     type: "String",
@@ -3515,20 +3529,6 @@ const metadata = {
                     name: "fileSize",
                     type: "Int",
                     isOptional: true,
-                }, topic: {
-                    name: "topic",
-                    type: "Topic",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'documents',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "topicId" },
-                }, topicId: {
-                    name: "topicId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'topic',
                 }, reason: {
                     name: "reason",
                     type: "String",
@@ -3561,6 +3561,12 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'approvedBy',
+                }, topics: {
+                    name: "topics",
+                    type: "DocumentTopic",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'document',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -3569,6 +3575,75 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        documentTopic: {
+            name: 'DocumentTopic', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, document: {
+                    name: "document",
+                    type: "Document",
+                    isDataModel: true,
+                    backLink: 'topics',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "documentId" },
+                }, documentId: {
+                    name: "documentId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'document',
+                }, topic: {
+                    name: "topic",
+                    type: "Topic",
+                    isDataModel: true,
+                    backLink: 'documents',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "topicId" },
+                }, topicId: {
+                    name: "topicId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'topic',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, documentId_topicId: {
+                    name: "documentId_topicId",
+                    fields: ["documentId", "topicId"]
                 },
             },
         },
@@ -4014,7 +4089,7 @@ const metadata = {
                     type: "String",
                 }, documents: {
                     name: "documents",
-                    type: "Document",
+                    type: "DocumentTopic",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'topic',
@@ -4044,6 +4119,60 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        documentClassification: {
+            name: 'DocumentClassification', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, documents: {
+                    name: "documents",
+                    type: "Document",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'classification',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, name: {
+                    name: "name",
+                    fields: ["name"]
                 },
             },
         },

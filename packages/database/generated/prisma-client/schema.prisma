@@ -1325,27 +1325,45 @@ model UserSession {
 }
 
 model Document {
-  id           String         @id() @default(cuid())
-  code         String?        @unique()
-  active       Boolean        @default(true)
-  description  String?        @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @default(now()) @updatedAt()
-  title        String?
-  body         String?        @db.Text()
-  status       DocumentStatus @default(PENDING)
-  uri          String?
-  fileType     String?
-  fileSize     Int?
-  topic        Topic?         @relation(fields: [topicId], references: [id])
-  topicId      String?
-  reason       String?
-  uploadedBy   UserProfile    @relation("DocumentUploaded", fields: [uploadedById], references: [id])
-  uploadedById String
-  approvedBy   UserProfile?   @relation("DocumentApproved", fields: [approvedById], references: [id])
-  approvedById String?
+  id               String                  @id() @default(cuid())
+  code             String?                 @unique()
+  active           Boolean                 @default(true)
+  description      String?                 @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @default(now()) @updatedAt()
+  title            String?
+  body             String?                 @db.Text()
+  status           DocumentStatus          @default(PENDING)
+  classification   DocumentClassification? @relation(fields: [classificationId], references: [id])
+  classificationId String?
+  uri              String?
+  fileType         String?
+  fileSize         Int?
+  reason           String?
+  uploadedBy       UserProfile             @relation("DocumentUploaded", fields: [uploadedById], references: [id])
+  uploadedById     String
+  approvedBy       UserProfile?            @relation("DocumentApproved", fields: [approvedById], references: [id])
+  approvedById     String?
+  topics           DocumentTopic[]
 
+  @@schema("tro-ly-ao")
+}
+
+model DocumentTopic {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  document    Document  @relation(fields: [documentId], references: [id])
+  documentId  String
+  topic       Topic     @relation(fields: [topicId], references: [id])
+  topicId     String
+
+  @@unique([documentId, topicId])
   @@schema("tro-ly-ao")
 }
 
@@ -1444,19 +1462,33 @@ model CitationMessage {
 }
 
 model Topic {
-  id            String         @id() @default(cuid())
-  code          String?        @unique()
-  active        Boolean        @default(true)
-  description   String?        @db.Text()
+  id            String          @id() @default(cuid())
+  code          String?         @unique()
+  active        Boolean         @default(true)
+  description   String?         @db.Text()
   deletedAt     DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now()) @updatedAt()
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt()
   name          String
   type          String
-  documents     Document[]
+  documents     DocumentTopic[]
   faqs          FAQ[]
   prompts       Prompt[]
   conversations Conversation[]
+
+  @@schema("tro-ly-ao")
+}
+
+model DocumentClassification {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt()
+  name        String     @unique()
+  documents   Document[]
 
   @@schema("tro-ly-ao")
 }

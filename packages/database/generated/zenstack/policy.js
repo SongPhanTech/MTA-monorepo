@@ -435,6 +435,19 @@ const policy = {
                 update: {},
             },
         },
+        documentTopic: {
+            modelLevel: {
+                read: { guard: DocumentTopic_read, },
+                create: { guard: DocumentTopic_create, inputChecker: DocumentTopic_create_input, },
+                update: { guard: DocumentTopic_update, },
+                postUpdate: { guard: DocumentTopic_postUpdate, },
+                delete: { guard: DocumentTopic_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         fAQ: {
             modelLevel: {
                 read: { guard: FAQ_read, },
@@ -507,6 +520,19 @@ const policy = {
                 update: { guard: Topic_update, },
                 postUpdate: { guard: Topic_postUpdate, },
                 delete: { guard: Topic_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
+        documentClassification: {
+            modelLevel: {
+                read: { guard: DocumentClassification_read, },
+                create: { guard: DocumentClassification_create, inputChecker: DocumentClassification_create_input, },
+                update: { guard: DocumentClassification_update, },
+                postUpdate: { guard: DocumentClassification_postUpdate, },
+                delete: { guard: DocumentClassification_delete, }
             },
             fieldLevel: {
                 read: {},
@@ -3200,12 +3226,14 @@ const policy = {
         chatBotConfig: { hasValidation: false },
         userSession: { hasValidation: false },
         document: { hasValidation: false },
+        documentTopic: { hasValidation: false },
         fAQ: { hasValidation: false },
         prompt: { hasValidation: false },
         conversation: { hasValidation: false },
         message: { hasValidation: false },
         citationMessage: { hasValidation: false },
         topic: { hasValidation: false },
+        documentClassification: { hasValidation: false },
         dM_CapBac: { hasValidation: false },
         dM_ChucDanh: { hasValidation: false },
         dM_ChucVu: { hasValidation: false },
@@ -5941,6 +5969,84 @@ function $check_Document_delete(input, context) {
     }
     return false;
 }
+function DocumentTopic_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DocumentTopic_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DocumentTopic_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DocumentTopic_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DocumentTopic_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DocumentTopic_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DocumentTopic_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DocumentTopic_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DocumentTopic_postUpdate(input, context) {
+    return true;
+}
+function DocumentTopic_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DocumentTopic_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
 function FAQ_read(context, db) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
@@ -6402,6 +6508,84 @@ function Topic_delete(context, db) {
     return { OR: [] };
 }
 function $check_Topic_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DocumentClassification_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_DocumentClassification_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DocumentClassification_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DocumentClassification_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DocumentClassification_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function DocumentClassification_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DocumentClassification_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function DocumentClassification_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_DocumentClassification_postUpdate(input, context) {
+    return true;
+}
+function DocumentClassification_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_DocumentClassification_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {
