@@ -242,6 +242,7 @@ function Page() {
                         </div>
                         <Table
                             rowKey="id"
+                            scroll={{ x: 1200 }}
                             // onRow={(item) => ({
                             //     className: 'cursor-pointer hover:bg-gray-50',
                             //     onClick: () => openPreviewTaiLieu(item.id),
@@ -250,7 +251,7 @@ function Page() {
                                 {
                                     title: 'STT',
                                     dataIndex: 'index',
-                                    width: 40,
+                                    width: 60,
                                     align: 'center',
                                     render: (_, __, index) =>
                                         (tableParams.pagination.current - 1) *
@@ -261,6 +262,7 @@ function Page() {
                                 {
                                     title: 'Tên tài liệu',
                                     dataIndex: 'title',
+                                    width: 400,
                                     render: (value, { fileType }) => (
                                         <span className="flex items-center gap-2">
                                             <FileUploadIcon
@@ -316,6 +318,7 @@ function Page() {
                                 {
                                     title: 'Người tải lên',
                                     dataIndex: 'uploadedBy',
+                                    width: 140,
                                     render: (value) => value.name,
                                 },
                                 {
@@ -371,6 +374,7 @@ function Page() {
                                     key: 'action',
                                     align: 'center',
                                     width: 120,
+                                    fixed: 'right',
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
                                             {(record.status === $Enums.DocumentStatus.PENDING ||
@@ -503,6 +507,7 @@ function Page() {
                             </Button>
                         </div>
                         <Table
+                            scroll={{ x: 1200 }}
                             // onRow={(item) => {
                             //     return {
                             //         className: 'cursor-pointer',
@@ -513,7 +518,7 @@ function Page() {
                                 {
                                     title: 'STT',
                                     dataIndex: 'index',
-                                    width: 40,
+                                    width: 60,
                                     align: 'center',
                                     render: (_, __, index) =>
                                         (faqParams.pagination.current - 1) *
@@ -537,6 +542,7 @@ function Page() {
                                 {
                                     title: 'Câu trả lời',
                                     dataIndex: 'answer',
+                                    width: 400,
                                     render: (value: string) =>
                                         value?.length > 200 ? `${value.slice(0, 200)}...` : value,
                                 },
@@ -602,6 +608,7 @@ function Page() {
                                     key: 'action',
                                     align: 'center',
                                     width: 100,
+                                    fixed: 'right',
                                     render: (_, record) => (
                                         <div className="flex items-center justify-center gap-2">
                                             {(record.status === $Enums.DocumentStatus.PENDING ||

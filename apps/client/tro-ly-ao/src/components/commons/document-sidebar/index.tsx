@@ -1,4 +1,13 @@
-import { CloseOutlined, FileTextOutlined, LinkOutlined, SearchOutlined } from '@ant-design/icons'
+import {
+    CloseOutlined,
+    DownCircleOutlined,
+    DownOutlined,
+    FileTextOutlined,
+    LinkOutlined,
+    SearchOutlined,
+    UpCircleOutlined,
+    UpOutlined,
+} from '@ant-design/icons'
 import { useFindUniqueDocument } from '@workspace/db/hooks'
 import { useEffect, useRef, useState } from 'react'
 import { Drawer, Input } from 'antd'
@@ -16,9 +25,12 @@ export default function DocumentSidebar({
 }: DocumentSidebarProps) {
     const [highlightedContent, setHighlightedContent] = useState<string>('')
     const [searchQuery, setSearchQuery] = useState<string>('')
+    const [inputValue, setInputValue] = useState<string>('')
     const [currentMatchIndex, setCurrentMatchIndex] = useState<number>(0)
     const [totalMatches, setTotalMatches] = useState<number>(0)
+    const [isTopicsExpanded, setIsTopicsExpanded] = useState(false)
     const contentRef = useRef<HTMLDivElement>(null)
+    const debounceTimer = useRef<NodeJS.Timeout | null>(null)
 
     const { data: document } = useFindUniqueDocument(
         {
@@ -52,7 +64,6 @@ export default function DocumentSidebar({
         }
     )
 
-    // Highlight citation content and search results in document
     useEffect(() => {
         if (!document?.body) return
 
@@ -60,7 +71,6 @@ export default function DocumentSidebar({
         let citationStart = -1
         let citationLength = 0
 
-        // Step 1: Find citation position in original content
         if (citationContent) {
             const citation = citationContent.trim()
             citationStart = originalContent.indexOf(citation)
@@ -76,9 +86,7 @@ export default function DocumentSidebar({
             }
         }
 
-        // Step 2: Apply search highlighting (avoiding citation area)
-        let result = ''
-        let lastIndex = 0
+        const searchMatches: Array<{ start: number; end: number; isCurrent: boolean }> = []
         let matchCount = 0
 
         if (searchQuery.trim()) {
@@ -91,94 +99,128 @@ export default function DocumentSidebar({
             regex.lastIndex = 0
             // biome-ignore lint/suspicious/noAssignInExpressions: need to iterate through regex matches
             while ((match = regex.exec(originalContent)) !== null) {
-                const matchStart = match.index
-                const matchEnd = matchStart + match[0].length
-
-                // Add content before this match
-                result += originalContent.substring(lastIndex, matchStart)
-
-                // Highlight the match
                 matchCount++
-                const isCurrentMatch = matchCount === currentMatchIndex + 1
-                result += isCurrentMatch
-                    ? `<mark style="background-color: #108850; color: white;" class="font-semibold">${match[0]}</mark>`
-                    : `<mark style="background-color: #E0EEEA;">${match[0]}</mark>`
-
-                lastIndex = matchEnd
+                searchMatches.push({
+                    start: match.index,
+                    end: match.index + match[0].length,
+                    isCurrent: matchCount === currentMatchIndex + 1,
+                })
             }
-            result += originalContent.substring(lastIndex)
         } else {
-            result = originalContent
             setTotalMatches(0)
             setCurrentMatchIndex(0)
         }
 
-        // Step 3: Apply citation highlighting (on result that may contain search marks)
-        if (citationStart !== -1 && citationLength > 0) {
-            // We need to find the same position in the result string (which now has HTML tags)
-            // Count characters before citation position to account for added tags
-            let resultPos = 0
-            let originalPos = 0
+        const segments: Array<{
+            start: number
+            end: number
+            type: 'search-current' | 'search-other' | 'citation' | 'normal'
+        }> = []
+        const citationEnd = citationStart + citationLength
 
-            // Navigate through result string to find where original citation starts
-            while (originalPos < citationStart && resultPos < result.length) {
-                if (result[resultPos] === '<') {
-                    // Skip HTML tag
-                    const tagEnd = result.indexOf('>', resultPos)
-                    if (tagEnd !== -1) {
-                        resultPos = tagEnd + 1
-                    } else {
-                        resultPos++
-                    }
-                } else {
-                    resultPos++
-                    originalPos++
+        let i = 0
+        while (i < originalContent.length) {
+            const searchMatch = searchMatches.find((m) => i >= m.start && i < m.end)
+            if (searchMatch) {
+                if (i === searchMatch.start) {
+                    segments.push({
+                        start: searchMatch.start,
+                        end: searchMatch.end,
+                        type: searchMatch.isCurrent ? 'search-current' : 'search-other',
+                    })
                 }
-            }
-
-            const citationStartInResult = resultPos
-
-            // Find citation end
-            let citationCharsFound = 0
-            while (citationCharsFound < citationLength && resultPos < result.length) {
-                if (result[resultPos] === '<') {
-                    // Skip HTML tag
-                    const tagEnd = result.indexOf('>', resultPos)
-                    if (tagEnd !== -1) {
-                        resultPos = tagEnd + 1
-                    } else {
-                        resultPos++
+                i = searchMatch.end
+            } else if (citationStart !== -1 && i >= citationStart && i < citationEnd) {
+                let segmentEnd = citationEnd
+                for (const match of searchMatches) {
+                    if (match.start > i && match.start < segmentEnd) {
+                        segmentEnd = match.start
+                        break
                     }
-                } else {
-                    resultPos++
-                    citationCharsFound++
                 }
+                segments.push({
+                    start: i,
+                    end: segmentEnd,
+                    type: 'citation',
+                })
+                i = segmentEnd
+            } else {
+                let segmentEnd = originalContent.length
+
+                for (const match of searchMatches) {
+                    if (match.start > i && match.start < segmentEnd) {
+                        segmentEnd = match.start
+                    }
+                }
+
+                if (citationStart > i && citationStart < segmentEnd) {
+                    segmentEnd = citationStart
+                }
+
+                segments.push({
+                    start: i,
+                    end: segmentEnd,
+                    type: 'normal',
+                })
+                i = segmentEnd
             }
+        }
 
-            const citationEndInResult = resultPos
+        let result = ''
+        for (const segment of segments) {
+            const text = originalContent.substring(segment.start, segment.end)
 
-            result =
-                result.substring(0, citationStartInResult) +
-                '<mark class="bg-yellow-300 font-semibold">' +
-                result.substring(citationStartInResult, citationEndInResult) +
-                '</mark>' +
-                result.substring(citationEndInResult)
+            if (segment.type === 'search-current') {
+                result += `<mark style="background-color: #fde047;">${text}</mark>`
+            } else if (segment.type === 'search-other') {
+                result += `<mark style="background-color: #fef9c3;">${text}</mark>`
+            } else if (segment.type === 'citation') {
+                result += `<mark style="background-color: #108850; color: white;">${text}</mark>`
+            } else {
+                result += text
+            }
         }
 
         setHighlightedContent(result)
 
-        // Scroll to highlighted element
         setTimeout(() => {
-            const markElement = contentRef.current?.querySelector('mark')
-            if (markElement) {
-                markElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            if (searchQuery.trim() && totalMatches > 0) {
+                const allMarks = contentRef.current?.querySelectorAll('mark')
+                if (allMarks && allMarks.length > 0) {
+                    const currentMark = Array.from(allMarks).find(
+                        (mark) => mark.style.backgroundColor === 'rgb(253, 224, 71)'
+                    )
+                    if (currentMark) {
+                        currentMark.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    }
+                }
+            } else {
+                const markElement = contentRef.current?.querySelector('mark')
+                if (markElement) {
+                    markElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                }
             }
-        }, 300)
-    }, [document, citationContent, searchQuery, currentMatchIndex])
+        }, 100)
+    }, [document, citationContent, searchQuery, currentMatchIndex, totalMatches])
 
     const handleSearchChange = (value: string) => {
-        setSearchQuery(value)
-        setCurrentMatchIndex(0)
+        setInputValue(value)
+
+        if (debounceTimer.current) {
+            clearTimeout(debounceTimer.current)
+        }
+
+        debounceTimer.current = setTimeout(() => {
+            setSearchQuery(value)
+            setCurrentMatchIndex(0)
+        }, 300)
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && totalMatches > 0) {
+            e.preventDefault()
+            handleNextMatch()
+        }
     }
 
     const handleNextMatch = () => {
@@ -215,7 +257,6 @@ export default function DocumentSidebar({
         >
             {document && (
                 <div className="h-full flex flex-col">
-                    {/* Header */}
                     <div className="px-3 py-2 border-b border-gray-200 bg-gray-50">
                         {document.uri ? (
                             <a
@@ -238,17 +279,37 @@ export default function DocumentSidebar({
                         )}
 
                         {document.topics && document.topics.length > 0 && (
-                            <div className="flex items-start gap-1 text-xs mb-1">
-                                <span className="text-gray-500 mt-0.5">Chủ đề:</span>
-                                <div className="flex flex-wrap gap-1">
-                                    {document.topics.map((dt) => (
-                                        <span
-                                            key={dt.id}
-                                            className="px-1.5 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium"
+                            <div className="text-xs mb-1">
+                                <div className="flex items-center gap-1">
+                                    <span className="text-gray-500 flex-shrink-0">Chủ đề:</span>
+                                    <div
+                                        className={`flex gap-1 ${isTopicsExpanded ? 'flex-wrap' : 'overflow-hidden'}`}
+                                    >
+                                        {document.topics.map((dt) => (
+                                            <span
+                                                key={dt.id}
+                                                className="px-1.5 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium whitespace-nowrap"
+                                            >
+                                                {dt.topic?.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    {document.topics.length > 2 && (
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                setIsTopicsExpanded(!isTopicsExpanded)
+                                            }}
+                                            className="ml-1 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
                                         >
-                                            {dt.topic?.name}
-                                        </span>
-                                    ))}
+                                            {isTopicsExpanded ? (
+                                                <UpOutlined className="text-[10px]" />
+                                            ) : (
+                                                <DownOutlined className="text-[10px]" />
+                                            )}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -263,7 +324,6 @@ export default function DocumentSidebar({
                         )}
                     </div>
 
-                    {/* Content */}
                     <div className="flex-1 overflow-y-auto px-6 py-6">
                         {highlightedContent ? (
                             <div
@@ -283,14 +343,14 @@ export default function DocumentSidebar({
                         )}
                     </div>
 
-                    {/* Search Footer */}
                     <div className="border-t border-gray-200 p-3 bg-white">
                         <div className="flex items-center gap-2">
                             <Input
                                 placeholder="Tìm kiếm trong tài liệu..."
                                 prefix={<SearchOutlined className="text-gray-400" />}
-                                value={searchQuery}
+                                value={inputValue}
                                 onChange={(e) => handleSearchChange(e.target.value)}
+                                onKeyDown={handleKeyDown}
                                 allowClear
                                 className="flex-1"
                             />
@@ -302,16 +362,16 @@ export default function DocumentSidebar({
                                     <button
                                         type="button"
                                         onClick={handlePrevMatch}
-                                        className="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50"
+                                        className="text-gray-500 hover:text-primary transition-colors"
                                     >
-                                        ↑
+                                        <UpCircleOutlined className="text-lg" />
                                     </button>
                                     <button
                                         type="button"
                                         onClick={handleNextMatch}
-                                        className="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50"
+                                        className="text-gray-500 hover:text-primary transition-colors"
                                     >
-                                        ↓
+                                        <DownCircleOutlined className="text-lg" />
                                     </button>
                                 </div>
                             )}
