@@ -3,7 +3,12 @@ import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
 // import { formatDateReadable } from '@lib/utils'
-import { useCountTopic, useDeleteTopic, useFindManyTopic } from '@workspace/db/hooks'
+import {
+    useCountTopic,
+    useDeleteManyPrompt,
+    useDeleteTopic,
+    useFindManyTopic,
+} from '@workspace/db/hooks'
 import { Button, Input, message, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -67,10 +72,17 @@ function Page() {
     }, [totalCountTopic])
 
     const { mutateAsync: deleteTopic } = useDeleteTopic()
+    const { mutateAsync: deletePrompts } = useDeleteManyPrompt()
+
     const handleDeleteTopic = async (id: string) => {
         if (!id) return
 
         try {
+            await deletePrompts({
+                where: {
+                    topicId: id,
+                },
+            })
             await deleteTopic({ where: { id } })
             message.success('Xoá chủ đề thành công')
         } catch (_error) {
@@ -114,6 +126,7 @@ function Page() {
                     </div>
                     <Table
                         rowKey="id"
+                        scroll={{ x: 1000 }}
                         columns={[
                             {
                                 title: 'STT',
@@ -137,7 +150,7 @@ function Page() {
                             {
                                 title: 'Mã định danh',
                                 dataIndex: 'type',
-                                width: 150,
+                                width: 350,
                                 render: (value) => (
                                     <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-sm">
                                         {value}
@@ -147,6 +160,7 @@ function Page() {
                             {
                                 title: 'Mô tả',
                                 dataIndex: 'description',
+                                width: 400,
                                 render: (value: string) =>
                                     value?.length > 100
                                         ? `${value.slice(0, 100)}...`
