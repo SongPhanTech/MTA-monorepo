@@ -1,4 +1,4 @@
-import type { DM_DonVi } from '@workspace/db'
+import type { DM_DonVi } from '@workspace/db/client'
 
 export interface TreeNodeOrganization extends Record<string, unknown> {
     key: string

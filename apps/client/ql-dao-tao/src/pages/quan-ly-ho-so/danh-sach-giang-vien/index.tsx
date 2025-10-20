@@ -7,7 +7,7 @@ import type { FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import type { UserProfile } from '@workspace/db'
+import type { UserProfile } from '@workspace/db/client'
 import {
     useCountLecturer,
     useFindManyDM_DonVi,

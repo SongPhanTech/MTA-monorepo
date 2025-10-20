@@ -5,8 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
+/**
+ * @nullable
+ */
 export type GetClassesInfo200ItemSubjectClassItemSchedule =
-    (typeof GetClassesInfo200ItemSubjectClassItemSchedule)[keyof typeof GetClassesInfo200ItemSubjectClassItemSchedule]
+    | (typeof GetClassesInfo200ItemSubjectClassItemSchedule)[keyof typeof GetClassesInfo200ItemSubjectClassItemSchedule]
+    | null
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassesInfo200ItemSubjectClassItemSchedule = {

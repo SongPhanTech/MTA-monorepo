@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { GraduationRankDowngradeCondition } from '@workspace/db'
+import type { GraduationRankDowngradeCondition } from '@workspace/db/client'
 import {
     useCreateGraduationRankDowngradeCondition,
     useFindUniqueGraduationRankDowngradeCondition,

@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingTime } from '@workspace/db'
+import type { TrainingTime } from '@workspace/db/client'
 import {
     useCreateTrainingTime,
     useFindUniqueTrainingTime,

@@ -7,7 +7,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { Prisma, TrainingObjectType } from '@workspace/db'
+import type { Prisma, TrainingObjectType } from '@workspace/db/client'
 import {
     useCountTrainingField,
     useFindManyDM_DonVi,

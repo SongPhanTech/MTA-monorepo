@@ -10,7 +10,7 @@
 import { CheckOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DefaultLayout from '@layouts/default-layout'
-import type { SubjectVersion } from '@workspace/db'
+import type { SubjectVersion } from '@workspace/db/client'
 import { useFindUniqueLecturer } from '@workspace/db/hooks'
 import { ROUTER_PATH } from '@workspace/router'
 import { Col, Row } from 'antd'

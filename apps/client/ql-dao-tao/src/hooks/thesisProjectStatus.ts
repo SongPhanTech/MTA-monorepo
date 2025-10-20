@@ -1,4 +1,4 @@
-import { ThesisProjectStatus } from '@workspace/db'
+import { ThesisProjectStatus } from '@workspace/db/client'
 
 export type ThesisProjectStatusOption = {
     value: ThesisProjectStatus

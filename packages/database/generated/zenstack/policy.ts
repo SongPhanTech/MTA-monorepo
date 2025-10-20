@@ -719,6 +719,26 @@ const policy: PolicyDef = {
             },
 
         },
+        documentTopic: {
+            modelLevel: {
+                read: { guard: DocumentTopic_read, },
+                create: { guard: DocumentTopic_create, inputChecker: DocumentTopic_create_input, },
+                update: { guard: DocumentTopic_update, },
+                postUpdate: { guard: DocumentTopic_postUpdate, },
+                delete: { guard: DocumentTopic_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         fAQ: {
             modelLevel: {
                 read: { guard: FAQ_read, },
@@ -826,6 +846,26 @@ const policy: PolicyDef = {
                 update: { guard: Topic_update, },
                 postUpdate: { guard: Topic_postUpdate, },
                 delete: { guard: Topic_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        documentClassification: {
+            modelLevel: {
+                read: { guard: DocumentClassification_read, },
+                create: { guard: DocumentClassification_create, inputChecker: DocumentClassification_create_input, },
+                update: { guard: DocumentClassification_update, },
+                postUpdate: { guard: DocumentClassification_postUpdate, },
+                delete: { guard: DocumentClassification_delete, }
             },
             fieldLevel: {
                 read:
@@ -4099,13 +4139,13 @@ const policy: PolicyDef = {
             },
 
         },
-        answer: {
+        exam: {
             modelLevel: {
-                read: { guard: Answer_read, },
-                create: { guard: Answer_create, inputChecker: Answer_create_input, },
-                update: { guard: Answer_update, },
-                postUpdate: { guard: Answer_postUpdate, },
-                delete: { guard: Answer_delete, }
+                read: { guard: Exam_read, },
+                create: { guard: Exam_create, inputChecker: Exam_create_input, },
+                update: { guard: Exam_update, },
+                postUpdate: { guard: Exam_postUpdate, },
+                delete: { guard: Exam_delete, }
             },
             fieldLevel: {
                 read:
@@ -4119,13 +4159,13 @@ const policy: PolicyDef = {
             },
 
         },
-        exam: {
+        examRoom: {
             modelLevel: {
-                read: { guard: Exam_read, },
-                create: { guard: Exam_create, inputChecker: Exam_create_input, },
-                update: { guard: Exam_update, },
-                postUpdate: { guard: Exam_postUpdate, },
-                delete: { guard: Exam_delete, }
+                read: { guard: ExamRoom_read, },
+                create: { guard: ExamRoom_create, inputChecker: ExamRoom_create_input, },
+                update: { guard: ExamRoom_update, },
+                postUpdate: { guard: ExamRoom_postUpdate, },
+                delete: { guard: ExamRoom_delete, }
             },
             fieldLevel: {
                 read:
@@ -4186,26 +4226,6 @@ const policy: PolicyDef = {
                 update: { guard: ExamBankQuestion_update, },
                 postUpdate: { guard: ExamBankQuestion_postUpdate, },
                 delete: { guard: ExamBankQuestion_delete, }
-            },
-            fieldLevel: {
-                read:
-                {
-
-                },
-                update:
-                {
-
-                },
-            },
-
-        },
-        examFax: {
-            modelLevel: {
-                read: { guard: ExamFax_read, },
-                create: { guard: ExamFax_create, inputChecker: ExamFax_create_input, },
-                update: { guard: ExamFax_update, },
-                postUpdate: { guard: ExamFax_postUpdate, },
-                delete: { guard: ExamFax_delete, }
             },
             fieldLevel: {
                 read:
@@ -4974,12 +4994,14 @@ const policy: PolicyDef = {
         chatBotConfig: { hasValidation: false },
         userSession: { hasValidation: false },
         document: { hasValidation: false },
+        documentTopic: { hasValidation: false },
         fAQ: { hasValidation: false },
         prompt: { hasValidation: false },
         conversation: { hasValidation: false },
         message: { hasValidation: false },
         citationMessage: { hasValidation: false },
         topic: { hasValidation: false },
+        documentClassification: { hasValidation: false },
         dM_CapBac: { hasValidation: false },
         dM_ChucDanh: { hasValidation: false },
         dM_ChucVu: { hasValidation: false },
@@ -5143,12 +5165,11 @@ const policy: PolicyDef = {
         multipleChoiceOption: { hasValidation: false },
         fillInBlankSlot: { hasValidation: false },
         orderingItem: { hasValidation: false },
-        answer: { hasValidation: false },
         exam: { hasValidation: false },
+        examRoom: { hasValidation: false },
         testStructureRule: { hasValidation: false },
         examBank: { hasValidation: false },
         examBankQuestion: { hasValidation: false },
-        examFax: { hasValidation: false },
         examSession: { hasValidation: false },
         academicWarningRule: { hasValidation: false },
         academicWarning: { hasValidation: false },
@@ -7313,6 +7334,71 @@ function $check_Document_delete(input: any, context: QueryContext): any {
     return false;
 }
 
+function DocumentTopic_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DocumentTopic_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentTopic_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DocumentTopic_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentTopic_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DocumentTopic_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DocumentTopic_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentTopic_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DocumentTopic_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DocumentTopic_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DocumentTopic_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
 function FAQ_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
@@ -7697,6 +7783,71 @@ function Topic_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Topic_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentClassification_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_DocumentClassification_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentClassification_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DocumentClassification_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentClassification_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function DocumentClassification_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DocumentClassification_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function DocumentClassification_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_DocumentClassification_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function DocumentClassification_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_DocumentClassification_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
@@ -18298,71 +18449,6 @@ function $check_OrderingItem_delete(input: any, context: QueryContext): any {
     return false;
 }
 
-function Answer_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_Answer_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Answer_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Answer_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Answer_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function Answer_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Answer_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function Answer_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_Answer_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function Answer_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_Answer_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
 function Exam_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
@@ -18422,6 +18508,71 @@ function Exam_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Exam_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamRoom_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ExamRoom_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamRoom_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamRoom_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamRoom_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ExamRoom_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamRoom_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamRoom_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ExamRoom_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ExamRoom_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamRoom_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
@@ -18617,71 +18768,6 @@ function ExamBankQuestion_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_ExamBankQuestion_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamFax_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ExamFax_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamFax_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamFax_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamFax_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ExamFax_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamFax_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamFax_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ExamFax_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ExamFax_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamFax_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

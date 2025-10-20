@@ -1,7 +1,7 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { ScoreConvert } from '@workspace/db/client'
+import type { ScoreConvert } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'

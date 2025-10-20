@@ -1,4 +1,4 @@
-import { ClassRegisterStatus } from '@workspace/db'
+import { ClassRegisterStatus } from '@workspace/db/client'
 
 export type ClassRegisterStatusType = {
     value: ClassRegisterStatus

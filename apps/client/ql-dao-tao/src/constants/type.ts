@@ -10,6 +10,7 @@ import type {
     ExamType,
     GraduationSessionStatus,
     PaymentStatus,
+    ScoreConvertStatus,
     SemesterType,
     StudentStatus,
     SubjectClassSchedule,
@@ -20,6 +21,7 @@ import type { ColumnsType } from 'antd/es/table'
 export type FilterProps = {
     searchText?: string
     trainingObjectTypes?: string[]
+    pcgd?: boolean[]
     name?: string | ''
     code?: string | ''
     sort?: string
@@ -145,6 +147,8 @@ export type FilterProps = {
     trainingObjectTypeId?: string
     trainingFormId?: string[]
     trainingLevelId?: string[]
+    formStatus?: ScoreConvertStatus
+    subjects?: string
 }
 export type ColumnTypeProps = ColumnsType & {
     type?: string

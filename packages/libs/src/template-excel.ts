@@ -1,7 +1,9 @@
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
+import * as XLSX from 'xlsx'
 
-interface TableCell {
+/** ──────────────── Types ──────────────── */
+export interface TableCell {
     value: string | number | null
     colSpan?: number
     rowSpan?: number
@@ -11,194 +13,315 @@ interface TableCell {
     wrapText?: boolean
 }
 
-interface TableRow {
+export interface TableRow {
     cells: TableCell[]
 }
 
-interface ExportOptions {
-    templateUrl: string
-    data: Record<string, string | number | null>
+export interface SheetExportOptions {
+    sheet?: string | number
+    data?: Record<string, string | number | null>
     rows?: TableRow[]
-    tableStartCell?: { sheet?: string; row: number; col: number }
-    fileName: string
+    tableStartCell?: { row: number; col: number }
 }
-/*
-await exportFromTemplate({
-  templateUrl: "/template.xlsx",
-  data: {
-    name: "Hoàng Hải",
-    date: new Date().toLocaleDateString(),
-  },
-  tableStartCell: { row: 10, col: 2 },
-  rows: [
-    {
-      cells: [
-        { value: "STT", bold: true, bgColor: "CCCCCC", align: "center" },
-        { value: "Họ tên", bold: true, bgColor: "CCCCCC", align: "center" },
-        { value: "Chức vụ", bold: true, bgColor: "CCCCCC", align: "center" },
-      ],
-    },
-    {
-      cells: [
-        { value: 1, align: "center" },
-        { value: "Nguyễn Văn A", colSpan: 2 },
-      ],
-    },
-    {
-      cells: [
-        { value: 2, align: "center" },
-        { value: "Lê Thị B" },
-        { value: "Kỹ sư" },
-      ],
-    },
-  ],
-  fileName: "bao-cao-hoan-chinh.xlsx",
-});
 
-await exportFromTemplate({
-  templateUrl: "/template.xlsx",
-  data: { title: "Bảng chấm công" },
-  tableStartCell: { row: 5, col: 2 },
-  rows: [
-    {
-      cells: [
-        { value: "STT", bold: true, bgColor: "CCCCCC", align: "center" },
-        { value: "Họ và tên", bold: true, bgColor: "CCCCCC", align: "center" },
-        { value: "Ghi chú", bold: true, bgColor: "CCCCCC", align: "center" },
-      ],
-    },
-    {
-      cells: [
-        { value: 1, align: "center", rowSpan: 2 }, // merge dọc xuống 2 hàng
-        { value: "Nguyễn Văn A" },
-        { value: "Đi làm" },
-      ],
-    },
-    {
-      cells: [
-        // chỗ này không cần truyền lại giá trị STT nữa
-        { value: "Ca chiều", colSpan: 2 },
-      ],
-    },
-  ],
-  fileName: "bang-cham-cong.xlsx",
-});
+export interface ExportOptions {
+    templateUrl: string
+    sheets: SheetExportOptions[]
+    fileName: string
+    fontFamily?: string
+    fontSize?: number
+}
 
-*/
-export async function exportFromTemplate(options: ExportOptions) {
-    const { templateUrl, data, rows, tableStartCell, fileName } = options
-    const workbook = new ExcelJS.Workbook()
+function cloneWorksheet(
+    workbook: ExcelJS.Workbook,
+    sourceSheet: ExcelJS.Worksheet,
+    newSheetName: string
+) {
+    const newSheet = workbook.addWorksheet(newSheetName)
 
-    // Load template
-    const response = await fetch(templateUrl)
-    const buffer = await response.arrayBuffer()
-    await workbook.xlsx.load(buffer)
-
-    const worksheet = workbook.getWorksheet(tableStartCell?.sheet || 1) || workbook.worksheets[0]
-    if (!worksheet) {
-        throw new Error('Worksheet not found')
-    }
-
-    if (rows && tableStartCell && rows.length > 0) {
-        worksheet.getRow(tableStartCell.row).values = new Array(rows.length - 1).fill('')
-        worksheet.duplicateRow(tableStartCell.row, rows.length - 1, true)
-    }
-    // 1️⃣ Replace các placeholder {{...}}
-    worksheet.eachRow((row) => {
-        row.eachCell((cell) => {
-            if (typeof cell.value === 'string') {
-                let text = cell.value
-                Object.keys(data).forEach((key) => {
-                    const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g')
-                    text = text.replace(regex, String(data[key] ?? ''))
-                })
-                cell.value = text
-            }
-        })
+    // 1️⃣ Clone độ rộng cột
+    sourceSheet.columns.forEach((col, idx) => {
+        const newCol = newSheet.getColumn(idx + 1)
+        newCol.width = col.width
+        if (!newCol?.hidden) {
+            newCol.hidden = false
+        } else {
+            newCol.hidden = true
+        }
+        // nếu có style cột thì copy
+        if (col.style) {
+            newCol.style = JSON.parse(JSON.stringify(col.style))
+        }
     })
 
-    // 2️⃣ Render bảng động nếu có rows
-    if (rows && tableStartCell) {
-        let currentRow = tableStartCell.row
-        const colWidths: number[] = []
+    // 2️⃣ Clone hàng, ô và style
+    sourceSheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+        const newRow = newSheet.getRow(rowNumber)
+        newRow.height = row.height
 
-        //insert rows for dont replace footer
+        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+            const newCell = newRow.getCell(colNumber)
 
-        for (const rowData of rows) {
-            let currentCol = tableStartCell.col
-            const excelRow = worksheet.getRow(currentRow)
+            // ✅ copy giá trị
+            newCell.value = cell.value
 
-            rowData.cells.forEach((cellData) => {
-                const cell = excelRow.getCell(currentCol)
-                cell.value = cellData.value
-
-                // Style: font, align, fill, wrap
-                cell.alignment = {
-                    horizontal: cellData.align || 'left',
-                    vertical: 'middle',
-                    wrapText: cellData.wrapText ?? true,
-                }
-                cell.font = {
-                    name: 'Times New Roman',
-                    size: 14,
-                    bold: !!cellData.bold,
-                }
-                if (cellData.bgColor) {
-                    cell.fill = {
-                        type: 'pattern',
-                        pattern: 'solid',
-                        fgColor: { argb: cellData.bgColor },
-                    }
-                }
-
-                // Border
-                cell.border = {
-                    top: { style: 'thin' },
-                    left: { style: 'thin' },
-                    bottom: { style: 'thin' },
-                    right: { style: 'thin' },
-                }
-
-                // Merge cell nếu có colSpan/rowSpan
-                const colSpan = cellData.colSpan ?? 1
-                const rowSpan = cellData.rowSpan ?? 1
-                if (colSpan > 1 || rowSpan > 1) {
-                    worksheet.mergeCells(
-                        currentRow,
-                        currentCol,
-                        currentRow + rowSpan - 1,
-                        currentCol + colSpan - 1
-                    )
-                }
-
-                // Tính chiều rộng cột tối đa
-                const textLength = String(cellData.value ?? '').length
-                for (let i = 0; i < colSpan; i++) {
-                    const idx = currentCol - tableStartCell.col + i
-                    colWidths[idx] = Math.max(colWidths[idx] || 10, textLength + 2)
-                }
-
-                currentCol += colSpan
-            })
-
-            excelRow.commit()
-            currentRow++
-        }
-
-        // 3️⃣ Autofit chiều rộng cột
-        colWidths.forEach((width, index) => {
-            const colIndex = tableStartCell.col + index
-            const column = worksheet.getColumn(colIndex)
-            column.width = width
+            // ✅ copy style
+            if (cell.style && Object.keys(cell.style).length > 0) {
+                newCell.style = JSON.parse(JSON.stringify(cell.style))
+            }
         })
+
+        newRow.commit()
+    })
+
+    // 3️⃣ Clone merge cell
+    sourceSheet.model.merges.forEach((mergeRange) => {
+        newSheet.mergeCells(mergeRange)
+    })
+
+    return newSheet
+}
+
+/** ──────────────── Main ──────────────── */
+export async function exportFromTemplate(options: ExportOptions) {
+    const { templateUrl, sheets, fileName } = options
+    const ext = templateUrl.split('.').pop()?.toLowerCase()
+
+    if (ext === 'xlsx') {
+        await handleExcelJSExport(templateUrl, sheets, fileName, options)
+    } else if (ext === 'xls') {
+        await handleSheetJSExport(templateUrl, sheets, fileName, options)
+    } else {
+        throw new Error('Unsupported file type')
+    }
+}
+
+/** ──────────────── XLSX: ExcelJS ──────────────── */
+async function handleExcelJSExport(
+    templateUrl: string,
+    sheets: SheetExportOptions[],
+    fileName: string,
+    options: ExportOptions
+) {
+    const response = await fetch(templateUrl)
+    const buffer = await response.arrayBuffer()
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.load(buffer)
+
+    const firstSheet = workbook.worksheets[0]
+    if (!firstSheet) {
+        throw new Error('Template is empty')
+    }
+    for (const sheetOption of sheets) {
+        const { sheet, data = {}, rows, tableStartCell } = sheetOption
+        let worksheet: ExcelJS.Worksheet | undefined
+        if (typeof sheet === 'string' || typeof sheet === 'number') {
+            worksheet = workbook.getWorksheet(sheet)
+            if (!worksheet) {
+                worksheet = cloneWorksheet(workbook, firstSheet, String(sheet))
+            }
+        } else {
+            worksheet = workbook.worksheets[0]
+        }
+        if (!worksheet) {
+            console.log('Cannot find or create sheet:', sheet)
+            continue
+        }
+        // 1️⃣ Replace placeholder {{...}}
+        worksheet.eachRow((row) => {
+            row.eachCell((cell) => {
+                if (typeof cell.value === 'string') {
+                    let text = cell.value
+                    for (const key in data) {
+                        text = text.replace(
+                            new RegExp(`{{\\s*${key}\\s*}}`, 'g'),
+                            String(data[key] ?? '')
+                        )
+                    }
+                    cell.value = text
+                }
+            })
+        })
+
+        // 2️⃣ Render bảng động
+        if (rows && tableStartCell) {
+            let currentRow = tableStartCell.row
+            const colWidths: number[] = []
+
+            if (rows.length > 1) {
+                worksheet.spliceRows(tableStartCell.row + 1, 0, ...Array(rows.length - 1).fill([]))
+            }
+
+            for (const rowData of rows) {
+                let currentCol = tableStartCell.col
+                const excelRow = worksheet.getRow(currentRow)
+
+                for (const cellData of rowData.cells) {
+                    const cell = excelRow.getCell(currentCol)
+                    cell.value = cellData.value
+
+                    // Style
+                    cell.alignment = {
+                        horizontal: cellData.align || 'left',
+                        vertical: 'middle',
+                        wrapText: cellData.wrapText ?? true,
+                    }
+                    cell.font = {
+                        name: options.fontFamily || 'Times New Roman',
+                        size: options.fontSize || 14,
+                        bold: !!cellData.bold,
+                    }
+                    if (cellData.bgColor) {
+                        cell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: cellData.bgColor },
+                        }
+                    }
+                    cell.border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    }
+
+                    const colSpan = cellData.colSpan ?? 1
+                    const rowSpan = cellData.rowSpan ?? 1
+                    if (colSpan > 1 || rowSpan > 1) {
+                        worksheet.mergeCells(
+                            currentRow,
+                            currentCol,
+                            currentRow + rowSpan - 1,
+                            currentCol + colSpan - 1
+                        )
+                    }
+
+                    const textLength = String(cellData.value ?? '').length
+                    for (let i = 0; i < colSpan; i++) {
+                        const idx = currentCol - tableStartCell.col + i
+                        colWidths[idx] = Math.max(colWidths[idx] || 10, textLength + 2)
+                    }
+
+                    currentCol += colSpan
+                }
+
+                excelRow.commit()
+                currentRow++
+            }
+
+            // 3️⃣ Autofit column width
+            // colWidths.forEach((width, index) => {
+            //     worksheet.getColumn(tableStartCell.col + index).width = width
+            // })
+        }
     }
 
-    // 4️⃣ Xuất file
+    workbook.removeWorksheet(firstSheet.id)
     const outBuffer = await workbook.xlsx.writeBuffer()
     saveAs(
         new Blob([outBuffer], {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         }),
-        fileName
+        fileName.endsWith('.xlsx') ? fileName : `${fileName}.xlsx`
+    )
+}
+
+/** ──────────────── XLS: SheetJS ──────────────── */
+async function handleSheetJSExport(
+    templateUrl: string,
+    sheets: SheetExportOptions[],
+    fileName: string,
+    options: ExportOptions
+) {
+    const response = await fetch(templateUrl)
+    const buffer = await response.arrayBuffer()
+    const wb = XLSX.read(buffer, { type: 'array' })
+
+    for (const sheetOption of sheets) {
+        const { sheet, data = {}, rows, tableStartCell } = sheetOption
+        let sheetName: string
+
+        if (typeof sheet === 'number') {
+            sheetName = wb.SheetNames[sheet - 1] || `${sheet}`
+            if (!wb.Sheets[sheetName]) {
+                wb.SheetNames.push(sheetName)
+                wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet([])
+            }
+        } else if (typeof sheet === 'string') {
+            sheetName = sheet
+            if (!wb.Sheets[sheetName]) {
+                wb.SheetNames.push(sheetName)
+                wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet([])
+            }
+        } else {
+            sheetName = wb.SheetNames[0] || 'Sheet1'
+            if (!wb.Sheets[sheetName]) {
+                wb.SheetNames.push(sheetName)
+                wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet([])
+            }
+        }
+        const ws = wb.Sheets[sheetName]
+        if (!ws) {
+            console.log('Cannot find or create sheet:', sheetName)
+            continue
+        }
+        // 1️⃣ Replace placeholder {{...}}
+        const range = XLSX.utils.decode_range(ws['!ref'] || 'A1')
+        for (let R = range.s.r; R <= range.e.r; ++R) {
+            for (let C = range.s.c; C <= range.e.c; ++C) {
+                const addr = XLSX.utils.encode_cell({ r: R, c: C })
+                const cell = ws[addr]
+                if (cell && typeof cell.v === 'string') {
+                    let text = cell.v
+                    for (const key in data) {
+                        text = text.replace(
+                            new RegExp(`{{\\s*${key}\\s*}}`, 'g'),
+                            String(data[key] ?? '')
+                        )
+                    }
+                    cell.v = text
+                }
+            }
+        }
+
+        // 2️⃣ Render bảng + merge cell cơ bản
+        if (rows && tableStartCell) {
+            let currentRow = tableStartCell.row - 1
+            const merges: XLSX.Range[] = ws['!merges'] || []
+
+            for (const rowData of rows) {
+                let currentCol = tableStartCell.col - 1
+                for (const cellData of rowData.cells) {
+                    const addr = XLSX.utils.encode_cell({ r: currentRow, c: currentCol })
+                    ws[addr] = {
+                        t: typeof cellData.value === 'number' ? 'n' : 's',
+                        v: cellData.value ?? '',
+                    }
+
+                    const colSpan = cellData.colSpan ?? 1
+                    const rowSpan = cellData.rowSpan ?? 1
+                    if (colSpan > 1 || rowSpan > 1) {
+                        merges.push({
+                            s: { r: currentRow, c: currentCol },
+                            e: { r: currentRow + rowSpan - 1, c: currentCol + colSpan - 1 },
+                        })
+                    }
+                    currentCol += colSpan
+                }
+                currentRow++
+            }
+
+            ws['!merges'] = merges
+            ws['!ref'] = XLSX.utils.encode_range({
+                s: { r: range.s.r, c: range.s.c },
+                e: { r: Math.max(range.e.r, currentRow - 1), c: range.e.c },
+            })
+        }
+    }
+
+    const out = XLSX.write(wb, { bookType: 'xls', type: 'array' })
+    saveAs(
+        new Blob([out], { type: 'application/vnd.ms-excel' }),
+        fileName.endsWith('.xls') ? fileName : `${fileName}.xls`
     )
 }

@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Decision, DocumentFile } from '@workspace/db'
+import type { Decision, DocumentFile } from '@workspace/db/client'
 import { useCreateDecision, useFindUniqueDecision, useUpdateDecision } from '@workspace/db/hooks'
 import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'

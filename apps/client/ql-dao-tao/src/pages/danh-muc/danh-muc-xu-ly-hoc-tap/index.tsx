@@ -9,7 +9,7 @@ import type { FilterProps } from '@constants/type'
 import { useAcademicActionTypeOption } from '@hooks/academicActionType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse } from '@workspace/db'
+import type { TrainingCourse } from '@workspace/db/client'
 import {
     useCountTrainingCourse,
     useFindManyTrainingCourse,

@@ -1,5 +1,5 @@
 import { CloseOutlined, CloudUploadOutlined, PaperClipOutlined } from '@ant-design/icons'
-import type { DocumentFile, Prisma } from '@workspace/db'
+import type { DocumentFile, Prisma } from '@workspace/db/client'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { message, Tooltip, Typography, Upload } from 'antd'
 import type { FormInstance } from 'antd/es/form'

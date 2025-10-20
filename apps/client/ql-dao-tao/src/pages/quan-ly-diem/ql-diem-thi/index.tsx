@@ -9,7 +9,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import type { StudentSubjectScore } from '@workspace/db'
+import type { StudentSubjectScore } from '@workspace/db/client'
 import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
@@ -204,26 +204,22 @@ export default function SubjectClassScore() {
                                 where: { id },
                                 data: {
                                     ...newData,
-                                    attendanceScore: !!item?.subjectVersion?.onePoint
-                                        ? !!item.examScore
+                                    attendanceScore: item?.subjectVersion?.onePoint
+                                        ? item.examScore
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.attendanceScore,
-                                    midtermScore: !!item?.subjectVersion?.onePoint
-                                        ? !!item.examScore
+                                    midtermScore: item?.subjectVersion?.onePoint
+                                        ? item.examScore
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.midtermScore,
-                                    examScore: !!item.examScore
-                                        ? item.examScore
-                                        : newData?.examScore,
-                                    description: !!item.description
+                                    examScore: item.examScore ? item.examScore : newData?.examScore,
+                                    description: item.description
                                         ? item.description
                                         : newData?.description,
-                                    suspended: !!item.suspended
-                                        ? item.suspended
-                                        : newData?.suspended,
-                                    suspendedReason: !!item.suspendedReason
+                                    suspended: item.suspended ? item.suspended : newData?.suspended,
+                                    suspendedReason: item.suspendedReason
                                         ? item.suspendedReason
                                         : newData?.suspendedReason,
                                 },
@@ -241,28 +237,24 @@ export default function SubjectClassScore() {
                             data: {
                                 data: {
                                     studentSubjectScoreId: id,
-                                    attendanceScore: !!item?.subjectVersion?.onePoint
-                                        ? !!item.examScore
+                                    attendanceScore: item?.subjectVersion?.onePoint
+                                        ? item.examScore
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.attendanceScore,
-                                    midtermScore: !!item?.subjectVersion?.onePoint
-                                        ? !!item.examScore
+                                    midtermScore: item?.subjectVersion?.onePoint
+                                        ? item.examScore
                                             ? item.examScore
                                             : newData?.examScore
                                         : item?.midtermScore,
-                                    examScore: !!item.examScore
-                                        ? item.examScore
-                                        : newData?.examScore,
+                                    examScore: item.examScore ? item.examScore : newData?.examScore,
                                     finalScore: item?.finalScore,
                                     manualFinalScore: item?.manualFinalScore,
-                                    description: !!item.description
+                                    description: item.description
                                         ? item.description
                                         : newData?.description,
-                                    suspended: !!item.suspended
-                                        ? item.suspended
-                                        : newData?.suspended,
-                                    suspendedReason: !!item.suspendedReason
+                                    suspended: item.suspended ? item.suspended : newData?.suspended,
+                                    suspendedReason: item.suspendedReason
                                         ? item.suspendedReason
                                         : newData?.suspendedReason,
                                     updatedById: profileId,
@@ -580,15 +572,14 @@ export default function SubjectClassScore() {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const disabledForm: boolean = useMemo(() => {
         return !(
-            (can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
-                dataDetailSubjectClass?.examScoreDeadline &&
-                dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
-                !dataDetailSubjectClass?.isLockExamScore &&
-                ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
-                    profileId === listUser.P13) ||
-                    (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
-                        profileId !== listUser.P13))) ||
-            false
+            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
+            dataDetailSubjectClass?.examScoreDeadline &&
+            dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
+            !dataDetailSubjectClass?.isLockExamScore &&
+            ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
+                profileId === listUser.P13) ||
+                (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
+                    profileId !== listUser.P13))
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
@@ -618,7 +609,7 @@ export default function SubjectClassScore() {
     // // biome-ignore lint/correctness/useExhaustiveDependencies: <formTable>
     // useEffect(() => {
     //     if (subjectClassId) {
-            
+
     //     }
     // }, [subjectClassId])
 
@@ -1138,7 +1129,7 @@ export default function SubjectClassScore() {
                                                                         ?.trainingCourse,
                                                                     {
                                                                         ...record,
-                                                                        examScore: !!recordForm
+                                                                        examScore: recordForm
                                                                             ? recordForm
                                                                             : record?.examScore,
                                                                     }

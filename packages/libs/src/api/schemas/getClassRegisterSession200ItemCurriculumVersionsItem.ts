@@ -4,7 +4,6 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { GetClassRegisterSession200ItemCurriculumVersionsItemTrainingLanguage } from './getClassRegisterSession200ItemCurriculumVersionsItemTrainingLanguage'
 
 /**
  * @nullable
@@ -27,13 +26,13 @@ export type GetClassRegisterSession200ItemCurriculumVersionsItem = {
     shortName?: string | null
     /** @nullable */
     englishName?: string | null
-    trainingLanguage: GetClassRegisterSession200ItemCurriculumVersionsItemTrainingLanguage
     /** @nullable */
     numberOfSemesters?: number | null
     /** @nullable */
     yearCreation?: number | null
     /** @nullable */
     yearApplication?: number | null
+    isLock?: boolean
     /** @nullable */
     requiredCredits?: number | null
     /** @nullable */

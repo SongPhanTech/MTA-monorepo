@@ -85,16 +85,17 @@ model TrainingForm extends Base {
 
 /// địa điểm đào tạo
 model TrainingLocation extends Base {
-  name          String       @unique
+  name           String         @unique
 
-  dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId     String?      @db.Uuid
+  dM_Tinh        DM_Tinh?       @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId      String?        @db.Uuid
 
-  dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
-  dM_Tinh_NewId String?      @db.Uuid
+  dM_Tinh_New    DM_Tinh_New?   @relation(fields: [dM_Tinh_NewId], references: [Id])
+  dM_Tinh_NewId  String?        @db.Uuid
 
-  students      Student[]
-  buildings     Building[]
+  students       Student[]
+  buildings      Building[]
+  subjectClasses SubjectClass[] @relation("ClassTrainingLocation")
 
   @@schema("ql-dao-tao")
 }
@@ -130,7 +131,7 @@ model Room extends Base {
   defenseRooms   SubjectClass[]  @relation("DefenseRooms") // DS phòng bảo vệ đồ án -> chọn phòng tự động
   thesisProject  ThesisProject[]
   classSchedules ClassSchedule[]
-  examSession    ExamSession[]
+  examRooms      ExamRoom[]
 
   @@schema("ql-dao-tao")
 }

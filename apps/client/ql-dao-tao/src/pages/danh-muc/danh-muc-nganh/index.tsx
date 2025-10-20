@@ -7,7 +7,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
-import type { DM_DonVi, DocumentFile, TrainingObjectType } from '@workspace/db'
+import type { DM_DonVi, DocumentFile, TrainingObjectType } from '@workspace/db/client'
 import {
     useCountTrainingField,
     useFindManyDM_DonVi,

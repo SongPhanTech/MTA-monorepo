@@ -1422,27 +1422,48 @@ model UserSession {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model Document {
-  id           String         @id() @default(cuid())
-  code         String?        @unique()
-  active       Boolean        @default(true)
-  description  String?        @db.Text()
-  deletedAt    DateTime?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @default(now()) @updatedAt()
-  title        String?
-  body         String?        @db.Text()
-  status       DocumentStatus @default(PENDING)
-  uri          String?
-  fileType     String?
-  fileSize     Int?
-  topic        Topic?         @relation(fields: [topicId], references: [id])
-  topicId      String?
-  reason       String?
-  uploadedBy   UserProfile    @relation("DocumentUploaded", fields: [uploadedById], references: [id])
-  uploadedById String         @default("")
-  approvedBy   UserProfile?   @relation("DocumentApproved", fields: [approvedById], references: [id])
-  approvedById String?
+  id               String                  @id() @default(cuid())
+  code             String?                 @unique()
+  active           Boolean                 @default(true)
+  description      String?                 @db.Text()
+  deletedAt        DateTime?
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @default(now()) @updatedAt()
+  title            String?
+  body             String?                 @db.Text()
+  status           DocumentStatus          @default(PENDING)
+  classification   DocumentClassification? @relation(fields: [classificationId], references: [id])
+  classificationId String?
+  uri              String?
+  fileType         String?
+  fileSize         Int?
+  reason           String?
+  uploadedBy       UserProfile             @relation("DocumentUploaded", fields: [uploadedById], references: [id])
+  uploadedById     String                  @default("")
+  approvedBy       UserProfile?            @relation("DocumentApproved", fields: [approvedById], references: [id])
+  approvedById     String?
+  topics           DocumentTopic[]
 
+  @@schema("tro-ly-ao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model DocumentTopic {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  document    Document  @relation(fields: [documentId], references: [id])
+  documentId  String
+  topic       Topic     @relation(fields: [topicId], references: [id])
+  topicId     String
+
+  @@unique([documentId, topicId])
   @@schema("tro-ly-ao")
 }
 
@@ -1559,19 +1580,36 @@ model CitationMessage {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model Topic {
-  id            String         @id() @default(cuid())
-  code          String?        @unique()
-  active        Boolean        @default(true)
-  description   String?        @db.Text()
+  id            String          @id() @default(cuid())
+  code          String?         @unique()
+  active        Boolean         @default(true)
+  description   String?         @db.Text()
   deletedAt     DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now()) @updatedAt()
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt()
   name          String
   type          String
-  documents     Document[]
+  documents     DocumentTopic[]
   faqs          FAQ[]
   prompts       Prompt[]
   conversations Conversation[]
+
+  @@schema("tro-ly-ao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model DocumentClassification {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt()
+  name        String     @unique()
+  documents   Document[]
 
   @@schema("tro-ly-ao")
 }
@@ -2492,6 +2530,11 @@ model StudentSubjectScore {
   repeated                     Boolean                                    @default(false)
   repeatedReason               String?
   isImproving                  Boolean                                    @default(false)
+  /// kì thi
+  exam                         Exam?                                      @relation(fields: [examId], references: [id])
+  examId                       String?
+  /// thí sinh trong kì thi
+  examSession                  ExamSession?
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
   certificates                 ArchivedCertificateOnStudentSubjectScore[]
@@ -2538,7 +2581,7 @@ model StudentSubjectScoreHistory {
   manualFinalScore      Float?
   examPostponedReason   Boolean?
   examPostponed         String?
-  examBanned            Boolean
+  examBanned            Boolean?
   examBannedReason      String?
   suspended             Boolean?
   suspendedReason       String?
@@ -3170,7 +3213,7 @@ model ClassRegisterSessionCredit {
   classRegisterSessionId String
   minCredit              Int                     @default(0)
   maxCredit              Int                     @default(25)
-  baseScore              AcademicRankingBaseType
+  baseScore              AcademicRankingBaseType @default(Base10)
   base10Min              Float?
   base10Max              Float?
   base4Min               Float?
@@ -3251,6 +3294,8 @@ model SubjectClass {
   semesterId                 String
   cancelled                  Boolean               @default(false)
   lecturerAssignmentDeadline DateTime?
+  sendLecturerAssignmentAt   DateTime?
+  submitLecturerAssignmentAt DateTime?
   examDate                   DateTime?
   examType                   ExamType?
   exam                       Exam?                 @relation(fields: [examId], references: [id])
@@ -3270,6 +3315,8 @@ model SubjectClass {
   scoreChecked               Boolean               @default(false)
   room                       Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
   roomId                     String?
+  trainingLocation           TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocationId         String?
   mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
   lecturerId                 String?
   extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
@@ -3456,20 +3503,21 @@ model TrainingForm {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model TrainingLocation {
-  id            String       @id() @default(cuid())
-  code          String?      @unique()
-  active        Boolean      @default(true)
-  description   String?      @db.Text()
-  deletedAt     DateTime?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now()) @updatedAt()
-  name          String       @unique()
-  dM_Tinh       DM_Tinh?     @relation(fields: [dM_TinhId], references: [Id])
-  dM_TinhId     String?      @db.Uuid()
-  dM_Tinh_New   DM_Tinh_New? @relation(fields: [dM_Tinh_NewId], references: [Id])
-  dM_Tinh_NewId String?      @db.Uuid()
-  students      Student[]
-  buildings     Building[]
+  id             String         @id() @default(cuid())
+  code           String?        @unique()
+  active         Boolean        @default(true)
+  description    String?        @db.Text()
+  deletedAt      DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now()) @updatedAt()
+  name           String         @unique()
+  dM_Tinh        DM_Tinh?       @relation(fields: [dM_TinhId], references: [Id])
+  dM_TinhId      String?        @db.Uuid()
+  dM_Tinh_New    DM_Tinh_New?   @relation(fields: [dM_Tinh_NewId], references: [Id])
+  dM_Tinh_NewId  String?        @db.Uuid()
+  students       Student[]
+  buildings      Building[]
+  subjectClasses SubjectClass[] @relation("ClassTrainingLocation")
 
   @@schema("ql-dao-tao")
 }
@@ -3519,7 +3567,7 @@ model Room {
   defenseRooms   SubjectClass[]  @relation("DefenseRooms")
   thesisProject  ThesisProject[]
   classSchedules ClassSchedule[]
-  examSession    ExamSession[]
+  examRooms      ExamRoom[]
 
   @@schema("ql-dao-tao")
 }
@@ -3893,7 +3941,6 @@ model Student {
   notifications                  Notification[]
   researchRegistrations          StudentResearchRegistration[]
   thesisRegistrations            StudentThesisRegistration[]
-  examSession                    ExamSession[]
   diplomaVerificationApplication DiplomaVerificationApplication[]
   studentScoreConvert            StudentScoreConvert[]
   classRegisterLogs              ClassRegisterLogs[]
@@ -5883,8 +5930,6 @@ model Question {
   difficulty            Difficulty?            @relation(fields: [difficultyId], references: [id])
   difficultyId          String?
   sessionQuestions      ExamBankQuestion[]
-  /// Câu trả lời của thí sinh trong các phiên thi
-  answers               Answer[]
 
   @@schema("khao-thi")
 }
@@ -5952,62 +5997,58 @@ model OrderingItem {
   @@schema("khao-thi")
 }
 
-/// Câu trả lời của thí sinh
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model Answer {
-  id          String      @id() @default(cuid())
-  code        String?     @unique()
-  active      Boolean     @default(true)
-  description String?     @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @default(now()) @updatedAt()
-  sessionId   String
-  session     ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  questionId  String
-  question    Question    @relation(fields: [questionId], references: [id])
-  isCorrect   Boolean?
-  score       Float?
-  comment     String?
-  essayAnswer String
-
-  @@unique([sessionId, questionId])
-  @@schema("khao-thi")
-}
-
 /// Bảng kỳ thi
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model Exam {
-  id                 String              @id() @default(cuid())
-  code               String?             @unique()
-  active             Boolean             @default(true)
-  description        String?             @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @default(now()) @updatedAt()
-  title              String
-  status             ExamStatus          @default(DRAFT)
-  questionBank       QuestionBank        @relation(fields: [questionBankId], references: [id])
-  questionBankId     String
-  startTime          DateTime
-  endTime            DateTime
-  duration           Int
-  passScore          Float               @default(5)
-  maxScore           Float               @default(10)
-  shuffleQuestions   Boolean             @default(true)
-  shuffleAnswers     Boolean             @default(true)
-  showResult         Boolean             @default(false)
-  room               Room[]
-  subjectClass       SubjectClass[]
-  examBank           ExamBank[]
-  testStructureRules TestStructureRule[]
-  examSessions       ExamSession[]
-  examFax            ExamFax[]
+  id                  String                @id() @default(cuid())
+  code                String?               @unique()
+  active              Boolean               @default(true)
+  description         String?               @db.Text()
+  deletedAt           DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @default(now()) @updatedAt()
+  title               String
+  status              ExamStatus            @default(DRAFT)
+  questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
+  questionBankId      String?
+  lockExamCode        Boolean               @default(false)
+  /// thời gian thi
+  startTime           String
+  duration            Int
+  /// Lớp môn học
+  subjectClass        SubjectClass[]
+  /// thí sinh
+  studentSubjectScore StudentSubjectScore[]
+  room                Room[]
+  examBank            ExamBank[]
+  testStructureRules  TestStructureRule[]
+  examSessions        ExamSession[]
+  examRooms           ExamRoom[]
 
+  @@schema("khao-thi")
+}
+
+/// Phòng thi cho kỳ thi
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
+model ExamRoom {
+  id           String        @id() @default(cuid())
+  code         String?       @unique()
+  active       Boolean       @default(true)
+  description  String?       @db.Text()
+  deletedAt    DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt()
+  exam         Exam          @relation(fields: [examId], references: [id])
+  examId       String
+  room         Room?         @relation(fields: [roomId], references: [id])
+  roomId       String?
+  examSessions ExamSession[]
+
+  @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 
@@ -6050,14 +6091,13 @@ model ExamBank {
   exam        Exam               @relation(fields: [examId], references: [id])
   examId      String
   examCode    String
-  examSession ExamSession[]
   questions   ExamBankQuestion[]
 
   @@unique([examId, examCode])
   @@schema("khao-thi")
 }
 
-/// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
+/// Bảng nối, xác định câu hỏi nào thuộc về đề thi nào
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
@@ -6080,54 +6120,28 @@ model ExamBankQuestion {
   @@schema("khao-thi")
 }
 
-/// @@allow('all', auth() != null)
-/// @@deny('read', deletedAt != null)
-/// @@allow('read', auth() != null)
-model ExamFax {
-  id          String       @id() @default(cuid())
-  code        String?      @unique()
-  active      Boolean      @default(true)
-  description String?      @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now()) @updatedAt()
-  examId      String
-  exam        Exam         @relation(fields: [examId], references: [id], onDelete: Cascade)
-  fax         String
-  score       Decimal?     @db.Decimal(5, 2)
-  examSession ExamSession?
-
-  @@unique([examId, fax])
-  @@schema("khao-thi")
-}
-
 /// Bài thi
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ExamSession {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  startTime   DateTime?
-  endTime     DateTime?
-  student     Student?  @relation(fields: [studentId], references: [id])
-  studentId   String?
-  exam        Exam      @relation(fields: [examId], references: [id])
-  examId      String
-  room        Room?     @relation(fields: [roomId], references: [id])
-  roomId      String?
-  examBank    ExamBank? @relation(fields: [examBankId], references: [id])
-  examBankId  String?
-  answers     Answer[]
-  examFax     ExamFax?  @relation(fields: [examFaxId], references: [id])
-  examFaxId   String?   @unique()
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt()
+  exam                  Exam                @relation(fields: [examId], references: [id])
+  examId                String
+  examRoom              ExamRoom            @relation(fields: [examRoomId], references: [id])
+  examRoomId            String
+  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String              @unique()
+  /// phách
+  examCode              String?
 
-  @@unique([studentId, examId])
+  @@unique([examCode, examId])
   @@schema("khao-thi")
 }
 

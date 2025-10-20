@@ -8,7 +8,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import type { StudentSubjectScore } from '@workspace/db'
+import type { StudentSubjectScore } from '@workspace/db/client'
 import {
     useFindManyStudentSubjectScore,
     useFindManySubjectClass,
@@ -518,14 +518,13 @@ export default function SubjectClassScore() {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const disabledForm: boolean = useMemo(() => {
         return !(
-            (can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
-                dataDetailSubjectClass?.scoreDeadLineStart &&
-                dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&
-                dataDetailSubjectClass?.scoreDeadline &&
-                dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
-                !dataDetailSubjectClass?.isLockScore &&
-                profileId !== listUser.P13) ||
-            false
+            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
+            dataDetailSubjectClass?.scoreDeadLineStart &&
+            dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&
+            dataDetailSubjectClass?.scoreDeadline &&
+            dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
+            !dataDetailSubjectClass?.isLockScore &&
+            profileId !== listUser.P13
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
@@ -575,7 +574,7 @@ export default function SubjectClassScore() {
     // useEffect(() => {
     //     if (subjectClassId) {
     //         setIsChanged(false)
-          
+
     //     }
     // }, [subjectClassId])
 
@@ -618,7 +617,7 @@ export default function SubjectClassScore() {
                                     })}
                                     defaultValue={subjectClassId}
                                     onChange={(value) => {
-                                          formTable.setFieldsValue([])
+                                        formTable.setFieldsValue([])
                                         router.push(
                                             `/quan-ly-diem/ql-diem-cc-tx?subjectClassId=${value}`
                                         )
@@ -1148,10 +1147,10 @@ export default function SubjectClassScore() {
                                                                     {
                                                                         ...record,
                                                                         attendanceScore:
-                                                                            !!attendanceScore
+                                                                            attendanceScore
                                                                                 ? attendanceScore
                                                                                 : record?.attendanceScore,
-                                                                        midtermScore: !!midtermScore
+                                                                        midtermScore: midtermScore
                                                                             ? midtermScore
                                                                             : record?.attendanceScore,
                                                                     }

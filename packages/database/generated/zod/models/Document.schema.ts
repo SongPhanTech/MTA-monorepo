@@ -26,13 +26,14 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    topic: z.record(z.unknown()).optional(),
+    classification: z.record(z.unknown()).optional(),
     uploadedBy: z.record(z.unknown()),
     approvedBy: z.record(z.unknown()).optional(),
+    topics: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    topicId: z.string().nullish(),
+    classificationId: z.string().nullish(),
     uploadedById: z.string().optional(),
     approvedById: z.string().nullish(),
 }

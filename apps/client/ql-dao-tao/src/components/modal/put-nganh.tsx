@@ -5,7 +5,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import type { DocumentFile, TrainingField, TrainingObjectType } from '@workspace/db'
+import type { DocumentFile, TrainingField, TrainingObjectType } from '@workspace/db/client'
 import {
     useCreateTrainingField,
     useFindManyDM_DonVi,
@@ -37,12 +37,9 @@ const PutTrainingFieldModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-    const { data: trainingObjectTypeData = [], refetch: refetchObjectType } =
-        useFindManyTrainingObjectType()
-
-    const { data: organizations = [], refetch: refetchOrganizations } = useFindManyDM_DonVi()
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+    const { data: organizations = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(organizations)
-
     const { mutateAsync: createTrainingField } = useCreateTrainingField()
     const { mutateAsync: updateTrainingField } = useUpdateTrainingField()
     async function onOk({ trainingObjectTypeIds, ...rest }: PutTrainingField) {
@@ -53,15 +50,39 @@ const PutTrainingFieldModal = () => {
                     data: {
                         ...rest,
                         documentFiles: {
-                            createMany: {
-                                data:
-                                    rest.documentFiles?.map((documentFile: DocumentFile) => ({
-                                        name: documentFile.name,
-                                        path: documentFile.path,
-                                        mimeType: documentFile.mimeType,
-                                        size: documentFile.size,
-                                    })) || [],
-                            },
+                            upsert: (rest.documentFiles || [])
+                                .filter((file) => !!file.id)
+                                .map((file) => ({
+                                    where: { id: file.id },
+                                    create: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                    },
+                                    update: {
+                                        name: file.name,
+                                        path: file.path,
+                                        mimeType: file.mimeType,
+                                        size: file.size,
+                                    },
+                                })),
+                            create: (rest.documentFiles || [])
+                                .filter((file) => !file.id)
+                                .map((file) => ({
+                                    name: file.name,
+                                    path: file.path,
+                                    mimeType: file.mimeType,
+                                    size: file.size,
+                                })),
+                            disconnect: document
+                                .filter(
+                                    (initialFile) =>
+                                        !rest.documentFiles?.some(
+                                            (finalFile) => finalFile.id === initialFile.id
+                                        )
+                                )
+                                .map((fileToDisconnect) => ({ id: fileToDisconnect.id })),
                         },
                         trainingObjectTypes: {
                             createMany: {

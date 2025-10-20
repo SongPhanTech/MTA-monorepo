@@ -21,15 +21,19 @@ export type GetClassesInfo200Item = {
     createdAt?: string | null
     /** @nullable */
     updatedAt?: string | null
+    isLocked?: boolean
     name: string
     /** @nullable */
     codeTkb?: string | null
     examType: GetClassesInfo200ItemExamType
     type: GetClassesInfo200ItemType
+    onePoint?: boolean
     credit: number
     /** @nullable */
     week?: number | null
     period?: number
+    /** @nullable */
+    schedulePeriod?: number | null
     /** @nullable */
     numberOfTheory?: number | null
     /** @nullable */

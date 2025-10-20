@@ -6,7 +6,7 @@ import type { FilterProps } from '@constants/type'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { PaymentStatus } from '@workspace/db'
+import { PaymentStatus } from '@workspace/db/client'
 import {
     useCountSupervisorPaymentRecord,
     useDeleteSupervisorPaymentRecord,

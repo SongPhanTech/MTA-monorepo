@@ -1,7 +1,7 @@
 import { queryClient } from '@api/index'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { DiplomaVerificationApplication } from '@workspace/db'
+import type { DiplomaVerificationApplication } from '@workspace/db/client'
 import {
     useFindUniqueDiplomaVerificationApplication,
     useUpdateDiplomaVerificationApplication,

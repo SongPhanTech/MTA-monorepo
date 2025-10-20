@@ -3,7 +3,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
 import DefaultLayout from '@layouts/default-layout'
-import type { StudentTrainingType } from '@workspace/db'
+import type { StudentTrainingType } from '@workspace/db/client'
 import {
     useCountStudent,
     useFindManyStudent,

@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { Council } from '@workspace/db'
+import type { Council } from '@workspace/db/client'
 import { useCreateCouncil, useFindUniqueCouncil, useUpdateCouncil } from '@workspace/db/hooks'
 import { Col, Form, message } from 'antd'
 import dayjs from 'dayjs'

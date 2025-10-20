@@ -1,4 +1,4 @@
-import { CouncilRole } from '@workspace/db'
+import { CouncilRole } from '@workspace/db/client'
 
 export type CouncilRoleOption = {
     value: CouncilRole

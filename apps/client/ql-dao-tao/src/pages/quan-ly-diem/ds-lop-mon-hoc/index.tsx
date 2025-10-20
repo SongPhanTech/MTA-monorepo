@@ -2,12 +2,12 @@ import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { FilterProps } from '@constants/type'
+import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { SubjectClass, SubjectVersion } from '@workspace/db'
+import type { SubjectClass, SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManySubjectClass,
@@ -31,7 +31,7 @@ import {
     Row,
     Tooltip,
 } from 'antd'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -624,7 +624,7 @@ export default function ClassSubject() {
                                                     </Col>
                                                 </Form>
                                             }
-                                            title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                            title="Sửa thời gian nhập điểm TX,CC"
                                             trigger="click"
                                             placement="bottomRight"
                                             open={open}
@@ -647,14 +647,14 @@ export default function ClassSubject() {
                                                     <FormItem
                                                         form={form}
                                                         name={'beforeDays'}
-                                                        label="Số ngày nhập điểm TX,CC"
+                                                        label="Số ngày nhập điểm thi"
                                                         className="mb-2"
                                                     >
                                                         <InputNumber
                                                             className="w-full"
                                                             min={0}
                                                             step={0}
-                                                            placeholder="Nhập số ngày nhập điểm TX,CC"
+                                                            placeholder="Nhập số ngày nhập điểm thi"
                                                         />
                                                     </FormItem>
                                                     <FormItem
@@ -665,6 +665,7 @@ export default function ClassSubject() {
                                                         <DatePicker
                                                             format={'DD/MM/YYYY'}
                                                             placeholder={'Hạn nhập điểm thi'}
+                                                            className="w-full"
                                                         />
                                                     </FormItem>
                                                     <Col span={24} className="text-right mt-4">
@@ -674,7 +675,7 @@ export default function ClassSubject() {
                                                     </Col>
                                                 </Form>
                                             }
-                                            title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                            title="Sửa thời gian nhập điểm thi"
                                             trigger="click"
                                             placement="bottomRight"
                                             open={openExam}

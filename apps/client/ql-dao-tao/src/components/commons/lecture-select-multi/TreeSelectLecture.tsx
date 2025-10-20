@@ -37,7 +37,7 @@ function buildOrgAndLectureTree(
 
 // Define props for our custom component
 type LectureTreeSelectProps = {
-    organizationId?: string // ID của tổ chức để lọc giảng viên
+    organizationId?: string | null // ID của tổ chức để lọc giảng viên
     ignoreOrgIds?: string[] // Danh sách ID tổ chức để bỏ qua
     ignoreLectureIds?: string[] // Danh sách ID giảng viên để bỏ qua
 } & TreeSelectProps

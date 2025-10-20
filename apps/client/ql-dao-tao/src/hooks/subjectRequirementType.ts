@@ -1,4 +1,4 @@
-import { SubjectRequirementType } from '@workspace/db'
+import { SubjectRequirementType } from '@workspace/db/client'
 
 export type SubjectRequirementTypeOption = {
     value: SubjectRequirementType

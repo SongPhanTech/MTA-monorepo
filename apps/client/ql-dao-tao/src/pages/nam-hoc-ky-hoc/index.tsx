@@ -9,7 +9,7 @@ import type { FilterProps } from '@constants/type'
 import { useSemesterTypeOptions } from '@hooks/semesterType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma, SchoolYear } from '@workspace/db'
+import type { Prisma, SchoolYear } from '@workspace/db/client'
 import {
     useCountSchoolYear,
     useFindManySchoolYear,
@@ -253,7 +253,7 @@ function YearAndSemester() {
                     <Col span={12}>
                         <Flex justify="end" gap={10}>
                             {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                 'THEM'
                             ) && (
                                 <>

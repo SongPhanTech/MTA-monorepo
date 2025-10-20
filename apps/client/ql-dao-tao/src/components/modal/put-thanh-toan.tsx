@@ -3,7 +3,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Table from '@components/commons/table'
 import { useCouncilRoleOptions } from '@hooks/councilRole'
 import useSpinner from '@hooks/spinner'
-import { CouncilRole, type DefaultCouncilRolePayAmount, PaymentStatus } from '@workspace/db'
+import { CouncilRole, type DefaultCouncilRolePayAmount, PaymentStatus } from '@workspace/db/client'
 import {
     useCreateManyPaymentRecord,
     useCreateManySupervisorPaymentRecord,

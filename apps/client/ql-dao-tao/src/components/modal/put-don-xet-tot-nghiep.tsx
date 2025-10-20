@@ -2,8 +2,8 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { StudentGraduationApplication } from '@workspace/db'
-import { ApplicationStatus } from '@workspace/db'
+import type { StudentGraduationApplication } from '@workspace/db/client'
+import { ApplicationStatus } from '@workspace/db/client'
 import {
     useCreateManyStudentGraduationApplication,
     useFindManyStudent,

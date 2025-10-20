@@ -1,4 +1,4 @@
-import { DecisionStatus } from '@workspace/db'
+import { DecisionStatus } from '@workspace/db/client'
 
 export type DecisionStatusOption = {
     value: DecisionStatus

@@ -5,7 +5,7 @@ import Table from '@components/commons/table'
 import { useCouncilRoleOptions } from '@hooks/councilRole'
 import { usePaymentStatusOptions } from '@hooks/paymentStatus'
 import useSpinner from '@hooks/spinner'
-import type { PaymentRecord } from '@workspace/db'
+import type { PaymentRecord } from '@workspace/db/client'
 import {
     useFindManyPaymentRecord,
     useFindManySupervisorPaymentRecord,

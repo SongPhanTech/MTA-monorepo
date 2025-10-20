@@ -1,5 +1,5 @@
 import PutFormModal from '@components/commons/put-modal'
-import type { Student } from '@workspace/db'
+import type { Student } from '@workspace/db/client'
 import { useFindUniqueStudent } from '@workspace/db/hooks'
 import { Col, Form, Table } from 'antd'
 import dayjs from 'dayjs'

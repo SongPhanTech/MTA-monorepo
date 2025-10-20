@@ -30,18 +30,25 @@ export type GetClassesInfo200ItemSubjectClassItem = {
     code: string
     name: string
     /** @nullable */
-    startDate: string | null
+    startDate?: string | null
     /** @nullable */
     endDate?: string | null
-    schedule: GetClassesInfo200ItemSubjectClassItemSchedule
+    /** @nullable */
+    schedule?: GetClassesInfo200ItemSubjectClassItemSchedule
     maxStudent: number
     cancelled?: boolean
     /** @nullable */
     lecturerAssignmentDeadline?: string | null
     /** @nullable */
+    sendLecturerAssignmentAt?: string | null
+    /** @nullable */
+    submitLecturerAssignmentAt?: string | null
+    /** @nullable */
     examDate?: string | null
     /** @nullable */
     examType?: GetClassesInfo200ItemSubjectClassItemExamType
+    /** @nullable */
+    scoreDeadLineStart?: string | null
     /** @nullable */
     scoreDeadline?: string | null
     /** @nullable */

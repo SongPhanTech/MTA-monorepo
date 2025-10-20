@@ -11,5 +11,7 @@ export type GetClassesInfo200ItemType =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassesInfo200ItemType = {
     Normal: 'Normal',
+    Internship: 'Internship',
+    Research: 'Research',
     Project: 'Project',
 } as const

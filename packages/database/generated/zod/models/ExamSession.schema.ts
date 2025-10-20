@@ -14,25 +14,19 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    startTime: z.coerce.date().nullish(),
-    endTime: z.coerce.date().nullish(),
+    examCode: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
-    student: z.record(z.unknown()).optional(),
     exam: z.record(z.unknown()),
-    room: z.record(z.unknown()).optional(),
-    examBank: z.record(z.unknown()).optional(),
-    answers: z.array(z.unknown()).optional(),
-    examFax: z.record(z.unknown()).optional(),
+    examRoom: z.record(z.unknown()),
+    studentSubjectScore: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
-    studentId: z.string().nullish(),
     examId: z.string(),
-    roomId: z.string().nullish(),
-    examBankId: z.string().nullish(),
-    examFaxId: z.string().nullish(),
+    examRoomId: z.string(),
+    studentSubjectScoreId: z.string(),
 }
 );
 
@@ -67,8 +61,7 @@ export const ExamSessionPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    startTime: z.coerce.date().nullish(),
-    endTime: z.coerce.date().nullish()
+    examCode: z.string().nullish()
 }).partial().passthrough();
 
 

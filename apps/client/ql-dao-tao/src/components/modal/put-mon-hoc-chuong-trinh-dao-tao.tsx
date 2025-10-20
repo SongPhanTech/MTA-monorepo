@@ -6,7 +6,7 @@ import {
     SubjectRequirementType,
     type SubjectVersion,
     type TrainingBlockSubject,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCreateManyTrainingBlockSubject,
     useFindManyDM_DonVi,

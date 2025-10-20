@@ -15,5 +15,8 @@ export type GetClassRegisterSession200ItemSemesterSemesterType =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassRegisterSession200ItemSemesterSemesterType = {
     FIRST: 'FIRST',
+    FIRST_SUPPLEMENTARY: 'FIRST_SUPPLEMENTARY',
     SECOND: 'SECOND',
+    SECOND_SUPPLEMENTARY: 'SECOND_SUPPLEMENTARY',
+    SUMMER: 'SUMMER',
 } as const

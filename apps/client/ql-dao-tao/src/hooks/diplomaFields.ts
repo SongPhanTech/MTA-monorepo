@@ -1,4 +1,4 @@
-// import { DiplomaFields } from '@workspace/db'
+// import { DiplomaFields } from '@workspace/db/client'
 
 // export type DiplomaFieldOption = {
 //     value: DiplomaFields

@@ -8,7 +8,7 @@ import type { FilterProps } from '@constants/type'
 import { useCriteriaOperatorOptions } from '@hooks/criteriaOperator'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma, TrainingCourse } from '@workspace/db'
+import type { Prisma, TrainingCourse } from '@workspace/db/client'
 import {
     useCountScholarship,
     useFindManyScholarship,

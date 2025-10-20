@@ -2,21 +2,26 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { ArchivedAward } from '@workspace/db'
+import type { Award } from '@workspace/db/client'
 import {
-    useCreateArchivedAward,
-    useFindUniqueArchivedAward,
-    useUpdateArchivedAward,
+    useCreateAward,
+    useFindManySubject,
+    useFindUniqueAward,
+    useUpdateAward,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-export type PutArchivedAward = ArchivedAward
+import Select from '@components/commons/select'
+export type PutAward = Award & {
+    subjects: string[]
+}
 dayjs.locale('vi')
 const PutOlympicScoreModal = () => {
-    const [form] = Form.useForm<PutArchivedAward>()
+    const [form] = Form.useForm<PutAward>()
     const [_targetDisabled, setTargetDisabled] = useState(true)
     const {
         isOpen,
@@ -28,29 +33,35 @@ const PutOlympicScoreModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createArchivedAward } = useCreateArchivedAward()
-    const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
-    async function onOk({ ...rest }: PutArchivedAward) {
+    const { mutateAsync: createAward } = useCreateAward()
+    const { mutateAsync: updateAward } = useUpdateAward()
+    const { data: subjectData = [] } = useFindManySubject()
+    async function onOk({ subjects, ...rest }: PutAward) {
         try {
             showSpinner()
             if (id) {
-                await updateArchivedAward({
+                await updateAward({
                     data: {
-                        name: rest.name,
+                        // name: rest.name,
                         bonusScore: rest.bonusScore,
                     },
                     where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createArchivedAward({
-                    data: rest,
+                await createAward({
+                    data: {
+                        ...rest,
+                        subjects: {
+                            connect: (subjects || []).map((id) => ({ id })),
+                        },
+                    },
                 })
                 message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['ArchivedAward'],
+                queryKey: ['Award'],
             })
             onClose()
         } catch (error: any) {
@@ -64,7 +75,7 @@ const PutOlympicScoreModal = () => {
         }
     }
 
-    const { data: level } = useFindUniqueArchivedAward(
+    const { data: level } = useFindUniqueAward(
         {
             where: { id },
         },
@@ -95,12 +106,12 @@ const PutOlympicScoreModal = () => {
             title={id ? 'Chỉnh sửa điểm oplympic' : 'Thêm mới điểm oplympic'}
             className="w-[500px]"
         >
-            <Col span={24}>
+            <Col span={24} className="mb-4">
                 <FormItem form={form} name="name" label="Tên giải thưởng" required>
                     <Input placeholder="Nhập tên giải thưởng" />
                 </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={24} className="mb-4">
                 <FormItem form={form} name="bonusScore" label="Điểm cộng">
                     <InputNumber
                         type="number"
@@ -109,6 +120,20 @@ const PutOlympicScoreModal = () => {
                         min={0}
                         max={10}
                         step={0.1}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24} className="mb-4">
+                <FormItem form={form} name="subjects" label="Môn được cộng điểm" required>
+                    <Select
+                        mode="multiple"
+                        allowClear
+                        style={{ width: '100%' }}
+                        placeholder="Chọn môn học"
+                        options={subjectData.map((item) => ({
+                            label: item.name,
+                            value: item.id,
+                        }))}
                     />
                 </FormItem>
             </Col>

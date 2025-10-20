@@ -1,4 +1,4 @@
-import type { ScoreConvert } from '@workspace/db'
+import type { ScoreConvert } from '@workspace/db/client'
 import { useMemo } from 'react'
 
 export function useScoreConverter(scoreRanges: ScoreConvert[] = []) {
