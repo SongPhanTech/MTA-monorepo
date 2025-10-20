@@ -137,7 +137,7 @@ const SiderChatLayout = ({ theme, items, onDelete, onEdit }: SiderDefaultLayoutP
                 height: '100%',
                 overflow: 'hidden',
             }}
-            className="mr-[10px] rounded-xl"
+            className="mr-[10px] rounded-xl max-md:mr-0 max-md:rounded-none"
             theme={theme}
             width={280}
         >

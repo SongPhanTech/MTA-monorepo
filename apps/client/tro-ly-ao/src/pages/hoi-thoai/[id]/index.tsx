@@ -410,6 +410,8 @@ export default function Page() {
         setIsUserScrolling(false)
         setShowScrollButton(false)
         setHasAutoReplied(false)
+        setSelectedDocumentId(null)
+        setSelectedCitationContent(null)
     }, [id])
 
     // Tự động gọi API cho conversation mới (chỉ có USER message, chưa có BOT reply)
@@ -585,7 +587,7 @@ export default function Page() {
                     {showScrollButton && (
                         <div
                             onClick={scrollToBottom}
-                            className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-50 w-8 h-8 bg-white hover:bg-gray-50 text-primary rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 shadow-md"
+                            className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-10 w-8 h-8 bg-white hover:bg-gray-50 text-primary rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 shadow-md"
                         >
                             <ArrowDownOutlined className="text-sm" />
                         </div>

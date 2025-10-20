@@ -165,7 +165,7 @@ export default function Certificate() {
                         <Col span={24} className="mt-3">
                             <Flex justify="end">
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                     'THEM'
                                 ) && (
                                     <Button onClick={handleModal} type="primary">
@@ -236,7 +236,7 @@ export default function Certificate() {
                                 width: 60,
                                 align: 'center',
                                 hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                     'SUA',
                                     'XOA'
                                 ),
@@ -246,7 +246,7 @@ export default function Certificate() {
                                     return (
                                         <Row className="justify-center gap-2">
                                             {can(
-                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                                 'SUA'
                                             ) && (
                                                 <EditIcon
@@ -262,7 +262,7 @@ export default function Certificate() {
                                                 />
                                             )}
                                             {can(
-                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                                 'XOA'
                                             ) && (
                                                 <DeleteIcon
@@ -300,7 +300,7 @@ export default function Certificate() {
                                     />
                                 )}
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                     'SUA'
                                 ) && (
                                     <EditIcon
@@ -313,7 +313,7 @@ export default function Certificate() {
                                     />
                                 )}
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                     'XOA'
                                 ) && (
                                     <DeleteIcon

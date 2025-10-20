@@ -104,6 +104,7 @@ export default function SubjectClassScore() {
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
+            refetchSubjectClass()
         }, 500),
         []
     )
@@ -213,10 +214,12 @@ export default function SubjectClassScore() {
             }
 
             if (listSqlTransaction?.length > 0) {
-                await sqlTransaction(listSqlTransaction)
-                message.success('Đã cập nhật điểm thi thành công!')
-                debouncedRefetch()
-                setIsChanged(false)
+                 const res= await sqlTransaction(listSqlTransaction)
+                               if(res?.status===200){
+                                    message.success('Đã cập nhật điểm thi thành công!')
+                                    debouncedRefetch()
+                                    setIsChanged(false)
+                               }
             }
         } catch (error: any) {
             message.error(error)
@@ -318,6 +321,20 @@ export default function SubjectClassScore() {
             },
             include: {
                 subject: true,
+                    subjectClassStudent: {
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: true,
+                                fixedClass: {
+                                    include: {
+                                        trainingCourse: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         { refetchOnWindowFocus: false, enabled: !!subjectClassId }
@@ -468,8 +485,6 @@ export default function SubjectClassScore() {
         { refetchOnWindowFocus: false }
     )
 
-    const selectedClassInfo = subjectClassData.find((item) => item.id === subjectClassId)
-
     // const statistics = getScoreStatistics(dataTable)
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
@@ -528,18 +543,6 @@ export default function SubjectClassScore() {
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-    useEffect(() => {
-        if (subjectClassId) {
-            form.setFieldsValue({
-                isLockExamScore: dataDetailSubjectClass?.isLockExamScore,
-                isLockScore: dataDetailSubjectClass?.isLockScore,
-                scoreChecked: dataDetailSubjectClass?.scoreChecked,
-                scoreSubmitted: dataDetailSubjectClass?.scoreSubmitted,
-            })
-        }
-    }, [dataTable, subjectClassId])
-
     // biome-ignore lint/correctness/useExhaustiveDependencies: <form>
     useEffect(() => {
         if (subjectClassId) {
@@ -550,7 +553,7 @@ export default function SubjectClassScore() {
                 scoreSubmitted: dataDetailSubjectClass?.scoreSubmitted,
             })
         }
-    }, [dataTable, subjectClassId])
+    }, [dataDetailSubjectClass, subjectClassId])
     const listForm = Form.useWatch([], formTable) || []
     useEffect(() => {
         if (listForm) {
@@ -569,15 +572,6 @@ export default function SubjectClassScore() {
             }
         }
     }, [listForm])
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <formTable>
-    // useEffect(() => {
-    //     if (subjectClassId) {
-    //         setIsChanged(false)
-
-    //     }
-    // }, [subjectClassId])
-
     useEffect(() => {
         if (!isChanged) return
         const handleRouteChange = (url: string) => {
@@ -732,7 +726,7 @@ export default function SubjectClassScore() {
                                                 !!dataDetailSubjectClass?.enteredScore && (
                                                     <ExportTemplateExam
                                                         selectedFixedClass={subjectClassId}
-                                                        dataClass={selectedClassInfo}
+                                                        dataClass={dataDetailSubjectClass}
                                                         dataTable={dataTable}
                                                     />
                                                 )}

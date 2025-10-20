@@ -1,8 +1,8 @@
 import {
     AppstoreOutlined,
     ExportOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
+    MenuOutlined,
+    UnorderedListOutlined,
 } from '@ant-design/icons'
 import { Button, Layout, Typography } from 'antd'
 import { usePathname } from 'next/navigation'
@@ -43,9 +43,10 @@ const ChatHeader = ({ collapsed, onCollapse, showCollapseButton = true }: ChatHe
                 {showCollapseButton && (
                     <Button
                         type="text"
-                        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                        icon={collapsed ? <UnorderedListOutlined /> : <MenuOutlined />}
                         onClick={() => onCollapse(!collapsed)}
                         className="flex items-center justify-center hover:bg-gray-100"
+                        title={collapsed ? 'Hiện danh sách chat' : 'Ẩn danh sách chat'}
                     />
                 )}
                 <Button

@@ -1,7 +1,6 @@
 import ChatIframeHeader from '@components/layouts/header/chat-iframe-header'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import { cn } from '@lib/utils'
-import { useSession } from '@workspace/auth/react'
 import {
     useDeleteConversation,
     useDeleteManyMessage,
@@ -34,24 +33,20 @@ const ChatIframeLayout = ({
     const router = useRouter()
     const { sessionId } = useUserSession()
     const [isDeleting, setIsDeleting] = useState(false)
+    const [isResizing, setIsResizing] = useState(false)
     const [collapsed, setCollapsed] = useState(() => {
         if (typeof window !== 'undefined') {
-            const isMobile = window.innerWidth < 768
             const storedCollapsed = localStorage.getItem('chat-iframe-sider-collapsed') === 'true'
-            return isMobile ? true : storedCollapsed
+            return storedCollapsed
         }
         return false
     })
-
-    const { data: userCurrent } = useSession()
 
     const handleCollapsed = (value?: boolean) => {
         if (typeof window !== 'undefined') {
             const newValue = value ?? !collapsed
             setCollapsed(newValue)
-            if (window.innerWidth >= 768) {
-                localStorage.setItem('chat-iframe-sider-collapsed', newValue.toString())
-            }
+            localStorage.setItem('chat-iframe-sider-collapsed', newValue.toString())
         }
     }
 
@@ -75,13 +70,32 @@ const ChatIframeLayout = ({
         }
     }
 
-    // Initialize responsive collapse on mount
+    // Initialize responsive collapse on mount and handle resize
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const isMobile = window.innerWidth < 768
-            if (isMobile) {
-                setCollapsed(true)
-            }
+        if (typeof window === 'undefined') return
+
+        let resizeTimer: NodeJS.Timeout
+
+        const handleResize = () => {
+            setIsResizing(true)
+            clearTimeout(resizeTimer)
+
+            const storedCollapsed = localStorage.getItem('chat-iframe-sider-collapsed') === 'true'
+            setCollapsed((prev) => {
+                return prev !== storedCollapsed ? storedCollapsed : prev
+            })
+
+            resizeTimer = setTimeout(() => {
+                setIsResizing(false)
+            }, 100)
+        }
+
+        handleResize()
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
+            clearTimeout(resizeTimer)
         }
     }, [])
 
@@ -109,20 +123,29 @@ const ChatIframeLayout = ({
                     onClose={onClose}
                     onExpand={onExpand}
                 />
-                <Layout className="flex-1">
+                <Layout className="flex-1 relative">
+                    {/* Backdrop overlay when sider is open */}
+                    {showSiderChat && !collapsed && (
+                        <div
+                            className="absolute inset-0 bg-black/50 z-40 transition-opacity duration-300"
+                            onClick={() => handleCollapsed(true)}
+                        />
+                    )}
+
+                    {/* Sider - responsive behavior */}
                     {showSiderChat && (
                         <div
-                            className={`transition-all duration-300 ease-in-out overflow-hidden h-full border-r border-gray-200 ${!collapsed ? 'w-[290px] opacity-100' : 'w-0 opacity-0'}`}
+                            className={`
+                                h-full absolute left-0 top-0 bottom-0 z-50 w-[290px]
+                                ${!collapsed ? 'translate-x-0' : '-translate-x-full'}
+                                ${isResizing ? '' : 'transition-transform duration-300 ease-in-out'}
+                            `}
                         >
-                            <div
-                                className={`transition-opacity duration-300 h-full ${!collapsed ? 'opacity-100' : 'opacity-0'}`}
-                            >
-                                <SiderChatLayout
-                                    items={generateMenusTroLyAo(conversationMenuList)}
-                                    theme={'light'}
-                                    onDelete={handleDelete}
-                                />
-                            </div>
+                            <SiderChatLayout
+                                items={generateMenusTroLyAo(conversationMenuList)}
+                                theme={'light'}
+                                onDelete={handleDelete}
+                            />
                         </div>
                     )}
                     <Content className={cn('flex-1 bg-white relative overflow-hidden', className)}>

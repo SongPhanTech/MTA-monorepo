@@ -199,7 +199,7 @@ export default function ArchivedCertificate() {
                     <Col span={24} className="mt-3">
                         <Flex justify="end">
                             {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                 'THEM'
                             ) && (
                                 // <Popover
@@ -242,7 +242,7 @@ export default function ArchivedCertificate() {
                                 </>
                             )}
                             {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                 'THEM'
                             ) && (
                                 <Button onClick={handleModal} type="primary" className="ml-3">
@@ -351,7 +351,7 @@ export default function ArchivedCertificate() {
                             align: 'center',
                             fixed: 'right',
                             hidden: !canSome(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                 'SUA',
                                 'XOA'
                             ),
@@ -359,7 +359,7 @@ export default function ArchivedCertificate() {
                                 return (
                                     <Row className="justify-center gap-2">
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                             'SUA'
                                         ) &&
                                             status === 'PENDING' && (
@@ -369,7 +369,7 @@ export default function ArchivedCertificate() {
                                                 />
                                             )}
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                             'XOA'
                                         ) &&
                                             status === 'PENDING' && (
