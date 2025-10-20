@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { AcademicActionType, type Prisma, StudentStatus } from '@workspace/db'
+import { AcademicActionType, createId, type Prisma, StudentStatus } from '@workspace/db'
+import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetHeQuanSu, parseSheetStudent, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
@@ -146,10 +147,12 @@ app.openapi(importStudent, async (c) => {
 
     const existingStudent = await prisma.student.findMany({
         where: { code: { in: data.students.map((student) => student.code) } },
-        select: { id: true, code: true },
+        select: { id: true, code: true, userProfileId: true },
     })
 
-    const existingStudentMap = new Map(existingStudent.map(({ code, id }) => [code, id]))
+    const existingStudentMap = new Map(
+        existingStudent.map(({ code, id, userProfileId }) => [code, { id, userProfileId }])
+    )
 
     const start = Date.now()
     await prisma.$transaction(
@@ -223,16 +226,37 @@ app.openapi(importStudent, async (c) => {
                         positionCPVId: positionMap.get(student.position ?? '') || null,
                     }
 
-                const existingId = existingStudentMap.get(student.code)
-                if (existingId) {
+                const existing = existingStudentMap.get(student.code)
+                if (existing) {
                     await tx.student.update({
-                        where: { id: existingId },
+                        where: { id: existing.id },
                         data: {
                             ...studentData,
                             userProfile: { update: profileData },
                         },
                     })
+
+                    const res = await putDMNhanViens(
+                        {
+                            Id: existing.userProfileId,
+                            bLaCanBoNhanVien: true,
+                            bLaTaiKhoan: true,
+                            dNgaySinh: profileData.dateOfBirth?.toString(),
+                            sCCCD: profileData.idCardNumber,
+                            sEmail: profileData.email,
+                            sHoVaDem: profileData.lastName,
+                            sTen: profileData.firstName,
+                            sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+                        },
+                        {
+                            headers: {
+                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                            },
+                        }
+                    ).catch(console.error)
                 } else {
+                    const profileId = createId()
                     const st = await tx.student.create({
                         data: {
                             ...studentData,
@@ -244,6 +268,26 @@ app.openapi(importStudent, async (c) => {
                             },
                         },
                     })
+
+                    postDMNhanViens(
+                        {
+                            Id: profileId,
+                            bLaCanBoNhanVien: true,
+                            bLaTaiKhoan: true,
+                            dNgaySinh: profileData.dateOfBirth?.toString(),
+                            sCCCD: profileData.idCardNumber,
+                            sEmail: profileData.email,
+                            sHoVaDem: profileData.lastName,
+                            sTen: profileData.firstName,
+                            sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
+                        },
+                        {
+                            headers: {
+                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                            },
+                        }
+                    ).catch(console.error)
 
                     if (student.department) {
                         await tx.quaTrinhCongTac.create({

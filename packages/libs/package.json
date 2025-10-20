@@ -30,6 +30,7 @@
     "dayjs": "catalog:",
     "decimal.js": "catalog:",
     "docxtemplater": "catalog:",
+    "esm-env": "catalog:",
     "exceljs": "catalog:",
     "file-saver": "catalog:",
     "pizzip": "catalog:",
