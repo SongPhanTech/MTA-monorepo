@@ -186,7 +186,7 @@ const NAVIGATION: NavigationType = {
                     //     path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_KHOA_NHAP_DIEM,
                     //     description: 'Mở/Khoá nhập điểm',
                     // },
-                    
+
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                         label: 'Điểm trung bình theo kỳ học',
@@ -547,7 +547,7 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_DANH_MUC_CHUONG_MUC,
-                        label: 'Chương mục',
+                        label: 'Chuẩn đầu ra',
                         path: ROUTER_PATH.KHAO_THI.DANH_MUC_DANH_MUC_CHUONG_MUC,
                     },
                     // {

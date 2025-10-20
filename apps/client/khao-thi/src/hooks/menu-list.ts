@@ -49,7 +49,7 @@ const useMenuList = () => {
         [isUpdateAbility, permissions, ability]
     )
 
-    return menus
+    return process.env.NODE_ENV === 'development' ? NAVIGATION.KHAO_THI.menus : menus
 }
 
 export { useMenuList }
