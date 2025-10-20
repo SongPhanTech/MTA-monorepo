@@ -175,7 +175,7 @@ export default function DocumentSidebar({
             } else if (segment.type === 'search-other') {
                 result += `<mark style="background-color: #fef9c3;">${text}</mark>`
             } else if (segment.type === 'citation') {
-                result += `<mark style="background-color: #108850; color: white;">${text}</mark>`
+                result += `<mark style="background-color: rgba(2, 136, 80, 0.25); color: #000;">${text}</mark>`
             } else {
                 result += text
             }
@@ -251,6 +251,7 @@ export default function DocumentSidebar({
             open={!!documentId}
             width={600}
             closeIcon={<CloseOutlined />}
+            mask={false}
             styles={{
                 body: { padding: 0 },
             }}
@@ -280,36 +281,40 @@ export default function DocumentSidebar({
 
                         {document.topics && document.topics.length > 0 && (
                             <div className="text-xs mb-1">
-                                <div className="flex items-center gap-1">
-                                    <span className="text-gray-500 flex-shrink-0">Chủ đề:</span>
-                                    <div
-                                        className={`flex gap-1 ${isTopicsExpanded ? 'flex-wrap' : 'overflow-hidden'}`}
-                                    >
-                                        {document.topics.map((dt) => (
-                                            <span
-                                                key={dt.id}
-                                                className="px-1.5 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium whitespace-nowrap"
-                                            >
-                                                {dt.topic?.name}
-                                            </span>
-                                        ))}
-                                    </div>
-                                    {document.topics.length > 2 && (
-                                        <button
-                                            type="button"
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                setIsTopicsExpanded(!isTopicsExpanded)
-                                            }}
-                                            className="ml-1 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                                <div className="flex items-start gap-1">
+                                    <span className="text-gray-500 flex-shrink-0 pt-0.5">
+                                        Chủ đề:
+                                    </span>
+                                    <div className="flex-1 min-w-0 flex items-start gap-1">
+                                        <div
+                                            className={`flex gap-1 flex-1 min-w-0 ${isTopicsExpanded ? 'flex-wrap' : 'overflow-hidden'}`}
                                         >
-                                            {isTopicsExpanded ? (
-                                                <UpOutlined className="text-[10px]" />
-                                            ) : (
-                                                <DownOutlined className="text-[10px]" />
-                                            )}
-                                        </button>
-                                    )}
+                                            {document.topics.map((dt) => (
+                                                <span
+                                                    key={dt.id}
+                                                    className="px-1.5 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium whitespace-nowrap flex-shrink-0"
+                                                >
+                                                    {dt.topic?.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        {document.topics.length > 2 && (
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setIsTopicsExpanded(!isTopicsExpanded)
+                                                }}
+                                                className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors pt-0.5"
+                                            >
+                                                {isTopicsExpanded ? (
+                                                    <UpOutlined className="text-[10px]" />
+                                                ) : (
+                                                    <DownOutlined className="text-[10px]" />
+                                                )}
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         )}
@@ -324,12 +329,15 @@ export default function DocumentSidebar({
                         )}
                     </div>
 
-                    <div className="flex-1 overflow-y-auto px-6 py-6">
+                    <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 py-6">
                         {highlightedContent ? (
                             <div
                                 ref={contentRef}
-                                className="prose prose-sm max-w-none text-gray-800 leading-relaxed whitespace-pre-wrap"
-                                style={{ fontFamily: '"Noto Serif", serif' }}
+                                className="prose prose-sm max-w-none text-gray-800 leading-relaxed whitespace-pre-wrap break-words overflow-wrap-anywhere"
+                                style={{
+                                    fontFamily: '"Noto Serif", serif',
+                                    overflowWrap: 'anywhere',
+                                }}
                                 // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
                                 dangerouslySetInnerHTML={{ __html: highlightedContent }}
                             />

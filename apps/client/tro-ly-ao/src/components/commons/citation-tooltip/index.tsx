@@ -162,36 +162,38 @@ export default function CitationTooltip({ citation, onClick }: CitationTooltipPr
 
                         {document?.topics && document.topics.length > 0 && (
                             <div className="text-xs text-gray-500">
-                                <div className="flex items-center gap-1">
-                                    <span className="flex-shrink-0">Chủ đề:</span>
-                                    <div
-                                        className={`flex gap-1 ${isTopicsExpanded ? 'flex-wrap' : 'overflow-hidden'}`}
-                                    >
-                                        {document.topics.map((dt) => (
-                                            <span
-                                                key={dt.topic?.name}
-                                                className="px-1.5 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium whitespace-nowrap"
-                                            >
-                                                {dt.topic?.name}
-                                            </span>
-                                        ))}
-                                    </div>
-                                    {document.topics.length > 2 && (
-                                        <button
-                                            type="button"
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                setIsTopicsExpanded(!isTopicsExpanded)
-                                            }}
-                                            className="ml-1 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                                <div className="flex items-start gap-1">
+                                    <span className="flex-shrink-0 pt-0.5">Chủ đề:</span>
+                                    <div className="flex-1 min-w-0 flex items-start gap-1">
+                                        <div
+                                            className={`flex gap-1 flex-1 min-w-0 ${isTopicsExpanded ? 'flex-wrap' : 'overflow-hidden'}`}
                                         >
-                                            {isTopicsExpanded ? (
-                                                <UpOutlined className="text-[10px]" />
-                                            ) : (
-                                                <DownOutlined className="text-[10px]" />
-                                            )}
-                                        </button>
-                                    )}
+                                            {document.topics.map((dt) => (
+                                                <span
+                                                    key={dt.topic?.name}
+                                                    className="px-1.5 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium whitespace-nowrap flex-shrink-0"
+                                                >
+                                                    {dt.topic?.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        {document.topics.length > 2 && (
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setIsTopicsExpanded(!isTopicsExpanded)
+                                                }}
+                                                className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors pt-0.5"
+                                            >
+                                                {isTopicsExpanded ? (
+                                                    <UpOutlined className="text-[10px]" />
+                                                ) : (
+                                                    <DownOutlined className="text-[10px]" />
+                                                )}
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         )}

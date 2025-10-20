@@ -410,6 +410,8 @@ export default function Page() {
         setIsUserScrolling(false)
         setShowScrollButton(false)
         setHasAutoReplied(false)
+        setSelectedDocumentId(null)
+        setSelectedCitationContent(null)
     }, [id])
 
     // Tự động gọi API cho conversation mới (chỉ có USER message, chưa có BOT reply)
