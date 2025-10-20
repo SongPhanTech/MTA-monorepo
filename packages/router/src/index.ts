@@ -216,11 +216,17 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_THI,
                         description: 'Nhập điểm thi',
                     },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
-                        label: 'Quản lý điểm cộng',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CONG,
-                        description: 'Quản lý điểm cộng',
+                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
+                        label: 'Điểm giải thưởng',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_OLYMPIC,
+                        description: 'Điểm giải thưởng',
+                    },
+                         {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI,
+                        label: 'Điểm chứng chỉ',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_CHUNG_CHI,
+                        description: 'Điểm chứng chỉ',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_SV_HV_CHUYEN_TRUONG,
@@ -370,6 +376,12 @@ const NAVIGATION: NavigationType = {
                         icon: TeamOutlined,
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HINH_THUC_HUAN_LUYEN,
                         description: 'Danh mục hình thức huấn luyện',
+                    },
+                        {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
+                        label: 'Quản lý điểm cộng',
+                        path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_QL_DIEM_CONG,
+                        description: 'Quản lý điểm cộng',
                     },
                 ],
             },

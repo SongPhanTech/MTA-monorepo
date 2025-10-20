@@ -624,7 +624,7 @@ export default function ClassSubject() {
                                                     </Col>
                                                 </Form>
                                             }
-                                            title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                            title="Sửa thời gian nhập điểm TX,CC"
                                             trigger="click"
                                             placement="bottomRight"
                                             open={open}
@@ -647,14 +647,14 @@ export default function ClassSubject() {
                                                     <FormItem
                                                         form={form}
                                                         name={'beforeDays'}
-                                                        label="Số ngày nhập điểm TX,CC"
+                                                        label="Số ngày nhập điểm thi"
                                                         className="mb-2"
                                                     >
                                                         <InputNumber
                                                             className="w-full"
                                                             min={0}
                                                             step={0}
-                                                            placeholder="Nhập số ngày nhập điểm TX,CC"
+                                                            placeholder="Nhập số ngày nhập điểm thi"
                                                         />
                                                     </FormItem>
                                                     <FormItem
@@ -665,6 +665,7 @@ export default function ClassSubject() {
                                                         <DatePicker
                                                             format={'DD/MM/YYYY'}
                                                             placeholder={'Hạn nhập điểm thi'}
+                                                            className="w-full"
                                                         />
                                                     </FormItem>
                                                     <Col span={24} className="text-right mt-4">
@@ -674,7 +675,7 @@ export default function ClassSubject() {
                                                     </Col>
                                                 </Form>
                                             }
-                                            title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                            title="Sửa thời gian nhập điểm thi"
                                             trigger="click"
                                             placement="bottomRight"
                                             open={openExam}
