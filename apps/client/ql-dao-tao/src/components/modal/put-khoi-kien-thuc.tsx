@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingBlock, TrainingBlockOnCurriculumVersion } from '@workspace/db'
+import type { TrainingBlock, TrainingBlockOnCurriculumVersion } from '@workspace/db/client'
 import { useFindManyTrainingBlock, useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
 import { Col, Form, message, Row, TreeSelect } from 'antd'
 import dayjs from 'dayjs'

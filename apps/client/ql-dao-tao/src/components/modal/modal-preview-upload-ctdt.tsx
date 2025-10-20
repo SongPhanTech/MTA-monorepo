@@ -1,5 +1,5 @@
 import Table from '@components/commons/table'
-import { $Enums } from '@workspace/db/client'
+import type { $Enums } from '@workspace/db/client'
 import { useFindManySubject, useFindManySubjectVersion } from '@workspace/db/hooks'
 import type { SubjectResult } from '@workspace/libs/parseExcel'
 import { Button, Collapse, Modal, Tag } from 'antd'

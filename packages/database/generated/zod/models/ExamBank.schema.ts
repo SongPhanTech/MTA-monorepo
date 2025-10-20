@@ -19,7 +19,6 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     exam: z.record(z.unknown()),
-    examSession: z.array(z.unknown()).optional(),
     questions: z.array(z.unknown()).optional(),
 }
 );

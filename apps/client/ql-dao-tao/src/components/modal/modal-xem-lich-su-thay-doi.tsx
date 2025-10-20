@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import ExpandableContent from '@components/commons/expandable-content/ExpandableContent'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { SubjectVersionHistory } from '@workspace/db'
+import type { SubjectVersionHistory } from '@workspace/db/client'
 import useSpinner from '@hooks/spinner'
 dayjs.locale('vi')
 
@@ -139,7 +139,7 @@ const ModalViewHistoryChange = () => {
                         width: 60,
                         render: (_, record) => {
                             return (
-                                // @ts-ignore
+                                // @ts-expect-error
                                 <div className="truncate">{record.updatedBy?.fullname || ''}</div>
                             )
                         },
@@ -150,7 +150,7 @@ const ModalViewHistoryChange = () => {
                         width: 60,
                         align: 'center',
                         render: (_, record) => {
-                            // @ts-ignore
+                            // @ts-expect-error
                             return record.subjectVersion?.name || ''
                         },
                     },

@@ -18,28 +18,24 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     title: z.string(),
     status: ExamStatusSchema,
-    startTime: z.coerce.date(),
-    endTime: z.coerce.date(),
+    lockExamCode: z.boolean().default(false),
+    startTime: z.string(),
     duration: z.number(),
-    passScore: z.number().default(5),
-    maxScore: z.number().default(10),
-    shuffleQuestions: z.boolean().default(true),
-    shuffleAnswers: z.boolean().default(true),
-    showResult: z.boolean().default(false),
 }
 ).strict();
 const relationSchema = z.object({
-    questionBank: z.record(z.unknown()),
-    room: z.array(z.unknown()).optional(),
+    questionBank: z.record(z.unknown()).optional(),
     subjectClass: z.array(z.unknown()).optional(),
+    studentSubjectScore: z.array(z.unknown()).optional(),
+    room: z.array(z.unknown()).optional(),
     examBank: z.array(z.unknown()).optional(),
     testStructureRules: z.array(z.unknown()).optional(),
     examSessions: z.array(z.unknown()).optional(),
-    examFax: z.array(z.unknown()).optional(),
+    examRooms: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    questionBankId: z.string(),
+    questionBankId: z.string().nullish(),
 }
 );
 
@@ -76,14 +72,9 @@ export const ExamPrismaUpdateSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     title: z.string(),
     status: ExamStatusSchema,
-    startTime: z.coerce.date(),
-    endTime: z.coerce.date(),
-    duration: z.union([z.number(), z.record(z.unknown())]),
-    passScore: z.union([z.number().default(5), z.record(z.unknown())]),
-    maxScore: z.union([z.number().default(10), z.record(z.unknown())]),
-    shuffleQuestions: z.boolean().default(true),
-    shuffleAnswers: z.boolean().default(true),
-    showResult: z.boolean().default(false)
+    lockExamCode: z.boolean().default(false),
+    startTime: z.string(),
+    duration: z.union([z.number(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
@@ -91,7 +82,7 @@ export const ExamPrismaUpdateSchema = z.object({
  * `Exam` schema for create operations excluding foreign keys and relations.
  */
 export const ExamCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true, passScore: true, maxScore: true, shuffleQuestions: true, shuffleAnswers: true, showResult: true
+    id: true, active: true, createdAt: true, updatedAt: true, status: true, lockExamCode: true
 });
 
 

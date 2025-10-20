@@ -1,4 +1,4 @@
-import { FileTextOutlined, LinkOutlined } from '@ant-design/icons'
+import { DownOutlined, FileTextOutlined, LinkOutlined, UpOutlined } from '@ant-design/icons'
 import { useFindUniqueDocument } from '@workspace/db/hooks'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -7,16 +7,17 @@ interface Citation {
     index: number
     content: string
     document_id: string
-    document_type: string
 }
 
 interface CitationTooltipProps {
     citation: Citation
+    onClick?: () => void
 }
 
-export default function CitationTooltip({ citation }: CitationTooltipProps) {
+export default function CitationTooltip({ citation, onClick }: CitationTooltipProps) {
     const [isHovered, setIsHovered] = useState(false)
     const [isVisible, setIsVisible] = useState(false)
+    const [isTopicsExpanded, setIsTopicsExpanded] = useState(false)
     const [position, setPosition] = useState({
         top: 0,
         left: 0,
@@ -30,8 +31,24 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
     const { data: document } = useFindUniqueDocument(
         {
             where: { id: citation.document_id },
-            include: {
-                topic: true,
+            select: {
+                id: true,
+                title: true,
+                uri: true,
+                topics: {
+                    select: {
+                        topic: {
+                            select: {
+                                name: true,
+                            },
+                        },
+                    },
+                },
+                classification: {
+                    select: {
+                        name: true,
+                    },
+                },
             },
         },
         {
@@ -99,7 +116,7 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
     const tooltipContent = isHovered ? (
         <div
             ref={tooltipRef}
-            className="fixed z-[9999] rounded-lg shadow-lg border border-gray-200 w-[400px] max-w-[calc(100vw-48px)] transition-opacity duration-150 ease-in-out"
+            className="fixed z-[9999] rounded-lg shadow-lg border border-gray-200 w-[400px] max-w-[calc(100vw-48px)] transition-opacity duration-150 ease-in-out bg-gray-50"
             style={{
                 top: `${position.top}px`,
                 left: `${position.left}px`,
@@ -107,7 +124,6 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
                     position.placement === 'top' ? 'translate(-50%, -100%)' : 'translate(-50%, 0)',
                 opacity: isVisible ? 1 : 0,
                 fontFamily: '"Noto Serif", serif',
-                backgroundColor: '#F0F2F7',
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -144,11 +160,47 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
                             </div>
                         )}
 
-                        {document?.topic?.name && (
+                        {document?.topics && document.topics.length > 0 && (
+                            <div className="text-xs text-gray-500">
+                                <div className="flex items-center gap-1">
+                                    <span className="flex-shrink-0">Chủ đề:</span>
+                                    <div
+                                        className={`flex gap-1 ${isTopicsExpanded ? 'flex-wrap' : 'overflow-hidden'}`}
+                                    >
+                                        {document.topics.map((dt) => (
+                                            <span
+                                                key={dt.topic?.name}
+                                                className="px-1.5 py-0.5 bg-primary/10 text-primary rounded text-xs font-medium whitespace-nowrap"
+                                            >
+                                                {dt.topic?.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    {document.topics.length > 2 && (
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                setIsTopicsExpanded(!isTopicsExpanded)
+                                            }}
+                                            className="ml-1 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                                        >
+                                            {isTopicsExpanded ? (
+                                                <UpOutlined className="text-[10px]" />
+                                            ) : (
+                                                <DownOutlined className="text-[10px]" />
+                                            )}
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {document?.classification?.name && (
                             <div className="text-xs text-gray-500 flex items-center gap-1">
-                                <span>Chủ đề:</span>
-                                <span className="font-medium text-gray-700">
-                                    {document.topic.name}
+                                <span>Phân loại:</span>
+                                <span className="px-1.5 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">
+                                    {document.classification.name}
                                 </span>
                             </div>
                         )}
@@ -167,7 +219,13 @@ export default function CitationTooltip({ citation }: CitationTooltipProps) {
                 className="inline-flex items-center justify-center w-5 h-5 ml-0.5 text-xs font-semibold text-[#108850] bg-[#e8f5f0] rounded-full cursor-pointer hover:bg-[#108850] hover:text-white transition-all border border-[#108850]"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                onClick={() => setIsHovered(!isHovered)}
+                onClick={() => {
+                    if (onClick) {
+                        onClick()
+                    } else {
+                        setIsHovered(!isHovered)
+                    }
+                }}
             >
                 {citation.index}
             </span>

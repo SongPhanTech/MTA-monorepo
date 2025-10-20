@@ -1,4 +1,4 @@
-import type { CriteriaField } from '@workspace/db'
+import type { CriteriaField } from '@workspace/db/client'
 import { criteriaFieldOptions } from '@workspace/libs/constants'
 
 export const useCriteriaFieldOptions = () => {

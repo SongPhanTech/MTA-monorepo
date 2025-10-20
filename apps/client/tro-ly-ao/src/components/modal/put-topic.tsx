@@ -1,6 +1,15 @@
 import FormItem from '@components/commons/form-item'
 import { cn } from '@lib/utils'
-import { useCreateTopic, useFindFirstTopic, useUpdateTopic } from '@workspace/db/hooks'
+import { getDefaultPromptTemplate } from '@lib/prompt-template'
+import { $Enums } from '@workspace/db'
+import {
+    useCreateManyPrompt,
+    useCreateTopic,
+    useFindFirstPrompt,
+    useFindFirstTopic,
+    useUpdateManyPrompt,
+    useUpdateTopic,
+} from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -23,6 +32,8 @@ const PutTopic = () => {
     })
     const { mutateAsync: create } = useCreateTopic()
     const { mutateAsync: update } = useUpdateTopic()
+    const { mutateAsync: createPrompt } = useCreateManyPrompt()
+    const { mutateAsync: updatePrompt } = useUpdateManyPrompt()
 
     const { data: detail } = useFindFirstTopic({
         where: {
@@ -49,7 +60,15 @@ const PutTopic = () => {
         }
     }, [id, detail, form])
 
+    const { data: existingPrompt } = useFindFirstPrompt({
+        where: {
+            topicId: id,
+        },
+    })
+
     const onFinish = async (values: TopicFormType) => {
+        const defaultPrompt = getDefaultPromptTemplate(values.name)
+
         try {
             if (id) {
                 await update({
@@ -62,15 +81,38 @@ const PutTopic = () => {
                         description: values.description,
                     },
                 })
+
+                if (existingPrompt) {
+                    await updatePrompt({
+                        where: {
+                            topicId: id,
+                        },
+                        data: {
+                            prompt: defaultPrompt,
+                        },
+                    })
+                }
+
                 message.success('Cập nhật chủ đề thành công')
             } else {
-                await create({
+                const newTopic = await create({
                     data: {
                         name: values.name,
                         type: values.type,
                         description: values.description,
                     },
                 })
+
+                if (newTopic) {
+                    await createPrompt({
+                        data: {
+                            prompt: defaultPrompt,
+                            topicId: newTopic.id,
+                            status: $Enums.DocumentStatus.APPROVE,
+                        },
+                    })
+                }
+
                 message.success('Thêm chủ đề thành công')
             }
             onClose()
@@ -108,9 +150,9 @@ const PutTopic = () => {
                         rules={[
                             { required: true, message: 'Vui lòng nhập mã định danh' },
                             {
-                                pattern: /^[A-Z]+(_[A-Z]+)*$/,
+                                pattern: /^[A-Z0-9]+(_[A-Z0-9]+)*$/,
                                 message:
-                                    'Mã định danh phải là chữ in hoa, ngăn cách bằng dấu _ (VD: CHAT_BOT, AI_ASSISTANT)',
+                                    'Mã định danh chỉ được chứa chữ in hoa, số và dấu gạch dưới (VD: CHAT_BOT, AI_ASSISTANT, GPT_4)',
                             },
                             {
                                 validator: (_, value) => {

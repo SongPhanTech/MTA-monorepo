@@ -1,4 +1,4 @@
-import { SubjectClassSchedule } from '@workspace/db'
+import { SubjectClassSchedule } from '@workspace/db/client'
 
 export type ScheduleOption = {
     value: SubjectClassSchedule

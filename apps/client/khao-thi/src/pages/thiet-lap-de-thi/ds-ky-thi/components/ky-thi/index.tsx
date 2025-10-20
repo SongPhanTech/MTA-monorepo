@@ -19,6 +19,7 @@ import dayjs from 'dayjs'
 import { BookPlus, Pencil } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
+import type { Prisma } from '../../../../../../../../../packages/database/generated/zenstack/logical-prisma-client'
 
 function Exam() {
     const { can, canSome } = useAbility()
@@ -34,35 +35,18 @@ function Exam() {
     const [filters, setFilters] = useState<FilterProps>({
         title: '',
         startTime: undefined,
-        endTime: undefined,
         duration: undefined,
         examStatus: undefined,
         questionBankId: undefined,
     })
 
-    const where = useMemo(
+    const where: Prisma.ExamWhereInput = useMemo(
         () => ({
-            ...(filters.title && filters.title !== ''
-                ? {
-                      title: {
-                          contains: filters.title,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-            ...(filters.startTime?.length === 2
+            ...(filters.startTime
                 ? {
                       startTime: {
-                          gte: dayjs(filters.startTime?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.startTime?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.endTime?.length === 2
-                ? {
-                      endTime: {
-                          gte: dayjs(filters.endTime?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.endTime?.[1], 'DD/MM/YYYY').toDate(),
+                          contains: filters.startTime,
+                          mode: 'insensitive' as const,
                       },
                   }
                 : {}),
@@ -84,14 +68,7 @@ function Exam() {
                 },
             },
         }),
-        [
-            filters.title,
-            filters.startTime,
-            filters.endTime,
-            filters.examStatus,
-            filters.questionBankId,
-            trainingObjectTypeId,
-        ]
+        [filters.startTime, filters.examStatus, filters.questionBankId, trainingObjectTypeId]
     )
 
     const { data = [] } = useFindManyExam({
@@ -213,18 +190,18 @@ function Exam() {
                                 width: 220,
                                 type: 'input',
                             },
-                            {
-                                title: 'Phiên bản ngân hàng câu hỏi',
-                                dataIndex: 'questionBankId',
-                                fixed: 'left',
-                                width: 220,
-                                type: 'select',
-                                options: questionBankData?.map(({ id, name }) => ({
-                                    value: id,
-                                    label: name,
-                                })),
-                                render: (_, record) => record?.questionBank?.name || 'Chưa có',
-                            },
+                            // {
+                            //     title: 'Phiên bản ngân hàng câu hỏi',
+                            //     dataIndex: 'questionBankId',
+                            //     fixed: 'left',
+                            //     width: 220,
+                            //     type: 'select',
+                            //     options: questionBankData?.map(({ id, name }) => ({
+                            //         value: id,
+                            //         label: name,
+                            //     })),
+                            //     render: (_, record) => record?.questionBank?.name || 'Chưa có',
+                            // },
                             {
                                 title: 'Thời gian bắt dầu',
                                 dataIndex: 'startTime',

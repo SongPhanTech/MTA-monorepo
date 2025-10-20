@@ -1,5 +1,5 @@
 import DeleteIcon from '@components/icons/delete'
-import { Button, Checkbox, Col, Flex, message, Popconfirm, Row, type TableProps, Tag } from 'antd'
+import { Button, Checkbox, Col, Flex, message, Row, type TableProps, Tag } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { queryClient } from '@api/index'
@@ -13,14 +13,12 @@ import { useDecisionStatusOptions } from '@hooks/decisionStatus'
 import useSpinner from '@hooks/spinner'
 
 import {
+    useCountStudentAcademicDecision,
     useDeleteStudentAcademicDecision,
     useFindManyStudentAcademicDecision,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import {
-    updateStudentStatus,
-    useExportStudentResultSemesterJson,
-} from '@workspace/libs/api/training'
+import { useExportStudentResultSemesterJson } from '@workspace/libs/api/training'
 import { BookPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -166,6 +164,16 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
         { enabled: !!semesterId }
     )
 
+    const { data: count } = useCountStudentAcademicDecision({
+        where: {
+            semesterId,
+            actionTaken,
+            ...where,
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
     const { mutateAsync: deleteStudentAcademicDecision } = useDeleteStudentAcademicDecision()
     async function handleDeleteStudentAcademicDecision(id: string) {
         try {
@@ -194,6 +202,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
 
     const { onOpen: openModalChuyenLopLuuBan } = useDisclosure<{
         ids: string[]
+        actionTaken: AcademicActionType
     }>({
         tag: 'ModalChuyenLopLuuBan',
     })
@@ -356,35 +365,20 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                 <Row justify={'space-between'}>
                                     <h3 className="text-xl font-bold">Quyết định</h3>
                                     <Flex justify="end" gap={4}>
-                                        <Popconfirm
-                                            placement="topLeft"
-                                            title="Xác nhận cập nhật trạng thái SV?"
-                                            description={`Trạng thái SV và kết quả học tập sẽ được đánh dấu là ${getAcademicActionTypeLabel(
-                                                actionTaken
-                                            )}`}
-                                            okText="Đồng ý"
-                                            cancelText="Hủy"
-                                            onConfirm={async () => {
-                                                await updateStudentStatus({
-                                                    decisionIds: selectedDecision as string[],
-                                                    academicActionType: actionTaken,
-                                                })
-
-                                                await refetch()
+                                        <Button
+                                            type="primary"
+                                            disabled={!selectedDecision.length}
+                                            onClick={() => {
                                                 openModalChuyenLopLuuBan({
                                                     ids: selectedDecision as string[],
+                                                    actionTaken,
                                                 })
                                                 setSelectedDecision([])
                                             }}
                                         >
-                                            <Button
-                                                type="primary"
-                                                disabled={!selectedDecision.length}
-                                            >
-                                                <BookPlus />
-                                                Cập nhật trạng thái SV
-                                            </Button>
-                                        </Popconfirm>
+                                            <BookPlus />
+                                            Cập nhật SV
+                                        </Button>
 
                                         <Button
                                             type="primary"
@@ -558,6 +552,7 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                             pagination={{
                                 current: currentPage,
                                 pageSize: numberOfPages,
+                                total: count,
                                 onChange: (page, pageSize) => {
                                     if (numberOfPages === pageSize) {
                                         setCurrentPage(page)

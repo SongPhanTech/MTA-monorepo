@@ -1,20 +1,17 @@
 import Table from '@components/commons/table'
+import TextTruncate from '@components/commons/text-truncate'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { emptyObjectIf } from '@workspace/constant'
-import {
-    useCountArchivedAward,
-    useFindManyArchivedAward,
-    useUpdateArchivedAward,
-} from '@workspace/db/hooks'
+import { useCountAward, useFindManyAward, useUpdateAward } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row } from 'antd'
 import _ from 'lodash'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export default function OlympicAwards() {
@@ -25,6 +22,7 @@ export default function OlympicAwards() {
         name: '',
         bonusScore: undefined,
         count: undefined,
+        subjects: undefined,
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -37,11 +35,11 @@ export default function OlympicAwards() {
         onOpen()
     }
 
-    const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
+    const { mutateAsync: updateAward } = useUpdateAward()
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            await updateArchivedAward({
+            await updateAward({
                 where: {
                     id,
                 },
@@ -60,11 +58,34 @@ export default function OlympicAwards() {
         }
     }
 
-    const { data: dataTable = [], refetch } = useFindManyArchivedAward({
-        where: {
-            name: { contains: filters.name, mode: 'insensitive' },
-        },
-        include: { _count: true },
+    const where = useMemo(() => {
+        return {
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.subjects && filters.subjects !== ''
+                ? {
+                      subjects: {
+                          some: {
+                              name: {
+                                  contains: filters.subjects,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+        }
+    }, [filters])
+
+    const { data: dataTable = [], refetch } = useFindManyAward({
+        where,
+        include: { subjects: true, _count: true },
         orderBy: [
             ...emptyObjectIf(
                 [
@@ -73,16 +94,6 @@ export default function OlympicAwards() {
                     },
                 ],
                 !!filters.bonusScore
-            ),
-            ...emptyObjectIf(
-                [
-                    {
-                        studentSubjectScore: {
-                            _count: filters.count,
-                        },
-                    },
-                ],
-                !!filters.count
             ),
             {
                 createdAt: 'desc',
@@ -99,9 +110,9 @@ export default function OlympicAwards() {
         []
     )
 
-    const { data: count } = useCountArchivedAward({
+    const { data: count } = useCountAward({
         where: {
-            name: { contains: filters.name, mode: 'insensitive' },
+            ...where,
             deletedAt: null,
         },
     })
@@ -135,18 +146,6 @@ export default function OlympicAwards() {
                                 )}
                             </Flex>
                         </Col>
-
-                        {/* <Col span={6}>
-                            <Flex justify="end" gap={4}>
-                                <Button type="primary" className="h-[40px]">
-                                    Thêm mới
-                                </Button>
-                                <Button type="primary" className="h-[40px]">
-                                    <EditIcon stroke="white" />
-                                    Nhập từ file danh sách
-                                </Button>
-                            </Flex>
-                        </Col> */}
                     </Row>
                 </Col>
 
@@ -177,18 +176,29 @@ export default function OlympicAwards() {
                             {
                                 title: 'Điểm cộng',
                                 dataIndex: 'bonusScore',
-                                width: 250,
+                                width: 200,
                                 align: 'center',
                                 type: 'order',
                             },
                             {
-                                title: 'Số SV đã được cộng',
-                                dataIndex: 'count',
-                                width: 250,
+                                title: 'Môn học có thể cộng điểm',
+                                dataIndex: 'subjects',
+                                width: 300,
                                 align: 'center',
-                                type: 'order',
+                                type: 'input',
                                 render: (__, record) => {
-                                    return record._count?.studentSubjectScore
+                                    return record?.subjects?.length ? (
+                                        <TextTruncate
+                                            arr={record?.subjects.map((i: any) => {
+                                                return {
+                                                    key: i?.id,
+                                                    label: `${i?.name}`,
+                                                }
+                                            })}
+                                        />
+                                    ) : (
+                                        ''
+                                    )
                                 },
                             },
                             {
@@ -202,32 +212,36 @@ export default function OlympicAwards() {
                                     'XOA'
                                 ),
                                 render: (_, { id, _count }) => {
-                                    if (!_count?.studentSubjectScore) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
-                                                    'SUA'
-                                                ) && (
-                                                    <EditIcon
-                                                        onClick={onOpen.bind(null, id)}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                )}
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
-                                                    'XOA'
-                                                ) && (
-                                                    <DeleteIcon
-                                                        popConfirm={{
-                                                            onConfirm: () => handleDelete(id),
-                                                        }}
-                                                    />
-                                                )}
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
+                                    return (
+                                        <Row className="justify-center gap-2">
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                'SUA'
+                                            ) && (
+                                                <EditIcon
+                                                    disabled={
+                                                        _count?.subjects > 0 ||
+                                                        _count?.archivedAward > 0
+                                                    }
+                                                    onClick={onOpen.bind(null, id)}
+                                                />
+                                            )}
+                                            {can(
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                'XOA'
+                                            ) && (
+                                                <DeleteIcon
+                                                    disabled={
+                                                        _count?.subjects > 0 ||
+                                                        _count?.archivedAward > 0
+                                                    }
+                                                    popConfirm={{
+                                                        onConfirm: () => handleDelete(id),
+                                                    }}
+                                                />
+                                            )}
+                                        </Row>
+                                    )
                                 },
                             },
                         ]}

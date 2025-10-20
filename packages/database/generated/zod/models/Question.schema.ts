@@ -31,7 +31,6 @@ const relationSchema = z.object({
     knowledgeBlock: z.record(z.unknown()).optional(),
     difficulty: z.record(z.unknown()).optional(),
     sessionQuestions: z.array(z.unknown()).optional(),
-    answers: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

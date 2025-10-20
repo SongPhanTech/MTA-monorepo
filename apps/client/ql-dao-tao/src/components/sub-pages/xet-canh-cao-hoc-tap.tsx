@@ -12,7 +12,13 @@ import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import type { AcademicWarning, FixedClass, Prisma, Student, TrainingCourse } from '@workspace/db'
+import type {
+    AcademicWarning,
+    FixedClass,
+    Prisma,
+    Student,
+    TrainingCourse,
+} from '@workspace/db/client'
 import {
     useDeleteAcademicWarning,
     useFindManyAcademicWarning,

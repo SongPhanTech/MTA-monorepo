@@ -4,7 +4,11 @@ import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
 import { cn, formatNiceBytes } from '@lib/utils'
-import { useCreateManyDocument } from '@workspace/db/hooks'
+import {
+    useCreateDocument,
+    useCreateManyDocumentTopic,
+    useFindManyDocumentClassification,
+} from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { Col, Form, Input, Modal, message, Progress } from 'antd'
 import axios from 'axios'
@@ -13,7 +17,8 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTopics } from '@/hooks/useTopics'
 
 type DocumentFormType = {
-    topicId: string
+    topicIds: string[]
+    classificationId?: string
     files: Record<
         string,
         {
@@ -29,6 +34,9 @@ type DocumentFormType = {
 }
 const ThemTaiLieu = () => {
     const { selectableTopicOptions } = useTopics()
+    const { data: classifications = [] } = useFindManyDocumentClassification({
+        orderBy: { name: 'asc' },
+    })
     const {
         isOpen,
         onClose,
@@ -37,14 +45,15 @@ const ThemTaiLieu = () => {
         tag: 'ThemTaiLieu',
     })
 
-    const { mutateAsync: createMany } = useCreateManyDocument()
+    const { mutateAsync: createDocument } = useCreateDocument()
+    const { mutateAsync: createManyDocumentTopic } = useCreateManyDocumentTopic()
 
     const [selectedFile, setSelectedFile] = useState<DocumentFormType['files'][0]>()
 
     const [form] = Form.useForm<DocumentFormType>()
 
     const files = Form.useWatch('files', form) || {}
-    const selectedTopicId = Form.useWatch('topicId', form)
+    const selectedTopicIds = Form.useWatch('topicIds', form)
     const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
     const onUpload = async (
@@ -55,9 +64,9 @@ const ThemTaiLieu = () => {
     ) => {
         try {
             // Kiểm tra xem đã chọn topic chưa
-            const currentTopicId = form.getFieldValue('topicId')
-            if (!currentTopicId) {
-                message.error('Vui lòng chọn loại tài liệu trước khi tải lên')
+            const currentTopicIds = form.getFieldValue('topicIds')
+            if (!currentTopicIds || currentTopicIds.length === 0) {
+                message.error('Vui lòng chọn ít nhất một loại tài liệu trước khi tải lên')
                 return
             }
 
@@ -107,9 +116,10 @@ const ThemTaiLieu = () => {
                             })
                         },
                     })
-                    const selectedTopicId = form.getFieldValue('topicId')
+                    const selectedTopicIds = form.getFieldValue('topicIds')
+                    const firstTopicId = selectedTopicIds?.[0]
                     const selectedTopic = selectableTopicOptions.find(
-                        (topic) => topic.id === selectedTopicId
+                        (topic) => topic.id === firstTopicId
                     )
                     const resReaderDocument =
                         await fetchReadDocumentContentDocumentDocumentReaderGet({
@@ -163,19 +173,37 @@ const ThemTaiLieu = () => {
                     return
                 }
             }
-            await createMany({
-                data: Object.values(values.files).map(({ body, file, url }) => ({
-                    uri: url,
-                    title: file.name,
-                    fileType: file.type,
-                    topicId: values.topicId,
-                    body,
-                    fileSize: file.size,
-                })),
-            })
+
+            // Tạo document trước, sau đó tạo DocumentTopic
+            await Promise.all(
+                Object.values(values.files).map(async ({ body, file, url }) => {
+                    // Tạo document
+                    const newDocument = await createDocument({
+                        data: {
+                            uri: url,
+                            title: file.name,
+                            fileType: file.type,
+                            body,
+                            fileSize: file.size,
+                            classificationId: values.classificationId || null,
+                        },
+                    })
+
+                    // Tạo DocumentTopic cho tất cả topicIds
+                    if (newDocument && values.topicIds.length > 0) {
+                        await createManyDocumentTopic({
+                            data: values.topicIds.map((topicId) => ({
+                                documentId: newDocument.id,
+                                topicId: topicId,
+                            })),
+                        })
+                    }
+                })
+            )
             message.success('Thêm tài liệu thành công')
             onClose()
         } catch (_error) {
+            console.error('Error creating document:', _error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         }
     }
@@ -203,17 +231,24 @@ const ThemTaiLieu = () => {
                     className={cn('mt-4', selectedFile ? 'w-2/5' : 'w-full')}
                     initialValues={{
                         files: {},
-                        topicId: null,
+                        topicIds: [],
+                        classificationId: undefined,
                     }}
                 >
                     <Col span={24}>
                         <FormItem
                             form={form}
-                            name={'topicId'}
+                            name={'topicIds'}
                             label="Loại tài liệu"
-                            rules={[{ required: true, message: 'Vui lòng chọn loại tài liệu' }]}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ít nhất một loại tài liệu',
+                                },
+                            ]}
                         >
                             <Select
+                                mode="multiple"
                                 placeholder="Chọn loại tài liệu"
                                 options={selectableTopicOptions.map((topic) => ({
                                     value: topic.id,
@@ -223,8 +258,20 @@ const ThemTaiLieu = () => {
                         </FormItem>
                     </Col>
                     <Col span={24}>
+                        <FormItem form={form} name={'classificationId'} label="Phân loại">
+                            <Select
+                                allowClear
+                                placeholder="Chọn phân loại (tùy chọn)"
+                                options={classifications.map((classification) => ({
+                                    value: classification.id,
+                                    label: classification.name,
+                                }))}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={24}>
                         <FormItem form={form} name={'files'}>
-                            {selectedTopicId ? (
+                            {selectedTopicIds && selectedTopicIds.length > 0 ? (
                                 <UploadDragAndDrop
                                     multiple
                                     accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"

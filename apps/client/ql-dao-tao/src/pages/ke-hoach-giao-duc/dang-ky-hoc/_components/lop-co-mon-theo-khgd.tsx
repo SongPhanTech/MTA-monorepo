@@ -11,7 +11,7 @@ import { enrollFixedClassOnSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Divider, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -43,8 +43,21 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
             },
             include: {
                 mainLecturer: {
-                    include: {
-                        userProfile: true,
+                    select: {
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                            },
+                        },
+                    },
+                },
+                extraLecturer: {
+                    select: {
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                            },
+                        },
                     },
                 },
                 subject: true,
@@ -184,25 +197,26 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
 
     return (
         <div>
-            <Divider orientation="left" orientationMargin={0}>
+            {/* <Divider orientation="left" orientationMargin={0} className='m-0 my-0'>
                 {[
                     selectedSubjectClass?.code,
                     selectedSubjectClass?.name,
                     selectedSubjectClass?.schedule &&
                         getScheduleLabel(selectedSubjectClass.schedule),
                     selectedSubjectClass?.mainLecturer?.userProfile?.fullname,
+                    selectedSubjectClass?.extraLecturer?.userProfile?.fullname,
                 ]
                     .filter(Boolean)
                     .join(' - ')}
-            </Divider>
-            <Row gutter={[12, 12]} align="top" justify="space-between">
+            </Divider> */}
+            <Row align="top" justify="space-between">
                 <Col span={24}>
                     <Flex>
                         <Col span={20}>
-                            <Form.Item name="searchText">
+                            <Form.Item className="m-0" name="searchText">
                                 <Input
                                     id="search"
-                                    placeholder="Nhập tên lớp..."
+                                    placeholder="Tìm kiếm..."
                                     onChange={(e) =>
                                         handleFilterChange('searchText', e.target.value)
                                     }

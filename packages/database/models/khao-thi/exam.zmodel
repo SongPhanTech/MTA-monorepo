@@ -87,7 +87,7 @@ model Question extends Base {
 
   sessionQuestions      ExamBankQuestion[]
   /// Câu trả lời của thí sinh trong các phiên thi
-  answers               Answer[]
+  // answers               Answer[]
 
   @@schema("khao-thi")
 }
@@ -129,27 +129,27 @@ model OrderingItem extends Base {
   @@schema("khao-thi")
 }
 
-/// Câu trả lời của thí sinh
-model Answer extends Base {
-  sessionId   String
-  session     ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  questionId  String
-  question    Question    @relation(fields: [questionId], references: [id])
+// /// Câu trả lời của thí sinh
+// model Answer extends Base {
+//   // sessionId   String
+//   // session     ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+//   questionId  String
+//   question    Question @relation(fields: [questionId], references: [id])
 
-  // Điểm và nhận xét chung cho câu trả lời này
-  isCorrect   Boolean?
-  score       Float?
-  comment     String?
+//   // Điểm và nhận xét chung cho câu trả lời này
+//   isCorrect   Boolean?
+//   score       Float?
+//   comment     String?
 
-  // Liên kết đến dữ liệu trả lời chi tiết, tùy thuộc vào loại câu hỏi
-  essayAnswer String
-  // multipleChoiceSelections SelectedMultipleChoiceOption[]
-  // fillInBlankAnswers       FillInBlankAnswer[]
-  // orderingAnswers          OrderingAnswer[]
+//   // Liên kết đến dữ liệu trả lời chi tiết, tùy thuộc vào loại câu hỏi
+//   essayAnswer String
+//   // multipleChoiceSelections SelectedMultipleChoiceOption[]
+//   // fillInBlankAnswers       FillInBlankAnswer[]
+//   // orderingAnswers          OrderingAnswer[]
 
-  @@unique([sessionId, questionId])
-  @@schema("khao-thi")
-}
+//   // @@unique([sessionId, questionId])
+//   @@schema("khao-thi")
+// }
 
 // /// Bảng nối, ghi lại lựa chọn của thí sinh cho câu hỏi trắc nghiệm
 // model SelectedMultipleChoiceOption {
@@ -187,29 +187,48 @@ model Answer extends Base {
 // }
 
 /// Bảng kỳ thi
-model Exam  extends Base {
-  title              String
-  status             ExamStatus          @default(DRAFT)
-  questionBank       QuestionBank        @relation(fields: [questionBankId], references: [id])
-  questionBankId     String
+model Exam extends Base {
+  title               String
+  status              ExamStatus            @default(DRAFT)
+  questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
+  questionBankId      String?
 
-  startTime          DateTime // copy from subjectClass.examDate
-  endTime            DateTime
-  duration           Int
+  lockExamCode        Boolean               @default(false)
 
-  passScore          Float               @default(5) // Điểm đạt
-  maxScore           Float               @default(10) // Điểm tối đa
-  shuffleQuestions   Boolean             @default(true) // Xáo trộn câu hỏi
-  shuffleAnswers     Boolean             @default(true) // Xáo trộn đáp án
-  showResult         Boolean             @default(false) // Hiển thị kết quả ngay
+  /// thời gian thi
+  startTime           String // format: HH:mm
+  duration            Int
 
-  room               Room[] // sum examCapacity >= số thí sinh
-  subjectClass       SubjectClass[] // sum subjectClassStudent (!examBanned) => số thí sinh
-  examBank           ExamBank[]
-  testStructureRules TestStructureRule[]
-  examSessions       ExamSession[]
-  examFax            ExamFax[]
+  // passScore          Float               @default(5) // Điểm đạt
+  // maxScore           Float               @default(10) // Điểm tối đa
+  // shuffleQuestions   Boolean             @default(true) // Xáo trộn câu hỏi
+  // shuffleAnswers     Boolean             @default(true) // Xáo trộn đáp án
+  // showResult         Boolean             @default(false) // Hiển thị kết quả ngay
 
+  /// Lớp môn học
+  subjectClass        SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
+  /// thí sinh
+  studentSubjectScore StudentSubjectScore[]
+  room                Room[] // sum examCapacity >= số thí sinh
+  examBank            ExamBank[]
+  testStructureRules  TestStructureRule[]
+  examSessions        ExamSession[]
+  examRooms           ExamRoom[]
+
+  @@schema("khao-thi")
+}
+
+/// Phòng thi cho kỳ thi
+// 
+model ExamRoom extends Base {
+  exam         Exam          @relation(fields: [examId], references: [id])
+  examId       String
+  room         Room?         @relation(fields: [roomId], references: [id])
+  roomId       String?
+
+  examSessions ExamSession[]
+
+  @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 
@@ -231,65 +250,53 @@ model TestStructureRule extends Base {
 
 /// Đề thi
 model ExamBank extends Base {
-  exam        Exam               @relation(fields: [examId], references: [id])
-  examId      String
+  exam      Exam               @relation(fields: [examId], references: [id])
+  examId    String
 
-  examCode    String
+  examCode  String
 
-  examSession ExamSession[]
-  questions   ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
+  // examSession ExamSession[]
+  questions ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
 
   @@unique([examId, examCode])
   @@schema("khao-thi")
 }
 
-/// Bảng nối, xác định câu hỏi nào thuộc về phiên thi nào
+/// Bảng nối, xác định câu hỏi nào thuộc về đề thi nào
 model ExamBankQuestion extends Base {
   examBankId String
   examBank   ExamBank @relation(fields: [examBankId], references: [id], onDelete: Cascade)
   questionId String
   question   Question @relation(fields: [questionId], references: [id])
-  order      Int? // Thứ tự câu hỏi trong đề thi của phiên này
+  order      Int? // Thứ tự câu hỏi trong đề thi
 
   @@unique([examBankId, questionId])
   @@unique([examBankId, order])
   @@schema("khao-thi")
 }
 
-model ExamFax extends Base {
-  examId      String
-  exam        Exam         @relation(fields: [examId], references: [id], onDelete: Cascade)
-  fax         String
-  score       Decimal?     @db.Decimal(5, 2)
-
-  examSession ExamSession?
-
-  @@unique([examId, fax])
-  @@schema("khao-thi")
-}
-
 /// Bài thi
 model ExamSession extends Base {
-  // fax        String?                      // Dùng khi thi, chấm trên máy
-  // score      Decimal?  @db.Decimal(5, 2)  // Dùng khi thi, chấm trên máy
-  startTime  DateTime?
-  endTime    DateTime?
+  exam                  Exam                @relation(fields: [examId], references: [id])
+  examId                String
 
-  student    Student?  @relation(fields: [studentId], references: [id])
-  studentId  String?
-  exam       Exam      @relation(fields: [examId], references: [id])
-  examId     String
-  room       Room?     @relation(fields: [roomId], references: [id])
-  roomId     String?
+  examRoom              ExamRoom            @relation(fields: [examRoomId], references: [id])
+  examRoomId            String
 
-  examBank   ExamBank? @relation(fields: [examBankId], references: [id])
-  examBankId String?
+  studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String              @unique
 
-  answers    Answer[]              // Tất cả câu trả lời trong phiên này
-  examFax    ExamFax?  @relation(fields: [examFaxId], references: [id])
-  examFaxId  String?   @unique
+  /// phách
+  examCode              String?
+  // startTime             DateTime?
+  // endTime               DateTime?
 
-  @@unique([studentId, examId])
-  // @@unique([fax, examId]) // Dùng khi thi, chấm trên máy
+  // examBank              ExamBank?           @relation(fields: [examBankId], references: [id])
+  // examBankId            String?
+
+  // answers               Answer[]              // Tất cả câu trả lời trong phiên này
+
+  @@unique([examCode, examId])
+
   @@schema("khao-thi")
 }

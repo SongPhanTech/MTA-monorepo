@@ -22,6 +22,7 @@ const relationSchema = z.object({
     dM_Tinh_New: z.record(z.unknown()).optional(),
     students: z.array(z.unknown()).optional(),
     buildings: z.array(z.unknown()).optional(),
+    subjectClasses: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

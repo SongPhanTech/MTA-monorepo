@@ -3,7 +3,7 @@ import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
-import type { ArchivedAward, ArchivedCertificate, StudentSubjectScore } from '@workspace/db'
+import type { ArchivedAward, ArchivedCertificate, StudentSubjectScore } from '@workspace/db/client'
 import {
     useFindManySemester,
     useFindManyStudentSubjectScore,
@@ -315,7 +315,7 @@ export default function StudentScoreClassPage() {
                                     subjectClassStudent?.[0]?.certificates
                                         .map(
                                             (i: { archivedCertificate: ArchivedCertificate }) =>
-                                                i?.archivedCertificate?.name
+                                                i?.archivedCertificate?.code
                                         )
                                         .join(', '),
                             },

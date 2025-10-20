@@ -1,24 +1,23 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import Table from '@components/commons/table'
+import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
-import type { Room, SubjectClass } from '@workspace/db'
+import type { Room, SubjectClass } from '@workspace/db/client'
 import {
     useCreateManySubjectClass,
     useFindManyRoom,
     useFindManySchoolYear,
     useFindManySubjectVersion,
 } from '@workspace/db/hooks'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, DatePicker, Flex, Form, InputNumber, message } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
+import 'dayjs/locale/vi'
 import { useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-import Table from '@components/commons/table'
-import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
-import { useExamTypeOptions } from '@hooks/examType'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
-import TreeSelect from '@/components/commons/tree-select'
 
 dayjs.locale('vi')
 
@@ -27,7 +26,6 @@ export type PutSubjectClass = {
     schedule: string
     trainingLocationId: string | null
     subjectVersionId: string
-    semesterId: string
     totalStudent: number | null
     maxStudent: number | null
     numberOfClass: number | null
@@ -47,8 +45,8 @@ const PutOpenSubjectClassModal = () => {
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
     const { mutateAsync: createMany } = useCreateManySubjectClass()
+    const { id: semesterId } = useSemesterStore()
 
-    const semesterId = Form.useWatch('semesterId', form)
     const { data: subjectVersionData = [] } = useFindManySubjectVersion({
         where: semesterId
             ? {
@@ -116,7 +114,7 @@ const PutOpenSubjectClassModal = () => {
                     name: subjectVersion?.name,
                     maxStudent: Number(count),
                     startDate: new Date(),
-                    semesterId: form.getFieldValue('semesterId'),
+                    semesterId: semesterId,
                     subjectId: form.getFieldValue('subjectVersionId'),
                     subject: subjectVersion,
                     examType: subjectVersion?.examType,
@@ -140,7 +138,7 @@ const PutOpenSubjectClassModal = () => {
                     name: subjectVersion?.name ? subjectVersion?.name : '',
                     maxStudent: Number(maxStudent),
                     startDate: new Date(),
-                    semesterId: form.getFieldValue('semesterId'),
+                    semesterId: semesterId,
                     subjectId: form.getFieldValue('subjectVersionId'),
                     subject: subjectVersion,
                     examType: subjectVersion?.examType,
@@ -213,17 +211,6 @@ const PutOpenSubjectClassModal = () => {
             className="w-[80vw]"
         >
             <Col span={12}>
-                <FormItem form={form} name="semesterId" label="Học kỳ" required>
-                    <TreeSelect
-                        placeholder="Chọn học kỳ"
-                        showSearch
-                        treeDefaultExpandAll
-                        treeData={treeData}
-                        className="w-full"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
                 <FormItem form={form} name="subjectVersionId" label="Môn học" required>
                     <Select
                         disabled={disabledSubjectVersion}
@@ -270,7 +257,7 @@ const PutOpenSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col> */}
-            <Col span={24}>
+            <Col span={12}>
                 <FormItem form={form} name="totalStudent" label="Tổng SV" required>
                     <InputNumber
                         type="number"
@@ -332,7 +319,7 @@ const PutOpenSubjectClassModal = () => {
             <Col span={24}>
                 <FormItem form={form} name="list">
                     <Table
-                        className="mt-6 custom-scrollbar"
+                        className="mt-2 custom-scrollbar"
                         columns={[
                             {
                                 title: 'STT',

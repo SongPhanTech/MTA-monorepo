@@ -43,12 +43,15 @@ const baseSchema = z.object({
     suspendedReason: z.string().nullish(),
     repeated: z.boolean().default(false),
     repeatedReason: z.string().nullish(),
+    isImproving: z.boolean().default(false),
 }
 ).strict();
 const relationSchema = z.object({
     subjectClass: z.record(z.unknown()).optional(),
     subjectVersion: z.record(z.unknown()),
     student: z.record(z.unknown()),
+    exam: z.record(z.unknown()).optional(),
+    examSession: z.record(z.unknown()).optional(),
     graduationGpaScores: z.array(z.unknown()).optional(),
     graduationSupplementaryScore: z.array(z.unknown()).optional(),
     certificates: z.array(z.unknown()).optional(),
@@ -61,6 +64,7 @@ const fkSchema = z.object({
     subjectClassId: z.string().nullish(),
     subjectVersionId: z.string(),
     studentId: z.string(),
+    examId: z.string().nullish(),
 }
 );
 
@@ -121,7 +125,8 @@ export const StudentSubjectScorePrismaUpdateSchema = z.object({
     suspended: z.boolean().default(false),
     suspendedReason: z.string().nullish(),
     repeated: z.boolean().default(false),
-    repeatedReason: z.string().nullish()
+    repeatedReason: z.string().nullish(),
+    isImproving: z.boolean().default(false)
 }).partial().passthrough();
 
 
@@ -129,7 +134,7 @@ export const StudentSubjectScorePrismaUpdateSchema = z.object({
  * `StudentSubjectScore` schema for create operations excluding foreign keys and relations.
  */
 export const StudentSubjectScoreCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, examPostponed: true, exempted: true, withdrew: true, examBanned: true, suspended: true, repeated: true
+    id: true, active: true, createdAt: true, updatedAt: true, examPostponed: true, exempted: true, withdrew: true, examBanned: true, suspended: true, repeated: true, isImproving: true
 });
 
 

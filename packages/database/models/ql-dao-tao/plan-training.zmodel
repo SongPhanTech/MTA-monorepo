@@ -159,6 +159,14 @@ model StudentSubjectScore extends Base {
   repeated                     Boolean                                    @default(false)
   repeatedReason               String?
 
+  isImproving                  Boolean                                    @default(false) // học cải thiện
+
+  /// kì thi
+  exam                         Exam?                                      @relation(fields: [examId], references: [id])
+  examId                       String?
+  /// thí sinh trong kì thi
+  examSession                  ExamSession?
+
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
 
@@ -188,7 +196,7 @@ model StudentSubjectScoreHistory extends Base {
   examPostponedReason   Boolean?
   examPostponed         String?
 
-  examBanned            Boolean
+  examBanned            Boolean?
   examBannedReason      String?
 
   suspended             Boolean?
@@ -736,7 +744,7 @@ model ClassRegisterSessionCredit extends Base {
   classRegisterSessionId String
   minCredit              Int                     @default(0) // tối thiểu số tín chỉ phải đăng ký
   maxCredit              Int                     @default(25)        // tối đa số tín chỉ được đăng ký
-  baseScore              AcademicRankingBaseType
+  baseScore              AcademicRankingBaseType @default(Base10) // loại điểm làm cơ sở tính toán
   base10Min              Float?
   base10Max              Float?
   base4Min               Float?
@@ -821,7 +829,10 @@ model SubjectClass extends BaseNoCode {
   semesterId                 String
 
   cancelled                  Boolean               @default(false) // đã hủy lớp
+
   lecturerAssignmentDeadline DateTime? // hạn phân công giảng dạy
+  sendLecturerAssignmentAt   DateTime? // ngày gửi phân công giảng dạy
+  submitLecturerAssignmentAt DateTime? // ngày nộp phân công giảng dạy
   examDate                   DateTime? // ngày thi
 
   // hình thức thi copy từ phiên bản môn học; hình thức thi của lớp có thể thay đổi giữa kỳ học
@@ -855,6 +866,9 @@ model SubjectClass extends BaseNoCode {
 
   room                       Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
   roomId                     String?
+
+  trainingLocation           TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocationId         String?
 
   mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
   lecturerId                 String?

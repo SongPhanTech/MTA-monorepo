@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { StudentThesisRegistration } from '@workspace/db'
+import type { StudentThesisRegistration } from '@workspace/db/client'
 import {
     useCreateManyStudentThesisRegistration,
     useFindManyLecturer,

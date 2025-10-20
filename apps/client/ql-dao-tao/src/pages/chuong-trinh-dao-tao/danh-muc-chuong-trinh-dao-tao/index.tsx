@@ -21,7 +21,7 @@ import type {
     TrainingMajor,
     TrainingObjectType,
     TrainingTime,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCountCurriculum,
     useFindManyCurriculum,

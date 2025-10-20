@@ -111,8 +111,7 @@ export type FilterProps = {
     difficultyId?: string | null
     knowledgeBlockId?: string | null
     title?: string | ''
-    startTime?: Date[]
-    endTime?: Date[]
+    startTime?: string
     duration?: 'asc' | 'desc'
     passScore?: 'asc' | 'desc'
     examStatus?: ExamStatus[]
@@ -126,7 +125,7 @@ export type FilterProps = {
     order?: 'asc' | 'desc'
     scoreScalesId?: string[]
     hasExam?: boolean
-    fax?: string
+    examCode?: string
     score?: 'asc' | 'desc'
     surveyQuestionGroupId?: string[]
 }

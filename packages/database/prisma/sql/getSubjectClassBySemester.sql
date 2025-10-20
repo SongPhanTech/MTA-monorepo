@@ -45,9 +45,15 @@ WITH FCS AS (
                 LEFT JOIN "mta"."DM_DonVi" dv ON c."managementOrganizationId" = dv."Id"
         WHERE fc.active = TRUE
                 AND tbs."deletedAt" IS NULL
+                AND tbs."active" = TRUE
                 AND tbocv."deletedAt" IS NULL
+                AND tbocv."active" = TRUE
                 AND cv."deletedAt" IS NULL
+                AND cv."active" = TRUE
                 AND fc."deletedAt" IS NULL
+                AND fc."active" = TRUE
+                AND sv."deletedAt" IS NULL
+                AND sv."active" = TRUE
         GROUP BY cv.id,
                 cv.name,
                 fc.id,

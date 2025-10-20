@@ -2,7 +2,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import type { DisciplinaryWarning } from '@workspace/db'
+import type { DisciplinaryWarning } from '@workspace/db/client'
 import {
     useCreateDisciplinaryWarning,
     useFindManyDisciplinaryWarningReason,

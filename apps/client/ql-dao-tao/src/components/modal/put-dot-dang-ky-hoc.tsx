@@ -4,7 +4,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import type { ClassRegisterSession, TrainingCourse } from '@workspace/db'
+import type { $Enums, ClassRegisterSession, TrainingCourse } from '@workspace/db/client'
 import {
     useCreateClassRegisterSession,
     useDeleteManyClassRegisterSessionCredit,
@@ -24,7 +24,7 @@ export type PutClassRegisterSession = ClassRegisterSession & {
     minCredit: number | null
     maxCredit: number | null
     creditLimit: Array<{
-        baseScore: string | null
+        baseScore: $Enums.AcademicRankingBaseType
         base10Min: number | null
         base10Max: number | null
         base4Min: number | null
@@ -152,6 +152,16 @@ const PutClassRegisterSession = () => {
             active: true,
             trainingObjectTypeId,
         },
+        include: {
+            academicRankingConvert: {
+                select: {
+                    classification: true,
+                },
+                orderBy: {
+                    rankOrder: 'asc',
+                },
+            },
+        },
         orderBy: { createdAt: 'desc' },
     })
 
@@ -252,29 +262,23 @@ const PutClassRegisterSession = () => {
                 <FormItem hidden form={form} name="creditLimit" />
                 <span>Giới hạn đăng ký tín chỉ</span>
                 <Table
+                    data={Object.keys(
+                        Object.groupBy(
+                            trainingCourses.flatMap((e) => e.academicRankingConvert),
+                            (item) => item.classification
+                        )
+                    ).map((key) => ({ classification: key }))}
                     columns={[
                         {
                             title: 'Xếp loại',
                             align: 'center',
+                            dataIndex: 'classification',
                         },
                         {
-                            title: 'Từ',
-                            align: 'center',
-                        },
-                        {
-                            title: 'Đến',
-                            align: 'center',
-                        },
-                        {
-                            title: 'Tối thiểu',
+                            title: 'TC Tối thiểu',
                             align: 'center',
                             render: (_, record: any) => (
-                                <FormItem
-                                    form={form}
-                                    required
-                                    name="minCredit"
-                                    label="Tín chỉ tối thiểu"
-                                >
+                                <FormItem form={form} required name="minCredit">
                                     <InputNumber
                                         type="number"
                                         className="w-full"
@@ -287,15 +291,10 @@ const PutClassRegisterSession = () => {
                             ),
                         },
                         {
-                            title: 'Tối đa',
+                            title: 'TC Tối đa',
                             align: 'center',
                             render: (_, record: any) => (
-                                <FormItem
-                                    form={form}
-                                    required
-                                    name="maxCredit"
-                                    label="Tín chỉ tối đa"
-                                >
+                                <FormItem form={form} required name="maxCredit">
                                     <InputNumber
                                         type="number"
                                         className="w-full"

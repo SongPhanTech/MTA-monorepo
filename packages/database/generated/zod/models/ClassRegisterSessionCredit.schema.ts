@@ -6,6 +6,7 @@
 // @ts-nocheck
 
 import { z } from 'zod';
+import { AcademicRankingBaseType } from '../../zenstack/models';
 import { AcademicRankingBaseTypeSchema } from '../enums/AcademicRankingBaseType.schema';
 const baseSchema = z.object({
     id: z.string(),
@@ -78,7 +79,7 @@ export const ClassRegisterSessionCreditPrismaUpdateSchema = z.object({
  * `ClassRegisterSessionCredit` schema for create operations excluding foreign keys and relations.
  */
 export const ClassRegisterSessionCreditCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, minCredit: true, maxCredit: true
+    id: true, active: true, createdAt: true, updatedAt: true, minCredit: true, maxCredit: true, baseScore: true
 });
 
 

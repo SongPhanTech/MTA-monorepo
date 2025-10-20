@@ -10,7 +10,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
-import type { ScholarshipAward } from '@workspace/db'
+import type { ScholarshipAward } from '@workspace/db/client'
 import {
     useCountTrainingCourse,
     useDeleteScholarshipAward,

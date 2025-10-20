@@ -2,22 +2,22 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { ArchivedCertificate } from '@workspace/db'
+import type { Certificate } from '@workspace/db/client'
 import {
-    useCreateArchivedCertificate,
-    useFindUniqueArchivedCertificate,
-    useUpdateArchivedCertificate,
+    useCreateCertificate,
+    useFindUniqueCertificate,
+    useUpdateCertificate,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, InputNumber, message } from 'antd'
+import { Col, Form, Input, message } from 'antd'
 import dayjs from 'dayjs'
+import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import 'dayjs/locale/vi'
-export type PutArchivedCertificate = ArchivedCertificate
+export type PutCertificate = Certificate
 dayjs.locale('vi')
 
 const PutCertificateScoreModal = () => {
-    const [form] = Form.useForm<PutArchivedCertificate>()
+    const [form] = Form.useForm<PutCertificate>()
     const [_targetDisabled, setTargetDisabled] = useState(true)
     const {
         isOpen,
@@ -29,28 +29,28 @@ const PutCertificateScoreModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: createArchivedCertificate } = useCreateArchivedCertificate()
-    const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
-    async function onOk({ ...rest }: PutArchivedCertificate) {
+    const { mutateAsync: createCertificate } = useCreateCertificate()
+    const { mutateAsync: updateCertificate } = useUpdateCertificate()
+    async function onOk({ ...rest }: PutCertificate) {
         try {
             showSpinner()
             if (id) {
-                await updateArchivedCertificate({
+                await updateCertificate({
                     data: {
-                        finalScore: rest.finalScore,
+                        name: rest.name,
                     },
                     where: { id },
                 })
                 message.success('Cập nhật thành công')
             } else {
-                await createArchivedCertificate({
+                await createCertificate({
                     data: rest,
                 })
                 message.success('Thêm mới thành công')
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
-                queryKey: ['ArchivedCertificate'],
+                queryKey: ['Certificate'],
             })
             onClose()
         } catch (error: any) {
@@ -64,7 +64,7 @@ const PutCertificateScoreModal = () => {
         }
     }
 
-    const { data: level } = useFindUniqueArchivedCertificate(
+    const { data: level } = useFindUniqueCertificate(
         {
             where: { id },
         },
@@ -95,12 +95,12 @@ const PutCertificateScoreModal = () => {
             title={id ? 'Chỉnh sửa điểm chứng chỉ' : 'Thêm mới điểm chứng chỉ'}
             className="w-[500px]"
         >
-            {/* <Col span={24}>
+            <Col span={24}>
                 <FormItem form={form} name="name" label="Tên chứng chỉ" required>
                     <Input placeholder="Nhập tên chứng chỉ" />
                 </FormItem>
-            </Col> */}
-            <Col span={24}>
+            </Col>
+            {/* <Col span={24}>
                 <FormItem form={form} name="finalScore" label="Điểm tương đương">
                     <InputNumber
                         type="number"
@@ -111,7 +111,7 @@ const PutCertificateScoreModal = () => {
                         step={0.1}
                     />
                 </FormItem>
-            </Col>
+            </Col> */}
         </PutFormModal>
     )
 }

@@ -4,7 +4,7 @@ import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { type Prisma, RankingContext, type TrainingCourse } from '@workspace/db'
+import { type Prisma, RankingContext, type TrainingCourse } from '@workspace/db/client'
 import {
     useCountTrainingCourse,
     useDeleteAcademicRankingConvert,

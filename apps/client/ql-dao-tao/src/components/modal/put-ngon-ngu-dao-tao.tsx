@@ -2,7 +2,7 @@ import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { TrainingLanguage } from '@workspace/db'
+import type { TrainingLanguage } from '@workspace/db/client'
 import {
     useCreateTrainingLanguage,
     useFindUniqueTrainingLanguage,

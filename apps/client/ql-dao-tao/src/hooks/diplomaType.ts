@@ -1,4 +1,4 @@
-import { DiplomaTypeEnum } from '@workspace/db'
+import { DiplomaTypeEnum } from '@workspace/db/client'
 
 export type DiplomaTypeOption = {
     value: DiplomaTypeEnum

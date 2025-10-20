@@ -6,7 +6,7 @@ import { FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Student } from '@workspace/db'
+import type { Student } from '@workspace/db/client'
 import {
     useFindManyCurriculumVersion,
     useFindManyDM_GioiTinh,
@@ -48,6 +48,7 @@ export default function StudentFixedClassPage() {
         phone: undefined,
         statusStudent: undefined,
         rank: undefined,
+        curriculumVersionParallel: undefined,
     })
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
@@ -209,6 +210,13 @@ export default function StudentFixedClassPage() {
                       },
                   }
                 : {}),
+            ...(filters.curriculumVersionParallel
+                ? {
+                      curriculumVersionParallelId: {
+                          in: filters.curriculumVersionParallel,
+                      },
+                  }
+                : {}),
             fixedClass: {
                 curriculumVersion: {
                     curriculum: {
@@ -275,6 +283,7 @@ export default function StudentFixedClassPage() {
                     curriculum: true,
                 },
             },
+            curriculumVersionParallel: true,
         },
         orderBy: {
             userProfile: {
@@ -1092,6 +1101,21 @@ export default function StudentFixedClassPage() {
                                 })),
                                 render: (__, record) => {
                                     const curriculum = record.curriculumVersion
+                                    return curriculum ? curriculum.name : ''
+                                },
+                            },
+                            {
+                                title: 'CTĐT song song',
+                                width: 200,
+                                align: 'center',
+                                dataIndex: 'curriculumVersionParallel',
+                                type: 'select',
+                                options: curriculumVersionData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record) => {
+                                    const curriculum = record.curriculumVersionParallel
                                     return curriculum ? curriculum.name : ''
                                 },
                             },

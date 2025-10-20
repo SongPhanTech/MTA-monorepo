@@ -1,7 +1,7 @@
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import type { ThesisProject } from '@workspace/db'
+import type { ThesisProject } from '@workspace/db/client'
 import {
     useCreateThesisProject,
     useFindManyDM_DonVi,

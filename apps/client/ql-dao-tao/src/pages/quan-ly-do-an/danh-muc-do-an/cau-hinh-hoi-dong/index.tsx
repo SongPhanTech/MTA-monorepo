@@ -5,7 +5,7 @@ import {
     CouncilRole,
     type ExpertProfile,
     type SubjectClass,
-} from '@workspace/db'
+} from '@workspace/db/client'
 import {
     useCreateManyCouncil,
     useFindManyDefenseSession,

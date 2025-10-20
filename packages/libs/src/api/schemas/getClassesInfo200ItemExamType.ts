@@ -11,9 +11,6 @@ export type GetClassesInfo200ItemExamType =
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetClassesInfo200ItemExamType = {
     OfflineWritten: 'OfflineWritten',
-    OnlineWritten: 'OnlineWritten',
-    OfflineChoices: 'OfflineChoices',
-    OnlineChoices: 'OnlineChoices',
     Oral: 'Oral',
     Practice: 'Practice',
     Project: 'Project',

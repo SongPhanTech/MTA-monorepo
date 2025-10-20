@@ -9,7 +9,7 @@ import type { FilterProps } from '@constants/type'
 import { useSemesterTypeOptions } from '@hooks/semesterType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma, SchoolYear } from '@workspace/db'
+import type { Prisma, SchoolYear } from '@workspace/db/client'
 import {
     useCountSchoolYear,
     useFindManySchoolYear,

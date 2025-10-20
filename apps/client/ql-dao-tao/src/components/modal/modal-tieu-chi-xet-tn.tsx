@@ -1,5 +1,5 @@
 import PutFormModal from '@components/commons/put-modal'
-import type { RankingCondition } from '@workspace/db'
+import type { RankingCondition } from '@workspace/db/client'
 import {
     useCreateGraduationRankDowngradeRule,
     useDeleteGraduationRankDowngradeCondition,

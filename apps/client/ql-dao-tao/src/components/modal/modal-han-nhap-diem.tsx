@@ -1,4 +1,4 @@
-import type { SubjectClass } from '@workspace/db'
+import type { SubjectClass } from '@workspace/db/client'
 import { Col, DatePicker, Form, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'

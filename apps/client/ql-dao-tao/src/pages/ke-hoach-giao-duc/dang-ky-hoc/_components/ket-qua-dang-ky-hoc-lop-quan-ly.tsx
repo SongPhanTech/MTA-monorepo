@@ -3,8 +3,8 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
-import type { ExamType, SubjectClassSchedule } from '@workspace/db'
-import { useFindManySubjectClass } from '@workspace/db/hooks'
+import type { ExamType, SubjectClassSchedule } from '@workspace/db/client'
+import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Flex, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
@@ -16,13 +16,10 @@ interface FilterProps {
     searchText: string | null
 }
 
-interface RegisterClassProps {
-    setSubjectClassId?: (id: string | null) => void
-}
-
-export default function RegisterResult({ setSubjectClassId }: RegisterClassProps) {
-    const [currentPage, _setCurrentPage] = useState(1)
-    const [selectedRowKey, _setSelectedRowKey] = useState<string | null>(null)
+export default function KeQuaDangKyHocLopQuanLy() {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
@@ -51,8 +48,21 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
         },
         include: {
             mainLecturer: {
-                include: {
-                    userProfile: true,
+                select: {
+                    userProfile: {
+                        select: {
+                            fullname: true,
+                        },
+                    },
+                },
+            },
+            extraLecturer: {
+                select: {
+                    userProfile: {
+                        select: {
+                            fullname: true,
+                        },
+                    },
                 },
             },
             subject: true,
@@ -66,12 +76,34 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
                     building: true,
                 },
             },
+            trainingLocation: {
+                select: {
+                    name: true,
+                },
+            },
         },
         orderBy: {
             createdAt: 'desc',
         },
     })
-
+    const { data: countSubjectClass = 0 } = useCountSubjectClass({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      name: {
+                          contains: filters.searchText,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(semesterId
+                ? {
+                      semesterId,
+                  }
+                : {}),
+            trainingObjectTypeId,
+        },
+    })
     type SubjectClassData = (typeof subjectClassData)[number]
 
     const debouncedRefetch = useCallback(
@@ -120,8 +152,7 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
             </Row>
             <Table
                 rowKey="id"
-                id="subject-class"
-                dataSource={subjectClassData}
+                data={subjectClassData}
                 // onRow={(record) => ({
                 //     onClick: () => {
                 //         setSubjectClassId?.(record.id)
@@ -136,11 +167,10 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
                 selectedRow={selectedRowKey}
                 columns={[
                     {
-                        title: 'STT',
+                        title: 'TT',
                         dataIndex: '',
-                        width: 60,
+                        width: 35,
                         align: 'center',
-                        fixed: 'left',
                         render: (_, __, index) =>
                             index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                     },
@@ -149,12 +179,12 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
                         dataIndex: 'name',
                         align: 'center',
                         width: 200,
-                        fixed: 'left',
                     },
                     {
                         title: 'Thời gian học',
                         dataIndex: 'startDate',
-                        width: 150,
+                        width: 120,
+                        align: 'center',
                         render: (value: string) => dayjs(value).format('DD/MM/YYYY'),
                     },
                     {
@@ -172,14 +202,20 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
                     {
                         title: 'Giảng viên 1',
                         dataIndex: ['mainLecturer', 'userProfile'],
-                        width: 250,
-                        render: (record) => record && `${record.code} - ${record.fullname}`,
+                        width: 150,
+                        render: (record) => record && `${record.fullname}`,
+                    },
+                    {
+                        title: 'Giảng viên 2',
+                        dataIndex: ['extraLecturer', 'userProfile'],
+                        width: 150,
+                        render: (record) => record && `${record.fullname}`,
                     },
                     {
                         title: 'Số tín chỉ',
                         dataIndex: ['subject', 'credit'],
                         align: 'center',
-                        width: 120,
+                        width: 100,
                     },
                     {
                         title: 'Hình thức thi',
@@ -190,13 +226,7 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
                     },
                     {
                         title: 'Địa điểm',
-                        dataIndex: ['room', 'building', 'name'],
-                        align: 'center',
-                        width: 180,
-                    },
-                    {
-                        title: 'Phòng học',
-                        dataIndex: ['room', 'name'],
+                        dataIndex: ['trainingLocation', 'name'],
                         align: 'center',
                         width: 180,
                     },
@@ -220,7 +250,6 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
                     {
                         title: 'Lớp QL đã ĐK',
                         align: 'center',
-                        fixed: 'right',
                         width: 150,
                         render: (__, record: any) => {
                             return record?.fixedClasses.length ? (
@@ -236,6 +265,19 @@ export default function RegisterResult({ setSubjectClassId }: RegisterClassProps
                         },
                     },
                 ]}
+                pagination={{
+                    current: currentPage,
+                    pageSize: numberOfPages,
+                    total: countSubjectClass,
+                    onChange: (page, pageSize) => {
+                        if (numberOfPages === pageSize) {
+                            setCurrentPage(page)
+                        } else {
+                            setCurrentPage(1)
+                            setNumberOfPages(pageSize)
+                        }
+                    },
+                }}
             />
         </div>
     )

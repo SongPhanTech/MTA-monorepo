@@ -9,7 +9,7 @@ import type { FilterProps } from '@constants/type'
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { buildOrgTree } from '@lib/utils'
-import type { DisciplinaryWarning, DisciplinaryWarningReason } from '@workspace/db'
+import type { DisciplinaryWarning, DisciplinaryWarningReason } from '@workspace/db/client'
 import {
     useCountDisciplinaryWarning,
     useFindManyDisciplinaryWarning,

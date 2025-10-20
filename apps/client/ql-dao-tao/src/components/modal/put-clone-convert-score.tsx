@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
 import Select from '@components/commons/select'
-import type { ScoreConvert, TrainingCourse } from '@workspace/db'
+import type { ScoreConvert, TrainingCourse } from '@workspace/db/client'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 export type PutCloneConvertScoreFormType = { trainingCourseId: string }
 dayjs.locale('vi')

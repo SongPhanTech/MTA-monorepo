@@ -10,7 +10,6 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
 import AuthApp from './api/auth'
 import ClassRegisterApp from './api/class-register'
-import SurveyPublicApp from './api/survey-public'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -63,7 +62,6 @@ const audience = config.keycloak.clientId
 
 app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
 
-app.route('/api/survey', SurveyPublicApp)
 app.route('/api/class-register', ClassRegisterApp)
 
 app.onError((err, c) => {
