@@ -319,7 +319,7 @@ export default function TeachingAssignment() {
                 deletedAt: null,
                 active: true,
                 trainingObjectTypeId,
-                ...(!isBoMon
+                ...(isBoMon
                     ? {
                           lecturerAssignmentDeadline: {
                               not: null,
@@ -698,10 +698,7 @@ export default function TeachingAssignment() {
                                 Thêm mới lớp MH
                             </Button>
                         )}
-                        {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            'XEM_TAT_CA'
-                        ) && (
+                        {!isBoMon && (
                             <Popover
                                 content={
                                     <Form
@@ -735,7 +732,7 @@ export default function TeachingAssignment() {
                                 trigger="click"
                                 placement="bottomRight"
                             >
-                                <Button type="primary">1.Báo dạy</Button>
+                                <Button type="primary">Báo dạy</Button>
                             </Popover>
                         )}
                         {isEdit ? (
@@ -766,38 +763,36 @@ export default function TeachingAssignment() {
                                     type="primary"
                                     disabled={!dmDonViData.length}
                                 >
-                                    2.PCGD
+                                    PCGD
                                 </Button>
                             )
                         )}
-                        {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            'SUA'
-                        ) && (
-                            // TODO: Bỏ check quyền xem tất cả khi hoàn thành xong
-                            // !can(
-                            //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            //     'XEM_TAT_CA'
-                            // ) &&
-                            <Popconfirm
-                                title="Xác nhận gửi phân công giảng dạy?"
-                                placement="topRight"
-                                description="Các lớp môn học đã gửi phân công giảng dạy sẽ không thể chỉnh sửa, vui lòng kiểm tra kỹ trước khi gửi."
-                                onConfirm={handleGuiPCGD}
-                            >
-                                <Button
-                                    //TODO: handle save
-                                    type="primary"
-                                    disabled={!dmDonViData.length}
+                        {isBoMon &&
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                'SUA'
+                            ) && (
+                                // TODO: Bỏ check quyền xem tất cả khi hoàn thành xong
+                                // !can(
+                                //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                //     'XEM_TAT_CA'
+                                // ) &&
+                                <Popconfirm
+                                    title="Xác nhận gửi phân công giảng dạy?"
+                                    placement="topRight"
+                                    description="Các lớp môn học đã gửi phân công giảng dạy sẽ không thể chỉnh sửa, vui lòng kiểm tra kỹ trước khi gửi."
+                                    onConfirm={handleGuiPCGD}
                                 >
-                                    3.Gửi PCGD
-                                </Button>
-                            </Popconfirm>
-                        )}
-                        {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            'XEM_TAT_CA'
-                        ) && (
+                                    <Button
+                                        //TODO: handle save
+                                        type="primary"
+                                        disabled={!dmDonViData.length}
+                                    >
+                                        Gửi PCGD
+                                    </Button>
+                                </Popconfirm>
+                            )}
+                        {!isBoMon && (
                             <Button
                                 onClick={async () => {
                                     try {
@@ -1213,7 +1208,7 @@ export default function TeachingAssignment() {
                                 }}
                                 type="primary"
                             >
-                                4.Xuất báo dạy
+                                Xuất báo dạy
                             </Button>
                         )}
                         {can(
@@ -1225,7 +1220,7 @@ export default function TeachingAssignment() {
                                 onClick={() => onOpenModalNhapTKB(semesterId || '')}
                             >
                                 <EditIcon stroke="white" />
-                                5.Nhập từ TKB
+                                Nhập từ TKB
                             </Button>
                         )}
                     </Flex>
