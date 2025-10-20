@@ -39,6 +39,7 @@ export default {
     "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT_ID": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat/[id]",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
   },
+  "QL_DANH_MUC": {},
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
@@ -109,6 +110,7 @@ export default {
     "QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN": "/quan-ly-ho-so/danh-sach-giang-vien",
     "QUAN_LY_HO_SO_QL_SINH_VIEN_ID": "/quan-ly-ho-so/ql-sinh-vien/[id]",
     "QUAN_LY_HO_SO_QL_SINH_VIEN": "/quan-ly-ho-so/ql-sinh-vien",
+    "TO_CHUC_THI_DANH_SACH_THI": "/to-chuc-thi/danh-sach-thi",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP_ID": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep/[id]",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep"
   },
@@ -150,6 +152,7 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
+  "QL_NGUOI_DUNG": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",
