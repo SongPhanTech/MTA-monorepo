@@ -137,7 +137,7 @@ export default function OlympicAwards() {
                                     </Form.Item> */}
                                 </Col>
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                     'THEM'
                                 ) && (
                                     <Button onClick={handleModal} type="primary">
@@ -207,7 +207,7 @@ export default function OlympicAwards() {
                                 align: 'center',
                                 fixed: 'right',
                                 hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                     'SUA',
                                     'XOA'
                                 ),
@@ -215,7 +215,7 @@ export default function OlympicAwards() {
                                     return (
                                         <Row className="justify-center gap-2">
                                             {can(
-                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                                 'SUA'
                                             ) && (
                                                 <EditIcon
@@ -227,7 +227,7 @@ export default function OlympicAwards() {
                                                 />
                                             )}
                                             {can(
-                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                                 'XOA'
                                             ) && (
                                                 <DeleteIcon
