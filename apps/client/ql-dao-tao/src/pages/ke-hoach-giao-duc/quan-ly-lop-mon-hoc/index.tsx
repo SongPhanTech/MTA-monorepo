@@ -105,7 +105,7 @@ type BaoDayForm = {
     isOverride: boolean
 }
 
-export default function TeachingAssignment() {
+export default function PhanCongGiangDay() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -1746,6 +1746,6 @@ export default function TeachingAssignment() {
     )
 }
 
-TeachingAssignment.getLayout = function getLayout(page: React.ReactElement) {
+PhanCongGiangDay.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

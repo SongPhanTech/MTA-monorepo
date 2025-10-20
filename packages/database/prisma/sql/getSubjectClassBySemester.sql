@@ -70,7 +70,8 @@ WITH FCS AS (
                 c."managementOrganizationId",
                 tc."trainingObjectTypeId",
                 management_organization_code,
-                management_organization_name
+                management_organization_name,
+                subject_version_code
 )
 SELECT json_build_object(
                 'subjectVersionCode',

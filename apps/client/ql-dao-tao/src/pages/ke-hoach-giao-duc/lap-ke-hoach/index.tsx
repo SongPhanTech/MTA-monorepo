@@ -14,7 +14,7 @@ interface TabItem {
     content: React.ReactNode
 }
 
-export default function PlanTraining() {
+export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -29,31 +29,52 @@ export default function PlanTraining() {
         },
     })
 
-    const leftTabs: TabItem[] = [
-        {
-            key: '1',
-            label: 'Môn theo kế hoạch giảng dạy',
-            content: <MonTheoKeHoachDuKien />,
-        },
-        {
-            key: '2',
-            label: `Môn học chậm tiến độ ${countDelay?._count?.planTrainingDelaySubjects ? `(${countDelay?._count?.planTrainingDelaySubjects})` : ''}`,
-            content: <MonCham />,
-        },
-        {
-            key: '3',
-            label: 'Môn học kỳ sau',
-            content: <MonKySau />,
-        },
-    ]
+    const leftTabs: TabItem[] = hocLai
+        ? [
+              {
+                  key: '1',
+                  label: 'Môn có SV/HV chưa đạt',
+                  content: <MonTheoKeHoachDuKien />,
+              },
+              {
+                  key: '2',
+                  label: 'Môn học đã lập kế hoạch',
+                  content: <MonDaLapKeHoach />,
+              },
+          ]
+        : [
+              {
+                  key: '1',
+                  label: 'Môn theo kế hoạch giảng dạy',
+                  content: <MonTheoKeHoachDuKien />,
+              },
+              {
+                  key: '2',
+                  label: `Môn học chậm tiến độ ${countDelay?._count?.planTrainingDelaySubjects ? `(${countDelay?._count?.planTrainingDelaySubjects})` : ''}`,
+                  content: <MonCham />,
+              },
+              {
+                  key: '3',
+                  label: 'Môn học kỳ sau',
+                  content: <MonKySau />,
+              },
+          ]
 
-    const rightTabsMap: TabItem[] = [
-        {
-            key: '1',
-            label: 'Môn học đã lập kế hoạch',
-            content: <MonDaLapKeHoach />,
-        },
-    ]
+    const rightTabsMap: TabItem[] = hocLai
+        ? [
+              {
+                  key: '1',
+                  label: 'SV/HV chưa đạt',
+                  content: <MonDaLapKeHoach />,
+              },
+          ]
+        : [
+              {
+                  key: '1',
+                  label: 'Môn học đã lập kế hoạch',
+                  content: <MonDaLapKeHoach />,
+              },
+          ]
 
     return (
         <Row gutter={[12, 0]} className="bg-white">
@@ -79,6 +100,6 @@ export default function PlanTraining() {
     )
 }
 
-PlanTraining.getLayout = function getLayout(page: React.ReactElement) {
+LapKeHoach.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout unLayout={true}>{page}</DefaultLayout>
 }

@@ -1,16 +1,5 @@
 import { z } from '@hono/zod-openapi'
 
-export const StudentInfo = z
-    .object({
-        id: z.string().describe('id của HV/SV'),
-        stt: z.number().describe('STT'),
-        name: z.string().describe('Họ tên'),
-        code: z.string().describe('Mã sinh viên'),
-        birth: z.string().describe('Ngày sinh'),
-        hometown: z.string().describe('Quê quán'),
-    })
-    .openapi('StudentInfo')
-
 export const ListScholarship = z.object({
     id: z.string().describe('ID của tiêu chí học bổng'),
     name: z.string().describe('Tên tiêu chí học bổng'),
@@ -198,13 +187,6 @@ export const CourseStudentResult = z.object({
     courseName: z.string().describe('Tên khoá học'),
     students: z.array(StudentResult).describe('Danh sách sinh viên trong khoá học'),
 })
-export const StudentTemplateData = z.object({
-    date: z.string().describe('Ngày'),
-    month: z.string().describe('Tháng'),
-    year: z.number().describe('Năm'),
-    student: z.array(StudentScholarship).describe('Danh sách sinh viên'),
-})
-
 export const CourseStudentScholarship = z.object({
     courseId: z.string().describe('ID khoá học'),
     courseName: z.string().describe('Tên khoá học'),
@@ -238,8 +220,6 @@ export const StudentRepeatGrade = z.object({
     statusRepeatGrade: z.string().describe('Trạng thái lưu ban'),
 })
 
-export type StudentInfo = z.infer<typeof StudentInfo>
-export type StudentTemplateData = z.infer<typeof StudentTemplateData>
 export type StudentScholarship = z.infer<typeof StudentScholarship>
 export type ListScholarship = z.infer<typeof ListScholarship>
 export type StudentAcademicWarning = z.infer<typeof StudentAcademicWarning>

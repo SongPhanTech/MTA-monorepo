@@ -39,7 +39,6 @@ export default {
     "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT_ID": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat/[id]",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
   },
-  "QL_DANH_MUC": {},
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
@@ -79,6 +78,10 @@ export default {
     "KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-giao-duc/ke-hoach-mo-lop-mon-hoc",
     "KE_HOACH_GIAO_DUC_LAP_KE_HOACH": "/ke-hoach-giao-duc/lap-ke-hoach",
     "KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC": "/ke-hoach-giao-duc/quan-ly-lop-mon-hoc",
+    "KE_HOACH_HOC_LAI_DANG_KY_HOC": "/ke-hoach-hoc-lai/dang-ky-hoc",
+    "KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC": "/ke-hoach-hoc-lai/ke-hoach-mo-lop-mon-hoc",
+    "KE_HOACH_HOC_LAI_LAP_KE_HOACH": "/ke-hoach-hoc-lai/lap-ke-hoach",
+    "KE_HOACH_HOC_LAI_QUAN_LY_LOP_MON_HOC": "/ke-hoach-hoc-lai/quan-ly-lop-mon-hoc",
     "MOC_HUAN_LUYEN": "/moc-huan-luyen",
     "MON_HOC": "/mon-hoc",
     "NAM_HOC_KY_HOC_ID": "/nam-hoc-ky-hoc/[id]",
@@ -152,7 +155,6 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
-  "QL_NGUOI_DUNG": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",

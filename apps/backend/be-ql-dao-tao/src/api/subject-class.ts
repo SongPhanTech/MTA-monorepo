@@ -8,7 +8,6 @@ import {
 import { SubjectClassUpdateScalarSchema } from '@workspace/db/zod/models'
 import { read, utils } from 'xlsx'
 import { prisma } from '..'
-import type { StudentTemplateData } from '../dto/student-info.dto'
 import {
     EnrollFixedClassOnSubjectClass,
     FixedClassBySubjectClassSemester,
@@ -16,13 +15,6 @@ import {
     StudentClassBySubjectClassSemester,
 } from '../dto/subject-class.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import {
-    listStudentInfo,
-    populateExcelTemplate,
-    sanitizeFilename,
-} from '../services/subject-class.service'
-import { getBufferFromUrl } from '../services/template.service'
-import { getCurrentDateForReport } from '../utils'
 import { ListOf } from '../zod/base'
 
 const app = new OpenAPIHono({ strict: false })
@@ -310,52 +302,6 @@ const putManySubjectClass = createRoute({
                 },
             },
             description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
-        },
-    },
-})
-
-const exportExcelListStudentSubjectClass = createRoute({
-    operationId: 'exportStudentSubjectClassExcel',
-    path: '/export-xlsx-list-student-subject-class',
-    description: 'Xuất file xlsx danh sách sinh viên trong lớp môn học',
-    tags: ['SubjectClass'],
-    summary: 'Xuất file xlsx danh sách sinh viên trong lớp môn học',
-    method: 'get',
-    request: {
-        query: z.object({
-            subjectClassId: z.string().openapi('subjectClassId', {
-                description: 'ID của lớp môn học',
-            }),
-        }),
-    },
-    responses: {
-        200: {
-            description: 'Export list of student SubjectClass as .xlsx',
-            content: {
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
-                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
-                },
-            },
-        },
-        400: {
-            description: 'Invalid file upload',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                    }),
-                },
-            },
-        },
-        404: {
-            description: 'Not found',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                    }),
-                },
-            },
         },
     },
 })
@@ -920,38 +866,6 @@ app.openapi(putManySubjectClass, async (c) => {
     const failedIds = results.filter(({ success }) => !success).map(({ id }) => id)
 
     return c.json({ success: failedIds.length === 0, failedIds }, 200)
-})
-
-app.openapi(exportExcelListStudentSubjectClass, async (c) => {
-    const { subjectClassId } = c.req.valid('query')
-    const students = await listStudentInfo(subjectClassId)
-    const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId, deletedAt: null, active: true }, // Tìm kiếm lớp quản lý
-    })
-    if (!subjectClass) {
-        return c.json({ message: `Không tìm thấy lớp quản lý ${subjectClassId}` }, 404)
-    }
-
-    const { date, month, year } = getCurrentDateForReport()
-
-    const templateData: StudentTemplateData = {
-        date,
-        month,
-        year,
-        className: subjectClass.name,
-        student: students,
-    }
-
-    const templateBuffer = await getBufferFromUrl('LIST_STUDENT_SUBJECTCLASS_EXCEL')
-    const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
-
-    // Set response headers
-    const sanitizedClassName = sanitizeFilename(subjectClass.name ?? 'Class')
-    // @ts-expect-error
-    return c.body(excelBuffer, 200, {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
-    })
 })
 
 app.openapi(uploadExcelImportScore, async (c) => {

@@ -65,7 +65,9 @@ WITH FCS AS (
         sc.id,
         c."managementOrganizationId",
         tc."trainingObjectTypeId",
-        management_organization_name
+        management_organization_code,
+        management_organization_name,
+        subject_version_code
 )
 SELECT COUNT(*) AS "total"
 FROM (

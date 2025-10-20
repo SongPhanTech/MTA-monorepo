@@ -14,7 +14,7 @@ interface TabItem {
     content: React.ReactNode
 }
 
-export default function RegisterClass() {
+export default function DangKyHoc() {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
     const [subjectClassId, setSubjectClassId] = useState<string | null>(null)
     const [studentId, setStudentId] = useState<string | null>(null)
@@ -97,6 +97,6 @@ export default function RegisterClass() {
     )
 }
 
-RegisterClass.getLayout = function getLayout(page: React.ReactElement) {
+DangKyHoc.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout unLayout={true}>{page}</DefaultLayout>
 }

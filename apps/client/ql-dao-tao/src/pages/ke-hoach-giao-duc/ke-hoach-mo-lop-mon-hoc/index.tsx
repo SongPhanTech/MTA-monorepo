@@ -9,6 +9,7 @@ import type { FixedClass, SubjectClass } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,
     useFindManyTrainingCourse,
+    useFindManyTrainingLocation,
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -174,7 +175,7 @@ const FixedClassDragItem: React.FC<{
     )
 }
 
-export default function SubjectOpeningPlan() {
+export default function KeHoachMoLopMonHoc() {
     const { canSome } = useAbility()
     const [form] = Form.useForm<OpenSubjectClassForm>()
     const [currentPage, setCurrentPage] = useState(1)
@@ -368,6 +369,11 @@ export default function SubjectOpeningPlan() {
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
+    })
+
+    const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
+        orderBy: { name: 'asc' },
+        where: { deletedAt: null, active: true },
     })
 
     const { hideSpinner, showSpinner } = useSpinner()
@@ -811,7 +817,23 @@ export default function SubjectOpeningPlan() {
                                                 ]}
                                                 required
                                             >
-                                                <Select />
+                                                <Select
+                                                    allowClear
+                                                    showSearch
+                                                    dropdownStyle={{
+                                                        maxHeight:400,
+                                                        minWidth:300
+                                                    }}
+                                                    filterOption={(input, option) =>
+                                                        String(option?.label ?? '')
+                                                            ?.toLowerCase()
+                                                            ?.includes(input?.toLowerCase())
+                                                    }
+                                                    options={trainingLocationData.map((e) => ({
+                                                        label: e.name,
+                                                        value: e.id,
+                                                    }))}
+                                                />
                                             </Form.Item>
                                         </>
                                     ),
@@ -966,6 +988,6 @@ export default function SubjectOpeningPlan() {
     )
 }
 
-SubjectOpeningPlan.getLayout = function getLayout(page: React.ReactElement) {
+KeHoachMoLopMonHoc.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }
