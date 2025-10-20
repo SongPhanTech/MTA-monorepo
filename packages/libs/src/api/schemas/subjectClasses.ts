@@ -32,6 +32,10 @@ export interface SubjectClasses {
     /** @nullable */
     lecturerAssignmentDeadline?: string | null
     /** @nullable */
+    sendLecturerAssignmentAt?: string | null
+    /** @nullable */
+    submitLecturerAssignmentAt?: string | null
+    /** @nullable */
     examDate?: string | null
     /** @nullable */
     examType?: SubjectClassesExamType

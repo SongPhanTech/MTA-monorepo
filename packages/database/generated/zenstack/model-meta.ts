@@ -2108,6 +2108,10 @@ const metadata = {
                     name: "donVi",
                     type: "String",
                     isOptional: true,
+                }, diaChi: {
+                    name: "diaChi",
+                    type: "String",
+                    isOptional: true,
                 }, chucDanh: {
                     name: "chucDanh",
                     type: "String",
@@ -2128,6 +2132,7 @@ const metadata = {
                     name: "chucVu",
                     type: "DM_ChucVu",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhCongTac',
                     isRelationOwner: true,
@@ -2135,6 +2140,7 @@ const metadata = {
                 }, chucVuId: {
                     name: "chucVuId",
                     type: "String",
+                    isOptional: true,
                     attributes: [{ "name": "@db.Uuid", "args": [] }],
                     isForeignKey: true,
                     relationField: 'chucVu',

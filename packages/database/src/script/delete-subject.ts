@@ -10,6 +10,14 @@ await prisma.curriculum.deleteMany({
     },
 })
 
+await prisma.curriculumVersion.deleteMany({
+    where: {
+        deletedAt: {
+            not: null,
+        },
+    },
+})
+
 await prisma.trainingBlockSubject.deleteMany({
     where: {
         trainingBlockOnCurriculumVersion: {
@@ -25,6 +33,8 @@ await prisma.trainingBlockOnCurriculumVersion.deleteMany({
         curriculumVersionId: null,
     },
 })
+
+await prisma.subjectVersionHistory.deleteMany({})
 
 await prisma.subjectVersion.deleteMany({
     where: {

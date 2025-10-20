@@ -48132,6 +48132,7 @@ export namespace Prisma {
     tuThangNam: Date | null
     denThangNam: Date | null
     donVi: string | null
+    diaChi: string | null
     chucDanh: string | null
     chucVuDangDoan: string | null
     soQuyetDinh: string | null
@@ -48152,6 +48153,7 @@ export namespace Prisma {
     tuThangNam: Date | null
     denThangNam: Date | null
     donVi: string | null
+    diaChi: string | null
     chucDanh: string | null
     chucVuDangDoan: string | null
     soQuyetDinh: string | null
@@ -48172,6 +48174,7 @@ export namespace Prisma {
     tuThangNam: number
     denThangNam: number
     donVi: number
+    diaChi: number
     chucDanh: number
     chucVuDangDoan: number
     soQuyetDinh: number
@@ -48194,6 +48197,7 @@ export namespace Prisma {
     tuThangNam?: true
     denThangNam?: true
     donVi?: true
+    diaChi?: true
     chucDanh?: true
     chucVuDangDoan?: true
     soQuyetDinh?: true
@@ -48214,6 +48218,7 @@ export namespace Prisma {
     tuThangNam?: true
     denThangNam?: true
     donVi?: true
+    diaChi?: true
     chucDanh?: true
     chucVuDangDoan?: true
     soQuyetDinh?: true
@@ -48234,6 +48239,7 @@ export namespace Prisma {
     tuThangNam?: true
     denThangNam?: true
     donVi?: true
+    diaChi?: true
     chucDanh?: true
     chucVuDangDoan?: true
     soQuyetDinh?: true
@@ -48327,11 +48333,12 @@ export namespace Prisma {
     tuThangNam: Date | null
     denThangNam: Date | null
     donVi: string | null
+    diaChi: string | null
     chucDanh: string | null
     chucVuDangDoan: string | null
     soQuyetDinh: string | null
     ngayNhanQuyetDinh: Date | null
-    chucVuId: string
+    chucVuId: string | null
     loaiHinhCongTacId: string | null
     userProfileId: string
     _count: QuaTrinhCongTacCountAggregateOutputType | null
@@ -48364,6 +48371,7 @@ export namespace Prisma {
     tuThangNam?: boolean
     denThangNam?: boolean
     donVi?: boolean
+    diaChi?: boolean
     chucDanh?: boolean
     chucVuDangDoan?: boolean
     soQuyetDinh?: boolean
@@ -48371,7 +48379,7 @@ export namespace Prisma {
     chucVuId?: boolean
     loaiHinhCongTacId?: boolean
     userProfileId?: boolean
-    chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+    chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
     loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quaTrinhCongTac"]>
@@ -48387,6 +48395,7 @@ export namespace Prisma {
     tuThangNam?: boolean
     denThangNam?: boolean
     donVi?: boolean
+    diaChi?: boolean
     chucDanh?: boolean
     chucVuDangDoan?: boolean
     soQuyetDinh?: boolean
@@ -48394,7 +48403,7 @@ export namespace Prisma {
     chucVuId?: boolean
     loaiHinhCongTacId?: boolean
     userProfileId?: boolean
-    chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+    chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
     loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quaTrinhCongTac"]>
@@ -48410,6 +48419,7 @@ export namespace Prisma {
     tuThangNam?: boolean
     denThangNam?: boolean
     donVi?: boolean
+    diaChi?: boolean
     chucDanh?: boolean
     chucVuDangDoan?: boolean
     soQuyetDinh?: boolean
@@ -48417,7 +48427,7 @@ export namespace Prisma {
     chucVuId?: boolean
     loaiHinhCongTacId?: boolean
     userProfileId?: boolean
-    chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+    chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
     loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quaTrinhCongTac"]>
@@ -48433,6 +48443,7 @@ export namespace Prisma {
     tuThangNam?: boolean
     denThangNam?: boolean
     donVi?: boolean
+    diaChi?: boolean
     chucDanh?: boolean
     chucVuDangDoan?: boolean
     soQuyetDinh?: boolean
@@ -48442,19 +48453,19 @@ export namespace Prisma {
     userProfileId?: boolean
   }
 
-  export type QuaTrinhCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "tuThangNam" | "denThangNam" | "donVi" | "chucDanh" | "chucVuDangDoan" | "soQuyetDinh" | "ngayNhanQuyetDinh" | "chucVuId" | "loaiHinhCongTacId" | "userProfileId", ExtArgs["result"]["quaTrinhCongTac"]>
+  export type QuaTrinhCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "tuThangNam" | "denThangNam" | "donVi" | "diaChi" | "chucDanh" | "chucVuDangDoan" | "soQuyetDinh" | "ngayNhanQuyetDinh" | "chucVuId" | "loaiHinhCongTacId" | "userProfileId", ExtArgs["result"]["quaTrinhCongTac"]>
   export type QuaTrinhCongTacInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+    chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
     loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
   export type QuaTrinhCongTacIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+    chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
     loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
   export type QuaTrinhCongTacIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
+    chucVu?: boolean | QuaTrinhCongTac$chucVuArgs<ExtArgs>
     loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
@@ -48462,7 +48473,7 @@ export namespace Prisma {
   export type $QuaTrinhCongTacPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "QuaTrinhCongTac"
     objects: {
-      chucVu: Prisma.$DM_ChucVuPayload<ExtArgs>
+      chucVu: Prisma.$DM_ChucVuPayload<ExtArgs> | null
       loaiHinhCongTac: Prisma.$DM_LoaiHinhCongTacPayload<ExtArgs> | null
       userProfile: Prisma.$UserProfilePayload<ExtArgs>
     }
@@ -48477,11 +48488,12 @@ export namespace Prisma {
       tuThangNam: Date | null
       denThangNam: Date | null
       donVi: string | null
+      diaChi: string | null
       chucDanh: string | null
       chucVuDangDoan: string | null
       soQuyetDinh: string | null
       ngayNhanQuyetDinh: Date | null
-      chucVuId: string
+      chucVuId: string | null
       loaiHinhCongTacId: string | null
       userProfileId: string
     }, ExtArgs["result"]["quaTrinhCongTac"]>
@@ -48878,7 +48890,7 @@ export namespace Prisma {
    */
   export interface Prisma__QuaTrinhCongTacClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    chucVu<T extends DM_ChucVuDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVuDefaultArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chucVu<T extends QuaTrinhCongTac$chucVuArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCongTac$chucVuArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     loaiHinhCongTac<T extends QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>>): Prisma__DM_LoaiHinhCongTacClient<$Result.GetResult<Prisma.$DM_LoaiHinhCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -48920,6 +48932,7 @@ export namespace Prisma {
     readonly tuThangNam: FieldRef<"QuaTrinhCongTac", 'DateTime'>
     readonly denThangNam: FieldRef<"QuaTrinhCongTac", 'DateTime'>
     readonly donVi: FieldRef<"QuaTrinhCongTac", 'String'>
+    readonly diaChi: FieldRef<"QuaTrinhCongTac", 'String'>
     readonly chucDanh: FieldRef<"QuaTrinhCongTac", 'String'>
     readonly chucVuDangDoan: FieldRef<"QuaTrinhCongTac", 'String'>
     readonly soQuyetDinh: FieldRef<"QuaTrinhCongTac", 'String'>
@@ -49320,6 +49333,25 @@ export namespace Prisma {
      * Limit how many QuaTrinhCongTacs to delete.
      */
     limit?: number
+  }
+
+  /**
+   * QuaTrinhCongTac.chucVu
+   */
+  export type QuaTrinhCongTac$chucVuArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_ChucVu
+     */
+    select?: DM_ChucVuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_ChucVu
+     */
+    omit?: DM_ChucVuOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_ChucVuInclude<ExtArgs> | null
+    where?: DM_ChucVuWhereInput
   }
 
   /**
@@ -334655,6 +334687,7 @@ export namespace Prisma {
     tuThangNam: 'tuThangNam',
     denThangNam: 'denThangNam',
     donVi: 'donVi',
+    diaChi: 'diaChi',
     chucDanh: 'chucDanh',
     chucVuDangDoan: 'chucVuDangDoan',
     soQuyetDinh: 'soQuyetDinh',
@@ -339301,6 +339334,7 @@ export namespace Prisma {
     code: 'code',
     description: 'description',
     donVi: 'donVi',
+    diaChi: 'diaChi',
     chucDanh: 'chucDanh',
     chucVuDangDoan: 'chucVuDangDoan',
     soQuyetDinh: 'soQuyetDinh',
@@ -344896,14 +344930,15 @@ export namespace Prisma {
     tuThangNam?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     denThangNam?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     donVi?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
+    diaChi?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     chucDanh?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     chucVuDangDoan?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     soQuyetDinh?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
-    chucVuId?: UuidFilter<"QuaTrinhCongTac"> | string
+    chucVuId?: UuidNullableFilter<"QuaTrinhCongTac"> | string | null
     loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
-    chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
+    chucVu?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacNullableScalarRelationFilter, DM_LoaiHinhCongTacWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
@@ -344919,11 +344954,12 @@ export namespace Prisma {
     tuThangNam?: SortOrderInput | SortOrder
     denThangNam?: SortOrderInput | SortOrder
     donVi?: SortOrderInput | SortOrder
+    diaChi?: SortOrderInput | SortOrder
     chucDanh?: SortOrderInput | SortOrder
     chucVuDangDoan?: SortOrderInput | SortOrder
     soQuyetDinh?: SortOrderInput | SortOrder
     ngayNhanQuyetDinh?: SortOrderInput | SortOrder
-    chucVuId?: SortOrder
+    chucVuId?: SortOrderInput | SortOrder
     loaiHinhCongTacId?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
     chucVu?: DM_ChucVuOrderByWithRelationInput
@@ -344946,14 +344982,15 @@ export namespace Prisma {
     tuThangNam?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     denThangNam?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     donVi?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
+    diaChi?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     chucDanh?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     chucVuDangDoan?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     soQuyetDinh?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
-    chucVuId?: UuidFilter<"QuaTrinhCongTac"> | string
+    chucVuId?: UuidNullableFilter<"QuaTrinhCongTac"> | string | null
     loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
-    chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
+    chucVu?: XOR<DM_ChucVuNullableScalarRelationFilter, DM_ChucVuWhereInput> | null
     loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacNullableScalarRelationFilter, DM_LoaiHinhCongTacWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
@@ -344969,11 +345006,12 @@ export namespace Prisma {
     tuThangNam?: SortOrderInput | SortOrder
     denThangNam?: SortOrderInput | SortOrder
     donVi?: SortOrderInput | SortOrder
+    diaChi?: SortOrderInput | SortOrder
     chucDanh?: SortOrderInput | SortOrder
     chucVuDangDoan?: SortOrderInput | SortOrder
     soQuyetDinh?: SortOrderInput | SortOrder
     ngayNhanQuyetDinh?: SortOrderInput | SortOrder
-    chucVuId?: SortOrder
+    chucVuId?: SortOrderInput | SortOrder
     loaiHinhCongTacId?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
     _count?: QuaTrinhCongTacCountOrderByAggregateInput
@@ -344995,11 +345033,12 @@ export namespace Prisma {
     tuThangNam?: DateTimeNullableWithAggregatesFilter<"QuaTrinhCongTac"> | Date | string | null
     denThangNam?: DateTimeNullableWithAggregatesFilter<"QuaTrinhCongTac"> | Date | string | null
     donVi?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
+    diaChi?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
     chucDanh?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
     chucVuDangDoan?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
     soQuyetDinh?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableWithAggregatesFilter<"QuaTrinhCongTac"> | Date | string | null
-    chucVuId?: UuidWithAggregatesFilter<"QuaTrinhCongTac"> | string
+    chucVuId?: UuidNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
     loaiHinhCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
     userProfileId?: StringWithAggregatesFilter<"QuaTrinhCongTac"> | string
   }
@@ -370762,11 +370801,12 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
+    chucVu?: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
     loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
     userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput
   }
@@ -370782,11 +370822,12 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    chucVuId: string
+    chucVuId?: string | null
     loaiHinhCongTacId?: string | null
     userProfileId: string
   }
@@ -370802,11 +370843,12 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
+    chucVu?: DM_ChucVuUpdateOneWithoutQuaTrinhCongTacNestedInput
     loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
     userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
   }
@@ -370822,11 +370864,12 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    chucVuId?: StringFieldUpdateOperationsInput | string
+    chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
     loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
@@ -370842,11 +370885,12 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    chucVuId: string
+    chucVuId?: string | null
     loaiHinhCongTacId?: string | null
     userProfileId: string
   }
@@ -370862,6 +370906,7 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
@@ -370879,11 +370924,12 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    chucVuId?: StringFieldUpdateOperationsInput | string
+    chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
     loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
@@ -399499,11 +399545,6 @@ export namespace Prisma {
     userProfileId?: SortOrder
   }
 
-  export type DM_ChucVuScalarRelationFilter = {
-    is?: DM_ChucVuWhereInput
-    isNot?: DM_ChucVuWhereInput
-  }
-
   export type DM_LoaiHinhCongTacNullableScalarRelationFilter = {
     is?: DM_LoaiHinhCongTacWhereInput | null
     isNot?: DM_LoaiHinhCongTacWhereInput | null
@@ -399526,6 +399567,7 @@ export namespace Prisma {
     tuThangNam?: SortOrder
     denThangNam?: SortOrder
     donVi?: SortOrder
+    diaChi?: SortOrder
     chucDanh?: SortOrder
     chucVuDangDoan?: SortOrder
     soQuyetDinh?: SortOrder
@@ -399546,6 +399588,7 @@ export namespace Prisma {
     tuThangNam?: SortOrder
     denThangNam?: SortOrder
     donVi?: SortOrder
+    diaChi?: SortOrder
     chucDanh?: SortOrder
     chucVuDangDoan?: SortOrder
     soQuyetDinh?: SortOrder
@@ -399566,6 +399609,7 @@ export namespace Prisma {
     tuThangNam?: SortOrder
     denThangNam?: SortOrder
     donVi?: SortOrder
+    diaChi?: SortOrder
     chucDanh?: SortOrder
     chucVuDangDoan?: SortOrder
     soQuyetDinh?: SortOrder
@@ -399573,6 +399617,11 @@ export namespace Prisma {
     chucVuId?: SortOrder
     loaiHinhCongTacId?: SortOrder
     userProfileId?: SortOrder
+  }
+
+  export type DM_ChucVuScalarRelationFilter = {
+    is?: DM_ChucVuWhereInput
+    isNot?: DM_ChucVuWhereInput
   }
 
   export type QuaTrinhCuDiCongTacOrderByRelevanceInput = {
@@ -418653,10 +418702,12 @@ export namespace Prisma {
     connect?: UserProfileWhereUniqueInput
   }
 
-  export type DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput = {
+  export type DM_ChucVuUpdateOneWithoutQuaTrinhCongTacNestedInput = {
     create?: XOR<DM_ChucVuCreateWithoutQuaTrinhCongTacInput, DM_ChucVuUncheckedCreateWithoutQuaTrinhCongTacInput>
     connectOrCreate?: DM_ChucVuCreateOrConnectWithoutQuaTrinhCongTacInput
     upsert?: DM_ChucVuUpsertWithoutQuaTrinhCongTacInput
+    disconnect?: DM_ChucVuWhereInput | boolean
+    delete?: DM_ChucVuWhereInput | boolean
     connect?: DM_ChucVuWhereUniqueInput
     update?: XOR<XOR<DM_ChucVuUpdateToOneWithWhereWithoutQuaTrinhCongTacInput, DM_ChucVuUpdateWithoutQuaTrinhCongTacInput>, DM_ChucVuUncheckedUpdateWithoutQuaTrinhCongTacInput>
   }
@@ -443338,11 +443389,12 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
+    chucVu?: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
     loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
   }
 
@@ -443357,11 +443409,12 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    chucVuId: string
+    chucVuId?: string | null
     loaiHinhCongTacId?: string | null
   }
 
@@ -446857,11 +446910,12 @@ export namespace Prisma {
     tuThangNam?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     denThangNam?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     donVi?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
+    diaChi?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     chucDanh?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     chucVuDangDoan?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     soQuyetDinh?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
-    chucVuId?: UuidFilter<"QuaTrinhCongTac"> | string
+    chucVuId?: UuidNullableFilter<"QuaTrinhCongTac"> | string | null
     loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
   }
@@ -471441,6 +471495,7 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
@@ -471460,6 +471515,7 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
@@ -546549,11 +546605,12 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
+    chucVu?: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
     userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput
   }
 
@@ -546568,11 +546625,12 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    chucVuId: string
+    chucVuId?: string | null
     userProfileId: string
   }
 
@@ -548600,11 +548658,12 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    chucVuId: string
+    chucVuId?: string | null
     loaiHinhCongTacId?: string | null
   }
 
@@ -549401,11 +549460,12 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
+    chucVu?: DM_ChucVuUpdateOneWithoutQuaTrinhCongTacNestedInput
     loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
   }
 
@@ -549420,11 +549480,12 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    chucVuId?: StringFieldUpdateOperationsInput | string
+    chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
     loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -549439,11 +549500,12 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    chucVuId?: StringFieldUpdateOperationsInput | string
+    chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
     loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -553525,6 +553587,7 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
@@ -553988,6 +554051,7 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
@@ -554007,6 +554071,7 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
@@ -554026,6 +554091,7 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
@@ -595355,11 +595421,12 @@ export namespace Prisma {
     tuThangNam?: Date | string | null
     denThangNam?: Date | string | null
     donVi?: string | null
+    diaChi?: string | null
     chucDanh?: string | null
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    chucVuId: string
+    chucVuId?: string | null
     userProfileId: string
   }
 
@@ -595374,11 +595441,12 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
+    chucVu?: DM_ChucVuUpdateOneWithoutQuaTrinhCongTacNestedInput
     userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
   }
 
@@ -595393,11 +595461,12 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    chucVuId?: StringFieldUpdateOperationsInput | string
+    chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -595412,11 +595481,12 @@ export namespace Prisma {
     tuThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     denThangNam?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     donVi?: NullableStringFieldUpdateOperationsInput | string | null
+    diaChi?: NullableStringFieldUpdateOperationsInput | string | null
     chucDanh?: NullableStringFieldUpdateOperationsInput | string | null
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    chucVuId?: StringFieldUpdateOperationsInput | string
+    chucVuId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 

@@ -1971,6 +1971,10 @@ const metadata = {
                     name: "donVi",
                     type: "String",
                     isOptional: true,
+                }, diaChi: {
+                    name: "diaChi",
+                    type: "String",
+                    isOptional: true,
                 }, chucDanh: {
                     name: "chucDanh",
                     type: "String",
@@ -1991,12 +1995,14 @@ const metadata = {
                     name: "chucVu",
                     type: "DM_ChucVu",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'quaTrinhCongTac',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "chucVuId" },
                 }, chucVuId: {
                     name: "chucVuId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'chucVu',
                 }, loaiHinhCongTac: {
