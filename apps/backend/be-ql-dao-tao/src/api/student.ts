@@ -250,7 +250,8 @@ app.openapi(importStudent, async (c) => {
                             data: {
                                 userProfileId: st.userProfileId,
                                 donVi: student.department,
-                                chucVuId: positionMap.get(student.position ?? '') as string,
+                                diaChi: student.departmentAddress,
+                                chucVuId: positionMap.get(student.position ?? ''),
                             },
                         })
                     }

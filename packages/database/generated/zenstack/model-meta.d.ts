@@ -3580,6 +3580,11 @@ declare const metadata: {
                     type: string;
                     isOptional: boolean;
                 };
+                diaChi: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
                 chucDanh: {
                     name: string;
                     type: string;
@@ -3604,6 +3609,7 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
@@ -3620,6 +3626,7 @@ declare const metadata: {
                 chucVuId: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: never[];

@@ -163,27 +163,33 @@ export const buildWardMapOrThrow = async (prisma: PrismaClient, names: (string |
     return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
 
+type CurriculumData = {
+    curriculum: string
+    trainingMajor?: string
+    trainingField?: string
+}
+
 export const buildCurriculumMapOrThrow = async (
     prisma: PrismaClient,
-    students: {
-        curriculum: string
-        trainingMajor?: string
-        trainingField?: string
-    }[]
+    students: CurriculumData[]
 ) => {
     const categorySet = new Set<string>(
         students.map((s) =>
-            JSON.stringify([s.curriculum, s.trainingMajor ?? null, s.trainingField ?? null])
+            JSON.stringify({
+                curriculum: s.curriculum,
+                trainingMajor: s.trainingMajor,
+                trainingField: s.trainingField,
+            })
         )
     )
 
-    const uniqueTuples = Array.from(categorySet).map(
-        (s) => JSON.parse(s) as [string, string | null, string | null]
-    )
+    const uniqueTuples = Array.from(categorySet).map((s) => JSON.parse(s) as CurriculumData)
+
+    console.log(uniqueTuples)
 
     const existing = await prisma.curriculumVersion.findMany({
         where: {
-            OR: uniqueTuples.map(([curriculum, trainingMajor, trainingField]) => ({
+            OR: uniqueTuples.map(({ curriculum, trainingMajor, trainingField }) => ({
                 name: curriculum,
                 ...(trainingMajor && trainingField
                     ? {
@@ -214,7 +220,7 @@ export const buildCurriculumMapOrThrow = async (
     })
 
     const missing = uniqueTuples.filter(
-        ([curriculum, trainingMajor, trainingField]) =>
+        ({ curriculum, trainingMajor, trainingField }) =>
             !existing.some(
                 (version) =>
                     version.name === curriculum &&
@@ -228,7 +234,7 @@ export const buildCurriculumMapOrThrow = async (
         throw new HTTPException(400, {
             message: `Chương trình đào tạo không tồn tại: ${missing
                 .map(
-                    ([curriculum, trainingMajor, trainingField]) =>
+                    ({ curriculum, trainingMajor, trainingField }) =>
                         `${curriculum}${
                             trainingMajor && trainingField
                                 ? ` - ${trainingMajor} - ${trainingField}`
@@ -289,7 +295,8 @@ type SubjectData = {
     examType: $Enums.ExamType
     type: $Enums.SubjectVersionType
     onePoint?: boolean
-    schedulePeriod?: number
+    period: number
+    schedulePeriod: number
     numberOfTheory?: number
     numberOfPractical?: number
     numberOfSelfStudy?: number
@@ -325,7 +332,8 @@ export const buildSubjectMapOrThrow = async (
                 credit: s.credit,
                 examType: s.examType,
                 type: s.type,
-                ...(s.schedulePeriod ? { schedulePeriod: s.schedulePeriod } : {}),
+                period: s.period,
+                schedulePeriod: s.schedulePeriod,
                 ...(s.numberOfTheory ? { numberOfTheory: s.numberOfTheory } : {}),
                 ...(s.numberOfPractical ? { numberOfPractical: s.numberOfPractical } : {}),
                 ...(s.numberOfSelfStudy ? { numberOfSelfStudy: s.numberOfSelfStudy } : {}),
@@ -337,24 +345,9 @@ export const buildSubjectMapOrThrow = async (
         select: { id: true, name: true },
     })
 
-    console.log(
-        'existing',
-        existing.map((s) => s.name)
-    )
-
     const missing = uniqueSubject.filter(
         ({ name }) => !existing.some((version) => version.name === name)
     )
-    console.log(
-        'missing',
-        missing.map((s) => `${s.code} - ${s.name}`)
-    )
-
-    console.log(111, missing.length)
-
-    // throw new HTTPException(400, {
-    //     message: `Môn học không tồn tại: ${missing.map((s) => s.name).join(', ')}`,
-    // })
 
     if (missing.length && createNewSubject) {
         const orgMap = await buildOrgCodeMapOrThrow(
@@ -388,6 +381,7 @@ export const buildSubjectMapOrThrow = async (
                     examType: subject.examType,
                     type: subject.type,
                     onePoint: subject.onePoint,
+                    period: subject.period,
                     schedulePeriod: subject.schedulePeriod,
                     numberOfTheory: subject.numberOfTheory,
                     numberOfPractical: subject.numberOfPractical,
@@ -407,6 +401,8 @@ export const buildSubjectMapOrThrow = async (
                 select: { id: true, name: true },
             })
         })
+
+        return new Map([...existing, ...newSubjects].map(({ name, id }) => [name, id]))
     }
 
     if (missing.length && !createNewSubject) {
@@ -589,20 +585,15 @@ export const buildPositionMapOrThrow = async (
     prisma: PrismaClient,
     names: (string | undefined)[]
 ) => {
-    const skipValue = 'Chưa xác định'
-
-    const uniqNames = Array.from(
-        new Set(names.filter((name): name is string => Boolean(name) && name !== skipValue))
-    )
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+    console.log(uniqNames)
 
     const existing = await prisma.dM_ChucVu.findMany({
         where: { sTen: { in: uniqNames } },
         select: { sTen: true, Id: true },
     })
 
-    const missing = uniqNames.filter(
-        (name) => !existing.some(({ sTen }) => sTen === name && name !== skipValue)
-    )
+    const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
 
     if (missing.length) {
         throw new HTTPException(400, {

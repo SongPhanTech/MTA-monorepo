@@ -8,6 +8,7 @@ export type SubjectResult = {
     organizationCode: string | undefined
     credit: number
     period: number
+    schedulePeriod: number
     semester: number | null
     type: $Enums.SubjectRequirementType
     subjectVersionType: $Enums.SubjectVersionType
@@ -58,8 +59,8 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         orgCode: 'H', // Khoa, Viện phụ trách
         credit: 'I', // Số tín chỉ
         // structure: 'I', // Cấu trúc
-        periodCtdt: 'K', // Số tiết CTĐT
-        periodTkb: 'L', // Số tiết TKB
+        period: 'K', // Số tiết CTĐT
+        schedulePeriod: 'L', // Số tiết TKB
         theory: 'M', // LT
         practice: 'N', // TL, BT
         discussion: 'O', // ThL
@@ -156,7 +157,8 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             continue
         }
 
-        const period = parseIntField(row[cols.periodTkb]) || 0
+        const period = parseIntField(row[cols.period]) || 0
+        const schedulePeriod = parseIntField(row[cols.schedulePeriod]) || 0
         const semester = parseIntField(row[cols.semester]) || null
 
         // Parse loại bắt buộc
@@ -203,6 +205,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             organizationCode,
             credit,
             period,
+            schedulePeriod,
             semester,
             type,
             subjectVersionType,
@@ -218,31 +221,16 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         })
     }
 
-    // // Kiểm tra trùng lặp training blocks
-    // const duplicateTrainingBlocks = trainingBlocks
-    //     .map(({ name }) => name)
-    //     .filter((name, index, arr) => arr.indexOf(name) !== index)
+    // Kiểm tra trùng lặp subjects
+    const duplicateSubjects = subjects.filter((s, index, arr) => arr.indexOf(s) !== index)
 
-    // if (duplicateTrainingBlocks.length) {
-    //     errors.push({
-    //         sheetRef: sheetName,
-    //         cellRef: null,
-    //         message: `Khối kiến thức bị trùng: ${duplicateTrainingBlocks.join(', ')}`,
-    //     })
-    // }
-
-    // // Kiểm tra trùng lặp subjects
-    // const duplicateSubjects = trainingBlocks
-    //     .flatMap(({ subjects }) => subjects.map(({ name }) => name))
-    //     .filter((name, index, arr) => arr.indexOf(name) !== index)
-
-    // if (duplicateSubjects.length) {
-    //     errors.push({
-    //         sheetRef: sheetName,
-    //         cellRef: null,
-    //         message: `Môn học bị trùng: ${duplicateSubjects.join(', ')}`,
-    //     })
-    // }
+    if (duplicateSubjects.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: null,
+            message: `Môn học bị trùng: ${duplicateSubjects.join(', ')}`,
+        })
+    }
 
     return { subjects, errors }
 }

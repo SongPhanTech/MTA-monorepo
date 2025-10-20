@@ -413,13 +413,14 @@ model QuaTrinhCongTac extends Base {
   denThangNam       DateTime?
 
   donVi             String?
+  diaChi            String?
   chucDanh          String?
   chucVuDangDoan    String?
   soQuyetDinh       String?
   ngayNhanQuyetDinh DateTime?
 
-  chucVu            DM_ChucVu           @relation(fields: [chucVuId], references: [Id])
-  chucVuId          String              @db.Uuid
+  chucVu            DM_ChucVu?          @relation(fields: [chucVuId], references: [Id])
+  chucVuId          String?             @db.Uuid
 
   loaiHinhCongTac   DM_LoaiHinhCongTac? @relation(fields: [loaiHinhCongTacId], references: [id])
   loaiHinhCongTacId String?
