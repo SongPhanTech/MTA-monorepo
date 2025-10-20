@@ -15,7 +15,7 @@ import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import { $Enums, type Prisma, type SubjectClassSchedule } from '@workspace/db/client'
 import {
-    useCountSubjectClass,
+    useCountDM_DonVi,
     useDeleteSubjectClass,
     useFindManyBuilding,
     useFindManyDM_DonVi,
@@ -147,8 +147,7 @@ export default function TeachingAssignment() {
         'SUA'
     )
 
-    const isBoMon = canXemTatCa && canSua
-    // const isBoMon = !canXemTatCa && canSua
+    const isBoMon = !canXemTatCa && canSua
 
     const where = useMemo(
         () =>
@@ -400,12 +399,12 @@ export default function TeachingAssignment() {
                                     code: 'asc',
                                 },
                             ],
-                            take: numberOfPages,
-                            skip: (currentPage - 1) * numberOfPages,
                         },
                     },
                 },
             },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
             where: {
                 bActive: true,
                 subjectVersions: {
@@ -425,83 +424,18 @@ export default function TeachingAssignment() {
         }
     )
 
-    // const { data = [], refetch } = useFindManySubjectClass(
-    //     {
-    //         where: {
-    //             ...where,
-    //         },
-    //         include: {
-    //             semester: true,
-    //             mainLecturer: {
-    //                 include: {
-    //                     userProfile: true,
-    //                 },
-    //             },
-    //             subject: {
-    //                 include: {
-    //                     managementOrganization: true,
-    //                 },
-    //             },
-    //             extraLecturer: {
-    //                 include: {
-    //                     userProfile: true,
-    //                 },
-    //             },
-    //             enterGradeLecturer: {
-    //                 include: {
-    //                     userProfile: true,
-    //                 },
-    //             },
-    //             room: true,
-    //             trainingLocation: true,
-    //             subjectClassStudent: true,
-    //             subjectClassTimes: true,
-    //         },
-    //         orderBy: [
-    //             ...emptyObjectIf(
-    //                 [
-    //                     {
-    //                         subject: {
-    //                             credit: filters.credit,
-    //                         },
-    //                     },
-    //                 ],
-    //                 !!filters.credit
-    //             ),
-    //             ...emptyObjectIf(
-    //                 [
-    //                     {
-    //                         maxStudent: filters.maxStudent,
-    //                     },
-    //                 ],
-    //                 !!filters.maxStudent
-    //             ),
-    //             ...emptyObjectIf(
-    //                 [
-    //                     {
-    //                         subjectClassStudent: {
-    //                             _count: filters.subjectClassStudent,
-    //                         },
-    //                     },
-    //                 ],
-    //                 !!filters.subjectClassStudent
-    //             ),
-    //             {
-    //                 code: 'asc',
-    //             },
-    //         ],
-    //         take: numberOfPages,
-    //         skip: (currentPage - 1) * numberOfPages,
-    //     },
-    //     {
-    //         enabled: !!semesterId && !!trainingObjectTypeId,
-    //         refetchOnWindowFocus: false,
-    //     }
-    // )
-
-    const { data: count } = useCountSubjectClass({
+    const { data: count } = useCountDM_DonVi({
         where: {
-            ...where,
+            bActive: true,
+            subjectVersions: {
+                some: {
+                    subjectClass: {
+                        some: {
+                            ...where,
+                        },
+                    },
+                },
+            },
         },
     })
 
@@ -1470,6 +1404,13 @@ export default function TeachingAssignment() {
                                                             ? [record?.extraLecturerId]
                                                             : []
                                                     }
+                                                    disabled={
+                                                        record.lecturerAssignmentDeadline
+                                                            ? dayjs(
+                                                                  record.lecturerAssignmentDeadline
+                                                              ).isBefore(dayjs().startOf('day'))
+                                                            : true
+                                                    }
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId ??
                                                         ''
@@ -1502,6 +1443,13 @@ export default function TeachingAssignment() {
                                                         record?.lecturerId
                                                             ? [record?.lecturerId]
                                                             : []
+                                                    }
+                                                    disabled={
+                                                        record.lecturerAssignmentDeadline
+                                                            ? dayjs(
+                                                                  record.lecturerAssignmentDeadline
+                                                              ).isBefore(dayjs().startOf('day'))
+                                                            : true
                                                     }
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId
@@ -1650,6 +1598,13 @@ export default function TeachingAssignment() {
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId
                                                     }
+                                                    disabled={
+                                                        record.lecturerAssignmentDeadline
+                                                            ? dayjs(
+                                                                  record.lecturerAssignmentDeadline
+                                                              ).isBefore(dayjs().startOf('day'))
+                                                            : true
+                                                    }
                                                 />
                                             </FormItem>
                                         ) : (
@@ -1777,7 +1732,6 @@ export default function TeachingAssignment() {
                                 current: currentPage,
                                 pageSize: numberOfPages,
                                 total: count,
-
                                 onChange: (page, pageSize) => {
                                     console.log(page, pageSize)
 
