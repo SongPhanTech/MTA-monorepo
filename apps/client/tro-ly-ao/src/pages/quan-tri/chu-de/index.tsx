@@ -5,6 +5,7 @@ import DefaultLayout from '@layouts/default-layout'
 // import { formatDateReadable } from '@lib/utils'
 import {
     useCountTopic,
+    useDeleteManyDocumentTopic,
     useDeleteManyPrompt,
     useDeleteTopic,
     useFindManyTopic,
@@ -73,11 +74,17 @@ function Page() {
 
     const { mutateAsync: deleteTopic } = useDeleteTopic()
     const { mutateAsync: deletePrompts } = useDeleteManyPrompt()
+    const { mutateAsync: deleteDocumentTopics } = useDeleteManyDocumentTopic()
 
     const handleDeleteTopic = async (id: string) => {
         if (!id) return
 
         try {
+            await deleteDocumentTopics({
+                where: {
+                    topicId: id,
+                },
+            })
             await deletePrompts({
                 where: {
                     topicId: id,
