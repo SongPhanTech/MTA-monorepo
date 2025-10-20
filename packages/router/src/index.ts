@@ -496,34 +496,53 @@ const NAVIGATION: NavigationType = {
         label: 'Trợ lý ảo',
         menus: [
             {
-                id: 'quan-tri',
-                label: 'Quản trị trợ lý ảo',
+                id: 'danh-muc',
+                label: 'Danh mục',
+                icon: ListTree,
+                children: [
+                    {
+                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_CHU_DE,
+                        label: 'Chủ đề',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DANH_MUC_CHU_DE,
+                    },
+                    {
+                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU,
+                        label: 'Loại tài liệu',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU,
+                    },
+                ],
+            },
+            {
+                id: 'cau-hinh',
+                label: 'Cấu hình',
                 icon: SettingOutlined,
                 children: [
                     {
-                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CHU_DE,
-                        label: 'Chủ đề',
-                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CHU_DE,
-                    },
-                    {
-                        id: 'TRO_LY_AO_QUAN_TRI_LOAI_TAI_LIEU',
-                        label: 'Loại tài liệu',
-                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_LOAI_TAI_LIEU,
-                    },
-                    {
-                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU,
-                        label: 'Dữ liệu',
-                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU,
-                    },
-                    {
                         id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_THAM_SO,
-                        label: 'Cấu hình tham số',
+                        label: 'Tham số',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_THAM_SO,
                     },
                     {
                         id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_CAU_HINH_PROMT,
-                        label: 'Cấu hình promt',
+                        label: 'Prompt',
                         path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_CAU_HINH_PROMT,
+                    },
+                ],
+            },
+            {
+                id: 'du-lieu',
+                label: 'Dữ liệu',
+                icon: BookOutlined,
+                children: [
+                    {
+                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_TAI_LIEU,
+                        label: 'Tài liệu',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_TAI_LIEU,
+                    },
+                    {
+                        id: TRO_LY_AO_PERMISSION.TRO_LY_AO_QUAN_TRI_DU_LIEU_FAQ,
+                        label: 'Câu hỏi thường gặp',
+                        path: ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_FAQ,
                     },
                 ],
             },

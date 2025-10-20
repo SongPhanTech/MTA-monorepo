@@ -156,9 +156,10 @@ export default {
     "INDEX": "/",
     "QUAN_TRI_CAU_HINH_PROMT": "/quan-tri/cau-hinh/promt",
     "QUAN_TRI_CAU_HINH_THAM_SO": "/quan-tri/cau-hinh/tham-so",
-    "QUAN_TRI_CHU_DE": "/quan-tri/chu-de",
-    "QUAN_TRI_DU_LIEU": "/quan-tri/du-lieu",
-    "QUAN_TRI_LOAI_TAI_LIEU": "/quan-tri/loai-tai-lieu",
+    "QUAN_TRI_DANH_MUC_CHU_DE": "/quan-tri/danh-muc/chu-de",
+    "QUAN_TRI_DANH_MUC_LOAI_TAI_LIEU": "/quan-tri/danh-muc/loai-tai-lieu",
+    "QUAN_TRI_DU_LIEU_FAQ": "/quan-tri/du-lieu/faq",
+    "QUAN_TRI_DU_LIEU_TAI_LIEU": "/quan-tri/du-lieu/tai-lieu",
     "TIM_KIEM_VAN_BAN": "/tim-kiem-van-ban",
     "TRO_LY_AO": "/tro-ly-ao",
     "XU_LY_VAN_BAN": "/xu-ly-van-ban"
