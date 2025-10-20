@@ -38,9 +38,9 @@
 		"@workspace/auth": "workspace:*",
 		"@workspace/constant": "workspace:*",
 		"@workspace/db": "workspace:*",
+		"@workspace/permissions": "workspace:*",
 		"@workspace/router": "workspace:*",
 		"@workspace/ui": "workspace:*",
-		"@workspace/permissions": "workspace:*",
 		"antd": "catalog:",
 		"axios": "catalog:",
 		"chart.js": "catalog:",
@@ -49,6 +49,7 @@
 		"dayjs": "catalog:",
 		"decimal.js": "catalog:",
 		"easy-peasy": "catalog:",
+		"easy-template-x": "^7.0.1",
 		"exceljs": "catalog:",
 		"file-saver": "catalog:",
 		"katex": "catalog:",
@@ -73,6 +74,7 @@
 		"tailwind-merge": "catalog:",
 		"tippy.js": "catalog:",
 		"xlsx": "catalog:",
+		"xlsx-template": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {

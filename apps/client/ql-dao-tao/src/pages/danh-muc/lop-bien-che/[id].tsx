@@ -29,7 +29,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
-
+import ReportGenerator from '@components/report/ReportGenerator'
 dayjs.locale('vi')
 
 export default function StudentFixedClassPage() {
@@ -935,6 +935,7 @@ export default function StudentFixedClassPage() {
                                     data={data}
                                     fixedClassName={`${fixedClass?.name}_${fixedClass?.trainingCourse?.name}`}
                                 />
+                                <ReportGenerator />
                                 <Button onClick={handleModalPrint} type="primary">
                                     In danh sách
                                 </Button>

@@ -128,7 +128,7 @@ catalog:
   typescript: ^5.8.3
   xlsx: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
   xlsx-style: ^0.8.13
-  xlsx-template: ^1.4.4
+  xlsx-template: 1.4.4
   zenstack: ^2.16.1
   zod: ^3.25.76
 
