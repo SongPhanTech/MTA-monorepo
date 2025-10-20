@@ -4,7 +4,7 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { TrainingMajor } from '@workspace/db/client'
+import { $Enums, type TrainingMajor } from '@workspace/db/client'
 import type { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,
@@ -62,6 +62,9 @@ export default function MonTheoKeHoachDuKien() {
                 planTrainingSubjects: {
                     select: {
                         subjectVersionId: true,
+                    },
+                    where: {
+                        subjectClassType: $Enums.SubjectClassType.NORMAL,
                     },
                 },
             },
@@ -179,31 +182,6 @@ export default function MonTheoKeHoachDuKien() {
                 throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
             }
 
-            // new PrismaClient().planTrainingDelay.update({
-            //     where: { id: planTrainingDelayId },
-            //     data: {
-            //         planTrainingDelaySubjects: {
-            //             upsert: delaySubject.map((subject) => ({
-            //                 where: {
-            //                     planTrainingDelayId_subjectVersionId: {
-            //                         planTrainingDelayId,
-            //                         subjectVersionId: subject.subjectVersionId,
-            //                     },
-            //                 },
-            //                 create: {
-            //                     subjectVersionId: subject.subjectVersionId,
-            //                     fixedClasses: {
-            //                         connect: subject.fixedClass.map((fc) => ({
-            //                             id: fc.fixedClassId,
-            //                         })),
-            //                     },
-            //                 },
-            //                 update: {},
-            //             })),
-            //         },
-            //     },
-            // })
-
             const res = await sqlTransaction([
                 {
                     model: 'PlanTraining',
@@ -212,7 +190,11 @@ export default function MonTheoKeHoachDuKien() {
                         where: { id: planTrainingId },
                         data: {
                             planTrainingSubjects: {
-                                deleteMany: {},
+                                deleteMany: {
+                                    where: {
+                                        subjectClassType: $Enums.SubjectClassType.NORMAL,
+                                    },
+                                },
                             },
                         },
                     },

@@ -220,6 +220,7 @@ export default function KeHoachMoLopMonHoc() {
                                           },
                                       },
                                   },
+                                  subjectClassType: $Enums.SubjectClassType.NORMAL,
                               },
                           },
                       }
@@ -280,12 +281,19 @@ export default function KeHoachMoLopMonHoc() {
                             orderBy: { code: 'asc' },
                         },
                     },
+                    where: {
+                        subjectClassType: $Enums.SubjectClassType.NORMAL,
+                    },
                     take: numberOfPages,
                     skip: (currentPage - 1) * numberOfPages,
                 },
                 _count: {
                     select: {
-                        planTrainingSubjects: true,
+                        planTrainingSubjects: {
+                            where: {
+                                subjectClassType: $Enums.SubjectClassType.NORMAL,
+                            },
+                        },
                     },
                 },
             },
@@ -821,8 +829,8 @@ export default function KeHoachMoLopMonHoc() {
                                                     allowClear
                                                     showSearch
                                                     dropdownStyle={{
-                                                        maxHeight:400,
-                                                        minWidth:300
+                                                        maxHeight: 400,
+                                                        minWidth: 300,
                                                     }}
                                                     filterOption={(input, option) =>
                                                         String(option?.label ?? '')

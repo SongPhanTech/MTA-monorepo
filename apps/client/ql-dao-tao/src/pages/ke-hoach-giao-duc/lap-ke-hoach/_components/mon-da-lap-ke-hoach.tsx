@@ -3,6 +3,7 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { $Enums } from '@workspace/db/client'
 import {
     useDeleteManyPlanTrainingSubject,
     useFindFirstPlanTraining,
@@ -93,6 +94,7 @@ export default function MonDaLapKeHoach() {
                                   }
                                 : {}),
                         },
+                        subjectClassType: $Enums.SubjectClassType.NORMAL,
                     },
                 },
                 _count: {
@@ -101,6 +103,7 @@ export default function MonDaLapKeHoach() {
                             where: {
                                 deletedAt: null,
                                 active: true,
+                                subjectClassType: $Enums.SubjectClassType.NORMAL
                             },
                         },
                     },
