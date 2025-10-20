@@ -7,9 +7,10 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { SubjectClass, SubjectVersion } from '@workspace/db/client'
+import type { Prisma, SubjectClass, SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
+    useCreateExam,
     useFindManySubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
@@ -29,6 +30,7 @@ import {
     message,
     Popover,
     Row,
+    Switch,
     Tooltip,
 } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
@@ -48,6 +50,21 @@ type TimeScoreExam = {
     beforeDays: number
 }
 
+type HoldAnExam = {
+    isGroupBySubject: boolean
+}
+
+type SubjectClassRelation = Prisma.SubjectClassGetPayload<{
+    include: {
+        subject: true
+        subjectClassStudent: {
+            include: {
+                student: true
+            }
+        }
+    }
+}>
+
 export default function ClassSubject() {
     const { canSome, can } = useAbility()
     const { showSpinner, hideSpinner } = useSpinner()
@@ -58,8 +75,10 @@ export default function ClassSubject() {
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const [open, setOpen] = useState(false)
     const [openExam, setOpenExam] = useState(false)
+    const [openHoldAnExam, setOpenHoldAnExam] = useState(false)
     const [form] = Form.useForm<TimeScore>()
     const [formExam] = Form.useForm<TimeScoreExam>()
+    const [formHoldAnExam] = Form.useForm<HoldAnExam>()
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         code: '',
@@ -458,7 +477,6 @@ export default function ClassSubject() {
     const handleUpdateTimeScore = async (values: TimeScoreExam) => {
         try {
             showSpinner()
-            showSpinner()
             const res = await sqlTransaction([
                 {
                     model: 'SubjectClass',
@@ -510,6 +528,109 @@ export default function ClassSubject() {
             }
         } catch (error: any) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const { mutateAsync: createExam } = useCreateExam()
+
+    const handleUpdateHoldAnExam = async (values: HoldAnExam) => {
+        try {
+            showSpinner()
+
+            const res = await sqlTransaction([
+                {
+                    model: 'SubjectClass',
+                    operation: 'findMany',
+                    data: {
+                        where: {
+                            ...(semesterId ? { semesterId } : {}),
+                            ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
+                        },
+                        include: {
+                            subjectClassStudent: {
+                                where: {
+                                    examBanned: false,
+                                    suspended: false,
+                                    withdrew: false,
+                                },
+                                include: {
+                                    student: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            ])
+
+            if (res.status === 200 && res.data.length > 0) {
+                const subjectClasses = res.data[0] as SubjectClassRelation[]
+
+                if (values.isGroupBySubject) {
+                    const groupedClasses = subjectClasses.reduce(
+                        (acc, subjectClass) => {
+                            const key = `${subjectClass.subjectId}_${subjectClass.trainingObjectTypeId}_${subjectClass.semesterId}`
+
+                            if (!acc[key]) {
+                                acc[key] = {
+                                    subjectClassIds: [],
+                                    studentSubjectScores: [],
+                                }
+                            }
+
+                            acc[key].subjectClassIds.push(subjectClass.id)
+
+                            const studentScoreIds = subjectClass.subjectClassStudent.map(
+                                (scs) => scs.id
+                            )
+                            acc[key].studentSubjectScores.push(...studentScoreIds)
+
+                            return acc
+                        },
+                        {} as Record<
+                            string,
+                            { subjectClassIds: string[]; studentSubjectScores: string[] }
+                        >
+                    )
+
+                    const examData = Object.values(groupedClasses).map((group) => ({
+                        subjectClass: {
+                            connect: group.subjectClassIds.map((id) => ({ id })),
+                        },
+                        studentSubjectScore: {
+                            connect: group.studentSubjectScores.map((id) => ({ id })),
+                        },
+                    }))
+
+                    for (const exam of examData) {
+                        await createExam({ data: exam })
+                    }
+
+                    message.success('Tạo danh sách thi thành công')
+                    router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
+                } else {
+                    const examData = subjectClasses.map((subjectClass) => ({
+                        subjectClass: {
+                            connect: [{ id: subjectClass.id }],
+                        },
+                        studentSubjectScore: {
+                            connect: subjectClass.subjectClassStudent.map((scs) => ({
+                                id: scs.id,
+                            })),
+                        },
+                    }))
+
+                    for (const exam of examData) {
+                        await createExam({ data: exam })
+                    }
+
+                    message.success('Tạo danh sách thi thành công')
+                    router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
+                }
+            }
+        } catch (error: any) {
+            message.error('Đã có lỗi xảy ra khi tạo danh sách thi')
         } finally {
             hideSpinner()
         }
@@ -574,6 +695,39 @@ export default function ClassSubject() {
                                     'XEM_TAT_CA'
                                 ) && (
                                     <>
+                                        <Popover
+                                            content={
+                                                <Form
+                                                    form={formHoldAnExam}
+                                                    initialValues={{
+                                                        isGroupBySubject: false,
+                                                    }}
+                                                    onFinish={handleUpdateHoldAnExam}
+                                                >
+                                                    <FormItem
+                                                        form={formHoldAnExam}
+                                                        name="isGroupBySubject"
+                                                        label="Gộp theo môn học"
+                                                        className="mb-2"
+                                                        valuePropName="checked"
+                                                    >
+                                                        <Switch />
+                                                    </FormItem>
+                                                    <Col span={24} className="text-right mt-4">
+                                                        <Button type="primary" htmlType="submit">
+                                                            Xác nhận
+                                                        </Button>
+                                                    </Col>
+                                                </Form>
+                                            }
+                                            title="Sửa lên danh sách thi"
+                                            trigger="click"
+                                            placement="bottomRight"
+                                            open={openHoldAnExam}
+                                            onOpenChange={setOpenHoldAnExam}
+                                        >
+                                            <Button type="primary">Lên danh sách thi</Button>
+                                        </Popover>
                                         <Popover
                                             content={
                                                 <Form

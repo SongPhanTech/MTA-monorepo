@@ -231,6 +231,19 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
+                id: 'to-chuc-thi',
+                label: 'Tổ chức thi',
+                icon: FileOutlined,
+                children: [
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_DANH_SACH_THI,
+                        label: 'Danh sách thi',
+                        path: ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI,
+                        description: 'Danh sách thi',
+                    },
+                ],
+            },
+            {
                 id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_MOC_HUAN_LUYEN,
                 label: 'Mốc huấn luyện',
                 icon: Flag,
