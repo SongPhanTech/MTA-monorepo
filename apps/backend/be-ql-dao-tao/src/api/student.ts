@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { AcademicActionType, type Prisma, StudentStatus } from '@workspace/db'
-import { parseSheetHeQuanSu, zParseSheetError } from '@workspace/libs/parseExcel'
+import { parseSheetHeQuanSu, parseSheetStudent, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
@@ -11,13 +11,274 @@ import {
 } from '../services/student-result.service'
 import {
     buildCurriculumMapOrThrow,
+    buildDMChuyenNganhMap,
+    buildDMNganhMap,
+    buildDMTruongMap,
     buildEthnicityMapOrThrow,
     buildGenderMapOrThrow,
     buildNationalityMapOrThrow,
+    buildPositionMapOrThrow,
     buildProvinceMapOrThrow,
+    buildRankMapOrThrow,
 } from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
+
+const importStudent = createRoute({
+    operationId: 'import-student',
+    tags: ['Student'],
+    path: '/import-student',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'multipart/form-data': {
+                    schema: UploadExcelModel.extend({
+                        timeout: z.coerce.number().default(30),
+                    }).openapi('importStudent'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Import Student successfully',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string(), time: z.number() }),
+                },
+            },
+        },
+        400: {
+            description: 'Invalid file type',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                        errors: z.array(zParseSheetError).optional(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(importStudent, async (c) => {
+    const { file, timeout } = c.req.valid('form')
+
+    const buf = await file.arrayBuffer()
+    const data = parseSheetStudent(buf)
+
+    if (data.errors.length) {
+        return c.json({ message: 'Lỗi khi đọc file', errors: data.errors }, 400)
+    }
+
+    const trainingObjectType = await prisma.trainingObjectType.findFirst({
+        where: { name: data.trainingObjectType as string, active: true },
+    })
+
+    if (!trainingObjectType) {
+        return c.json(
+            {
+                message: `Đối tượng đào tạo không tồn tại: ${data.trainingObjectType}`,
+            },
+            400
+        )
+    }
+
+    const trainingCourse = await prisma.trainingCourse.findFirst({
+        where: {
+            OR: [{ name: data.trainingCourse as string }, { code: data.trainingCourse as string }],
+            active: true,
+        },
+    })
+
+    if (!trainingCourse) {
+        return c.json({ message: `Khoá đào tạo không tồn tại: ${data.trainingCourse}` }, 400)
+    }
+
+    const genderMap = await buildGenderMapOrThrow(
+        prisma,
+        data.students.map((student) => student.gender)
+    )
+
+    const ethnicityMap = await buildEthnicityMapOrThrow(
+        prisma,
+        data.students.map((student) => student.ethnicity)
+    )
+
+    const nationalityMap = await buildNationalityMapOrThrow(
+        prisma,
+        data.students.map((student) => student.nationality)
+    )
+
+    const provinceMap = await buildProvinceMapOrThrow(
+        prisma,
+        data.students.map((student) => student.provinceHometown)
+    )
+
+    const rankMap = await buildRankMapOrThrow(
+        prisma,
+        data.students.map((student) => student.rank)
+    )
+
+    const positionMap = await buildPositionMapOrThrow(
+        prisma,
+        data.students.map((student) => student.position)
+    )
+
+    const curriculumVersionMap = await buildCurriculumMapOrThrow(prisma, data.students)
+
+    const dmTruong = await buildDMTruongMap(
+        prisma,
+        data.students.map((student) => student.universitySchool)
+    )
+
+    const dmNganh = await buildDMNganhMap(
+        prisma,
+        data.students.map((student) => student.universityMajor)
+    )
+
+    const dmChuyenNganh = await buildDMChuyenNganhMap(
+        prisma,
+        data.students.map((student) => student.universityMajor)
+    )
+
+    const existingStudent = await prisma.student.findMany({
+        where: { code: { in: data.students.map((student) => student.code) } },
+        select: { id: true, code: true },
+    })
+
+    const existingStudentMap = new Map(existingStudent.map(({ code, id }) => [code, id]))
+
+    const start = Date.now()
+    await prisma.$transaction(
+        async (tx) => {
+            await tx.fixedClass.createMany({
+                skipDuplicates: true,
+                data: data.students.map(({ fixedClass, curriculum }) => ({
+                    name: fixedClass,
+                    trainingCourseId: trainingCourse.id,
+                    curriculumVersionId: curriculumVersionMap.get(curriculum),
+                    startYear: new Date().getFullYear(),
+                })),
+            })
+
+            const fixedClass = await tx.fixedClass.findMany({
+                where: {
+                    OR: data.students.map(({ fixedClass, curriculum }) => ({
+                        name: fixedClass,
+                        trainingCourseId: trainingCourse.id,
+                        curriculumVersionId: curriculumVersionMap.get(curriculum),
+                    })),
+                },
+                select: { id: true, name: true },
+            })
+
+            const fixedClassMap = new Map(fixedClass.map(({ name, id }) => [name, id]))
+
+            for (const student of data.students) {
+                const studentData: Prisma.StudentCreateInput = {
+                    code: student.code,
+                    entryScore: Number.parseFloat(student.entryScore ?? '') || null,
+                    trainingObjectType: {
+                        connect: { id: trainingObjectType.id },
+                    },
+                    fixedClass: {
+                        connect: { id: fixedClassMap.get(student.fixedClass) },
+                    },
+                    curriculumVersion: {
+                        connect: { id: curriculumVersionMap.get(student.curriculum) },
+                    },
+                    userProfile: {},
+                    department: student.department,
+                    departmentAddress: student.departmentAddress,
+                    careerYear: Number.parseInt(student.careerYear ?? '0', 10),
+                    universitySchool: student.universitySchool,
+                    universityTrainingType: student.universityTrainingType,
+                    universityGraduationYear: Number.parseInt(
+                        student.universityGraduationYear ?? '0',
+                        10
+                    ),
+                    universityMajor: student.universityMajor,
+                    universityRank: student.universityRank,
+                    basic: student.basic ? Number.parseFloat(student.basic) : null,
+                    facility: student.facility ? Number.parseFloat(student.facility) : null,
+                    foreignLanguage: student.foreignLanguage,
+                    priorityReason: student.priorityReason,
+                    description: student.description,
+                }
+                const profileData: Prisma.UserProfileUncheckedCreateWithoutEducationAndTrainingInput =
+                    {
+                        ...splitFullName(student.fullname),
+                        dateOfBirth: student.dateOfBirth,
+                        idCardNumber: student.idCardNumber,
+                        genderId: student.gender ? genderMap.get(student.gender) : null,
+                        ethnicityId: ethnicityMap.get(student.ethnicity ?? '') || null,
+                        nationalityId: nationalityMap.get(student.nationality ?? '') || null,
+                        provinceHometownId: provinceMap.get(student.provinceHometown ?? '') || null,
+                        phoneNumber: student.phoneNumber,
+                        officerNumber: student.officerNumber,
+                        rankId: rankMap.get(student.rank ?? '') || null,
+                        positionCPVId: positionMap.get(student.position ?? '') || null,
+                    }
+
+                const existingId = existingStudentMap.get(student.code)
+                if (existingId) {
+                    await tx.student.update({
+                        where: { id: existingId },
+                        data: {
+                            ...studentData,
+                            userProfile: { update: profileData },
+                        },
+                    })
+                } else {
+                    const st = await tx.student.create({
+                        data: {
+                            ...studentData,
+                            userProfile: {
+                                connectOrCreate: {
+                                    where: { idCardNumber: student.idCardNumber },
+                                    create: profileData,
+                                },
+                            },
+                        },
+                    })
+
+                    if (student.department) {
+                        await tx.quaTrinhCongTac.create({
+                            data: {
+                                userProfileId: st.userProfileId,
+                                donVi: student.department,
+                                chucVuId: positionMap.get(student.position ?? '') as string,
+                            },
+                        })
+                    }
+
+                    if (student.universitySchool && student.universityMajor) {
+                        await tx.quaTrinhHocTap.create({
+                            data: {
+                                userProfileId: st.userProfileId,
+                                tenTruongId: dmTruong.get(student.universitySchool) as string,
+                                nganhHocId: dmNganh.get(student.universityMajor) as string,
+                                chuyenNganhId: dmChuyenNganh.get(student.universityMajor) as string,
+                            },
+                        })
+                    }
+                }
+            }
+        },
+        { timeout: timeout * 1000 }
+    )
+
+    return c.json(
+        {
+            message: `Import students successfully: ${data.students.length}`,
+            time: Date.now() - start,
+        },
+        200
+    )
+})
 
 const importHeQuanSu = createRoute({
     operationId: 'import-he-quan-su',

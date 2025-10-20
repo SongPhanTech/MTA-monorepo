@@ -11,7 +11,6 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
 import CurriculumApp from './api/curriculum'
 import CurriculumSubjectApp from './api/curriculum-subject'
-
 import FixedClassApp from './api/fixed-class'
 import GraduationApp from './api/graduation'
 import ImportApp from './api/import'
@@ -19,6 +18,7 @@ import PlanTraining from './api/plan-training'
 import RoomApp from './api/room'
 import Stats from './api/stats'
 import StudentApp from './api/student'
+import ArchivedScoreApp from './api/student'
 import SubjectClassApp from './api/subject-class'
 import TrainingFieldApp from './api/training-field'
 import TrainingScoreApp from './api/training-score'
@@ -88,6 +88,7 @@ app.route('/api/graduation', GraduationApp)
 app.route('/api/plan-training', PlanTraining)
 app.route('/api/stats', Stats)
 app.route('/api/import', ImportApp)
+app.route('/api/archived-score', ArchivedScoreApp)
 
 const nv = await prisma.userProfile.findFirstOrThrow()
 

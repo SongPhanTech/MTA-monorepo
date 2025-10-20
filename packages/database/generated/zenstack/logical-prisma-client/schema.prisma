@@ -981,13 +981,13 @@ model CapBac {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model QuaTrinhCongTac {
-  id                String             @id() @default(cuid())
-  code              String?            @unique()
-  active            Boolean            @default(true)
-  description       String?            @db.Text()
+  id                String              @id() @default(cuid())
+  code              String?             @unique()
+  active            Boolean             @default(true)
+  description       String?             @db.Text()
   deletedAt         DateTime?
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @default(now()) @updatedAt()
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now()) @updatedAt()
   tuThangNam        DateTime?
   denThangNam       DateTime?
   donVi             String?
@@ -995,11 +995,11 @@ model QuaTrinhCongTac {
   chucVuDangDoan    String?
   soQuyetDinh       String?
   ngayNhanQuyetDinh DateTime?
-  chucVu            DM_ChucVu          @relation(fields: [chucVuId], references: [Id])
-  chucVuId          String             @db.Uuid()
-  loaiHinhCongTac   DM_LoaiHinhCongTac @relation(fields: [loaiHinhCongTacId], references: [id])
-  loaiHinhCongTacId String
-  userProfile       UserProfile        @relation(fields: [userProfileId], references: [id])
+  chucVu            DM_ChucVu           @relation(fields: [chucVuId], references: [Id])
+  chucVuId          String              @db.Uuid()
+  loaiHinhCongTac   DM_LoaiHinhCongTac? @relation(fields: [loaiHinhCongTacId], references: [id])
+  loaiHinhCongTacId String?
+  userProfile       UserProfile         @relation(fields: [userProfileId], references: [id])
   userProfileId     String
 
   @@schema("ql-ho-so")
@@ -3887,10 +3887,43 @@ model Student {
   deletedAt                      DateTime?
   createdAt                      DateTime                         @default(now())
   updatedAt                      DateTime                         @default(now()) @updatedAt()
-  entryScore                     Float?
   note                           String?
   from                           DateTime?
   to                             DateTime?
+  /// số báo danh
+  registerNumber                 String?                          @unique()
+  /// mã hồ sơ tiến sĩ
+  doctoralCode                   String?                          @unique()
+  /// Tổ hợp xét tuyển
+  admissionCombination           String?
+  /// Điểm xét tuyển
+  entryScore                     Float?
+  /// Điểm đánh giá năng lực
+  competencyScore                Float?
+  /// Cơ quan, đơn vị
+  department                     String?
+  /// Địa chỉ cơ quan, đơn vị
+  departmentAddress              String?
+  /// năm bắt đầu vào nghề
+  careerYear                     Int?
+  /// Trường đại học
+  universitySchool               String?
+  /// Hệ đào tạo
+  universityTrainingType         String?
+  /// Năm tốt nghiệp
+  universityGraduationYear       Int?
+  /// Ngành/Chuyên ngành
+  universityMajor                String?
+  /// Loại/Bậc tốt nghiệp
+  universityRank                 String?
+  /// Điểm cơ bản/Điểm môn 1
+  basic                          Float?
+  /// Điểm cơ sở/Điểm môn 2
+  facility                       Float?
+  /// Ngoại ngữ
+  foreignLanguage                String?
+  /// Lý do ưu tiên
+  priorityReason                 String?
   trainingLocation               TrainingLocation?                @relation(fields: [trainingLocationId], references: [id])
   trainingLocationId             String?
   /// đối tượng ưu tiên
@@ -5997,7 +6030,7 @@ model OrderingItem {
   @@schema("khao-thi")
 }
 
-/// Bảng kỳ thi
+/// Kỳ thi
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
@@ -6009,14 +6042,12 @@ model Exam {
   deletedAt           DateTime?
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @default(now()) @updatedAt()
-  title               String
   status              ExamStatus            @default(DRAFT)
   questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
   questionBankId      String?
   lockExamCode        Boolean               @default(false)
   /// thời gian thi
-  startTime           String
-  duration            Int
+  duration            Int?
   /// Lớp môn học
   subjectClass        SubjectClass[]
   /// thí sinh
@@ -6046,6 +6077,8 @@ model ExamRoom {
   examId       String
   room         Room?         @relation(fields: [roomId], references: [id])
   roomId       String?
+  start        Int?
+  end          Int?
   examSessions ExamSession[]
 
   @@unique([examId, roomId])

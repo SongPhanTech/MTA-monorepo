@@ -25,13 +25,13 @@ const baseSchema = z.object({
 ).strict();
 const relationSchema = z.object({
     chucVu: z.record(z.unknown()),
-    loaiHinhCongTac: z.record(z.unknown()),
+    loaiHinhCongTac: z.record(z.unknown()).optional(),
     userProfile: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
     chucVuId: z.string().uuid(),
-    loaiHinhCongTacId: z.string(),
+    loaiHinhCongTacId: z.string().nullish(),
     userProfileId: z.string(),
 }
 );

@@ -2143,6 +2143,7 @@ const metadata = {
                     name: "loaiHinhCongTac",
                     type: "DM_LoaiHinhCongTac",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'quaTrinhCongTac',
                     isRelationOwner: true,
@@ -2150,6 +2151,7 @@ const metadata = {
                 }, loaiHinhCongTacId: {
                     name: "loaiHinhCongTacId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'loaiHinhCongTac',
                 }, userProfile: {
@@ -12838,10 +12840,6 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, entryScore: {
-                    name: "entryScore",
-                    type: "Float",
-                    isOptional: true,
                 }, note: {
                     name: "note",
                     type: "String",
@@ -12853,6 +12851,76 @@ const metadata = {
                 }, to: {
                     name: "to",
                     type: "DateTime",
+                    isOptional: true,
+                }, registerNumber: {
+                    name: "registerNumber",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, doctoralCode: {
+                    name: "doctoralCode",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, admissionCombination: {
+                    name: "admissionCombination",
+                    type: "String",
+                    isOptional: true,
+                }, entryScore: {
+                    name: "entryScore",
+                    type: "Float",
+                    isOptional: true,
+                }, competencyScore: {
+                    name: "competencyScore",
+                    type: "Float",
+                    isOptional: true,
+                }, department: {
+                    name: "department",
+                    type: "String",
+                    isOptional: true,
+                }, departmentAddress: {
+                    name: "departmentAddress",
+                    type: "String",
+                    isOptional: true,
+                }, careerYear: {
+                    name: "careerYear",
+                    type: "Int",
+                    isOptional: true,
+                }, universitySchool: {
+                    name: "universitySchool",
+                    type: "String",
+                    isOptional: true,
+                }, universityTrainingType: {
+                    name: "universityTrainingType",
+                    type: "String",
+                    isOptional: true,
+                }, universityGraduationYear: {
+                    name: "universityGraduationYear",
+                    type: "Int",
+                    isOptional: true,
+                }, universityMajor: {
+                    name: "universityMajor",
+                    type: "String",
+                    isOptional: true,
+                }, universityRank: {
+                    name: "universityRank",
+                    type: "String",
+                    isOptional: true,
+                }, basic: {
+                    name: "basic",
+                    type: "Float",
+                    isOptional: true,
+                }, facility: {
+                    name: "facility",
+                    type: "Float",
+                    isOptional: true,
+                }, foreignLanguage: {
+                    name: "foreignLanguage",
+                    type: "String",
+                    isOptional: true,
+                }, priorityReason: {
+                    name: "priorityReason",
+                    type: "String",
                     isOptional: true,
                 }, trainingLocation: {
                     name: "trainingLocation",
@@ -13199,6 +13267,12 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                }, registerNumber: {
+                    name: "registerNumber",
+                    fields: ["registerNumber"]
+                }, doctoralCode: {
+                    name: "doctoralCode",
+                    fields: ["doctoralCode"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
@@ -20987,9 +21061,6 @@ const metadata = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, title: {
-                    name: "title",
-                    type: "String",
                 }, status: {
                     name: "status",
                     type: "ExamStatus",
@@ -21013,12 +21084,10 @@ const metadata = {
                     name: "lockExamCode",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, startTime: {
-                    name: "startTime",
-                    type: "String",
                 }, duration: {
                     name: "duration",
                     type: "Int",
+                    isOptional: true,
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",
@@ -21135,6 +21204,14 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
+                }, start: {
+                    name: "start",
+                    type: "Int",
+                    isOptional: true,
+                }, end: {
+                    name: "end",
+                    type: "Int",
+                    isOptional: true,
                 }, examSessions: {
                     name: "examSessions",
                     type: "ExamSession",

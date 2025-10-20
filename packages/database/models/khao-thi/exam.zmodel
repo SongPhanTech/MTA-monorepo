@@ -188,7 +188,6 @@ model OrderingItem extends Base {
 
 /// Kỳ thi
 model Exam extends Base {
-  title               String
   status              ExamStatus            @default(DRAFT)
   questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
   questionBankId      String?
@@ -224,6 +223,9 @@ model ExamRoom extends Base {
   examId       String
   room         Room?         @relation(fields: [roomId], references: [id])
   roomId       String?
+
+  start        Int?
+  end          Int?
 
   examSessions ExamSession[]
 

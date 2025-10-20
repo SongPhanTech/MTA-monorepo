@@ -418,13 +418,13 @@ model QuaTrinhCongTac extends Base {
   soQuyetDinh       String?
   ngayNhanQuyetDinh DateTime?
 
-  chucVu            DM_ChucVu          @relation(fields: [chucVuId], references: [Id])
-  chucVuId          String             @db.Uuid
+  chucVu            DM_ChucVu           @relation(fields: [chucVuId], references: [Id])
+  chucVuId          String              @db.Uuid
 
-  loaiHinhCongTac   DM_LoaiHinhCongTac @relation(fields: [loaiHinhCongTacId], references: [id])
-  loaiHinhCongTacId String
+  loaiHinhCongTac   DM_LoaiHinhCongTac? @relation(fields: [loaiHinhCongTacId], references: [id])
+  loaiHinhCongTacId String?
 
-  userProfile       UserProfile        @relation(fields: [userProfileId], references: [id])
+  userProfile       UserProfile         @relation(fields: [userProfileId], references: [id])
   userProfileId     String
 
   @@schema("ql-ho-so")

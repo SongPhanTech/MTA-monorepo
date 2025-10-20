@@ -1037,7 +1037,7 @@ export type FillInBlankSlot = $Result.DefaultSelection<Prisma.$FillInBlankSlotPa
 export type OrderingItem = $Result.DefaultSelection<Prisma.$OrderingItemPayload>
 /**
  * Model Exam
- * Bảng kỳ thi
+ * Kỳ thi
  */
 export type Exam = $Result.DefaultSelection<Prisma.$ExamPayload>
 /**
@@ -48319,7 +48319,7 @@ export namespace Prisma {
     soQuyetDinh: string | null
     ngayNhanQuyetDinh: Date | null
     chucVuId: string
-    loaiHinhCongTacId: string
+    loaiHinhCongTacId: string | null
     userProfileId: string
     _count: QuaTrinhCongTacCountAggregateOutputType | null
     _min: QuaTrinhCongTacMinAggregateOutputType | null
@@ -48359,7 +48359,7 @@ export namespace Prisma {
     loaiHinhCongTacId?: boolean
     userProfileId?: boolean
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
-    loaiHinhCongTac?: boolean | DM_LoaiHinhCongTacDefaultArgs<ExtArgs>
+    loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quaTrinhCongTac"]>
 
@@ -48382,7 +48382,7 @@ export namespace Prisma {
     loaiHinhCongTacId?: boolean
     userProfileId?: boolean
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
-    loaiHinhCongTac?: boolean | DM_LoaiHinhCongTacDefaultArgs<ExtArgs>
+    loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quaTrinhCongTac"]>
 
@@ -48405,7 +48405,7 @@ export namespace Prisma {
     loaiHinhCongTacId?: boolean
     userProfileId?: boolean
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
-    loaiHinhCongTac?: boolean | DM_LoaiHinhCongTacDefaultArgs<ExtArgs>
+    loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quaTrinhCongTac"]>
 
@@ -48432,17 +48432,17 @@ export namespace Prisma {
   export type QuaTrinhCongTacOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "tuThangNam" | "denThangNam" | "donVi" | "chucDanh" | "chucVuDangDoan" | "soQuyetDinh" | "ngayNhanQuyetDinh" | "chucVuId" | "loaiHinhCongTacId" | "userProfileId", ExtArgs["result"]["quaTrinhCongTac"]>
   export type QuaTrinhCongTacInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
-    loaiHinhCongTac?: boolean | DM_LoaiHinhCongTacDefaultArgs<ExtArgs>
+    loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
   export type QuaTrinhCongTacIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
-    loaiHinhCongTac?: boolean | DM_LoaiHinhCongTacDefaultArgs<ExtArgs>
+    loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
   export type QuaTrinhCongTacIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chucVu?: boolean | DM_ChucVuDefaultArgs<ExtArgs>
-    loaiHinhCongTac?: boolean | DM_LoaiHinhCongTacDefaultArgs<ExtArgs>
+    loaiHinhCongTac?: boolean | QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
 
@@ -48450,7 +48450,7 @@ export namespace Prisma {
     name: "QuaTrinhCongTac"
     objects: {
       chucVu: Prisma.$DM_ChucVuPayload<ExtArgs>
-      loaiHinhCongTac: Prisma.$DM_LoaiHinhCongTacPayload<ExtArgs>
+      loaiHinhCongTac: Prisma.$DM_LoaiHinhCongTacPayload<ExtArgs> | null
       userProfile: Prisma.$UserProfilePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -48469,7 +48469,7 @@ export namespace Prisma {
       soQuyetDinh: string | null
       ngayNhanQuyetDinh: Date | null
       chucVuId: string
-      loaiHinhCongTacId: string
+      loaiHinhCongTacId: string | null
       userProfileId: string
     }, ExtArgs["result"]["quaTrinhCongTac"]>
     composites: {}
@@ -48866,7 +48866,7 @@ export namespace Prisma {
   export interface Prisma__QuaTrinhCongTacClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     chucVu<T extends DM_ChucVuDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_ChucVuDefaultArgs<ExtArgs>>): Prisma__DM_ChucVuClient<$Result.GetResult<Prisma.$DM_ChucVuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    loaiHinhCongTac<T extends DM_LoaiHinhCongTacDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_LoaiHinhCongTacDefaultArgs<ExtArgs>>): Prisma__DM_LoaiHinhCongTacClient<$Result.GetResult<Prisma.$DM_LoaiHinhCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    loaiHinhCongTac<T extends QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs> = {}>(args?: Subset<T, QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs>>): Prisma__DM_LoaiHinhCongTacClient<$Result.GetResult<Prisma.$DM_LoaiHinhCongTacPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -49307,6 +49307,25 @@ export namespace Prisma {
      * Limit how many QuaTrinhCongTacs to delete.
      */
     limit?: number
+  }
+
+  /**
+   * QuaTrinhCongTac.loaiHinhCongTac
+   */
+  export type QuaTrinhCongTac$loaiHinhCongTacArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DM_LoaiHinhCongTac
+     */
+    select?: DM_LoaiHinhCongTacSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DM_LoaiHinhCongTac
+     */
+    omit?: DM_LoaiHinhCongTacOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DM_LoaiHinhCongTacInclude<ExtArgs> | null
+    where?: DM_LoaiHinhCongTacWhereInput
   }
 
   /**
@@ -186896,12 +186915,22 @@ export namespace Prisma {
 
   export type StudentAvgAggregateOutputType = {
     entryScore: number | null
+    competencyScore: number | null
+    careerYear: number | null
+    universityGraduationYear: number | null
+    basic: number | null
+    facility: number | null
     academicWarningLevel: number | null
     disciplinaryWarningLevel: number | null
   }
 
   export type StudentSumAggregateOutputType = {
     entryScore: number | null
+    competencyScore: number | null
+    careerYear: number | null
+    universityGraduationYear: number | null
+    basic: number | null
+    facility: number | null
     academicWarningLevel: number | null
     disciplinaryWarningLevel: number | null
   }
@@ -186914,10 +186943,26 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
-    entryScore: number | null
     note: string | null
     from: Date | null
     to: Date | null
+    registerNumber: string | null
+    doctoralCode: string | null
+    admissionCombination: string | null
+    entryScore: number | null
+    competencyScore: number | null
+    department: string | null
+    departmentAddress: string | null
+    careerYear: number | null
+    universitySchool: string | null
+    universityTrainingType: string | null
+    universityGraduationYear: number | null
+    universityMajor: string | null
+    universityRank: string | null
+    basic: number | null
+    facility: number | null
+    foreignLanguage: string | null
+    priorityReason: string | null
     trainingLocationId: string | null
     unionLeader: string | null
     status: $Enums.StudentStatus | null
@@ -186948,10 +186993,26 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
-    entryScore: number | null
     note: string | null
     from: Date | null
     to: Date | null
+    registerNumber: string | null
+    doctoralCode: string | null
+    admissionCombination: string | null
+    entryScore: number | null
+    competencyScore: number | null
+    department: string | null
+    departmentAddress: string | null
+    careerYear: number | null
+    universitySchool: string | null
+    universityTrainingType: string | null
+    universityGraduationYear: number | null
+    universityMajor: string | null
+    universityRank: string | null
+    basic: number | null
+    facility: number | null
+    foreignLanguage: string | null
+    priorityReason: string | null
     trainingLocationId: string | null
     unionLeader: string | null
     status: $Enums.StudentStatus | null
@@ -186982,10 +187043,26 @@ export namespace Prisma {
     deletedAt: number
     createdAt: number
     updatedAt: number
-    entryScore: number
     note: number
     from: number
     to: number
+    registerNumber: number
+    doctoralCode: number
+    admissionCombination: number
+    entryScore: number
+    competencyScore: number
+    department: number
+    departmentAddress: number
+    careerYear: number
+    universitySchool: number
+    universityTrainingType: number
+    universityGraduationYear: number
+    universityMajor: number
+    universityRank: number
+    basic: number
+    facility: number
+    foreignLanguage: number
+    priorityReason: number
     trainingLocationId: number
     unionLeader: number
     status: number
@@ -187012,12 +187089,22 @@ export namespace Prisma {
 
   export type StudentAvgAggregateInputType = {
     entryScore?: true
+    competencyScore?: true
+    careerYear?: true
+    universityGraduationYear?: true
+    basic?: true
+    facility?: true
     academicWarningLevel?: true
     disciplinaryWarningLevel?: true
   }
 
   export type StudentSumAggregateInputType = {
     entryScore?: true
+    competencyScore?: true
+    careerYear?: true
+    universityGraduationYear?: true
+    basic?: true
+    facility?: true
     academicWarningLevel?: true
     disciplinaryWarningLevel?: true
   }
@@ -187030,10 +187117,26 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    entryScore?: true
     note?: true
     from?: true
     to?: true
+    registerNumber?: true
+    doctoralCode?: true
+    admissionCombination?: true
+    entryScore?: true
+    competencyScore?: true
+    department?: true
+    departmentAddress?: true
+    careerYear?: true
+    universitySchool?: true
+    universityTrainingType?: true
+    universityGraduationYear?: true
+    universityMajor?: true
+    universityRank?: true
+    basic?: true
+    facility?: true
+    foreignLanguage?: true
+    priorityReason?: true
     trainingLocationId?: true
     unionLeader?: true
     status?: true
@@ -187064,10 +187167,26 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    entryScore?: true
     note?: true
     from?: true
     to?: true
+    registerNumber?: true
+    doctoralCode?: true
+    admissionCombination?: true
+    entryScore?: true
+    competencyScore?: true
+    department?: true
+    departmentAddress?: true
+    careerYear?: true
+    universitySchool?: true
+    universityTrainingType?: true
+    universityGraduationYear?: true
+    universityMajor?: true
+    universityRank?: true
+    basic?: true
+    facility?: true
+    foreignLanguage?: true
+    priorityReason?: true
     trainingLocationId?: true
     unionLeader?: true
     status?: true
@@ -187098,10 +187217,26 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    entryScore?: true
     note?: true
     from?: true
     to?: true
+    registerNumber?: true
+    doctoralCode?: true
+    admissionCombination?: true
+    entryScore?: true
+    competencyScore?: true
+    department?: true
+    departmentAddress?: true
+    careerYear?: true
+    universitySchool?: true
+    universityTrainingType?: true
+    universityGraduationYear?: true
+    universityMajor?: true
+    universityRank?: true
+    basic?: true
+    facility?: true
+    foreignLanguage?: true
+    priorityReason?: true
     trainingLocationId?: true
     unionLeader?: true
     status?: true
@@ -187219,10 +187354,26 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
-    entryScore: number | null
     note: string | null
     from: Date | null
     to: Date | null
+    registerNumber: string | null
+    doctoralCode: string | null
+    admissionCombination: string | null
+    entryScore: number | null
+    competencyScore: number | null
+    department: string | null
+    departmentAddress: string | null
+    careerYear: number | null
+    universitySchool: string | null
+    universityTrainingType: string | null
+    universityGraduationYear: number | null
+    universityMajor: string | null
+    universityRank: string | null
+    basic: number | null
+    facility: number | null
+    foreignLanguage: string | null
+    priorityReason: string | null
     trainingLocationId: string | null
     unionLeader: string | null
     status: $Enums.StudentStatus
@@ -187272,10 +187423,26 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    entryScore?: boolean
     note?: boolean
     from?: boolean
     to?: boolean
+    registerNumber?: boolean
+    doctoralCode?: boolean
+    admissionCombination?: boolean
+    entryScore?: boolean
+    competencyScore?: boolean
+    department?: boolean
+    departmentAddress?: boolean
+    careerYear?: boolean
+    universitySchool?: boolean
+    universityTrainingType?: boolean
+    universityGraduationYear?: boolean
+    universityMajor?: boolean
+    universityRank?: boolean
+    basic?: boolean
+    facility?: boolean
+    foreignLanguage?: boolean
+    priorityReason?: boolean
     trainingLocationId?: boolean
     unionLeader?: boolean
     status?: boolean
@@ -187341,10 +187508,26 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    entryScore?: boolean
     note?: boolean
     from?: boolean
     to?: boolean
+    registerNumber?: boolean
+    doctoralCode?: boolean
+    admissionCombination?: boolean
+    entryScore?: boolean
+    competencyScore?: boolean
+    department?: boolean
+    departmentAddress?: boolean
+    careerYear?: boolean
+    universitySchool?: boolean
+    universityTrainingType?: boolean
+    universityGraduationYear?: boolean
+    universityMajor?: boolean
+    universityRank?: boolean
+    basic?: boolean
+    facility?: boolean
+    foreignLanguage?: boolean
+    priorityReason?: boolean
     trainingLocationId?: boolean
     unionLeader?: boolean
     status?: boolean
@@ -187385,10 +187568,26 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    entryScore?: boolean
     note?: boolean
     from?: boolean
     to?: boolean
+    registerNumber?: boolean
+    doctoralCode?: boolean
+    admissionCombination?: boolean
+    entryScore?: boolean
+    competencyScore?: boolean
+    department?: boolean
+    departmentAddress?: boolean
+    careerYear?: boolean
+    universitySchool?: boolean
+    universityTrainingType?: boolean
+    universityGraduationYear?: boolean
+    universityMajor?: boolean
+    universityRank?: boolean
+    basic?: boolean
+    facility?: boolean
+    foreignLanguage?: boolean
+    priorityReason?: boolean
     trainingLocationId?: boolean
     unionLeader?: boolean
     status?: boolean
@@ -187429,10 +187628,26 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    entryScore?: boolean
     note?: boolean
     from?: boolean
     to?: boolean
+    registerNumber?: boolean
+    doctoralCode?: boolean
+    admissionCombination?: boolean
+    entryScore?: boolean
+    competencyScore?: boolean
+    department?: boolean
+    departmentAddress?: boolean
+    careerYear?: boolean
+    universitySchool?: boolean
+    universityTrainingType?: boolean
+    universityGraduationYear?: boolean
+    universityMajor?: boolean
+    universityRank?: boolean
+    basic?: boolean
+    facility?: boolean
+    foreignLanguage?: boolean
+    priorityReason?: boolean
     trainingLocationId?: boolean
     unionLeader?: boolean
     status?: boolean
@@ -187455,7 +187670,7 @@ export namespace Prisma {
     militaryTrainingPass?: boolean
   }
 
-  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "entryScore" | "note" | "from" | "to" | "trainingLocationId" | "unionLeader" | "status" | "fixedClassId" | "userProfileId" | "trainingLevelId" | "trainingObjectTypeId" | "trainingTypeId" | "trainingFormId" | "registrationAreaId" | "curriculumVersionId" | "curriculumVersionParallelId" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled" | "foreignLangPass" | "ITCertificationPass" | "strengthTrainingPass" | "militaryTrainingPass", ExtArgs["result"]["student"]>
+  export type StudentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "note" | "from" | "to" | "registerNumber" | "doctoralCode" | "admissionCombination" | "entryScore" | "competencyScore" | "department" | "departmentAddress" | "careerYear" | "universitySchool" | "universityTrainingType" | "universityGraduationYear" | "universityMajor" | "universityRank" | "basic" | "facility" | "foreignLanguage" | "priorityReason" | "trainingLocationId" | "unionLeader" | "status" | "fixedClassId" | "userProfileId" | "trainingLevelId" | "trainingObjectTypeId" | "trainingTypeId" | "trainingFormId" | "registrationAreaId" | "curriculumVersionId" | "curriculumVersionParallelId" | "academicWarningLevel" | "disciplinaryWarningLevel" | "suspended" | "expelled" | "foreignLangPass" | "ITCertificationPass" | "strengthTrainingPass" | "militaryTrainingPass", ExtArgs["result"]["student"]>
   export type StudentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     trainingLocation?: boolean | Student$trainingLocationArgs<ExtArgs>
     priorityObject?: boolean | Student$priorityObjectArgs<ExtArgs>
@@ -187567,10 +187782,77 @@ export namespace Prisma {
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
-      entryScore: number | null
       note: string | null
       from: Date | null
       to: Date | null
+      /**
+       * số báo danh
+       */
+      registerNumber: string | null
+      /**
+       * mã hồ sơ tiến sĩ
+       */
+      doctoralCode: string | null
+      /**
+       * Tổ hợp xét tuyển
+       */
+      admissionCombination: string | null
+      /**
+       * Điểm xét tuyển
+       */
+      entryScore: number | null
+      /**
+       * Điểm đánh giá năng lực
+       */
+      competencyScore: number | null
+      /**
+       * Cơ quan, đơn vị
+       */
+      department: string | null
+      /**
+       * Địa chỉ cơ quan, đơn vị
+       */
+      departmentAddress: string | null
+      /**
+       * năm bắt đầu vào nghề
+       */
+      careerYear: number | null
+      /**
+       * Trường đại học
+       */
+      universitySchool: string | null
+      /**
+       * Hệ đào tạo
+       */
+      universityTrainingType: string | null
+      /**
+       * Năm tốt nghiệp
+       */
+      universityGraduationYear: number | null
+      /**
+       * Ngành/Chuyên ngành
+       */
+      universityMajor: string | null
+      /**
+       * Loại/Bậc tốt nghiệp
+       */
+      universityRank: string | null
+      /**
+       * Điểm cơ bản/Điểm môn 1
+       */
+      basic: number | null
+      /**
+       * Điểm cơ sở/Điểm môn 2
+       */
+      facility: number | null
+      /**
+       * Ngoại ngữ
+       */
+      foreignLanguage: string | null
+      /**
+       * Lý do ưu tiên
+       */
+      priorityReason: string | null
       trainingLocationId: string | null
       unionLeader: string | null
       status: $Enums.StudentStatus
@@ -188055,10 +188337,26 @@ export namespace Prisma {
     readonly deletedAt: FieldRef<"Student", 'DateTime'>
     readonly createdAt: FieldRef<"Student", 'DateTime'>
     readonly updatedAt: FieldRef<"Student", 'DateTime'>
-    readonly entryScore: FieldRef<"Student", 'Float'>
     readonly note: FieldRef<"Student", 'String'>
     readonly from: FieldRef<"Student", 'DateTime'>
     readonly to: FieldRef<"Student", 'DateTime'>
+    readonly registerNumber: FieldRef<"Student", 'String'>
+    readonly doctoralCode: FieldRef<"Student", 'String'>
+    readonly admissionCombination: FieldRef<"Student", 'String'>
+    readonly entryScore: FieldRef<"Student", 'Float'>
+    readonly competencyScore: FieldRef<"Student", 'Float'>
+    readonly department: FieldRef<"Student", 'String'>
+    readonly departmentAddress: FieldRef<"Student", 'String'>
+    readonly careerYear: FieldRef<"Student", 'Int'>
+    readonly universitySchool: FieldRef<"Student", 'String'>
+    readonly universityTrainingType: FieldRef<"Student", 'String'>
+    readonly universityGraduationYear: FieldRef<"Student", 'Int'>
+    readonly universityMajor: FieldRef<"Student", 'String'>
+    readonly universityRank: FieldRef<"Student", 'String'>
+    readonly basic: FieldRef<"Student", 'Float'>
+    readonly facility: FieldRef<"Student", 'Float'>
+    readonly foreignLanguage: FieldRef<"Student", 'String'>
+    readonly priorityReason: FieldRef<"Student", 'String'>
     readonly trainingLocationId: FieldRef<"Student", 'String'>
     readonly unionLeader: FieldRef<"Student", 'String'>
     readonly status: FieldRef<"Student", 'StudentStatus'>
@@ -288343,11 +288641,9 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
-    title: string | null
     status: $Enums.ExamStatus | null
     questionBankId: string | null
     lockExamCode: boolean | null
-    startTime: string | null
     duration: number | null
   }
 
@@ -288359,11 +288655,9 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
-    title: string | null
     status: $Enums.ExamStatus | null
     questionBankId: string | null
     lockExamCode: boolean | null
-    startTime: string | null
     duration: number | null
   }
 
@@ -288375,11 +288669,9 @@ export namespace Prisma {
     deletedAt: number
     createdAt: number
     updatedAt: number
-    title: number
     status: number
     questionBankId: number
     lockExamCode: number
-    startTime: number
     duration: number
     _all: number
   }
@@ -288401,11 +288693,9 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    title?: true
     status?: true
     questionBankId?: true
     lockExamCode?: true
-    startTime?: true
     duration?: true
   }
 
@@ -288417,11 +288707,9 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    title?: true
     status?: true
     questionBankId?: true
     lockExamCode?: true
-    startTime?: true
     duration?: true
   }
 
@@ -288433,11 +288721,9 @@ export namespace Prisma {
     deletedAt?: true
     createdAt?: true
     updatedAt?: true
-    title?: true
     status?: true
     questionBankId?: true
     lockExamCode?: true
-    startTime?: true
     duration?: true
     _all?: true
   }
@@ -288536,12 +288822,10 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
-    title: string
     status: $Enums.ExamStatus
     questionBankId: string | null
     lockExamCode: boolean
-    startTime: string
-    duration: number
+    duration: number | null
     _count: ExamCountAggregateOutputType | null
     _avg: ExamAvgAggregateOutputType | null
     _sum: ExamSumAggregateOutputType | null
@@ -288571,11 +288855,9 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    title?: boolean
     status?: boolean
     questionBankId?: boolean
     lockExamCode?: boolean
-    startTime?: boolean
     duration?: boolean
     questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
     subjectClass?: boolean | Exam$subjectClassArgs<ExtArgs>
@@ -288596,11 +288878,9 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    title?: boolean
     status?: boolean
     questionBankId?: boolean
     lockExamCode?: boolean
-    startTime?: boolean
     duration?: boolean
     questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
   }, ExtArgs["result"]["exam"]>
@@ -288613,11 +288893,9 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    title?: boolean
     status?: boolean
     questionBankId?: boolean
     lockExamCode?: boolean
-    startTime?: boolean
     duration?: boolean
     questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
   }, ExtArgs["result"]["exam"]>
@@ -288630,15 +288908,13 @@ export namespace Prisma {
     deletedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    title?: boolean
     status?: boolean
     questionBankId?: boolean
     lockExamCode?: boolean
-    startTime?: boolean
     duration?: boolean
   }
 
-  export type ExamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "status" | "questionBankId" | "lockExamCode" | "startTime" | "duration", ExtArgs["result"]["exam"]>
+  export type ExamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "status" | "questionBankId" | "lockExamCode" | "duration", ExtArgs["result"]["exam"]>
   export type ExamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
     subjectClass?: boolean | Exam$subjectClassArgs<ExtArgs>
@@ -288683,15 +288959,13 @@ export namespace Prisma {
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
-      title: string
       status: $Enums.ExamStatus
       questionBankId: string | null
       lockExamCode: boolean
       /**
        * thời gian thi
        */
-      startTime: string
-      duration: number
+      duration: number | null
     }, ExtArgs["result"]["exam"]>
     composites: {}
   }
@@ -289130,11 +289404,9 @@ export namespace Prisma {
     readonly deletedAt: FieldRef<"Exam", 'DateTime'>
     readonly createdAt: FieldRef<"Exam", 'DateTime'>
     readonly updatedAt: FieldRef<"Exam", 'DateTime'>
-    readonly title: FieldRef<"Exam", 'String'>
     readonly status: FieldRef<"Exam", 'ExamStatus'>
     readonly questionBankId: FieldRef<"Exam", 'String'>
     readonly lockExamCode: FieldRef<"Exam", 'Boolean'>
-    readonly startTime: FieldRef<"Exam", 'String'>
     readonly duration: FieldRef<"Exam", 'Int'>
   }
     
@@ -289354,7 +289626,7 @@ export namespace Prisma {
     /**
      * The data needed to create a Exam.
      */
-    data: XOR<ExamCreateInput, ExamUncheckedCreateInput>
+    data?: XOR<ExamCreateInput, ExamUncheckedCreateInput>
   }
 
   /**
@@ -289743,8 +290015,20 @@ export namespace Prisma {
 
   export type AggregateExamRoom = {
     _count: ExamRoomCountAggregateOutputType | null
+    _avg: ExamRoomAvgAggregateOutputType | null
+    _sum: ExamRoomSumAggregateOutputType | null
     _min: ExamRoomMinAggregateOutputType | null
     _max: ExamRoomMaxAggregateOutputType | null
+  }
+
+  export type ExamRoomAvgAggregateOutputType = {
+    start: number | null
+    end: number | null
+  }
+
+  export type ExamRoomSumAggregateOutputType = {
+    start: number | null
+    end: number | null
   }
 
   export type ExamRoomMinAggregateOutputType = {
@@ -289757,6 +290041,8 @@ export namespace Prisma {
     updatedAt: Date | null
     examId: string | null
     roomId: string | null
+    start: number | null
+    end: number | null
   }
 
   export type ExamRoomMaxAggregateOutputType = {
@@ -289769,6 +290055,8 @@ export namespace Prisma {
     updatedAt: Date | null
     examId: string | null
     roomId: string | null
+    start: number | null
+    end: number | null
   }
 
   export type ExamRoomCountAggregateOutputType = {
@@ -289781,9 +290069,21 @@ export namespace Prisma {
     updatedAt: number
     examId: number
     roomId: number
+    start: number
+    end: number
     _all: number
   }
 
+
+  export type ExamRoomAvgAggregateInputType = {
+    start?: true
+    end?: true
+  }
+
+  export type ExamRoomSumAggregateInputType = {
+    start?: true
+    end?: true
+  }
 
   export type ExamRoomMinAggregateInputType = {
     id?: true
@@ -289795,6 +290095,8 @@ export namespace Prisma {
     updatedAt?: true
     examId?: true
     roomId?: true
+    start?: true
+    end?: true
   }
 
   export type ExamRoomMaxAggregateInputType = {
@@ -289807,6 +290109,8 @@ export namespace Prisma {
     updatedAt?: true
     examId?: true
     roomId?: true
+    start?: true
+    end?: true
   }
 
   export type ExamRoomCountAggregateInputType = {
@@ -289819,6 +290123,8 @@ export namespace Prisma {
     updatedAt?: true
     examId?: true
     roomId?: true
+    start?: true
+    end?: true
     _all?: true
   }
 
@@ -289860,6 +290166,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ExamRoomAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ExamRoomSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ExamRoomMinAggregateInputType
@@ -289890,6 +290208,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ExamRoomCountAggregateInputType | true
+    _avg?: ExamRoomAvgAggregateInputType
+    _sum?: ExamRoomSumAggregateInputType
     _min?: ExamRoomMinAggregateInputType
     _max?: ExamRoomMaxAggregateInputType
   }
@@ -289904,7 +290224,11 @@ export namespace Prisma {
     updatedAt: Date
     examId: string
     roomId: string | null
+    start: number | null
+    end: number | null
     _count: ExamRoomCountAggregateOutputType | null
+    _avg: ExamRoomAvgAggregateOutputType | null
+    _sum: ExamRoomSumAggregateOutputType | null
     _min: ExamRoomMinAggregateOutputType | null
     _max: ExamRoomMaxAggregateOutputType | null
   }
@@ -289933,6 +290257,8 @@ export namespace Prisma {
     updatedAt?: boolean
     examId?: boolean
     roomId?: boolean
+    start?: boolean
+    end?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     room?: boolean | ExamRoom$roomArgs<ExtArgs>
     examSessions?: boolean | ExamRoom$examSessionsArgs<ExtArgs>
@@ -289949,6 +290275,8 @@ export namespace Prisma {
     updatedAt?: boolean
     examId?: boolean
     roomId?: boolean
+    start?: boolean
+    end?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     room?: boolean | ExamRoom$roomArgs<ExtArgs>
   }, ExtArgs["result"]["examRoom"]>
@@ -289963,6 +290291,8 @@ export namespace Prisma {
     updatedAt?: boolean
     examId?: boolean
     roomId?: boolean
+    start?: boolean
+    end?: boolean
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     room?: boolean | ExamRoom$roomArgs<ExtArgs>
   }, ExtArgs["result"]["examRoom"]>
@@ -289977,9 +290307,11 @@ export namespace Prisma {
     updatedAt?: boolean
     examId?: boolean
     roomId?: boolean
+    start?: boolean
+    end?: boolean
   }
 
-  export type ExamRoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "roomId", ExtArgs["result"]["examRoom"]>
+  export type ExamRoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "roomId" | "start" | "end", ExtArgs["result"]["examRoom"]>
   export type ExamRoomInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     exam?: boolean | ExamDefaultArgs<ExtArgs>
     room?: boolean | ExamRoom$roomArgs<ExtArgs>
@@ -290012,6 +290344,8 @@ export namespace Prisma {
       updatedAt: Date
       examId: string
       roomId: string | null
+      start: number | null
+      end: number | null
     }, ExtArgs["result"]["examRoom"]>
     composites: {}
   }
@@ -290447,6 +290781,8 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"ExamRoom", 'DateTime'>
     readonly examId: FieldRef<"ExamRoom", 'String'>
     readonly roomId: FieldRef<"ExamRoom", 'String'>
+    readonly start: FieldRef<"ExamRoom", 'Int'>
+    readonly end: FieldRef<"ExamRoom", 'Int'>
   }
     
 
@@ -336477,10 +336813,26 @@ export namespace Prisma {
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    entryScore: 'entryScore',
     note: 'note',
     from: 'from',
     to: 'to',
+    registerNumber: 'registerNumber',
+    doctoralCode: 'doctoralCode',
+    admissionCombination: 'admissionCombination',
+    entryScore: 'entryScore',
+    competencyScore: 'competencyScore',
+    department: 'department',
+    departmentAddress: 'departmentAddress',
+    careerYear: 'careerYear',
+    universitySchool: 'universitySchool',
+    universityTrainingType: 'universityTrainingType',
+    universityGraduationYear: 'universityGraduationYear',
+    universityMajor: 'universityMajor',
+    universityRank: 'universityRank',
+    basic: 'basic',
+    facility: 'facility',
+    foreignLanguage: 'foreignLanguage',
+    priorityReason: 'priorityReason',
     trainingLocationId: 'trainingLocationId',
     unionLeader: 'unionLeader',
     status: 'status',
@@ -338032,11 +338384,9 @@ export namespace Prisma {
     deletedAt: 'deletedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    title: 'title',
     status: 'status',
     questionBankId: 'questionBankId',
     lockExamCode: 'lockExamCode',
-    startTime: 'startTime',
     duration: 'duration'
   };
 
@@ -338052,7 +338402,9 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     examId: 'examId',
-    roomId: 'roomId'
+    roomId: 'roomId',
+    start: 'start',
+    end: 'end'
   };
 
   export type ExamRoomScalarFieldEnum = (typeof ExamRoomScalarFieldEnum)[keyof typeof ExamRoomScalarFieldEnum]
@@ -340387,6 +340739,17 @@ export namespace Prisma {
     code: 'code',
     description: 'description',
     note: 'note',
+    registerNumber: 'registerNumber',
+    doctoralCode: 'doctoralCode',
+    admissionCombination: 'admissionCombination',
+    department: 'department',
+    departmentAddress: 'departmentAddress',
+    universitySchool: 'universitySchool',
+    universityTrainingType: 'universityTrainingType',
+    universityMajor: 'universityMajor',
+    universityRank: 'universityRank',
+    foreignLanguage: 'foreignLanguage',
+    priorityReason: 'priorityReason',
     trainingLocationId: 'trainingLocationId',
     unionLeader: 'unionLeader',
     fixedClassId: 'fixedClassId',
@@ -341392,9 +341755,7 @@ export namespace Prisma {
     id: 'id',
     code: 'code',
     description: 'description',
-    title: 'title',
-    questionBankId: 'questionBankId',
-    startTime: 'startTime'
+    questionBankId: 'questionBankId'
   };
 
   export type ExamOrderByRelevanceFieldEnum = (typeof ExamOrderByRelevanceFieldEnum)[keyof typeof ExamOrderByRelevanceFieldEnum]
@@ -344499,10 +344860,10 @@ export namespace Prisma {
     soQuyetDinh?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     chucVuId?: UuidFilter<"QuaTrinhCongTac"> | string
-    loaiHinhCongTacId?: StringFilter<"QuaTrinhCongTac"> | string
+    loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
     chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
-    loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacScalarRelationFilter, DM_LoaiHinhCongTacWhereInput>
+    loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacNullableScalarRelationFilter, DM_LoaiHinhCongTacWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -344522,7 +344883,7 @@ export namespace Prisma {
     soQuyetDinh?: SortOrderInput | SortOrder
     ngayNhanQuyetDinh?: SortOrderInput | SortOrder
     chucVuId?: SortOrder
-    loaiHinhCongTacId?: SortOrder
+    loaiHinhCongTacId?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
     chucVu?: DM_ChucVuOrderByWithRelationInput
     loaiHinhCongTac?: DM_LoaiHinhCongTacOrderByWithRelationInput
@@ -344549,10 +344910,10 @@ export namespace Prisma {
     soQuyetDinh?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     chucVuId?: UuidFilter<"QuaTrinhCongTac"> | string
-    loaiHinhCongTacId?: StringFilter<"QuaTrinhCongTac"> | string
+    loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
     chucVu?: XOR<DM_ChucVuScalarRelationFilter, DM_ChucVuWhereInput>
-    loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacScalarRelationFilter, DM_LoaiHinhCongTacWhereInput>
+    loaiHinhCongTac?: XOR<DM_LoaiHinhCongTacNullableScalarRelationFilter, DM_LoaiHinhCongTacWhereInput> | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id" | "code">
 
@@ -344572,7 +344933,7 @@ export namespace Prisma {
     soQuyetDinh?: SortOrderInput | SortOrder
     ngayNhanQuyetDinh?: SortOrderInput | SortOrder
     chucVuId?: SortOrder
-    loaiHinhCongTacId?: SortOrder
+    loaiHinhCongTacId?: SortOrderInput | SortOrder
     userProfileId?: SortOrder
     _count?: QuaTrinhCongTacCountOrderByAggregateInput
     _max?: QuaTrinhCongTacMaxOrderByAggregateInput
@@ -344598,7 +344959,7 @@ export namespace Prisma {
     soQuyetDinh?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableWithAggregatesFilter<"QuaTrinhCongTac"> | Date | string | null
     chucVuId?: UuidWithAggregatesFilter<"QuaTrinhCongTac"> | string
-    loaiHinhCongTacId?: StringWithAggregatesFilter<"QuaTrinhCongTac"> | string
+    loaiHinhCongTacId?: StringNullableWithAggregatesFilter<"QuaTrinhCongTac"> | string | null
     userProfileId?: StringWithAggregatesFilter<"QuaTrinhCongTac"> | string
   }
 
@@ -356395,10 +356756,26 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Student"> | Date | string | null
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
-    entryScore?: FloatNullableFilter<"Student"> | number | null
     note?: StringNullableFilter<"Student"> | string | null
     from?: DateTimeNullableFilter<"Student"> | Date | string | null
     to?: DateTimeNullableFilter<"Student"> | Date | string | null
+    registerNumber?: StringNullableFilter<"Student"> | string | null
+    doctoralCode?: StringNullableFilter<"Student"> | string | null
+    admissionCombination?: StringNullableFilter<"Student"> | string | null
+    entryScore?: FloatNullableFilter<"Student"> | number | null
+    competencyScore?: FloatNullableFilter<"Student"> | number | null
+    department?: StringNullableFilter<"Student"> | string | null
+    departmentAddress?: StringNullableFilter<"Student"> | string | null
+    careerYear?: IntNullableFilter<"Student"> | number | null
+    universitySchool?: StringNullableFilter<"Student"> | string | null
+    universityTrainingType?: StringNullableFilter<"Student"> | string | null
+    universityGraduationYear?: IntNullableFilter<"Student"> | number | null
+    universityMajor?: StringNullableFilter<"Student"> | string | null
+    universityRank?: StringNullableFilter<"Student"> | string | null
+    basic?: FloatNullableFilter<"Student"> | number | null
+    facility?: FloatNullableFilter<"Student"> | number | null
+    foreignLanguage?: StringNullableFilter<"Student"> | string | null
+    priorityReason?: StringNullableFilter<"Student"> | string | null
     trainingLocationId?: StringNullableFilter<"Student"> | string | null
     unionLeader?: StringNullableFilter<"Student"> | string | null
     status?: EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
@@ -356463,10 +356840,26 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    entryScore?: SortOrderInput | SortOrder
     note?: SortOrderInput | SortOrder
     from?: SortOrderInput | SortOrder
     to?: SortOrderInput | SortOrder
+    registerNumber?: SortOrderInput | SortOrder
+    doctoralCode?: SortOrderInput | SortOrder
+    admissionCombination?: SortOrderInput | SortOrder
+    entryScore?: SortOrderInput | SortOrder
+    competencyScore?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    departmentAddress?: SortOrderInput | SortOrder
+    careerYear?: SortOrderInput | SortOrder
+    universitySchool?: SortOrderInput | SortOrder
+    universityTrainingType?: SortOrderInput | SortOrder
+    universityGraduationYear?: SortOrderInput | SortOrder
+    universityMajor?: SortOrderInput | SortOrder
+    universityRank?: SortOrderInput | SortOrder
+    basic?: SortOrderInput | SortOrder
+    facility?: SortOrderInput | SortOrder
+    foreignLanguage?: SortOrderInput | SortOrder
+    priorityReason?: SortOrderInput | SortOrder
     trainingLocationId?: SortOrderInput | SortOrder
     unionLeader?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -356527,6 +356920,8 @@ export namespace Prisma {
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     code?: string
+    registerNumber?: string
+    doctoralCode?: string
     AND?: StudentWhereInput | StudentWhereInput[]
     OR?: StudentWhereInput[]
     NOT?: StudentWhereInput | StudentWhereInput[]
@@ -356535,10 +356930,24 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Student"> | Date | string | null
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
-    entryScore?: FloatNullableFilter<"Student"> | number | null
     note?: StringNullableFilter<"Student"> | string | null
     from?: DateTimeNullableFilter<"Student"> | Date | string | null
     to?: DateTimeNullableFilter<"Student"> | Date | string | null
+    admissionCombination?: StringNullableFilter<"Student"> | string | null
+    entryScore?: FloatNullableFilter<"Student"> | number | null
+    competencyScore?: FloatNullableFilter<"Student"> | number | null
+    department?: StringNullableFilter<"Student"> | string | null
+    departmentAddress?: StringNullableFilter<"Student"> | string | null
+    careerYear?: IntNullableFilter<"Student"> | number | null
+    universitySchool?: StringNullableFilter<"Student"> | string | null
+    universityTrainingType?: StringNullableFilter<"Student"> | string | null
+    universityGraduationYear?: IntNullableFilter<"Student"> | number | null
+    universityMajor?: StringNullableFilter<"Student"> | string | null
+    universityRank?: StringNullableFilter<"Student"> | string | null
+    basic?: FloatNullableFilter<"Student"> | number | null
+    facility?: FloatNullableFilter<"Student"> | number | null
+    foreignLanguage?: StringNullableFilter<"Student"> | string | null
+    priorityReason?: StringNullableFilter<"Student"> | string | null
     trainingLocationId?: StringNullableFilter<"Student"> | string | null
     unionLeader?: StringNullableFilter<"Student"> | string | null
     status?: EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
@@ -356593,7 +357002,7 @@ export namespace Prisma {
     classRegisterLogs?: ClassRegisterLogsListRelationFilter
     notes?: NoteListRelationFilter
     noteFolders?: NoteFolderListRelationFilter
-  }, "id" | "code">
+  }, "id" | "code" | "registerNumber" | "doctoralCode">
 
   export type StudentOrderByWithAggregationInput = {
     id?: SortOrder
@@ -356603,10 +357012,26 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    entryScore?: SortOrderInput | SortOrder
     note?: SortOrderInput | SortOrder
     from?: SortOrderInput | SortOrder
     to?: SortOrderInput | SortOrder
+    registerNumber?: SortOrderInput | SortOrder
+    doctoralCode?: SortOrderInput | SortOrder
+    admissionCombination?: SortOrderInput | SortOrder
+    entryScore?: SortOrderInput | SortOrder
+    competencyScore?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    departmentAddress?: SortOrderInput | SortOrder
+    careerYear?: SortOrderInput | SortOrder
+    universitySchool?: SortOrderInput | SortOrder
+    universityTrainingType?: SortOrderInput | SortOrder
+    universityGraduationYear?: SortOrderInput | SortOrder
+    universityMajor?: SortOrderInput | SortOrder
+    universityRank?: SortOrderInput | SortOrder
+    basic?: SortOrderInput | SortOrder
+    facility?: SortOrderInput | SortOrder
+    foreignLanguage?: SortOrderInput | SortOrder
+    priorityReason?: SortOrderInput | SortOrder
     trainingLocationId?: SortOrderInput | SortOrder
     unionLeader?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -356645,10 +357070,26 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Student"> | Date | string
-    entryScore?: FloatNullableWithAggregatesFilter<"Student"> | number | null
     note?: StringNullableWithAggregatesFilter<"Student"> | string | null
     from?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
     to?: DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
+    registerNumber?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    doctoralCode?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    admissionCombination?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    entryScore?: FloatNullableWithAggregatesFilter<"Student"> | number | null
+    competencyScore?: FloatNullableWithAggregatesFilter<"Student"> | number | null
+    department?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    departmentAddress?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    careerYear?: IntNullableWithAggregatesFilter<"Student"> | number | null
+    universitySchool?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    universityTrainingType?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    universityGraduationYear?: IntNullableWithAggregatesFilter<"Student"> | number | null
+    universityMajor?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    universityRank?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    basic?: FloatNullableWithAggregatesFilter<"Student"> | number | null
+    facility?: FloatNullableWithAggregatesFilter<"Student"> | number | null
+    foreignLanguage?: StringNullableWithAggregatesFilter<"Student"> | string | null
+    priorityReason?: StringNullableWithAggregatesFilter<"Student"> | string | null
     trainingLocationId?: StringNullableWithAggregatesFilter<"Student"> | string | null
     unionLeader?: StringNullableWithAggregatesFilter<"Student"> | string | null
     status?: EnumStudentStatusWithAggregatesFilter<"Student"> | $Enums.StudentStatus
@@ -365004,12 +365445,10 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Exam"> | Date | string | null
     createdAt?: DateTimeFilter<"Exam"> | Date | string
     updatedAt?: DateTimeFilter<"Exam"> | Date | string
-    title?: StringFilter<"Exam"> | string
     status?: EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
     questionBankId?: StringNullableFilter<"Exam"> | string | null
     lockExamCode?: BoolFilter<"Exam"> | boolean
-    startTime?: StringFilter<"Exam"> | string
-    duration?: IntFilter<"Exam"> | number
+    duration?: IntNullableFilter<"Exam"> | number | null
     questionBank?: XOR<QuestionBankNullableScalarRelationFilter, QuestionBankWhereInput> | null
     subjectClass?: SubjectClassListRelationFilter
     studentSubjectScore?: StudentSubjectScoreListRelationFilter
@@ -365028,12 +365467,10 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    title?: SortOrder
     status?: SortOrder
     questionBankId?: SortOrderInput | SortOrder
     lockExamCode?: SortOrder
-    startTime?: SortOrder
-    duration?: SortOrder
+    duration?: SortOrderInput | SortOrder
     questionBank?: QuestionBankOrderByWithRelationInput
     subjectClass?: SubjectClassOrderByRelationAggregateInput
     studentSubjectScore?: StudentSubjectScoreOrderByRelationAggregateInput
@@ -365056,12 +365493,10 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Exam"> | Date | string | null
     createdAt?: DateTimeFilter<"Exam"> | Date | string
     updatedAt?: DateTimeFilter<"Exam"> | Date | string
-    title?: StringFilter<"Exam"> | string
     status?: EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
     questionBankId?: StringNullableFilter<"Exam"> | string | null
     lockExamCode?: BoolFilter<"Exam"> | boolean
-    startTime?: StringFilter<"Exam"> | string
-    duration?: IntFilter<"Exam"> | number
+    duration?: IntNullableFilter<"Exam"> | number | null
     questionBank?: XOR<QuestionBankNullableScalarRelationFilter, QuestionBankWhereInput> | null
     subjectClass?: SubjectClassListRelationFilter
     studentSubjectScore?: StudentSubjectScoreListRelationFilter
@@ -365080,12 +365515,10 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    title?: SortOrder
     status?: SortOrder
     questionBankId?: SortOrderInput | SortOrder
     lockExamCode?: SortOrder
-    startTime?: SortOrder
-    duration?: SortOrder
+    duration?: SortOrderInput | SortOrder
     _count?: ExamCountOrderByAggregateInput
     _avg?: ExamAvgOrderByAggregateInput
     _max?: ExamMaxOrderByAggregateInput
@@ -365104,12 +365537,10 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"Exam"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Exam"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Exam"> | Date | string
-    title?: StringWithAggregatesFilter<"Exam"> | string
     status?: EnumExamStatusWithAggregatesFilter<"Exam"> | $Enums.ExamStatus
     questionBankId?: StringNullableWithAggregatesFilter<"Exam"> | string | null
     lockExamCode?: BoolWithAggregatesFilter<"Exam"> | boolean
-    startTime?: StringWithAggregatesFilter<"Exam"> | string
-    duration?: IntWithAggregatesFilter<"Exam"> | number
+    duration?: IntNullableWithAggregatesFilter<"Exam"> | number | null
   }
 
   export type ExamRoomWhereInput = {
@@ -365125,6 +365556,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
     examId?: StringFilter<"ExamRoom"> | string
     roomId?: StringNullableFilter<"ExamRoom"> | string | null
+    start?: IntNullableFilter<"ExamRoom"> | number | null
+    end?: IntNullableFilter<"ExamRoom"> | number | null
     exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
     room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
     examSessions?: ExamSessionListRelationFilter
@@ -365140,6 +365573,8 @@ export namespace Prisma {
     updatedAt?: SortOrder
     examId?: SortOrder
     roomId?: SortOrderInput | SortOrder
+    start?: SortOrderInput | SortOrder
+    end?: SortOrderInput | SortOrder
     exam?: ExamOrderByWithRelationInput
     room?: RoomOrderByWithRelationInput
     examSessions?: ExamSessionOrderByRelationAggregateInput
@@ -365160,6 +365595,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
     examId?: StringFilter<"ExamRoom"> | string
     roomId?: StringNullableFilter<"ExamRoom"> | string | null
+    start?: IntNullableFilter<"ExamRoom"> | number | null
+    end?: IntNullableFilter<"ExamRoom"> | number | null
     exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
     room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
     examSessions?: ExamSessionListRelationFilter
@@ -365175,9 +365612,13 @@ export namespace Prisma {
     updatedAt?: SortOrder
     examId?: SortOrder
     roomId?: SortOrderInput | SortOrder
+    start?: SortOrderInput | SortOrder
+    end?: SortOrderInput | SortOrder
     _count?: ExamRoomCountOrderByAggregateInput
+    _avg?: ExamRoomAvgOrderByAggregateInput
     _max?: ExamRoomMaxOrderByAggregateInput
     _min?: ExamRoomMinOrderByAggregateInput
+    _sum?: ExamRoomSumOrderByAggregateInput
   }
 
   export type ExamRoomScalarWhereWithAggregatesInput = {
@@ -365193,6 +365634,8 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ExamRoom"> | Date | string
     examId?: StringWithAggregatesFilter<"ExamRoom"> | string
     roomId?: StringNullableWithAggregatesFilter<"ExamRoom"> | string | null
+    start?: IntNullableWithAggregatesFilter<"ExamRoom"> | number | null
+    end?: IntNullableWithAggregatesFilter<"ExamRoom"> | number | null
   }
 
   export type TestStructureRuleWhereInput = {
@@ -370278,7 +370721,7 @@ export namespace Prisma {
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
     chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
-    loaiHinhCongTac: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
+    loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
     userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput
   }
 
@@ -370298,7 +370741,7 @@ export namespace Prisma {
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
     chucVuId: string
-    loaiHinhCongTacId: string
+    loaiHinhCongTacId?: string | null
     userProfileId: string
   }
 
@@ -370318,7 +370761,7 @@ export namespace Prisma {
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
-    loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
+    loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
     userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
   }
 
@@ -370338,7 +370781,7 @@ export namespace Prisma {
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chucVuId?: StringFieldUpdateOperationsInput | string
-    loaiHinhCongTacId?: StringFieldUpdateOperationsInput | string
+    loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -370358,7 +370801,7 @@ export namespace Prisma {
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
     chucVuId: string
-    loaiHinhCongTacId: string
+    loaiHinhCongTacId?: string | null
     userProfileId: string
   }
 
@@ -370395,7 +370838,7 @@ export namespace Prisma {
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chucVuId?: StringFieldUpdateOperationsInput | string
-    loaiHinhCongTacId?: StringFieldUpdateOperationsInput | string
+    loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -383962,10 +384405,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -384020,10 +384479,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -384078,10 +384553,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -384136,10 +384627,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -384194,10 +384701,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -384228,10 +384751,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -384252,10 +384791,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -393581,11 +394136,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     questionBank?: QuestionBankCreateNestedOneWithoutExamInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
@@ -393604,12 +394157,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     questionBankId?: string | null
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
     room?: RoomUncheckedCreateNestedManyWithoutExamInput
@@ -393627,11 +394178,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
@@ -393650,12 +394199,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
     room?: RoomUncheckedUpdateManyWithoutExamNestedInput
@@ -393673,12 +394220,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     questionBankId?: string | null
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
   }
 
   export type ExamUpdateManyMutationInput = {
@@ -393689,11 +394234,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ExamUncheckedUpdateManyInput = {
@@ -393704,12 +394247,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ExamRoomCreateInput = {
@@ -393720,6 +394261,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    start?: number | null
+    end?: number | null
     exam: ExamCreateNestedOneWithoutExamRoomsInput
     room?: RoomCreateNestedOneWithoutExamRoomsInput
     examSessions?: ExamSessionCreateNestedManyWithoutExamRoomInput
@@ -393735,6 +394278,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     examId: string
     roomId?: string | null
+    start?: number | null
+    end?: number | null
     examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput
   }
 
@@ -393746,6 +394291,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
     exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
     room?: RoomUpdateOneWithoutExamRoomsNestedInput
     examSessions?: ExamSessionUpdateManyWithoutExamRoomNestedInput
@@ -393761,6 +394308,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     examId?: StringFieldUpdateOperationsInput | string
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
     examSessions?: ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput
   }
 
@@ -393774,6 +394323,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     examId: string
     roomId?: string | null
+    start?: number | null
+    end?: number | null
   }
 
   export type ExamRoomUpdateManyMutationInput = {
@@ -393784,6 +394335,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ExamRoomUncheckedUpdateManyInput = {
@@ -393796,6 +394349,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     examId?: StringFieldUpdateOperationsInput | string
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TestStructureRuleCreateInput = {
@@ -398896,9 +399451,9 @@ export namespace Prisma {
     isNot?: DM_ChucVuWhereInput
   }
 
-  export type DM_LoaiHinhCongTacScalarRelationFilter = {
-    is?: DM_LoaiHinhCongTacWhereInput
-    isNot?: DM_LoaiHinhCongTacWhereInput
+  export type DM_LoaiHinhCongTacNullableScalarRelationFilter = {
+    is?: DM_LoaiHinhCongTacWhereInput | null
+    isNot?: DM_LoaiHinhCongTacWhereInput | null
   }
 
   export type QuaTrinhCongTacOrderByRelevanceInput = {
@@ -407402,10 +407957,26 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    entryScore?: SortOrder
     note?: SortOrder
     from?: SortOrder
     to?: SortOrder
+    registerNumber?: SortOrder
+    doctoralCode?: SortOrder
+    admissionCombination?: SortOrder
+    entryScore?: SortOrder
+    competencyScore?: SortOrder
+    department?: SortOrder
+    departmentAddress?: SortOrder
+    careerYear?: SortOrder
+    universitySchool?: SortOrder
+    universityTrainingType?: SortOrder
+    universityGraduationYear?: SortOrder
+    universityMajor?: SortOrder
+    universityRank?: SortOrder
+    basic?: SortOrder
+    facility?: SortOrder
+    foreignLanguage?: SortOrder
+    priorityReason?: SortOrder
     trainingLocationId?: SortOrder
     unionLeader?: SortOrder
     status?: SortOrder
@@ -407430,6 +408001,11 @@ export namespace Prisma {
 
   export type StudentAvgOrderByAggregateInput = {
     entryScore?: SortOrder
+    competencyScore?: SortOrder
+    careerYear?: SortOrder
+    universityGraduationYear?: SortOrder
+    basic?: SortOrder
+    facility?: SortOrder
     academicWarningLevel?: SortOrder
     disciplinaryWarningLevel?: SortOrder
   }
@@ -407442,10 +408018,26 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    entryScore?: SortOrder
     note?: SortOrder
     from?: SortOrder
     to?: SortOrder
+    registerNumber?: SortOrder
+    doctoralCode?: SortOrder
+    admissionCombination?: SortOrder
+    entryScore?: SortOrder
+    competencyScore?: SortOrder
+    department?: SortOrder
+    departmentAddress?: SortOrder
+    careerYear?: SortOrder
+    universitySchool?: SortOrder
+    universityTrainingType?: SortOrder
+    universityGraduationYear?: SortOrder
+    universityMajor?: SortOrder
+    universityRank?: SortOrder
+    basic?: SortOrder
+    facility?: SortOrder
+    foreignLanguage?: SortOrder
+    priorityReason?: SortOrder
     trainingLocationId?: SortOrder
     unionLeader?: SortOrder
     status?: SortOrder
@@ -407476,10 +408068,26 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    entryScore?: SortOrder
     note?: SortOrder
     from?: SortOrder
     to?: SortOrder
+    registerNumber?: SortOrder
+    doctoralCode?: SortOrder
+    admissionCombination?: SortOrder
+    entryScore?: SortOrder
+    competencyScore?: SortOrder
+    department?: SortOrder
+    departmentAddress?: SortOrder
+    careerYear?: SortOrder
+    universitySchool?: SortOrder
+    universityTrainingType?: SortOrder
+    universityGraduationYear?: SortOrder
+    universityMajor?: SortOrder
+    universityRank?: SortOrder
+    basic?: SortOrder
+    facility?: SortOrder
+    foreignLanguage?: SortOrder
+    priorityReason?: SortOrder
     trainingLocationId?: SortOrder
     unionLeader?: SortOrder
     status?: SortOrder
@@ -407504,6 +408112,11 @@ export namespace Prisma {
 
   export type StudentSumOrderByAggregateInput = {
     entryScore?: SortOrder
+    competencyScore?: SortOrder
+    careerYear?: SortOrder
+    universityGraduationYear?: SortOrder
+    basic?: SortOrder
+    facility?: SortOrder
     academicWarningLevel?: SortOrder
     disciplinaryWarningLevel?: SortOrder
   }
@@ -413562,11 +414175,9 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    title?: SortOrder
     status?: SortOrder
     questionBankId?: SortOrder
     lockExamCode?: SortOrder
-    startTime?: SortOrder
     duration?: SortOrder
   }
 
@@ -413582,11 +414193,9 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    title?: SortOrder
     status?: SortOrder
     questionBankId?: SortOrder
     lockExamCode?: SortOrder
-    startTime?: SortOrder
     duration?: SortOrder
   }
 
@@ -413598,11 +414207,9 @@ export namespace Prisma {
     deletedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    title?: SortOrder
     status?: SortOrder
     questionBankId?: SortOrder
     lockExamCode?: SortOrder
-    startTime?: SortOrder
     duration?: SortOrder
   }
 
@@ -413646,6 +414253,13 @@ export namespace Prisma {
     updatedAt?: SortOrder
     examId?: SortOrder
     roomId?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+  }
+
+  export type ExamRoomAvgOrderByAggregateInput = {
+    start?: SortOrder
+    end?: SortOrder
   }
 
   export type ExamRoomMaxOrderByAggregateInput = {
@@ -413658,6 +414272,8 @@ export namespace Prisma {
     updatedAt?: SortOrder
     examId?: SortOrder
     roomId?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
   }
 
   export type ExamRoomMinOrderByAggregateInput = {
@@ -413670,6 +414286,13 @@ export namespace Prisma {
     updatedAt?: SortOrder
     examId?: SortOrder
     roomId?: SortOrder
+    start?: SortOrder
+    end?: SortOrder
+  }
+
+  export type ExamRoomSumOrderByAggregateInput = {
+    start?: SortOrder
+    end?: SortOrder
   }
 
   export type KnowledgeBlockScalarRelationFilter = {
@@ -417965,10 +418588,12 @@ export namespace Prisma {
     update?: XOR<XOR<DM_ChucVuUpdateToOneWithWhereWithoutQuaTrinhCongTacInput, DM_ChucVuUpdateWithoutQuaTrinhCongTacInput>, DM_ChucVuUncheckedUpdateWithoutQuaTrinhCongTacInput>
   }
 
-  export type DM_LoaiHinhCongTacUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput = {
+  export type DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput = {
     create?: XOR<DM_LoaiHinhCongTacCreateWithoutQuaTrinhCongTacInput, DM_LoaiHinhCongTacUncheckedCreateWithoutQuaTrinhCongTacInput>
     connectOrCreate?: DM_LoaiHinhCongTacCreateOrConnectWithoutQuaTrinhCongTacInput
     upsert?: DM_LoaiHinhCongTacUpsertWithoutQuaTrinhCongTacInput
+    disconnect?: DM_LoaiHinhCongTacWhereInput | boolean
+    delete?: DM_LoaiHinhCongTacWhereInput | boolean
     connect?: DM_LoaiHinhCongTacWhereUniqueInput
     update?: XOR<XOR<DM_LoaiHinhCongTacUpdateToOneWithWhereWithoutQuaTrinhCongTacInput, DM_LoaiHinhCongTacUpdateWithoutQuaTrinhCongTacInput>, DM_LoaiHinhCongTacUncheckedUpdateWithoutQuaTrinhCongTacInput>
   }
@@ -442624,7 +443249,7 @@ export namespace Prisma {
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
     chucVu: DM_ChucVuCreateNestedOneWithoutQuaTrinhCongTacInput
-    loaiHinhCongTac: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
+    loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
   }
 
   export type QuaTrinhCongTacUncheckedCreateWithoutUserProfileInput = {
@@ -442643,7 +443268,7 @@ export namespace Prisma {
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
     chucVuId: string
-    loaiHinhCongTacId: string
+    loaiHinhCongTacId?: string | null
   }
 
   export type QuaTrinhCongTacCreateOrConnectWithoutUserProfileInput = {
@@ -443333,10 +443958,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -443390,10 +444031,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -446111,7 +446768,7 @@ export namespace Prisma {
     soQuyetDinh?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     ngayNhanQuyetDinh?: DateTimeNullableFilter<"QuaTrinhCongTac"> | Date | string | null
     chucVuId?: UuidFilter<"QuaTrinhCongTac"> | string
-    loaiHinhCongTacId?: StringFilter<"QuaTrinhCongTac"> | string
+    loaiHinhCongTacId?: StringNullableFilter<"QuaTrinhCongTac"> | string | null
     userProfileId?: StringFilter<"QuaTrinhCongTac"> | string
   }
 
@@ -446736,10 +447393,26 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Student"> | Date | string | null
     createdAt?: DateTimeFilter<"Student"> | Date | string
     updatedAt?: DateTimeFilter<"Student"> | Date | string
-    entryScore?: FloatNullableFilter<"Student"> | number | null
     note?: StringNullableFilter<"Student"> | string | null
     from?: DateTimeNullableFilter<"Student"> | Date | string | null
     to?: DateTimeNullableFilter<"Student"> | Date | string | null
+    registerNumber?: StringNullableFilter<"Student"> | string | null
+    doctoralCode?: StringNullableFilter<"Student"> | string | null
+    admissionCombination?: StringNullableFilter<"Student"> | string | null
+    entryScore?: FloatNullableFilter<"Student"> | number | null
+    competencyScore?: FloatNullableFilter<"Student"> | number | null
+    department?: StringNullableFilter<"Student"> | string | null
+    departmentAddress?: StringNullableFilter<"Student"> | string | null
+    careerYear?: IntNullableFilter<"Student"> | number | null
+    universitySchool?: StringNullableFilter<"Student"> | string | null
+    universityTrainingType?: StringNullableFilter<"Student"> | string | null
+    universityGraduationYear?: IntNullableFilter<"Student"> | number | null
+    universityMajor?: StringNullableFilter<"Student"> | string | null
+    universityRank?: StringNullableFilter<"Student"> | string | null
+    basic?: FloatNullableFilter<"Student"> | number | null
+    facility?: FloatNullableFilter<"Student"> | number | null
+    foreignLanguage?: StringNullableFilter<"Student"> | string | null
+    priorityReason?: StringNullableFilter<"Student"> | string | null
     trainingLocationId?: StringNullableFilter<"Student"> | string | null
     unionLeader?: StringNullableFilter<"Student"> | string | null
     status?: EnumStudentStatusFilter<"Student"> | $Enums.StudentStatus
@@ -470678,7 +471351,7 @@ export namespace Prisma {
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    loaiHinhCongTac: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
+    loaiHinhCongTac?: DM_LoaiHinhCongTacCreateNestedOneWithoutQuaTrinhCongTacInput
     userProfile: UserProfileCreateNestedOneWithoutQuaTrinhCongTacInput
   }
 
@@ -470697,7 +471370,7 @@ export namespace Prisma {
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    loaiHinhCongTacId: string
+    loaiHinhCongTacId?: string | null
     userProfileId: string
   }
 
@@ -473357,10 +474030,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -473414,10 +474103,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -483093,10 +483798,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -483150,10 +483871,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -483331,10 +484068,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -483388,10 +484141,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -484027,10 +484796,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -484084,10 +484869,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -484146,11 +484947,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     questionBank?: QuestionBankCreateNestedOneWithoutExamInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
     room?: RoomCreateNestedManyWithoutExamInput
@@ -484168,12 +484967,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     questionBankId?: string | null
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
     room?: RoomUncheckedCreateNestedManyWithoutExamInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
@@ -484707,10 +485504,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -484764,10 +485577,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -484832,11 +485661,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
     room?: RoomUpdateManyWithoutExamNestedInput
@@ -484854,12 +485681,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
     room?: RoomUncheckedUpdateManyWithoutExamNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
@@ -486163,10 +486988,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -486220,10 +487061,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -486434,10 +487291,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -486491,10 +487364,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -486853,10 +487742,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -486910,10 +487815,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -487126,10 +488047,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -487183,10 +488120,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -490370,10 +491323,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -490427,10 +491396,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -490489,10 +491474,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -490546,10 +491547,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -490886,10 +491903,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -490943,10 +491976,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -491353,10 +492402,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -491410,10 +492475,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -491478,10 +492559,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -491535,10 +492632,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -493139,10 +494252,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -493196,10 +494325,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -493263,10 +494408,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -493320,10 +494481,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -498122,10 +499299,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -498179,10 +499372,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -498404,10 +499613,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -498461,10 +499686,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -498737,11 +499978,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     questionBank?: QuestionBankCreateNestedOneWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
     room?: RoomCreateNestedManyWithoutExamInput
@@ -498759,12 +499998,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     questionBankId?: string | null
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
     room?: RoomUncheckedCreateNestedManyWithoutExamInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
@@ -499821,11 +501058,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
     room?: RoomUpdateManyWithoutExamNestedInput
@@ -499843,12 +501078,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
     room?: RoomUncheckedUpdateManyWithoutExamNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
@@ -501764,10 +502997,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -501821,10 +503070,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -502576,10 +503841,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -502633,10 +503914,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -502711,10 +504008,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -502768,10 +504081,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -502941,10 +504270,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -502998,10 +504343,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -503190,10 +504551,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -503247,10 +504624,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -503516,10 +504909,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -503573,10 +504982,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     fixedClassId?: string | null
@@ -504147,11 +505572,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     questionBank?: QuestionBankCreateNestedOneWithoutExamInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
@@ -504169,12 +505592,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     questionBankId?: string | null
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
     examBank?: ExamBankUncheckedCreateNestedManyWithoutExamInput
@@ -504543,6 +505964,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    start?: number | null
+    end?: number | null
     exam: ExamCreateNestedOneWithoutExamRoomsInput
     examSessions?: ExamSessionCreateNestedManyWithoutExamRoomInput
   }
@@ -504556,6 +505979,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     examId: string
+    start?: number | null
+    end?: number | null
     examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput
   }
 
@@ -504633,12 +506058,10 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Exam"> | Date | string | null
     createdAt?: DateTimeFilter<"Exam"> | Date | string
     updatedAt?: DateTimeFilter<"Exam"> | Date | string
-    title?: StringFilter<"Exam"> | string
     status?: EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
     questionBankId?: StringNullableFilter<"Exam"> | string | null
     lockExamCode?: BoolFilter<"Exam"> | boolean
-    startTime?: StringFilter<"Exam"> | string
-    duration?: IntFilter<"Exam"> | number
+    duration?: IntNullableFilter<"Exam"> | number | null
   }
 
   export type SubjectClassUpsertWithWhereUniqueWithoutRoomInput = {
@@ -504734,6 +506157,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
     examId?: StringFilter<"ExamRoom"> | string
     roomId?: StringNullableFilter<"ExamRoom"> | string | null
+    start?: IntNullableFilter<"ExamRoom"> | number | null
+    end?: IntNullableFilter<"ExamRoom"> | number | null
   }
 
   export type DM_DonViCreateWithoutTrainingFieldsInput = {
@@ -511502,10 +512927,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -511559,10 +513000,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -511687,10 +513144,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -511744,10 +513217,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -511862,10 +513351,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -511919,10 +513424,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -512029,10 +513550,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -512086,10 +513623,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -512344,10 +513897,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -512401,10 +513970,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -515364,10 +516949,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -515421,10 +517022,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -515691,10 +517308,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -515748,10 +517381,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -516281,10 +517930,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -516338,10 +518003,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -516450,10 +518131,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -516507,10 +518204,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -520213,10 +521926,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -520270,10 +521999,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -520461,10 +522206,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -520518,10 +522279,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -522038,10 +523815,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -522095,10 +523888,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -522422,10 +524231,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -522479,10 +524304,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -531013,10 +532854,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -531070,10 +532927,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -531283,10 +533156,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -531340,10 +533229,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -534074,10 +535979,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -534131,10 +536052,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -534300,10 +536237,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -534357,10 +536310,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -534698,10 +536667,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -534755,10 +536740,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -535106,10 +537107,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -535163,10 +537180,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -535588,10 +537621,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -535645,10 +537694,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -536032,10 +538097,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -536089,10 +538170,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -537461,10 +539558,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -537518,10 +539631,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -537753,10 +539882,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -537810,10 +539955,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -537867,10 +540028,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -537924,10 +540101,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -538177,10 +540370,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -538234,10 +540443,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -538417,10 +540642,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -538474,10 +540715,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -538668,10 +540925,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -538725,10 +540998,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -539151,11 +541440,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
     room?: RoomCreateNestedManyWithoutExamInput
@@ -539173,11 +541460,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
     room?: RoomUncheckedCreateNestedManyWithoutExamInput
@@ -540950,6 +543235,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    start?: number | null
+    end?: number | null
     room?: RoomCreateNestedOneWithoutExamRoomsInput
     examSessions?: ExamSessionCreateNestedManyWithoutExamRoomInput
   }
@@ -540963,6 +543250,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     roomId?: string | null
+    start?: number | null
+    end?: number | null
     examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput
   }
 
@@ -541165,11 +543454,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     questionBank?: QuestionBankCreateNestedOneWithoutExamInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
@@ -541187,12 +543474,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     questionBankId?: string | null
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
     room?: RoomUncheckedCreateNestedManyWithoutExamInput
@@ -541312,11 +543597,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
@@ -541334,12 +543617,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
     room?: RoomUncheckedUpdateManyWithoutExamNestedInput
@@ -541429,11 +543710,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     questionBank?: QuestionBankCreateNestedOneWithoutExamInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
@@ -541451,12 +543730,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     questionBankId?: string | null
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
     room?: RoomUncheckedCreateNestedManyWithoutExamInput
@@ -541520,11 +543797,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
@@ -541542,12 +543817,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
     room?: RoomUncheckedUpdateManyWithoutExamNestedInput
@@ -541601,11 +543874,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     questionBank?: QuestionBankCreateNestedOneWithoutExamInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
@@ -541623,12 +543894,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     questionBankId?: string | null
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
     room?: RoomUncheckedCreateNestedManyWithoutExamInput
@@ -541695,11 +543964,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
@@ -541717,12 +543984,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
     room?: RoomUncheckedUpdateManyWithoutExamNestedInput
@@ -541919,11 +544184,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     questionBank?: QuestionBankCreateNestedOneWithoutExamInput
     subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreCreateNestedManyWithoutExamInput
@@ -541941,12 +544204,10 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     questionBankId?: string | null
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
     subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
     studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
     room?: RoomUncheckedCreateNestedManyWithoutExamInput
@@ -541968,6 +544229,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    start?: number | null
+    end?: number | null
     exam: ExamCreateNestedOneWithoutExamRoomsInput
     room?: RoomCreateNestedOneWithoutExamRoomsInput
   }
@@ -541982,6 +544245,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     examId: string
     roomId?: string | null
+    start?: number | null
+    end?: number | null
   }
 
   export type ExamRoomCreateOrConnectWithoutExamSessionsInput = {
@@ -542085,11 +544350,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
@@ -542107,12 +544370,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
     room?: RoomUncheckedUpdateManyWithoutExamNestedInput
@@ -542140,6 +544401,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
     exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
     room?: RoomUpdateOneWithoutExamRoomsNestedInput
   }
@@ -542154,6 +544417,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     examId?: StringFieldUpdateOperationsInput | string
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type StudentSubjectScoreUpsertWithoutExamSessionInput = {
@@ -542502,10 +544767,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -542559,10 +544840,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -542730,10 +545027,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -542787,10 +545100,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -542921,10 +545250,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     academicWarningLevel?: number
@@ -542978,10 +545323,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -543135,10 +545496,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -543192,10 +545569,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -546071,7 +548464,7 @@ export namespace Prisma {
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
     chucVuId: string
-    loaiHinhCongTacId: string
+    loaiHinhCongTacId?: string | null
   }
 
   export type QuaTrinhCuDiCongTacCreateManyUserProfileInput = {
@@ -546323,10 +548716,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -546856,7 +549265,7 @@ export namespace Prisma {
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chucVu?: DM_ChucVuUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
-    loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
+    loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
   }
 
   export type QuaTrinhCongTacUncheckedUpdateWithoutUserProfileInput = {
@@ -546875,7 +549284,7 @@ export namespace Prisma {
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chucVuId?: StringFieldUpdateOperationsInput | string
-    loaiHinhCongTacId?: StringFieldUpdateOperationsInput | string
+    loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuaTrinhCongTacUncheckedUpdateManyWithoutUserProfileInput = {
@@ -546894,7 +549303,7 @@ export namespace Prisma {
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     chucVuId?: StringFieldUpdateOperationsInput | string
-    loaiHinhCongTacId?: StringFieldUpdateOperationsInput | string
+    loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuaTrinhCuDiCongTacUpdateWithoutUserProfileInput = {
@@ -547628,10 +550037,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -547685,10 +550110,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -547742,10 +550183,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -550931,7 +553388,7 @@ export namespace Prisma {
     chucVuDangDoan?: string | null
     soQuyetDinh?: string | null
     ngayNhanQuyetDinh?: Date | string | null
-    loaiHinhCongTacId: string
+    loaiHinhCongTacId?: string | null
     userProfileId: string
   }
 
@@ -551394,7 +553851,7 @@ export namespace Prisma {
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
+    loaiHinhCongTac?: DM_LoaiHinhCongTacUpdateOneWithoutQuaTrinhCongTacNestedInput
     userProfile?: UserProfileUpdateOneRequiredWithoutQuaTrinhCongTacNestedInput
   }
 
@@ -551413,7 +553870,7 @@ export namespace Prisma {
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loaiHinhCongTacId?: StringFieldUpdateOperationsInput | string
+    loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -551432,7 +553889,7 @@ export namespace Prisma {
     chucVuDangDoan?: NullableStringFieldUpdateOperationsInput | string | null
     soQuyetDinh?: NullableStringFieldUpdateOperationsInput | string | null
     ngayNhanQuyetDinh?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    loaiHinhCongTacId?: StringFieldUpdateOperationsInput | string
+    loaiHinhCongTacId?: NullableStringFieldUpdateOperationsInput | string | null
     userProfileId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -554596,10 +557053,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -554629,10 +557102,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -554686,10 +557175,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -554743,10 +557248,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -571353,10 +573874,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -571386,10 +573923,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -571443,10 +573996,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -571500,10 +574069,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -572245,10 +574830,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -572278,10 +574879,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -572523,10 +575140,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -572580,10 +575213,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -572637,10 +575286,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -572670,10 +575335,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -572727,10 +575408,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -572784,10 +575481,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -575798,10 +578511,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -576319,10 +579048,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -576376,10 +579121,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -576433,10 +579194,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -576891,10 +579668,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -576948,10 +579741,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -577005,10 +579814,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -577039,10 +579864,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -577072,10 +579913,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -577129,10 +579986,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -577186,10 +580059,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -577254,10 +580143,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -577415,10 +580320,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -577472,10 +580393,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -577529,10 +580466,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -577625,10 +580578,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     trainingLocationId?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
@@ -577671,10 +580640,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -577728,10 +580713,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -577785,10 +580786,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -577881,10 +580898,26 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    entryScore?: number | null
     note?: string | null
     from?: Date | string | null
     to?: Date | string | null
+    registerNumber?: string | null
+    doctoralCode?: string | null
+    admissionCombination?: string | null
+    entryScore?: number | null
+    competencyScore?: number | null
+    department?: string | null
+    departmentAddress?: string | null
+    careerYear?: number | null
+    universitySchool?: string | null
+    universityTrainingType?: string | null
+    universityGraduationYear?: number | null
+    universityMajor?: string | null
+    universityRank?: string | null
+    basic?: number | null
+    facility?: number | null
+    foreignLanguage?: string | null
+    priorityReason?: string | null
     unionLeader?: string | null
     status?: $Enums.StudentStatus
     fixedClassId?: string | null
@@ -577965,10 +580998,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -578022,10 +581071,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578079,10 +581144,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     fixedClassId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -578459,6 +581540,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     examId: string
+    start?: number | null
+    end?: number | null
   }
 
   export type ExamUpdateWithoutRoomInput = {
@@ -578469,11 +581552,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
     subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
@@ -578491,12 +581572,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
     examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
@@ -578513,12 +581592,10 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type SubjectClassUpdateWithoutRoomInput = {
@@ -578974,6 +582051,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
     exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
     examSessions?: ExamSessionUpdateManyWithoutExamRoomNestedInput
   }
@@ -578987,6 +582066,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     examId?: StringFieldUpdateOperationsInput | string
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
     examSessions?: ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput
   }
 
@@ -578999,6 +582080,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     examId?: StringFieldUpdateOperationsInput | string
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type TrainingFieldOnTrainingObjectTypeCreateManyTrainingFieldInput = {
@@ -582210,10 +585293,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     academicWarningLevel?: IntFieldUpdateOperationsInput | number
@@ -582267,10 +585366,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -582324,10 +585439,26 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
     from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     to?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registerNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    doctoralCode?: NullableStringFieldUpdateOperationsInput | string | null
+    admissionCombination?: NullableStringFieldUpdateOperationsInput | string | null
+    entryScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    competencyScore?: NullableFloatFieldUpdateOperationsInput | number | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    departmentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    careerYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universitySchool?: NullableStringFieldUpdateOperationsInput | string | null
+    universityTrainingType?: NullableStringFieldUpdateOperationsInput | string | null
+    universityGraduationYear?: NullableIntFieldUpdateOperationsInput | number | null
+    universityMajor?: NullableStringFieldUpdateOperationsInput | string | null
+    universityRank?: NullableStringFieldUpdateOperationsInput | string | null
+    basic?: NullableFloatFieldUpdateOperationsInput | number | null
+    facility?: NullableFloatFieldUpdateOperationsInput | number | null
+    foreignLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    priorityReason?: NullableStringFieldUpdateOperationsInput | string | null
     trainingLocationId?: NullableStringFieldUpdateOperationsInput | string | null
     unionLeader?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
@@ -589979,11 +593110,9 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    title: string
     status?: $Enums.ExamStatus
     lockExamCode?: boolean
-    startTime: string
-    duration: number
+    duration?: number | null
   }
 
   export type QuestionUpdateWithoutQuestionBankInput = {
@@ -590053,11 +593182,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUpdateManyWithoutExamNestedInput
     room?: RoomUpdateManyWithoutExamNestedInput
@@ -590075,11 +593202,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
     studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
     room?: RoomUncheckedUpdateManyWithoutExamNestedInput
@@ -590097,11 +593222,9 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    title?: StringFieldUpdateOperationsInput | string
     status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
     lockExamCode?: BoolFieldUpdateOperationsInput | boolean
-    startTime?: StringFieldUpdateOperationsInput | string
-    duration?: IntFieldUpdateOperationsInput | number
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type QuestionCreateManyDifficultyInput = {
@@ -590623,6 +593746,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     roomId?: string | null
+    start?: number | null
+    end?: number | null
   }
 
   export type SubjectClassUpdateWithoutExamInput = {
@@ -591049,6 +594174,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
     room?: RoomUpdateOneWithoutExamRoomsNestedInput
     examSessions?: ExamSessionUpdateManyWithoutExamRoomNestedInput
   }
@@ -591062,6 +594189,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
     examSessions?: ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput
   }
 
@@ -591074,6 +594203,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     roomId?: NullableStringFieldUpdateOperationsInput | string | null
+    start?: NullableIntFieldUpdateOperationsInput | number | null
+    end?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ExamSessionCreateManyExamRoomInput = {

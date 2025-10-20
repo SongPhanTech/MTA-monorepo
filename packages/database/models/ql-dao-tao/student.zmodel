@@ -20,10 +20,44 @@ import './note.zmodel'
 
 /// HV/SV: khi tạo student, thông tin khoá học sẽ được copy sang
 model Student extends Base {
-  entryScore                     Float?   // Điểm thi đầu vào (nếu có)
   note                           String?
   from                           DateTime? // từ ngày
   to                             DateTime? // đến ngày
+
+  /// số báo danh
+  registerNumber                 String?                          @unique
+  /// mã hồ sơ tiến sĩ
+  doctoralCode                   String?                          @unique
+  /// Tổ hợp xét tuyển
+  admissionCombination           String?
+  /// Điểm xét tuyển
+  entryScore                     Float?
+  /// Điểm đánh giá năng lực
+  competencyScore                Float?
+  /// Cơ quan, đơn vị
+  department                     String?
+  /// Địa chỉ cơ quan, đơn vị
+  departmentAddress              String?
+  /// năm bắt đầu vào nghề
+  careerYear                     Int?
+  /// Trường đại học
+  universitySchool               String?
+  /// Hệ đào tạo
+  universityTrainingType         String?
+  /// Năm tốt nghiệp
+  universityGraduationYear       Int?
+  /// Ngành/Chuyên ngành
+  universityMajor                String?
+  /// Loại/Bậc tốt nghiệp
+  universityRank                 String?
+  /// Điểm cơ bản/Điểm môn 1
+  basic                          Float?
+  /// Điểm cơ sở/Điểm môn 2
+  facility                       Float?
+  /// Ngoại ngữ
+  foreignLanguage                String?
+  /// Lý do ưu tiên
+  priorityReason                 String?
 
   trainingLocation               TrainingLocation?                @relation(fields: [trainingLocationId], references: [id])
   trainingLocationId             String?

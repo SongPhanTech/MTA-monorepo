@@ -566,3 +566,99 @@ export const buildDegreeRankTypeMapOrThrow = async (
     }
     return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
 }
+
+export const buildRankMapOrThrow = async (prisma: PrismaClient, names: (string | undefined)[]) => {
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+
+    const existing = await prisma.dM_CapBac.findMany({
+        where: { sTen: { in: uniqNames } },
+        select: { sTen: true, Id: true },
+    })
+
+    const missing = uniqNames.filter((name) => !existing.some(({ sTen }) => sTen === name))
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Cấp bậc không tồn tại: ${missing.join(', ')}`,
+        })
+    }
+    return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
+}
+
+export const buildPositionMapOrThrow = async (
+    prisma: PrismaClient,
+    names: (string | undefined)[]
+) => {
+    const skipValue = 'Chưa xác định'
+
+    const uniqNames = Array.from(
+        new Set(names.filter((name): name is string => Boolean(name) && name !== skipValue))
+    )
+
+    const existing = await prisma.dM_ChucVu.findMany({
+        where: { sTen: { in: uniqNames } },
+        select: { sTen: true, Id: true },
+    })
+
+    const missing = uniqNames.filter(
+        (name) => !existing.some(({ sTen }) => sTen === name && name !== skipValue)
+    )
+
+    if (missing.length) {
+        throw new HTTPException(400, {
+            message: `Chức vụ không tồn tại: ${missing.join(', ')}`,
+        })
+    }
+    return new Map(existing.map(({ sTen, Id }) => [sTen, Id]))
+}
+
+export const buildDMTruongMap = async (prisma: PrismaClient, names: (string | undefined)[]) => {
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+
+    await prisma.dM_TruongDaoTaoBacDH.createMany({
+        skipDuplicates: true,
+        data: uniqNames.map((name) => ({ name })),
+    })
+
+    const data = await prisma.dM_TruongDaoTaoBacDH.findMany({
+        where: { name: { in: uniqNames } },
+        select: { name: true, id: true },
+    })
+
+    return new Map(data.map(({ name, id }) => [name, id]))
+}
+
+export const buildDMNganhMap = async (prisma: PrismaClient, names: (string | undefined)[]) => {
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+
+    await prisma.dM_NganhHoc.createMany({
+        skipDuplicates: true,
+        data: uniqNames.map((name) => ({ name })),
+    })
+
+    const data = await prisma.dM_NganhHoc.findMany({
+        where: { name: { in: uniqNames } },
+        select: { name: true, id: true },
+    })
+
+    return new Map(data.map(({ name, id }) => [name, id]))
+}
+
+export const buildDMChuyenNganhMap = async (
+    prisma: PrismaClient,
+    names: (string | undefined)[]
+) => {
+    const uniqNames = Array.from(new Set(names.filter((name): name is string => Boolean(name))))
+
+    await prisma.dM_ChuyenNganhDaoTaoBacDH.createMany({
+        skipDuplicates: true,
+        data: uniqNames.map((name) => ({ name })),
+    })
+
+    const data = await prisma.dM_ChuyenNganhDaoTaoBacDH.findMany({
+        where: { name: { in: uniqNames } },
+        select: { name: true, id: true },
+    })
+
+    return new Map(data.map(({ name, id }) => [name, id]))
+}

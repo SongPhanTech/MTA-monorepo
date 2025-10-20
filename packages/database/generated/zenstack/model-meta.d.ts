@@ -3631,6 +3631,7 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
@@ -3647,6 +3648,7 @@ declare const metadata: {
                 loaiHinhCongTacId: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                     isForeignKey: boolean;
                     relationField: string;
                 };
@@ -22786,11 +22788,6 @@ declare const metadata: {
                         }[];
                     }[];
                 };
-                entryScore: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
                 note: {
                     name: string;
                     type: string;
@@ -22802,6 +22799,99 @@ declare const metadata: {
                     isOptional: boolean;
                 };
                 to: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                registerNumber: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                doctoralCode: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                admissionCombination: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                entryScore: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                competencyScore: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                department: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                departmentAddress: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                careerYear: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                universitySchool: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                universityTrainingType: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                universityGraduationYear: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                universityMajor: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                universityRank: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                basic: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                facility: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                foreignLanguage: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                priorityReason: {
                     name: string;
                     type: string;
                     isOptional: boolean;
@@ -23358,6 +23448,14 @@ declare const metadata: {
                     fields: string[];
                 };
                 code: {
+                    name: string;
+                    fields: string[];
+                };
+                registerNumber: {
+                    name: string;
+                    fields: string[];
+                };
+                doctoralCode: {
                     name: string;
                     fields: string[];
                 };
@@ -37710,10 +37808,6 @@ declare const metadata: {
                         }[];
                     }[];
                 };
-                title: {
-                    name: string;
-                    type: string;
-                };
                 status: {
                     name: string;
                     type: string;
@@ -37760,13 +37854,10 @@ declare const metadata: {
                         }[];
                     }[];
                 };
-                startTime: {
-                    name: string;
-                    type: string;
-                };
                 duration: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
                 };
                 subjectClass: {
                     name: string;
@@ -37955,6 +38046,16 @@ declare const metadata: {
                     isOptional: boolean;
                     isForeignKey: boolean;
                     relationField: string;
+                };
+                start: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                end: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                 };
                 examSessions: {
                     name: string;

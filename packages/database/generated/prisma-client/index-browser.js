@@ -2270,10 +2270,26 @@ exports.Prisma.StudentScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  entryScore: 'entryScore',
   note: 'note',
   from: 'from',
   to: 'to',
+  registerNumber: 'registerNumber',
+  doctoralCode: 'doctoralCode',
+  admissionCombination: 'admissionCombination',
+  entryScore: 'entryScore',
+  competencyScore: 'competencyScore',
+  department: 'department',
+  departmentAddress: 'departmentAddress',
+  careerYear: 'careerYear',
+  universitySchool: 'universitySchool',
+  universityTrainingType: 'universityTrainingType',
+  universityGraduationYear: 'universityGraduationYear',
+  universityMajor: 'universityMajor',
+  universityRank: 'universityRank',
+  basic: 'basic',
+  facility: 'facility',
+  foreignLanguage: 'foreignLanguage',
+  priorityReason: 'priorityReason',
   trainingLocationId: 'trainingLocationId',
   unionLeader: 'unionLeader',
   status: 'status',
@@ -3582,11 +3598,9 @@ exports.Prisma.ExamScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  title: 'title',
   status: 'status',
   questionBankId: 'questionBankId',
   lockExamCode: 'lockExamCode',
-  startTime: 'startTime',
   duration: 'duration'
 };
 
@@ -3599,7 +3613,9 @@ exports.Prisma.ExamRoomScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   examId: 'examId',
-  roomId: 'roomId'
+  roomId: 'roomId',
+  start: 'start',
+  end: 'end'
 };
 
 exports.Prisma.TestStructureRuleScalarFieldEnum = {
@@ -5430,6 +5446,17 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   note: 'note',
+  registerNumber: 'registerNumber',
+  doctoralCode: 'doctoralCode',
+  admissionCombination: 'admissionCombination',
+  department: 'department',
+  departmentAddress: 'departmentAddress',
+  universitySchool: 'universitySchool',
+  universityTrainingType: 'universityTrainingType',
+  universityMajor: 'universityMajor',
+  universityRank: 'universityRank',
+  foreignLanguage: 'foreignLanguage',
+  priorityReason: 'priorityReason',
   trainingLocationId: 'trainingLocationId',
   unionLeader: 'unionLeader',
   fixedClassId: 'fixedClassId',
@@ -6192,9 +6219,7 @@ exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  title: 'title',
-  questionBankId: 'questionBankId',
-  startTime: 'startTime'
+  questionBankId: 'questionBankId'
 };
 
 exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {

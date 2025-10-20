@@ -246,3 +246,93 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
 
     return { subjects, errors }
 }
+
+export interface TrainingBlockResult {
+    trainingBlockName: string
+    credit: number
+}
+
+export interface ParseTrainingBlockResult {
+    trainingBlocks: TrainingBlockResult[]
+    errors: ParseSheetError[]
+}
+
+export const parseSheetTrainingBlock = (file: ArrayBufferLike): ParseTrainingBlockResult => {
+    const wb = read(file)
+    const sheetName = 'KKT_TU_CHON'
+
+    const errors: ParseSheetError[] = []
+    const ws = wb.Sheets[sheetName]
+    if (!ws) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: sheetName,
+            message: `Không tìm thấy sheet "${sheetName}" trong file`,
+        })
+        return { errors, trainingBlocks: [] }
+    }
+
+    // Mapping cột theo đúng cấu trúc Excel
+    const cols = {
+        trainingBlock: 'A', // tên khối kiến thức
+        electiveCreditsRequired: 'B', // số tín chỉ tự chọn yêu cầu
+    } as const
+
+    const startRow = 1 // Dòng bắt đầu đọc dữ liệu (bỏ qua header)
+
+    const rows = utils.sheet_to_json(ws, {
+        defval: '',
+        blankrows: false,
+        raw: false,
+        header: 'A',
+        range: startRow,
+    }) as (Record<(typeof cols)[keyof typeof cols], string | null> & {
+        __rowNum__: number
+    })[]
+
+    const trainingBlocks: TrainingBlockResult[] = []
+
+    for (const row of rows) {
+        const rowNumber = row.__rowNum__ + 1
+        const trainingBlock = row[cols.trainingBlock]?.trim()
+        if (!trainingBlock) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.trainingBlock}${rowNumber}`,
+                message: 'Tên khối kiến thức không được để trống',
+            })
+            continue
+        }
+
+        // Parse các trường bắt buộc
+        const credit = Number.parseInt(row[cols.electiveCreditsRequired] || '', 10)
+        if (credit === undefined || Number.isNaN(credit)) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.electiveCreditsRequired}${rowNumber}`,
+                message: `Số tín chỉ không hợp lệ cho KKT "${trainingBlock}"`,
+            })
+            continue
+        }
+
+        trainingBlocks.push({
+            trainingBlockName: trainingBlock,
+            credit,
+        })
+    }
+
+    // Kiểm tra trùng lặp training blocks
+    const duplicateTrainingBlocks = trainingBlocks
+        .map(({ trainingBlockName }) => trainingBlockName)
+        .filter((name, index, arr) => arr.indexOf(name) !== index)
+
+    if (duplicateTrainingBlocks.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: null,
+            message: `Khối kiến thức bị trùng: ${duplicateTrainingBlocks.join(', ')}`,
+        })
+    }
+
+    return { trainingBlocks, errors }
+}
