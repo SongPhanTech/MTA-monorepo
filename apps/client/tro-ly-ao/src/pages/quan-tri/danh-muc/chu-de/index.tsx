@@ -108,7 +108,7 @@ function Page() {
                             </span>
                         </div>
                         <Button onClick={() => openPutTopic()} type="primary">
-                            Thêm chủ đề
+                            Thêm mới
                         </Button>
                     </div>
                     <div className="flex items-center gap-2 mb-4">

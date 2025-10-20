@@ -10,7 +10,7 @@ export default function Page() {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (query?.mode === 'quan-tri') {
-            router.replace(ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU)
+            router.replace(ROUTER_PATH.TRO_LY_AO.QUAN_TRI_DU_LIEU_TAI_LIEU)
         }
         if (query?.mode === 'tro-ly-ao') {
             router.replace(ROUTER_PATH.TRO_LY_AO.TRO_LY_AO)
