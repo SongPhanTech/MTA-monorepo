@@ -97,7 +97,9 @@ import ModalViewHistoryChange from './modal-xem-lich-su-thay-doi'
 import PutArchivedAwardModal from './put-archived-award'
 import PutCertificateOnSubjectScoreModal from './put-certificate-on-subject'
 import PutCertificateArchivedModal from './put-archived-certificate'
+import { XemTaiLieu } from './xem-tai-lieu'
 export {
+    XemTaiLieu,
     ModalViewHistoryChange,
     PutUpdateProfileModal,
     PutUploadProfileModal,

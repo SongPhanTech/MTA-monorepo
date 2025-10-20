@@ -2144,6 +2144,9 @@ importers:
       '@workspace/auth':
         specifier: workspace:*
         version: link:../auth
+      '@workspace/constant':
+        specifier: workspace:*
+        version: link:../constant
       '@workspace/db':
         specifier: workspace:*
         version: link:../database

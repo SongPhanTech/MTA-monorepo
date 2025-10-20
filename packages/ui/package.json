@@ -44,6 +44,7 @@
     "@workspace/db": "workspace:*",
     "@workspace/libs": "workspace:*",
     "@workspace/router": "workspace:*",
+    "@workspace/constant": "workspace:*",
     "antd": "catalog:",
     "class-variance-authority": "catalog:",
     "clsx": "catalog:",
