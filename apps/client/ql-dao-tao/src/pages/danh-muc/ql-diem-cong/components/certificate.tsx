@@ -304,11 +304,8 @@ export default function Certificate() {
                                     'SUA'
                                 ) && (
                                     <EditIcon
-                                        disabled={
-                                            archivedCertificate?.length > 0 || subjects?.length > 0
-                                        }
                                         onClick={() => {
-                                            onOpen.bind(null, id)
+                                            onOpen(id)
                                         }}
                                     />
                                 )}

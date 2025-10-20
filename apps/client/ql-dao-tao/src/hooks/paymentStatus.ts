@@ -32,7 +32,7 @@ export const usePaymentStatusOptions = () => {
 export const useArchivedCertificateStatusOptions = () => {
     const archivedCertificateStatusOptions = [
         { value: ArchivedCertificateStatus.PENDING, label: 'Chờ phê duyệt', color: 'orange' },
-        { value: ArchivedCertificateStatus.APPROVED, label: 'Chấp thuận', color: 'orange' },
+        { value: ArchivedCertificateStatus.APPROVED, label: 'Chấp thuận', color: 'green' },
         { value: ArchivedCertificateStatus.REJECTED, label: 'Từ chối', color: 'red' },
         { value: ArchivedCertificateStatus.CANCEL, label: 'Hủy', color: 'red' },
     ]
