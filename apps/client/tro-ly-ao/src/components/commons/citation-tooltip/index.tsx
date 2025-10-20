@@ -61,10 +61,12 @@ export default function CitationTooltip({ citation, onClick }: CitationTooltipPr
             if (triggerRef.current) {
                 const rect = triggerRef.current.getBoundingClientRect()
                 const viewportHeight = window.innerHeight
+                const viewportWidth = window.innerWidth
                 const tooltipHeight = tooltipRef.current?.offsetHeight || 300
+                const tooltipWidth = Math.min(400, viewportWidth - 32)
 
-                const spaceBelow = viewportHeight - rect.bottom - 16 // 16px margin
-                const spaceAbove = rect.top - 16 // 16px margin
+                const spaceBelow = viewportHeight - rect.bottom - 16
+                const spaceAbove = rect.top - 16
 
                 const useTop = spaceBelow < tooltipHeight && spaceAbove > spaceBelow
 
@@ -75,9 +77,20 @@ export default function CitationTooltip({ citation, onClick }: CitationTooltipPr
                     maxHeight = `${Math.min(spaceBelow - 2, viewportHeight * 0.6)}px`
                 }
 
+                let left = rect.left + rect.width / 2
+                const halfTooltipWidth = tooltipWidth / 2
+
+                if (left - halfTooltipWidth < 16) {
+                    left = halfTooltipWidth + 16
+                }
+                
+                if (left + halfTooltipWidth > viewportWidth - 16) {
+                    left = viewportWidth - halfTooltipWidth - 16
+                }
+
                 setPosition({
                     top: useTop ? rect.top - 2 : rect.bottom + 2,
-                    left: rect.left + rect.width / 2,
+                    left,
                     placement: useTop ? 'top' : 'bottom',
                     maxHeight,
                 })
@@ -116,7 +129,7 @@ export default function CitationTooltip({ citation, onClick }: CitationTooltipPr
     const tooltipContent = isHovered ? (
         <div
             ref={tooltipRef}
-            className="fixed z-[9999] rounded-lg shadow-lg border border-gray-200 w-[400px] max-w-[calc(100vw-48px)] transition-opacity duration-150 ease-in-out bg-gray-50"
+            className="fixed z-[9999] rounded-lg shadow-lg border border-gray-200 w-[min(400px,calc(100vw-32px))] transition-opacity duration-150 ease-in-out bg-gray-50"
             style={{
                 top: `${position.top}px`,
                 left: `${position.left}px`,
