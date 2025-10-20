@@ -186,17 +186,11 @@ const NAVIGATION: NavigationType = {
                     //     path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_KHOA_NHAP_DIEM,
                     //     description: 'Mở/Khoá nhập điểm',
                     // },
-                      {
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
                         label: 'Danh sách lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC,
                         description: 'Danh sách lớp môn học',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                        label: 'Điểm trung bình theo kỳ học',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_TRUNG_BINH_KY_HOC,
-                        description: 'Điểm trung bình theo kỳ học',
                     },
                     // {
                     //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
@@ -216,13 +210,13 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_THI,
                         description: 'Nhập điểm thi',
                     },
-                     {
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
                         label: 'Điểm giải thưởng',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_OLYMPIC,
                         description: 'Điểm giải thưởng',
                     },
-                         {
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_CHUNG_CHI,
                         label: 'Điểm chứng chỉ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_CHUNG_CHI,
@@ -377,7 +371,7 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_HINH_THUC_HUAN_LUYEN,
                         description: 'Danh mục hình thức huấn luyện',
                     },
-                        {
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                         label: 'Quản lý điểm cộng',
                         path: ROUTER_PATH.QL_DAO_TAO.DANH_MUC_QL_DIEM_CONG,
@@ -575,7 +569,7 @@ const NAVIGATION: NavigationType = {
                 children: [
                     {
                         id: KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_DANH_MUC_CHUONG_MUC,
-                        label: 'Chương mục',
+                        label: 'Chuẩn đầu ra',
                         path: ROUTER_PATH.KHAO_THI.DANH_MUC_DANH_MUC_CHUONG_MUC,
                     },
                     // {
