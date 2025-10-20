@@ -19,6 +19,7 @@ export namespace $DbEnums {
   type ClassRegisterStatus = "PENDING" | "CANCELLED" | "SUCCESS" | "FAILED"
   type SubjectClassSchedule = "MORNING" | "AFTERNOON" | "EVENING"
   type PeriodType = "THEORY" | "PRACTICE" | "LAB" | "SEMINAR" | "EXAM" | "MAKEUP" | "REVIEW"
+  type SubjectClassType = "NORMAL" | "RETAKE" | "REEXAM"
   type TrainingObjectTypes = "MILITARY" | "CIVILIAN" | "INTERNATIONAL_MILITARY"
   type DiplomaTypeEnum = "MASTER" | "DOCTORATE" | "ENGINEER" | "BACHELOR"
   type AcademicRankingBaseType = "Base10" | "Base4"

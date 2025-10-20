@@ -26,6 +26,7 @@ WITH FCS AS (
         c."trainingMajorId" as training_major_id,
         c."managementOrganizationId" as management_organization_id,
         dv."sTen" as management_organization_name,
+        dv."sMa" as management_organization_code,
         tc."trainingObjectTypeId" as training_object_type_id,
         COUNT(fc.id) as fixed_class_count
     FROM "ql-dao-tao"."SubjectVersion" sv
@@ -65,9 +66,9 @@ WITH FCS AS (
         sc.id,
         c."managementOrganizationId",
         tc."trainingObjectTypeId",
+        subject_version_code,
         management_organization_code,
-        management_organization_name,
-        subject_version_code
+        management_organization_name
 )
 SELECT COUNT(*) AS "total"
 FROM (
