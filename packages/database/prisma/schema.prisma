@@ -190,6 +190,14 @@ enum PeriodType {
   @@schema("ql-dao-tao")
 }
 
+enum SubjectClassType {
+  NORMAL
+  RETAKE
+  REEXAM
+
+  @@schema("ql-dao-tao")
+}
+
 enum TrainingObjectTypes {
   MILITARY
   CIVILIAN
@@ -2970,6 +2978,7 @@ model SubjectClass {
   subjectId                  String
   schedule                   SubjectClassSchedule?
   maxStudent                 Int
+  type                       SubjectClassType      @default(NORMAL)
   trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId       String
   semester                   Semester              @relation(fields: [semesterId], references: [id])

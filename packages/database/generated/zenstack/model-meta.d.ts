@@ -18658,6 +18658,16 @@ declare const metadata: {
                     name: string;
                     type: string;
                 };
+                type: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
                 trainingObjectType: {
                     name: string;
                     type: string;

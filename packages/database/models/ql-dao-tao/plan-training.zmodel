@@ -810,6 +810,14 @@ enum PeriodType {
   @@schema("ql-dao-tao")
 }
 
+enum SubjectClassType {
+  NORMAL // Lớp thường
+  RETAKE // Học lại
+  REEXAM // Thi lại
+  @@schema("ql-dao-tao")
+}
+
+
 /// Lớp môn học
 model SubjectClass extends BaseNoCode {
   code                       String
@@ -820,7 +828,7 @@ model SubjectClass extends BaseNoCode {
   subjectId                  String
   schedule                   SubjectClassSchedule?
   maxStudent                 Int // Số SV tối đa
-
+  type                       SubjectClassType     @default(NORMAL)
   // Đối tượng đào tạo
   trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId       String

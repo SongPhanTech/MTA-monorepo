@@ -10569,6 +10569,10 @@ const metadata = {
                 }, maxStudent: {
                     name: "maxStudent",
                     type: "Int",
+                }, type: {
+                    name: "type",
+                    type: "SubjectClassType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",

@@ -6,7 +6,9 @@
 // @ts-nocheck
 
 import { z } from 'zod';
+import { SubjectClassType } from '../../zenstack/models';
 import { SubjectClassScheduleSchema } from '../enums/SubjectClassSchedule.schema';
+import { SubjectClassTypeSchema } from '../enums/SubjectClassType.schema';
 import { ExamTypeSchema } from '../enums/ExamType.schema';
 const baseSchema = z.object({
     id: z.string(),
@@ -21,6 +23,7 @@ const baseSchema = z.object({
     endDate: z.coerce.date().nullish(),
     schedule: SubjectClassScheduleSchema.nullish(),
     maxStudent: z.number(),
+    type: SubjectClassTypeSchema,
     cancelled: z.boolean().default(false),
     lecturerAssignmentDeadline: z.coerce.date().nullish(),
     sendLecturerAssignmentAt: z.coerce.date().nullish(),
@@ -109,6 +112,7 @@ export const SubjectClassPrismaUpdateSchema = z.object({
     endDate: z.coerce.date().nullish(),
     schedule: SubjectClassScheduleSchema.nullish(),
     maxStudent: z.union([z.number(), z.record(z.unknown())]),
+    type: SubjectClassTypeSchema,
     cancelled: z.boolean().default(false),
     lecturerAssignmentDeadline: z.coerce.date().nullish(),
     sendLecturerAssignmentAt: z.coerce.date().nullish(),
@@ -132,7 +136,7 @@ export const SubjectClassPrismaUpdateSchema = z.object({
  * `SubjectClass` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectClassCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, scoreSubmitted: true, scoreChecked: true
+    id: true, active: true, createdAt: true, updatedAt: true, type: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, scoreSubmitted: true, scoreChecked: true
 });
 
 
