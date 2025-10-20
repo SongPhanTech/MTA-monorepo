@@ -13029,6 +13029,16 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                 };
+                subjectClassType: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
             };
             uniqueConstraints: {
                 id: {

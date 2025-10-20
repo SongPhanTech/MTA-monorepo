@@ -53,12 +53,13 @@ model PlanTraining extends BaseNoCode {
 }
 
 model PlanTrainingSubject extends BaseNoCode {
-  planTraining     PlanTraining   @relation(fields: [planTrainingId], references: [id])
+  planTraining     PlanTraining     @relation(fields: [planTrainingId], references: [id])
   planTrainingId   String
 
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersion   SubjectVersion   @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId String
   fixedClasses     FixedClass[] // Lớp niên chế  
+  subjectClassType SubjectClassType @default(NORMAL)
   @@schema("ql-dao-tao")
 }
 
@@ -828,7 +829,7 @@ model SubjectClass extends BaseNoCode {
   subjectId                  String
   schedule                   SubjectClassSchedule?
   maxStudent                 Int // Số SV tối đa
-  type                       SubjectClassType     @default(NORMAL)
+  type                       SubjectClassType      @default(NORMAL)
   // Đối tượng đào tạo
   trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId       String

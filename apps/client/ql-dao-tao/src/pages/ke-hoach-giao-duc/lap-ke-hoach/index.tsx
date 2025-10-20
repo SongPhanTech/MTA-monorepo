@@ -8,6 +8,7 @@ import MonCham from './_components/mon-cham'
 import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
 import MonKySau from './_components/mon-ky-sau'
 import MonTheoKeHoachDuKien from './_components/mon-theo-ke-hoach-du-kien'
+import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
 interface TabItem {
     key: string
     label: string
@@ -34,7 +35,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               {
                   key: '1',
                   label: 'Môn có SV/HV chưa đạt',
-                  content: <MonTheoKeHoachDuKien />,
+                  content: <MonCoHVSVChuaDat />,
               },
               {
                   key: '2',

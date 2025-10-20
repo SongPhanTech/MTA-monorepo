@@ -1424,7 +1424,8 @@ exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   planTrainingId: 'planTrainingId',
-  subjectVersionId: 'subjectVersionId'
+  subjectVersionId: 'subjectVersionId',
+  subjectClassType: 'subjectClassType'
 };
 
 exports.Prisma.StudentScoreConvertScalarFieldEnum = {
@@ -6568,6 +6569,12 @@ exports.MessageSender = exports.$Enums.MessageSender = {
   BOT: 'BOT'
 };
 
+exports.SubjectClassType = exports.$Enums.SubjectClassType = {
+  NORMAL: 'NORMAL',
+  RETAKE: 'RETAKE',
+  REEXAM: 'REEXAM'
+};
+
 exports.ScoreConvertStatus = exports.$Enums.ScoreConvertStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -6631,12 +6638,6 @@ exports.SubjectClassSchedule = exports.$Enums.SubjectClassSchedule = {
   MORNING: 'MORNING',
   AFTERNOON: 'AFTERNOON',
   EVENING: 'EVENING'
-};
-
-exports.SubjectClassType = exports.$Enums.SubjectClassType = {
-  NORMAL: 'NORMAL',
-  RETAKE: 'RETAKE',
-  REEXAM: 'REEXAM'
 };
 
 exports.PeriodType = exports.$Enums.PeriodType = {

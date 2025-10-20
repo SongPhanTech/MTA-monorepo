@@ -2218,17 +2218,18 @@ model PlanTraining {
 }
 
 model PlanTrainingSubject {
-  id               String         @id() @default(cuid())
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
+  id               String           @id() @default(cuid())
+  active           Boolean          @default(true)
+  description      String?          @db.Text()
   deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  planTraining     PlanTraining   @relation(fields: [planTrainingId], references: [id])
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @default(now()) @updatedAt()
+  planTraining     PlanTraining     @relation(fields: [planTrainingId], references: [id])
   planTrainingId   String
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
+  subjectVersion   SubjectVersion   @relation(fields: [subjectVersionId], references: [id])
   subjectVersionId String
   fixedClasses     FixedClass[]
+  subjectClassType SubjectClassType @default(NORMAL)
 
   @@schema("ql-dao-tao")
 }

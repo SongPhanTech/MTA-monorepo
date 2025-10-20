@@ -7433,6 +7433,10 @@ const metadata = {
                     isArray: true,
                     backLink: 'planTrainingSubject',
                     isRelationOwner: true,
+                }, subjectClassType: {
+                    name: "subjectClassType",
+                    type: "SubjectClassType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {

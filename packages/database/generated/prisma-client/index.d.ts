@@ -120443,6 +120443,7 @@ export namespace Prisma {
     updatedAt: Date | null
     planTrainingId: string | null
     subjectVersionId: string | null
+    subjectClassType: $Enums.SubjectClassType | null
   }
 
   export type PlanTrainingSubjectMaxAggregateOutputType = {
@@ -120454,6 +120455,7 @@ export namespace Prisma {
     updatedAt: Date | null
     planTrainingId: string | null
     subjectVersionId: string | null
+    subjectClassType: $Enums.SubjectClassType | null
   }
 
   export type PlanTrainingSubjectCountAggregateOutputType = {
@@ -120465,6 +120467,7 @@ export namespace Prisma {
     updatedAt: number
     planTrainingId: number
     subjectVersionId: number
+    subjectClassType: number
     _all: number
   }
 
@@ -120478,6 +120481,7 @@ export namespace Prisma {
     updatedAt?: true
     planTrainingId?: true
     subjectVersionId?: true
+    subjectClassType?: true
   }
 
   export type PlanTrainingSubjectMaxAggregateInputType = {
@@ -120489,6 +120493,7 @@ export namespace Prisma {
     updatedAt?: true
     planTrainingId?: true
     subjectVersionId?: true
+    subjectClassType?: true
   }
 
   export type PlanTrainingSubjectCountAggregateInputType = {
@@ -120500,6 +120505,7 @@ export namespace Prisma {
     updatedAt?: true
     planTrainingId?: true
     subjectVersionId?: true
+    subjectClassType?: true
     _all?: true
   }
 
@@ -120584,6 +120590,7 @@ export namespace Prisma {
     updatedAt: Date
     planTrainingId: string
     subjectVersionId: string
+    subjectClassType: $Enums.SubjectClassType
     _count: PlanTrainingSubjectCountAggregateOutputType | null
     _min: PlanTrainingSubjectMinAggregateOutputType | null
     _max: PlanTrainingSubjectMaxAggregateOutputType | null
@@ -120612,6 +120619,7 @@ export namespace Prisma {
     updatedAt?: boolean
     planTrainingId?: boolean
     subjectVersionId?: boolean
+    subjectClassType?: boolean
     planTraining?: boolean | PlanTrainingDefaultArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     fixedClasses?: boolean | PlanTrainingSubject$fixedClassesArgs<ExtArgs>
@@ -120627,6 +120635,7 @@ export namespace Prisma {
     updatedAt?: boolean
     planTrainingId?: boolean
     subjectVersionId?: boolean
+    subjectClassType?: boolean
     planTraining?: boolean | PlanTrainingDefaultArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["planTrainingSubject"]>
@@ -120640,6 +120649,7 @@ export namespace Prisma {
     updatedAt?: boolean
     planTrainingId?: boolean
     subjectVersionId?: boolean
+    subjectClassType?: boolean
     planTraining?: boolean | PlanTrainingDefaultArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["planTrainingSubject"]>
@@ -120653,9 +120663,10 @@ export namespace Prisma {
     updatedAt?: boolean
     planTrainingId?: boolean
     subjectVersionId?: boolean
+    subjectClassType?: boolean
   }
 
-  export type PlanTrainingSubjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "planTrainingId" | "subjectVersionId", ExtArgs["result"]["planTrainingSubject"]>
+  export type PlanTrainingSubjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "planTrainingId" | "subjectVersionId" | "subjectClassType", ExtArgs["result"]["planTrainingSubject"]>
   export type PlanTrainingSubjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     planTraining?: boolean | PlanTrainingDefaultArgs<ExtArgs>
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
@@ -120687,6 +120698,7 @@ export namespace Prisma {
       updatedAt: Date
       planTrainingId: string
       subjectVersionId: string
+      subjectClassType: $Enums.SubjectClassType
     }, ExtArgs["result"]["planTrainingSubject"]>
     composites: {}
   }
@@ -121121,6 +121133,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"PlanTrainingSubject", 'DateTime'>
     readonly planTrainingId: FieldRef<"PlanTrainingSubject", 'String'>
     readonly subjectVersionId: FieldRef<"PlanTrainingSubject", 'String'>
+    readonly subjectClassType: FieldRef<"PlanTrainingSubject", 'SubjectClassType'>
   }
     
 
@@ -335869,7 +335882,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     planTrainingId: 'planTrainingId',
-    subjectVersionId: 'subjectVersionId'
+    subjectVersionId: 'subjectVersionId',
+    subjectClassType: 'subjectClassType'
   };
 
   export type PlanTrainingSubjectScalarFieldEnum = (typeof PlanTrainingSubjectScalarFieldEnum)[keyof typeof PlanTrainingSubjectScalarFieldEnum]
@@ -342375,6 +342389,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SubjectClassType'
+   */
+  export type EnumSubjectClassTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubjectClassType'>
+    
+
+
+  /**
+   * Reference to a field of type 'SubjectClassType[]'
+   */
+  export type ListEnumSubjectClassTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubjectClassType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ScoreConvertStatus'
    */
   export type EnumScoreConvertStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ScoreConvertStatus'>
@@ -342539,20 +342567,6 @@ export namespace Prisma {
    * Reference to a field of type 'SubjectClassSchedule[]'
    */
   export type ListEnumSubjectClassScheduleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubjectClassSchedule[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'SubjectClassType'
-   */
-  export type EnumSubjectClassTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubjectClassType'>
-    
-
-
-  /**
-   * Reference to a field of type 'SubjectClassType[]'
-   */
-  export type ListEnumSubjectClassTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubjectClassType[]'>
     
 
 
@@ -351176,6 +351190,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PlanTrainingSubject"> | Date | string
     planTrainingId?: StringFilter<"PlanTrainingSubject"> | string
     subjectVersionId?: StringFilter<"PlanTrainingSubject"> | string
+    subjectClassType?: EnumSubjectClassTypeFilter<"PlanTrainingSubject"> | $Enums.SubjectClassType
     planTraining?: XOR<PlanTrainingScalarRelationFilter, PlanTrainingWhereInput>
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     fixedClasses?: FixedClassListRelationFilter
@@ -351190,6 +351205,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassType?: SortOrder
     planTraining?: PlanTrainingOrderByWithRelationInput
     subjectVersion?: SubjectVersionOrderByWithRelationInput
     fixedClasses?: FixedClassOrderByRelationAggregateInput
@@ -351208,6 +351224,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PlanTrainingSubject"> | Date | string
     planTrainingId?: StringFilter<"PlanTrainingSubject"> | string
     subjectVersionId?: StringFilter<"PlanTrainingSubject"> | string
+    subjectClassType?: EnumSubjectClassTypeFilter<"PlanTrainingSubject"> | $Enums.SubjectClassType
     planTraining?: XOR<PlanTrainingScalarRelationFilter, PlanTrainingWhereInput>
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     fixedClasses?: FixedClassListRelationFilter
@@ -351222,6 +351239,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassType?: SortOrder
     _count?: PlanTrainingSubjectCountOrderByAggregateInput
     _max?: PlanTrainingSubjectMaxOrderByAggregateInput
     _min?: PlanTrainingSubjectMinOrderByAggregateInput
@@ -351239,6 +351257,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"PlanTrainingSubject"> | Date | string
     planTrainingId?: StringWithAggregatesFilter<"PlanTrainingSubject"> | string
     subjectVersionId?: StringWithAggregatesFilter<"PlanTrainingSubject"> | string
+    subjectClassType?: EnumSubjectClassTypeWithAggregatesFilter<"PlanTrainingSubject"> | $Enums.SubjectClassType
   }
 
   export type StudentScoreConvertWhereInput = {
@@ -378117,6 +378136,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectClassType?: $Enums.SubjectClassType
     planTraining: PlanTrainingCreateNestedOneWithoutPlanTrainingSubjectsInput
     subjectVersion: SubjectVersionCreateNestedOneWithoutPlanTrainingSubjectInput
     fixedClasses?: FixedClassCreateNestedManyWithoutPlanTrainingSubjectInput
@@ -378131,6 +378151,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     planTrainingId: string
     subjectVersionId: string
+    subjectClassType?: $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutPlanTrainingSubjectInput
   }
 
@@ -378141,6 +378162,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     planTraining?: PlanTrainingUpdateOneRequiredWithoutPlanTrainingSubjectsNestedInput
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutPlanTrainingSubjectNestedInput
     fixedClasses?: FixedClassUpdateManyWithoutPlanTrainingSubjectNestedInput
@@ -378155,6 +378177,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedUpdateManyWithoutPlanTrainingSubjectNestedInput
   }
 
@@ -378167,6 +378190,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     planTrainingId: string
     subjectVersionId: string
+    subjectClassType?: $Enums.SubjectClassType
   }
 
   export type PlanTrainingSubjectUpdateManyMutationInput = {
@@ -378176,6 +378200,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
   export type PlanTrainingSubjectUncheckedUpdateManyInput = {
@@ -378187,6 +378212,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
   export type StudentScoreConvertCreateInput = {
@@ -403668,6 +403694,13 @@ export namespace Prisma {
     semesterId?: SortOrder
   }
 
+  export type EnumSubjectClassTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubjectClassTypeFilter<$PrismaModel> | $Enums.SubjectClassType
+  }
+
   export type PlanTrainingScalarRelationFilter = {
     is?: PlanTrainingWhereInput
     isNot?: PlanTrainingWhereInput
@@ -403688,6 +403721,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassType?: SortOrder
   }
 
   export type PlanTrainingSubjectMaxOrderByAggregateInput = {
@@ -403699,6 +403733,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassType?: SortOrder
   }
 
   export type PlanTrainingSubjectMinOrderByAggregateInput = {
@@ -403710,6 +403745,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
     planTrainingId?: SortOrder
     subjectVersionId?: SortOrder
+    subjectClassType?: SortOrder
+  }
+
+  export type EnumSubjectClassTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubjectClassTypeWithAggregatesFilter<$PrismaModel> | $Enums.SubjectClassType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSubjectClassTypeFilter<$PrismaModel>
+    _max?: NestedEnumSubjectClassTypeFilter<$PrismaModel>
   }
 
   export type StudentScalarRelationFilter = {
@@ -406307,13 +406353,6 @@ export namespace Prisma {
     not?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel> | $Enums.SubjectClassSchedule | null
   }
 
-  export type EnumSubjectClassTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumSubjectClassTypeFilter<$PrismaModel> | $Enums.SubjectClassType
-  }
-
   export type EnumExamTypeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
     in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
@@ -406516,16 +406555,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
     _max?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
-  }
-
-  export type EnumSubjectClassTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumSubjectClassTypeWithAggregatesFilter<$PrismaModel> | $Enums.SubjectClassType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumSubjectClassTypeFilter<$PrismaModel>
-    _max?: NestedEnumSubjectClassTypeFilter<$PrismaModel>
   }
 
   export type EnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -422674,6 +422703,10 @@ export namespace Prisma {
     connect?: FixedClassWhereUniqueInput | FixedClassWhereUniqueInput[]
   }
 
+  export type EnumSubjectClassTypeFieldUpdateOperationsInput = {
+    set?: $Enums.SubjectClassType
+  }
+
   export type PlanTrainingUpdateOneRequiredWithoutPlanTrainingSubjectsNestedInput = {
     create?: XOR<PlanTrainingCreateWithoutPlanTrainingSubjectsInput, PlanTrainingUncheckedCreateWithoutPlanTrainingSubjectsInput>
     connectOrCreate?: PlanTrainingCreateOrConnectWithoutPlanTrainingSubjectsInput
@@ -426916,10 +426949,6 @@ export namespace Prisma {
 
   export type NullableEnumSubjectClassScheduleFieldUpdateOperationsInput = {
     set?: $Enums.SubjectClassSchedule | null
-  }
-
-  export type EnumSubjectClassTypeFieldUpdateOperationsInput = {
-    set?: $Enums.SubjectClassType
   }
 
   export type NullableEnumExamTypeFieldUpdateOperationsInput = {
@@ -439960,6 +439989,23 @@ export namespace Prisma {
     _max?: NestedEnumMessageSenderFilter<$PrismaModel>
   }
 
+  export type NestedEnumSubjectClassTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubjectClassTypeFilter<$PrismaModel> | $Enums.SubjectClassType
+  }
+
+  export type NestedEnumSubjectClassTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSubjectClassTypeWithAggregatesFilter<$PrismaModel> | $Enums.SubjectClassType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSubjectClassTypeFilter<$PrismaModel>
+    _max?: NestedEnumSubjectClassTypeFilter<$PrismaModel>
+  }
+
   export type NestedEnumScoreConvertStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ScoreConvertStatus | EnumScoreConvertStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ScoreConvertStatus[] | ListEnumScoreConvertStatusFieldRefInput<$PrismaModel>
@@ -440206,13 +440252,6 @@ export namespace Prisma {
     not?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel> | $Enums.SubjectClassSchedule | null
   }
 
-  export type NestedEnumSubjectClassTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumSubjectClassTypeFilter<$PrismaModel> | $Enums.SubjectClassType
-  }
-
   export type NestedEnumExamTypeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.ExamType | EnumExamTypeFieldRefInput<$PrismaModel> | null
     in?: $Enums.ExamType[] | ListEnumExamTypeFieldRefInput<$PrismaModel> | null
@@ -440228,16 +440267,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
     _max?: NestedEnumSubjectClassScheduleNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumSubjectClassTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SubjectClassType | EnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SubjectClassType[] | ListEnumSubjectClassTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumSubjectClassTypeWithAggregatesFilter<$PrismaModel> | $Enums.SubjectClassType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumSubjectClassTypeFilter<$PrismaModel>
-    _max?: NestedEnumSubjectClassTypeFilter<$PrismaModel>
   }
 
   export type NestedEnumExamTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -483404,6 +483433,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectClassType?: $Enums.SubjectClassType
     subjectVersion: SubjectVersionCreateNestedOneWithoutPlanTrainingSubjectInput
     fixedClasses?: FixedClassCreateNestedManyWithoutPlanTrainingSubjectInput
   }
@@ -483416,6 +483446,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    subjectClassType?: $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutPlanTrainingSubjectInput
   }
 
@@ -483579,6 +483610,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PlanTrainingSubject"> | Date | string
     planTrainingId?: StringFilter<"PlanTrainingSubject"> | string
     subjectVersionId?: StringFilter<"PlanTrainingSubject"> | string
+    subjectClassType?: EnumSubjectClassTypeFilter<"PlanTrainingSubject"> | $Enums.SubjectClassType
   }
 
   export type PlanTrainingCreateWithoutPlanTrainingSubjectsInput = {
@@ -492495,6 +492527,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectClassType?: $Enums.SubjectClassType
     planTraining: PlanTrainingCreateNestedOneWithoutPlanTrainingSubjectsInput
     subjectVersion: SubjectVersionCreateNestedOneWithoutPlanTrainingSubjectInput
   }
@@ -492508,6 +492541,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     planTrainingId: string
     subjectVersionId: string
+    subjectClassType?: $Enums.SubjectClassType
   }
 
   export type PlanTrainingSubjectCreateOrConnectWithoutFixedClassesInput = {
@@ -496727,6 +496761,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    subjectClassType?: $Enums.SubjectClassType
     planTraining: PlanTrainingCreateNestedOneWithoutPlanTrainingSubjectsInput
     fixedClasses?: FixedClassCreateNestedManyWithoutPlanTrainingSubjectInput
   }
@@ -496739,6 +496774,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     planTrainingId: string
+    subjectClassType?: $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedCreateNestedManyWithoutPlanTrainingSubjectInput
   }
 
@@ -570766,6 +570802,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     subjectVersionId: string
+    subjectClassType?: $Enums.SubjectClassType
   }
 
   export type PlanTrainingSubjectUpdateWithoutPlanTrainingInput = {
@@ -570775,6 +570812,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutPlanTrainingSubjectNestedInput
     fixedClasses?: FixedClassUpdateManyWithoutPlanTrainingSubjectNestedInput
   }
@@ -570787,6 +570825,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedUpdateManyWithoutPlanTrainingSubjectNestedInput
   }
 
@@ -570798,6 +570837,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
   export type FixedClassUpdateWithoutPlanTrainingSubjectInput = {
@@ -574579,6 +574619,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     planTraining?: PlanTrainingUpdateOneRequiredWithoutPlanTrainingSubjectsNestedInput
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutPlanTrainingSubjectNestedInput
   }
@@ -574592,6 +574633,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
   export type PlanTrainingSubjectUncheckedUpdateManyWithoutFixedClassesInput = {
@@ -574603,6 +574645,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
   export type PlanTrainingDelaySubjectUpdateWithoutFixedClassesInput = {
@@ -576361,6 +576404,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     planTrainingId: string
+    subjectClassType?: $Enums.SubjectClassType
   }
 
   export type SubjectVersionHistoryCreateManySubjectVersionInput = {
@@ -577509,6 +577553,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     planTraining?: PlanTrainingUpdateOneRequiredWithoutPlanTrainingSubjectsNestedInput
     fixedClasses?: FixedClassUpdateManyWithoutPlanTrainingSubjectNestedInput
   }
@@ -577521,6 +577566,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
     fixedClasses?: FixedClassUncheckedUpdateManyWithoutPlanTrainingSubjectNestedInput
   }
 
@@ -577532,6 +577578,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     planTrainingId?: StringFieldUpdateOperationsInput | string
+    subjectClassType?: EnumSubjectClassTypeFieldUpdateOperationsInput | $Enums.SubjectClassType
   }
 
   export type SubjectVersionHistoryUpdateWithoutSubjectVersionInput = {
