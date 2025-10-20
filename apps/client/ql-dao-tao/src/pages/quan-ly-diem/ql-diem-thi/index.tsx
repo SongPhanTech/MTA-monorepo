@@ -1013,7 +1013,6 @@ export default function SubjectClassScore() {
                             return record?.midtermScore || "";
                           },
                         },
-                        // #region Điểm Thi
                         {
                           title: "Điểm thi",
                           dataIndex: "examScore",
@@ -1021,21 +1020,7 @@ export default function SubjectClassScore() {
                           type: "order",
                           align: "center",
                           render: (_, record) => {
-                            return (
-                              <Form.Item
-                                noStyle
-                                shouldUpdate={(prev, cur) =>
-                                  prev?.[record.id]?.examScore !==
-                                  cur?.[record.id]?.examScore
-                                }
-                              >
-                                {({ getFieldValue }) => {
-                                  const recordForm: any = getFieldValue([
-                                    record.id,
-                                    "examScore",
-                                  ]);
-
-                                  return (
+                        return (
                                     <Form.Item
                                       className="w-full mb-0"
                                       name={[record.id, "examScore"]}
@@ -1072,16 +1057,6 @@ export default function SubjectClassScore() {
                                         id={`score-thi-${record.id}`}
                                         style={{
                                           width: "100%",
-                                          borderColor:
-                                            !!recordForm &&
-                                            (recordForm > 10 ||
-                                              Math.round(recordForm * 10) !==
-                                                recordForm * 10)
-                                              ? "red"
-                                              : !!recordForm &&
-                                                recordForm !== record?.examScore
-                                              ? "#f0b60ce0"
-                                              : "",
                                         }}
                                         step={0}
                                         defaultValue={record?.examScore}
@@ -1097,9 +1072,6 @@ export default function SubjectClassScore() {
                                       />
                                     </Form.Item>
                                   );
-                                }}
-                              </Form.Item>
-                            );
                           },
                         },
                         {
@@ -1134,7 +1106,6 @@ export default function SubjectClassScore() {
                             </Form.Item>
                           ),
                         },
-                        // #region Cấm thi/Hoãn thi/Đình chỉ
                         {
                           title: "Cấm thi",
                           dataIndex: "examBanned",

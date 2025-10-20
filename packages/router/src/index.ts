@@ -192,12 +192,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC,
                         description: 'Danh sách lớp môn học',
                     },
-                    // {
-                    //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                    //     label: 'Nhập điểm',
-                    //     path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                    //     description: 'Nhập điểm',
-                    // },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                        label: 'Điểm trung bình học kỳ',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_TRUNG_BINH_KY_HOC,
+                        description: 'Điểm trung bình học kỳ',
+                    },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                         label: 'Nhập điểm CC,TX',
