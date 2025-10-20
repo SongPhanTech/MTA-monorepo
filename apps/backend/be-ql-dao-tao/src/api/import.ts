@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import type { Prisma } from '@workspace/db'
+import { createId, type Prisma } from '@workspace/db'
+import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetLecturer, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
@@ -90,10 +91,12 @@ app.openapi(importLecturer, async (c) => {
 
     const existingLecturer = await prisma.lecturer.findMany({
         where: { code: { in: data.lecturers.map((lecturer) => lecturer.code) } },
-        select: { id: true, code: true },
+        select: { id: true, code: true, userProfileId: true },
     })
 
-    const existingLecturerMap = new Map(existingLecturer.map(({ code, id }) => [code, id]))
+    const existingLecturerMap = new Map(
+        existingLecturer.map(({ code, id, userProfileId }) => [code, { id, userProfileId }])
+    )
 
     const start = Date.now()
     await prisma.$transaction(
@@ -127,31 +130,72 @@ app.openapi(importLecturer, async (c) => {
                         idCardNumber: lecturer.idCardNumber,
                     }
 
-                const existingId = existingLecturerMap.get(lecturer.code)
-                if (existingId) {
+                const existing = existingLecturerMap.get(lecturer.code)
+                if (existing) {
                     await tx.lecturer.update({
-                        where: { id: existingId },
+                        where: { id: existing.id },
                         data: {
                             ...lecturerData,
                             userProfile: { update: profileData },
                         },
                     })
+
+                    putDMNhanViens(
+                        {
+                            Id: existing.userProfileId,
+                            bLaCanBoNhanVien: true,
+                            bLaTaiKhoan: true,
+                            dNgaySinh: profileData.dateOfBirth?.toString(),
+                            sCCCD: profileData.idCardNumber,
+                            sEmail: profileData.email,
+                            sHoVaDem: profileData.lastName,
+                            sTen: profileData.firstName,
+                            sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                            sDM_GioiTinhId: genderMap.get(lecturer.gender),
+                        },
+                        {
+                            headers: {
+                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                            },
+                        }
+                    ).catch(console.error)
                 } else {
+                    const profileId = createId()
                     await tx.lecturer.create({
                         data: {
                             ...lecturerData,
                             userProfile: {
                                 connectOrCreate: {
                                     where: { idCardNumber: lecturer.idCardNumber },
-                                    create: profileData,
+                                    create: { id: profileId, ...profileData },
                                 },
                             },
                         },
                     })
+
+                    postDMNhanViens(
+                        {
+                            Id: profileId,
+                            bLaCanBoNhanVien: true,
+                            bLaTaiKhoan: true,
+                            dNgaySinh: profileData.dateOfBirth?.toString(),
+                            sCCCD: profileData.idCardNumber,
+                            sEmail: profileData.email,
+                            sHoVaDem: profileData.lastName,
+                            sTen: profileData.firstName,
+                            sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
+                            sDM_GioiTinhId: genderMap.get(lecturer.gender),
+                        },
+                        {
+                            headers: {
+                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                            },
+                        }
+                    ).catch(console.error)
                 }
             }
-
-            // TODO: sync with LSB
         },
         { timeout: timeout * 1000 }
     )
