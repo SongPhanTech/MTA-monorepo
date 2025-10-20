@@ -51,24 +51,20 @@ WITH FCS AS (
         AND fc."active" = TRUE
         AND sv."deletedAt" IS NULL
         AND sv."active" = TRUE
-    GROUP BY cv.id,
-        cv.name,
-        fc.id,
-        fc."startYear",
-        fc.name,
-        sv.id,
-        sv.code,
-        sv.credit,
-        sv.name,
-        tbs.semester,
-        training_course_id,
-        training_major_id,
-        sc.id,
-        c."managementOrganizationId",
-        tc."trainingObjectTypeId",
-        subject_version_code,
-        management_organization_code,
-        management_organization_name
+    GROUP BY sv.code,
+            tbs.semester,
+            fc."startYear",
+            fc.id,
+            cv.id,
+            cv.code,
+            cv.name,
+            sv.id,
+            c."trainingMajorId",
+            c."managementOrganizationId",
+            tc."trainingObjectTypeId",
+            dv."sTen",
+            dv."sMa",
+            sc.id
 )
 SELECT COUNT(*) AS "total"
 FROM (
@@ -99,7 +95,6 @@ FROM (
             subject_version_code,
             subject_version_credit,
             subject_version_name,
-            training_major_id,
             training_course_id,
             management_organization_id,
             management_organization_name
