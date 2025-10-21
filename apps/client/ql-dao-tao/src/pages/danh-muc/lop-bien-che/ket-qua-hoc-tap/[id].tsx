@@ -285,7 +285,7 @@ export default function StudentScoreClassPage() {
         ]
       };
     exportFromTemplate({
-      templateUrl: getMinioUrl('"/mta/template/quatrinh.xlsx"'),
+      templateUrl: getMinioUrl('/mta/template/quatrinh.xlsx'),
       sheets: [
         {
           sheet: "BaoCaoDiem",
