@@ -4,7 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
+import type { ExamRoomId } from './examRoomId'
 
-export type ExportPhanCongGiangDay404 = {
-    message: string
+export interface GenExamRoomCode {
+    examRoomId: ExamRoomId
 }

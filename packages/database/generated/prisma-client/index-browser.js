@@ -3617,6 +3617,7 @@ exports.Prisma.ExamRoomScalarFieldEnum = {
   updatedAt: 'updatedAt',
   examId: 'examId',
   roomId: 'roomId',
+  lockExamCode: 'lockExamCode',
   start: 'start',
   end: 'end'
 };

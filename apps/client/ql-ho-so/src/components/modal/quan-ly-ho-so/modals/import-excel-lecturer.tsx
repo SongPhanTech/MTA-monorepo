@@ -7,12 +7,12 @@ import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } 
 import { useState } from 'react'
 
 const { Panel } = Collapse
-interface ImportStudentModalProps {
+interface ImportLecturerModalProps {
     visible: boolean
     onCancel: () => void
 }
 
-const ImportLecturerModal = ({ visible, onCancel }: ImportStudentModalProps) => {
+const ImportLecturerModal = ({ visible, onCancel }: ImportLecturerModalProps) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(10)
     const [previewData, setPreviewData] = useState<any[]>([])

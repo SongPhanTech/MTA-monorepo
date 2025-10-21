@@ -6088,11 +6088,11 @@ model ExamRoom {
   examId       String
   room         Room?         @relation(fields: [roomId], references: [id])
   roomId       String?
+  lockExamCode Boolean       @default(false)
   start        Int?
   end          Int?
   examSessions ExamSession[]
 
-  @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 
@@ -6185,7 +6185,7 @@ model ExamSession {
   /// phách
   examCode              String?
 
-  @@unique([examCode, examId])
+  @@unique([examCode, examRoomId])
   @@schema("khao-thi")
 }
 

@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportPhanCongGiangDay400 = {
+export interface AwardIdsResult {
+    success: boolean
     message: string
 }

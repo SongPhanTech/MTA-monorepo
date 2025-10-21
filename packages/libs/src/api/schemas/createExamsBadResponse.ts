@@ -5,6 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportStudentFixedClassDocx404 = {
+export interface CreateExamsBadResponse {
     message: string
 }

@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-/**
- * ID của lớp quản lý
- */
-export type FixedClassId = string
+export type GenExamRoomCode404 = {
+    message: string
+}

@@ -21218,6 +21218,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
+                }, lockExamCode: {
+                    name: "lockExamCode",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, start: {
                     name: "start",
                     type: "Int",
@@ -21240,12 +21244,9 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, examId_roomId: {
-                    name: "examId_roomId",
-                    fields: ["examId", "roomId"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         testStructureRule: {
             name: 'TestStructureRule', fields: {
@@ -21570,9 +21571,9 @@ const metadata = {
                 }, studentSubjectScoreId: {
                     name: "studentSubjectScoreId",
                     fields: ["studentSubjectScoreId"]
-                }, examCode_examId: {
-                    name: "examCode_examId",
-                    fields: ["examCode", "examId"]
+                }, examCode_examRoomId: {
+                    name: "examCode_examRoomId",
+                    fields: ["examCode", "examRoomId"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],

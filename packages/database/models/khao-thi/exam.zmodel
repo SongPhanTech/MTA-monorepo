@@ -224,12 +224,14 @@ model ExamRoom extends Base {
   room         Room?         @relation(fields: [roomId], references: [id])
   roomId       String?
 
+  lockExamCode Boolean       @default(false)
+
   start        Int?
   end          Int?
 
   examSessions ExamSession[]
 
-  @@unique([examId, roomId])
+  // @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 
@@ -297,7 +299,7 @@ model ExamSession extends Base {
 
   // answers               Answer[]              // Tất cả câu trả lời trong phiên này
 
-  @@unique([examCode, examId])
+  @@unique([examCode, examRoomId])
 
   @@schema("khao-thi")
 }

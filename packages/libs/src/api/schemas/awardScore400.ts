@@ -5,8 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface ImportStudent {
-    file: Blob
-    /** @nullable */
-    timeout?: number | null
+export type AwardScore400 = {
+    message: string
 }

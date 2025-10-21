@@ -4,12 +4,13 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
+import HSSVChuaDat from './_components/hssv-chua-dat'
 import MonCham from './_components/mon-cham'
+import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
 import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
 import MonKySau from './_components/mon-ky-sau'
 import MonTheoKeHoachDuKien from './_components/mon-theo-ke-hoach-du-kien'
-import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
-import HSSVChuaDat from './_components/hssv-chua-dat'
+
 interface TabItem {
     key: string
     label: string

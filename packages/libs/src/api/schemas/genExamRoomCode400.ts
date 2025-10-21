@@ -4,6 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { SerializedField } from './serializedField'
 
-export type SerializedFields = SerializedField[]
+export type GenExamRoomCode400 = {
+    message: string
+}

@@ -14,6 +14,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    lockExamCode: z.boolean().default(false),
     start: z.number().nullish(),
     end: z.number().nullish(),
 }
@@ -61,6 +62,7 @@ export const ExamRoomPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    lockExamCode: z.boolean().default(false),
     start: z.union([z.number().nullish(), z.record(z.unknown())]),
     end: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
@@ -70,7 +72,7 @@ export const ExamRoomPrismaUpdateSchema = z.object({
  * `ExamRoom` schema for create operations excluding foreign keys and relations.
  */
 export const ExamRoomCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true
+    id: true, active: true, createdAt: true, updatedAt: true, lockExamCode: true
 });
 
 

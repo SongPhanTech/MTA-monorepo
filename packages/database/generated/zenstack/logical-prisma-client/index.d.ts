@@ -9095,6 +9095,7 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         examId: 'examId',
         roomId: 'roomId',
+        lockExamCode: 'lockExamCode',
         start: 'start',
         end: 'end'
     };
@@ -91837,6 +91838,7 @@ export namespace Prisma {
         readonly updatedAt: FieldRef<"ExamRoom", 'DateTime'>;
         readonly examId: FieldRef<"ExamRoom", 'String'>;
         readonly roomId: FieldRef<"ExamRoom", 'String'>;
+        readonly lockExamCode: FieldRef<"ExamRoom", 'Boolean'>;
         readonly start: FieldRef<"ExamRoom", 'Int'>;
         readonly end: FieldRef<"ExamRoom", 'Int'>;
     }
@@ -291774,6 +291776,7 @@ export namespace Prisma {
         updatedAt: Date | null
         examId: string | null
         roomId: string | null
+        lockExamCode: boolean | null
         start: number | null
         end: number | null
     };
@@ -291787,6 +291790,7 @@ export namespace Prisma {
         updatedAt: Date | null
         examId: string | null
         roomId: string | null
+        lockExamCode: boolean | null
         start: number | null
         end: number | null
     };
@@ -291800,6 +291804,7 @@ export namespace Prisma {
         updatedAt: number
         examId: number
         roomId: number
+        lockExamCode: number
         start: number
         end: number
         _all: number
@@ -291822,6 +291827,7 @@ export namespace Prisma {
         updatedAt?: true
         examId?: true
         roomId?: true
+        lockExamCode?: true
         start?: true
         end?: true
     };
@@ -291835,6 +291841,7 @@ export namespace Prisma {
         updatedAt?: true
         examId?: true
         roomId?: true
+        lockExamCode?: true
         start?: true
         end?: true
     };
@@ -291848,6 +291855,7 @@ export namespace Prisma {
         updatedAt?: true
         examId?: true
         roomId?: true
+        lockExamCode?: true
         start?: true
         end?: true
         _all?: true
@@ -291942,6 +291950,7 @@ export namespace Prisma {
         updatedAt: Date
         examId: string
         roomId: string | null
+        lockExamCode: boolean
         start: number | null
         end: number | null
         _count: ExamRoomCountAggregateOutputType | null
@@ -291972,6 +291981,7 @@ export namespace Prisma {
         updatedAt?: boolean
         examId?: boolean
         roomId?: boolean
+        lockExamCode?: boolean
         start?: boolean
         end?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
@@ -291989,6 +291999,7 @@ export namespace Prisma {
         updatedAt?: boolean
         examId?: boolean
         roomId?: boolean
+        lockExamCode?: boolean
         start?: boolean
         end?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
@@ -292004,6 +292015,7 @@ export namespace Prisma {
         updatedAt?: boolean
         examId?: boolean
         roomId?: boolean
+        lockExamCode?: boolean
         start?: boolean
         end?: boolean
         exam?: boolean | ExamDefaultArgs<ExtArgs>
@@ -292019,10 +292031,11 @@ export namespace Prisma {
         updatedAt?: boolean
         examId?: boolean
         roomId?: boolean
+        lockExamCode?: boolean
         start?: boolean
         end?: boolean
     };
-    export type ExamRoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "roomId" | "start" | "end", ExtArgs["result"]["examRoom"]>;
+    export type ExamRoomOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "roomId" | "lockExamCode" | "start" | "end", ExtArgs["result"]["examRoom"]>;
     export type ExamRoomInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         exam?: boolean | ExamDefaultArgs<ExtArgs>
         room?: boolean | ExamRoom$roomArgs<ExtArgs>
@@ -292054,6 +292067,7 @@ export namespace Prisma {
             updatedAt: Date
             examId: string
             roomId: string | null
+            lockExamCode: boolean
             start: number | null
             end: number | null
         }, ExtArgs["result"]["examRoom"]>
@@ -339746,6 +339760,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
         examId?: StringFilter<"ExamRoom"> | string
         roomId?: StringNullableFilter<"ExamRoom"> | string | null
+        lockExamCode?: BoolFilter<"ExamRoom"> | boolean
         start?: IntNullableFilter<"ExamRoom"> | number | null
         end?: IntNullableFilter<"ExamRoom"> | number | null
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
@@ -339762,6 +339777,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         examId?: SortOrder
         roomId?: SortOrderInput | SortOrder
+        lockExamCode?: SortOrder
         start?: SortOrderInput | SortOrder
         end?: SortOrderInput | SortOrder
         exam?: ExamOrderByWithRelationInput
@@ -339772,7 +339788,6 @@ export namespace Prisma {
     export type ExamRoomWhereUniqueInput = Prisma.AtLeast<{
         id?: string
         code?: string
-        examId_roomId?: ExamRoomExamIdRoomIdCompoundUniqueInput
         AND?: ExamRoomWhereInput | ExamRoomWhereInput[]
         OR?: ExamRoomWhereInput[]
         NOT?: ExamRoomWhereInput | ExamRoomWhereInput[]
@@ -339783,12 +339798,13 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
         examId?: StringFilter<"ExamRoom"> | string
         roomId?: StringNullableFilter<"ExamRoom"> | string | null
+        lockExamCode?: BoolFilter<"ExamRoom"> | boolean
         start?: IntNullableFilter<"ExamRoom"> | number | null
         end?: IntNullableFilter<"ExamRoom"> | number | null
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
         room?: XOR<RoomNullableScalarRelationFilter, RoomWhereInput> | null
         examSessions?: ExamSessionListRelationFilter
-    }, "id" | "code" | "examId_roomId">;
+    }, "id" | "code">;
     export type ExamRoomOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -339799,6 +339815,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         examId?: SortOrder
         roomId?: SortOrderInput | SortOrder
+        lockExamCode?: SortOrder
         start?: SortOrderInput | SortOrder
         end?: SortOrderInput | SortOrder
         _count?: ExamRoomCountOrderByAggregateInput
@@ -339820,6 +339837,7 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"ExamRoom"> | Date | string
         examId?: StringWithAggregatesFilter<"ExamRoom"> | string
         roomId?: StringNullableWithAggregatesFilter<"ExamRoom"> | string | null
+        lockExamCode?: BoolWithAggregatesFilter<"ExamRoom"> | boolean
         start?: IntNullableWithAggregatesFilter<"ExamRoom"> | number | null
         end?: IntNullableWithAggregatesFilter<"ExamRoom"> | number | null
     };
@@ -340113,7 +340131,7 @@ export namespace Prisma {
         id?: string
         code?: string
         studentSubjectScoreId?: string
-        examCode_examId?: ExamSessionExamCodeExamIdCompoundUniqueInput
+        examCode_examRoomId?: ExamSessionExamCodeExamRoomIdCompoundUniqueInput
         AND?: ExamSessionWhereInput | ExamSessionWhereInput[]
         OR?: ExamSessionWhereInput[]
         NOT?: ExamSessionWhereInput | ExamSessionWhereInput[]
@@ -340128,7 +340146,7 @@ export namespace Prisma {
         exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
         examRoom?: XOR<ExamRoomScalarRelationFilter, ExamRoomWhereInput>
         studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
-    }, "id" | "code" | "studentSubjectScoreId" | "examCode_examId">;
+    }, "id" | "code" | "studentSubjectScoreId" | "examCode_examRoomId">;
     export type ExamSessionOrderByWithAggregationInput = {
         id?: SortOrder
         code?: SortOrderInput | SortOrder
@@ -366837,6 +366855,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
         exam: ExamCreateNestedOneWithoutExamRoomsInput
@@ -366853,6 +366872,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         examId: string
         roomId?: string | null
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
         examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput
@@ -366865,6 +366885,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
         exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
@@ -366881,6 +366902,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
         examSessions?: ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput
@@ -366895,6 +366917,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         examId: string
         roomId?: string | null
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
     };
@@ -366906,6 +366929,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
     };
@@ -366919,6 +366943,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
     };
@@ -384897,10 +384922,6 @@ export namespace Prisma {
         sort: SortOrder
         search: string
     };
-    export type ExamRoomExamIdRoomIdCompoundUniqueInput = {
-        examId: string
-        roomId: string
-    };
     export type ExamRoomCountOrderByAggregateInput = {
         id?: SortOrder
         code?: SortOrder
@@ -384911,6 +384932,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         examId?: SortOrder
         roomId?: SortOrder
+        lockExamCode?: SortOrder
         start?: SortOrder
         end?: SortOrder
     };
@@ -384928,6 +384950,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         examId?: SortOrder
         roomId?: SortOrder
+        lockExamCode?: SortOrder
         start?: SortOrder
         end?: SortOrder
     };
@@ -384941,6 +384964,7 @@ export namespace Prisma {
         updatedAt?: SortOrder
         examId?: SortOrder
         roomId?: SortOrder
+        lockExamCode?: SortOrder
         start?: SortOrder
         end?: SortOrder
     };
@@ -385123,9 +385147,9 @@ export namespace Prisma {
         sort: SortOrder
         search: string
     };
-    export type ExamSessionExamCodeExamIdCompoundUniqueInput = {
+    export type ExamSessionExamCodeExamRoomIdCompoundUniqueInput = {
         examCode: string
-        examId: string
+        examRoomId: string
     };
     export type ExamSessionCountOrderByAggregateInput = {
         id?: SortOrder
@@ -470890,6 +470914,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
         exam: ExamCreateNestedOneWithoutExamRoomsInput
@@ -470904,6 +470929,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
         examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput
@@ -471056,6 +471082,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"ExamRoom"> | Date | string
         examId?: StringFilter<"ExamRoom"> | string
         roomId?: StringNullableFilter<"ExamRoom"> | string | null
+        lockExamCode?: BoolFilter<"ExamRoom"> | boolean
         start?: IntNullableFilter<"ExamRoom"> | number | null
         end?: IntNullableFilter<"ExamRoom"> | number | null
     };
@@ -505757,6 +505784,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
         room?: RoomCreateNestedOneWithoutExamRoomsInput
@@ -505771,6 +505799,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         roomId?: string | null
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
         examSessions?: ExamSessionUncheckedCreateNestedManyWithoutExamRoomInput
@@ -506654,6 +506683,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
         exam: ExamCreateNestedOneWithoutExamRoomsInput
@@ -506669,6 +506699,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         examId: string
         roomId?: string | null
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
     };
@@ -506814,6 +506845,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
         exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
@@ -506829,6 +506861,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
     };
@@ -542935,6 +542968,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         examId: string
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
     };
@@ -543436,6 +543470,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
         exam?: ExamUpdateOneRequiredWithoutExamRoomsNestedInput
@@ -543450,6 +543485,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
         examSessions?: ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput
@@ -543463,6 +543499,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         examId?: StringFieldUpdateOperationsInput | string
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
     };
@@ -554561,6 +554598,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         roomId?: string | null
+        lockExamCode?: boolean
         start?: number | null
         end?: number | null
     };
@@ -554973,6 +555011,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
         room?: RoomUpdateOneWithoutExamRoomsNestedInput
@@ -554987,6 +555026,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
         examSessions?: ExamSessionUncheckedUpdateManyWithoutExamRoomNestedInput
@@ -555000,6 +555040,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
     };

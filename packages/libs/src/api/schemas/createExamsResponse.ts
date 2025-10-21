@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportStudentSubjectClassExcel404 = {
+export interface CreateExamsResponse {
+    success: boolean
     message: string
 }

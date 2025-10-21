@@ -38074,6 +38074,17 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                lockExamCode: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 start: {
                     name: string;
                     type: string;
@@ -38101,12 +38112,8 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
-                examId_roomId: {
-                    name: string;
-                    fields: string[];
-                };
             };
-            attributes: ({
+            attributes: {
                 name: string;
                 args: ({
                     name: string;
@@ -38115,13 +38122,7 @@ declare const metadata: {
                     name: string;
                     value?: undefined;
                 })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
+            }[];
         };
         testStructureRule: {
             name: string;
@@ -38734,7 +38735,7 @@ declare const metadata: {
                     name: string;
                     fields: string[];
                 };
-                examCode_examId: {
+                examCode_examRoomId: {
                     name: string;
                     fields: string[];
                 };

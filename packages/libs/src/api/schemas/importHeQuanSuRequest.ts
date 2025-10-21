@@ -5,8 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type SerializedFieldItemsItem = {
-    path: string
-    type: string
-    description?: string
+export interface ImportHeQuanSuRequest {
+    file: Blob
+    /** @nullable */
+    timeout?: number | null
 }
