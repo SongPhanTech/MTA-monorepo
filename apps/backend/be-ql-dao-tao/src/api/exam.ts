@@ -118,7 +118,7 @@ app.openapi(createNewExamList, async (c) => {
             data: groupedExams.map(({ examId }) => ({ id: examId })),
         })
 
-        await prisma.$executeRawUnsafe(`
+        await tx.$executeRawUnsafe(`
             UPDATE "ql-dao-tao"."SubjectClass" AS c
             SET "examId" = data."examId"
             FROM (
@@ -128,7 +128,7 @@ app.openapi(createNewExamList, async (c) => {
             WHERE c."id" = data."classId";
             `)
 
-        await prisma.$executeRawUnsafe(`
+        await tx.$executeRawUnsafe(`
             UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
             SET "examId" = data."examId"
             FROM (
