@@ -74,8 +74,7 @@ export default function MonCoHVSVChuaDat() {
         }
     )
 
-    const data = useMemo(() => (res?.status === 200 ? res?.data : []), [res])
-    console.log('data',data);
+    const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
     
     useEffect(() => {
         if (planTrainingData) {
