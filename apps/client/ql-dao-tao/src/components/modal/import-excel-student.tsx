@@ -2,7 +2,7 @@ import { CloseOutlined } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-// import {importStudent} from '@workspace/libs/api/training'
+import {importStudent} from '@workspace/libs/api/training'
 import { parseSheetStudent } from '@workspace/libs/parseExcel'
 import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
@@ -75,12 +75,12 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
 
         try {
             if (!file) return
-            // const res = await importStudent({ file: file, timeout: 30 })
-            // if (res?.status === 200) {
-            //     message.success(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thành công')
-            // } else {
-            //     message.error(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thất bại')
-            // }
+            const res = await importStudent({ file: file, timeout: 30 })
+            if (res?.status === 200) {
+                message.success(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thành công')
+            } else {
+                message.error(res?.data?.message || 'Nhập dữ liệu sinh viên từ file thất bại')
+            }
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
