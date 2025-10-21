@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { createId, type Prisma } from '@workspace/db'
+import type { Prisma } from '@workspace/db'
 import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetLecturer, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
@@ -143,15 +143,21 @@ app.openapi(importLecturer, async (c) => {
                     putDMNhanViens(
                         {
                             Id: existing.userProfileId,
-                            bLaCanBoNhanVien: true,
+                            sMa: lecturer.idCardNumber,
+                            bLaHocVien: true,
                             bLaTaiKhoan: true,
-                            dNgaySinh: profileData.dateOfBirth?.toString(),
-                            sCCCD: profileData.idCardNumber,
-                            sEmail: profileData.email,
+                            dNgaySinh: lecturer.dateOfBirth
+                                ? new Date(lecturer.dateOfBirth)?.toISOString()
+                                : null,
+                            sCCCD: lecturer.idCardNumber,
                             sHoVaDem: profileData.lastName,
                             sTen: profileData.firstName,
-                            sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                            sDM_GioiTinhId: genderMap.get(lecturer.gender),
+                            sTenDayDu: lecturer.fullname,
+                            sSDTDiDong: lecturer.phoneNumber ?? '',
+                            // TODO: fix this
+                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                            sEmail: lecturer.email,
+                            sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
                         },
                         {
                             headers: {
@@ -159,9 +165,13 @@ app.openapi(importLecturer, async (c) => {
                                 'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
                             },
                         }
-                    ).catch(console.error)
+                    )
+                        .then((res) => {
+                            console.log('[LSB create User]:', res.status, res.data)
+                        })
+                        .catch(console.error)
                 } else {
-                    const profileId = createId()
+                    const profileId = crypto.randomUUID()
                     await tx.lecturer.create({
                         data: {
                             ...lecturerData,
@@ -177,15 +187,21 @@ app.openapi(importLecturer, async (c) => {
                     postDMNhanViens(
                         {
                             Id: profileId,
-                            bLaCanBoNhanVien: true,
+                            sMa: lecturer.idCardNumber,
+                            bLaHocVien: true,
                             bLaTaiKhoan: true,
-                            dNgaySinh: profileData.dateOfBirth?.toString(),
-                            sCCCD: profileData.idCardNumber,
-                            sEmail: profileData.email,
+                            dNgaySinh: lecturer.dateOfBirth
+                                ? new Date(lecturer.dateOfBirth)?.toISOString()
+                                : null,
+                            sCCCD: lecturer.idCardNumber,
                             sHoVaDem: profileData.lastName,
                             sTen: profileData.firstName,
-                            sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
-                            sDM_GioiTinhId: genderMap.get(lecturer.gender),
+                            sTenDayDu: lecturer.fullname,
+                            sSDTDiDong: lecturer.phoneNumber ?? '',
+                            // TODO: fix this
+                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                            sEmail: lecturer.email,
+                            sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
                         },
                         {
                             headers: {
@@ -193,7 +209,11 @@ app.openapi(importLecturer, async (c) => {
                                 'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
                             },
                         }
-                    ).catch(console.error)
+                    )
+                        .then((res) => {
+                            console.log('[LSB create User]:', res.status, res.data)
+                        })
+                        .catch(console.error)
                 }
             }
         },

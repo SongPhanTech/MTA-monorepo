@@ -2,6 +2,7 @@ import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
 import '../ql-dao-tao/categories'
+import '../ql-dao-tao/lecturer'
 
 /// Loại câu hỏi
 enum QuestionType {
@@ -207,7 +208,7 @@ model Exam extends Base {
   subjectClass        SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
   /// thí sinh
   studentSubjectScore StudentSubjectScore[]
-  room                Room[] // sum examCapacity >= số thí sinh
+  room                Room[]
   examBank            ExamBank[]
   testStructureRules  TestStructureRule[]
   examSessions        ExamSession[]
@@ -217,19 +218,26 @@ model Exam extends Base {
 }
 
 /// Phòng thi cho kỳ thi
-// 
 model ExamRoom extends Base {
-  exam         Exam          @relation(fields: [examId], references: [id])
-  examId       String
-  room         Room?         @relation(fields: [roomId], references: [id])
-  roomId       String?
+  exam               Exam          @relation(fields: [examId], references: [id])
+  examId             String
+  room               Room?         @relation(fields: [roomId], references: [id])
+  roomId             String?
 
-  start        Int?
-  end          Int?
+  firstSupervisor    Lecturer?     @relation("FirstSupervisor", fields: [firstSupervisorId], references: [id])
+  firstSupervisorId  String?
 
-  examSessions ExamSession[]
+  secondSupervisor   Lecturer?     @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
+  secondSupervisorId String?
 
-  @@unique([examId, roomId])
+  lockExamCode       Boolean       @default(false)
+
+  start              Int?
+  end                Int?
+
+  examSessions       ExamSession[]
+
+  // @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 
@@ -297,7 +305,7 @@ model ExamSession extends Base {
 
   // answers               Answer[]              // Tất cả câu trả lời trong phiên này
 
-  @@unique([examCode, examId])
+  @@unique([examCode, examRoomId])
 
   @@schema("khao-thi")
 }

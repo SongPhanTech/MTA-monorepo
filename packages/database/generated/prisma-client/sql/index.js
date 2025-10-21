@@ -3,6 +3,5 @@
 /* eslint-disable */
 "use strict"
 exports.countSubjectClassBySemester = require("./countSubjectClassBySemester.js").countSubjectClassBySemester
-exports.getFixedClassBySubjectClassSemester = require("./getFixedClassBySubjectClassSemester.js").getFixedClassBySubjectClassSemester
 exports.getRandomQuestionIDs = require("./getRandomQuestionIDs.js").getRandomQuestionIDs
 exports.getSubjectClassBySemester = require("./getSubjectClassBySemester.js").getSubjectClassBySemester

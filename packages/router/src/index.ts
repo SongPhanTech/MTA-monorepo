@@ -175,7 +175,7 @@ const NAVIGATION: NavigationType = {
                     },
                 ],
             },
-             {
+            {
                 id: 'ke-hoach-hoc-lai',
                 label: 'Kế hoạch học lại',
                 icon: CalendarRange,
@@ -188,7 +188,7 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
-                        label: 'Mở lớp học môn học',
+                        label: 'Mở lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
                         description: 'Kế hoạch mở lớp học lại',
                     },
@@ -225,9 +225,15 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                        label: 'Điểm trung bình học kỳ',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_TRUNG_BINH_KY_HOC,
-                        description: 'Điểm trung bình học kỳ',
+                        label: 'QL phòng thi',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_PHONG_THI,
+                        description: 'QL phòng thi',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                        label: 'Nhập điểm theo phách',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH,
+                        description: 'Nhập điểm theo phách',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
@@ -240,6 +246,12 @@ const NAVIGATION: NavigationType = {
                         label: 'Nhập điểm thi',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_THI,
                         description: 'Nhập điểm thi',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                        label: 'Trung bình học kỳ',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_TRUNG_BINH_KY_HOC,
+                        description: 'Điểm trung bình học kỳ',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_OLYMPIC,
@@ -266,6 +278,12 @@ const NAVIGATION: NavigationType = {
                 label: 'Tổ chức thi',
                 icon: FileOutlined,
                 children: [
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_KY_THI,
+                        label: 'Kỳ thi',
+                        path: ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_KY_THI,
+                        description: 'Quản lý kỳ thi',
+                    },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_DANH_SACH_THI,
                         label: 'Danh sách thi',

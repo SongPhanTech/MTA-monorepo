@@ -4,7 +4,7 @@ import type React from 'react'
 
 export default function DangKyHocLai() {
     return (
-        <DangKyHoc/>
+        <DangKyHoc hocLai/>
     )
 }
 

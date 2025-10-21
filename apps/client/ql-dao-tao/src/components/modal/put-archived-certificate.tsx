@@ -1,4 +1,5 @@
 import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import DocumentPaths from '@components/commons/documentPaths'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
@@ -9,24 +10,29 @@ import type { ArchivedCertificate } from '@workspace/db/client'
 import {
     useCreateArchivedCertificate,
     useFindManyCertificate,
-    useFindManySubject,
+    useFindManyFixedClass,
+    useFindManyStudent,
+    useFindManyTrainingCourse,
     useFindUniqueArchivedCertificate,
     useUpdateArchivedCertificate,
 } from '@workspace/db/hooks'
-import { Col, DatePicker, Form, Input, InputNumber, message } from 'antd'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Col, Form, Input, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutArchivedCertificate = ArchivedCertificate & {
     documentFiles?: DocumentFile[]
+    trainingCoursesId?:string
+    fixedClassesId?:string
 }
 dayjs.locale('vi')
 
 const PutCertificateArchivedModal = () => {
     const [document, setDocument] = useState<DocumentFile[]>([])
     const [form] = Form.useForm<PutArchivedCertificate>()
-    const [_targetDisabled, setTargetDisabled] = useState(true)
+     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const {
         isOpen,
         onClose,
@@ -40,6 +46,23 @@ const PutCertificateArchivedModal = () => {
     const { mutateAsync: createArchivedCertificate } = useCreateArchivedCertificate()
     const { mutateAsync: updateArchivedCertificate } = useUpdateArchivedCertificate()
     const { data: certificate = [] } = useFindManyCertificate()
+          const { data: trainingCourses = [] } =
+            useFindManyTrainingCourse({
+                where:{
+                    trainingObjectTypeId
+                },
+                orderBy: { name: 'asc' },
+            }, { enabled: !!trainingObjectTypeId })
+    
+        // Lấy danh sách FixedClass
+        const { data: fixedClasses = [] } = useFindManyFixedClass({
+            where: {
+                trainingCourseId: {
+                    in: trainingCourses.map((course) => course.id),
+                },
+            },
+            // skip: trainingCourses.length ? 0 : 1,
+        })
     async function onOk({ ...rest }: PutArchivedCertificate) {
         try {
             showSpinner()
@@ -48,7 +71,7 @@ const PutCertificateArchivedModal = () => {
                     data: {
                         studentId: rest.studentId,
                         certificateId: rest.certificateId,
-                        finalScore: rest.finalScore,
+                        finalScore: rest.finalScore||0,
                         score: rest.score,
                         issuedBy: rest.issuedBy,
                         issuedDate: rest.issuedDate,
@@ -96,7 +119,7 @@ const PutCertificateArchivedModal = () => {
                     data: {
                         studentId: rest.studentId,
                         certificateId: rest.certificateId,
-                        finalScore: rest.finalScore,
+                        finalScore: rest.finalScore ||0,
                         score: rest.score,
                         issuedBy: rest.issuedBy,
                         issuedDate: rest.issuedDate,
@@ -129,12 +152,44 @@ const PutCertificateArchivedModal = () => {
             hideSpinner()
         }
     }
-    const { data: subjectData = [] } = useFindManySubject()
+    const fixedClassId=Form.useWatch('fixedClassesId',form)
+    const trainingCoursesId=Form.useWatch('trainingCoursesId',form)
+        const { data: studentData = [] } = useFindManyStudent(
+            {
+                where: {
+                    trainingObjectTypeId,
+                    ...(!!trainingCoursesId||!!fixedClassId?{
+                          fixedClass:{
+                        ...(trainingCoursesId?{trainingCourseId:trainingCoursesId}:{}),
+                        ...(fixedClassId?{id:fixedClassId}:{})
+                    }
+                    }:{})
+                },
+                include: {
+                    userProfile: true,
+                },
+                orderBy: {
+                    userProfile: {
+                        firstName: 'asc',
+                    },
+                },
+            },
+            { enabled: !!trainingObjectTypeId }
+        )
     const { data: initialData } = useFindUniqueArchivedCertificate(
         {
             where: { id: id },
             include: {
                 documentFiles: true,
+                    student:{
+                    include:{
+                        fixedClass:{
+                            include:{
+                                trainingCourse:true
+                            }
+                        }
+                    }
+                }
             },
         },
         { enabled: !!id }
@@ -145,7 +200,11 @@ const PutCertificateArchivedModal = () => {
         if (initialData) {
             form.setFieldsValue({
                 ...initialData,
-                documentFiles: initialData.documentFiles,
+                    issuedDate:dayjs(initialData.issuedDate),
+                    expiredDate:dayjs(initialData.expiredDate),
+                    documentFiles: initialData.documentFiles,
+                    trainingCoursesId:initialData?.student?.fixedClass?.trainingCourseId ||'',
+                    fixedClassesId:initialData?.student?.fixedClassId||''
             })
             setDocument(initialData.documentFiles)
         } else {
@@ -164,8 +223,8 @@ const PutCertificateArchivedModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa chứng chỉ theo môn học' : 'Thêm mới chứng chỉ theo môn học'}
-            className="w-[600px]"
+            title={id ? 'Chỉnh sửa đơn phiển điểm chứng chỉ cho môn môn học' : 'Thêm mới đơn phiển điểm chứng chỉ cho môn môn học'}
+            className="w-[700px]"
         >
             <Col span={24} className="mb-3">
                 <FormItem form={form} name="certificateId" label="Chứng chỉ" required>
@@ -178,7 +237,7 @@ const PutCertificateArchivedModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-3">
+            {/* <Col span={24} className="mb-3">
                 <FormItem form={form} name="finalScore" label="Điểm phiên cho môn học" required>
                     <InputNumber
                         min={1}
@@ -187,8 +246,8 @@ const PutCertificateArchivedModal = () => {
                         placeholder="Nhập điểm phiên cho môn học"
                     />
                 </FormItem>
-            </Col>
-            <Col span={24} className="mb-3">
+            </Col> */}
+            <Col span={12} className="mb-3">
                 <FormItem form={form} name="score" label="Điểm chứng chỉ" required>
                     <InputNumber
                         min={1}
@@ -197,19 +256,58 @@ const PutCertificateArchivedModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-3">
+            <Col span={12} className="mb-3">
                 <FormItem form={form} name="issuedBy" label="Nơi cấp chứng chỉ">
                     <Input className="w-full" placeholder="Nhập nơi cấp chứng chỉ" />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-3">
+            <Col span={12} className="mb-3">
                 <FormItem form={form} name="issuedDate" label="Ngày cấp">
                     <DatePicker format="DD/MM/YYYY" className="w-full" placeholder="Chọn ngày" />
                 </FormItem>
             </Col>
-            <Col span={24} className="mb-3">
+            <Col span={12} className="mb-3">
                 <FormItem form={form} name="expiredDate" label="Ngày hết hạn">
                     <DatePicker format="DD/MM/YYYY" className="w-full" placeholder="Chọn ngày" />
+                </FormItem>
+            </Col>
+                          <Col span={24} className="mb-4">
+                <FormItem form={form} name="trainingCoursesId" label="Khoá">
+                    <Select
+                        showSearch
+                        style={{ width: '100%' }}
+                        placeholder="Chọn khoá"
+                        options={trainingCourses.map((item) => ({
+                            label: `${item?.code || ''} - ${item.name}`,
+                            value: item.id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+                    <Col span={24} className="mb-4">
+                <FormItem form={form} name="fixedClassesId" label="Lớp quản lý">
+                    <Select
+                        showSearch
+                        style={{ width: '100%' }}
+                        placeholder="Chọn lớp quản lý"
+                        options={fixedClasses.map((item) => ({
+                            label: `${item?.code || ''} - ${item.name}`,
+                            value: item.id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24} className="mb-4">
+                <FormItem form={form} name="studentId" label="Học viên, sinh viên" required>
+                    <Select
+                        showSearch
+                        style={{ width: '100%' }}
+                        placeholder="Chọn sinh viên"
+                        options={studentData.map((item) => ({
+                            label: `${item.userProfile?.code || ''} - ${item.userProfile?.lastName} ${item.userProfile?.firstName}`,
+                            value: item.id,
+                        }))}
+                    />
                 </FormItem>
             </Col>
             <Col span={24} className="mb-3">

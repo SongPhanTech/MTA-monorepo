@@ -1,21 +1,11 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums } from '@workspace/db'
-import {
-    countSubjectClassBySemester,
-    getFixedClassBySubjectClassSemester,
-    getSubjectClassBySemester,
-} from '@workspace/db/sql'
-import { SubjectClassUpdateScalarSchema } from '@workspace/db/zod/models'
+import { countSubjectClassBySemester, getSubjectClassBySemester } from '@workspace/db/sql'
 import { read, utils } from 'xlsx'
 import { prisma } from '..'
-import {
-    EnrollFixedClassOnSubjectClass,
-    FixedClassBySubjectClassSemester,
-    OpenSubjectClass,
-    StudentClassBySubjectClassSemester,
-} from '../dto/subject-class.dto'
+import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from '../dto/subject-class.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { ListOf } from '../zod/base'
+import { ListOf, PaginationQuerySchema } from '../zod/base'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -81,41 +71,35 @@ const openSubjectClass = createRoute({
     },
 })
 
-const fixedClassBySubjectClassSemester = createRoute({
-    operationId: 'fixedClassBySubjectClassSemester',
-    path: '/fixed-class-by-subject-class-semester',
+const openSubjectClassRetake = createRoute({
+    operationId: 'openSubjectClassRetake',
+    path: '/open-subject-class-retake',
     method: 'get',
-    description: 'Lấy danh sách lớp quản lý theo học kỳ và lớp môn học',
+    description: 'Lấy danh sách môn học có hssv nợ',
     tags: ['SubjectClass'],
-    summary: 'Lấy danh sách lớp quản lý theo học kỳ và lớp môn học',
+    summary: 'Lấy danh sách môn học có hssv nợ',
     request: {
-        query: z.object({
-            semesterId: z.string().openapi('semesterId', {
-                description: 'ID của học kỳ',
-            }),
-            subjectClassId: z.string().openapi('subjectClassId', {
-                description: 'ID của lớp môn học',
-            }),
+        query: PaginationQuerySchema.extend({
+            trainingCourseId: z
+                .string()
+                .openapi('trainingCourseId', {
+                    description: 'ID ngành đào tạo',
+                })
+                .optional(),
+            trainingMajorId: z
+                .string()
+                .openapi('trainingMajorId', {
+                    description: 'ID của chuyên ngành đào tạo',
+                })
+                .optional(),
             search: z
                 .string()
                 .openapi('search', {
                     description: 'Từ khoá tìm kiếm',
                 })
                 .optional(),
-            page: z.string().openapi('page', {
-                description: 'Số trang',
-                default: '1',
-            }),
-            pageSize: z.string().openapi('pageSize', {
-                description: 'Số lượng bản ghi trên mỗi trang',
-                default: '10',
-            }),
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
-            }),
-            isShowAllFixedClass: z.string().openapi('isShowAllFixedClass', {
-                description: 'Hiển thị tất cả lớp quản lý',
-                default: 'true',
             }),
         }),
     },
@@ -123,10 +107,22 @@ const fixedClassBySubjectClassSemester = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: ListOf(FixedClassBySubjectClassSemester),
+                    schema: ListOf(
+                        z
+                            .object({
+                                id: z.string(),
+                                code: z.string(),
+                                name: z.string(),
+                                trainingObjectTypeId: z.string().nullable(),
+                                trainingMajorId: z.string().nullable(),
+                                trainingCourseId: z.string().nullable(),
+                                count: z.number(),
+                            })
+                            .openapi('OpenSubjectClassRetakeResponse')
+                    ),
                 },
             },
-            description: 'Danh sách lớp quản lý theo học kỳ và lớp môn học',
+            description: 'Danh sách phân công giảng dạy thành công',
         },
         400: {
             description: 'Yêu cầu không hợp lệ',
@@ -134,27 +130,33 @@ const fixedClassBySubjectClassSemester = createRoute({
     },
 })
 
-const studentBySubjectClassSemester = createRoute({
-    operationId: 'studentBySubjectClassSemester',
-    path: '/student-by-subject-class-semester',
+const openSubjectClassRetakeStudents = createRoute({
+    operationId: 'openSubjectClassRetakeStudents',
+    path: '/open-subject-class-retake-students',
     method: 'get',
-    description: 'Lấy danh sách học sinh theo học kỳ và lớp môn học',
+    description: 'Lấy danh sách sinh viên nợ môn học',
     tags: ['SubjectClass'],
-    summary: 'Lấy danh sách học sinh theo học kỳ và lớp môn học',
+    summary: 'Lấy danh sách sinh viên nợ môn học',
     request: {
         query: z.object({
-            semesterId: z.string().openapi('semesterId', {
-                description: 'ID của học kỳ',
+            subjectVersionId: z.string().openapi('subjectVersionId', {
+                description: 'ID môn học',
             }),
-            subjectClassId: z.string().openapi('subjectClassId', {
-                description: 'ID của lớp môn học',
-            }),
+            trainingCourseId: z
+                .string()
+                .openapi('trainingCourseId', {
+                    description: 'ID của khóa đào tạo',
+                })
+                .optional(),
             search: z
                 .string()
                 .openapi('search', {
                     description: 'Từ khoá tìm kiếm',
                 })
                 .optional(),
+            trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
+                description: 'ID loại đối tượng đào tạo',
+            }),
             page: z.string().openapi('page', {
                 description: 'Số trang',
                 default: '1',
@@ -163,23 +165,41 @@ const studentBySubjectClassSemester = createRoute({
                 description: 'Số lượng bản ghi trên mỗi trang',
                 default: '10',
             }),
-            trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
-                description: 'ID loại đối tượng đào tạo',
-            }),
-            isShowAllStudents: z.string().openapi('isShowAllStudents', {
-                description: 'Hiển thị tất cả học sinh',
-                default: 'true',
-            }),
         }),
     },
     responses: {
         200: {
             content: {
                 'application/json': {
-                    schema: ListOf(StudentClassBySubjectClassSemester),
+                    schema: ListOf(
+                        z
+                            .object({
+                                id: z.string(),
+                                code: z.string(),
+                                userProfile: z.object({
+                                    fullname: z.string(),
+                                }),
+                                fixedClass: z.object({
+                                    code: z.string(),
+                                    trainingCourse: z.object({
+                                        name: z.string(),
+                                    }),
+                                }),
+                                diem_cuoi: z.number().nullable(),
+                                withdrew: z.boolean(),
+                                exempted: z.boolean(),
+                                examPostponed: z.boolean(),
+                                cam_thi: z.boolean(),
+                                ly_do_cam_thi: z.string().nullable(),
+                                dinh_chi: z.boolean(),
+                                ly_do_dinh_chi: z.string().nullable(),
+                                truot_mon: z.boolean(),
+                            })
+                            .openapi('OpenSubjectClassRetakeStudentsResponse')
+                    ),
                 },
             },
-            description: 'Danh sách học sinh theo học kỳ và lớp môn học',
+            description: 'Danh sách phân công giảng dạy thành công',
         },
         400: {
             description: 'Yêu cầu không hợp lệ',
@@ -221,87 +241,6 @@ const enrollFixedClassOnSubjectClass = createRoute({
         },
         400: {
             description: 'Yêu cầu không hợp lệ',
-        },
-    },
-})
-
-const enrollStudentOnSubjectClass = createRoute({
-    operationId: 'enrollStudentOnSubjectClass',
-    path: '/enroll-student-on-subject-class',
-    method: 'post',
-    description: 'Đăng ký lớp môn học cho học viên',
-    tags: ['SubjectClass'],
-    summary: 'Đăng ký lớp môn học cho học viên',
-    request: {
-        body: {
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        addStudentIds: z.array(z.string()).openapi('studentIds', {
-                            description: 'Danh sách ID học viên',
-                        }),
-                        removeStudentIds: z.array(z.string()).openapi('removeStudentIds', {
-                            description: 'Danh sách ID học viên cần xóa',
-                        }),
-                        subjectClassId: z.string().openapi('subjectClassId', {
-                            description: 'ID của lớp môn học',
-                        }),
-                    }),
-                },
-            },
-        },
-    },
-    responses: {
-        200: {
-            content: {
-                'application/json': {
-                    schema: ListOf(EnrollFixedClassOnSubjectClass),
-                },
-            },
-            description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
-        },
-        400: {
-            description: 'Yêu cầu không hợp lệ',
-        },
-    },
-})
-
-const putManySubjectClass = createRoute({
-    operationId: 'putManySubjectClass',
-    path: '/',
-    method: 'put',
-    description: 'Cập nhật nhiều lớp môn học',
-    tags: ['SubjectClass'],
-    summary: 'Cập nhật nhiều lớp môn học',
-    request: {
-        body: {
-            content: {
-                'application/json': {
-                    schema: z.array(
-                        SubjectClassUpdateScalarSchema.extend({
-                            id: z.string(),
-                            roomId: z.string().nullish(),
-                            lecturerId: z.string().nullish(),
-                            extraLecturerId: z.string().nullish(),
-                            enterGradeLecturerId: z.string().nullish(),
-                        }).openapi('subjectClasses')
-                    ),
-                },
-            },
-        },
-    },
-    responses: {
-        200: {
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        success: z.boolean(),
-                        failedIds: z.array(z.string()),
-                        message: z.string().optional(),
-                    }),
-                },
-            },
-            description: 'Đăng ký lớp môn học cho lớp quản lý thành công',
         },
     },
 })
@@ -460,256 +399,247 @@ app.openapi(openSubjectClass, async (c) => {
     )
 })
 
-app.openapi(fixedClassBySubjectClassSemester, async (c) => {
+app.openapi(openSubjectClassRetake, async (c) => {
     const {
-        semesterId,
         search,
-        page,
-        pageSize,
-        subjectClassId,
+        trainingCourseId,
+        trainingMajorId,
         trainingObjectTypeId,
-        isShowAllFixedClass,
+        limit = 10,
+        page = 1,
     } = c.req.valid('query')
-
-    const semester = await prisma.semester.findUnique({
-        where: { id: semesterId, deletedAt: null, active: true },
-        include: {
-            schoolYear: true,
-        },
-    })
-
-    const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId, deletedAt: null, active: true },
-    })
-
-    if (!subjectClass) {
-        return c.json(
-            {
-                success: false,
-                message: 'Lớp môn học không tồn tại',
-            },
-            400
+    const res = await prisma.$queryRaw`
+        with mon_no as (select sv.id,
+                sv.code,
+                sv.name,
+                sv."trainingObjectTypeId",
+                C."trainingMajorId",
+                TC.id                                                                                    as trainingCourseId,
+                SSS."studentId",
+                SSS."finalScore"                                                                         as diem_cuoi,
+                SSS.withdrew,
+                SSS.exempted,
+                SSS."examPostponed",
+                SSS."examBanned"                                                                         as cam_thi,
+                SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                SSS.suspended                                                                            as dinh_chi,
+                SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                    TC."scoreToPassConditional"                           as truot_mon,
+                row_number()
+                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+        from "ql-dao-tao"."SubjectVersion" as sv
+                    inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                    inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                    inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                    inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                    inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                    inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                            on CV.id = TBOCV."curriculumVersionId"
+                    inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                    inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                    inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+        where TBS."subjectId" = sv.id)
+        select id, code, name, "trainingObjectTypeId", "trainingMajorId", trainingCourseId, count("studentId")::INTEGER as count
+        -- select *
+        from mon_no
+        where rn = 1
+        and (truot_mon = true or cam_thi = true or dinh_chi = true)
+        and withdrew = false        -- rút khỏi lớp
+        and exempted = false        -- miễn học
+        and "examPostponed" = false -- hoãn thi
+        and 
+        (
+            ${trainingObjectTypeId}::TEXT IS NULL
+            OR "trainingObjectTypeId" = ${trainingObjectTypeId}
         )
-    }
-
-    if (!semester) {
-        return c.json(
-            {
-                success: false,
-                message: 'Học kỳ không tồn tại',
-            },
-            400
+        and 
+        (
+            ${trainingMajorId}::TEXT IS NULL
+            OR "trainingMajorId" = ${trainingMajorId}
         )
-    }
-    const semesterYear = semester?.schoolYear.startDate.getFullYear()
+        and 
+        (
+            ${trainingCourseId}::TEXT IS NULL
+            OR trainingCourseId = ${trainingCourseId}
+        )
+        and (
+            ${search}::TEXT IS NULL
+                OR code ILIKE ${search}
+                OR name ILIKE ${search}
+            )
+        group by id, code, name, "trainingObjectTypeId", "trainingMajorId", trainingCourseId
+        order by code
+        limit ${limit}
+        offset ${limit} * (${page} - 1)
+        `
 
-    const semesterType =
-        isShowAllFixedClass === 'true'
-            ? 0
-            : semester?.semesterType === $Enums.SemesterType.FIRST
-              ? 1
-              : semester?.semesterType === $Enums.SemesterType.SECOND
-                ? 2
-                : 0
+    const { count = 0 }: { count: number } = await prisma.$queryRaw`
+        with mon_no as (select sv.id,
+                sv.code,
+                sv.name,
+                sv."trainingObjectTypeId",
+                C."trainingMajorId",
+                TC.id                                                                                    as trainingCourseId,
+                SSS."studentId",
+                SSS."finalScore"                                                                         as diem_cuoi,
+                SSS.withdrew,
+                SSS.exempted,
+                SSS."examPostponed",
+                SSS."examBanned"                                                                         as cam_thi,
+                SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                SSS.suspended                                                                            as dinh_chi,
+                SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                    TC."scoreToPassConditional"                           as truot_mon,
+                row_number()
+                over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
+        from "ql-dao-tao"."SubjectVersion" as sv
+                    inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                    inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                    inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                    inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                    inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                    inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                            on CV.id = TBOCV."curriculumVersionId"
+                    inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                    inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                    inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+        where TBS."subjectId" = sv.id)
+        select count("id")::INTEGER as count
+        -- select *
+        from mon_no
+        where rn = 1
+        and (truot_mon = true or cam_thi = true or dinh_chi = true)
+        and withdrew = false        -- rút khỏi lớp
+        and exempted = false        -- miễn học
+        and "examPostponed" = false -- hoãn thi
+        and 
+        (
+            ${trainingObjectTypeId}::TEXT IS NULL
+            OR "trainingObjectTypeId" = ${trainingObjectTypeId}
+        )
+        and 
+        (
+            ${trainingMajorId}::TEXT IS NULL
+            OR "trainingMajorId" = ${trainingMajorId}
+        )
+        and 
+        (
+            ${trainingCourseId}::TEXT IS NULL
+            OR trainingCourseId = ${trainingCourseId}
+        )
+        and (
+            ${search}::TEXT IS NULL
+                OR code ILIKE ${search}
+                OR name ILIKE ${search}
+            )
+        group by id, code, name, "trainingObjectTypeId", "trainingMajorId", trainingCourseId
+        `
 
-    const res = await prisma.$queryRawTyped<{
-        full_count: number
-        fixedClassId: string
-    }>(
-        getFixedClassBySubjectClassSemester(
-            semesterYear,
-            semesterType,
-            subjectClassId,
-            trainingObjectTypeId,
-            search ? `%${search}%` : null,
-            Number(page),
-            Number(pageSize)
-        ) as any
-    )
-
-    const fixedClasses = await prisma.fixedClass.findMany({
-        where: {
-            id: {
-                in: res.map((e) => e.fixedClassId),
-            },
-            deletedAt: null,
-            active: true,
-        },
-        include: {
-            trainingCourse: {
-                select: {
-                    id: true,
-                    name: true,
-                    code: true,
-                },
-            },
-            curriculumVersion: {
-                select: {
-                    id: true,
-                    name: true,
-                    code: true,
-                    curriculum: {
-                        select: {
-                            id: true,
-                            name: true,
-                            code: true,
-                            trainingMajor: {
-                                select: {
-                                    id: true,
-                                    name: true,
-                                    code: true,
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-            subjectClasses: {
-                select: { id: true },
-            },
-            _count: {
-                select: {
-                    students: true,
-                },
-            },
-        },
-    })
-
-    return c.json(
-        {
-            data: fixedClasses.map((e) => ({
-                ...e,
-                checked: !!e.subjectClasses.find((sc) => sc.id === subjectClassId),
-            })),
-            count: res.length > 0 && res[0] ? Number(res[0].full_count) : 0,
-            success: true,
-        },
-        200
-    )
+    return c.json({ data: res, count }, 200)
 })
 
-app.openapi(studentBySubjectClassSemester, async (c) => {
-    const {
-        semesterId,
-        search,
-        page,
-        pageSize,
-        subjectClassId,
-        trainingObjectTypeId,
-        isShowAllStudents,
-    } = c.req.valid('query')
-
-    const semester = await prisma.semester.findUnique({
-        where: { id: semesterId, deletedAt: null, active: true },
-        include: {
-            schoolYear: true,
-        },
-    })
-
-    const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId, deletedAt: null, active: true },
-    })
-
-    if (!subjectClass) {
-        return c.json(
-            {
-                success: false,
-                message: 'Lớp môn học không tồn tại',
-            },
-            400
-        )
-    }
-
-    if (!semester) {
-        return c.json(
-            {
-                success: false,
-                message: 'Học kỳ không tồn tại',
-            },
-            400
-        )
-    }
-    const semesterYear = semester?.schoolYear.startDate.getFullYear()
-
-    const semesterType =
-        isShowAllStudents === 'true'
-            ? 0
-            : semester?.semesterType === $Enums.SemesterType.FIRST
-              ? 1
-              : semester?.semesterType === $Enums.SemesterType.SECOND
-                ? 2
-                : 0
-    const res = await prisma.$queryRawTyped<{
-        fixedClassId: string
-        full_count: number
-    }>(
-        getFixedClassBySubjectClassSemester(
-            semesterYear,
-            semesterType,
-            subjectClassId,
-            trainingObjectTypeId,
-            search ? `%${search}%` : null,
-            Number(page),
-            Number(pageSize)
-        ) as any
+app.openapi(openSubjectClassRetakeStudents, async (c) => {
+    const { search, trainingCourseId, trainingObjectTypeId, subjectVersionId } =
+        c.req.valid('query')
+    const res = await prisma.$queryRaw<
+        {
+            studentId: string
+            diem_cuoi: number | null
+            withdrew: boolean
+            exempted: boolean
+            examPostponed: boolean
+            cam_thi: boolean
+            ly_do_cam_thi: string | null
+            dinh_chi: boolean
+            ly_do_dinh_chi: string | null
+            truot_mon: boolean
+        }[]
+    >`with mon_no as (select sv.id,
+                       sv.code,
+                       sv.name,
+                       sv."trainingObjectTypeId",
+                       C."trainingMajorId",
+                       TC.id                                                                                    as trainingCourseId,
+                       SSS."studentId",
+                       SSS."finalScore"                                                                         as diem_cuoi,
+                       SSS.withdrew,
+                       SSS.exempted,
+                       SSS."examPostponed",
+                       SSS."examBanned"                                                                         as cam_thi,
+                       SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                       SSS.suspended                                                                            as dinh_chi,
+                       SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                       TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                       TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                       TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                          TC."scoreToPassConditional"                           as truot_mon,
+                       row_number()
+                       over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
+                from "ql-dao-tao"."SubjectVersion" as sv
+                         inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                         inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                         inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                         inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                         inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                         inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                    on CV.id = TBOCV."curriculumVersionId"
+                         inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                    on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                         inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                         inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                where TBS."subjectId" = sv.id)
+select "studentId", diem_cuoi, withdrew, exempted, "examPostponed", cam_thi, ly_do_cam_thi, dinh_chi, ly_do_dinh_chi, truot_mon
+from mon_no
+where rn = 1
+  and (truot_mon = true or cam_thi = true or dinh_chi = true)
+  and withdrew = false        -- rút khỏi lớp
+  and exempted = false        -- miễn học
+  and "examPostponed" = false -- hoãn thi
+  and 
+  (
+    ${trainingObjectTypeId}::TEXT IS NULL
+    OR "trainingObjectTypeId" = ${trainingObjectTypeId}
+  )
+  and 
+  (
+    ${trainingCourseId}::TEXT IS NULL
+    OR trainingCourseId = ${trainingCourseId}
+  )
+  and (
+    ${search}::TEXT IS NULL
+        OR code ILIKE ${search}
+        OR name ILIKE ${search}
     )
-
+    and id = ${subjectVersionId}::TEXT
+`
     const students = await prisma.student.findMany({
         where: {
-            fixedClassId: {
-                in: res.map((e) => e.fixedClassId),
+            id: {
+                in: res.map((r) => r.studentId),
             },
-            deletedAt: null,
-            active: true,
         },
-        include: {
+        select: {
+            id: true,
+            code: true,
             userProfile: {
                 select: {
-                    id: true,
-                    code: true,
-                    lastName: true,
-                    firstName: true,
-                    familyName: true,
-                    gender: true,
-                    dateOfBirth: true,
-                },
-            },
-            subjectClassStudent: {
-                select: {
-                    subjectClassId: true,
+                    fullname: true,
                 },
             },
             fixedClass: {
                 select: {
-                    id: true,
-                    name: true,
                     code: true,
                     trainingCourse: {
                         select: {
-                            id: true,
                             name: true,
-                            code: true,
-                        },
-                    },
-                    curriculumVersion: {
-                        select: {
-                            id: true,
-                            name: true,
-                            code: true,
-                            curriculum: {
-                                select: {
-                                    id: true,
-                                    name: true,
-                                    code: true,
-                                    trainingMajor: {
-                                        select: {
-                                            id: true,
-                                            name: true,
-                                            code: true,
-                                        },
-                                    },
-                                },
-                            },
                         },
                     },
                 },
@@ -719,14 +649,10 @@ app.openapi(studentBySubjectClassSemester, async (c) => {
 
     return c.json(
         {
-            data: students.map((e) => ({
-                ...e,
-                checked: !!e.subjectClassStudent.find(
-                    (sCs) => sCs.subjectClassId === subjectClassId
-                ),
+            data: students.map((student) => ({
+                ...student,
+                ...res.find((r) => r.studentId === student.id),
             })),
-            count: res.length > 0 && res[0] ? Number(res[0].full_count) : 0,
-            success: true,
         },
         200
     )
@@ -804,68 +730,6 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
         },
         200
     )
-})
-
-app.openapi(enrollStudentOnSubjectClass, async (c) => {
-    const { subjectClassId, addStudentIds, removeStudentIds } = c.req.valid('json')
-
-    const subjectClass = await prisma.subjectClass.findUnique({
-        where: { id: subjectClassId, deletedAt: null, active: true },
-    })
-
-    if (!subjectClass) {
-        return c.json(
-            {
-                success: false,
-                message: 'Lớp môn học không tồn tại',
-            },
-            400
-        )
-    }
-
-    const res = await prisma.$transaction(async (tx) => {
-        for (const studentId of removeStudentIds) {
-            await tx.studentSubjectScore.deleteMany({
-                where: {
-                    studentId,
-                },
-            })
-        }
-        return await tx.studentSubjectScore.createManyAndReturn({
-            data: addStudentIds.map((studentId) => ({
-                studentId: studentId,
-                subjectClassId,
-                subjectVersionId: subjectClass.subjectId,
-            })),
-            skipDuplicates: true,
-        })
-    })
-
-    return c.json(
-        {
-            data: res,
-            success: true,
-        },
-        200
-    )
-})
-
-app.openapi(putManySubjectClass, async (c) => {
-    const classes = c.req.valid('json')
-
-    const updates = classes.map(async (cls) => {
-        await prisma.subjectClass.update({
-            where: { id: cls.id, deletedAt: null, active: true },
-            data: cls,
-            select: { id: true },
-        })
-        return { success: true, id: cls.id }
-    })
-
-    const results = await Promise.all(updates)
-    const failedIds = results.filter(({ success }) => !success).map(({ id }) => id)
-
-    return c.json({ success: failedIds.length === 0, failedIds }, 200)
 })
 
 app.openapi(uploadExcelImportScore, async (c) => {

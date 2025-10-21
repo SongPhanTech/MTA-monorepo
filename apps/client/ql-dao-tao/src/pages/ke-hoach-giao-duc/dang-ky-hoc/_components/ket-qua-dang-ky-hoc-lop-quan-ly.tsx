@@ -16,7 +16,7 @@ interface FilterProps {
     searchText: string | null
 }
 
-export default function KeQuaDangKyHocLopQuanLy() {
+export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: boolean }) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)

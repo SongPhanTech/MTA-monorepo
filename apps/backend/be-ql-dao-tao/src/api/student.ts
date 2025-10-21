@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { AcademicActionType, createId, type Prisma, StudentStatus } from '@workspace/db'
+import { AcademicActionType, type Prisma, StudentStatus } from '@workspace/db'
 import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetHeQuanSu, parseSheetStudent, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
@@ -36,7 +36,7 @@ const importStudent = createRoute({
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
                         timeout: z.coerce.number().default(30),
-                    }).openapi('importStudent'),
+                    }).openapi('ImportStudentRequest'),
                 },
             },
         },
@@ -236,16 +236,23 @@ app.openapi(importStudent, async (c) => {
                         },
                     })
 
-                    const res = await putDMNhanViens(
+                    putDMNhanViens(
                         {
                             Id: existing.userProfileId,
-                            bLaCanBoNhanVien: true,
+                            sMa: student.idCardNumber,
+                            bLaHocVien: true,
                             bLaTaiKhoan: true,
-                            dNgaySinh: profileData.dateOfBirth?.toString(),
-                            sCCCD: profileData.idCardNumber,
-                            sEmail: profileData.email,
+                            dNgaySinh: student.dateOfBirth
+                                ? new Date(student.dateOfBirth)?.toISOString()
+                                : null,
+                            sCCCD: student.idCardNumber,
                             sHoVaDem: profileData.lastName,
                             sTen: profileData.firstName,
+                            sTenDayDu: student.fullname,
+                            sSDTDiDong: student.phoneNumber ?? '',
+                            // TODO: fix this
+                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                            sEmail: `${student.idCardNumber}@gmail.com`,
                             sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
                         },
                         {
@@ -254,9 +261,13 @@ app.openapi(importStudent, async (c) => {
                                 'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
                             },
                         }
-                    ).catch(console.error)
+                    )
+                        .then((res) => {
+                            console.log('[LSB update User]:', res.status, res.data)
+                        })
+                        .catch(console.error)
                 } else {
-                    const profileId = createId()
+                    const profileId = crypto.randomUUID()
                     const st = await tx.student.create({
                         data: {
                             ...studentData,
@@ -272,13 +283,20 @@ app.openapi(importStudent, async (c) => {
                     postDMNhanViens(
                         {
                             Id: profileId,
-                            bLaCanBoNhanVien: true,
+                            sMa: student.idCardNumber,
+                            bLaHocVien: true,
                             bLaTaiKhoan: true,
-                            dNgaySinh: profileData.dateOfBirth?.toString(),
-                            sCCCD: profileData.idCardNumber,
-                            sEmail: profileData.email,
+                            dNgaySinh: student.dateOfBirth
+                                ? new Date(student.dateOfBirth)?.toISOString()
+                                : null,
+                            sCCCD: student.idCardNumber,
                             sHoVaDem: profileData.lastName,
                             sTen: profileData.firstName,
+                            sTenDayDu: student.fullname,
+                            sSDTDiDong: student.phoneNumber ?? '',
+                            // TODO: fix this
+                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                            sEmail: `${student.idCardNumber}@gmail.com`,
                             sDM_GioiTinhId: student.gender ? genderMap.get(student.gender) : null,
                         },
                         {
@@ -287,7 +305,11 @@ app.openapi(importStudent, async (c) => {
                                 'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
                             },
                         }
-                    ).catch(console.error)
+                    )
+                        .then((res) => {
+                            console.log('[LSB create User]:', res.status, res.data)
+                        })
+                        .catch(console.error)
 
                     if (student.department) {
                         await tx.quaTrinhCongTac.create({
@@ -336,7 +358,7 @@ const importHeQuanSu = createRoute({
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
                         timeout: z.coerce.number().default(30),
-                    }).openapi('importHeQuanSu'),
+                    }).openapi('importHeQuanSuRequest'),
                 },
             },
         },
