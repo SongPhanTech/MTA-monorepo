@@ -780,7 +780,7 @@ export default function StudentFixedClassPage() {
       };
     });
     exportFromTemplate({
-      templateUrl: getMinioUrl('"/mta/template/quatrinh.xlsx"'),
+      templateUrl: getMinioUrl('/mta/template/quatrinh.xlsx'),
       sheets: allSheetOptions,
       fileName: `DGQT.xlsx`,
       mergeSheetsToOne: true,
@@ -1146,7 +1146,7 @@ export default function StudentFixedClassPage() {
       };
     });
     exportFromTemplate({
-      templateUrl: getMinioUrl('"/mta/template/quatrinh.xlsx"'),
+      templateUrl: getMinioUrl('/mta/template/quatrinh.xlsx'),
       sheets: allSheetOptions,
       fileName: `DGQT.xlsx`,
       mergeSheetsToOne: true,
