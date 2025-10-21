@@ -1,11 +1,11 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { createId } from '@workspace/db'
 import { prisma } from '..'
+import { createId } from '@workspace/db'
 
 const app = new OpenAPIHono({ strict: false })
 
 const createNewExamList = createRoute({
-    operationId: 'create-new-exam-list',
+    operationId: 'create-exams',
     tags: ['Exam'],
     path: '',
     method: 'post',
@@ -19,7 +19,7 @@ const createNewExamList = createRoute({
                             trainingObjectTypeId: z.string(),
                             semesterId: z.string(),
                         })
-                        .openapi('create-new-exam-list'),
+                        .openapi('CreateExamsRequest'),
                 },
             },
         },
@@ -34,7 +34,7 @@ const createNewExamList = createRoute({
                             success: z.boolean(),
                             message: z.string(),
                         })
-                        .openapi('create-new-exam-list-result'),
+                        .openapi('CreateExamsResponse'),
                 },
             },
         },
@@ -46,7 +46,7 @@ const createNewExamList = createRoute({
                         .object({
                             message: z.string(),
                         })
-                        .openapi('create-new-exam-list-result'),
+                        .openapi('CreateExamsBadResponse'),
                 },
             },
         },
@@ -56,43 +56,92 @@ const createNewExamList = createRoute({
 app.openapi(createNewExamList, async (c) => {
     const { isGroupBySubject, trainingObjectTypeId, semesterId } = c.req.valid('json')
 
-    const subjectClass = await prisma.subjectClass.findMany({
+    const subjects = await prisma.subjectVersion.findMany({
         where: {
-            trainingObjectTypeId,
-            semesterId,
-            cancelled: false,
-            deletedAt: null,
-            enteredScore: true,
+            subjectClass: {
+                some: {
+                    trainingObjectTypeId,
+                    semesterId,
+                    cancelled: false,
+                    deletedAt: null,
+                    enteredScore: true,
+                },
+            },
         },
-        include: {
-            subjectClassStudent: {
+        select: {
+            subjectClass: {
+                select: {
+                    id: true,
+                    subjectClassStudent: {
+                        select: { id: true },
+                        where: {
+                            examBanned: false,
+                            withdrew: false,
+                            exempted: false,
+                        },
+                    },
+                },
                 where: {
-                    examBanned: false,
-                    withdrew: false,
-                    exempted: false,
+                    // TODO: cần kiểu tra theo yêu cầu
+                    examId: null,
                 },
             },
         },
     })
 
-    const examId = createId()
+    const exams = subjects.flatMap(({ subjectClass }) => {
+        const id = createId()
+        return subjectClass.map((cls) => ({
+            examId: isGroupBySubject ? id : createId(),
+            classId: cls.id,
+            studentSubjectScoreIds: cls.subjectClassStudent.map((scs) => scs.id),
+        }))
+    })
 
-    if (isGroupBySubject) {
-        const subjectClassMerge = subjectClass.reduce(
-            (acc, subjectClass) => {
-                acc.subjectClassIds.push(subjectClass.id)
-
-                const studentScoreIds = subjectClass.subjectClassStudent.map((scs) => scs.id)
-                acc.studentSubjectScores.push(...studentScoreIds)
-
-                return acc
-            },
-            { subjectClassIds: [], studentSubjectScores: [] } as {
-                subjectClassIds: string[]
-                studentSubjectScores: string[]
-            }
+    if (exams.length === 0) {
+        return c.json(
+            { success: false, message: 'Không có lớp học nào cần lên danh sách thi' },
+            400
         )
     }
+
+    const grouped = Object.groupBy(exams, (exam) => exam.examId)
+
+    const groupedExams = Object.entries(grouped).map(([examId, items]) => ({
+        examId,
+        classIds: items?.map((i) => i.classId),
+        studentSubjectScoreIds: items?.flatMap((i) => i.studentSubjectScoreIds),
+    }))
+
+    await prisma.$transaction(async (tx) => {
+        await tx.exam.createMany({
+            data: groupedExams.map(({ examId }) => ({ id: examId })),
+        })
+
+        await prisma.$executeRawUnsafe(`
+            UPDATE "ql-dao-tao"."SubjectClass" AS c
+            SET "examId" = data."examId"
+            FROM (
+                VALUES
+                ${exams.map(({ examId, classId }) => `('${classId}', '${examId}')`).join(',\n')}
+            ) AS data("classId", "examId")
+            WHERE c."id" = data."classId";
+            `)
+
+        await prisma.$executeRawUnsafe(`
+            UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
+            SET "examId" = data."examId"
+            FROM (
+                VALUES
+                ${exams
+                    .flatMap(({ examId, studentSubjectScoreIds }) =>
+                        studentSubjectScoreIds.map((id) => `('${id}', '${examId}')`)
+                    )
+                    .join(',\n')}
+            ) AS data("id", "examId")
+            WHERE sss."id" = data."id";
+            `)
+    })
 
     return c.json({ success: true, message: 'Lên danh sách thi thành công' })
 })

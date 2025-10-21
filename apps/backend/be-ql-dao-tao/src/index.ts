@@ -23,6 +23,7 @@ import SubjectClassApp from './api/subject-class'
 import TrainingFieldApp from './api/training-field'
 import TrainingScoreApp from './api/training-score'
 import UserProfileApp from './api/user-profile'
+import ExamApp from './api/exam'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -89,6 +90,7 @@ app.route('/api/plan-training', PlanTraining)
 app.route('/api/stats', Stats)
 app.route('/api/import', ImportApp)
 app.route('/api/archived-score', ArchivedScoreApp)
+app.route('/api/exam', ExamApp)
 
 const nv = await prisma.userProfile.findFirstOrThrow()
 
