@@ -105,7 +105,7 @@ type BaoDayForm = {
     isOverride: boolean
 }
 
-export default function PhanCongGiangDay() {
+export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -326,6 +326,7 @@ export default function PhanCongGiangDay() {
                           },
                       }
                     : {}),
+                type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
             }) satisfies Prisma.SubjectClassWhereInput,
         [filters, semesterId, trainingObjectTypeId, isBoMon]
     )
@@ -475,6 +476,7 @@ export default function PhanCongGiangDay() {
                         : {
                               lecturerAssignmentDeadline: null,
                           }),
+                    type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL
                 },
             })
             message.success('Báo dạy thành công')
@@ -567,6 +569,7 @@ export default function PhanCongGiangDay() {
                     extraLecturerId: { not: null },
                     lecturerAssignmentDeadline: { not: null },
                     submitLecturerAssignmentAt: null,
+                    type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL
                 },
             })
             message.success('Gửi PCGD thành công')

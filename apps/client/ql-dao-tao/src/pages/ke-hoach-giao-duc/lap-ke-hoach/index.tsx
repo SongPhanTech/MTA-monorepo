@@ -9,6 +9,7 @@ import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
 import MonKySau from './_components/mon-ky-sau'
 import MonTheoKeHoachDuKien from './_components/mon-theo-ke-hoach-du-kien'
 import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
+import HSSVChuaDat from './_components/hssv-chua-dat'
 interface TabItem {
     key: string
     label: string
@@ -39,8 +40,8 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               },
               {
                   key: '2',
-                  label: 'Môn học đã lập kế hoạch',
-                  content: <MonDaLapKeHoach />,
+                  label: 'Môn học lại đã lập kế hoạch',
+                  content: <MonDaLapKeHoach hocLai />,
               },
           ]
         : [
@@ -66,7 +67,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               {
                   key: '1',
                   label: 'SV/HV chưa đạt',
-                  content: <MonDaLapKeHoach />,
+                  content: <HSSVChuaDat />,
               },
           ]
         : [

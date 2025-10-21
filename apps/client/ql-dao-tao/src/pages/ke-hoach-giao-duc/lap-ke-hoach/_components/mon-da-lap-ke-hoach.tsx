@@ -22,7 +22,7 @@ type MonDaLapKeHoachForm = {
     subjectSelected?: Array<string>
 }
 
-export default function MonDaLapKeHoach() {
+export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
@@ -103,7 +103,7 @@ export default function MonDaLapKeHoach() {
                             where: {
                                 deletedAt: null,
                                 active: true,
-                                subjectClassType: $Enums.SubjectClassType.NORMAL
+                                subjectClassType: $Enums.SubjectClassType.NORMAL,
                             },
                         },
                     },

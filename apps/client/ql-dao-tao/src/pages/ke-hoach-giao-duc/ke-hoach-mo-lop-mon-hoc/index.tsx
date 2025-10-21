@@ -36,6 +36,7 @@ interface OpenSubjectClassForm {
             maxStudent: number
             countOld: number
             examType?: $Enums.ExamType | null
+            trainingLocationId?: string | null
         }
     >
     subjectClassToFixedClass?: Record<
@@ -175,7 +176,7 @@ const FixedClassDragItem: React.FC<{
     )
 }
 
-export default function KeHoachMoLopMonHoc() {
+export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolean }) {
     const { canSome } = useAbility()
     const [form] = Form.useForm<OpenSubjectClassForm>()
     const [currentPage, setCurrentPage] = useState(1)
@@ -212,15 +213,17 @@ export default function KeHoachMoLopMonHoc() {
                                   },
                                   fixedClasses: {
                                       some: {
-                                          trainingCourseId: trainingCourseId || undefined,
+                                          trainingCourseId,
                                           curriculumVersion: {
                                               curriculum: {
-                                                  trainingMajorId: trainingMajorId || undefined,
+                                                  trainingMajorId,
                                               },
                                           },
                                       },
                                   },
-                                  subjectClassType: $Enums.SubjectClassType.NORMAL,
+                                  subjectClassType: hocLai
+                                      ? $Enums.SubjectClassType.RETAKE
+                                      : $Enums.SubjectClassType.NORMAL,
                               },
                           },
                       }
@@ -228,6 +231,21 @@ export default function KeHoachMoLopMonHoc() {
             },
             include: {
                 planTrainingSubjects: {
+                    where: {
+                        subjectClassType: hocLai
+                            ? $Enums.SubjectClassType.RETAKE
+                            : $Enums.SubjectClassType.NORMAL,
+                        fixedClasses: {
+                            some: {
+                                trainingCourseId,
+                                curriculumVersion: {
+                                    curriculum: {
+                                        trainingMajorId,
+                                    },
+                                },
+                            },
+                        },
+                    },
                     include: {
                         subjectVersion: {
                             include: {
@@ -281,9 +299,6 @@ export default function KeHoachMoLopMonHoc() {
                             orderBy: { code: 'asc' },
                         },
                     },
-                    where: {
-                        subjectClassType: $Enums.SubjectClassType.NORMAL,
-                    },
                     take: numberOfPages,
                     skip: (currentPage - 1) * numberOfPages,
                 },
@@ -291,7 +306,19 @@ export default function KeHoachMoLopMonHoc() {
                     select: {
                         planTrainingSubjects: {
                             where: {
-                                subjectClassType: $Enums.SubjectClassType.NORMAL,
+                                subjectClassType: hocLai
+                                    ? $Enums.SubjectClassType.RETAKE
+                                    : $Enums.SubjectClassType.NORMAL,
+                                fixedClasses: {
+                                    some: {
+                                        trainingCourseId,
+                                        curriculumVersion: {
+                                            curriculum: {
+                                                trainingMajorId,
+                                            },
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
@@ -322,6 +349,8 @@ export default function KeHoachMoLopMonHoc() {
                             ),
                             countOld: cur.subjectVersion.subjectClass.length ?? 0,
                             examType: cur.subjectVersion?.examType,
+                            trainingLocationId:
+                                cur.subjectVersion?.subjectClass[0]?.trainingLocationId || null,
                         }
                         return acc
                     },
@@ -457,6 +486,7 @@ export default function KeHoachMoLopMonHoc() {
                                     maxStudent: subjectVersion.count,
                                     examType: subjectVersion.examType,
                                     schedule: $Enums.SubjectClassSchedule.MORNING,
+                                    trainingLocationId: subjectVersion.trainingLocationId || null,
                                 }))
                             ),
                     },
@@ -701,7 +731,7 @@ export default function KeHoachMoLopMonHoc() {
                                                     (i: any) => {
                                                         return {
                                                             key: i?.id,
-                                                            label: `${i?.code}`,
+                                                            label: `${i?.code} (${(subjectClassToFixed?.[i?.subjectId]?.[i?.id] || []).reduce((sum, fcId) => sum + (fcId.count || 0), 0)})`,
                                                         }
                                                     }
                                                 )}
