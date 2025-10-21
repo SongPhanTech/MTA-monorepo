@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { createId } from '@workspace/db'
 import { prisma } from '..'
+import { createId } from '@workspace/db'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -97,6 +97,13 @@ app.openapi(createNewExamList, async (c) => {
             studentSubjectScoreIds: cls.subjectClassStudent.map((scs) => scs.id),
         }))
     })
+
+    if (exams.length === 0) {
+        return c.json(
+            { success: false, message: 'Không có lớp học nào cần lên danh sách thi' },
+            400
+        )
+    }
 
     const grouped = Object.groupBy(exams, (exam) => exam.examId)
 
