@@ -19953,10 +19953,6 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'questionBank',
-                }, lockExamCode: {
-                    name: "lockExamCode",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, duration: {
                     name: "duration",
                     type: "Int",
@@ -20072,6 +20068,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
+                }, lockExamCode: {
+                    name: "lockExamCode",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, start: {
                     name: "start",
                     type: "Int",
@@ -20094,9 +20094,6 @@ const metadata = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                }, examId_roomId: {
-                    name: "examId_roomId",
-                    fields: ["examId", "roomId"]
                 },
             },
         },
@@ -20403,9 +20400,9 @@ const metadata = {
                 }, studentSubjectScoreId: {
                     name: "studentSubjectScoreId",
                     fields: ["studentSubjectScoreId"]
-                }, examCode_examId: {
-                    name: "examCode_examId",
-                    fields: ["examCode", "examId"]
+                }, examCode_examRoomId: {
+                    name: "examCode_examRoomId",
+                    fields: ["examCode", "examRoomId"]
                 },
             },
         },
