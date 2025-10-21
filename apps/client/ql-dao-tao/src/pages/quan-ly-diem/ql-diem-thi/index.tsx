@@ -1128,9 +1128,6 @@ export default function SubjectClassScore() {
                                                                                       : '',
                                                                         }}
                                                                         step={0}
-                                                                        defaultValue={
-                                                                            record?.examScore
-                                                                        }
                                                                         controls={false}
                                                                         onKeyDown={(e) =>
                                                                             handleScoreInputKeyDown(

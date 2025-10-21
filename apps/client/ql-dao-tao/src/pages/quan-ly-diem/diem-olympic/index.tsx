@@ -12,7 +12,7 @@ import {
     useFindManyArchivedAward,
     useUpdateArchivedAward,
 } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
+import { useAwardScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Modal, Row, Tag } from 'antd'
@@ -154,30 +154,33 @@ export default function ArchivedAward() {
             },
         })
     }
+
+    const { mutateAsync: updateAwardScore } = useAwardScore()
     const handleAprove = async (status: string) => {
         try {
-            console.log(selectedRowKeys)
-
             if (selectedRowKeys?.length > 0) {
-                let listSqlTransaction: any = []
-                listSqlTransaction = [
-                    ...listSqlTransaction,
-                    ...selectedRowKeys.map((item: any) => {
-                        return {
-                            model: 'ArchivedAward',
-                            operation: 'update',
-                            data: {
-                                where: {
-                                    id: item,
-                                },
-                                data: {
-                                    status,
-                                },
-                            },
-                        }
-                    }),
-                ]
-                const res = await sqlTransaction(listSqlTransaction)
+                // let listSqlTransaction: any = []
+                // listSqlTransaction = [
+                //     ...listSqlTransaction,
+                //     ...selectedRowKeys.map((item: any) => {
+                //         return {
+                //             model: 'ArchivedAward',
+                //             operation: 'update',
+                //             data: {
+                //                 where: {
+                //                     id: item,
+                //                 },
+                //                 data: {
+                //                     status,
+                //                 },
+                //             },
+                //         }
+                //     }),
+                // ]
+                // const res = await sqlTransaction(listSqlTransaction)
+                   const res= await updateAwardScore({
+                    data:{archivedAwardIds:selectedRowKeys as string[]}
+                })
                 if (res?.status === 200) {
                     message.success('Phê duyệt thành công')
                     refetch()
