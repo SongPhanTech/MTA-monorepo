@@ -30,7 +30,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
 export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -243,132 +242,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         onOpenChuyenLop()
     }
 
-    // THAY THẾ TOÀN BỘ HÀM handleExportBangDiem HIỆN TẠI BẰNG HÀM NÀY
-
-    const handleExportBangDiem = () => {
-        showSpinner();
-        try {
-            // 1. Dữ liệu mẫu (Giữ nguyên)
-            const reportData = {
-              khoa: "KẾT QUẢ ĐÀO TẠO TOÀN KHÓA 35",
-              chuyenNganh: "8 52 03 01_01 - Kỹ thuật hoá học",
-              lop: "KTHH-NC-35",
-              students: [
-                { stt: 1, hoTen: "Vũ Đức Anh", ngaySinh: "08/03/1995", doiTuong: "QS", diem: [7.6, 7.8, 8.1, 8.3, 9.3, 6.2, 7.1, 8.3, "0/10", 8.3, 7.8, 8.3, 8.2, 7.6, 8.4, 9, 7.8, 6.9, 8.1, 9, 8, 8.5, null], ccta: null, tbc: 8.19, dlv: 8.7 },
-                { stt: 2, hoTen: "Hà Huy Hưng", ngaySinh: "07/01/1997", doiTuong: "QS", diem: [8, 8.3, 8.7, 8.2, 8.9, 7.8, 6.9, 8.7, "0/10", 7.8, 7.2, 8.3, 7.8, 9, 9, 8.6, 7.9, 7.4, 9, 8.5, 8, 9, null], ccta: null, tbc: 8.34, dlv: 8.7 },
-                { stt: 3, hoTen: "Trần Tiến Tùng", ngaySinh: "09/10/1994", doiTuong: "QS", diem: [8.4, 8, 8.2, 8.4, 9, 7, 7.5, 8.6, "0/10", 7.2, 7.2, 8.7, 7.6, 7.3, 8.1, 8.3, 7.5, 7.1, 8.4, 9.5, 7.5, 8.5, null], ccta: null, tbc: 8.15, dlv: 9.2 },
-                { stt: 4, hoTen: "Vũ Văn Tùng", ngaySinh: "18/05/1994", doiTuong: "QS", diem: [9, 8.1, 8.5, 8.4, 9, 7, 7.4, 8.4, "0/10", 8.3, 7.5, 8.7, 8.4, 8.7, 8.7, 9, 7.7, 7.2, 8.4, 8.5, 8.5, 9, null], ccta: null, tbc: 8.43, dlv: 8.5 }
-              ],
-              tongSoHP: 22,
-              tongSoTC: 53,
-            };
-
-            // 2. Chuyển đổi JSON thành TableRow[]
-            const studentRows = reportData.students.map(student => ({
-              cells: [
-                { value: student.stt, align: 'center' as const, border: true },
-                { value: student.hoTen, border: true },
-                { value: student.ngaySinh, align: 'center' as const, border: true },
-                { value: student.doiTuong, align: 'center' as const, border: true },
-                ...student.diem.map(d => ({ 
-                    value: d !== null ? String(d) : null,
-                    align: 'right' as const, 
-                    border: true 
-                })),
-                { value: student.ccta !== null ? String(student.ccta) : null, align: 'right' as const, border: true },
-                { value: student.tbc !== null ? String(student.tbc) : null, align: 'right' as const, border: true, bold: true },
-                { value: student.dlv !== null ? String(student.dlv) : null, align: 'right' as const, border: true, bold: true },
-              ]
-            }));
-
-            const totalCell = [{ cells: [{ value: `Tổng số học phần: ${reportData.tongSoHP} HP, tổng số tín chỉ: ${reportData.tongSoTC} TC.`, border: false, colSpan: 10, bold:true }]}];
-
-            // === PHẦN MỚI 1: TẠO CHÚ THÍCH MÔN HỌC (3 CỘT) ===
-            const chuthichMonHoc = [
-                "M1. Các phương pháp vật lý và hoá lý trong nghiên cứu vật chất",
-                "M2. Công nghệ xử lý môi trường.",
-                "M3. Hoá học chất rắn",
-                "M4. Nhiệt động học và động học trong hoá kỹ thuật",
-                "M5. Những vấn đề hiện đại trong hoá học hữu cơ",
-                "M6. Những vấn đề hiện đại trong hoá học vô cơ",
-                "M7. Phương pháp luận nghiên cứu khoa học",
-                "M8. Quá trình và thiết bị chuyển khối - truyền nhiệt",
-                "M9. Tiếng Anh",
-                "M10. Tin học trong công nghệ hoá học",
-                "M11. Triết học",
-                "M12. Vật liệu chuyên dụng",
-                "M13. Chỉ huy, quản lý kỹ thuật quân sự",
-                "M14. Hóa lý bề mặt",
-                "M15. Năng lượng tái tạo",
-                "M16. Công nghệ vật liệu polyme-composite nâng cao",
-                "M17. Hóa học và công nghệ nitroxenlulo",
-                "M18. Các phương pháp quang phổ và sắc kí trong phân tích",
-                "M19. Kỹ thuật điện hóa và ứng dụng",
-                "M20. Chuyên đề nghiên cứu 2 (KTHH)",
-                "M21. Chuyên đề nghiên cứu 1 (KTHH)",
-                "M22. Chuyên đề nghiên cứu 3 (KTHH)",
-            ];
-
-            const columnFooterRows = [];
-            // Chia làm 3 cột (Cột 1: 9 item, Cột 2: 9 item, Cột 3: 4 item)
-            const maxRowsPerColumn = 9; 
-            
-            for (let i = 0; i < maxRowsPerColumn; i++) {
-                // (colSpan 10 cho mỗi cột, tổng 30 cột)
-                const cell1 = chuthichMonHoc[i] ? { value: chuthichMonHoc[i], border: false, colSpan: 10 } : { value: null, border: false, colSpan: 10 };
-                const cell2 = chuthichMonHoc[i + 9] ? { value: chuthichMonHoc[i + 9], border: false, colSpan: 10 } : { value: null, border: false, colSpan: 10 };
-                const cell3 = chuthichMonHoc[i + 18] ? { value: chuthichMonHoc[i + 18], border: false, colSpan: 10 } : { value: null, border: false, colSpan: 10 };
-                
-                columnFooterRows.push({ cells: [cell1, cell2, cell3] });
-            }
-
-            // === PHẦN MỚI 2: TẠO PHẦN GHI CHÚ CUỐI FILE ===
-             const ghiChuRows = [
-                { cells: [{ value: null, border: false }] }, // Dòng trống
-                { cells: [{ value: 'GHI CHÚ:', border: false, bold: true, colSpan: 10 }] },
-                { cells: [{ value: "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giáo viên chưa nhập điểm", border: false, colSpan: 20 }] },
-                { cells: [{ value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 20 }] },
-                { cells: [{ value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 20 }] },
-                { cells: [{ value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 20 }] },
-                { cells: [{ value: "4. 'CT': Môn cấm thi", border: false, colSpan: 20 }] },
-                { cells: [{ value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 20 }] },
-                { cells: [{ value: "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)", border: false, colSpan: 30 }] },
-            ];
-
-
-            // 3. Gọi hàm export
-            exportFromTemplate({
-              templateUrl: "/lms/templates/chuong-trinh-dao-tao/Bangdiemtheolop.xlsx",
-              sheets: [
-                {
-                  sheet: "BaoCaoDiem", // Đảm bảo tên sheet này chính xác
-                  data: {
-                    khoa: reportData.khoa,
-                    chuyenNganh: reportData.chuyenNganh,
-                    lop: reportData.lop,
-                    tongSoHP: reportData.tongSoHP,
-                    tongSoTC: reportData.tongSoTC,
-                  },
-                  tableStartCell: { row: 9, col: 1 }, 
-                  
-                  rows: [
-                    ...studentRows, 
-                    ...totalCell,
-                    ...columnFooterRows, 
-                    ...ghiChuRows
-                  ], 
-                },
-              ],
-              fileName: `BangDiem-${reportData.lop}.xlsx`,
-            });
-        } catch (error) {
-            console.error("Export failed:", error);
-            message.error("Xuất file thất bại, vui lòng thử lại!");
-        } finally {
-            hideSpinner();
-        }
-    };
-
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
     async function handleDelete(id: string) {
         try {
@@ -399,13 +272,6 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                     <Row gutter={[16, 16]} align="top" justify={'end'}>
                         <Col span={4}>
                             <Flex justify="end">
-                                <Button
-                                    className="mr-3"
-                                    type="primary"
-                                    onClick={handleExportBangDiem}
-                                >
-                                   Xuất excel
-                                </Button>
                                 <Button
                                     className="mr-3"
                                     type="primary"
