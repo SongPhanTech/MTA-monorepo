@@ -39,6 +39,7 @@ import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+
 const { RangePicker } = DatePicker
 type TimeScore = {
     time: [Dayjs, Dayjs]
@@ -260,7 +261,7 @@ export default function ClassSubject() {
             deletedAt: null,
             cancelled: false,
         }
-    }, [filters, semesterId, trainingObjectTypeId])
+    }, [filters, semesterId, trainingObjectTypeId, profileId, canReadAll])
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where,
@@ -545,14 +546,17 @@ export default function ClassSubject() {
                     operation: 'findMany',
                     data: {
                         where: {
+                            deletedAt: null,
+                            cancelled: false,
+                            enteredScore: true,
                             ...(semesterId ? { semesterId } : {}),
                             ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
                         },
                         include: {
                             subjectClassStudent: {
                                 where: {
+                                    exempted: false,
                                     examBanned: false,
-                                    suspended: false,
                                     withdrew: false,
                                 },
                                 include: {

@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { AcademicActionType, createId, type Prisma, StudentStatus } from '@workspace/db'
+import { AcademicActionType, type Prisma, StudentStatus } from '@workspace/db'
 import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetHeQuanSu, parseSheetStudent, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
@@ -241,7 +241,9 @@ app.openapi(importStudent, async (c) => {
                             Id: existing.userProfileId,
                             bLaCanBoNhanVien: true,
                             bLaTaiKhoan: true,
-                            dNgaySinh: profileData.dateOfBirth?.toString(),
+                            dNgaySinh: profileData.dateOfBirth
+                                ? new Date(profileData.dateOfBirth)?.toISOString()
+                                : null,
                             sCCCD: profileData.idCardNumber,
                             sEmail: profileData.email,
                             sHoVaDem: profileData.lastName,
@@ -256,7 +258,7 @@ app.openapi(importStudent, async (c) => {
                         }
                     ).catch(console.error)
                 } else {
-                    const profileId = createId()
+                    const profileId = crypto.randomUUID()
                     const st = await tx.student.create({
                         data: {
                             ...studentData,
