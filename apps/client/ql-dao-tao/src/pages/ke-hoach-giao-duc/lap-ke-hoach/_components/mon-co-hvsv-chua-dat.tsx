@@ -12,7 +12,7 @@ import {
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useOpenSubjectClass } from '@workspace/libs/api/training'
+import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
@@ -38,18 +38,14 @@ export default function MonCoHVSVChuaDat() {
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: res, refetch } = useOpenSubjectClass(
+    const { data: res, refetch } = useOpenSubjectClassRetake(
         {
-            page: `${currentPage}`,
-            pageSize: `${numberOfPages}`,
-            semesterId: semesterId as string,
             search: searchText,
             trainingCourseId,
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
-            nextSemester: 'false',
         },
-        { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
+        { query: { enabled: !!trainingObjectTypeId } }
     )
 
     const { data: planTrainingData } = useFindFirstPlanTraining(
@@ -71,16 +67,7 @@ export default function MonCoHVSVChuaDat() {
         }
     )
 
-    const data = useMemo(
-        () =>
-            res?.status === 200
-                ? res?.data?.data.map((subjectVersion) => ({
-                      id: subjectVersion.subjectVersionId,
-                      ...subjectVersion,
-                  }))
-                : [],
-        [res]
-    )
+    const data = useMemo(() => (res?.status === 200 ? res?.data?.data : []), [res])
 
     useEffect(() => {
         if (planTrainingData) {

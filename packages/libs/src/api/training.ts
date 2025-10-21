@@ -38,12 +38,10 @@ import type {
     CreateExamsRequest,
     CreateExamsResponse,
     EnrollFixedClassOnSubjectClassBody,
-    EnrollStudentOnSubjectClassBody,
     ExamCodes,
     ExportStudentResultSemesterJson200Item,
     ExportStudentResultSemesterJson404,
     ExportStudentResultSemesterJsonParams,
-    FixedClassBySubjectClassSemesterParams,
     GenExamCode,
     GenExamCode400,
     GenExamCode404,
@@ -74,11 +72,13 @@ import type {
     ImportStudent400,
     ImportStudentRequest,
     ListOfEnrollFixedClassOnSubjectClass,
-    ListOfFixedClassBySubjectClassSemester,
     ListOfOpenSubjectClass,
-    ListOfStudentClassBySubjectClassSemester,
     ListOfundefined,
     OpenSubjectClassParams,
+    OpenSubjectClassRetake200,
+    OpenSubjectClassRetakeParams,
+    OpenSubjectClassRetakeStudents200,
+    OpenSubjectClassRetakeStudentsParams,
     PostApiStatsAcademicPerformanceByYear200,
     PostApiStatsAcademicPerformanceByYearBody,
     PostApiStatsAcademicPerformanceByYearFiltered200,
@@ -145,13 +145,10 @@ import type {
     PostApiStatsSubjectClassStatisticsBody,
     PostApiStatsSubjectPassFailRate200,
     PostApiStatsSubjectPassFailRateBody,
-    PutManySubjectClass200,
     Room200Item,
     Room400,
     SaveExamCodesResult,
     SaveExamScore400,
-    StudentBySubjectClassSemesterParams,
-    SubjectClasses,
     TrainingField200Item,
     TrainingField400,
     UpdateStudentStatus200,
@@ -903,31 +900,28 @@ export function useOpenSubjectClass<
 }
 
 /**
- * Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
- * @summary Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
+ * Lấy danh sách môn học có hssv nợ
+ * @summary Lấy danh sách môn học có hssv nợ
  */
-export type fixedClassBySubjectClassSemesterResponse200 = {
-    data: ListOfFixedClassBySubjectClassSemester
+export type openSubjectClassRetakeResponse200 = {
+    data: OpenSubjectClassRetake200
     status: 200
 }
 
-export type fixedClassBySubjectClassSemesterResponse400 = {
+export type openSubjectClassRetakeResponse400 = {
     data: undefined
     status: 400
 }
 
-export type fixedClassBySubjectClassSemesterResponseComposite =
-    | fixedClassBySubjectClassSemesterResponse200
-    | fixedClassBySubjectClassSemesterResponse400
+export type openSubjectClassRetakeResponseComposite =
+    | openSubjectClassRetakeResponse200
+    | openSubjectClassRetakeResponse400
 
-export type fixedClassBySubjectClassSemesterResponse =
-    fixedClassBySubjectClassSemesterResponseComposite & {
-        headers: Headers
-    }
+export type openSubjectClassRetakeResponse = openSubjectClassRetakeResponseComposite & {
+    headers: Headers
+}
 
-export const getFixedClassBySubjectClassSemesterUrl = (
-    params: FixedClassBySubjectClassSemesterParams
-) => {
+export const getOpenSubjectClassRetakeUrl = (params: OpenSubjectClassRetakeParams) => {
     const normalizedParams = new URLSearchParams()
 
     Object.entries(params || {}).forEach(([key, value]) => {
@@ -939,16 +933,16 @@ export const getFixedClassBySubjectClassSemesterUrl = (
     const stringifiedParams = normalizedParams.toString()
 
     return stringifiedParams.length > 0
-        ? `/api/subject-class/fixed-class-by-subject-class-semester?${stringifiedParams}`
-        : '/api/subject-class/fixed-class-by-subject-class-semester'
+        ? `/api/subject-class/open-subject-class-retake?${stringifiedParams}`
+        : '/api/subject-class/open-subject-class-retake'
 }
 
-export const fixedClassBySubjectClassSemester = async (
-    params: FixedClassBySubjectClassSemesterParams,
+export const openSubjectClassRetake = async (
+    params: OpenSubjectClassRetakeParams,
     options?: RequestInit
-): Promise<fixedClassBySubjectClassSemesterResponse> => {
-    return customTrainingFetch<fixedClassBySubjectClassSemesterResponse>(
-        getFixedClassBySubjectClassSemesterUrl(params),
+): Promise<openSubjectClassRetakeResponse> => {
+    return customTrainingFetch<openSubjectClassRetakeResponse>(
+        getOpenSubjectClassRetakeUrl(params),
         {
             ...options,
             method: 'GET',
@@ -956,69 +950,56 @@ export const fixedClassBySubjectClassSemester = async (
     )
 }
 
-export const getFixedClassBySubjectClassSemesterQueryKey = (
-    params: FixedClassBySubjectClassSemesterParams
-) => {
-    return [
-        '/api/subject-class/fixed-class-by-subject-class-semester',
-        ...(params ? [params] : []),
-    ] as const
+export const getOpenSubjectClassRetakeQueryKey = (params: OpenSubjectClassRetakeParams) => {
+    return ['/api/subject-class/open-subject-class-retake', ...(params ? [params] : [])] as const
 }
 
-export const getFixedClassBySubjectClassSemesterQueryOptions = <
-    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+export const getOpenSubjectClassRetakeQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
     TError = void,
 >(
-    params: FixedClassBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
         >
         request?: SecondParameter<typeof customTrainingFetch>
     }
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getFixedClassBySubjectClassSemesterQueryKey(params)
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>> = ({
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetake>>> = ({
         signal,
-    }) => fixedClassBySubjectClassSemester(params, { signal, ...requestOptions })
+    }) => openSubjectClassRetake(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+        Awaited<ReturnType<typeof openSubjectClassRetake>>,
         TError,
         TData
     > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type FixedClassBySubjectClassSemesterQueryResult = NonNullable<
-    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+export type OpenSubjectClassRetakeQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassRetake>>
 >
-export type FixedClassBySubjectClassSemesterQueryError = undefined
+export type OpenSubjectClassRetakeQueryError = undefined
 
-export function useFixedClassBySubjectClassSemester<
-    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+export function useOpenSubjectClassRetake<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
     TError = void,
 >(
-    params: FixedClassBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeParams,
     options: {
         query: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
         > &
             Pick<
                 DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                    Awaited<ReturnType<typeof openSubjectClassRetake>>,
                     TError,
-                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+                    Awaited<ReturnType<typeof openSubjectClassRetake>>
                 >,
                 'initialData'
             >
@@ -1026,24 +1007,20 @@ export function useFixedClassBySubjectClassSemester<
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFixedClassBySubjectClassSemester<
-    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+export function useOpenSubjectClassRetake<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
     TError = void,
 >(
-    params: FixedClassBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
         > &
             Pick<
                 UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+                    Awaited<ReturnType<typeof openSubjectClassRetake>>,
                     TError,
-                    Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>
+                    Awaited<ReturnType<typeof openSubjectClassRetake>>
                 >,
                 'initialData'
             >
@@ -1051,45 +1028,37 @@ export function useFixedClassBySubjectClassSemester<
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useFixedClassBySubjectClassSemester<
-    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+export function useOpenSubjectClassRetake<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
     TError = void,
 >(
-    params: FixedClassBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Lấy danh sách lớp quản lý theo học kỳ và lớp môn học
+ * @summary Lấy danh sách môn học có hssv nợ
  */
 
-export function useFixedClassBySubjectClassSemester<
-    TData = Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
+export function useOpenSubjectClassRetake<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetake>>,
     TError = void,
 >(
-    params: FixedClassBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeParams,
     options?: {
         query?: Partial<
-            UseQueryOptions<
-                Awaited<ReturnType<typeof fixedClassBySubjectClassSemester>>,
-                TError,
-                TData
-            >
+            UseQueryOptions<Awaited<ReturnType<typeof openSubjectClassRetake>>, TError, TData>
         >
         request?: SecondParameter<typeof customTrainingFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getFixedClassBySubjectClassSemesterQueryOptions(params, options)
+    const queryOptions = getOpenSubjectClassRetakeQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
@@ -1101,30 +1070,30 @@ export function useFixedClassBySubjectClassSemester<
 }
 
 /**
- * Lấy danh sách học sinh theo học kỳ và lớp môn học
- * @summary Lấy danh sách học sinh theo học kỳ và lớp môn học
+ * Lấy danh sách sinh viên nợ môn học
+ * @summary Lấy danh sách sinh viên nợ môn học
  */
-export type studentBySubjectClassSemesterResponse200 = {
-    data: ListOfStudentClassBySubjectClassSemester
+export type openSubjectClassRetakeStudentsResponse200 = {
+    data: OpenSubjectClassRetakeStudents200
     status: 200
 }
 
-export type studentBySubjectClassSemesterResponse400 = {
+export type openSubjectClassRetakeStudentsResponse400 = {
     data: undefined
     status: 400
 }
 
-export type studentBySubjectClassSemesterResponseComposite =
-    | studentBySubjectClassSemesterResponse200
-    | studentBySubjectClassSemesterResponse400
+export type openSubjectClassRetakeStudentsResponseComposite =
+    | openSubjectClassRetakeStudentsResponse200
+    | openSubjectClassRetakeStudentsResponse400
 
-export type studentBySubjectClassSemesterResponse =
-    studentBySubjectClassSemesterResponseComposite & {
+export type openSubjectClassRetakeStudentsResponse =
+    openSubjectClassRetakeStudentsResponseComposite & {
         headers: Headers
     }
 
-export const getStudentBySubjectClassSemesterUrl = (
-    params: StudentBySubjectClassSemesterParams
+export const getOpenSubjectClassRetakeStudentsUrl = (
+    params: OpenSubjectClassRetakeStudentsParams
 ) => {
     const normalizedParams = new URLSearchParams()
 
@@ -1137,16 +1106,16 @@ export const getStudentBySubjectClassSemesterUrl = (
     const stringifiedParams = normalizedParams.toString()
 
     return stringifiedParams.length > 0
-        ? `/api/subject-class/student-by-subject-class-semester?${stringifiedParams}`
-        : '/api/subject-class/student-by-subject-class-semester'
+        ? `/api/subject-class/open-subject-class-retake-students?${stringifiedParams}`
+        : '/api/subject-class/open-subject-class-retake-students'
 }
 
-export const studentBySubjectClassSemester = async (
-    params: StudentBySubjectClassSemesterParams,
+export const openSubjectClassRetakeStudents = async (
+    params: OpenSubjectClassRetakeStudentsParams,
     options?: RequestInit
-): Promise<studentBySubjectClassSemesterResponse> => {
-    return customTrainingFetch<studentBySubjectClassSemesterResponse>(
-        getStudentBySubjectClassSemesterUrl(params),
+): Promise<openSubjectClassRetakeStudentsResponse> => {
+    return customTrainingFetch<openSubjectClassRetakeStudentsResponse>(
+        getOpenSubjectClassRetakeStudentsUrl(params),
         {
             ...options,
             method: 'GET',
@@ -1154,24 +1123,24 @@ export const studentBySubjectClassSemester = async (
     )
 }
 
-export const getStudentBySubjectClassSemesterQueryKey = (
-    params: StudentBySubjectClassSemesterParams
+export const getOpenSubjectClassRetakeStudentsQueryKey = (
+    params: OpenSubjectClassRetakeStudentsParams
 ) => {
     return [
-        '/api/subject-class/student-by-subject-class-semester',
+        '/api/subject-class/open-subject-class-retake-students',
         ...(params ? [params] : []),
     ] as const
 }
 
-export const getStudentBySubjectClassSemesterQueryOptions = <
-    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+export const getOpenSubjectClassRetakeStudentsQueryOptions = <
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
     TError = void,
 >(
-    params: StudentBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeStudentsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
                 TError,
                 TData
             >
@@ -1181,42 +1150,42 @@ export const getStudentBySubjectClassSemesterQueryOptions = <
 ) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getStudentBySubjectClassSemesterQueryKey(params)
+    const queryKey = queryOptions?.queryKey ?? getOpenSubjectClassRetakeStudentsQueryKey(params)
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof studentBySubjectClassSemester>>> = ({
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>> = ({
         signal,
-    }) => studentBySubjectClassSemester(params, { signal, ...requestOptions })
+    }) => openSubjectClassRetakeStudents(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-        Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+        Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
         TError,
         TData
     > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type StudentBySubjectClassSemesterQueryResult = NonNullable<
-    Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+export type OpenSubjectClassRetakeStudentsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
 >
-export type StudentBySubjectClassSemesterQueryError = undefined
+export type OpenSubjectClassRetakeStudentsQueryError = undefined
 
-export function useStudentBySubjectClassSemester<
-    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+export function useOpenSubjectClassRetakeStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
     TError = void,
 >(
-    params: StudentBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeStudentsParams,
     options: {
         query: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
                 TError,
                 TData
             >
         > &
             Pick<
                 DefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
                     TError,
-                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
                 >,
                 'initialData'
             >
@@ -1224,24 +1193,24 @@ export function useStudentBySubjectClassSemester<
     },
     queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStudentBySubjectClassSemester<
-    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+export function useOpenSubjectClassRetakeStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
     TError = void,
 >(
-    params: StudentBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeStudentsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
                 TError,
                 TData
             >
         > &
             Pick<
                 UndefinedInitialDataOptions<
-                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
                     TError,
-                    Awaited<ReturnType<typeof studentBySubjectClassSemester>>
+                    Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>
                 >,
                 'initialData'
             >
@@ -1249,15 +1218,15 @@ export function useStudentBySubjectClassSemester<
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useStudentBySubjectClassSemester<
-    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+export function useOpenSubjectClassRetakeStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
     TError = void,
 >(
-    params: StudentBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeStudentsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
                 TError,
                 TData
             >
@@ -1267,18 +1236,18 @@ export function useStudentBySubjectClassSemester<
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Lấy danh sách học sinh theo học kỳ và lớp môn học
+ * @summary Lấy danh sách sinh viên nợ môn học
  */
 
-export function useStudentBySubjectClassSemester<
-    TData = Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+export function useOpenSubjectClassRetakeStudents<
+    TData = Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
     TError = void,
 >(
-    params: StudentBySubjectClassSemesterParams,
+    params: OpenSubjectClassRetakeStudentsParams,
     options?: {
         query?: Partial<
             UseQueryOptions<
-                Awaited<ReturnType<typeof studentBySubjectClassSemester>>,
+                Awaited<ReturnType<typeof openSubjectClassRetakeStudents>>,
                 TError,
                 TData
             >
@@ -1287,7 +1256,7 @@ export function useStudentBySubjectClassSemester<
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getStudentBySubjectClassSemesterQueryOptions(params, options)
+    const queryOptions = getOpenSubjectClassRetakeStudentsQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
@@ -1403,212 +1372,6 @@ export const useEnrollFixedClassOnSubjectClass = <TError = void, TContext = unkn
     TContext
 > => {
     const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Đăng ký lớp môn học cho học viên
- * @summary Đăng ký lớp môn học cho học viên
- */
-export type enrollStudentOnSubjectClassResponse200 = {
-    data: ListOfEnrollFixedClassOnSubjectClass
-    status: 200
-}
-
-export type enrollStudentOnSubjectClassResponse400 = {
-    data: undefined
-    status: 400
-}
-
-export type enrollStudentOnSubjectClassResponseComposite =
-    | enrollStudentOnSubjectClassResponse200
-    | enrollStudentOnSubjectClassResponse400
-
-export type enrollStudentOnSubjectClassResponse = enrollStudentOnSubjectClassResponseComposite & {
-    headers: Headers
-}
-
-export const getEnrollStudentOnSubjectClassUrl = () => {
-    return '/api/subject-class/enroll-student-on-subject-class'
-}
-
-export const enrollStudentOnSubjectClass = async (
-    enrollStudentOnSubjectClassBody: EnrollStudentOnSubjectClassBody,
-    options?: RequestInit
-): Promise<enrollStudentOnSubjectClassResponse> => {
-    return customTrainingFetch<enrollStudentOnSubjectClassResponse>(
-        getEnrollStudentOnSubjectClassUrl(),
-        {
-            ...options,
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', ...options?.headers },
-            body: JSON.stringify(enrollStudentOnSubjectClassBody),
-        }
-    )
-}
-
-export const getEnrollStudentOnSubjectClassMutationOptions = <
-    TError = void,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
-        TError,
-        { data: EnrollStudentOnSubjectClassBody },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
-    TError,
-    { data: EnrollStudentOnSubjectClassBody },
-    TContext
-> => {
-    const mutationKey = ['enrollStudentOnSubjectClass']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
-        { data: EnrollStudentOnSubjectClassBody }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return enrollStudentOnSubjectClass(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type EnrollStudentOnSubjectClassMutationResult = NonNullable<
-    Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>
->
-export type EnrollStudentOnSubjectClassMutationBody = EnrollStudentOnSubjectClassBody
-export type EnrollStudentOnSubjectClassMutationError = undefined
-
-/**
- * @summary Đăng ký lớp môn học cho học viên
- */
-export const useEnrollStudentOnSubjectClass = <TError = void, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
-            TError,
-            { data: EnrollStudentOnSubjectClassBody },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof enrollStudentOnSubjectClass>>,
-    TError,
-    { data: EnrollStudentOnSubjectClassBody },
-    TContext
-> => {
-    const mutationOptions = getEnrollStudentOnSubjectClassMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Cập nhật nhiều lớp môn học
- * @summary Cập nhật nhiều lớp môn học
- */
-export type putManySubjectClassResponse200 = {
-    data: PutManySubjectClass200
-    status: 200
-}
-
-export type putManySubjectClassResponseComposite = putManySubjectClassResponse200
-
-export type putManySubjectClassResponse = putManySubjectClassResponseComposite & {
-    headers: Headers
-}
-
-export const getPutManySubjectClassUrl = () => {
-    return '/api/subject-class'
-}
-
-export const putManySubjectClass = async (
-    subjectClasses: SubjectClasses[],
-    options?: RequestInit
-): Promise<putManySubjectClassResponse> => {
-    return customTrainingFetch<putManySubjectClassResponse>(getPutManySubjectClassUrl(), {
-        ...options,
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(subjectClasses),
-    })
-}
-
-export const getPutManySubjectClassMutationOptions = <
-    TError = unknown,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof putManySubjectClass>>,
-        TError,
-        { data: SubjectClasses[] },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof putManySubjectClass>>,
-    TError,
-    { data: SubjectClasses[] },
-    TContext
-> => {
-    const mutationKey = ['putManySubjectClass']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof putManySubjectClass>>,
-        { data: SubjectClasses[] }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return putManySubjectClass(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type PutManySubjectClassMutationResult = NonNullable<
-    Awaited<ReturnType<typeof putManySubjectClass>>
->
-export type PutManySubjectClassMutationBody = SubjectClasses[]
-export type PutManySubjectClassMutationError = unknown
-
-/**
- * @summary Cập nhật nhiều lớp môn học
- */
-export const usePutManySubjectClass = <TError = unknown, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof putManySubjectClass>>,
-            TError,
-            { data: SubjectClasses[] },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof putManySubjectClass>>,
-    TError,
-    { data: SubjectClasses[] },
-    TContext
-> => {
-    const mutationOptions = getPutManySubjectClassMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
