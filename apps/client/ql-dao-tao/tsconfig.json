@@ -52,7 +52,6 @@
         "**/*.tsx",
         ".next/types/**/*.ts",
         "src/pages/api/equipments/locations/[[...id]]",
-        "src/components/templateExcel/xlsx-template-browser.d.ts"
     ],
     "exclude": ["node_modules"]
 }
