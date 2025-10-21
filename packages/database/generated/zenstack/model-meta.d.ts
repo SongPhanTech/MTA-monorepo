@@ -37870,6 +37870,17 @@ declare const metadata: {
                     isForeignKey: boolean;
                     relationField: string;
                 };
+                lockExamCode: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
                 duration: {
                     name: string;
                     type: string;

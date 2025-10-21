@@ -192,7 +192,7 @@ model Exam extends Base {
   questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
   questionBankId      String?
 
-  // lockExamCode        Boolean               @default(false)
+  lockExamCode        Boolean               @default(false)
 
   /// thời gian thi
   duration            Int?

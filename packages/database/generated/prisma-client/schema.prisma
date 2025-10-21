@@ -5418,6 +5418,7 @@ model Exam {
   status              ExamStatus            @default(DRAFT)
   questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
   questionBankId      String?
+  lockExamCode        Boolean               @default(false)
   /// thời gian thi
   duration            Int?
   /// Lớp môn học

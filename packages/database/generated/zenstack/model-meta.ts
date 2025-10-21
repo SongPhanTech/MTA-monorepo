@@ -21093,6 +21093,10 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'questionBank',
+                }, lockExamCode: {
+                    name: "lockExamCode",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, duration: {
                     name: "duration",
                     type: "Int",

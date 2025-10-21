@@ -299,6 +299,126 @@ app.openapi(genExamCode, async (c) => {
     return c.json({ success: true, message: 'Success' }, 200)
 })
 
+const genExamRoomCode = createRoute({
+    operationId: 'gen-exam-room-code',
+    path: '/gex-exam-room-code',
+    tags: ['Exam'],
+    summary: 'Sinh phách cho phòng thi',
+    description: 'Sinh phách cho phòng thi',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            examRoomId: z.string().openapi('examRoomId', {
+                                description: 'ID phòng thi',
+                            }),
+                        })
+                        .openapi('gen-exam-room-code'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Generate Exam Room code result',
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            success: z.boolean(),
+                            message: z.string(),
+                        })
+                        .openapi('gen-exam-room-code-result'),
+                },
+            },
+        },
+        400: {
+            description: 'failed',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(genExamRoomCode, async (c) => {
+    const { examRoomId } = c.req.valid('json')
+    const examRoom = await prisma.examRoom.findUnique({
+        where: { id: examRoomId },
+        include: {
+            examSessions: {
+                include: { studentSubjectScore: true },
+            },
+        },
+    })
+    if (!examRoom) {
+        return c.json({ message: 'Kỳ thi không tồn tại' }, 404)
+    }
+
+    if (examRoom.lockExamCode) {
+        return c.json({ message: 'Phách đã khoá' }, 400)
+    }
+
+    if (!examRoom.examSessions.length) {
+        return c.json({ message: 'Không có thí sinh' }, 404)
+    }
+
+    const hasScore = examRoom.examSessions.some((s) => s.studentSubjectScore.finalScore !== null)
+
+    if (hasScore) {
+        return c.json({ message: 'Phách đã được nhập điểm' }, 400)
+    }
+
+    const padding = examRoom.examSessions.length
+    const examCodes = Array.from({ length: examRoom.examSessions.length }, (_, i) =>
+        String(i + 1).padStart(padding, '0')
+    ).sort((a, b) => Math.random() - 0.5)
+
+    const examSessionUpdates = examRoom.examSessions.map((s, i) => ({
+        id: s.id,
+        examCode: examCodes[i],
+    }))
+
+    const examCodesCases = examSessionUpdates.map(
+        (u) => Prisma.sql`WHEN "id" = ${u.id} THEN ${u.examCode}`
+    )
+
+    const ids = examSessionUpdates.map((u) => u.id)
+
+    await prisma.$transaction(async (tx) => {
+        await tx.examSession.updateMany({
+            where: { id: { in: ids } },
+            data: { examCode: null },
+        })
+        await tx.$executeRaw`
+            UPDATE "khao-thi"."ExamSession"
+            SET
+                "examCode" = CASE ${Prisma.join(examCodesCases, ' ')} END
+            WHERE
+                "id" IN (${Prisma.join(ids)})
+            `
+    })
+
+    return c.json({ success: true, message: 'Success' }, 200)
+})
+
 const saveExamScore = createRoute({
     operationId: 'save-exam-score',
     path: '/save-exam-score',
