@@ -41,7 +41,6 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useDisclosure } from "react-hook-disclosure-modal";
 import { useTrainingObjectTypeStore } from "@workspace/ui";
-import ExcelTemplateDownloader from "@components/templateExcel/ExcelTemplateDownloader";
 import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel";
 import { createSimpleExcel, SimpleRowData } from "@workspace/libs/create-excel";
 import { sqlTransaction } from "@workspace/libs/api/model";
@@ -532,10 +531,7 @@ export default function StudentFixedClassPage() {
                   });
                 }
               );
-            }); // <-- Vòng lặp subjectClasses KẾT THÚC ở đây
-
-            // --- BẮT ĐẦU KHỐI LOGIC ĐƯỢC DI CHUYỂN ---
-            // Bây giờ "monhoc" đã chứa TẤT CẢ các môn của học kỳ này
+            });
             const tongSoTinChi = monhoc.reduce(
               (acc, curr) => acc + (curr.soTC ?? 0),
               0
@@ -900,10 +896,8 @@ export default function StudentFixedClassPage() {
                   });
                 }
               );
-            }); // <-- Vòng lặp subjectClasses KẾT THÚC ở đây
+            });
 
-            // --- BẮT ĐẦU KHỐI LOGIC ĐƯỢC DI CHUYỂN ---
-            // Bây giờ "monhoc" đã chứa TẤT CẢ các môn của học kỳ này
             const tongSoTinChi = monhoc.reduce(
               (acc, curr) => acc + (curr.soTC ?? 0),
               0
