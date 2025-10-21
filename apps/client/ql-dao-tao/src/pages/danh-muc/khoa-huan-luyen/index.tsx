@@ -13,7 +13,8 @@ import {
     useFindUniqueTrainingCourse,
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
-import { exportFromTemplate, TableCell } from '@workspace/libs/template-excel'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { exportFromTemplate, TableCell, TableRow } from '@workspace/libs/template-excel'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
@@ -120,15 +121,33 @@ export default function TrainingCoursePage() {
     const handleModal = () => {
         onOpen()
     }
-    const handleExport = (e: any, id: string) => {
+    const handleExport = async (e: any, id: string) => {
         idTrainingCourse.current = id
-        console.log( 'e', id),
-        console.log( 'initialData',  idTrainingCourse.current);
         const baseUrl = '/lms/templates/chuong-trinh-dao-tao/'
         const url = baseUrl + (e=== 'P2' ? 'si-so-p2.xlsx' : 'si-so-p7.xlsx')
         const tableStartCell = e === 'P2' ? { row: 11, col: 1 } : { row: 8, col: 1 }
-        
-        const rows = initialData?.fixedClass?.map((item, index) => {
+        const result = await sqlTransaction(
+        [
+            {
+                model: "TrainingCourse",
+                operation: "findUnique",
+                data: {
+                    where: { id: id },
+                    include: {
+                      trainingObjectType: true,
+                      fixedClass: {
+                        include: {
+                          students: true,
+                        }
+                      },
+                    }
+                },
+            },
+        ]);
+        console.log('result', result);
+        if (result.status !== 200) return;
+        const data: any = result.data[0];
+        const rows = data?.fixedClass?.map((item: any, index: number) => {
 
             return {
                 cells: [
@@ -146,7 +165,7 @@ export default function TrainingCoursePage() {
          const totalRow = {
             cells: [
                 { value: 'TỔNG', border: true ,colSpan: 3,align: 'center'},
-                { value: initialData?.fixedClass?.reduce((sum, item) => sum + (item.students?.length ?? 0), 0) ?? 0, border: true },
+                { value: initialData?.fixedClass?.reduce((sum, item) => sum + (item.students?.length ?? 0), 0) ?? 0, border: true,bold: true,align: 'center' },
                 { value: '', border: true },
             ] 
          }
@@ -199,6 +218,8 @@ export default function TrainingCoursePage() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
+ 
+
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             {/* <Flex>

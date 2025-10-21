@@ -20,7 +20,7 @@ import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
- interface IMonHoc {
+export interface IMonHoc {
     TenMonhoc: string;
     MaMH?: string;
     soTC?: number;
@@ -34,7 +34,7 @@ dayjs.locale('vi')
 }
 
 
- interface IHocKi {
+export interface IHocKi {
     TenHocKi?: string;
     SoTinChiKy?: number; 
     DiemTBKyHe10?: number; 
@@ -156,10 +156,10 @@ export default function StudentScoreClassPage() {
             cells: [
               {
                 value: hocKi.TenHocKi ?? '', 
-                colSpan: 18, 
+                colSpan: 19, 
                 bold: true,
                 align: 'left',
-                bgColor: 'F2F2F2', 
+                border: true, 
               },
             ],
           };
@@ -209,6 +209,41 @@ export default function StudentScoreClassPage() {
 
       const gapRow: TableRow = {
         cells: [{ value: null, colSpan: 18, border: false }]
+      };
+      const tongtinchi = sampleStudentData.hocKis.reduce((acc, curr) => acc + (curr.SoTinChiKy ?? 0), 0);
+      
+      // Tính điểm trung bình hệ 10 toàn khóa: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
+      const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
+        (acc, curr) => acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0), 
+        0
+      );
+      const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
+        (acc, curr) => acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0), 
+        0
+      );
+      
+      const tongdiemhe10 = tongtinchi === 0 ? 0 : parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1));
+      const tongdiemhe4 = tongtinchi === 0 ? 0 : parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1));
+      const totalRow: TableRow = {
+        cells: [
+          { value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false },       
+        ]
+      };
+      const diemTBHe10Row: TableRow = {
+        cells: [
+          { value: `Điểm trung bình hệ 10 toàn khóa: ${tongdiemhe10}`, colSpan: 18, border: false },       
+        ]
+      };
+      const diemTBHe4Row: TableRow = {
+        cells: [
+          { value: `Điểm trung bình hệ 4 toàn khóa: ${tongdiemhe4}`, colSpan: 18, border: false },       
+        ]
+      };
+      const xeploai = convertScore(tongdiemhe10).classification;
+      const xepLoaiRow: TableRow = {
+        cells: [
+          { value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false },       
+        ]
       };
   
 
@@ -266,11 +301,12 @@ export default function StudentScoreClassPage() {
             ...tableRows,   
             gapRow,         
             gapRow,         
+            totalRow,
+            diemTBHe10Row,
+            diemTBHe4Row,
+            xepLoaiRow,
             dateSignatureRow, 
             titleSignatureRow, 
-
-            gapRow,
-            gapRow,
             nameSignatureRow
           ],
           hiddenColumns: ['M', 'N', 'R','J','K','L']
