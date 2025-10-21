@@ -1,9 +1,6 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import {
-    useFindManyFixedClass,
-    useFindManyTrainingCourse
-} from '@workspace/db/hooks'
+import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { useOpenSubjectClassRetakeStudents } from '@workspace/libs/api/training'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, Row, Select } from 'antd'
@@ -52,7 +49,7 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
             page: `${currentPage}`,
             pageSize: `${numberOfPages}`,
         },
-        { query: { enabled: !!trainingObjectTypeId } }
+        { query: { enabled: !!trainingObjectTypeId && !!subjectVersionId } }
     )
     // queryKey /api/subject-class/open-subject-class-retake
 
