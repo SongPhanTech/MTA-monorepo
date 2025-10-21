@@ -107,16 +107,17 @@ const openSubjectClassRetake = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: ListOf(
-                        z.object({
-                            id: z.string(),
-                            code: z.string(),
-                            name: z.string(),
-                            trainingObjectTypeId: z.string().nullable(),
-                            trainingMajorId: z.string().nullable(),
-                            trainingCourseId: z.string().nullable(),
-                            count: z.number(),
-                        })
+                    schema: z.array(
+                        z
+                            .object({
+                                id: z.string(),
+                                code: z.string(),
+                                name: z.string(),
+                                trainingObjectTypeId: z.string().nullable(),
+                                trainingMajorId: z.string().nullable(),
+                                trainingCourseId: z.string().nullable(),
+                                count: z.number(),
+                            })
                     ),
                 },
             },
@@ -161,7 +162,7 @@ const openSubjectClassRetakeStudents = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: ListOf(
+                    schema: z.array(
                         z.object({
                             id: z.string(),
                             code: z.string(),
