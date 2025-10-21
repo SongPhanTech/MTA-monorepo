@@ -9,6 +9,7 @@
     "./constants": "./src/constants.ts",
     "./parseExcel": "./src/parseExcel.ts",
     "./template-excel": "./src/template-excel.ts",
+    "./create-excel": "./src/create-excel.ts",
     "./utils": "./src/utils.ts",
     "./docxjs": "./src/docxjs.ts",
     ".": "./src/index.ts"

@@ -11,6 +11,7 @@ export interface TableCell {
     bgColor?: string
     bold?: boolean
     wrapText?: boolean
+    border?: boolean
 }
 
 export interface TableRow {
@@ -22,6 +23,7 @@ export interface SheetExportOptions {
     data?: Record<string, string | number | null>
     rows?: TableRow[]
     tableStartCell?: { row: number; col: number }
+    hiddenColumns?: string[]
 }
 
 export interface ExportOptions {
@@ -127,6 +129,11 @@ async function handleExcelJSExport(
             console.log('Cannot find or create sheet:', sheet)
             continue
         }
+        if (sheetOption.hiddenColumns && sheetOption.hiddenColumns.length > 0) {
+            sheetOption.hiddenColumns.forEach((colName) => {
+                worksheet.getColumn(colName).hidden = true
+            })
+        }
         // 1️⃣ Replace placeholder {{...}}
         worksheet.eachRow((row) => {
             row.eachCell((cell) => {
@@ -178,11 +185,22 @@ async function handleExcelJSExport(
                             fgColor: { argb: cellData.bgColor },
                         }
                     }
-                    cell.border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' },
+                    const applyBorder = cellData.border ?? true 
+                    
+                    if (applyBorder) {
+                        cell.border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' },
+                        }
+                    } else {
+                        cell.border = {
+                            top: { style: undefined },
+                            left: { style: undefined },
+                            bottom: { style: undefined },
+                            right: { style: undefined },
+                        }
                     }
 
                     const colSpan = cellData.colSpan ?? 1

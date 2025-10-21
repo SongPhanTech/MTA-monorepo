@@ -1446,6 +1446,9 @@ importers:
       xlsx:
         specifier: 'catalog:'
         version: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
+      xlsx-template-browser:
+        specifier: ^0.2.1
+        version: 0.2.1
       zod:
         specifier: 'catalog:'
         version: 3.25.76
@@ -9104,6 +9107,9 @@ packages:
     resolution: {integrity: sha512-Cj3pGUvzrP2q9oowpLP8GyujovTaBGjBRRUlCKPitNvHWj9JDD5+FDPZIM5QQggGb995ZhkuBSsMZOSd5TzIWg==}
     engines: {node: '>=0.8'}
     hasBin: true
+
+  xlsx-template-browser@0.2.1:
+    resolution: {integrity: sha512-1uTgSAsn+Z9x6FjkcW07RuTgOl0joehQiXGnPoKwgQg9T8YA7O7+5XvQX+dD8pztCLf4HBHxBhYCooBSXgj3RQ==}
 
   xlsx-template@1.4.4:
     resolution: {integrity: sha512-L6FRDs9i3Zzy8Qu3G8phLDi8AwzTwUwBptGFjQ3NaE4tL4iZ+8nPPgzYJbi+zzKpppbp3pH68n6SwZiU8d2qHQ==}
@@ -17280,6 +17286,10 @@ snapshots:
       crc-32: 1.2.2
       jszip: 2.4.0
       ssf: 0.8.2
+
+  xlsx-template-browser@0.2.1:
+    dependencies:
+      jszip: 3.10.1
 
   xlsx-template@1.4.4:
     dependencies:
