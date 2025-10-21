@@ -6,14 +6,14 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import { $Enums, type Prisma, type SubjectClass, type SubjectVersion } from '@workspace/db/client'
+import { type Prisma, type SubjectClass, type SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManySubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { useCreateExams } from '@workspace/libs/api/training'
+import { useCreateExams, useCreateNewReExamList } from '@workspace/libs/api/training'
 import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
@@ -546,49 +546,27 @@ export default function ClassSubject() {
         }
     }
 
+    const { mutateAsync: createReExamList } = useCreateNewReExamList()
+
     const handleRexamList = async () => {
         try {
             showSpinner()
-            if (!semesterId || !trainingObjectTypeId) return
 
-            const res = await sqlTransaction([
-                {
-                    model: 'SubjectVersion',
-                    operation: 'findMany',
+            if (semesterId && trainingObjectTypeId) {
+                const res = await createReExamList({
                     data: {
-                        where: {
-                            subjectClass: {
-                                some: {
-                                    trainingObjectTypeId,
-                                    semesterId,
-                                    cancelled: false,
-                                    deletedAt: null,
-                                    enteredScore: true,
-                                    enteredExamScore: true,
-                                    type: $Enums.SubjectClassType.REEXAM,
-                                },
-                            },
-                        },
-                        select: {
-                            subjectClass: {
-                                select: {
-                                    id: true,
-                                    subjectClassStudent: {
-                                        select: { id: true },
-                                        where: {
-                                            examPostponed: true,
-                                            suspended: true,
-                                        },
-                                    },
-                                },
-                                where: {
-                                    examId: null,
-                                },
-                            },
-                        },
+                        semesterId,
+                        trainingObjectTypeId,
                     },
-                },
-            ])
+                })
+
+                if (res.status !== 200) {
+                    message.error(res.data.message || 'Lên danh sách thi lại thất bại')
+                }
+
+                message.success('Lên danh sách thi lại thành công')
+                router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
+            }
         } catch (error) {
             message.error('Đã có lỗi xảy ra khi lên danh sách thi lại')
         } finally {

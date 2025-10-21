@@ -58,6 +58,8 @@ export default function DanhSachThiPage() {
                 formValues[examRoom.id] = {
                     start: examRoom.start,
                     end: examRoom.end,
+                    firstSupervisorId: examRoom.firstSupervisorId,
+                    secondSupervisorId: examRoom.secondSupervisorId,
                 }
             }
 
@@ -83,6 +85,8 @@ export default function DanhSachThiPage() {
                         data: {
                             start: item.start,
                             end: item.end,
+                            firstSupervisorId: item.firstSupervisorId,
+                            secondSupervisorId: item.secondSupervisorId,
                         },
                     })
                 )
@@ -249,8 +253,9 @@ export default function DanhSachThiPage() {
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
-                                            name={[record.id, 'lecturerId1']}
+                                            name={[record.id, 'firstSupervisorId']}
                                             className="mb-0"
+                                            initialValue={record.firstSupervisorId}
                                         >
                                             <Select
                                                 placeholder="Chọn giám thị 1"
@@ -292,8 +297,9 @@ export default function DanhSachThiPage() {
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
-                                            name={[record.id, 'lecturerId2']}
+                                            name={[record.id, 'secondSupervisorId']}
                                             className="mb-0"
+                                            initialValue={record.secondSupervisorId}
                                         >
                                             <Select
                                                 placeholder="Chọn giám thị 2"

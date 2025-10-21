@@ -2,7 +2,7 @@ import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
-import type { Prisma } from '@workspace/db/client'
+import { $Enums, type Prisma } from '@workspace/db/client'
 import {
     useFindManyExam,
     useFindManyRoom,
@@ -71,7 +71,6 @@ export default function KyThiPage() {
                 const examRooms = examRoomsByExamId[exam.id] || []
 
                 if (examRooms.length > 0) {
-                    // Lấy danh sách roomId duy nhất
                     const uniqueRoomIds = Array.from(
                         new Set(examRooms.map((er) => er.roomId).filter(Boolean))
                     )
@@ -204,6 +203,17 @@ export default function KyThiPage() {
                                 width: 50,
                                 align: 'center',
                                 render: (_, record) => record.studentSubjectScore?.length || 0,
+                            },
+                            {
+                                title: 'Thi lại',
+                                width: 40,
+                                align: 'center',
+                                render: (_, record) => {
+                                    const isReexam = record.subjectClass?.some(
+                                        (sc: any) => sc.type === $Enums.SubjectClassType.REEXAM
+                                    )
+                                    return isReexam ? '✓' : ''
+                                },
                             },
                             {
                                 title: 'Phòng thi',
