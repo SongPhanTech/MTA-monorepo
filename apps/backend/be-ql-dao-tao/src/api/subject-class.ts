@@ -107,7 +107,7 @@ const openSubjectClassRetake = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(
+                    schema: ListOf(
                         z
                             .object({
                                 id: z.string(),
@@ -118,6 +118,7 @@ const openSubjectClassRetake = createRoute({
                                 trainingCourseId: z.string().nullable(),
                                 count: z.number(),
                             })
+                            .openapi('OpenSubjectClassRetakeResponse')
                     ),
                 },
             },
@@ -162,29 +163,31 @@ const openSubjectClassRetakeStudents = createRoute({
         200: {
             content: {
                 'application/json': {
-                    schema: z.array(
-                        z.object({
-                            id: z.string(),
-                            code: z.string(),
-                            userProfile: z.object({
-                                fullname: z.string(),
-                            }),
-                            fixedClass: z.object({
+                    schema: ListOf(
+                        z
+                            .object({
+                                id: z.string(),
                                 code: z.string(),
-                                trainingCourse: z.object({
-                                    name: z.string(),
+                                userProfile: z.object({
+                                    fullname: z.string(),
                                 }),
-                            }),
-                            diem_cuoi: z.number().nullable(),
-                            withdrew: z.boolean(),
-                            exempted: z.boolean(),
-                            examPostponed: z.boolean(),
-                            cam_thi: z.boolean(),
-                            ly_do_cam_thi: z.string().nullable(),
-                            dinh_chi: z.boolean(),
-                            ly_do_dinh_chi: z.string().nullable(),
-                            truot_mon: z.boolean(),
-                        })
+                                fixedClass: z.object({
+                                    code: z.string(),
+                                    trainingCourse: z.object({
+                                        name: z.string(),
+                                    }),
+                                }),
+                                diem_cuoi: z.number().nullable(),
+                                withdrew: z.boolean(),
+                                exempted: z.boolean(),
+                                examPostponed: z.boolean(),
+                                cam_thi: z.boolean(),
+                                ly_do_cam_thi: z.string().nullable(),
+                                dinh_chi: z.boolean(),
+                                ly_do_dinh_chi: z.string().nullable(),
+                                truot_mon: z.boolean(),
+                            })
+                            .openapi('OpenSubjectClassRetakeStudentsResponse')
                     ),
                 },
             },

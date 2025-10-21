@@ -1,11 +1,10 @@
 import { queryClient } from '@api/index'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { TrainingMajor } from '@workspace/db/client'
-import type { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
+import type { PlanTraining } from '@workspace/db/client'
+import { $Enums, type TrainingMajor } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,
     useFindManyTrainingCourse,
@@ -53,12 +52,20 @@ export default function MonCoHVSVChuaDat() {
             where: {
                 semesterId: semesterId as string,
                 trainingObjectTypeId,
+                planTrainingSubjects: {
+                    some: {
+                        subjectClassType: $Enums.SubjectClassType.RETAKE,
+                    },
+                },
             },
             select: {
                 planTrainingSubjects: {
                     select: {
                         subjectVersionId: true,
                     },
+                    where:{
+                        subjectClassType: $Enums.SubjectClassType.RETAKE,
+                    }
                 },
             },
         },
@@ -67,8 +74,8 @@ export default function MonCoHVSVChuaDat() {
         }
     )
 
-    const data = useMemo(() => (res?.status === 200 ? res?.data?.data : []), [res])
-
+    const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
+    
     useEffect(() => {
         if (planTrainingData) {
             form.setFieldValue(
@@ -102,12 +109,8 @@ export default function MonCoHVSVChuaDat() {
         try {
             if (!semesterId || !trainingObjectTypeId) return
             showSpinner()
-            const delaySubject = data.filter(
-                (subject) => !subjectSelected.includes(subject.subjectVersionId)
-            )
-
             const subject = data.filter((subject) =>
-                subjectSelected.includes(subject.subjectVersionId)
+                subjectSelected.includes(subject.id)
             )
 
             let planTraining = await sqlTransaction([
@@ -119,16 +122,6 @@ export default function MonCoHVSVChuaDat() {
                     },
                 },
             ])
-            let planTrainingDelay = await sqlTransaction([
-                {
-                    model: 'PlanTrainingDelay',
-                    operation: 'findFirst',
-                    data: {
-                        where: { trainingObjectTypeId },
-                    },
-                },
-            ])
-
             if (planTraining.status === 200 && !planTraining?.data?.[0]) {
                 planTraining = await sqlTransaction([
                     {
@@ -141,55 +134,10 @@ export default function MonCoHVSVChuaDat() {
                 ])
             }
 
-            if (planTrainingDelay.status === 200 && !planTrainingDelay?.data?.[0]) {
-                planTrainingDelay = await sqlTransaction([
-                    {
-                        model: 'PlanTrainingDelay',
-                        operation: 'create',
-                        data: {
-                            data: { trainingObjectTypeId },
-                        },
-                    },
-                ])
-            }
-
-            if (planTraining.status !== 200 || planTrainingDelay.status !== 200) {
-                throw new Error('Lỗi khi tạo kế hoạch đào tạo')
-            }
-
             const planTrainingId = (planTraining?.data?.[0] as PlanTraining)?.id
             if (!planTrainingId) {
                 throw new Error('Kế hoạch đào tạo không tồn tại')
             }
-            const planTrainingDelayId = (planTrainingDelay?.data?.[0] as PlanTrainingDelay)?.id
-            if (!planTrainingDelayId) {
-                throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
-            }
-
-            // new PrismaClient().planTrainingDelay.update({
-            //     where: { id: planTrainingDelayId },
-            //     data: {
-            //         planTrainingDelaySubjects: {
-            //             upsert: delaySubject.map((subject) => ({
-            //                 where: {
-            //                     planTrainingDelayId_subjectVersionId: {
-            //                         planTrainingDelayId,
-            //                         subjectVersionId: subject.subjectVersionId,
-            //                     },
-            //                 },
-            //                 create: {
-            //                     subjectVersionId: subject.subjectVersionId,
-            //                     fixedClasses: {
-            //                         connect: subject.fixedClass.map((fc) => ({
-            //                             id: fc.fixedClassId,
-            //                         })),
-            //                     },
-            //                 },
-            //                 update: {},
-            //             })),
-            //         },
-            //     },
-            // })
 
             const res = await sqlTransaction([
                 {
@@ -205,18 +153,6 @@ export default function MonCoHVSVChuaDat() {
                     },
                 },
                 {
-                    model: 'PlanTrainingDelay',
-                    operation: 'update',
-                    data: {
-                        where: { id: planTrainingDelayId },
-                        data: {
-                            planTrainingDelaySubjects: {
-                                deleteMany: subjectSelected.map((id) => ({ subjectVersionId: id })),
-                            },
-                        },
-                    },
-                },
-                {
                     model: 'PlanTraining',
                     operation: 'update',
                     data: {
@@ -224,40 +160,8 @@ export default function MonCoHVSVChuaDat() {
                         data: {
                             planTrainingSubjects: {
                                 create: subject.map((subject) => ({
-                                    subjectVersionId: subject.subjectVersionId,
-                                    fixedClasses: {
-                                        connect: subject.fixedClass.map((fc) => ({
-                                            id: fc.fixedClassId,
-                                        })),
-                                    },
-                                })),
-                            },
-                        },
-                    },
-                },
-                {
-                    model: 'PlanTrainingDelay',
-                    operation: 'update',
-                    data: {
-                        where: { id: planTrainingDelayId },
-                        data: {
-                            planTrainingDelaySubjects: {
-                                upsert: delaySubject.map((subject) => ({
-                                    where: {
-                                        planTrainingDelayId_subjectVersionId: {
-                                            planTrainingDelayId,
-                                            subjectVersionId: subject.subjectVersionId,
-                                        },
-                                    },
-                                    create: {
-                                        subjectVersionId: subject.subjectVersionId,
-                                        fixedClasses: {
-                                            connect: subject.fixedClass.map((fc) => ({
-                                                id: fc.fixedClassId,
-                                            })),
-                                        },
-                                    },
-                                    update: {},
+                                    subjectVersionId: subject.id,
+                                    subjectClassType: $Enums.SubjectClassType.RETAKE,
                                 })),
                             },
                         },
@@ -382,81 +286,29 @@ export default function MonCoHVSVChuaDat() {
                                 dataIndex: 'subjectVersionName',
                                 align: 'center',
                                 render: (__, record) => {
-                                    return (
-                                        <div className="text-left">
-                                            {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
-                                                ''}
-                                        </div>
-                                    )
+                                    return <div className="text-left">{`${record?.name}`}</div>
                                 },
                             },
                             {
-                                title: 'Danh sách lớp quản lý',
-                                dataIndex: 'fixedClass',
-                                align: 'center',
-                                width: 180,
-                                render: (__, record) => {
-                                    return record?.fixedClass.length ? (
-                                        <TextTruncate
-                                            arr={record?.fixedClass.map((i: any) => {
-                                                return {
-                                                    key: i?.fixedClassId,
-                                                    label: `Kỳ ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
-                                                }
-                                            })}
-                                            key="fixedClass"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'CTĐT',
-                                dataIndex: 'curriculumVersion',
-                                align: 'center',
-                                render: (__, record) => {
-                                    return record?.curriculumVersion.length ? (
-                                        <TextTruncate
-                                            arr={record?.curriculumVersion.map((i: any) => {
-                                                return {
-                                                    key: i?.curriculumVersionId,
-                                                    label: `${i?.curriculumVersionCode} - ${i?.curriculumVersionName}`,
-                                                }
-                                            })}
-                                            key="curriculumVersion"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'Tổng SV',
-                                dataIndex: 'countStudent',
+                                title: 'Số SV nợ',
+                                dataIndex: 'count',
                                 width: 80,
                                 align: 'center',
                             },
-                            {
-                                title: 'Đơn vị phụ trách',
-                                dataIndex: 'managementOrganizationCode',
-                                width: 150,
-                                align: 'center',
-                            },
                         ]}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: res?.data?.count ?? 0,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
+                        // pagination={{
+                        //     current: currentPage,
+                        //     pageSize: numberOfPages,
+                        //     total: res?.data?.count ?? 0,
+                        //     onChange: (page, pageSize) => {
+                        //         if (numberOfPages === pageSize) {
+                        //             setCurrentPage(page)
+                        //         } else {
+                        //             setCurrentPage(1)
+                        //             setNumberOfPages(pageSize)
+                        //         }
+                        //     },
+                        // }}
                     />
                 </Col>
             </Row>
