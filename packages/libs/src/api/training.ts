@@ -74,11 +74,11 @@ import type {
     ImportStudentRequest,
     ListOfEnrollFixedClassOnSubjectClass,
     ListOfOpenSubjectClass,
+    ListOfOpenSubjectClassRetakeResponse,
+    ListOfOpenSubjectClassRetakeStudentsResponse,
     ListOfundefined,
     OpenSubjectClassParams,
-    OpenSubjectClassRetake200Item,
     OpenSubjectClassRetakeParams,
-    OpenSubjectClassRetakeStudents200Item,
     OpenSubjectClassRetakeStudentsParams,
     PostApiStatsAcademicPerformanceByYear200,
     PostApiStatsAcademicPerformanceByYearBody,
@@ -905,7 +905,7 @@ export function useOpenSubjectClass<
  * @summary Lấy danh sách môn học có hssv nợ
  */
 export type openSubjectClassRetakeResponse200 = {
-    data: OpenSubjectClassRetake200Item[]
+    data: ListOfOpenSubjectClassRetakeResponse
     status: 200
 }
 
@@ -1075,7 +1075,7 @@ export function useOpenSubjectClassRetake<
  * @summary Lấy danh sách sinh viên nợ môn học
  */
 export type openSubjectClassRetakeStudentsResponse200 = {
-    data: OpenSubjectClassRetakeStudents200Item[]
+    data: ListOfOpenSubjectClassRetakeStudentsResponse
     status: 200
 }
 
