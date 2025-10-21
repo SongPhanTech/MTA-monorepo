@@ -30,7 +30,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
+import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -365,8 +365,211 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
             hideSpinner();
         }
     };
+const handleExportBangDiemNganHan = () => {
+        showSpinner();
+        try {
+            
+            const mockStudentData = [
+                {
+                    hoTen: "TRẦN VĂN MINH",
+                    maHocVien: "2024150201",
+                    ngaySinh: "15/03/1985",
+                    khoa: "42",
+                    ngayNhapHoc: "01/9/2024",
+                    chuyenNganh: "Công nghệ thông tin",
+                    thoiGianDaoTao: "2 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "002/CNTT-NH/25",
+                    ctdt:"ngắn hạn",
+                    monHoc: [
+                        { tt: 1, ten: "Lập trình ứng dụng web", trongSo: 3, diem: 8.2 },
+                        { tt: 2, ten: "Cơ sở dữ liệu nâng cao", trongSo: 2, diem: 7.9 },
+                        { tt: 3, ten: "An ninh mạng", trongSo: 2, diem: 8.5 },
+                        { tt: 4, ten: "Trí tuệ nhân tạo", trongSo: 3, diem: 8.0 },
+                    ]
+                },
+                {
+                    hoTen: "LÊ THỊ HƯƠNG",
+                    maHocVien: "2024150202",
+                    ngaySinh: "22/07/1988",
+                    khoa: "42",
+                    ngayNhapHoc: "01/9/2024",
+                    chuyenNganh: "Quản lý dự án",
+                    thoiGianDaoTao: "1.5 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "003/QMDA-NH/25",
+                    ctdt:"ngắn hạn",
+                    monHoc: [
+                        { tt: 1, ten: "Quản lý dự án phần mềm", trongSo: 3, diem: 8.7 },
+                        { tt: 2, ten: "Phân tích yêu cầu hệ thống", trongSo: 2, diem: 8.3 },
+                        { tt: 3, ten: "Kiểm thử phần mềm", trongSo: 2, diem: 7.8 },
+                    ]
+                },
+                {
+                    hoTen: "PHẠM ĐỨC THÀNH",
+                    maHocVien: "2024150203",
+                    ngaySinh: "10/12/1982",
+                    khoa: "43",
+                    ngayNhapHoc: "01/10/2024",
+                    chuyenNganh: "Kỹ thuật điện tử",
+                    thoiGianDaoTao: "2 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "004/KTDT-NH/25",
+                    ctdt:"ngắn hạn",
+                    monHoc: [
+                        { tt: 1, ten: "Vi điều khiển và ứng dụng", trongSo: 3, diem: 8.1 },
+                        { tt: 2, ten: "Thiết kế mạch điện tử", trongSo: 2, diem: 7.6 },
+                        { tt: 3, ten: "Xử lý tín hiệu số", trongSo: 2, diem: 8.4 },
+                        { tt: 4, ten: "Hệ thống nhúng", trongSo: 3, diem: 8.9 },
+                    ]
+                },
+                {
+                    hoTen: "NGUYỄN THỊ LAN",
+                    maHocVien: "2024150204",
+                    ngaySinh: "05/05/1990",
+                    khoa: "43",
+                    ngayNhapHoc: "01/10/2024",
+                    chuyenNganh: "Marketing số",
+                    thoiGianDaoTao: "1 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "005/MKS-NH/25",
+                    ctdt:"ngắn hạn",
+                    monHoc: [
+                        { tt: 1, ten: "Digital Marketing", trongSo: 2, diem: 8.6 },
+                        { tt: 2, ten: "SEO và SEM", trongSo: 2, diem: 8.2 },
+                        { tt: 3, ten: "Social Media Marketing", trongSo: 1, diem: 7.9 },
+                        { tt: 4, ten: "Content Marketing", trongSo: 2, diem: 8.3 },
+                    ]
+                },
+                {
+                    hoTen: "HOÀNG VĂN ĐỨC",
+                    maHocVien: "2024150205",
+                    ngaySinh: "18/09/1987",
+                    khoa: "44",
+                    ngayNhapHoc: "01/11/2024",
+                    chuyenNganh: "Quản trị kinh doanh",
+                    thoiGianDaoTao: "2 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "006/QTKD-NH/25",
+                    ctdt:"ngắn hạn",
+                    monHoc: [
+                        { tt: 1, ten: "Quản trị chiến lược", trongSo: 3, diem: 8.4 },
+                        { tt: 2, ten: "Quản trị nguồn nhân lực", trongSo: 2, diem: 7.7 },
+                        { tt: 3, ten: "Marketing căn bản", trongSo: 2, diem: 8.1 },
+                        { tt: 4, ten: "Tài chính doanh nghiệp", trongSo: 3, diem: 8.8 },
+                    ]
+                }
+            ];
 
+            const allSheetOptions = mockStudentData.map((student) => {
+                const tableRows = student.monHoc.map((monHoc) => {
+                    return {
+                        cells: [
+                            { value: monHoc.tt, align: 'center' as const, border: true },
+                            { value: monHoc.ten, border: true, colSpan: 8, },
+                            { value: monHoc.trongSo, align: 'center' as const, border: true },
+                            { value: monHoc.diem, align: 'center' as const, border: true },
+                        ]
+                    }
+                })
+                  const gapRow: TableRow = {
+                     cells: [{ value: null, colSpan: 18, border: false }],
+                   };
+                   
+                   // Tính điểm trung bình có trọng số
+                   const tongDiemCoTrongSo = student.monHoc.reduce((sum, mon) => sum + (mon.diem * mon.trongSo), 0);
+                   const tongTrongSo = student.monHoc.reduce((sum, mon) => sum + mon.trongSo, 0);
+                   const diemTB = tongTrongSo > 0 ? Math.round((tongDiemCoTrongSo / tongTrongSo) * 100) / 100 : 0;
+                   
+                   // Xếp hạng dựa trên điểm trung bình
+                   let hang = '';
+                   if (diemTB >= 9.0) {
+                       hang = 'Xuất sắc';
+                   } else if (diemTB >= 8.0) {
+                       hang = 'Giỏi';
+                   } else if (diemTB >= 7.0) {
+                       hang = 'Khá';
+                   } else if (diemTB >= 6.0) {
+                       hang = 'Trung bình';
+                   } else if (diemTB >= 5.0) {
+                       hang = 'Trung bình yếu';
+                   } else {
+                       hang = 'Yếu';
+                   }
+                  const totalRow: TableRow = {
+                    cells: [
+                        { value:`Điểm trung bình chung tốt nghiệp: ${diemTB}`, border: false, colSpan: 7, bold:true }
+                     , { value: `Hạng tốt nghiệp: ${hang}`, border: false, colSpan: 10, bold:true }
+                    ]
+                  };
+                  const dateSignatureRow: TableRow = {
+                    cells: [
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`, colSpan: 5, border: false, align: 'center' }
+                    ]
+                  };
+                  const titleSignatureRow: TableRow = {
+                    cells: [
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: 'TL. GIÁM ĐỐC ', colSpan: 5, border: false, align: 'center', bold: true }
+                    ]
+                  };
+                  const nameSignatureRow: TableRow = {
+                    cells: [
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: 'TRƯỞNG PHÒNG SAU ĐẠI HỌC', colSpan: 5, border: false, align: 'center', bold: true }
+                    ]
+                  };
+                  
+                return {
+                    sheet: student.hoTen,
+                    data: {
+                        fullname: student.hoTen,
+                        maSV: student.maHocVien,
+                        dateOfBirth: student.ngaySinh,
+                        htdt: student.khoa,
+                        nganh: student.chuyenNganh,
+                        thoigian: student.thoiGianDaoTao,
+                        ngonngu: student.ngonNgu,
+                        ngaynhaphoc: student.ngayNhapHoc,
+                        khoa: student.khoa,
+                        soChungChi: student.soChungChi,
+                        ctdt: student.ctdt,
+                    },
+                    tableStartCell: { row: 15, col: 1 },
+                    rows: [...tableRows, gapRow, totalRow, gapRow, dateSignatureRow, titleSignatureRow, nameSignatureRow],
+                }
+            })
+            
+            exportFromTemplate({
+                templateUrl: getMinioUrl('/mta/template/bang-diem-ngan-dai-han.xlsx'), 
+                sheets: allSheetOptions,
+                fileName: `BangDiem-ChiTiet-TungSinhVien.xlsx`,
+                mergeSheetsToOne: true,
+            });
 
+        } catch (error) {
+            console.error("Export failed:", error);
+            message.error("Xuất file thất bại, vui lòng thử lại!");
+        } finally {
+            hideSpinner();
+        }
+    };
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
     async function handleDelete(id: string) {
         try {
@@ -404,6 +607,13 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 >
                                    Xuất bảng điểm
                                 </Button>
+<Button
+                            className="mr-3"
+                            type="primary"
+                            onClick={handleExportBangDiemNganHan}
+                        >
+                           Xuất excel (Ngắn hạn)
+                        </Button>
 
                                 <Button
                                     className="mr-3"
