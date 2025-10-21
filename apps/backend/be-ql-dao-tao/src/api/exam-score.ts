@@ -219,7 +219,7 @@ app.openapi(genExamRoomCode, async (c) => {
         return c.json({ message: 'Phách đã được nhập điểm' }, 400)
     }
 
-    const padding = examRoom.examSessions.length
+    const padding = examRoom.examSessions.length.toString().length
     const examCodes = Array.from({ length: examRoom.examSessions.length }, (_, i) =>
         String(i + 1).padStart(padding, '0')
     ).sort((a, b) => Math.random() - 0.5)
