@@ -3,6 +3,5 @@
 /* eslint-disable */
 "use strict"
 exports.countSubjectClassBySemester = require("./countSubjectClassBySemester.edge.js").countSubjectClassBySemester
-exports.getFixedClassBySubjectClassSemester = require("./getFixedClassBySubjectClassSemester.edge.js").getFixedClassBySubjectClassSemester
 exports.getRandomQuestionIDs = require("./getRandomQuestionIDs.edge.js").getRandomQuestionIDs
 exports.getSubjectClassBySemester = require("./getSubjectClassBySemester.edge.js").getSubjectClassBySemester
