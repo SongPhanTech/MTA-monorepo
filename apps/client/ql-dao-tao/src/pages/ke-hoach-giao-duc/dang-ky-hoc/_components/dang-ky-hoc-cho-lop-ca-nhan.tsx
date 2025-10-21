@@ -168,9 +168,9 @@ export default function DangKyHocChoCaNhan({ setStudentId }: RegisterClassProps)
         })
     }
 
-    const handleRowSelection = (record: any) => {
-        setStudentId?.(record.id)
-        setSelectedRowKey(record.id)
+    const handleRowSelection = (id: string) => {
+        setStudentId?.(id)
+        setSelectedRowKey(id)
     }
 
     return (
@@ -235,14 +235,14 @@ export default function DangKyHocChoCaNhan({ setStudentId }: RegisterClassProps)
                     className="mt-0"
                     data={students}
                     onRow={(record) => ({
-                        onClick: () => handleRowSelection(record),
+                        onClick: () => handleRowSelection(record.id),
                         style: { cursor: 'pointer' },
                         columnWidth: 35,
                     })}
                     rowSelection={{
                         selectedRowKeys: [selectedRowKey],
                         onChange: (selectedRowKeys) => {
-                            setSelectedRowKey(selectedRowKeys?.[0] as string)
+                            handleRowSelection(selectedRowKeys?.[0] as string)
                         },
                         type: 'radio',
                         columnWidth: 35,
