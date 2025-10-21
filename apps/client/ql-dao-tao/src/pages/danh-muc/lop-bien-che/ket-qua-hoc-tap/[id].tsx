@@ -3,6 +3,7 @@ import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
+import { getMinioUrl } from '@workspace/constant'
 import type { ArchivedAward, ArchivedCertificate, StudentSubjectScore } from '@workspace/db/client'
 import {
     useFindManySemester,
@@ -284,7 +285,7 @@ export default function StudentScoreClassPage() {
         ]
       };
     exportFromTemplate({
-      templateUrl: "/lms/templates/chuong-trinh-dao-tao/quatrinh.xlsx",
+      templateUrl: getMinioUrl('"/mta/template/quatrinh.xlsx"'),
       sheets: [
         {
           sheet: "BaoCaoDiem",

@@ -46,6 +46,7 @@ import { createSimpleExcel, SimpleRowData } from "@workspace/libs/create-excel";
 import { sqlTransaction } from "@workspace/libs/api/model";
 import { IMonHoc, IHocKi } from "./ket-qua-hoc-tap/[id]";
 import { useScoreConverter } from "@hooks/scoreConverter";
+import { getMinioUrl } from "@workspace/constant";
 
 dayjs.locale("vi");
 
@@ -779,7 +780,7 @@ export default function StudentFixedClassPage() {
       };
     });
     exportFromTemplate({
-      templateUrl: "/lms/templates/chuong-trinh-dao-tao/quatrinh.xlsx",
+      templateUrl: getMinioUrl('"/mta/template/quatrinh.xlsx"'),
       sheets: allSheetOptions,
       fileName: `DGQT.xlsx`,
       mergeSheetsToOne: true,
@@ -1145,7 +1146,7 @@ export default function StudentFixedClassPage() {
       };
     });
     exportFromTemplate({
-      templateUrl: "/lms/templates/chuong-trinh-dao-tao/quatrinh.xlsx",
+      templateUrl: getMinioUrl('"/mta/template/quatrinh.xlsx"'),
       sheets: allSheetOptions,
       fileName: `DGQT.xlsx`,
       mergeSheetsToOne: true,

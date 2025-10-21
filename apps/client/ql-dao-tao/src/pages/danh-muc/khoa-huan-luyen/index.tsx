@@ -5,7 +5,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { emptyObjectIf } from '@workspace/constant'
+import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import {
     useCountTrainingCourse,
     useFindManySchoolYear,
@@ -123,8 +123,8 @@ export default function TrainingCoursePage() {
     }
     const handleExport = async (e: any, id: string) => {
         idTrainingCourse.current = id
-        const baseUrl = '/lms/templates/chuong-trinh-dao-tao/'
-        const url = baseUrl + (e=== 'P2' ? 'si-so-p2.xlsx' : 'si-so-p7.xlsx')
+        const baseUrl = '/mta/template/'
+        const url = getMinioUrl(baseUrl + (e=== 'P2' ? 'si-so-p2.xlsx' : 'si-so-p7.xlsx'))
         const tableStartCell = e === 'P2' ? { row: 11, col: 1 } : { row: 8, col: 1 }
         const result = await sqlTransaction(
         [
