@@ -34,6 +34,9 @@ import type {
     CertificateScore400,
     ClassDivision,
     ClassDivision200Item,
+    CreateExamsBadResponse,
+    CreateExamsRequest,
+    CreateExamsResponse,
     EnrollFixedClassOnSubjectClassBody,
     EnrollStudentOnSubjectClassBody,
     ExportStudentResultSemesterJson200Item,
@@ -6409,6 +6412,100 @@ export const useAwardScore = <TError = AwardScore400, TContext = unknown>(
     TContext
 > => {
     const mutationOptions = getAwardScoreMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type createExamsResponse200 = {
+    data: CreateExamsResponse
+    status: 200
+}
+
+export type createExamsResponse400 = {
+    data: CreateExamsBadResponse
+    status: 400
+}
+
+export type createExamsResponseComposite = createExamsResponse200 | createExamsResponse400
+
+export type createExamsResponse = createExamsResponseComposite & {
+    headers: Headers
+}
+
+export const getCreateExamsUrl = () => {
+    return '/api/exam'
+}
+
+export const createExams = async (
+    createExamsRequest: CreateExamsRequest,
+    options?: RequestInit
+): Promise<createExamsResponse> => {
+    return customTrainingFetch<createExamsResponse>(getCreateExamsUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(createExamsRequest),
+    })
+}
+
+export const getCreateExamsMutationOptions = <
+    TError = CreateExamsBadResponse,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof createExams>>,
+        TError,
+        { data: CreateExamsRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof createExams>>,
+    TError,
+    { data: CreateExamsRequest },
+    TContext
+> => {
+    const mutationKey = ['createExams']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof createExams>>,
+        { data: CreateExamsRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return createExams(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CreateExamsMutationResult = NonNullable<Awaited<ReturnType<typeof createExams>>>
+export type CreateExamsMutationBody = CreateExamsRequest
+export type CreateExamsMutationError = CreateExamsBadResponse
+
+export const useCreateExams = <TError = CreateExamsBadResponse, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof createExams>>,
+            TError,
+            { data: CreateExamsRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof createExams>>,
+    TError,
+    { data: CreateExamsRequest },
+    TContext
+> => {
+    const mutationOptions = getCreateExamsMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

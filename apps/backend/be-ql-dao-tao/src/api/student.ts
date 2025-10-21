@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { AcademicActionType, type Prisma, StudentStatus } from '@workspace/db'
-import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
+import { postDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetHeQuanSu, parseSheetStudent, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
@@ -236,7 +236,7 @@ app.openapi(importStudent, async (c) => {
                         },
                     })
 
-                    const res = await putDMNhanViens(
+                    const res = await postDMNhanViens(
                         {
                             Id: existing.userProfileId,
                             bLaCanBoNhanVien: true,
@@ -256,7 +256,9 @@ app.openapi(importStudent, async (c) => {
                                 'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
                             },
                         }
-                    ).catch(console.error)
+                    )
+                    // .catch(console.error)
+                    console.log(res.status, res.data)
                 } else {
                     const profileId = crypto.randomUUID()
                     const st = await tx.student.create({
