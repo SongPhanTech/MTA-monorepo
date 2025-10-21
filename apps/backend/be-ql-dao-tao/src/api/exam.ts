@@ -146,8 +146,8 @@ app.openapi(createNewExamList, async (c) => {
     return c.json({ success: true, message: 'Lên danh sách thi thành công' })
 })
 
-const createNewReexamList = createRoute({
-    operationId: 'create-new-reexam-list',
+const createNewReExamList = createRoute({
+    operationId: 'create-new-re-exam-list',
     tags: ['Exam'],
     path: '/reexam-list',
     method: 'post',
@@ -160,7 +160,7 @@ const createNewReexamList = createRoute({
                             trainingObjectTypeId: z.string(),
                             semesterId: z.string(),
                         })
-                        .openapi('CreateExamsRequest'),
+                        .openapi('CreateReExamsRequest'),
                 },
             },
         },
@@ -194,7 +194,7 @@ const createNewReexamList = createRoute({
     },
 })
 
-app.openapi(createNewReexamList, async (c) => {
+app.openapi(createNewReExamList, async (c) => {
     const { trainingObjectTypeId, semesterId } = c.req.valid('json')
 
     const subjects = await prisma.subjectVersion.findMany({
