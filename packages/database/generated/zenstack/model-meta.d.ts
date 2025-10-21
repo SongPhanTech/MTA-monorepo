@@ -26534,6 +26534,34 @@ declare const metadata: {
                     backLink: string;
                     isRelationOwner: boolean;
                 };
+                examRoomsMain: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
+                examRoomsExtra: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: string;
+                        }[];
+                    }[];
+                    backLink: string;
+                };
             };
             uniqueConstraints: {
                 id: {
@@ -33467,6 +33495,2094 @@ declare const metadata: {
                 }[];
             })[];
         };
+        questionBank: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                name: {
+                    name: string;
+                    type: string;
+                };
+                subjectVersion: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                subjectVersionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                questions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                exam: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                subjectVersionId_name: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
+        };
+        difficulty: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                name: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                level: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                questions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                name: {
+                    name: string;
+                    fields: string[];
+                };
+                level: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        knowledgeBlock: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                subjectVersion: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                subjectVersionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                name: {
+                    name: string;
+                    type: string;
+                };
+                questions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                structureRules: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                name_subjectVersionId: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
+        };
+        question: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                content: {
+                    name: string;
+                    type: string;
+                };
+                type: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                point: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: number;
+                        }[];
+                    }[];
+                };
+                explanation: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                isAutoGraded: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                multipleChoiceOptions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                fillInBlankSlots: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                orderingItems: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                questionBank: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                questionBankId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                knowledgeBlock: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                knowledgeBlockId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                difficulty: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                difficultyId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                sessionQuestions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        multipleChoiceOption: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                questionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                question: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    onDeleteAction: string;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                content: {
+                    name: string;
+                    type: string;
+                };
+                isCorrect: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                order: {
+                    name: string;
+                    type: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        fillInBlankSlot: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                questionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                question: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    onDeleteAction: string;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                order: {
+                    name: string;
+                    type: string;
+                };
+                correctAnswer: {
+                    name: string;
+                    type: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                questionId_order: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
+        };
+        orderingItem: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                questionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                question: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    onDeleteAction: string;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                content: {
+                    name: string;
+                    type: string;
+                };
+                correctOrder: {
+                    name: string;
+                    type: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                questionId_correctOrder: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
+        };
+        exam: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                status: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                questionBank: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                questionBankId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                lockExamCode: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                duration: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                subjectClass: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                studentSubjectScore: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                room: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                    isRelationOwner: boolean;
+                };
+                examBank: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                testStructureRules: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                examSessions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+                examRooms: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        examRoom: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                exam: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                examId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                room: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                roomId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                firstSupervisor: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                firstSupervisorId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                secondSupervisor: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: string;
+                        } | {
+                            name: string;
+                            value: null[];
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                secondSupervisorId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                lockExamCode: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                start: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                end: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                examSessions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: {
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            }[];
+        };
+        testStructureRule: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                exam: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                examId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                knowledgeBlock: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                knowledgeBlockId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                questionPoint: {
+                    name: string;
+                    type: string;
+                };
+                questionType: {
+                    name: string;
+                    type: string;
+                };
+                count: {
+                    name: string;
+                    type: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                examId_knowledgeBlockId_questionPoint_questionType: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
+        };
+        examBank: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                exam: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                examId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                examCode: {
+                    name: string;
+                    type: string;
+                };
+                questions: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                examId_examCode: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
+        };
+        examBankQuestion: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                examBankId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                examBank: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: ({
+                            name: string;
+                            value: null[];
+                        } | {
+                            name: string;
+                            value?: undefined;
+                        })[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    onDeleteAction: string;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                questionId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                question: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                order: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                examBankId_questionId: {
+                    name: string;
+                    fields: string[];
+                };
+                examBankId_order: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
+        };
+        examSession: {
+            name: string;
+            fields: {
+                id: {
+                    name: string;
+                    type: string;
+                    isId: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                code: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                active: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: boolean;
+                        }[];
+                    }[];
+                };
+                description: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                };
+                deletedAt: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+                createdAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                updatedAt: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                        }[];
+                    }[];
+                };
+                exam: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                examId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                examRoom: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                examRoomId: {
+                    name: string;
+                    type: string;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                studentSubjectScore: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                studentSubjectScoreId: {
+                    name: string;
+                    type: string;
+                    attributes: {
+                        name: string;
+                        args: never[];
+                    }[];
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                examCode: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                };
+            };
+            uniqueConstraints: {
+                id: {
+                    name: string;
+                    fields: string[];
+                };
+                code: {
+                    name: string;
+                    fields: string[];
+                };
+                studentSubjectScoreId: {
+                    name: string;
+                    fields: string[];
+                };
+                examCode_examRoomId: {
+                    name: string;
+                    fields: string[];
+                };
+            };
+            attributes: ({
+                name: string;
+                args: ({
+                    name: string;
+                    value: string;
+                } | {
+                    name: string;
+                    value?: undefined;
+                })[];
+            } | {
+                name: string;
+                args: {
+                    name: string;
+                    value: null[];
+                }[];
+            })[];
+        };
         staff: {
             name: string;
             fields: {
@@ -36724,2038 +38840,6 @@ declare const metadata: {
                     value?: undefined;
                 })[];
             }[];
-        };
-        questionBank: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                name: {
-                    name: string;
-                    type: string;
-                };
-                subjectVersion: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                subjectVersionId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                questions: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                exam: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                subjectVersionId_name: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
-        };
-        difficulty: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                name: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                level: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                questions: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                name: {
-                    name: string;
-                    fields: string[];
-                };
-                level: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: {
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            }[];
-        };
-        knowledgeBlock: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                subjectVersion: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                subjectVersionId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                name: {
-                    name: string;
-                    type: string;
-                };
-                questions: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                structureRules: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                name_subjectVersionId: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
-        };
-        question: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                content: {
-                    name: string;
-                    type: string;
-                };
-                type: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                point: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: number;
-                        }[];
-                    }[];
-                };
-                explanation: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                isAutoGraded: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                multipleChoiceOptions: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                fillInBlankSlots: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                orderingItems: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                questionBank: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                questionBankId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                knowledgeBlock: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                knowledgeBlockId: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                difficulty: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                difficultyId: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                sessionQuestions: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: {
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            }[];
-        };
-        multipleChoiceOption: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                questionId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                question: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: ({
-                            name: string;
-                            value: null[];
-                        } | {
-                            name: string;
-                            value?: undefined;
-                        })[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    onDeleteAction: string;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                content: {
-                    name: string;
-                    type: string;
-                };
-                isCorrect: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                order: {
-                    name: string;
-                    type: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: {
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            }[];
-        };
-        fillInBlankSlot: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                questionId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                question: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: ({
-                            name: string;
-                            value: null[];
-                        } | {
-                            name: string;
-                            value?: undefined;
-                        })[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    onDeleteAction: string;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                order: {
-                    name: string;
-                    type: string;
-                };
-                correctAnswer: {
-                    name: string;
-                    type: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                questionId_order: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
-        };
-        orderingItem: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                questionId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                question: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: ({
-                            name: string;
-                            value: null[];
-                        } | {
-                            name: string;
-                            value?: undefined;
-                        })[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    onDeleteAction: string;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                content: {
-                    name: string;
-                    type: string;
-                };
-                correctOrder: {
-                    name: string;
-                    type: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                questionId_correctOrder: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
-        };
-        exam: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                status: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                questionBank: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                questionBankId: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                lockExamCode: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                duration: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                subjectClass: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                studentSubjectScore: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                room: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                    isRelationOwner: boolean;
-                };
-                examBank: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                testStructureRules: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                examSessions: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-                examRooms: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: {
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            }[];
-        };
-        examRoom: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                exam: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                examId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                room: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                roomId: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                lockExamCode: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                start: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                end: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                examSessions: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: {
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            }[];
-        };
-        testStructureRule: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                exam: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                examId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                knowledgeBlock: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                knowledgeBlockId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                questionPoint: {
-                    name: string;
-                    type: string;
-                };
-                questionType: {
-                    name: string;
-                    type: string;
-                };
-                count: {
-                    name: string;
-                    type: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                examId_knowledgeBlockId_questionPoint_questionType: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
-        };
-        examBank: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                exam: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                examId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                examCode: {
-                    name: string;
-                    type: string;
-                };
-                questions: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    isArray: boolean;
-                    backLink: string;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                examId_examCode: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
-        };
-        examBankQuestion: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                examBankId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                examBank: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: ({
-                            name: string;
-                            value: null[];
-                        } | {
-                            name: string;
-                            value?: undefined;
-                        })[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    onDeleteAction: string;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                questionId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                question: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                order: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                examBankId_questionId: {
-                    name: string;
-                    fields: string[];
-                };
-                examBankId_order: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
-        };
-        examSession: {
-            name: string;
-            fields: {
-                id: {
-                    name: string;
-                    type: string;
-                    isId: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                code: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                active: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: boolean;
-                        }[];
-                    }[];
-                };
-                description: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                };
-                deletedAt: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-                createdAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                updatedAt: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                        }[];
-                    }[];
-                };
-                exam: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                examId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                examRoom: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                examRoomId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                studentSubjectScore: {
-                    name: string;
-                    type: string;
-                    isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
-                    backLink: string;
-                    isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                studentSubjectScoreId: {
-                    name: string;
-                    type: string;
-                    attributes: {
-                        name: string;
-                        args: never[];
-                    }[];
-                    isForeignKey: boolean;
-                    relationField: string;
-                };
-                examCode: {
-                    name: string;
-                    type: string;
-                    isOptional: boolean;
-                };
-            };
-            uniqueConstraints: {
-                id: {
-                    name: string;
-                    fields: string[];
-                };
-                code: {
-                    name: string;
-                    fields: string[];
-                };
-                studentSubjectScoreId: {
-                    name: string;
-                    fields: string[];
-                };
-                examCode_examRoomId: {
-                    name: string;
-                    fields: string[];
-                };
-            };
-            attributes: ({
-                name: string;
-                args: ({
-                    name: string;
-                    value: string;
-                } | {
-                    name: string;
-                    value?: undefined;
-                })[];
-            } | {
-                name: string;
-                args: {
-                    name: string;
-                    value: null[];
-                }[];
-            })[];
         };
         academicWarningRule: {
             name: string;
@@ -42714,9 +42798,9 @@ declare const metadata: {
         evaluationCriterion: string[];
         evidence: string[];
         evaluationCouncil: string[];
-        note: string[];
         question: string[];
         examBank: string[];
+        note: string[];
     };
     authModel: string;
 };

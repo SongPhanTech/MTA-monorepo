@@ -22,12 +22,16 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     exam: z.record(z.unknown()),
     room: z.record(z.unknown()).optional(),
+    firstSupervisor: z.record(z.unknown()).optional(),
+    secondSupervisor: z.record(z.unknown()).optional(),
     examSessions: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     examId: z.string(),
     roomId: z.string().nullish(),
+    firstSupervisorId: z.string().nullish(),
+    secondSupervisorId: z.string().nullish(),
 }
 );
 

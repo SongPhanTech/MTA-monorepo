@@ -2,6 +2,7 @@ import '../base'
 import '../ql-dao-tao/plan-training'
 import '../ql-dao-tao/student'
 import '../ql-dao-tao/categories'
+import '../ql-dao-tao/lecturer'
 
 /// Loại câu hỏi
 enum QuestionType {
@@ -219,17 +220,23 @@ model Exam extends Base {
 /// Phòng thi cho kỳ thi
 // 
 model ExamRoom extends Base {
-  exam         Exam          @relation(fields: [examId], references: [id])
-  examId       String
-  room         Room?         @relation(fields: [roomId], references: [id])
-  roomId       String?
+  exam               Exam          @relation(fields: [examId], references: [id])
+  examId             String
+  room               Room?         @relation(fields: [roomId], references: [id])
+  roomId             String?
 
-  lockExamCode Boolean       @default(false)
+  firstSupervisor    Lecturer?     @relation("FirstSupervisor", fields: [firstSupervisorId], references: [id])
+  firstSupervisorId  String?
 
-  start        Int?
-  end          Int?
+  secondSupervisor   Lecturer?     @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
+  secondSupervisorId String?
 
-  examSessions ExamSession[]
+  lockExamCode       Boolean       @default(false)
+
+  start              Int?
+  end                Int?
+
+  examSessions       ExamSession[]
 
   // @@unique([examId, roomId])
   @@schema("khao-thi")
