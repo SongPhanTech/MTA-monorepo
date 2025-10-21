@@ -30,7 +30,7 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
+import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -365,8 +365,146 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
             hideSpinner();
         }
     };
+const handleExportBangDiemNganHan = () => {
+        showSpinner();
+        try {
+            // 1. Dữ liệu mock (Mảng 2 sinh viên)
+            const mockStudentData = [
+                {
+                    hoTen: "MAI CẢNH TOÀN",
+                    maHocVien: "2024150167",
+                    ngaySinh: "18/11/1980",
+                    khoa: "41",
+                    ngayNhapHoc: "01/8/2024",
+                    chuyenNganh: "Tên lửa phòng không",
+                    thoiGianDaoTao: "1 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "001/CNHCKT-NH/25",
+                    monHoc: [
+                        { tt: 1, ten: "Công nghệ thông tin, chuyển đổi số", trongSo: 2, diem: 7.8 },
+                        { tt: 2, ten: "Công tác hậu cần, kỹ thuật quân sự địa phương và khu vực phòng thủ (phần 1)", trongSo: 1, diem: 7.6 },
+                        { tt: 3, ten: "Công tác hậu cần, kỹ thuật quân sự địa phương và khu vực phòng thủ (phần 2)", trongSo: 2, diem: 8.0 },
+                        // ...thêm các môn khác nếu cần
+                    ]
+                },
+                {
+                    hoTen: "NGUYỄN VĂN THÚY",
+                    maHocVien: "2024150134",
+                    ngaySinh: "10/4/1977",
+                    khoa: "41",
+                    ngayNhapHoc: "01/8/2024",
+                    chuyenNganh: "Kho kỹ thuật",
+                    thoiGianDaoTao: "1 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "160/CNHCKT-NH/25",
+                    monHoc: [
+                        { tt: 1, ten: "Công nghệ thông tin, chuyển đổi số", trongSo: 2, diem: 8.5 },
+                        { tt: 2, ten: "Công tác hậu cần, kỹ thuật quân sự địa phương và khu vực phòng thủ (phần 1)", trongSo: 1, diem: 8.1 },
+                        { tt: 3, ten: "Nghệ thuật chiến dịch", trongSo: 3, diem: 7.8 },
+                        // ...thêm các môn khác nếu cần
+                    ]
+                }
+            ];
+
+            // 2. Khởi tạo mảng rows tổng
+            const allRows:any = [];
+
+            // 3. Lặp qua từng SINH VIÊN
+            mockStudentData.forEach(student => {
+                
+                // --- A. Tạo Header (Giống ảnh) ---
+                allRows.push({ cells: [
+                    { value: 'BỘ QUỐC PHÒNG', bold: true, colSpan: 6 },
+                    { value: 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', bold: true, colSpan: 6, align: 'center' }
+                ]});
+                allRows.push({ cells: [
+                    { value: 'HỌC VIỆN KỸ THUẬT QUÂN SỰ', bold: true, colSpan: 6 },
+                    { value: 'Độc lập - Tự do - Hạnh phúc', bold: true, colSpan: 6, align: 'center' }
+                ]});
+                allRows.push({ cells: [{ value: null }] }); // Dòng trống
+                allRows.push({ cells: [{ value: 'BẢNG ĐIỂM', bold: true, align: 'center', colSpan: 12 }] });
+                allRows.push({ cells: [{ value: `(Kèm theo chứng chỉ tốt nghiệp số: ${student.soChungChi})`, align: 'center', colSpan: 12 }] });
+                allRows.push({ cells: [{ value: null }] });
+
+                // --- B. Tạo Thông tin sinh viên (Giống ảnh) ---
+                allRows.push({ cells: [
+                    { value: '       Cấp cho Ông (Bà):', colSpan: 3 }, { value: student.hoTen, bold: true, colSpan: 4 },
+                    { value: 'Mã học viên:', colSpan: 3, align: 'right' }, { value: student.maHocVien, bold: true, colSpan: 2 }
+                ]});
+                allRows.push({ cells: [{ value: `       Ngày sinh: ${student.ngaySinh}` }] });
+                allRows.push({ cells: [
+                    { value: `       Khóa: ${student.khoa}`, colSpan: 6 },
+                    { value: `Ngày nhập học: ${student.ngayNhapHoc}`, colSpan: 6 }
+                ]});
+                allRows.push({ cells: [{ value: '       Đã hoàn thành chương trình đào tạo ngắn hạn chủ nhiệm Hậu cần - Kỹ thuật trung, lữ đoàn' }] });
+                allRows.push({ cells: [
+                    { value: `       Chuyên ngành chuyên sâu: ${student.chuyenNganh}`, colSpan: 6 },
+                    { value: `Thời gian đào tạo: ${student.thoiGianDaoTao}`, colSpan: 6 }
+                ]});
+                allRows.push({ cells: [{ value: `       Ngôn ngữ đào tạo: ${student.ngonNgu}` }] });
+                allRows.push({ cells: [{ value: '       Kết quả đào tạo:' }] });
+
+                // --- C. Tạo Bảng điểm (Giống ảnh) ---
+                // Header bảng
+                allRows.push({ cells: [
+                    { value: 'TT', align: 'center', bold: true, border: true },
+                    { value: 'Tên học phần', align: 'center', bold: true, border: true, colSpan: 8 },
+                    { value: 'Trọng số học phần', align: 'center', bold: true, border: true, colSpan: 2 },
+                    { value: 'Điểm', align: 'center', bold: true, border: true },
+                ]});
+
+                // Dữ liệu môn học (lặp qua mảng monHoc của sinh viên)
+                student.monHoc.forEach(mon => {
+                    allRows.push({
+                        cells: [
+                            { value: mon.tt, align: 'center', border: true },
+                            { value: mon.ten, border: true, colSpan: 8 },
+                            { value: mon.trongSo, align: 'center', border: true, colSpan: 2 },
+                            { value: String(mon.diem), align: 'center', border: true },
+                        ]
+                    });
+                });
+
+                // --- D. Tạo Footer (Chữ ký, ngày tháng) ---
+                allRows.push({ cells: [{ value: null }] });
+                allRows.push({ cells: [
+                    { value: null, colSpan: 7 },
+                    { value: `Hà Nội, ngày ... tháng ... năm ...`, align: 'center', colSpan: 5 }
+                ]});
+                allRows.push({ cells: [
+                    { value: 'KT. GIÁM ĐỐC', bold: true, align: 'center', colSpan: 6 },
+                    { value: null, colSpan: 1 },
+                    { value: 'PHÒNG ĐÀO TẠO', bold: true, align: 'center', colSpan: 5 }
+                ]});
 
 
+                // --- E. Tạo khoảng cách LỚN giữa các sinh viên ---
+                allRows.push({ cells: [{ value: null }] });
+                allRows.push({ cells: [{ value: null }] });
+                allRows.push({ cells: [{ value: null }] });
+                allRows.push({ cells: [{ value: null }] });
+            });
+
+            // 4. Gọi hàm export
+            exportFromTemplate({
+                templateUrl: "/lms/templates/chuong-trinh-dao-tao/bang-diem-ngan-dai-han.xlsx", // Template rỗng
+                sheets: [
+                  {
+                    sheet: "TongHop",
+                    tableStartCell: { row: 1, col: 1 },
+                    rows: allRows,
+                  },
+                ],
+                fileName: `BangDiem-ChiTiet-TungSinhVien.xlsx`,
+            });
+
+        } catch (error) {
+            console.error("Export failed:", error);
+            message.error("Xuất file thất bại, vui lòng thử lại!");
+        } finally {
+            hideSpinner();
+        }
+    };
     const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
     async function handleDelete(id: string) {
         try {
@@ -404,6 +542,13 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 >
                                    Xuất bảng điểm
                                 </Button>
+<Button
+                            className="mr-3"
+                            type="primary"
+                            onClick={handleExportBangDiemNganHan}
+                        >
+                           Xuất excel (Ngắn hạn)
+                        </Button>
 
                                 <Button
                                     className="mr-3"
