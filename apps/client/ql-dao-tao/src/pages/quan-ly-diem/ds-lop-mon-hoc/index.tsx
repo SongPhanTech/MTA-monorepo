@@ -6,14 +6,14 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { Prisma, SubjectClass, SubjectVersion } from '@workspace/db/client'
+import { $Enums, type Prisma, type SubjectClass, type SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
-    useCreateExam,
     useFindManySubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { useCreateExams } from '@workspace/libs/api/training'
 import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
@@ -516,107 +516,81 @@ export default function ClassSubject() {
         }
     }
 
-    const { mutateAsync: createExam } = useCreateExam()
+    const { mutateAsync: createExam } = useCreateExams()
 
     const handleUpdateHoldAnExam = async (values: HoldAnExam) => {
         try {
             showSpinner()
 
+            if (semesterId && trainingObjectTypeId) {
+                const res = await createExam({
+                    data: {
+                        semesterId,
+                        trainingObjectTypeId,
+                        isGroupBySubject: values.isGroupBySubject,
+                    },
+                })
+
+                if (res.status !== 200) {
+                    message.error(res.data.message || 'Lên danh sách thi thất bại')
+                    return
+                }
+
+                message.success('Lên danh sách thi thành công')
+                router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
+            }
+        } catch (error: any) {
+            message.error('Đã có lỗi xảy ra khi tạo danh sách thi')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleRexamList = async () => {
+        try {
+            showSpinner()
+            if (!semesterId || !trainingObjectTypeId) return
+
             const res = await sqlTransaction([
                 {
-                    model: 'SubjectClass',
+                    model: 'SubjectVersion',
                     operation: 'findMany',
                     data: {
                         where: {
-                            deletedAt: null,
-                            cancelled: false,
-                            enteredScore: true,
-                            ...(semesterId ? { semesterId } : {}),
-                            ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
-                        },
-                        include: {
-                            subjectClassStudent: {
-                                where: {
-                                    exempted: false,
-                                    examBanned: false,
-                                    withdrew: false,
+                            subjectClass: {
+                                some: {
+                                    trainingObjectTypeId,
+                                    semesterId,
+                                    cancelled: false,
+                                    deletedAt: null,
+                                    enteredScore: true,
+                                    enteredExamScore: true,
+                                    type: $Enums.SubjectClassType.REEXAM,
                                 },
-                                include: {
-                                    student: true,
+                            },
+                        },
+                        select: {
+                            subjectClass: {
+                                select: {
+                                    id: true,
+                                    subjectClassStudent: {
+                                        select: { id: true },
+                                        where: {
+                                            examPostponed: true,
+                                            suspended: true,
+                                        },
+                                    },
+                                },
+                                where: {
+                                    examId: null,
                                 },
                             },
                         },
                     },
                 },
             ])
-
-            if (res.status === 200 && res.data.length > 0) {
-                const subjectClasses = res.data[0] as SubjectClassRelation[]
-
-                if (values.isGroupBySubject) {
-                    const groupedClasses = subjectClasses.reduce(
-                        (acc, subjectClass) => {
-                            const key = `${subjectClass.subjectId}_${subjectClass.trainingObjectTypeId}_${subjectClass.semesterId}`
-
-                            if (!acc[key]) {
-                                acc[key] = {
-                                    subjectClassIds: [],
-                                    studentSubjectScores: [],
-                                }
-                            }
-
-                            acc[key].subjectClassIds.push(subjectClass.id)
-
-                            const studentScoreIds = subjectClass.subjectClassStudent.map(
-                                (scs) => scs.id
-                            )
-                            acc[key].studentSubjectScores.push(...studentScoreIds)
-
-                            return acc
-                        },
-                        {} as Record<
-                            string,
-                            { subjectClassIds: string[]; studentSubjectScores: string[] }
-                        >
-                    )
-
-                    const examData = Object.values(groupedClasses).map((group) => ({
-                        subjectClass: {
-                            connect: group.subjectClassIds.map((id) => ({ id })),
-                        },
-                        studentSubjectScore: {
-                            connect: group.studentSubjectScores.map((id) => ({ id })),
-                        },
-                    }))
-
-                    for (const exam of examData) {
-                        await createExam({ data: exam })
-                    }
-
-                    message.success('Tạo danh sách thi thành công')
-                    router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
-                } else {
-                    const examData = subjectClasses.map((subjectClass) => ({
-                        subjectClass: {
-                            connect: [{ id: subjectClass.id }],
-                        },
-                        studentSubjectScore: {
-                            connect: subjectClass.subjectClassStudent.map((scs) => ({
-                                id: scs.id,
-                            })),
-                        },
-                    }))
-
-                    for (const exam of examData) {
-                        await createExam({ data: exam })
-                    }
-
-                    message.success('Tạo danh sách thi thành công')
-                    router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
-                }
-            }
-        } catch (error: any) {
-            message.error('Đã có lỗi xảy ra khi tạo danh sách thi')
+        } catch (error) {
+            message.error('Đã có lỗi xảy ra khi lên danh sách thi lại')
         } finally {
             hideSpinner()
         }
@@ -659,6 +633,9 @@ export default function ClassSubject() {
                                     'XEM_TAT_CA'
                                 ) && (
                                     <>
+                                        <Button onClick={handleRexamList} type="primary">
+                                            Lên danh sách thi lại
+                                        </Button>
                                         <Popover
                                             content={
                                                 <Form

@@ -267,6 +267,12 @@ const NAVIGATION: NavigationType = {
                 icon: FileOutlined,
                 children: [
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_KY_THI,
+                        label: 'Kỳ thi',
+                        path: ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_KY_THI,
+                        description: 'Quản lý kỳ thi',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_DANH_SACH_THI,
                         label: 'Danh sách thi',
                         path: ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI,
