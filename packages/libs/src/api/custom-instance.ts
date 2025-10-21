@@ -91,11 +91,10 @@ export const customPortalFetch = async <T>(url: string, options: RequestInit): P
 }
 
 export const customSystemFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
-    //! TODO: fix
     const requestUrl = getUrl(
         process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
-            ? `http://localhost:3001/api/system/public/${process.env.NEXT_PUBLIC_APP_CODE}`
-            : 'https://mta.swantech.vn/api/system/public',
+            ? `http://localhost:3001/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`
+            : `https://api.model.mta.swantech.vn/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`,
         url
     )
 

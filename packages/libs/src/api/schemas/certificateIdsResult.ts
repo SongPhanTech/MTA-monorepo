@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportStudentFixedClassExcelTrainingPoint400 = {
+export interface CertificateIdsResult {
+    success: boolean
     message: string
 }
