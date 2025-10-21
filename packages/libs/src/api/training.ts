@@ -37,6 +37,7 @@ import type {
     CreateExamsBadResponse,
     CreateExamsRequest,
     CreateExamsResponse,
+    CreateNewReexamListBody,
     EnrollFixedClassOnSubjectClassBody,
     ExamCodes,
     ExportStudentResultSemesterJson200Item,
@@ -75,9 +76,9 @@ import type {
     ListOfOpenSubjectClass,
     ListOfundefined,
     OpenSubjectClassParams,
-    OpenSubjectClassRetake200,
+    OpenSubjectClassRetake200Item,
     OpenSubjectClassRetakeParams,
-    OpenSubjectClassRetakeStudents200,
+    OpenSubjectClassRetakeStudents200Item,
     OpenSubjectClassRetakeStudentsParams,
     PostApiStatsAcademicPerformanceByYear200,
     PostApiStatsAcademicPerformanceByYearBody,
@@ -904,7 +905,7 @@ export function useOpenSubjectClass<
  * @summary Lấy danh sách môn học có hssv nợ
  */
 export type openSubjectClassRetakeResponse200 = {
-    data: OpenSubjectClassRetake200
+    data: OpenSubjectClassRetake200Item[]
     status: 200
 }
 
@@ -1074,7 +1075,7 @@ export function useOpenSubjectClassRetake<
  * @summary Lấy danh sách sinh viên nợ môn học
  */
 export type openSubjectClassRetakeStudentsResponse200 = {
-    data: OpenSubjectClassRetakeStudents200
+    data: OpenSubjectClassRetakeStudents200Item[]
     status: 200
 }
 
@@ -6280,6 +6281,104 @@ export const useCreateExams = <TError = CreateExamsBadResponse, TContext = unkno
     TContext
 > => {
     const mutationOptions = getCreateExamsMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type createNewReexamListResponse200 = {
+    data: CreateExamsResponse
+    status: 200
+}
+
+export type createNewReexamListResponse400 = {
+    data: CreateExamsBadResponse
+    status: 400
+}
+
+export type createNewReexamListResponseComposite =
+    | createNewReexamListResponse200
+    | createNewReexamListResponse400
+
+export type createNewReexamListResponse = createNewReexamListResponseComposite & {
+    headers: Headers
+}
+
+export const getCreateNewReexamListUrl = () => {
+    return '/api/exam/reexam-list'
+}
+
+export const createNewReexamList = async (
+    createNewReexamListBody: CreateNewReexamListBody,
+    options?: RequestInit
+): Promise<createNewReexamListResponse> => {
+    return customTrainingFetch<createNewReexamListResponse>(getCreateNewReexamListUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(createNewReexamListBody),
+    })
+}
+
+export const getCreateNewReexamListMutationOptions = <
+    TError = CreateExamsBadResponse,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof createNewReexamList>>,
+        TError,
+        { data: CreateNewReexamListBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof createNewReexamList>>,
+    TError,
+    { data: CreateNewReexamListBody },
+    TContext
+> => {
+    const mutationKey = ['createNewReexamList']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof createNewReexamList>>,
+        { data: CreateNewReexamListBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return createNewReexamList(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CreateNewReexamListMutationResult = NonNullable<
+    Awaited<ReturnType<typeof createNewReexamList>>
+>
+export type CreateNewReexamListMutationBody = CreateNewReexamListBody
+export type CreateNewReexamListMutationError = CreateExamsBadResponse
+
+export const useCreateNewReexamList = <TError = CreateExamsBadResponse, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof createNewReexamList>>,
+            TError,
+            { data: CreateNewReexamListBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof createNewReexamList>>,
+    TError,
+    { data: CreateNewReexamListBody },
+    TContext
+> => {
+    const mutationOptions = getCreateNewReexamListMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
