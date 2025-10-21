@@ -51,7 +51,7 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts",
-        "src/pages/api/equipments/locations/[[...id]]"
+        "src/pages/api/equipments/locations/[[...id]]",
     ],
     "exclude": ["node_modules"]
 }

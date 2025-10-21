@@ -1,4 +1,4 @@
-import ExcelJS from 'exceljs'
+import * as ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import * as XLSX from 'xlsx'
 
@@ -11,6 +11,8 @@ export interface TableCell {
     bgColor?: string
     bold?: boolean
     wrapText?: boolean
+    border?: boolean
+    color?: string
 }
 
 export interface TableRow {
@@ -22,6 +24,7 @@ export interface SheetExportOptions {
     data?: Record<string, string | number | null>
     rows?: TableRow[]
     tableStartCell?: { row: number; col: number }
+    hiddenColumns?: string[]
 }
 
 export interface ExportOptions {
@@ -30,6 +33,7 @@ export interface ExportOptions {
     fileName: string
     fontFamily?: string
     fontSize?: number
+    mergeSheetsToOne?: boolean
 }
 
 function cloneWorksheet(
@@ -97,7 +101,7 @@ export async function exportFromTemplate(options: ExportOptions) {
 }
 
 /** ──────────────── XLSX: ExcelJS ──────────────── */
-async function handleExcelJSExport(
+async function handleExcelJSDefault(
     templateUrl: string,
     sheets: SheetExportOptions[],
     fileName: string,
@@ -126,6 +130,11 @@ async function handleExcelJSExport(
         if (!worksheet) {
             console.log('Cannot find or create sheet:', sheet)
             continue
+        }
+        if (sheetOption.hiddenColumns && sheetOption.hiddenColumns.length > 0) {
+            sheetOption.hiddenColumns.forEach((colName) => {
+                worksheet.getColumn(colName).hidden = true
+            })
         }
         // 1️⃣ Replace placeholder {{...}}
         worksheet.eachRow((row) => {
@@ -178,13 +187,28 @@ async function handleExcelJSExport(
                             fgColor: { argb: cellData.bgColor },
                         }
                     }
-                    cell.border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' },
+                    const applyBorder = cellData.border ?? true 
+                    
+                    if (applyBorder) {
+                        cell.border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' },
+                        }
+                    } else {
+                        cell.border = {
+                            top: { style: undefined },
+                            left: { style: undefined },
+                            bottom: { style: undefined },
+                            right: { style: undefined },
+                        }
                     }
-
+                    if (cellData.color) {
+                        cell.font = {
+                            color: { argb: cellData.color },
+                        }
+                    }
                     const colSpan = cellData.colSpan ?? 1
                     const rowSpan = cellData.rowSpan ?? 1
                     if (colSpan > 1 || rowSpan > 1) {
@@ -324,4 +348,244 @@ async function handleSheetJSExport(
         new Blob([out], { type: 'application/vnd.ms-excel' }),
         fileName.endsWith('.xls') ? fileName : `${fileName}.xls`
     )
+}
+// Thêm hàm này vào file template-excel.ts
+function appendSheet(
+    masterSheet: ExcelJS.Worksheet,
+    sourceSheet: ExcelJS.Worksheet,
+    startRow: number
+) {
+    let currentRowNumber = startRow
+    const rowOffset = startRow - 1 // Offset để tính toán merge
+
+    // 1. Sao chép Hàng (giá trị, style, chiều cao)
+    sourceSheet.eachRow({ includeEmpty: true }, (sourceRow) => {
+        const newRow = masterSheet.getRow(currentRowNumber)
+        newRow.height = sourceRow.height
+
+        sourceRow.eachCell({ includeEmpty: true }, (sourceCell, colNumber) => {
+            const newCell = newRow.getCell(colNumber)
+
+            // Sao chép giá trị
+            newCell.value = sourceCell.value
+
+            // Sao chép style
+            if (sourceCell.style && Object.keys(sourceCell.style).length > 0) {
+                newCell.style = JSON.parse(JSON.stringify(sourceCell.style))
+            }
+        })
+
+        newRow.commit()
+        currentRowNumber++
+    })
+
+    sourceSheet.model.merges.forEach((mergeRange: string) => {
+        // mergeRange có dạng "A5:C6"
+        
+        try {
+            const [startCell, endCell] = mergeRange.split(':');
+
+            // Phân tích ô bắt đầu (ví dụ "A5")
+            const startMatch = startCell?.match(/([A-Z]+)(\d+)/);
+            if (!startMatch) return; // Bỏ qua nếu không khớp
+            const startCol = startMatch[1]; // "A"
+            const startRow = parseInt(startMatch[2] ?? '0'); // 5
+
+            // Phân tích ô kết thúc (ví dụ "C6")
+            const endMatch = endCell?.match(/([A-Z]+)(\d+)/);
+            if (!endMatch) return; // Bỏ qua nếu không khớp
+            const endCol = endMatch[1]; // "C"
+            const endRow = parseInt(endMatch[2] ?? '0'); // 6
+
+            // Tính toán lại tọa độ hàng mới
+            const newStartRow = startRow + rowOffset;
+            const newEndRow = endRow + rowOffset;
+
+            // Tạo chuỗi range mới (ví dụ "A55:C56")
+            const newRange = `${startCol}${newStartRow}:${endCol}${newEndRow}`;
+            
+            // Merge bằng chuỗi, giống như cloneWorksheet
+            masterSheet.mergeCells(newRange);
+
+        } catch (e) {
+            console.error("Error processing merge range:", mergeRange, e);
+        }
+    })
+}
+// THAY THẾ TOÀN BỘ HÀM handleExcelJSExport CŨ BẰNG HÀM NÀY
+
+async function handleExcelJSMergeSheets(
+    templateUrl: string,
+    sheets: SheetExportOptions[],
+    fileName: string,
+    options: ExportOptions
+) {
+    const response = await fetch(templateUrl)
+    const buffer = await response.arrayBuffer()
+    const workbook = new ExcelJS.Workbook()
+    await workbook.xlsx.load(buffer)
+
+    const firstSheet = workbook.worksheets[0] // Template
+    if (!firstSheet) {
+        throw new Error('Template is empty')
+    }
+
+    const tempWorksheets: ExcelJS.Worksheet[] = []
+
+    // 1. TẠO TẤT CẢ CÁC SHEET TẠM TRONG BỘ NHỚ
+    for (const sheetOption of sheets) {
+        const { sheet, data = {}, rows, tableStartCell, hiddenColumns } = sheetOption
+        
+        // Mỗi sheetOption BẮT BUỘC phải có tên sheet duy nhất
+        const sheetName = String(sheet || new Date().getTime())
+        const worksheet = cloneWorksheet(workbook, firstSheet, sheetName)
+
+        // 1a. Ẩn cột (nếu có)
+        if (hiddenColumns && hiddenColumns.length > 0) {
+            hiddenColumns.forEach((colName) => {
+                worksheet.getColumn(colName).hidden = true
+            })
+        }
+        
+        // 1b. Thay thế placeholder {{...}}
+        worksheet.eachRow((row) => {
+            row.eachCell((cell) => {
+                if (typeof cell.value === 'string') {
+                    let text = cell.value
+                    for (const key in data) {
+                        text = text.replace(
+                            new RegExp(`{{\\s*${key}\\s*}}`, 'g'),
+                            String(data[key] ?? '')
+                        )
+                    }
+                    cell.value = text
+                }
+            })
+        })
+
+        // 1c. Render bảng động
+        if (rows && tableStartCell) {
+            let currentRow = tableStartCell.row
+            
+            if (rows.length > 1) {
+                worksheet.spliceRows(tableStartCell.row + 1, 0, ...Array(rows.length - 1).fill([]))
+            }
+
+            for (const rowData of rows) {
+                let currentCol = tableStartCell.col
+                const excelRow = worksheet.getRow(currentRow)
+
+                for (const cellData of rowData.cells) {
+                    const cell = excelRow.getCell(currentCol)
+                    cell.value = cellData.value
+
+                    // Style (đã bao gồm logic border: false)
+                    cell.alignment = {
+                        horizontal: cellData.align || 'left',
+                        vertical: 'middle',
+                        wrapText: cellData.wrapText ?? true,
+                    }
+                    cell.font = {
+                        name: options.fontFamily || 'Times New Roman',
+                        size: options.fontSize || 14,
+                        bold: !!cellData.bold,
+                    }
+                    if (cellData.bgColor) {
+                        cell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: cellData.bgColor },
+                        }
+                    }
+                    
+                    const applyBorder = cellData.border ?? true
+                    if (applyBorder) {
+                        cell.border = {
+                            top: { style: 'thin' }, left: { style: 'thin' },
+                            bottom: { style: 'thin' }, right: { style: 'thin' },
+                        }
+                    } else {
+                         cell.border = {
+                            top: { style: undefined }, left: { style: undefined },
+                            bottom: { style: undefined }, right: { style: undefined },
+                        }
+                    }
+
+                    const colSpan = cellData.colSpan ?? 1
+                    const rowSpan = cellData.rowSpan ?? 1
+                    if (colSpan > 1 || rowSpan > 1) {
+                        worksheet.mergeCells(
+                            currentRow, currentCol,
+                            currentRow + rowSpan - 1, currentCol + colSpan - 1
+                        )
+                    }
+                    currentCol += colSpan
+                }
+                excelRow.commit()
+                currentRow++
+            }
+        }
+        
+        // 1d. Thêm sheet đã xử lý vào danh sách tạm
+        tempWorksheets.push(worksheet)
+    }
+
+    // 2. GỘP CÁC SHEET TẠM VÀO MASTER SHEET
+    if (tempWorksheets.length === 0) {
+        throw new Error("No data provided to export");
+    }
+
+    const masterSheet = tempWorksheets[0]; // Lấy sheet đầu tiên làm sheet chính
+
+    // Gộp từ sheet thứ 2 trở đi
+    if (tempWorksheets.length > 1) {
+        let currentRowOffset = masterSheet?.lastRow ? masterSheet.lastRow.number : 0
+
+        for (let i = 1; i < tempWorksheets.length; i++) {
+            const sheetToCopy = tempWorksheets[i]
+            
+            // Thêm 2 hàng trống để ngăn cách
+            masterSheet?.addRow({})
+            masterSheet?.addRow({})
+            currentRowOffset += 2
+            
+            // Copy nội dung
+            appendSheet(masterSheet as ExcelJS.Worksheet, sheetToCopy as ExcelJS.Worksheet, currentRowOffset + 1)
+            
+            // Cập nhật lại offset
+            currentRowOffset = masterSheet?.lastRow ? masterSheet.lastRow.number : 0
+            
+            // Xóa sheet tạm sau khi copy
+            workbook.removeWorksheet(sheetToCopy?.id ?? '')
+        }
+    }
+
+    // 3. XÓA TEMPLATE GỐC VÀ XUẤT FILE
+    workbook.removeWorksheet(firstSheet.id)
+    
+    // Đổi tên sheet chính (nếu muốn)
+    //@ts-ignore
+    masterSheet.name = "TongHopDiem"
+
+    const outBuffer = await workbook.xlsx.writeBuffer()
+    saveAs(
+        new Blob([outBuffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        }),
+        fileName.endsWith('.xlsx') ? fileName : `${fileName}.xlsx`
+    )
+}
+// DÁN HÀM ĐIỀU PHỐI NÀY VÀO
+async function handleExcelJSExport(
+    templateUrl: string,
+    sheets: SheetExportOptions[],
+    fileName: string,
+    options: ExportOptions
+) {
+    if (options.mergeSheetsToOne) {
+       
+        await handleExcelJSMergeSheets(templateUrl, sheets, fileName, options)
+    } else {
+        await handleExcelJSDefault(templateUrl, sheets, fileName, options)
+    }
 }
