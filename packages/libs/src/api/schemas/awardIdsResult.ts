@@ -5,8 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type SerializedFieldItemsItem = {
-    path: string
-    type: string
-    description?: string
+export interface AwardIdsResult {
+    success: boolean
+    message: string
 }

@@ -36,7 +36,7 @@ const importStudent = createRoute({
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
                         timeout: z.coerce.number().default(30),
-                    }).openapi('importStudent'),
+                    }).openapi('ImportStudentRequest'),
                 },
             },
         },
@@ -338,7 +338,7 @@ const importHeQuanSu = createRoute({
                 'multipart/form-data': {
                     schema: UploadExcelModel.extend({
                         timeout: z.coerce.number().default(30),
-                    }).openapi('importHeQuanSu'),
+                    }).openapi('importHeQuanSuRequest'),
                 },
             },
         },

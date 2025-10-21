@@ -5,6 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportStudentSubjectClassExcel400 = {
+export type AwardScore400 = {
     message: string
 }

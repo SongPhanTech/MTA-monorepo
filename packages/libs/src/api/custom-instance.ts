@@ -94,7 +94,7 @@ export const customSystemFetch = async <T>(url: string, options: RequestInit): P
     const requestUrl = getUrl(
         process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
             ? `http://localhost:3001/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`
-            : 'https://mta.swantech.vn/api/system/public',
+            : `https://api.model.mta.swantech.vn/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`,
         url
     )
 
