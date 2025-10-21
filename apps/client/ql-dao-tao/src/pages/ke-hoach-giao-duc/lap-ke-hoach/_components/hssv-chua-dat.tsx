@@ -6,11 +6,12 @@ import {
     useFindManyStudent,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
+import { useOpenSubjectClassRetakeStudents } from '@workspace/libs/api/training'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { type Key, useCallback, useState } from 'react'
+import { type Key, useCallback, useMemo, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
@@ -19,13 +20,13 @@ interface FilterProps {
 }
 
 interface RegisterClassProps {
-    setStudentId?: (id: string | null) => void
+    subjectVersionId?: string
 }
 
-export default function HSSVChuaDat({ setStudentId }: RegisterClassProps) {
+export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKey, setSelectedRowKey] = useState<Key>('')
+    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -43,6 +44,19 @@ export default function HSSVChuaDat({ setStudentId }: RegisterClassProps) {
             trainingObjectTypeId,
         },
     })
+
+    const { data: res } = useOpenSubjectClassRetakeStudents(
+        {
+            search: filters.searchText || '',
+            trainingObjectTypeId: trainingObjectTypeId || '',
+            trainingCourseId: filters.trainingCourseId,
+            subjectVersionId: subjectVersionId || '',
+        },
+        { query: { enabled: !!trainingObjectTypeId } }
+    )
+    // queryKey /api/subject-class/open-subject-class-retake
+
+    const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         orderBy: {
@@ -168,9 +182,8 @@ export default function HSSVChuaDat({ setStudentId }: RegisterClassProps) {
         })
     }
 
-    const handleRowSelection = (id: string) => {
-        setStudentId?.(id)
-        setSelectedRowKey(id)
+    const handleRowSelection = (keys: Key[]) => {
+        setSelectedRowKeys(Array.isArray(keys) ? keys : [keys])
     }
 
     return (
@@ -235,16 +248,25 @@ export default function HSSVChuaDat({ setStudentId }: RegisterClassProps) {
                     className="mt-0"
                     data={students}
                     onRow={(record) => ({
-                        onClick: () => handleRowSelection(record.id),
+                        onClick: () => {
+                            const isSelected = selectedRowKeys.includes(record.id)
+                            if (isSelected) {
+                                setSelectedRowKeys(
+                                    selectedRowKeys.filter((key) => key !== record.id)
+                                )
+                            } else {
+                                setSelectedRowKeys([...selectedRowKeys, record.id])
+                            }
+                        },
                         style: { cursor: 'pointer' },
                         columnWidth: 35,
                     })}
                     rowSelection={{
-                        selectedRowKeys: [selectedRowKey],
+                        selectedRowKeys: selectedRowKeys,
                         onChange: (selectedRowKeys) => {
-                            handleRowSelection(selectedRowKeys?.[0] as string)
+                            handleRowSelection(selectedRowKeys)
                         },
-                        type: 'radio',
+                        type: 'checkbox',
                         columnWidth: 35,
                     }}
                     columns={[

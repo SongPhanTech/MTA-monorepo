@@ -1,6 +1,6 @@
 import DefaultLayout from '@layouts/default-layout'
 import { useFindFirstPlanTrainingDelay } from '@workspace/db/hooks'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
@@ -19,8 +19,8 @@ interface TabItem {
 
 export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
     const [activeLeftTab, setActiveLeftTab] = useState('1')
-    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const [subjectVersionId, setSubjectVersionId] = useState<string>('')
     const { data: countDelay } = useFindFirstPlanTrainingDelay({
         where: { trainingObjectTypeId, deletedAt: null },
         select: {
@@ -37,7 +37,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               {
                   key: '1',
                   label: 'Môn có SV/HV chưa đạt',
-                  content: <MonCoHVSVChuaDat />,
+                  content: <MonCoHVSVChuaDat setSubjectVersionId={setSubjectVersionId} />,
               },
               {
                   key: '2',
@@ -68,7 +68,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               {
                   key: '1',
                   label: 'SV/HV chưa đạt',
-                  content: <HSSVChuaDat />,
+                  content: <HSSVChuaDat subjectVersionId={subjectVersionId} />,
               },
           ]
         : [
