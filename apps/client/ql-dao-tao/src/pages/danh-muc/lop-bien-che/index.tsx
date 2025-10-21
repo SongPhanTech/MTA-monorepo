@@ -368,134 +368,199 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
 const handleExportBangDiemNganHan = () => {
         showSpinner();
         try {
-            // 1. Dữ liệu mock (Mảng 2 sinh viên)
+            
             const mockStudentData = [
                 {
-                    hoTen: "MAI CẢNH TOÀN",
-                    maHocVien: "2024150167",
-                    ngaySinh: "18/11/1980",
-                    khoa: "41",
-                    ngayNhapHoc: "01/8/2024",
-                    chuyenNganh: "Tên lửa phòng không",
-                    thoiGianDaoTao: "1 năm",
+                    hoTen: "TRẦN VĂN MINH",
+                    maHocVien: "2024150201",
+                    ngaySinh: "15/03/1985",
+                    khoa: "42",
+                    ngayNhapHoc: "01/9/2024",
+                    chuyenNganh: "Công nghệ thông tin",
+                    thoiGianDaoTao: "2 năm",
                     ngonNgu: "Tiếng Việt",
-                    soChungChi: "001/CNHCKT-NH/25",
+                    soChungChi: "002/CNTT-NH/25",
+                    ctdt:"ngắn hạn",
                     monHoc: [
-                        { tt: 1, ten: "Công nghệ thông tin, chuyển đổi số", trongSo: 2, diem: 7.8 },
-                        { tt: 2, ten: "Công tác hậu cần, kỹ thuật quân sự địa phương và khu vực phòng thủ (phần 1)", trongSo: 1, diem: 7.6 },
-                        { tt: 3, ten: "Công tác hậu cần, kỹ thuật quân sự địa phương và khu vực phòng thủ (phần 2)", trongSo: 2, diem: 8.0 },
-                        // ...thêm các môn khác nếu cần
+                        { tt: 1, ten: "Lập trình ứng dụng web", trongSo: 3, diem: 8.2 },
+                        { tt: 2, ten: "Cơ sở dữ liệu nâng cao", trongSo: 2, diem: 7.9 },
+                        { tt: 3, ten: "An ninh mạng", trongSo: 2, diem: 8.5 },
+                        { tt: 4, ten: "Trí tuệ nhân tạo", trongSo: 3, diem: 8.0 },
                     ]
                 },
                 {
-                    hoTen: "NGUYỄN VĂN THÚY",
-                    maHocVien: "2024150134",
-                    ngaySinh: "10/4/1977",
-                    khoa: "41",
-                    ngayNhapHoc: "01/8/2024",
-                    chuyenNganh: "Kho kỹ thuật",
+                    hoTen: "LÊ THỊ HƯƠNG",
+                    maHocVien: "2024150202",
+                    ngaySinh: "22/07/1988",
+                    khoa: "42",
+                    ngayNhapHoc: "01/9/2024",
+                    chuyenNganh: "Quản lý dự án",
+                    thoiGianDaoTao: "1.5 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "003/QMDA-NH/25",
+                    ctdt:"ngắn hạn",
+                    monHoc: [
+                        { tt: 1, ten: "Quản lý dự án phần mềm", trongSo: 3, diem: 8.7 },
+                        { tt: 2, ten: "Phân tích yêu cầu hệ thống", trongSo: 2, diem: 8.3 },
+                        { tt: 3, ten: "Kiểm thử phần mềm", trongSo: 2, diem: 7.8 },
+                    ]
+                },
+                {
+                    hoTen: "PHẠM ĐỨC THÀNH",
+                    maHocVien: "2024150203",
+                    ngaySinh: "10/12/1982",
+                    khoa: "43",
+                    ngayNhapHoc: "01/10/2024",
+                    chuyenNganh: "Kỹ thuật điện tử",
+                    thoiGianDaoTao: "2 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "004/KTDT-NH/25",
+                    ctdt:"ngắn hạn",
+                    monHoc: [
+                        { tt: 1, ten: "Vi điều khiển và ứng dụng", trongSo: 3, diem: 8.1 },
+                        { tt: 2, ten: "Thiết kế mạch điện tử", trongSo: 2, diem: 7.6 },
+                        { tt: 3, ten: "Xử lý tín hiệu số", trongSo: 2, diem: 8.4 },
+                        { tt: 4, ten: "Hệ thống nhúng", trongSo: 3, diem: 8.9 },
+                    ]
+                },
+                {
+                    hoTen: "NGUYỄN THỊ LAN",
+                    maHocVien: "2024150204",
+                    ngaySinh: "05/05/1990",
+                    khoa: "43",
+                    ngayNhapHoc: "01/10/2024",
+                    chuyenNganh: "Marketing số",
                     thoiGianDaoTao: "1 năm",
                     ngonNgu: "Tiếng Việt",
-                    soChungChi: "160/CNHCKT-NH/25",
+                    soChungChi: "005/MKS-NH/25",
+                    ctdt:"ngắn hạn",
                     monHoc: [
-                        { tt: 1, ten: "Công nghệ thông tin, chuyển đổi số", trongSo: 2, diem: 8.5 },
-                        { tt: 2, ten: "Công tác hậu cần, kỹ thuật quân sự địa phương và khu vực phòng thủ (phần 1)", trongSo: 1, diem: 8.1 },
-                        { tt: 3, ten: "Nghệ thuật chiến dịch", trongSo: 3, diem: 7.8 },
-                        // ...thêm các môn khác nếu cần
+                        { tt: 1, ten: "Digital Marketing", trongSo: 2, diem: 8.6 },
+                        { tt: 2, ten: "SEO và SEM", trongSo: 2, diem: 8.2 },
+                        { tt: 3, ten: "Social Media Marketing", trongSo: 1, diem: 7.9 },
+                        { tt: 4, ten: "Content Marketing", trongSo: 2, diem: 8.3 },
+                    ]
+                },
+                {
+                    hoTen: "HOÀNG VĂN ĐỨC",
+                    maHocVien: "2024150205",
+                    ngaySinh: "18/09/1987",
+                    khoa: "44",
+                    ngayNhapHoc: "01/11/2024",
+                    chuyenNganh: "Quản trị kinh doanh",
+                    thoiGianDaoTao: "2 năm",
+                    ngonNgu: "Tiếng Việt",
+                    soChungChi: "006/QTKD-NH/25",
+                    ctdt:"ngắn hạn",
+                    monHoc: [
+                        { tt: 1, ten: "Quản trị chiến lược", trongSo: 3, diem: 8.4 },
+                        { tt: 2, ten: "Quản trị nguồn nhân lực", trongSo: 2, diem: 7.7 },
+                        { tt: 3, ten: "Marketing căn bản", trongSo: 2, diem: 8.1 },
+                        { tt: 4, ten: "Tài chính doanh nghiệp", trongSo: 3, diem: 8.8 },
                     ]
                 }
             ];
 
-            // 2. Khởi tạo mảng rows tổng
-            const allRows:any = [];
-
-            // 3. Lặp qua từng SINH VIÊN
-            mockStudentData.forEach(student => {
-                
-                // --- A. Tạo Header (Giống ảnh) ---
-                allRows.push({ cells: [
-                    { value: 'BỘ QUỐC PHÒNG', bold: true, colSpan: 6 },
-                    { value: 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM', bold: true, colSpan: 6, align: 'center' }
-                ]});
-                allRows.push({ cells: [
-                    { value: 'HỌC VIỆN KỸ THUẬT QUÂN SỰ', bold: true, colSpan: 6 },
-                    { value: 'Độc lập - Tự do - Hạnh phúc', bold: true, colSpan: 6, align: 'center' }
-                ]});
-                allRows.push({ cells: [{ value: null }] }); // Dòng trống
-                allRows.push({ cells: [{ value: 'BẢNG ĐIỂM', bold: true, align: 'center', colSpan: 12 }] });
-                allRows.push({ cells: [{ value: `(Kèm theo chứng chỉ tốt nghiệp số: ${student.soChungChi})`, align: 'center', colSpan: 12 }] });
-                allRows.push({ cells: [{ value: null }] });
-
-                // --- B. Tạo Thông tin sinh viên (Giống ảnh) ---
-                allRows.push({ cells: [
-                    { value: '       Cấp cho Ông (Bà):', colSpan: 3 }, { value: student.hoTen, bold: true, colSpan: 4 },
-                    { value: 'Mã học viên:', colSpan: 3, align: 'right' }, { value: student.maHocVien, bold: true, colSpan: 2 }
-                ]});
-                allRows.push({ cells: [{ value: `       Ngày sinh: ${student.ngaySinh}` }] });
-                allRows.push({ cells: [
-                    { value: `       Khóa: ${student.khoa}`, colSpan: 6 },
-                    { value: `Ngày nhập học: ${student.ngayNhapHoc}`, colSpan: 6 }
-                ]});
-                allRows.push({ cells: [{ value: '       Đã hoàn thành chương trình đào tạo ngắn hạn chủ nhiệm Hậu cần - Kỹ thuật trung, lữ đoàn' }] });
-                allRows.push({ cells: [
-                    { value: `       Chuyên ngành chuyên sâu: ${student.chuyenNganh}`, colSpan: 6 },
-                    { value: `Thời gian đào tạo: ${student.thoiGianDaoTao}`, colSpan: 6 }
-                ]});
-                allRows.push({ cells: [{ value: `       Ngôn ngữ đào tạo: ${student.ngonNgu}` }] });
-                allRows.push({ cells: [{ value: '       Kết quả đào tạo:' }] });
-
-                // --- C. Tạo Bảng điểm (Giống ảnh) ---
-                // Header bảng
-                allRows.push({ cells: [
-                    { value: 'TT', align: 'center', bold: true, border: true },
-                    { value: 'Tên học phần', align: 'center', bold: true, border: true, colSpan: 8 },
-                    { value: 'Trọng số học phần', align: 'center', bold: true, border: true, colSpan: 2 },
-                    { value: 'Điểm', align: 'center', bold: true, border: true },
-                ]});
-
-                // Dữ liệu môn học (lặp qua mảng monHoc của sinh viên)
-                student.monHoc.forEach(mon => {
-                    allRows.push({
+            const allSheetOptions = mockStudentData.map((student) => {
+                const tableRows = student.monHoc.map((monHoc) => {
+                    return {
                         cells: [
-                            { value: mon.tt, align: 'center', border: true },
-                            { value: mon.ten, border: true, colSpan: 8 },
-                            { value: mon.trongSo, align: 'center', border: true, colSpan: 2 },
-                            { value: String(mon.diem), align: 'center', border: true },
+                            { value: monHoc.tt, align: 'center' as const, border: true },
+                            { value: monHoc.ten, border: true, colSpan: 8, },
+                            { value: monHoc.trongSo, align: 'center' as const, border: true },
+                            { value: monHoc.diem, align: 'center' as const, border: true },
                         ]
-                    });
-                });
-
-                // --- D. Tạo Footer (Chữ ký, ngày tháng) ---
-                allRows.push({ cells: [{ value: null }] });
-                allRows.push({ cells: [
-                    { value: null, colSpan: 7 },
-                    { value: `Hà Nội, ngày ... tháng ... năm ...`, align: 'center', colSpan: 5 }
-                ]});
-                allRows.push({ cells: [
-                    { value: 'KT. GIÁM ĐỐC', bold: true, align: 'center', colSpan: 6 },
-                    { value: null, colSpan: 1 },
-                    { value: 'PHÒNG ĐÀO TẠO', bold: true, align: 'center', colSpan: 5 }
-                ]});
-
-
-                // --- E. Tạo khoảng cách LỚN giữa các sinh viên ---
-                allRows.push({ cells: [{ value: null }] });
-                allRows.push({ cells: [{ value: null }] });
-                allRows.push({ cells: [{ value: null }] });
-                allRows.push({ cells: [{ value: null }] });
-            });
-
-            // 4. Gọi hàm export
+                    }
+                })
+                  const gapRow: TableRow = {
+                     cells: [{ value: null, colSpan: 18, border: false }],
+                   };
+                   
+                   // Tính điểm trung bình có trọng số
+                   const tongDiemCoTrongSo = student.monHoc.reduce((sum, mon) => sum + (mon.diem * mon.trongSo), 0);
+                   const tongTrongSo = student.monHoc.reduce((sum, mon) => sum + mon.trongSo, 0);
+                   const diemTB = tongTrongSo > 0 ? Math.round((tongDiemCoTrongSo / tongTrongSo) * 100) / 100 : 0;
+                   
+                   // Xếp hạng dựa trên điểm trung bình
+                   let hang = '';
+                   if (diemTB >= 9.0) {
+                       hang = 'Xuất sắc';
+                   } else if (diemTB >= 8.0) {
+                       hang = 'Giỏi';
+                   } else if (diemTB >= 7.0) {
+                       hang = 'Khá';
+                   } else if (diemTB >= 6.0) {
+                       hang = 'Trung bình';
+                   } else if (diemTB >= 5.0) {
+                       hang = 'Trung bình yếu';
+                   } else {
+                       hang = 'Yếu';
+                   }
+                  const totalRow: TableRow = {
+                    cells: [
+                        { value:`Điểm trung bình chung tốt nghiệp: ${diemTB}`, border: false, colSpan: 7, bold:true }
+                     , { value: `Hạng tốt nghiệp: ${hang}`, border: false, colSpan: 10, bold:true }
+                    ]
+                  };
+                  const dateSignatureRow: TableRow = {
+                    cells: [
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`, colSpan: 5, border: false, align: 'center' }
+                    ]
+                  };
+                  const titleSignatureRow: TableRow = {
+                    cells: [
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: 'TL. GIÁM ĐỐC ', colSpan: 5, border: false, align: 'center', bold: true }
+                    ]
+                  };
+                  const nameSignatureRow: TableRow = {
+                    cells: [
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: null, border: false }, 
+                        { value: 'TRƯỞNG PHÒNG SAU ĐẠI HỌC', colSpan: 5, border: false, align: 'center', bold: true }
+                    ]
+                  };
+                  
+                return {
+                    sheet: student.hoTen,
+                    data: {
+                        fullname: student.hoTen,
+                        maSV: student.maHocVien,
+                        dateOfBirth: student.ngaySinh,
+                        htdt: student.khoa,
+                        nganh: student.chuyenNganh,
+                        thoigian: student.thoiGianDaoTao,
+                        ngonngu: student.ngonNgu,
+                        ngaynhaphoc: student.ngayNhapHoc,
+                        khoa: student.khoa,
+                        soChungChi: student.soChungChi,
+                        ctdt: student.ctdt,
+                    },
+                    tableStartCell: { row: 15, col: 1 },
+                    rows: [...tableRows, gapRow, totalRow, gapRow, dateSignatureRow, titleSignatureRow, nameSignatureRow],
+                }
+            })
+            
             exportFromTemplate({
-                templateUrl: "/lms/templates/chuong-trinh-dao-tao/bang-diem-ngan-dai-han.xlsx", // Template rỗng
-                sheets: [
-                  {
-                    sheet: "TongHop",
-                    tableStartCell: { row: 1, col: 1 },
-                    rows: allRows,
-                  },
-                ],
+                templateUrl: getMinioUrl('/mta/template/bang-diem-ngan-dai-han.xlsx'), 
+                sheets: allSheetOptions,
                 fileName: `BangDiem-ChiTiet-TungSinhVien.xlsx`,
+                mergeSheetsToOne: true,
             });
 
         } catch (error) {
