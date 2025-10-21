@@ -4,6 +4,8 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { ExamId } from './examId'
 
-export type GenExamCodeExamId = ExamId & unknown
+export interface GenExamRoomCodeResult {
+    success: boolean
+    message: string
+}

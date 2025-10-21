@@ -5,8 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface ImportHeQuanSu {
-    file: Blob
-    /** @nullable */
-    timeout?: number | null
+export type GenExamRoomCode404 = {
+    message: string
 }

@@ -5,8 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface ImportStudent {
-    file: Blob
-    /** @nullable */
-    timeout?: number | null
-}
+/**
+ * ID phòng thi
+ */
+export type ExamRoomId = string
