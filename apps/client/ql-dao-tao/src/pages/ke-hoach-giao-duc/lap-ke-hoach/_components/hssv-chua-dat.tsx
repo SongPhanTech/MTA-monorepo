@@ -1,10 +1,8 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import {
-    useCountStudent,
     useFindManyFixedClass,
-    useFindManyStudent,
-    useFindManyTrainingCourse,
+    useFindManyTrainingCourse
 } from '@workspace/db/hooks'
 import { useOpenSubjectClassRetakeStudents } from '@workspace/libs/api/training'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -45,7 +43,7 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
         },
     })
 
-    const { data: res } = useOpenSubjectClassRetakeStudents(
+    const { data: res, refetch } = useOpenSubjectClassRetakeStudents(
         {
             search: filters.searchText || '',
             trainingObjectTypeId: trainingObjectTypeId || '',
@@ -59,6 +57,7 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
     // queryKey /api/subject-class/open-subject-class-retake
 
     const data = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
+    const countData = useMemo(() => (res?.status === 200 ? res?.data.count : 0), [res])
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         orderBy: {
@@ -67,105 +66,6 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
         where: {
             active: true,
             trainingCourseId: filters.trainingCourseId,
-        },
-    })
-
-    const { data: students = [], refetch } = useFindManyStudent({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filters.searchText,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            fixedClassId: filters.fixedClassId,
-            fixedClass: {
-                trainingCourseId: filters.trainingCourseId,
-            },
-            active: true,
-            status: 'ENROLLED',
-            deletedAt: null,
-            trainingObjectTypeId,
-        },
-        include: {
-            userProfile: {
-                select: {
-                    fullname: true,
-                },
-            },
-            studentSemesterResult: {
-                select: {
-                    gpaBase10: true,
-                    cumulativeGpaBase10: true,
-                },
-                orderBy: {
-                    semester: {
-                        startDate: 'desc',
-                    },
-                },
-            },
-            fixedClass: {
-                select: {
-                    code: true,
-                    trainingCourse: {
-                        select: {
-                            name: true,
-                        },
-                    },
-                },
-            },
-        },
-        orderBy: {
-            userProfile: {
-                firstName: 'asc',
-            },
-        },
-    })
-
-    const { data: countStudents = 0 } = useCountStudent({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      OR: [
-                          {
-                              userProfile: {
-                                  fullname: {
-                                      contains: filters.searchText,
-                                      mode: 'insensitive',
-                                  },
-                              },
-                          },
-                          {
-                              code: {
-                                  contains: filters.searchText,
-                                  mode: 'insensitive',
-                              },
-                          },
-                      ],
-                  }
-                : {}),
-            fixedClassId: filters.fixedClassId,
-            fixedClass: {
-                trainingCourseId: filters.trainingCourseId,
-            },
-            active: true,
-            status: 'ENROLLED',
-            deletedAt: null,
-            trainingObjectTypeId,
         },
     })
 
@@ -248,7 +148,7 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
                 <Table
                     rowKey="id"
                     className="mt-0"
-                    data={students}
+                    data={data as any}
                     onRow={(record) => ({
                         onClick: () => {
                             const isSelected = selectedRowKeys.includes(record.id)
@@ -305,16 +205,16 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
                             dataIndex: ['fixedClass', 'trainingCourse', 'name'],
                         },
                         {
-                            title: 'GPA tích luỹ',
+                            title: 'Điểm',
                             align: 'center',
-                            dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
+                            dataIndex: 'diem_cuoi',
                             width: 80,
                         },
                     ]}
                     pagination={{
                         current: currentPage,
                         pageSize: numberOfPages,
-                        total: countStudents,
+                        total: countData,
                         onChange: (page, pageSize) => {
                             if (numberOfPages === pageSize) {
                                 setCurrentPage(page)
