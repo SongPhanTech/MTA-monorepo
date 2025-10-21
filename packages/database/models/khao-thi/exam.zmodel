@@ -218,7 +218,6 @@ model Exam extends Base {
 }
 
 /// Phòng thi cho kỳ thi
-// 
 model ExamRoom extends Base {
   exam               Exam          @relation(fields: [examId], references: [id])
   examId             String
