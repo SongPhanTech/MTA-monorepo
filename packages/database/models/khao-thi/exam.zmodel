@@ -208,7 +208,7 @@ model Exam extends Base {
   subjectClass        SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
   /// thí sinh
   studentSubjectScore StudentSubjectScore[]
-  room                Room[] // sum examCapacity >= số thí sinh
+  room                Room[]
   examBank            ExamBank[]
   testStructureRules  TestStructureRule[]
   examSessions        ExamSession[]
