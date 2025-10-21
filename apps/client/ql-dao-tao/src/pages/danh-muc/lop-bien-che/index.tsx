@@ -8,7 +8,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import { emptyObjectIf } from '@workspace/constant'
+import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import type { TrainingCourse } from '@workspace/db/client'
 import {
     useCountFixedClass,
@@ -335,7 +335,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
 
             // 3. Gọi hàm export
             exportFromTemplate({
-              templateUrl: "/lms/templates/chuong-trinh-dao-tao/Bangdiemtheolop.xlsx",
+              templateUrl: getMinioUrl('/mta/template/Bangdiemtheolop.xlsx'),
               sheets: [
                 {
                   sheet: "BaoCaoDiem", // Đảm bảo tên sheet này chính xác
