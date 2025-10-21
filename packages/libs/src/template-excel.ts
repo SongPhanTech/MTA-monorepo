@@ -12,6 +12,7 @@ export interface TableCell {
     bold?: boolean
     wrapText?: boolean
     border?: boolean
+    color?: string
 }
 
 export interface TableRow {
@@ -202,7 +203,11 @@ async function handleExcelJSExport(
                             right: { style: undefined },
                         }
                     }
-
+                    if (cellData.color) {
+                        cell.font = {
+                            color: { argb: cellData.color },
+                        }
+                    }
                     const colSpan = cellData.colSpan ?? 1
                     const rowSpan = cellData.rowSpan ?? 1
                     if (colSpan > 1 || rowSpan > 1) {

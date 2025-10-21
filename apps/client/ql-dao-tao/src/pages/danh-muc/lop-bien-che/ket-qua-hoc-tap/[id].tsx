@@ -9,6 +9,7 @@ import {
     useFindManyStudentSubjectScore,
     useFindUniqueStudent,
 } from '@workspace/db/hooks'
+import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -19,6 +20,27 @@ import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
+ interface IMonHoc {
+    TenMonhoc: string;
+    MaMH?: string;
+    soTC?: number;
+    diem01?: number;
+    diem02?: number;
+    diem07?: number;
+    diemhe10?: number;
+    diemhe4?: number;
+    diemchu?: string;
+    ghichu?: string;
+}
+
+
+ interface IHocKi {
+    TenHocKi?: string;
+    SoTinChiKy?: number; 
+    DiemTBKyHe10?: number; 
+    DiemTBKyHe4?: number; 
+    monHocs?: IMonHoc[]; 
+}
 export default function StudentScoreClassPage() {
     const router = useRouter()
     const studentId = router.query.id as string
@@ -57,6 +79,208 @@ export default function StudentScoreClassPage() {
             refetch()
         },
     })
+    const exportTemplate = async () => {
+      const hocKis: IHocKi[] = [];
+      if (data.length > 0) {
+        data.forEach(item=>{
+            const monhoc: IMonHoc[] = [];
+            item.subjectClasses.forEach((subjectClass) => {
+              subjectClass.subjectClassStudent.forEach(
+                (subjectClassStudent) => {
+                  monhoc.push({
+                    TenMonhoc: subjectClassStudent.subjectVersion.name,
+                    MaMH:
+                      subjectClassStudent.subjectVersion.code?.slice(0, 2) ??
+                      "",
+                    soTC: subjectClassStudent.subjectVersion.credit,
+                    diemhe10:
+                      subjectClassStudent?.manualFinalScore ||
+                      subjectClassStudent?.finalScore?.toNumber() ||
+                      0,
+                    diemhe4:
+                      convertScore(
+                        subjectClassStudent?.manualFinalScore ||
+                          subjectClassStudent?.finalScore?.toNumber() ||
+                          0
+                      ).base4 ?? 0,
+                      diemchu: convertScore(
+                        subjectClassStudent?.manualFinalScore ||
+                          subjectClassStudent?.finalScore?.toNumber() ||
+                          0
+                      ).letter ?? '',
+                      ghichu: subjectClassStudent.description ?? '',
+                  });
+                }
+              );
+            });
+            const tongSoTinChi = monhoc.reduce((acc, curr) => acc + (curr.soTC ?? 0), 0);
+
+            const tongDiemNhanTinChiHe10 = monhoc.reduce(
+                (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
+                0
+            );
+            const tongDiemNhanTinChiHe4 = monhoc.reduce(
+                (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
+                0
+            );
+        
+            const diemTBHe10_Raw =
+              tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi;
+            const diemTBHe4_Raw =
+              tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi;
+
+            const diemTBHe10 = parseFloat(diemTBHe10_Raw.toFixed(1));
+            const diemTBHe4 = parseFloat(diemTBHe4_Raw.toFixed(1));
+        
+            hocKis.push({
+                TenHocKi: item.code + '-' + item.name + '-' + item.schoolYear?.name,
+                SoTinChiKy: tongSoTinChi,
+                DiemTBKyHe10: diemTBHe10,
+                DiemTBKyHe4: diemTBHe4,
+                monHocs: monhoc,
+            });
+        })
+      }
+      const sampleStudentData = {
+        fullname: student?.userProfile?.fullname,
+        dateOfBirth: student?.userProfile?.dateOfBirth,
+        maSV: student?.code,
+        htdt: student?.trainingObjectType?.name,
+        nganh: student?.curriculumVersion?.curriculum.trainingMajor.name,
+        lop: student?.fixedClass?.trainingCourse?.name,
+        hocKis: hocKis,
+      }
+
+      const tableRows = sampleStudentData.hocKis.flatMap((hocKi) => {
+        const hocKiRow: TableRow = {
+            cells: [
+              {
+                value: hocKi.TenHocKi ?? '', 
+                colSpan: 18, 
+                bold: true,
+                align: 'left',
+                bgColor: 'F2F2F2', 
+              },
+            ],
+          };
+          //@ts-ignore
+        const monHocRows: TableRow[] = hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({   
+          cells: [
+            { value: index + 1 },
+            { value: monHoc.TenMonhoc ?? '', colSpan: 6, border: true }, 
+            { value: monHoc.MaMH ?? '' },
+            { value: monHoc.soTC, align: 'center' },
+            { value: monHoc.diem01 ?? 0, align: 'right' },
+            { value: monHoc.diem02 ?? 0, align: 'right' },
+            { value: monHoc.diem07 ?? 0, align: 'right' },
+            { value: null },
+            { value: null },
+            { value: monHoc.diemhe10 ?? 0, align: 'right' },
+            { value: monHoc.diemhe4 ?? 0, align: 'right' },
+            { value: monHoc.diemchu ?? '', align: 'center' },
+            { value: null },
+            { value: monHoc.ghichu ?? '' },
+          ]
+        })) ?? [];
+  
+        // Dòng trung bình học kỳ
+        const trungBinhRow: TableRow = {
+          cells: [
+            { value: null },
+            { value: 'Điểm trung bình học kỳ:', colSpan: 6, bold: true, align: 'center' },
+            { value: null }, // Cột 7
+            { value: hocKi.SoTinChiKy ?? 0, bold: true, align: 'center' }, // Cột 8
+            { value: null }, // Cột 9
+            { value: null }, // Cột 10
+            { value: null }, // Cột 11
+            { value: null }, // Cột 12
+            { value: null }, // Cột 13
+            { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: 'right' }, // Cột 14
+            { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: 'right' }, // Cột 15
+            { value: null }, // Cột 16
+            { value: null }, // Cột 17
+            { value: null }, // Cột 18
+          ]
+        };
+        
+        return [hocKiRow, ...monHocRows, trungBinhRow];
+      });
+  
+
+      const gapRow: TableRow = {
+        cells: [{ value: null, colSpan: 18, border: false }]
+      };
+  
+
+      const dateSignatureRow: TableRow = {
+        cells: [
+          { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+          { 
+            value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`, 
+            colSpan: 6, 
+            border: false, 
+            align: 'center' 
+          } 
+        ]
+      };
+      
+      const titleSignatureRow: TableRow = {
+        cells: [
+          { value: null, colSpan: 12, border: false },
+          { 
+            value: '  KT. TRƯỞNG PHÒNG \n PHÓ TRƯỞNG PHÒNG', 
+            colSpan: 6, 
+            border: false, 
+            align: 'center',
+            bold: true,
+          } 
+        ]
+      };
+      const nameSignatureRow: TableRow = {
+        cells: [
+          { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+          { 
+            value: 'Đại tá, TS Nguyễn Văn Bình												', 
+            colSpan: 6, 
+            border: false, 
+            align: 'center' ,
+            bold: true
+          } 
+        ]
+      };
+    exportFromTemplate({
+      templateUrl: "/lms/templates/chuong-trinh-dao-tao/quatrinh.xlsx",
+      sheets: [
+        {
+          sheet: "BaoCaoDiem",
+          data: {
+            fullname: sampleStudentData.fullname ?? '',
+            dateOfBirth: sampleStudentData.dateOfBirth ? dayjs(sampleStudentData.dateOfBirth).format('DD/MM/YYYY') : '',
+            htdt: sampleStudentData.htdt ?? '',
+            maSV: sampleStudentData.maSV ?? '',
+            nganh: sampleStudentData.nganh ?? '',
+            lop: sampleStudentData.lop ?? '',
+          },
+          tableStartCell: { row: 11, col: 1 },
+          rows: [
+            ...tableRows,   
+            gapRow,         
+            gapRow,         
+            dateSignatureRow, 
+            titleSignatureRow, 
+
+            gapRow,
+            gapRow,
+            nameSignatureRow
+          ],
+          hiddenColumns: ['M', 'N', 'R','J','K','L']
+        },
+      ],
+      fileName: `BDCN-${sampleStudentData.fullname}.xlsx`,
+    });
+     
+
+    };
 
     const { data: student } = useFindUniqueStudent(
         {
@@ -210,6 +434,15 @@ export default function StudentScoreClassPage() {
                                     }
                                 >
                                     In kết quả học tập
+                                </Button>
+                                
+                                <Button
+                                    type="primary"
+                                    onClick={() =>
+                                       {exportTemplate()}
+                                    }
+                                >
+                                    Xuất bảng điểm cá nhân (Mẫu P2)
                                 </Button>
                             </Flex>
                         </Col>
