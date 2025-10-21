@@ -5,6 +5,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportStudentFixedClassExcelTrainingPoint404 = {
-    message: string
+export interface CertificateIds {
+    archivedCertificateIds: string[]
 }

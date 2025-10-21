@@ -5,6 +5,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type ExportStudentFixedClassDocx400 = {
-    message: string
+export interface ImportStudentRequest {
+    file: Blob
+    /** @nullable */
+    timeout?: number | null
 }
