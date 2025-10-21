@@ -94,7 +94,9 @@ const DiemTrungBinhKyHoc = () => {
                       },
                   }
                 : {}),
-            ...(!!filters.trainingCourseId || !!filters.fixedClassId
+            ...(!!filters.trainingCourseId ||
+            !!filters.fixedClassId ||
+            !!filters.managementOrganizationId
                 ? {
                       fixedClass: {
                           ...(filters.fixedClassId
@@ -105,6 +107,11 @@ const DiemTrungBinhKyHoc = () => {
                           ...(filters.trainingCourseId
                               ? {
                                     trainingCourseId: filters.trainingCourseId,
+                                }
+                              : {}),
+                          ...(filters.managementOrganizationId
+                              ? {
+                                    managementOrganizationId: filters.managementOrganizationId,
                                 }
                               : {}),
                       },
@@ -126,6 +133,7 @@ const DiemTrungBinhKyHoc = () => {
                 fixedClass: {
                     include: {
                         trainingCourse: true,
+                        managementOrganization: true,
                     },
                 },
             },
@@ -144,7 +152,7 @@ const DiemTrungBinhKyHoc = () => {
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
         },
-        { enabled: !!semesterId }
+        { enabled: !!semesterId || !!trainingObjectTypeId }
     )
 
     const { data: count } = useCountStudent(

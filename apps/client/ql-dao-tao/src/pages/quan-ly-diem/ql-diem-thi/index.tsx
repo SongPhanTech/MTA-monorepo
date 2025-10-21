@@ -80,6 +80,7 @@ export default function SubjectClassScore() {
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: session } = useSession()
+    const [mesasge, setMesasge] = useState<string>('')
     const profileId = session?.sDM_NhanVienId || ''
     const [open, setOpen] = useState(false)
     const subjectClassId = router.query?.subjectClassId as string
@@ -174,7 +175,7 @@ export default function SubjectClassScore() {
             const list = dataTable.find(
                 (i: any) => !i.examScore || !dataSubmit.list[i.id].examScore
             )
-            if (!list && subjectClassId) {
+            if (!list && subjectClassId ) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
                     {
@@ -193,7 +194,7 @@ export default function SubjectClassScore() {
                 (i: any) => i.examScore || i.description || i.suspended || i.suspendedReason
             )
 
-            if (listChange?.length > 0) {
+            if (listChange?.length > 0 &&profileId !== listUser.P13) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
                     ...listChange.map((item: any) => {
@@ -266,10 +267,14 @@ export default function SubjectClassScore() {
                         }
                     }),
                 ]
+               
             }
             if (listSqlTransaction?.length > 0) {
                 const res = await sqlTransaction(listSqlTransaction)
                 if (res?.status === 200) {
+                    if(mesasge){
+                        message.success(mesasge)
+                    }
                     message.success('Đã cập nhật điểm thi thành công!')
                     debouncedRefetch()
                     setIsChanged(false)
@@ -303,7 +308,7 @@ export default function SubjectClassScore() {
     }
 
     const {
-        data: subjectClassData,
+        data: subjectClassData=[],
         isFetching,
         isLoading,
     } = useFindManySubjectClass(
@@ -364,7 +369,7 @@ export default function SubjectClassScore() {
                 },
             },
             orderBy: {
-                createdAt: 'desc',
+                name: 'asc',
             },
         },
         { refetchOnWindowFocus: false }
@@ -592,17 +597,17 @@ export default function SubjectClassScore() {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const disabledForm: boolean = useMemo(() => {
-        return false
-        // return !(
-        //     can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
-        //     dataDetailSubjectClass?.examScoreDeadline &&
-        //     dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
-        //     !dataDetailSubjectClass?.isLockExamScore &&
-        //     ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
-        //         profileId === listUser.P13) ||
-        //         (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
-        //             profileId !== listUser.P13))
-        // )
+        return !(
+            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
+            dataDetailSubjectClass?.examScoreDeadline &&
+            dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
+            !dataDetailSubjectClass?.isLockExamScore &&
+              (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
+                    profileId !== listUser.P13)
+            // ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
+            //     profileId === listUser.P13) ||
+            //   )
+        )
     }, [dataDetailSubjectClass, subjectClassId])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <form>
@@ -636,7 +641,7 @@ export default function SubjectClassScore() {
     useEffect(() => {
         if (listForm) {
             const item = Object.values(listForm).find(
-                (i: any) => i?.examScore || i?.description || i?.suspended || i?.suspendedReason
+                (i: any) => i?.examScore !==i.examScoreOld
             )
             if (item) {
                 setIsChanged(true)
@@ -875,6 +880,9 @@ export default function SubjectClassScore() {
                                                 >
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
+                                                        onChange={()=>{
+                                                          setMesasge('Khóa điểm CC/TX thành công')
+                                                        }}
                                                     >
                                                         Khóa điểm CC/TX
                                                     </Checkbox>
@@ -887,6 +895,9 @@ export default function SubjectClassScore() {
                                                 >
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
+                                                          onChange={()=>{
+                                                          setMesasge('Khóa điểm thi thành công')
+                                                        }}
                                                     >
                                                         Khóa điểm thi
                                                     </Checkbox>
@@ -899,6 +910,9 @@ export default function SubjectClassScore() {
                                                 >
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
+                                                            onChange={()=>{
+                                                          setMesasge('P13 đã nhận Phiếu điểm thành công')
+                                                        }}
                                                     >
                                                         P13 đã nhận Phiếu điểm
                                                     </Checkbox>
@@ -909,7 +923,11 @@ export default function SubjectClassScore() {
                                                     name="scoreChecked"
                                                     valuePropName="checked"
                                                 >
-                                                    <Checkbox disabled={profileId !== listUser?.P2}>
+                                                    <Checkbox disabled={profileId !== listUser?.P2}
+                                                          onChange={()=>{
+                                                          setMesasge('P2/P7 đã kiểm tra thành công')
+                                                        }}
+                                                    >
                                                         P2/P7 đã kiểm tra
                                                     </Checkbox>
                                                 </Form.Item>
