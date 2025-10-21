@@ -188,7 +188,7 @@ const NAVIGATION: NavigationType = {
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
-                        label: 'Mở lớp học môn học',
+                        label: 'Mở lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_KE_HOACH_MO_LOP_MON_HOC,
                         description: 'Kế hoạch mở lớp học lại',
                     },

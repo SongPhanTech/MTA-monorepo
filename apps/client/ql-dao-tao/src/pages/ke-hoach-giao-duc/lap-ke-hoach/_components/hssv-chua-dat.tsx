@@ -51,6 +51,8 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
             trainingObjectTypeId: trainingObjectTypeId || '',
             trainingCourseId: filters.trainingCourseId,
             subjectVersionId: subjectVersionId || '',
+            page: `${currentPage}`,
+            pageSize: `${numberOfPages}`,
         },
         { query: { enabled: !!trainingObjectTypeId } }
     )
