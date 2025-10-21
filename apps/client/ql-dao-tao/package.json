@@ -73,7 +73,6 @@
 		"tailwind-merge": "catalog:",
 		"tippy.js": "catalog:",
 		"xlsx": "catalog:",
-		"xlsx-template-browser": "catalog",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
