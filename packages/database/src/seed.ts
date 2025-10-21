@@ -468,6 +468,7 @@ async function main() {
                 name: trainingMajor,
                 managementOrganizationId: firstOrg.Id,
                 trainingMajorId: id,
+                trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000',
             }))
         ),
         skipDuplicates: true,
@@ -496,7 +497,7 @@ async function main() {
             description:
                 'Chương trình đào tạo Công nghệ thông tin cung cấp kiến thức và kỹ năng về lập trình, quản trị hệ thống, và phát triển phần mềm.',
             managementOrganization: { connect: { Id: firstOrg.Id } },
-
+            trainingObjectType: { connect: { id: '550e8402-e29b-41d4-a716-446655440000' } },
             trainingMajor: {
                 create: {
                     name: 'Công nghệ thông tin seed',
