@@ -1,9 +1,11 @@
+import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE, TRANG_THAI_HOC_VIEN } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useAcademicRankingBaseTypeOptions } from '@hooks/academicRankingBaseType'
 import { getWarningLevelColor } from '@hooks/getWarningLevelColor'
 import useSpinner from '@hooks/spinner'
 import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
+import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import type { FixedClass, TrainingCourse } from '@workspace/db/client'
 import {
@@ -17,12 +19,9 @@ import { useCalculateStudentSemesterResultJson } from '@workspace/libs/api/train
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, message, Row, Select, Tag } from 'antd'
 import dayjs from 'dayjs'
-import TreeSelect from '@/components/commons/tree-select'
 import 'dayjs/locale/vi'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
-import DefaultLayout from '@layouts/default-layout'
-import Table from '@components/commons/table'
 
 dayjs.locale('vi')
 
@@ -118,7 +117,7 @@ const DiemTrungBinhKyHoc = () => {
                   }
                 : {}),
         }
-    }, [filters])
+    }, [filters, semesterId, trainingObjectTypeId])
 
     const { data: dataStudents, refetch } = useFindManyStudent(
         {
@@ -239,63 +238,11 @@ const DiemTrungBinhKyHoc = () => {
 
     return (
         <div className="bg-white rounded-lg shadow-sm px-4">
-            <Row gutter={[16, 0]}>
+            <Row>
                 <Col span={24} className="mb-4">
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                    <Row align="top" justify="space-between">
                         <Col span={18}>
-                            <Flex>
-                                {/* <Col span={10}>
-                                    <Form.Item name="searchText">
-                                        <Input
-                                            id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange('searchText', e.target.value)
-                                            }
-                                            className="py-0"
-                                            placeholder="Tìm kiếm sinh viên"
-                                            prefix={
-                                                <Search
-                                                    size={15}
-                                                    style={{
-                                                        color: 'rgba(0, 0, 0, 0.25)',
-                                                    }}
-                                                />
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col> */}
-                                {/* <Col span={10}>
-                                    <Form.Item className="mb-0" name="trainingObjectId">
-                                        <Select
-                                            placeholder="Chọn đối tượng đào tạo"
-                                            options={trainingObjectTypeData.map(
-                                                (i: TrainingObjectType) => ({
-                                                    value: i.id,
-                                                    label: i.name,
-                                                })
-                                            )}
-                                            onChange={(val) =>
-                                                handleFilterChange('trainingObjectId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col> */}
-                                <Col span={8}>
-                                    <Form.Item className="mb-0" name="managementOrganizationId">
-                                        <TreeSelect
-                                            placeholder="Chọn đơn vị quản lý"
-                                            allowClear
-                                            showSearch
-                                            treeDefaultExpandAll
-                                            onChange={(val) =>
-                                                handleFilterChange('managementOrganizationId', val)
-                                            }
-                                            treeData={treeData}
-                                        />
-                                    </Form.Item>
-                                </Col>
+                            <Flex gap={8}>
                                 <Col span={8}>
                                     <Form.Item className="mb-0" name="trainingCourseId">
                                         <Select
@@ -313,7 +260,6 @@ const DiemTrungBinhKyHoc = () => {
                                         />
                                     </Form.Item>
                                 </Col>
-
                                 <Col span={8}>
                                     <Form.Item className="mb-0" name="fixedClassId">
                                         <Select
@@ -343,6 +289,7 @@ const DiemTrungBinhKyHoc = () => {
                 <Col span={24}>
                     <Table
                         rowKey="id"
+                        className="m-0"
                         filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
