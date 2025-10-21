@@ -20,9 +20,10 @@ interface FilterProps {
 
 interface RegisterClassProps {
     setStudentId?: (id: string | null) => void
+    hocLai?: boolean
 }
 
-export default function DangKyHocChoCaNhan({ setStudentId }: RegisterClassProps) {
+export default function DangKyHocChoCaNhan({ setStudentId, hocLai }: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKey, setSelectedRowKey] = useState<Key>('')

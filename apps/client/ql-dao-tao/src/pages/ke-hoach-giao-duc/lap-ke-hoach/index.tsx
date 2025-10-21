@@ -4,6 +4,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
+import HSSVChuaDat from './_components/hssv-chua-dat'
 import MonCham from './_components/mon-cham'
 import MonCoHVSVChuaDat from './_components/mon-co-hvsv-chua-dat'
 import MonDaLapKeHoach from './_components/mon-da-lap-ke-hoach'
@@ -40,8 +41,8 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               },
               {
                   key: '2',
-                  label: 'Môn học đã lập kế hoạch',
-                  content: <MonDaLapKeHoach />,
+                  label: 'Môn học lại đã lập kế hoạch',
+                  content: <MonDaLapKeHoach hocLai />,
               },
           ]
         : [
@@ -67,7 +68,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
               {
                   key: '1',
                   label: 'SV/HV chưa đạt',
-                  content: <MonDaLapKeHoach />,
+                  content: <HSSVChuaDat />,
               },
           ]
         : [

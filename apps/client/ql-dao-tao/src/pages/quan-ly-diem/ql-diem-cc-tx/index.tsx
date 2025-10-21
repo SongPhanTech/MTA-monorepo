@@ -54,13 +54,15 @@ interface SubjectClassScoreForm {
     list: Record<
         string,
         {
-            attendanceScore?: number |null
-            midtermScore?: number |null
-            description?: string |null
-            examBanned?: boolean |null
-            examBannedReason?: string |null
-            examPostponed?: boolean |null
-            examPostponedReason?: string |null
+            attendanceScore?: number | null
+            midtermScore?: number | null
+            description?: string | null
+            examBanned?: boolean | null
+            examBannedReason?: string | null
+            examPostponed?: boolean | null
+            examPostponedReason?: string | null
+            attendanceScoreOld?: number | null
+            midtermScoreOld?: number | null
         }
     >
 }
@@ -94,7 +96,7 @@ export default function SubjectClassScore() {
     const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn nhập điểm không?',
+            content: 'Bạn có chắc chắn muốn lưu điểm không?',
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
@@ -215,12 +217,12 @@ export default function SubjectClassScore() {
             }
 
             if (listSqlTransaction?.length > 0) {
-                 const res= await sqlTransaction(listSqlTransaction)
-                               if(res?.status===200){
-                                    message.success('Đã cập nhật điểm thi thành công!')
-                                    debouncedRefetch()
-                                    setIsChanged(false)
-                               }
+                const res = await sqlTransaction(listSqlTransaction)
+                if (res?.status === 200) {
+                    message.success('Đã cập nhật điểm thi thành công!')
+                    debouncedRefetch()
+                    setIsChanged(false)
+                }
             }
         } catch (error: any) {
             message.error(error)
@@ -304,8 +306,8 @@ export default function SubjectClassScore() {
                     },
                 },
             },
-            orderBy: {
-                createdAt: 'desc',
+             orderBy: {
+                name: 'asc',
             },
         },
         { refetchOnWindowFocus: false }
@@ -322,7 +324,7 @@ export default function SubjectClassScore() {
             },
             include: {
                 subject: true,
-                    subjectClassStudent: {
+                subjectClassStudent: {
                     include: {
                         student: {
                             include: {
@@ -552,19 +554,21 @@ export default function SubjectClassScore() {
                 isLockScore: dataDetailSubjectClass?.isLockScore,
                 scoreChecked: dataDetailSubjectClass?.scoreChecked,
                 scoreSubmitted: dataDetailSubjectClass?.scoreSubmitted,
-                      list: dataTable.reduce(
+                list: dataTable.reduce(
                     (acc, cur) => {
                         if (!acc) {
                             return {}
                         }
                         acc[cur.id] = {
-                          attendanceScore: cur.attendanceScore,
-                          midtermScore: cur.midtermScore,
-                          description: cur.description,
-                          examBanned: cur.examBanned,
-                          examBannedReason: cur.examBannedReason,
-                          examPostponed: cur.examPostponed,
-                          examPostponedReason: cur.examPostponedReason,
+                            attendanceScore: cur.attendanceScore,
+                            midtermScore: cur.midtermScore,
+                            description: cur.description,
+                            examBanned: cur.examBanned,
+                            examBannedReason: cur.examBannedReason,
+                            examPostponed: cur.examPostponed,
+                            examPostponedReason: cur.examPostponedReason,
+                            attendanceScoreOld: cur.attendanceScore,
+                            midtermScoreOld: cur.midtermScore,
                         }
                         return acc
                     },
@@ -572,19 +576,14 @@ export default function SubjectClassScore() {
                 ),
             })
         }
-    }, [dataDetailSubjectClass, subjectClassId,dataTable])
+    }, [dataDetailSubjectClass, subjectClassId, dataTable])
     const listForm = Form.useWatch('list', form) || []
     useEffect(() => {
         if (listForm) {
             const item = Object.values(listForm).find(
                 (i: any) =>
-                    i?.attendanceScore ||
-                    i?.midtermScore ||
-                    i?.description ||
-                    i?.examBanned ||
-                    i?.examBannedReason ||
-                    i?.examPostponed ||
-                    i?.examPostponedReason
+                    i?.attendanceScore !== i?.attendanceScoreOld ||
+                    i?.midtermScore !== i?.midtermScoreOld
             )
             if (item) {
                 setIsChanged(true)
@@ -895,92 +894,78 @@ export default function SubjectClassScore() {
                                                     width: 100,
                                                     align: 'center',
                                                     type: 'order',
-                                                      render: (_, record) => {
-                                                            const recordForm =
-                                                                listForm?.[record.id]?.attendanceScore
-                                                            return (
-                                                                <Form.Item
-                                                                    className="w-full mb-0"
-                                                                    name={[
-                                                                        'list',
-                                                                        record.id,
-                                                                        'attendanceScore',
-                                                                    ]}
-                                                                    label=""
-                                                                    rules={[
-                                                                                {
-                                                                                    validator: (
-                                                                                        _,
-                                                                                        value
-                                                                                    ) => {
-                                                                                        if (
-                                                                                            value ==
-                                                                                                null ||
-                                                                                            value ===
-                                                                                                ''
-                                                                                        )
-                                                                                            return Promise.resolve()
-                                                                                        if (
-                                                                                            value >
-                                                                                            10
-                                                                                        ) {
-                                                                                            message.error(
-                                                                                                'Điểm phải là nhỏ hơn 10!'
-                                                                                            )
-                                                                                            return Promise.reject()
-                                                                                        }
-                                                                                        if (
-                                                                                            value %
-                                                                                                0.5 !==
-                                                                                            0
-                                                                                        ) {
-                                                                                            message.error(
-                                                                                                'Điểm phải là bội số của 0.5!'
-                                                                                            )
-                                                                                            return Promise.reject()
-                                                                                        }
-
-                                                                                        return Promise.resolve()
-                                                                                    },
-                                                                                },
-                                                                            ]}
-                                                                >
-                                                                    <InputNumber
-                                                                        disabled={disabledForm}
-                                                                        min={0}
-                                                                        id={`score-cc-${record.id}`}
-                                                                        style={{
-                                                                            width: '100%',
-                                                                            borderColor:
-                                                                                !!recordForm &&
-                                                                                (recordForm > 10 ||
-                                                                                    Math.round(
-                                                                                        recordForm *
-                                                                                            10
-                                                                                    ) !==
-                                                                                        recordForm *
-                                                                                            10)
-                                                                                    ? 'red'
-                                                                                    : !!recordForm &&
-                                                                                        recordForm !==
-                                                                                            record?.attendanceScore
-                                                                                      ? '#f0b60ce0'
-                                                                                      : '',
-                                                                        }}
-                                                                        step={0.5}
-                                                                        controls={false}
-                                                                        onKeyDown={(e) =>
-                                                                            handleScoreInputKeyDown(
-                                                                                e,
-                                                                                record.id,
-                                                                                'cc',
-                                                                                dataTable
+                                                    render: (_, record) => {
+                                                        const recordForm =
+                                                            listForm?.[record.id]?.attendanceScore
+                                                        return (
+                                                            <Form.Item
+                                                                className="w-full mb-0"
+                                                                name={[
+                                                                    'list',
+                                                                    record.id,
+                                                                    'attendanceScore',
+                                                                ]}
+                                                                label=""
+                                                                rules={[
+                                                                    {
+                                                                        validator: (_, value) => {
+                                                                            if (
+                                                                                value == null ||
+                                                                                value === ''
                                                                             )
-                                                                        }
-                                                                    />
-                                                                </Form.Item>
-                                                            )
-                                                        },
+                                                                                return Promise.resolve()
+                                                                            if (value > 10) {
+                                                                                message.error(
+                                                                                    'Điểm phải là nhỏ hơn 10!'
+                                                                                )
+                                                                                return Promise.reject()
+                                                                            }
+                                                                            if (value % 0.5 !== 0) {
+                                                                                message.error(
+                                                                                    'Điểm phải là bội số của 0.5!'
+                                                                                )
+                                                                                return Promise.reject()
+                                                                            }
+
+                                                                            return Promise.resolve()
+                                                                        },
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <InputNumber
+                                                                    disabled={disabledForm}
+                                                                    min={0}
+                                                                    id={`score-cc-${record.id}`}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        borderColor:
+                                                                            !!recordForm &&
+                                                                            (recordForm > 10 ||
+                                                                                Math.round(
+                                                                                    recordForm * 10
+                                                                                ) !==
+                                                                                    recordForm * 10)
+                                                                                ? 'red'
+                                                                                : !!recordForm &&
+                                                                                    recordForm !==
+                                                                                        record?.attendanceScore
+                                                                                  ? '#f0b60ce0'
+                                                                                  : '',
+                                                                    }}
+                                                                    step={0.5}
+                                                                    controls={false}
+                                                                    onKeyDown={(e) =>
+                                                                        handleScoreInputKeyDown(
+                                                                            e,
+                                                                            record.id,
+                                                                            'cc',
+                                                                            dataTable
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </Form.Item>
+                                                        )
+                                                    },
                                                 },
                                                 // #region Điểm TX
                                                 {
@@ -989,92 +974,78 @@ export default function SubjectClassScore() {
                                                     width: 100,
                                                     align: 'center',
                                                     type: 'order',
-                                                   render: (_, record) => {
-                                                            const recordForm =
-                                                                listForm?.[record.id]?.midtermScore
-                                                            return (
-                                                                <Form.Item
-                                                                    className="w-full mb-0"
-                                                                    name={[
-                                                                        'list',
-                                                                        record.id,
-                                                                        'midtermScore',
-                                                                    ]}
-                                                                    label=""
-                                                                    rules={[
-                                                                                {
-                                                                                    validator: (
-                                                                                        _,
-                                                                                        value
-                                                                                    ) => {
-                                                                                        if (
-                                                                                            value ==
-                                                                                                null ||
-                                                                                            value ===
-                                                                                                ''
-                                                                                        )
-                                                                                            return Promise.resolve()
-                                                                                        if (
-                                                                                            value >
-                                                                                            10
-                                                                                        ) {
-                                                                                            message.error(
-                                                                                                'Điểm phải là nhỏ hơn 10!'
-                                                                                            )
-                                                                                            return Promise.reject()
-                                                                                        }
-                                                                                        if (
-                                                                                            value %
-                                                                                                0.5 !==
-                                                                                            0
-                                                                                        ) {
-                                                                                            message.error(
-                                                                                                'Điểm phải là bội số của 0.5!'
-                                                                                            )
-                                                                                            return Promise.reject()
-                                                                                        }
-
-                                                                                        return Promise.resolve()
-                                                                                    },
-                                                                                },
-                                                                            ]}
-                                                                >
-                                                                    <InputNumber
-                                                                        disabled={disabledForm}
-                                                                        min={0}
-                                                                        id={`score-tx-${record.id}`}
-                                                                        style={{
-                                                                            width: '100%',
-                                                                            borderColor:
-                                                                                !!recordForm &&
-                                                                                (recordForm > 10 ||
-                                                                                    Math.round(
-                                                                                        recordForm *
-                                                                                            10
-                                                                                    ) !==
-                                                                                        recordForm *
-                                                                                            10)
-                                                                                    ? 'red'
-                                                                                    : !!recordForm &&
-                                                                                        recordForm !==
-                                                                                            record?.midtermScore
-                                                                                      ? '#f0b60ce0'
-                                                                                      : '',
-                                                                        }}
-                                                                        step={0.5}
-                                                                        controls={false}
-                                                                        onKeyDown={(e) =>
-                                                                            handleScoreInputKeyDown(
-                                                                                e,
-                                                                                record.id,
-                                                                                'tx',
-                                                                                dataTable
+                                                    render: (_, record) => {
+                                                        const recordForm =
+                                                            listForm?.[record.id]?.midtermScore
+                                                        return (
+                                                            <Form.Item
+                                                                className="w-full mb-0"
+                                                                name={[
+                                                                    'list',
+                                                                    record.id,
+                                                                    'midtermScore',
+                                                                ]}
+                                                                label=""
+                                                                rules={[
+                                                                    {
+                                                                        validator: (_, value) => {
+                                                                            if (
+                                                                                value == null ||
+                                                                                value === ''
                                                                             )
-                                                                        }
-                                                                    />
-                                                                </Form.Item>
-                                                            )
-                                                        },
+                                                                                return Promise.resolve()
+                                                                            if (value > 10) {
+                                                                                message.error(
+                                                                                    'Điểm phải là nhỏ hơn 10!'
+                                                                                )
+                                                                                return Promise.reject()
+                                                                            }
+                                                                            if (value % 0.5 !== 0) {
+                                                                                message.error(
+                                                                                    'Điểm phải là bội số của 0.5!'
+                                                                                )
+                                                                                return Promise.reject()
+                                                                            }
+
+                                                                            return Promise.resolve()
+                                                                        },
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <InputNumber
+                                                                    disabled={disabledForm}
+                                                                    min={0}
+                                                                    id={`score-tx-${record.id}`}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        borderColor:
+                                                                            !!recordForm &&
+                                                                            (recordForm > 10 ||
+                                                                                Math.round(
+                                                                                    recordForm * 10
+                                                                                ) !==
+                                                                                    recordForm * 10)
+                                                                                ? 'red'
+                                                                                : !!recordForm &&
+                                                                                    recordForm !==
+                                                                                        record?.midtermScore
+                                                                                  ? '#f0b60ce0'
+                                                                                  : '',
+                                                                    }}
+                                                                    step={0.5}
+                                                                    controls={false}
+                                                                    onKeyDown={(e) =>
+                                                                        handleScoreInputKeyDown(
+                                                                            e,
+                                                                            record.id,
+                                                                            'tx',
+                                                                            dataTable
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </Form.Item>
+                                                        )
+                                                    },
                                                 },
                                                 // #region Điểm Thi
                                                 {
@@ -1144,7 +1115,11 @@ export default function SubjectClassScore() {
                                                         return (
                                                             <Form.Item
                                                                 className="w-full mb-0"
-                                                                name={['list', record.id, 'examBanned']}
+                                                                name={[
+                                                                    'list',
+                                                                    record.id,
+                                                                    'examBanned',
+                                                                ]}
                                                                 label=""
                                                                 valuePropName="checked"
                                                             >
@@ -1161,30 +1136,31 @@ export default function SubjectClassScore() {
                                                     title: 'Lý do cấm thi',
                                                     dataIndex: 'examBannedReason',
                                                     width: 150,
-                                                        render: (_, record) => {
-                                                                const examBanned = listForm[record.id]?.examBanned
-                                                                    return (
-                                                                        <Form.Item
-                                                                            name={[
-                                                                              'list',
-                                                                                record.id,
-                                                                                'examBannedReason',
-                                                                            ]}
-                                                                            style={{ margin: 0 }}
-                                                                        >
-                                                                            <Input
-                                                                                placeholder="Nhập lý do đình chỉ"
-                                                                                disabled={
-                                                                                !(
-                                                                                    examBanned &&
-                                                                                    profileId !==
-                                                                                        listUser.P13
-                                                                                )
-                                                                            }
-                                                                            />
-                                                                        </Form.Item>
-                                                                    )
-                                                        },
+                                                    render: (_, record) => {
+                                                        const examBanned =
+                                                            listForm[record.id]?.examBanned
+                                                        return (
+                                                            <Form.Item
+                                                                name={[
+                                                                    'list',
+                                                                    record.id,
+                                                                    'examBannedReason',
+                                                                ]}
+                                                                style={{ margin: 0 }}
+                                                            >
+                                                                <Input
+                                                                    placeholder="Nhập lý do đình chỉ"
+                                                                    disabled={
+                                                                        !(
+                                                                            examBanned &&
+                                                                            profileId !==
+                                                                                listUser.P13
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </Form.Item>
+                                                        )
+                                                    },
                                                 },
 
                                                 {
@@ -1196,7 +1172,11 @@ export default function SubjectClassScore() {
                                                         return (
                                                             <Form.Item
                                                                 className="w-full mb-0"
-                                                                name={['list', record.id, 'examPostponed']}
+                                                                name={[
+                                                                    'list',
+                                                                    record.id,
+                                                                    'examPostponed',
+                                                                ]}
                                                                 label=""
                                                                 valuePropName="checked"
                                                             >
@@ -1214,29 +1194,30 @@ export default function SubjectClassScore() {
                                                     title: 'Lý do hoãn thi',
                                                     dataIndex: 'examPostponedReason',
                                                     width: 200,
-                                                    render: (_, record) =>{
-                                                         const examPostponed = listForm[record.id]?.examPostponed
-                                                                return (
-                                                                    <Form.Item
-                                                                        name={[
-                                                                            record.id,
-                                                                            'examPostponedReason',
-                                                                        ]}
-                                                                        style={{ margin: 0 }}
-                                                                    >
-                                                                        <Input
-                                                                            placeholder="Nhập lý do hoãn thi"
-                                                                            disabled={
-                                                                                !(
-                                                                                    examPostponed &&
-                                                                                    profileId !==
-                                                                                        listUser.P13
-                                                                                )
-                                                                            }
-                                                                        />
-                                                                    </Form.Item>
-                                                                )
-                                                    }
+                                                    render: (_, record) => {
+                                                        const examPostponed =
+                                                            listForm[record.id]?.examPostponed
+                                                        return (
+                                                            <Form.Item
+                                                                name={[
+                                                                    record.id,
+                                                                    'examPostponedReason',
+                                                                ]}
+                                                                style={{ margin: 0 }}
+                                                            >
+                                                                <Input
+                                                                    placeholder="Nhập lý do hoãn thi"
+                                                                    disabled={
+                                                                        !(
+                                                                            examPostponed &&
+                                                                            profileId !==
+                                                                                listUser.P13
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </Form.Item>
+                                                        )
+                                                    },
                                                 },
 
                                                 {

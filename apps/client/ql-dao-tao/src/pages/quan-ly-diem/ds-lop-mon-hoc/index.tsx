@@ -1,5 +1,4 @@
 import FormItem from '@components/commons/form-item'
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -85,7 +84,6 @@ export default function ClassSubject() {
         code: '',
         name: '',
         examType: undefined,
-        subjectClassId: undefined,
         schoolYearId: undefined,
         semesterId: undefined,
         startDate: undefined,
@@ -125,15 +123,10 @@ export default function ClassSubject() {
     //#region Mới
     /* Mới */
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
-    const where: any = useMemo(() => {
+    const where = useMemo(() => {
         return {
             ...(semesterId ? { semesterId } : {}),
             ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
-            ...(filters.subjectClassId
-                ? {
-                      id: filters.subjectClassId,
-                  }
-                : {}),
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
@@ -179,23 +172,21 @@ export default function ClassSubject() {
             ...(filters.mainLecturer
                 ? {
                       mainLecturer: {
-                          include: {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.mainLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
+                          userProfile: {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.mainLecturer,
+                                          mode: 'insensitive' as const,
                                       },
-                                      {
-                                          lastName: {
-                                              contains: filters.mainLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.mainLecturer,
+                                          mode: 'insensitive' as const,
                                       },
-                                  ],
-                              },
+                                  },
+                              ],
                           },
                       },
                   }
@@ -203,23 +194,21 @@ export default function ClassSubject() {
             ...(filters.enterGradeLecturer
                 ? {
                       enterGradeLecturer: {
-                          include: {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.enterGradeLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
+                          userProfile: {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.enterGradeLecturer,
+                                          mode: 'insensitive' as const,
                                       },
-                                      {
-                                          lastName: {
-                                              contains: filters.enterGradeLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.enterGradeLecturer,
+                                          mode: 'insensitive' as const,
                                       },
-                                  ],
-                              },
+                                  },
+                              ],
                           },
                       },
                   }
@@ -260,7 +249,7 @@ export default function ClassSubject() {
             active: true,
             deletedAt: null,
             cancelled: false,
-        }
+        } satisfies Prisma.SubjectClassWhereInput
     }, [filters, semesterId, trainingObjectTypeId, profileId, canReadAll])
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
@@ -322,13 +311,6 @@ export default function ClassSubject() {
     }
     /* Mới */
     // #endregion
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: (selectedKeys: any) => {
-            setSelectedRowKeys(selectedKeys)
-        },
-    }
-
     const handleCheckExamDate = () => {
         dataTable.forEach((item: SubjectClass) => {
             if (item.examDate) {
@@ -642,19 +624,19 @@ export default function ClassSubject() {
 
     return (
         <div>
-            <Row gutter={[16, 0]}>
+            <Row>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                    <Row align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
                                 <Col span={8}>
-                                    <Form.Item name="searchText">
+                                    <Form.Item className="m-0" name="searchText">
                                         <Input
                                             id="search"
                                             onChange={(e) =>
                                                 handleFilterChange('searchText', e.target.value)
                                             }
-                                            placeholder="Nhập tên lớp..."
+                                            placeholder="Tìm kiếm lớp..."
                                             style={{ height: 32 }}
                                             prefix={
                                                 <Search
@@ -668,30 +650,8 @@ export default function ClassSubject() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={8}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingCourseId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Lớp MH"
-                                            options={dataTable.map((i) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            }))}
-                                            onChange={(val) =>
-                                                handleFilterChange('subjectClassId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
                             </Flex>
                         </Col>
-
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 {can(

@@ -12,6 +12,8 @@ import { Registry } from 'prom-client'
 import ArchivedScoreApp from './api/archived-score'
 import CurriculumApp from './api/curriculum'
 import CurriculumSubjectApp from './api/curriculum-subject'
+import ExamApp from './api/exam'
+import ExamScoreApp from './api/exam-score'
 import FixedClassApp from './api/fixed-class'
 import GraduationApp from './api/graduation'
 import ImportApp from './api/import'
@@ -23,7 +25,6 @@ import SubjectClassApp from './api/subject-class'
 import TrainingFieldApp from './api/training-field'
 import TrainingScoreApp from './api/training-score'
 import UserProfileApp from './api/user-profile'
-import ExamApp from './api/exam'
 import { checkIp } from './middlewares/check-ip'
 import { tracingMiddleware } from './middlewares/tracing'
 import { setupOpenApi } from './utils/openapi'
@@ -91,6 +92,7 @@ app.route('/api/stats', Stats)
 app.route('/api/import', ImportApp)
 app.route('/api/archived-score', ArchivedScoreApp)
 app.route('/api/exam', ExamApp)
+app.route('/api/exam-score', ExamScoreApp)
 
 const nv = await prisma.userProfile.findFirstOrThrow()
 
