@@ -3,7 +3,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useFindManyFixedClass, useFindManyTrainingCourse } from '@workspace/db/hooks'
 import { useOpenSubjectClassRetakeStudents } from '@workspace/libs/api/training'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Form, Input, Row, Select } from 'antd'
+import { Button, Col, Form, Input, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useMemo, useState } from 'react'
@@ -106,7 +106,7 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
                     />
                 </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={7}>
                 <Select
                     placeholder="Chọn khoá"
                     className="w-full"
@@ -122,7 +122,7 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
                     onChange={(value) => handleFilterChange('trainingCourseId', value)}
                 />
             </Col>
-            <Col span={8}>
+            <Col span={7}>
                 <Select
                     placeholder="Chọn lớp"
                     className="w-full"
@@ -140,6 +140,9 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
                     }))}
                     onChange={(value) => handleFilterChange('fixedClassId', value)}
                 />
+            </Col>
+            <Col span={2}>
+                <Button type='primary'>Lưu</Button>
             </Col>
             <Col span={24}>
                 <Table
