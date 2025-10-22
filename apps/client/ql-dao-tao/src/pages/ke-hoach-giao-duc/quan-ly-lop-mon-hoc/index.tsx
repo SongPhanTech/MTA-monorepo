@@ -12,10 +12,10 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { emptyObjectIf } from '@workspace/constant'
+import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import { $Enums, type Prisma, type SubjectClassSchedule } from '@workspace/db/client'
 import {
-    useCountSubjectClass,
+    useCountDM_DonVi,
     useDeleteSubjectClass,
     useFindManyBuilding,
     useFindManyDM_DonVi,
@@ -105,7 +105,7 @@ type BaoDayForm = {
     isOverride: boolean
 }
 
-export default function TeachingAssignment() {
+export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -147,8 +147,7 @@ export default function TeachingAssignment() {
         'SUA'
     )
 
-    const isBoMon = canXemTatCa && canSua
-    // const isBoMon = !canXemTatCa && canSua
+    const isBoMon = !canXemTatCa && canSua
 
     const where = useMemo(
         () =>
@@ -320,13 +319,14 @@ export default function TeachingAssignment() {
                 deletedAt: null,
                 active: true,
                 trainingObjectTypeId,
-                ...(!isBoMon
+                ...(isBoMon
                     ? {
                           lecturerAssignmentDeadline: {
                               not: null,
                           },
                       }
                     : {}),
+                type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
             }) satisfies Prisma.SubjectClassWhereInput,
         [filters, semesterId, trainingObjectTypeId, isBoMon]
     )
@@ -400,12 +400,12 @@ export default function TeachingAssignment() {
                                     code: 'asc',
                                 },
                             ],
-                            take: numberOfPages,
-                            skip: (currentPage - 1) * numberOfPages,
                         },
                     },
                 },
             },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
             where: {
                 bActive: true,
                 subjectVersions: {
@@ -425,83 +425,18 @@ export default function TeachingAssignment() {
         }
     )
 
-    // const { data = [], refetch } = useFindManySubjectClass(
-    //     {
-    //         where: {
-    //             ...where,
-    //         },
-    //         include: {
-    //             semester: true,
-    //             mainLecturer: {
-    //                 include: {
-    //                     userProfile: true,
-    //                 },
-    //             },
-    //             subject: {
-    //                 include: {
-    //                     managementOrganization: true,
-    //                 },
-    //             },
-    //             extraLecturer: {
-    //                 include: {
-    //                     userProfile: true,
-    //                 },
-    //             },
-    //             enterGradeLecturer: {
-    //                 include: {
-    //                     userProfile: true,
-    //                 },
-    //             },
-    //             room: true,
-    //             trainingLocation: true,
-    //             subjectClassStudent: true,
-    //             subjectClassTimes: true,
-    //         },
-    //         orderBy: [
-    //             ...emptyObjectIf(
-    //                 [
-    //                     {
-    //                         subject: {
-    //                             credit: filters.credit,
-    //                         },
-    //                     },
-    //                 ],
-    //                 !!filters.credit
-    //             ),
-    //             ...emptyObjectIf(
-    //                 [
-    //                     {
-    //                         maxStudent: filters.maxStudent,
-    //                     },
-    //                 ],
-    //                 !!filters.maxStudent
-    //             ),
-    //             ...emptyObjectIf(
-    //                 [
-    //                     {
-    //                         subjectClassStudent: {
-    //                             _count: filters.subjectClassStudent,
-    //                         },
-    //                     },
-    //                 ],
-    //                 !!filters.subjectClassStudent
-    //             ),
-    //             {
-    //                 code: 'asc',
-    //             },
-    //         ],
-    //         take: numberOfPages,
-    //         skip: (currentPage - 1) * numberOfPages,
-    //     },
-    //     {
-    //         enabled: !!semesterId && !!trainingObjectTypeId,
-    //         refetchOnWindowFocus: false,
-    //     }
-    // )
-
-    const { data: count } = useCountSubjectClass({
+    const { data: count } = useCountDM_DonVi({
         where: {
-            ...where,
+            bActive: true,
+            subjectVersions: {
+                some: {
+                    subjectClass: {
+                        some: {
+                            ...where,
+                        },
+                    },
+                },
+            },
         },
     })
 
@@ -541,6 +476,7 @@ export default function TeachingAssignment() {
                         : {
                               lecturerAssignmentDeadline: null,
                           }),
+                    type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
                 },
             })
             message.success('Báo dạy thành công')
@@ -633,6 +569,7 @@ export default function TeachingAssignment() {
                     extraLecturerId: { not: null },
                     lecturerAssignmentDeadline: { not: null },
                     submitLecturerAssignmentAt: null,
+                    type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
                 },
             })
             message.success('Gửi PCGD thành công')
@@ -764,10 +701,7 @@ export default function TeachingAssignment() {
                                 Thêm mới lớp MH
                             </Button>
                         )}
-                        {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            'XEM_TAT_CA'
-                        ) && (
+                        {!isBoMon && (
                             <Popover
                                 content={
                                     <Form
@@ -801,7 +735,7 @@ export default function TeachingAssignment() {
                                 trigger="click"
                                 placement="bottomRight"
                             >
-                                <Button type="primary">1.Báo dạy</Button>
+                                <Button type="primary">Báo dạy</Button>
                             </Popover>
                         )}
                         {isEdit ? (
@@ -832,38 +766,36 @@ export default function TeachingAssignment() {
                                     type="primary"
                                     disabled={!dmDonViData.length}
                                 >
-                                    2.PCGD
+                                    PCGD
                                 </Button>
                             )
                         )}
-                        {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            'SUA'
-                        ) && (
-                            // TODO: Bỏ check quyền xem tất cả khi hoàn thành xong
-                            // !can(
-                            //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            //     'XEM_TAT_CA'
-                            // ) &&
-                            <Popconfirm
-                                title="Xác nhận gửi phân công giảng dạy?"
-                                placement="topRight"
-                                description="Các lớp môn học đã gửi phân công giảng dạy sẽ không thể chỉnh sửa, vui lòng kiểm tra kỹ trước khi gửi."
-                                onConfirm={handleGuiPCGD}
-                            >
-                                <Button
-                                    //TODO: handle save
-                                    type="primary"
-                                    disabled={!dmDonViData.length}
+                        {isBoMon &&
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                'SUA'
+                            ) && (
+                                // TODO: Bỏ check quyền xem tất cả khi hoàn thành xong
+                                // !can(
+                                //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                //     'XEM_TAT_CA'
+                                // ) &&
+                                <Popconfirm
+                                    title="Xác nhận gửi phân công giảng dạy?"
+                                    placement="topRight"
+                                    description="Các lớp môn học đã gửi phân công giảng dạy sẽ không thể chỉnh sửa, vui lòng kiểm tra kỹ trước khi gửi."
+                                    onConfirm={handleGuiPCGD}
                                 >
-                                    3.Gửi PCGD
-                                </Button>
-                            </Popconfirm>
-                        )}
-                        {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            'XEM_TAT_CA'
-                        ) && (
+                                    <Button
+                                        //TODO: handle save
+                                        type="primary"
+                                        disabled={!dmDonViData.length}
+                                    >
+                                        Gửi PCGD
+                                    </Button>
+                                </Popconfirm>
+                            )}
+                        {!isBoMon && (
                             <Button
                                 onClick={async () => {
                                     try {
@@ -1075,8 +1007,9 @@ export default function TeachingAssignment() {
                                                 item?.subject?.managementOrganization?.sMa || 'MTA'
                                         )
                                         exportFromTemplate({
-                                            templateUrl:
-                                                '/lms/templates/ke-hoach-dao-tao/bao-day.xlsx',
+                                            templateUrl: getMinioUrl(
+                                                '/mta/template/ke-hoach-dao-tao/bao-day.xlsx'
+                                            ),
                                             fileName: `Bao_day_${dayjs().format('DD_MM_YYYY')}.xlsx`,
                                             fontFamily: 'Tahoma',
                                             fontSize: 9,
@@ -1279,7 +1212,7 @@ export default function TeachingAssignment() {
                                 }}
                                 type="primary"
                             >
-                                4.Xuất báo dạy
+                                Xuất báo dạy
                             </Button>
                         )}
                         {can(
@@ -1291,7 +1224,7 @@ export default function TeachingAssignment() {
                                 onClick={() => onOpenModalNhapTKB(semesterId || '')}
                             >
                                 <EditIcon stroke="white" />
-                                5.Nhập từ TKB
+                                Nhập từ TKB
                             </Button>
                         )}
                     </Flex>
@@ -1470,6 +1403,13 @@ export default function TeachingAssignment() {
                                                             ? [record?.extraLecturerId]
                                                             : []
                                                     }
+                                                    disabled={
+                                                        record.lecturerAssignmentDeadline
+                                                            ? dayjs(
+                                                                  record.lecturerAssignmentDeadline
+                                                              ).isBefore(dayjs().startOf('day'))
+                                                            : true
+                                                    }
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId ??
                                                         ''
@@ -1502,6 +1442,13 @@ export default function TeachingAssignment() {
                                                         record?.lecturerId
                                                             ? [record?.lecturerId]
                                                             : []
+                                                    }
+                                                    disabled={
+                                                        record.lecturerAssignmentDeadline
+                                                            ? dayjs(
+                                                                  record.lecturerAssignmentDeadline
+                                                              ).isBefore(dayjs().startOf('day'))
+                                                            : true
                                                     }
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId
@@ -1650,6 +1597,13 @@ export default function TeachingAssignment() {
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId
                                                     }
+                                                    disabled={
+                                                        record.lecturerAssignmentDeadline
+                                                            ? dayjs(
+                                                                  record.lecturerAssignmentDeadline
+                                                              ).isBefore(dayjs().startOf('day'))
+                                                            : true
+                                                    }
                                                 />
                                             </FormItem>
                                         ) : (
@@ -1777,7 +1731,6 @@ export default function TeachingAssignment() {
                                 current: currentPage,
                                 pageSize: numberOfPages,
                                 total: count,
-
                                 onChange: (page, pageSize) => {
                                     console.log(page, pageSize)
 
@@ -1797,6 +1750,6 @@ export default function TeachingAssignment() {
     )
 }
 
-TeachingAssignment.getLayout = function getLayout(page: React.ReactElement) {
+PhanCongGiangDay.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

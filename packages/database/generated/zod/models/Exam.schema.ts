@@ -16,11 +16,9 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    title: z.string(),
     status: ExamStatusSchema,
     lockExamCode: z.boolean().default(false),
-    startTime: z.string(),
-    duration: z.number(),
+    duration: z.number().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -70,11 +68,9 @@ export const ExamPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    title: z.string(),
     status: ExamStatusSchema,
     lockExamCode: z.boolean().default(false),
-    startTime: z.string(),
-    duration: z.union([z.number(), z.record(z.unknown())])
+    duration: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 

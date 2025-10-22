@@ -73,6 +73,7 @@ catalog:
   dotenv: ^16.4.7
   easy-peasy: 6.0.5
   esbuild: 0.24.2
+  esm-env: "^1.2.2"
   exceljs: 4.4.0
   fast-xml-parser: ^5.2.5
   file-saver: 2.0.5

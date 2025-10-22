@@ -1,6 +1,10 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { createId, type Prisma } from '@workspace/db'
-import { parseSheetSubject, zParseSheetError } from '@workspace/libs/parseExcel'
+import {
+    parseSheetSubject,
+    parseSheetTrainingBlock,
+    zParseSheetError,
+} from '@workspace/libs/parseExcel'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import { buildSubjectMapOrThrow, buildTrainingBlockMapOrThrow } from '../utils'
@@ -55,9 +59,13 @@ app.openapi(importCurriculumVersion, async (c) => {
 
     const buf = await file.arrayBuffer()
     const data = parseSheetSubject(buf)
+    const trainingBlocks = parseSheetTrainingBlock(buf)
 
-    if (data.errors.length) {
-        return c.json({ message: 'Lỗi khi đọc file', errors: data.errors }, 400)
+    if (data.errors.length || trainingBlocks.errors.length) {
+        return c.json(
+            { message: 'Lỗi khi đọc file', errors: [...data.errors, ...trainingBlocks.errors] },
+            400
+        )
     }
 
     const uniqueTrainingBlockNames = [
@@ -77,24 +85,34 @@ app.openapi(importCurriculumVersion, async (c) => {
     )
 
     const curriculumTrainingBlock = new Map(
-        uniqueTrainingBlockNames.map((trainingBlock) => [trainingBlock, createId()])
+        uniqueTrainingBlockNames.map((trainingBlock) => [
+            trainingBlock,
+            {
+                id: createId(),
+                electiveCreditsRequired:
+                    trainingBlocks.trainingBlocks.find(
+                        (tb) => tb.trainingBlockName === trainingBlock
+                    )?.credit || 0,
+            },
+        ])
     )
-    // electiveCreditsRequired: 0 // TODO: read sheet 2
 
     const trainingBlockOnCurriculumVersion: Prisma.TrainingBlockOnCurriculumVersionCreateManyInput[] =
-        Array.from(curriculumTrainingBlock.entries()).map(([name, id]) => ({
-            id,
-            curriculumVersionId,
-            trainingBlockId: trainingBlockMap.get(name) as string,
-            // priority,
-        }))
+        Array.from(curriculumTrainingBlock.entries()).map(
+            ([name, { id, electiveCreditsRequired }], i) => ({
+                id,
+                curriculumVersionId,
+                trainingBlockId: trainingBlockMap.get(name) as string,
+                electiveCreditsRequired,
+                priority: i + 1,
+            })
+        )
 
     const trainingBlockSubjects: Prisma.TrainingBlockSubjectCreateManyInput[] = data.subjects.map(
         ({ name, trainingBlockName, semester, type, useForFinalScore, graduation }) => ({
             id: createId(),
-            trainingBlockOnCurriculumVersionId: curriculumTrainingBlock.get(
-                trainingBlockName
-            ) as string,
+            trainingBlockOnCurriculumVersionId: curriculumTrainingBlock.get(trainingBlockName)
+                ?.id as string,
             subjectId: subjectMap.get(name) as string,
             semester,
             type,

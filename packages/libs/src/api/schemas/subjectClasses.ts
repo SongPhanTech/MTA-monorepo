@@ -7,6 +7,7 @@
 
 import type { SubjectClassesExamType } from './subjectClassesExamType'
 import type { SubjectClassesSchedule } from './subjectClassesSchedule'
+import type { SubjectClassesType } from './subjectClassesType'
 
 export interface SubjectClasses {
     id: string
@@ -28,9 +29,14 @@ export interface SubjectClasses {
     /** @nullable */
     schedule?: SubjectClassesSchedule
     maxStudent?: number
+    type?: SubjectClassesType
     cancelled?: boolean
     /** @nullable */
     lecturerAssignmentDeadline?: string | null
+    /** @nullable */
+    sendLecturerAssignmentAt?: string | null
+    /** @nullable */
+    submitLecturerAssignmentAt?: string | null
     /** @nullable */
     examDate?: string | null
     /** @nullable */

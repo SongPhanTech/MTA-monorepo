@@ -14,16 +14,20 @@ import { Col, Form, Input, message } from 'antd'
 import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutQuestionBankType = QuestionBank
+export type PutQuestionBankInput = {
+    id?: string
+    subjectVersionId?: string
+}
 const PutQuestionBank = () => {
     const [form] = Form.useForm<PutQuestionBankType>()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<PutQuestionBankInput>({
         tag: 'PutQuestionBank',
         onClose: form.resetFields,
     })
+
+    const id = input?.id
+    const subjectVersionId = input?.subjectVersionId
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: createQuestionBank } = useCreateQuestionBank()
@@ -84,8 +88,10 @@ const PutQuestionBank = () => {
     useEffect(() => {
         if (initialValue) {
             form.setFieldsValue({ ...initialValue })
+        } else if (subjectVersionId && !id) {
+            form.setFieldValue('subjectVersionId', subjectVersionId)
         }
-    }, [initialValue])
+    }, [initialValue, subjectVersionId, id])
 
     return (
         <PutFormModal

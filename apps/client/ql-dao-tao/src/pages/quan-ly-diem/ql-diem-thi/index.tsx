@@ -49,6 +49,23 @@ type FilterTable = FilterProps & {
     midtermScore?: 'asc' | 'desc'
     examScore?: 'asc' | 'desc'
 }
+
+interface SubjectClassScoreForm {
+    isLockExamScore: boolean
+    isLockScore: boolean
+    scoreChecked: boolean
+    scoreSubmitted: boolean
+    list: Record<
+        string,
+        {
+            examScore?: number | null
+            description?: string | null
+            suspended?: boolean | null
+            suspendedReason?: string | null
+            examScoreOld?: number | null
+        }
+    >
+}
 export default function SubjectClassScore() {
     const { can } = useAbility()
     const canReadAll = can(
@@ -57,26 +74,13 @@ export default function SubjectClassScore() {
     )
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
-    const [form] = Form.useForm<{
-        isLockExamScore: boolean
-        isLockScore: boolean
-        scoreChecked: boolean
-        scoreSubmitted: boolean
-    }>()
+    const [form] = Form.useForm<SubjectClassScoreForm>()
 
     const [isChanged, setIsChanged] = useState(false)
-    const [formTable] =
-        Form.useForm<
-            {
-                examScore?: number
-                description?: string
-                suspended?: boolean
-                suspendedReason?: string
-            }[]
-        >()
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: session } = useSession()
+    const [mesasge, setMesasge] = useState<string>('')
     const profileId = session?.sDM_NhanVienId || ''
     const [open, setOpen] = useState(false)
     const subjectClassId = router.query?.subjectClassId as string
@@ -126,6 +130,7 @@ export default function SubjectClassScore() {
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
+            refetchSubjectClass()
         }, 500),
         []
     )
@@ -134,8 +139,7 @@ export default function SubjectClassScore() {
         try {
             showSpinner()
             const dataSubmit = form.getFieldsValue()
-            const dataTableSubmit = formTable.getFieldsValue()
-            const listObject = Object.entries(dataTableSubmit).map(([key, value_]) => {
+            const listObject = Object.entries(dataSubmit.list).map(([key, value_]) => {
                 return {
                     id: key,
                     ...value_,
@@ -159,19 +163,19 @@ export default function SubjectClassScore() {
                                 id: subjectClassId,
                             },
                             data: {
-                                isLockScore: dataSubmit?.isLockScore,
-                                isLockExamScore: dataSubmit?.isLockExamScore,
-                                scoreSubmitted: dataSubmit?.scoreSubmitted,
-                                scoreChecked: dataSubmit?.scoreChecked,
+                                isLockScore: dataSubmit.isLockScore,
+                                isLockExamScore: dataSubmit.isLockExamScore,
+                                scoreSubmitted: dataSubmit.scoreSubmitted,
+                                scoreChecked: dataSubmit.scoreChecked,
                             },
                         },
                     },
                 ]
             }
             const list = dataTable.find(
-                (i: any) => !i.examScore || !dataTableSubmit[i.id].examScore
+                (i: any) => !i.examScore || !dataSubmit.list[i.id].examScore
             )
-            if (!list && subjectClassId) {
+            if (!list && subjectClassId ) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
                     {
@@ -190,12 +194,12 @@ export default function SubjectClassScore() {
                 (i: any) => i.examScore || i.description || i.suspended || i.suspendedReason
             )
 
-            if (listChange?.length > 0) {
+            if (listChange?.length > 0 &&profileId !== listUser.P13) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
                     ...listChange.map((item: any) => {
                         const { id } = item
-                        const newData = dataTableSubmit[id]
+                        const newData = dataSubmit.list[id]
 
                         return {
                             model: 'StudentSubjectScore',
@@ -229,7 +233,7 @@ export default function SubjectClassScore() {
 
                     ...listChange.map((item: any) => {
                         const { id } = item
-                        const newData = dataTableSubmit[id]
+                        const newData = dataSubmit.list[id]
 
                         return {
                             model: 'StudentSubjectScoreHistory',
@@ -263,12 +267,18 @@ export default function SubjectClassScore() {
                         }
                     }),
                 ]
+               
             }
             if (listSqlTransaction?.length > 0) {
-                await sqlTransaction(listSqlTransaction)
-                message.success('Đã cập nhật điểm thi thành công!')
-                debouncedRefetch()
-                setIsChanged(false)
+                const res = await sqlTransaction(listSqlTransaction)
+                if (res?.status === 200) {
+                    if(mesasge){
+                        message.success(mesasge)
+                    }
+                    message.success('Đã cập nhật điểm thi thành công!')
+                    debouncedRefetch()
+                    setIsChanged(false)
+                }
             }
         } catch (error: any) {
             if (error?.info?.message) {
@@ -297,7 +307,11 @@ export default function SubjectClassScore() {
         }
     }
 
-    const { data: subjectClassData = [], isFetching } = useFindManySubjectClass(
+    const {
+        data: subjectClassData=[],
+        isFetching,
+        isLoading,
+    } = useFindManySubjectClass(
         {
             where: {
                 ...(semesterId ? { semesterId } : {}),
@@ -355,7 +369,7 @@ export default function SubjectClassScore() {
                 },
             },
             orderBy: {
-                createdAt: 'desc',
+                name: 'asc',
             },
         },
         { refetchOnWindowFocus: false }
@@ -372,6 +386,20 @@ export default function SubjectClassScore() {
             },
             include: {
                 subject: true,
+                subjectClassStudent: {
+                    include: {
+                        student: {
+                            include: {
+                                userProfile: true,
+                                fixedClass: {
+                                    include: {
+                                        trainingCourse: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         { refetchOnWindowFocus: false, enabled: !!subjectClassId }
@@ -522,8 +550,6 @@ export default function SubjectClassScore() {
         { refetchOnWindowFocus: false }
     )
 
-    const selectedClassInfo = subjectClassData.find((item) => item.id === subjectClassId)
-
     const statistics = getScoreStatistics(dataTable)
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
@@ -576,10 +602,11 @@ export default function SubjectClassScore() {
             dataDetailSubjectClass?.examScoreDeadline &&
             dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
             !dataDetailSubjectClass?.isLockExamScore &&
-            ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
-                profileId === listUser.P13) ||
-                (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
-                    profileId !== listUser.P13))
+              (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
+                    profileId !== listUser.P13)
+            // ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
+            //     profileId === listUser.P13) ||
+            //   )
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
@@ -591,27 +618,36 @@ export default function SubjectClassScore() {
                 isLockScore: dataDetailSubjectClass?.isLockScore,
                 scoreChecked: dataDetailSubjectClass?.scoreChecked,
                 scoreSubmitted: dataDetailSubjectClass?.scoreSubmitted,
+                list: dataTable.reduce(
+                    (acc, cur) => {
+                        if (!acc) {
+                            return {}
+                        }
+                        acc[cur.id] = {
+                            examScore: cur?.examScore,
+                            description: cur?.description,
+                            suspended: cur?.suspended,
+                            suspendedReason: cur?.suspendedReason,
+                            examScoreOld: cur?.examScore,
+                        }
+                        return acc
+                    },
+                    {} as SubjectClassScoreForm['list']
+                ),
             })
         }
-    }, [dataTable, subjectClassId])
-    const listForm = Form.useWatch([], formTable) || []
+    }, [dataDetailSubjectClass, subjectClassId, dataTable])
+    const listForm = Form.useWatch('list', form) || []
     useEffect(() => {
         if (listForm) {
             const item = Object.values(listForm).find(
-                (i: any) => i?.examScore || i?.description || i?.suspended || i?.suspendedReason
+                (i: any) => i?.examScore !==i.examScoreOld
             )
             if (item) {
                 setIsChanged(true)
             }
         }
     }, [listForm])
-
-    // // biome-ignore lint/correctness/useExhaustiveDependencies: <formTable>
-    // useEffect(() => {
-    //     if (subjectClassId) {
-
-    //     }
-    // }, [subjectClassId])
 
     useEffect(() => {
         if (!isChanged) return
@@ -637,10 +673,9 @@ export default function SubjectClassScore() {
             {isFetching ? (
                 <Skeleton />
             ) : (
-                <Row gutter={[16, 16]}>
+                <Row gutter={[8,8]}>
                     <Col span={24}>
                         <Col span={6}>
-                            <Form.Item name="searchText">
                                 <Select
                                     placeholder="Chọn lớp môn học"
                                     options={subjectClassData?.map((i) => {
@@ -650,15 +685,15 @@ export default function SubjectClassScore() {
                                             key: i.id,
                                         }
                                     })}
+                                    className="w-full mb-3"
                                     defaultValue={subjectClassId}
                                     onChange={(value) => {
-                                        formTable.setFieldsValue([])
+                                        // form.setFieldsValue([]);
                                         router.push(
                                             `/quan-ly-diem/ql-diem-thi?subjectClassId=${value}`
                                         )
                                     }}
                                 />
-                            </Form.Item>
                         </Col>
                     </Col>
                     {isFetchingSubject ? (
@@ -790,7 +825,7 @@ export default function SubjectClassScore() {
                                                 !!dataDetailSubjectClass?.enteredScore && (
                                                     <ExportTemplateExam
                                                         selectedFixedClass={subjectClassId}
-                                                        dataClass={selectedClassInfo}
+                                                        dataClass={dataDetailSubjectClass}
                                                         dataTable={dataTable}
                                                     />
                                                 )}
@@ -845,6 +880,9 @@ export default function SubjectClassScore() {
                                                 >
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
+                                                        onChange={()=>{
+                                                          setMesasge('Khóa điểm CC/TX thành công')
+                                                        }}
                                                     >
                                                         Khóa điểm CC/TX
                                                     </Checkbox>
@@ -857,6 +895,9 @@ export default function SubjectClassScore() {
                                                 >
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
+                                                          onChange={()=>{
+                                                          setMesasge('Khóa điểm thi thành công')
+                                                        }}
                                                     >
                                                         Khóa điểm thi
                                                     </Checkbox>
@@ -869,6 +910,9 @@ export default function SubjectClassScore() {
                                                 >
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
+                                                            onChange={()=>{
+                                                          setMesasge('P13 đã nhận Phiếu điểm thành công')
+                                                        }}
                                                     >
                                                         P13 đã nhận Phiếu điểm
                                                     </Checkbox>
@@ -879,7 +923,11 @@ export default function SubjectClassScore() {
                                                     name="scoreChecked"
                                                     valuePropName="checked"
                                                 >
-                                                    <Checkbox disabled={profileId !== listUser?.P2}>
+                                                    <Checkbox disabled={profileId !== listUser?.P2}
+                                                          onChange={()=>{
+                                                          setMesasge('P2/P7 đã kiểm tra thành công')
+                                                        }}
+                                                    >
                                                         P2/P7 đã kiểm tra
                                                     </Checkbox>
                                                 </Form.Item>
@@ -895,7 +943,7 @@ export default function SubjectClassScore() {
                             ) : (
                                 <Col span={24}>
                                     {dataDetailSubjectClass && (
-                                        <div className="flex flex-row gap-2">
+                                        <div className="flex flex-row gap-2 mb-4">
                                             <div className="font-bold">Tổng hợp kết quả thi:</div>
                                             {Object.entries(statistics).map(
                                                 ([type, { count, percentage }]) => (
@@ -906,396 +954,363 @@ export default function SubjectClassScore() {
                                             )}
                                         </div>
                                     )}
-                                    <Form form={formTable}>
-                                        <Table
-                                            rowKey="id"
-                                            id="student-subject-score"
-                                            filters={filterTable}
-                                            setFilters={setFilterTable}
-                                            columns={[
-                                                {
-                                                    title: 'STT',
-                                                    width: 60,
-                                                    align: 'center',
-                                                    fixed: 'left',
-                                                    render: (_, __, index) => index + 1,
-                                                },
-                                                {
-                                                    title: 'Mã sinh viên',
-                                                    dataIndex: 'code',
-                                                    align: 'center',
-                                                    width: 150,
-                                                    fixed: 'left',
-                                                    type: 'input',
-                                                    render: (_, record) =>
-                                                        record.student?.code || '',
-                                                },
-                                                {
-                                                    title: 'Họ và tên',
-                                                    dataIndex: 'fullname',
-                                                    width: 150,
-                                                    fixed: 'left',
-                                                    type: 'input',
-                                                    render: (_, record) =>
-                                                        record?.student?.userProfile?.fullname ||
-                                                        '',
-                                                },
-                                                {
-                                                    title: 'Ngày sinh',
-                                                    dataIndex: 'dateOfBirth',
-                                                    width: 125,
-                                                    align: 'center',
-                                                    type: 'date',
-                                                    render: (_, record) =>
-                                                        record?.student?.userProfile.dateOfBirth
-                                                            ? dayjs(
-                                                                  record?.student?.userProfile
-                                                                      .dateOfBirth
-                                                              ).format('DD/MM/YYYY')
-                                                            : '',
-                                                },
-                                                {
-                                                    title: 'Lớp',
-                                                    dataIndex: 'fixedClassName',
-                                                    width: 120,
-                                                    align: 'center',
-                                                    type: 'input',
-                                                    render: (_, record) =>
-                                                        record.student?.fixedClass?.code || '',
-                                                },
-                                                // #region Điểm CC
-                                                {
-                                                    title: 'Điểm CC',
-                                                    dataIndex: 'attendanceScore',
-                                                    width: 100,
-                                                    align: 'center',
-                                                    type: 'order',
-                                                    hidden:
-                                                        !!dataDetailSubjectClass?.subject?.onePoint,
-                                                    render: (_, record) => {
-                                                        return record?.attendanceScore || ''
+                                    <Form form={form}>
+                                        <Form.Item name="list">
+                                            <Table
+                                              className="table-subject-score"
+                                                rowKey="id"
+                                                id="student-subject-score"
+                                                filters={filterTable}
+                                                setFilters={setFilterTable}
+                                                // onRow={(record) => {
+                                                //     return {
+                                                //         className: cn(
+                                                //             listForm?.[record.id]
+                                                //                 ?.examScore ===
+                                                //                 listForm?.[record.id]
+                                                //                     ?.examScoreOld
+                                                //                 ? ''
+                                                //                 : 'bg-yellow-100'
+                                                //         ),
+                                                //     }
+                                                // }}
+                                                columns={[
+                                                    {
+                                                        title: 'STT',
+                                                        width: 60,
+                                                        align: 'center',
+                                                        fixed: 'left',
+                                                        render: (_, __, index) => index + 1,
                                                     },
-                                                },
-                                                // #region Điểm TX
-                                                {
-                                                    title: 'Điểm TX',
-                                                    dataIndex: 'midtermScore',
-                                                    width: 100,
-                                                    align: 'center',
-                                                    type: 'order',
-                                                    hidden:
-                                                        !!dataDetailSubjectClass?.subject?.onePoint,
-                                                    render: (_, record) => {
-                                                        return record?.midtermScore || ''
+                                                    {
+                                                        title: 'Mã sinh viên',
+                                                        dataIndex: 'code',
+                                                        align: 'center',
+                                                        width: 150,
+                                                        fixed: 'left',
+                                                        type: 'input',
+                                                        render: (_, record) =>
+                                                            record.student?.code || '',
                                                     },
-                                                },
-                                                // #region Điểm Thi
-                                                {
-                                                    title: 'Điểm thi',
-                                                    dataIndex: 'examScore',
-                                                    width: 100,
-                                                    type: 'order',
-                                                    align: 'center',
-                                                    render: (_, record) => {
-                                                        return (
-                                                            <Form.Item
-                                                                noStyle
-                                                                shouldUpdate={(prev, cur) =>
-                                                                    prev?.[record.id]?.examScore !==
-                                                                    cur?.[record.id]?.examScore
-                                                                }
-                                                            >
-                                                                {({ getFieldValue }) => {
-                                                                    const recordForm: any =
-                                                                        getFieldValue([
-                                                                            record.id,
-                                                                            'examScore',
-                                                                        ])
+                                                    {
+                                                        title: 'Họ và tên',
+                                                        dataIndex: 'fullname',
+                                                        width: 150,
+                                                        fixed: 'left',
+                                                        type: 'input',
+                                                        render: (_, record) =>
+                                                            record?.student?.userProfile
+                                                                ?.fullname || '',
+                                                    },
+                                                    {
+                                                        title: 'Ngày sinh',
+                                                        dataIndex: 'dateOfBirth',
+                                                        width: 125,
+                                                        align: 'center',
+                                                        type: 'date',
+                                                        render: (_, record) =>
+                                                            record?.student?.userProfile.dateOfBirth
+                                                                ? dayjs(
+                                                                      record?.student?.userProfile
+                                                                          .dateOfBirth
+                                                                  ).format('DD/MM/YYYY')
+                                                                : '',
+                                                    },
+                                                    {
+                                                        title: 'Lớp',
+                                                        dataIndex: 'fixedClassName',
+                                                        width: 120,
+                                                        align: 'center',
+                                                        type: 'input',
+                                                        render: (_, record) =>
+                                                            record.student?.fixedClass?.code || '',
+                                                    },
+                                                    // #region Điểm CC
+                                                    {
+                                                        title: 'Điểm CC',
+                                                        dataIndex: 'attendanceScore',
+                                                        width: 100,
+                                                        align: 'center',
+                                                        type: 'order',
+                                                        hidden:
+                                                            !!dataDetailSubjectClass?.subject
+                                                                ?.onePoint,
+                                                        render: (_, record) => {
+                                                            return record?.attendanceScore || ''
+                                                        },
+                                                    },
+                                                    // #region Điểm TX
+                                                    {
+                                                        title: 'Điểm TX',
+                                                        dataIndex: 'midtermScore',
+                                                        width: 100,
+                                                        align: 'center',
+                                                        type: 'order',
+                                                        hidden:
+                                                            !!dataDetailSubjectClass?.subject
+                                                                ?.onePoint,
+                                                        render: (_, record) => {
+                                                            return record?.midtermScore || ''
+                                                        },
+                                                    },
+                                                    {
+                                                        title: 'Điểm thi',
+                                                        dataIndex: 'examScore',
+                                                        width: 100,
+                                                        type: 'order',
+                                                        align: 'center',
+                                                        render: (_, record) => {
+                                                            const recordForm =
+                                                                listForm?.[record.id]?.examScore
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'list',
+                                                                        record.id,
+                                                                        'examScore',
+                                                                    ]}
+                                                                    label=""
+                                                                    rules={[
+                                                                        {
+                                                                            validator: (
+                                                                                _,
+                                                                                value
+                                                                            ) => {
+                                                                                if (
+                                                                                    value == null ||
+                                                                                    value === ''
+                                                                                )
+                                                                                    return Promise.resolve()
+                                                                                if (value > 10) {
+                                                                                    message.error(
+                                                                                        'Điểm phải là nhỏ hơn 10!'
+                                                                                    )
+                                                                                    return Promise.reject()
+                                                                                }
+                                                                                if (
+                                                                                    Math.round(
+                                                                                        value * 10
+                                                                                    ) !==
+                                                                                    value * 10
+                                                                                ) {
+                                                                                    message.error(
+                                                                                        'Điểm phải là bội số của 0.1!'
+                                                                                    )
+                                                                                    return Promise.reject()
+                                                                                }
 
+                                                                                return Promise.resolve()
+                                                                            },
+                                                                        },
+                                                                    ]}
+                                                                >
+                                                                    <InputNumber
+                                                                        disabled={disabledForm}
+                                                                        min={0}
+                                                                        id={`score-thi-${record.id}`}
+                                                                        style={{
+                                                                            width: '100%',
+                                                                            borderColor:
+                                                                                !!recordForm &&
+                                                                                (recordForm > 10 ||
+                                                                                    Math.round(
+                                                                                        recordForm *
+                                                                                            10
+                                                                                    ) !==
+                                                                                        recordForm *
+                                                                                            10)
+                                                                                    ? 'red'
+                                                                                    : !!recordForm &&
+                                                                                        recordForm !==
+                                                                                            record?.examScore
+                                                                                      ? '#f0b60ce0'
+                                                                                      : '',
+                                                                        }}
+                                                                        step={0}
+                                                                        controls={false}
+                                                                        onKeyDown={(e) =>
+                                                                            handleScoreInputKeyDown(
+                                                                                e,
+                                                                                record.id,
+                                                                                'thi',
+                                                                                dataTable
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+                                                    {
+                                                        title: 'Điểm HP',
+                                                        width: 80,
+                                                        align: 'center',
+                                                        render: (_, record: any) => {
+                                                            const recordForm =
+                                                                listForm?.[record.id]?.examScore
+                                                            const finalScore = calcFinalScore(
+                                                                record?.student?.fixedClass
+                                                                    ?.trainingCourse,
+                                                                {
+                                                                    ...record,
+                                                                    examScore: recordForm
+                                                                        ? recordForm
+                                                                        : record?.examScore,
+                                                                }
+                                                            )?.toFixed(1)
+
+                                                            return <div>{finalScore}</div>
+                                                        },
+                                                    },
+                                                    {
+                                                        title: 'Cấm thi',
+                                                        dataIndex: 'examBanned',
+                                                        width: 80,
+                                                        align: 'center',
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Checkbox
+                                                                    disabled={true}
+                                                                    checked={record?.examBanned}
+                                                                />
+                                                            )
+                                                        },
+                                                    },
+                                                    {
+                                                        title: 'Lý do cấm thi',
+                                                        dataIndex: 'examBannedReason',
+                                                        width: 150,
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Input
+                                                                    disabled={true}
+                                                                    placeholder="Nhập lý do cấm thi"
+                                                                    value={record?.examBannedReason}
+                                                                />
+                                                            )
+                                                        },
+                                                    },
+
+                                                    {
+                                                        title: 'Hoãn thi',
+                                                        dataIndex: 'examPostponed',
+                                                        width: 80,
+                                                        align: 'center',
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Checkbox
+                                                                    disabled={true}
+                                                                    checked={record?.examPostponed}
+                                                                />
+                                                            )
+                                                        },
+                                                    },
+
+                                                    {
+                                                        title: 'Lý do hoãn thi',
+                                                        dataIndex: 'repeatedReason',
+                                                        width: 140,
+                                                        render: (value, record, index: number) => {
+                                                            return (
+                                                                <Input
+                                                                    disabled={true}
+                                                                    placeholder="Nhập lý do hoãn thi"
+                                                                    value={record?.repeatedReason}
+                                                                />
+                                                            )
+                                                        },
+                                                    },
+
+                                                    {
+                                                        title: 'Đình chỉ',
+                                                        dataIndex: 'suspended',
+                                                        width: 80,
+                                                        align: 'center',
+                                                        render: (value, record) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={['list',record.id, 'suspended']}
+                                                                    label=""
+                                                                    valuePropName="checked"
+                                                                >
+                                                                    <Checkbox
+                                                                        disabled={
+                                                                            profileId !==
+                                                                            listUser.P13
+                                                                        }
+                                                                    />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+
+                                                    {
+                                                        title: 'Lý do đình chỉ',
+                                                        dataIndex: 'suspendedReason',
+                                                        width: 140,
+                                                        render: (_, record) => {
+                                                                const suspended = listForm[record.id]?.suspended
                                                                     return (
                                                                         <Form.Item
-                                                                            className="w-full mb-0"
                                                                             name={[
+                                                                              'list',
                                                                                 record.id,
-                                                                                'examScore',
+                                                                                'suspendedReason',
                                                                             ]}
-                                                                            label=""
-                                                                            rules={[
-                                                                                {
-                                                                                    validator: (
-                                                                                        _,
-                                                                                        value
-                                                                                    ) => {
-                                                                                        if (
-                                                                                            value ==
-                                                                                                null ||
-                                                                                            value ===
-                                                                                                ''
-                                                                                        )
-                                                                                            return Promise.resolve()
-                                                                                        if (
-                                                                                            value >
-                                                                                            10
-                                                                                        ) {
-                                                                                            message.error(
-                                                                                                'Điểm phải là nhỏ hơn 10!'
-                                                                                            )
-                                                                                            return Promise.reject()
-                                                                                        }
-                                                                                        if (
-                                                                                            Math.round(
-                                                                                                value *
-                                                                                                    10
-                                                                                            ) !==
-                                                                                            value *
-                                                                                                10
-                                                                                        ) {
-                                                                                            message.error(
-                                                                                                'Điểm phải là bội số của 0.1!'
-                                                                                            )
-                                                                                            return Promise.reject()
-                                                                                        }
-
-                                                                                        return Promise.resolve()
-                                                                                    },
-                                                                                },
-                                                                            ]}
+                                                                            style={{ margin: 0 }}
                                                                         >
-                                                                            <InputNumber
+                                                                            <Input
+                                                                                placeholder="Nhập lý do đình chỉ"
                                                                                 disabled={
-                                                                                    disabledForm
-                                                                                }
-                                                                                min={0}
-                                                                                id={`score-thi-${record.id}`}
-                                                                                style={{
-                                                                                    width: '100%',
-                                                                                    borderColor:
-                                                                                        !!recordForm &&
-                                                                                        (recordForm >
-                                                                                            10 ||
-                                                                                            Math.round(
-                                                                                                recordForm *
-                                                                                                    10
-                                                                                            ) !==
-                                                                                                recordForm *
-                                                                                                    10)
-                                                                                            ? 'red'
-                                                                                            : !!recordForm &&
-                                                                                                recordForm !==
-                                                                                                    record?.examScore
-                                                                                              ? '#f0b60ce0'
-                                                                                              : '',
-                                                                                }}
-                                                                                step={0}
-                                                                                defaultValue={
-                                                                                    record?.examScore
-                                                                                }
-                                                                                controls={false}
-                                                                                onKeyDown={(e) =>
-                                                                                    handleScoreInputKeyDown(
-                                                                                        e,
-                                                                                        record.id,
-                                                                                        'thi',
-                                                                                        dataTable
+                                                                                    !(
+                                                                                        suspended &&
+                                                                                        profileId ===
+                                                                                            listUser.P13
                                                                                     )
                                                                                 }
                                                                             />
                                                                         </Form.Item>
                                                                     )
-                                                                }}
-                                                            </Form.Item>
-                                                        )
+                                                        },
                                                     },
-                                                },
-                                                {
-                                                    title: 'Điểm HP',
-                                                    width: 80,
-                                                    align: 'center',
-                                                    render: (_, record: any) => (
-                                                        <Form.Item
-                                                            noStyle
-                                                            shouldUpdate={(prev, cur) =>
-                                                                prev?.[record.id]?.examScore !==
-                                                                cur?.[record.id]?.examScore
-                                                            }
-                                                        >
-                                                            {({ getFieldValue }) => {
-                                                                const recordForm = getFieldValue([
-                                                                    record.id,
-                                                                    'examScore',
-                                                                ])
-                                                                const finalScore = calcFinalScore(
-                                                                    record?.student?.fixedClass
-                                                                        ?.trainingCourse,
-                                                                    {
-                                                                        ...record,
-                                                                        examScore: recordForm
-                                                                            ? recordForm
-                                                                            : record?.examScore,
-                                                                    }
-                                                                )?.toFixed(1)
 
-                                                                return <div>{finalScore}</div>
-                                                            }}
-                                                        </Form.Item>
-                                                    ),
-                                                },
-                                                // #region Cấm thi/Hoãn thi/Đình chỉ
-                                                {
-                                                    title: 'Cấm thi',
-                                                    dataIndex: 'examBanned',
-                                                    width: 80,
-                                                    align: 'center',
-                                                    render: (value, record, index: number) => {
-                                                        return (
-                                                            <Checkbox
-                                                                disabled={true}
-                                                                checked={record?.examBanned}
-                                                            />
-                                                        )
+                                                    {
+                                                        title: 'Ghi chú',
+                                                        dataIndex: 'description',
+                                                        width: 150,
+                                                        align: 'center',
+                                                        render: (value, record) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                      'list',
+                                                                        record.id,
+                                                                        'description',
+                                                                    ]}
+                                                                    label=""
+                                                                >
+                                                                    <Input
+                                                                        disabled={disabledForm}
+                                                                        placeholder="Nhập ghi chú"
+                                                                        style={{
+                                                                            width: '100%',
+                                                                        }}
+                                                                    />
+                                                                </Form.Item>
+                                                            )
+                                                        },
                                                     },
-                                                },
-                                                {
-                                                    title: 'Lý do cấm thi',
-                                                    dataIndex: 'examBannedReason',
-                                                    width: 150,
-                                                    render: (value, record, index: number) => {
-                                                        return (
-                                                            <Input
-                                                                disabled={true}
-                                                                placeholder="Nhập lý do cấm thi"
-                                                                value={record?.examBannedReason}
-                                                            />
-                                                        )
-                                                    },
-                                                },
-
-                                                {
-                                                    title: 'Hoãn thi',
-                                                    dataIndex: 'examPostponed',
-                                                    width: 80,
-                                                    align: 'center',
-                                                    render: (value, record, index: number) => {
-                                                        return (
-                                                            <Checkbox
-                                                                disabled={true}
-                                                                checked={record?.examPostponed}
-                                                            />
-                                                        )
-                                                    },
-                                                },
-
-                                                {
-                                                    title: 'Lý do hoãn thi',
-                                                    dataIndex: 'repeatedReason',
-                                                    width: 200,
-                                                    render: (value, record, index: number) => {
-                                                        return (
-                                                            <Input
-                                                                disabled={true}
-                                                                placeholder="Nhập lý do hoãn thi"
-                                                                value={record?.repeatedReason}
-                                                            />
-                                                        )
-                                                    },
-                                                },
-
-                                                {
-                                                    title: 'Đình chỉ',
-                                                    dataIndex: 'suspended',
-                                                    width: 80,
-                                                    align: 'center',
-                                                    render: (value, record) => {
-                                                        return (
-                                                            <Form.Item
-                                                                className="w-full mb-0"
-                                                                name={[record.id, 'suspended']}
-                                                                label=""
-                                                                valuePropName="checked"
-                                                            >
-                                                                <Checkbox
-                                                                    disabled={
-                                                                        profileId !== listUser.P13
-                                                                    }
-                                                                    checked={record?.suspended}
-                                                                />
-                                                            </Form.Item>
-                                                        )
-                                                    },
-                                                },
-
-                                                {
-                                                    title: 'Lý do đình chỉ',
-                                                    dataIndex: 'suspendedReason',
-                                                    width: 200,
-                                                    render: (_, record) => (
-                                                        <Form.Item
-                                                            noStyle
-                                                            shouldUpdate={(prev, cur) =>
-                                                                prev?.[record.id]?.suspended !==
-                                                                cur?.[record.id]?.suspended
-                                                            }
-                                                        >
-                                                            {({ getFieldValue }) => {
-                                                                const suspended = getFieldValue([
-                                                                    record.id,
-                                                                    'suspended',
-                                                                ])
-                                                                return (
-                                                                    <Form.Item
-                                                                        name={[
-                                                                            record.id,
-                                                                            'suspendedReason',
-                                                                        ]}
-                                                                        style={{ margin: 0 }}
-                                                                    >
-                                                                        <Input
-                                                                            placeholder="Nhập lý do đình chỉ"
-                                                                            disabled={
-                                                                                !(
-                                                                                    suspended &&
-                                                                                    profileId ===
-                                                                                        listUser.P13
-                                                                                )
-                                                                            }
-                                                                        />
-                                                                    </Form.Item>
-                                                                )
-                                                            }}
-                                                        </Form.Item>
-                                                    ),
-                                                },
-
-                                                {
-                                                    title: 'Ghi chú',
-                                                    dataIndex: 'description',
-                                                    width: 150,
-                                                    align: 'center',
-                                                    render: (value, record) => {
-                                                        return (
-                                                            <Form.Item
-                                                                className="w-full mb-0"
-                                                                name={[record.id, 'description']}
-                                                                label=""
-                                                            >
-                                                                <Input
-                                                                    disabled={disabledForm}
-                                                                    placeholder="Nhập ghi chú"
-                                                                    style={{
-                                                                        width: '100%',
-                                                                    }}
-                                                                />
-                                                            </Form.Item>
-                                                        )
-                                                    },
-                                                },
-                                            ]}
-                                            data={dataTable}
-                                            pagination={{
-                                                pageSize: dataTable.length,
-                                                hideOnSinglePage: true,
-                                            }}
-                                        />
+                                                ]}
+                                                data={dataTable}
+                                                pagination={{
+                                                    pageSize: dataTable.length,
+                                                    hideOnSinglePage: true,
+                                                }}
+                                            />
+                                        </Form.Item>
                                     </Form>
                                 </Col>
                             )}

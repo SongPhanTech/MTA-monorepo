@@ -1,5 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import type { Prisma } from '@workspace/db'
+import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetLecturer, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
 import { prisma } from '..'
@@ -90,10 +91,12 @@ app.openapi(importLecturer, async (c) => {
 
     const existingLecturer = await prisma.lecturer.findMany({
         where: { code: { in: data.lecturers.map((lecturer) => lecturer.code) } },
-        select: { id: true, code: true },
+        select: { id: true, code: true, userProfileId: true },
     })
 
-    const existingLecturerMap = new Map(existingLecturer.map(({ code, id }) => [code, id]))
+    const existingLecturerMap = new Map(
+        existingLecturer.map(({ code, id, userProfileId }) => [code, { id, userProfileId }])
+    )
 
     const start = Date.now()
     await prisma.$transaction(
@@ -127,31 +130,92 @@ app.openapi(importLecturer, async (c) => {
                         idCardNumber: lecturer.idCardNumber,
                     }
 
-                const existingId = existingLecturerMap.get(lecturer.code)
-                if (existingId) {
+                const existing = existingLecturerMap.get(lecturer.code)
+                if (existing) {
                     await tx.lecturer.update({
-                        where: { id: existingId },
+                        where: { id: existing.id },
                         data: {
                             ...lecturerData,
                             userProfile: { update: profileData },
                         },
                     })
+
+                    putDMNhanViens(
+                        {
+                            Id: existing.userProfileId,
+                            sMa: lecturer.idCardNumber,
+                            bLaHocVien: true,
+                            bLaTaiKhoan: true,
+                            dNgaySinh: lecturer.dateOfBirth
+                                ? new Date(lecturer.dateOfBirth)?.toISOString()
+                                : null,
+                            sCCCD: lecturer.idCardNumber,
+                            sHoVaDem: profileData.lastName,
+                            sTen: profileData.firstName,
+                            sTenDayDu: lecturer.fullname,
+                            sSDTDiDong: lecturer.phoneNumber ?? '',
+                            // TODO: fix this
+                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                            sEmail: lecturer.email,
+                            sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+                        },
+                        {
+                            headers: {
+                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                            },
+                        }
+                    )
+                        .then((res) => {
+                            console.log('[LSB create User]:', res.status, res.data)
+                        })
+                        .catch(console.error)
                 } else {
+                    const profileId = crypto.randomUUID()
                     await tx.lecturer.create({
                         data: {
                             ...lecturerData,
                             userProfile: {
                                 connectOrCreate: {
                                     where: { idCardNumber: lecturer.idCardNumber },
-                                    create: profileData,
+                                    create: { id: profileId, ...profileData },
                                 },
                             },
                         },
                     })
+
+                    postDMNhanViens(
+                        {
+                            Id: profileId,
+                            sMa: lecturer.idCardNumber,
+                            bLaHocVien: true,
+                            bLaTaiKhoan: true,
+                            dNgaySinh: lecturer.dateOfBirth
+                                ? new Date(lecturer.dateOfBirth)?.toISOString()
+                                : null,
+                            sCCCD: lecturer.idCardNumber,
+                            sHoVaDem: profileData.lastName,
+                            sTen: profileData.firstName,
+                            sTenDayDu: lecturer.fullname,
+                            sSDTDiDong: lecturer.phoneNumber ?? '',
+                            // TODO: fix this
+                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                            sEmail: lecturer.email,
+                            sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
+                        },
+                        {
+                            headers: {
+                                'x-clientid': process.env.KEYCLOAK_CLIENT_ID_LMS || '',
+                                'x-clientsecret': process.env.KEYCLOAK_CLIENT_SECRET_LMS || '',
+                            },
+                        }
+                    )
+                        .then((res) => {
+                            console.log('[LSB create User]:', res.status, res.data)
+                        })
+                        .catch(console.error)
                 }
             }
-
-            // TODO: sync with LSB
         },
         { timeout: timeout * 1000 }
     )

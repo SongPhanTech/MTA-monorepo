@@ -1,7 +1,7 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import type { ScoreConvert } from '@workspace/db/client'
+import { $Enums, type ScoreConvert } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -20,9 +20,10 @@ interface FilterProps {
 
 interface StudentCourseByPlanProps {
     studentId?: string | null
+    hocLai?: boolean
 }
 
-export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
+export default function LopMonHocDaMo({ studentId, hocLai }: StudentCourseByPlanProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -55,11 +56,15 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
                                 semesterId,
                                 trainingObjectTypeId,
                             },
+                            subjectClassType: hocLai
+                                ? $Enums.SubjectClassType.RETAKE
+                                : $Enums.SubjectClassType.NORMAL,
                         },
                     },
                 },
                 cancelled: false,
                 active: true,
+                type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
             },
             include: {
                 subject: {
@@ -133,32 +138,37 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
             enabled: !!studentId && !!semesterId,
         }
     )
-    const { data: countSubjectClass = 0 } = useCountSubjectClass({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      name: {
-                          contains: filters.searchText,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            semesterId,
-            trainingObjectTypeId,
-            subject: {
-                planTrainingSubject: {
-                    some: {
-                        planTraining: {
-                            semesterId,
-                            trainingObjectTypeId,
+    const { data: countSubjectClass = 0 } = useCountSubjectClass(
+        {
+            where: {
+                ...(filters.searchText && filters.searchText !== ''
+                    ? {
+                          name: {
+                              contains: filters.searchText,
+                              mode: 'insensitive',
+                          },
+                      }
+                    : {}),
+                semesterId,
+                trainingObjectTypeId,
+                subject: {
+                    planTrainingSubject: {
+                        some: {
+                            planTraining: {
+                                semesterId,
+                                trainingObjectTypeId,
+                            },
                         },
                     },
                 },
+                cancelled: false,
+                active: true,
             },
-            cancelled: false,
-            active: true,
         },
-    })
+        {
+            enabled: !!studentId && !!semesterId,
+        }
+    )
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -278,7 +288,7 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
     }
 
     useEffect(() => {
-        if (subjectClassData) {
+        if (subjectClassData && studentId) {
             const checkedSubjectClassByFixedClassIds = [
                 ...new Set(
                     subjectClassData
@@ -307,7 +317,7 @@ export default function LopMonHocDaMo({ studentId }: StudentCourseByPlanProps) {
                     .map((item) => item.id)
             )
         }
-    }, [subjectClassData, studentId])
+    }, [subjectClassData])
 
     return (
         <Row>

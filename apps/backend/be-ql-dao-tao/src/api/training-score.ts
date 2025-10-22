@@ -1,15 +1,7 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { read, utils } from 'xlsx'
 import { prisma } from '..'
-import type { StudentTemplateData } from '../dto/student-info.dto'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { getBufferFromUrl } from '../services/template.service'
-import {
-    listStudentInfo,
-    populateExcelTemplate,
-    sanitizeFilename,
-} from '../services/training-score'
-import { getCurrentDateForReport } from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -102,37 +94,6 @@ const uploadExcelImportTrainingScore = createRoute({
             description: 'Invalid file upload',
         },
     },
-})
-
-app.openapi(exportExcelListStudentFixedClassTrainingPoint, async (c) => {
-    const { fixedClassId } = c.req.valid('query')
-    const student = await listStudentInfo(fixedClassId)
-    const fixedClass = await prisma.fixedClass.findUnique({
-        where: { id: fixedClassId }, // Tìm kiếm lớp biên chế
-    })
-    if (!fixedClass) {
-        return c.json({ message: `Không tìm thấy lớp biên chế ${fixedClassId}` }, 404)
-    }
-
-    const { date, month, year } = getCurrentDateForReport()
-
-    const templateData: StudentTemplateData = {
-        date,
-        month,
-        year,
-        className: fixedClass.name,
-        student,
-    }
-
-    const templateBuffer = await getBufferFromUrl('TRAINING_POINT_IMPORT')
-    const excelBuffer = populateExcelTemplate(templateBuffer, templateData)
-
-    // Set response headers
-    const sanitizedClassName = sanitizeFilename(fixedClass.name ?? 'Class')
-    return c.body(excelBuffer, 200, {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(`DSLop_${sanitizedClassName}.xlsx`)}`,
-    })
 })
 
 app.openapi(uploadExcelImportTrainingScore, async (c) => {

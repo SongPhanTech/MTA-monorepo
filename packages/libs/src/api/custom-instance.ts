@@ -1,12 +1,14 @@
+import { BROWSER } from 'esm-env'
+
 export const fetchInstance = async (url: string, options?: RequestInit): Promise<Response> => {
-    const accessToken = localStorage.getItem('ACCESS_TOKEN')
+    const accessToken = BROWSER ? localStorage.getItem('ACCESS_TOKEN') : ''
 
     const payload: RequestInit = {
         ...options,
         credentials: 'include',
         headers: {
             ...options?.headers,
-            Authorization: `Bearer ${accessToken}`,
+            ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
         },
     }
     return await fetch(url, payload)
@@ -90,9 +92,11 @@ export const customPortalFetch = async <T>(url: string, options: RequestInit): P
 
 export const customSystemFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
-        process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
-            ? `http://localhost:3001/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`
-            : `https://api.model.mta.swantech.vn/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`,
+        process.versions.bun
+            ? 'https://mta.swantech.vn/api/system/public'
+            : process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
+              ? `http://localhost:3001/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`
+              : `https://api.model.mta.swantech.vn/api/system/${process.env.NEXT_PUBLIC_APP_CODE}`,
         url
     )
 

@@ -145,7 +145,7 @@ export default function QuestionPage() {
         queryOptions
     )
 
-    const { data: knowledgeBlockData } = useFindManyKnowledgeBlock({
+    const { data: knowledgeBlockData = [] } = useFindManyKnowledgeBlock({
         where: { subjectVersionId: initialValue?.subjectVersionId },
     })
 
@@ -331,7 +331,7 @@ export default function QuestionPage() {
                                 width: 100,
                                 align: 'center',
                                 type: 'select',
-                                options: knowledgeBlockData?.map(({ id, name }) => ({
+                                options: knowledgeBlockData.map(({ id, name }) => ({
                                     value: id,
                                     label: name,
                                 })),

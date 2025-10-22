@@ -61,7 +61,6 @@ export default function PageId() {
                     { label: 'Cấu hình sinh đề tự động', value: 'sinhDeTuDong' },
                     { label: 'Danh sách đề thi', value: 'examBank' },
                     { label: 'Quản lý phách', value: 'examCode' },
-                    { label: 'Quản lý bài thi', value: 'examSession' },
                 ]}
                 style={{ marginBottom: 14 }}
             />

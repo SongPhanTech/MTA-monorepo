@@ -17,6 +17,7 @@ const baseSchema = z.object({
     tuThangNam: z.coerce.date().nullish(),
     denThangNam: z.coerce.date().nullish(),
     donVi: z.string().nullish(),
+    diaChi: z.string().nullish(),
     chucDanh: z.string().nullish(),
     chucVuDangDoan: z.string().nullish(),
     soQuyetDinh: z.string().nullish(),
@@ -24,14 +25,14 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    chucVu: z.record(z.unknown()),
-    loaiHinhCongTac: z.record(z.unknown()),
+    chucVu: z.record(z.unknown()).optional(),
+    loaiHinhCongTac: z.record(z.unknown()).optional(),
     userProfile: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
-    chucVuId: z.string().uuid(),
-    loaiHinhCongTacId: z.string(),
+    chucVuId: z.string().uuid().nullish(),
+    loaiHinhCongTacId: z.string().nullish(),
     userProfileId: z.string(),
 }
 );
@@ -70,6 +71,7 @@ export const QuaTrinhCongTacPrismaUpdateSchema = z.object({
     tuThangNam: z.coerce.date().nullish(),
     denThangNam: z.coerce.date().nullish(),
     donVi: z.string().nullish(),
+    diaChi: z.string().nullish(),
     chucDanh: z.string().nullish(),
     chucVuDangDoan: z.string().nullish(),
     soQuyetDinh: z.string().nullish(),

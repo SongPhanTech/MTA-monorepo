@@ -20,9 +20,10 @@ interface FilterProps {
 
 interface RegisterClassProps {
     setStudentId?: (id: string | null) => void
+    hocLai?: boolean
 }
 
-export default function DangKyHocChoCaNhan({ setStudentId }: RegisterClassProps) {
+export default function DangKyHocChoCaNhan({ setStudentId, hocLai }: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKey, setSelectedRowKey] = useState<Key>('')
@@ -168,9 +169,9 @@ export default function DangKyHocChoCaNhan({ setStudentId }: RegisterClassProps)
         })
     }
 
-    const handleRowSelection = (record: any) => {
-        setStudentId?.(record.id)
-        setSelectedRowKey(record.id)
+    const handleRowSelection = (id: string) => {
+        setStudentId?.(id)
+        setSelectedRowKey(id)
     }
 
     return (
@@ -235,14 +236,14 @@ export default function DangKyHocChoCaNhan({ setStudentId }: RegisterClassProps)
                     className="mt-0"
                     data={students}
                     onRow={(record) => ({
-                        onClick: () => handleRowSelection(record),
+                        onClick: () => handleRowSelection(record.id),
                         style: { cursor: 'pointer' },
                         columnWidth: 35,
                     })}
                     rowSelection={{
                         selectedRowKeys: [selectedRowKey],
                         onChange: (selectedRowKeys) => {
-                            setSelectedRowKey(selectedRowKeys?.[0] as string)
+                            handleRowSelection(selectedRowKeys?.[0] as string)
                         },
                         type: 'radio',
                         columnWidth: 35,

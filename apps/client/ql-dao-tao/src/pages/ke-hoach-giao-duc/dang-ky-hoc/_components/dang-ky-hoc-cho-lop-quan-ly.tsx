@@ -125,9 +125,9 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
         })
     }
 
-    const handleRowSelection = (record: any) => {
-        setSubjectClassId?.(record.id)
-        setSelectedRowKey(record.id)
+    const handleRowSelection = (id: string) => {
+        setSubjectClassId?.(id)
+        setSelectedRowKey(id)
     }
 
     return (
@@ -163,17 +163,17 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                 rowKey="id"
                 dataSource={subjectClassData}
                 onRow={(record) => ({
-                    onClick: () => handleRowSelection(record),
+                    onClick: () => handleRowSelection(record.id),
                     style: { cursor: 'pointer' },
-                    columnWidth: 35,
+                    // columnWidth: 35,
                 })}
                 rowSelection={{
                     selectedRowKeys: [selectedRowKey],
                     onChange: (selectedRowKeys) => {
-                        setSelectedRowKey(selectedRowKeys?.[0] as string)
+                        handleRowSelection(selectedRowKeys?.[0] as string)
                     },
                     type: 'radio',
-                    columnWidth: 35,
+                    // columnWidth: 35,
                 }}
                 columns={[
                     {

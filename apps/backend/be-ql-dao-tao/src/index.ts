@@ -9,9 +9,11 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
+import ArchivedScoreApp from './api/archived-score'
 import CurriculumApp from './api/curriculum'
 import CurriculumSubjectApp from './api/curriculum-subject'
-
+import ExamApp from './api/exam'
+import ExamScoreApp from './api/exam-score'
 import FixedClassApp from './api/fixed-class'
 import GraduationApp from './api/graduation'
 import ImportApp from './api/import'
@@ -88,6 +90,9 @@ app.route('/api/graduation', GraduationApp)
 app.route('/api/plan-training', PlanTraining)
 app.route('/api/stats', Stats)
 app.route('/api/import', ImportApp)
+app.route('/api/archived-score', ArchivedScoreApp)
+app.route('/api/exam', ExamApp)
+app.route('/api/exam-score', ExamScoreApp)
 
 const nv = await prisma.userProfile.findFirstOrThrow()
 

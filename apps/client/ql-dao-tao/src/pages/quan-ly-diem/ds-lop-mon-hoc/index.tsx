@@ -1,5 +1,4 @@
 import FormItem from '@components/commons/form-item'
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -7,13 +6,14 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { SubjectClass, SubjectVersion } from '@workspace/db/client'
+import { type Prisma, type SubjectClass, type SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManySubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { useCreateExams, useCreateNewReExamList } from '@workspace/libs/api/training'
 import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
@@ -29,6 +29,7 @@ import {
     message,
     Popover,
     Row,
+    Switch,
     Tooltip,
 } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
@@ -37,6 +38,7 @@ import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+
 const { RangePicker } = DatePicker
 type TimeScore = {
     time: [Dayjs, Dayjs]
@@ -48,6 +50,21 @@ type TimeScoreExam = {
     beforeDays: number
 }
 
+type HoldAnExam = {
+    isGroupBySubject: boolean
+}
+
+type SubjectClassRelation = Prisma.SubjectClassGetPayload<{
+    include: {
+        subject: true
+        subjectClassStudent: {
+            include: {
+                student: true
+            }
+        }
+    }
+}>
+
 export default function ClassSubject() {
     const { canSome, can } = useAbility()
     const { showSpinner, hideSpinner } = useSpinner()
@@ -58,14 +75,15 @@ export default function ClassSubject() {
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const [open, setOpen] = useState(false)
     const [openExam, setOpenExam] = useState(false)
+    const [openHoldAnExam, setOpenHoldAnExam] = useState(false)
     const [form] = Form.useForm<TimeScore>()
     const [formExam] = Form.useForm<TimeScoreExam>()
+    const [formHoldAnExam] = Form.useForm<HoldAnExam>()
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         code: '',
         name: '',
         examType: undefined,
-        subjectClassId: undefined,
         schoolYearId: undefined,
         semesterId: undefined,
         startDate: undefined,
@@ -105,15 +123,10 @@ export default function ClassSubject() {
     //#region Mới
     /* Mới */
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
-    const where: any = useMemo(() => {
+    const where = useMemo(() => {
         return {
             ...(semesterId ? { semesterId } : {}),
             ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
-            ...(filters.subjectClassId
-                ? {
-                      id: filters.subjectClassId,
-                  }
-                : {}),
             ...(filters.searchText && filters.searchText !== ''
                 ? {
                       OR: [
@@ -159,23 +172,21 @@ export default function ClassSubject() {
             ...(filters.mainLecturer
                 ? {
                       mainLecturer: {
-                          include: {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.mainLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
+                          userProfile: {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.mainLecturer,
+                                          mode: 'insensitive' as const,
                                       },
-                                      {
-                                          lastName: {
-                                              contains: filters.mainLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.mainLecturer,
+                                          mode: 'insensitive' as const,
                                       },
-                                  ],
-                              },
+                                  },
+                              ],
                           },
                       },
                   }
@@ -183,23 +194,21 @@ export default function ClassSubject() {
             ...(filters.enterGradeLecturer
                 ? {
                       enterGradeLecturer: {
-                          include: {
-                              userProfile: {
-                                  OR: [
-                                      {
-                                          firstName: {
-                                              contains: filters.enterGradeLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
+                          userProfile: {
+                              OR: [
+                                  {
+                                      firstName: {
+                                          contains: filters.enterGradeLecturer,
+                                          mode: 'insensitive' as const,
                                       },
-                                      {
-                                          lastName: {
-                                              contains: filters.enterGradeLecturer,
-                                              mode: 'insensitive' as const,
-                                          },
+                                  },
+                                  {
+                                      lastName: {
+                                          contains: filters.enterGradeLecturer,
+                                          mode: 'insensitive' as const,
                                       },
-                                  ],
-                              },
+                                  },
+                              ],
                           },
                       },
                   }
@@ -240,8 +249,8 @@ export default function ClassSubject() {
             active: true,
             deletedAt: null,
             cancelled: false,
-        }
-    }, [filters, semesterId, trainingObjectTypeId])
+        } satisfies Prisma.SubjectClassWhereInput
+    }, [filters, semesterId, trainingObjectTypeId, profileId, canReadAll])
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where,
@@ -302,13 +311,6 @@ export default function ClassSubject() {
     }
     /* Mới */
     // #endregion
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: (selectedKeys: any) => {
-            setSelectedRowKeys(selectedKeys)
-        },
-    }
-
     const handleCheckExamDate = () => {
         dataTable.forEach((item: SubjectClass) => {
             if (item.examDate) {
@@ -458,7 +460,6 @@ export default function ClassSubject() {
     const handleUpdateTimeScore = async (values: TimeScoreExam) => {
         try {
             showSpinner()
-            showSpinner()
             const res = await sqlTransaction([
                 {
                     model: 'SubjectClass',
@@ -515,21 +516,79 @@ export default function ClassSubject() {
         }
     }
 
+    const { mutateAsync: createExam } = useCreateExams()
+
+    const handleUpdateHoldAnExam = async (values: HoldAnExam) => {
+        try {
+            showSpinner()
+
+            if (semesterId && trainingObjectTypeId) {
+                const res = await createExam({
+                    data: {
+                        semesterId,
+                        trainingObjectTypeId,
+                        isGroupBySubject: values.isGroupBySubject,
+                    },
+                })
+
+                if (res.status !== 200) {
+                    message.error(res.data.message || 'Lên danh sách thi thất bại')
+                    return
+                }
+
+                message.success('Lên danh sách thi thành công')
+                router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
+            }
+        } catch (error: any) {
+            message.error('Đã có lỗi xảy ra khi tạo danh sách thi')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const { mutateAsync: createReExamList } = useCreateNewReExamList()
+
+    const handleRexamList = async () => {
+        try {
+            showSpinner()
+
+            if (semesterId && trainingObjectTypeId) {
+                const res = await createReExamList({
+                    data: {
+                        semesterId,
+                        trainingObjectTypeId,
+                    },
+                })
+
+                if (res.status !== 200) {
+                    message.error(res.data.message || 'Lên danh sách thi lại thất bại')
+                }
+
+                message.success('Lên danh sách thi lại thành công')
+                router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
+            }
+        } catch (error) {
+            message.error('Đã có lỗi xảy ra khi lên danh sách thi lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <div>
-            <Row gutter={[16, 0]}>
+            <Row>
                 <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
+                    <Row align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
                                 <Col span={8}>
-                                    <Form.Item name="searchText">
+                                    <Form.Item className="m-0" name="searchText">
                                         <Input
                                             id="search"
                                             onChange={(e) =>
                                                 handleFilterChange('searchText', e.target.value)
                                             }
-                                            placeholder="Nhập tên lớp..."
+                                            placeholder="Tìm kiếm lớp..."
                                             style={{ height: 32 }}
                                             prefix={
                                                 <Search
@@ -543,30 +602,8 @@ export default function ClassSubject() {
                                         />
                                     </Form.Item>
                                 </Col>
-                                <Col span={8}>
-                                    <Form.Item
-                                        className="mb-0"
-                                        name="trainingCourseId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Lớp MH"
-                                            options={dataTable.map((i) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            }))}
-                                            onChange={(val) =>
-                                                handleFilterChange('subjectClassId', val)
-                                            }
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
                             </Flex>
                         </Col>
-
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 {can(
@@ -574,6 +611,42 @@ export default function ClassSubject() {
                                     'XEM_TAT_CA'
                                 ) && (
                                     <>
+                                        <Button onClick={handleRexamList} type="primary">
+                                            Lên danh sách thi lại
+                                        </Button>
+                                        <Popover
+                                            content={
+                                                <Form
+                                                    form={formHoldAnExam}
+                                                    initialValues={{
+                                                        isGroupBySubject: false,
+                                                    }}
+                                                    onFinish={handleUpdateHoldAnExam}
+                                                >
+                                                    <FormItem
+                                                        form={formHoldAnExam}
+                                                        name="isGroupBySubject"
+                                                        label="Gộp theo môn học"
+                                                        className="mb-2"
+                                                        valuePropName="checked"
+                                                    >
+                                                        <Switch />
+                                                    </FormItem>
+                                                    <Col span={24} className="text-right mt-4">
+                                                        <Button type="primary" htmlType="submit">
+                                                            Xác nhận
+                                                        </Button>
+                                                    </Col>
+                                                </Form>
+                                            }
+                                            title="Sửa lên danh sách thi"
+                                            trigger="click"
+                                            placement="bottomRight"
+                                            open={openHoldAnExam}
+                                            onOpenChange={setOpenHoldAnExam}
+                                        >
+                                            <Button type="primary">Lên danh sách thi</Button>
+                                        </Popover>
                                         <Popover
                                             content={
                                                 <Form
@@ -624,7 +697,7 @@ export default function ClassSubject() {
                                                     </Col>
                                                 </Form>
                                             }
-                                            title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                            title="Sửa thời gian nhập điểm TX,CC"
                                             trigger="click"
                                             placement="bottomRight"
                                             open={open}
@@ -647,14 +720,14 @@ export default function ClassSubject() {
                                                     <FormItem
                                                         form={form}
                                                         name={'beforeDays'}
-                                                        label="Số ngày nhập điểm TX,CC"
+                                                        label="Số ngày nhập điểm thi"
                                                         className="mb-2"
                                                     >
                                                         <InputNumber
                                                             className="w-full"
                                                             min={0}
                                                             step={0}
-                                                            placeholder="Nhập số ngày nhập điểm TX,CC"
+                                                            placeholder="Nhập số ngày nhập điểm thi"
                                                         />
                                                     </FormItem>
                                                     <FormItem
@@ -665,6 +738,7 @@ export default function ClassSubject() {
                                                         <DatePicker
                                                             format={'DD/MM/YYYY'}
                                                             placeholder={'Hạn nhập điểm thi'}
+                                                            className="w-full"
                                                         />
                                                     </FormItem>
                                                     <Col span={24} className="text-right mt-4">
@@ -674,7 +748,7 @@ export default function ClassSubject() {
                                                     </Col>
                                                 </Form>
                                             }
-                                            title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                            title="Sửa thời gian nhập điểm thi"
                                             trigger="click"
                                             placement="bottomRight"
                                             open={openExam}

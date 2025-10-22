@@ -17,7 +17,6 @@ import ModalPrintSupervisorGuide from './modal-print-quyet-dinh-huong-dan'
 import ModalGraduationCriteria from './modal-tieu-chi-xet-tn'
 import ModalTraCuuVanBang from './modal-tra-cuu-van-bang'
 import ModalVanBang from './modal-van-bang'
-import ModalExportFileSubjectClass from './modal-xuat-file-mo-lop'
 import NhapDiemThuCong from './nhap-diem'
 import PutDiplomaType from './put-bac-dao-tao'
 import PutDisciplinaryWarningReason from './put-canh-cao-hoc-duong'
@@ -97,7 +96,9 @@ import ModalViewHistoryChange from './modal-xem-lich-su-thay-doi'
 import PutArchivedAwardModal from './put-archived-award'
 import PutCertificateOnSubjectScoreModal from './put-certificate-on-subject'
 import PutCertificateArchivedModal from './put-archived-certificate'
+import { XemTaiLieu } from './xem-tai-lieu'
 export {
+    XemTaiLieu,
     ModalViewHistoryChange,
     PutUpdateProfileModal,
     PutUploadProfileModal,
@@ -170,7 +171,6 @@ export {
     PutTrainingTypeModal,
     ModalVanBang,
     ModalTraCuuVanBang,
-    ModalExportFileSubjectClass,
     ModalPrintDecision,
     ModalNhapTKB,
     ModalPhuLucThacSi,

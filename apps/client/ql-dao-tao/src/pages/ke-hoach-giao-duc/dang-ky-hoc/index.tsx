@@ -14,27 +14,35 @@ interface TabItem {
     content: React.ReactNode
 }
 
-export default function RegisterClass() {
-    const [activeLeftTab, setActiveLeftTab] = useState('1')
+export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
+    const [activeLeftTab, setActiveLeftTab] = useState(hocLai ? '2' : '1')
     const [subjectClassId, setSubjectClassId] = useState<string | null>(null)
     const [studentId, setStudentId] = useState<string | null>(null)
-    const leftTabs: TabItem[] = [
-        {
-            key: '1',
-            label: 'Đăng ký học cho lớp quản lý',
-            content: <DangKyHocChoLopQuanLy setSubjectClassId={setSubjectClassId} />,
-        },
-        {
-            key: '2',
-            label: 'Đăng ký học cho cá nhân',
-            content: <DangKyHocChoCaNhan setStudentId={setStudentId} />,
-        },
-        {
-            key: '3',
-            label: 'Kết quả đăng ký học lớp quản lý',
-            content: <KeQuaDangKyHocLopQuanLy />,
-        },
-    ]
+    const leftTabs: TabItem[] = hocLai
+        ? [
+              {
+                  key: '2',
+                  label: 'Đăng ký học cho cá nhân',
+                  content: <DangKyHocChoCaNhan hocLai={hocLai} setStudentId={setStudentId} />,
+              },
+          ]
+        : [
+              {
+                  key: '1',
+                  label: 'Đăng ký học cho lớp quản lý',
+                  content: <DangKyHocChoLopQuanLy setSubjectClassId={setSubjectClassId} />,
+              },
+              {
+                  key: '2',
+                  label: 'Đăng ký học cho cá nhân',
+                  content: <DangKyHocChoCaNhan setStudentId={setStudentId} />,
+              },
+              {
+                  key: '3',
+                  label: 'Kết quả đăng ký học lớp quản lý',
+                  content: <KeQuaDangKyHocLopQuanLy />,
+              },
+          ]
 
     const rightTabsMap: Record<string, TabItem[]> = {
         '1': [
@@ -48,7 +56,7 @@ export default function RegisterClass() {
             {
                 key: '1',
                 label: 'Lớp môn học đã mở',
-                content: <LopMonHocDaMo studentId={studentId} />,
+                content: <LopMonHocDaMo hocLai={hocLai} studentId={studentId} />,
             },
         ],
     }
@@ -58,7 +66,7 @@ export default function RegisterClass() {
         if (!rightTabs) return null
 
         return (
-            <Tabs defaultActiveKey="1">
+            <Tabs defaultActiveKey={'1'}>
                 {rightTabs.map((tab) => (
                     <Tabs.TabPane tab={tab.label} key={tab.key}>
                         {tab.content}
@@ -97,6 +105,6 @@ export default function RegisterClass() {
     )
 }
 
-RegisterClass.getLayout = function getLayout(page: React.ReactElement) {
+DangKyHoc.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout unLayout={true}>{page}</DefaultLayout>
 }

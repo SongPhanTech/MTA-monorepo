@@ -298,3 +298,204 @@ export const parseSheetHeQuanSu = (file: ArrayBufferLike) => {
         errors,
     }
 }
+
+export const parseSheetStudent = (file: ArrayBufferLike) => {
+    const wb = read(file)
+    const sheetName = 'HỌC VIÊN, SINH VIÊN'
+    const errors: ParseSheetError[] = []
+
+    const ws = wb.Sheets[sheetName]
+    if (!ws) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: sheetName,
+            message: `Không tìm thấy sheet "${sheetName}" trong file`,
+        })
+        return {
+            trainingObjectType: '',
+            trainingCourse: '',
+            students: [],
+            errors,
+        }
+    }
+
+    // start: Các tham chiếu ô cố định trong sheet
+    const trainingObjectTypeRef = 'J6' // Đối tượng đào tạo
+    const trainingCourseRef = 'J7' // Khoá đào tạo
+    const startRow = 12 // Dòng bắt đầu đọc dữ liệu (0-based index)
+    const cols = {
+        stt: 'A',
+        registerNumber: 'B', // Số báo danh
+        doctoralCode: 'C', // Mã hồ sơ TS
+        code: 'D', // Mã sinh viên
+        fullname: 'E', // Họ và tên
+        dateOfBirth: 'F', // Ngày sinh
+        gender: 'G', // Giới tính
+        ethnicity: 'H', // Dân tộc
+        nationality: 'I', // Quốc tịch
+        provinceHometown: 'J', // Nơi sinh
+        idCardNumber: 'K', // CCCD
+        phoneNumber: 'L', // Số ĐT
+        admissionCombination: 'M', // Khối xét tuyển
+        entryScore: 'N', // Điểm xét tuyển
+        competencyScore: 'O', // Điểm đánh giá năng lực
+        fixedClass: 'P', // Lớp quản lý
+        trainingField: 'Q', // Ngành đào tạo
+        trainingMajor: 'R', // Chuyên ngành đào tạo
+        curriculum: 'S', // Chương trình đào tạo
+        objectType: 'T', // Quân sự/Dân sự
+        officerNumber: 'U', // Số hiệu SQ/QNCN
+        rank: 'V', // Cấp bậc
+        position: 'W', // Chức vụ
+        department: 'X', // Cơ quan, đơn vị
+        departmentAddress: 'Y', // Địa chỉ cơ quan, đơn vị
+        careerYear: 'Z', // Năm bắt đầu vào nghề/Năm nghiệp vụ
+        // Thông tin tốt nghiệp đại học (Phục vụ cao học)
+        universitySchool: 'AA', // Trường ĐH
+        universityTrainingType: 'AB', // Hệ đào tạo
+        universityGraduationYear: 'AC', // Năm tốt nghiệp
+        universityMajor: 'AD', // Ngành, Chuyên ngành tốt nghiệp
+        universityRank: 'AE', // Loại/Bậc tốt nghiệp
+        basic: 'AF', // Cơ bản
+        facility: 'AG', // Cơ sở
+        foreignLanguage: 'AH', // Ngoại ngữ
+        priorityReason: 'AI', // Lý do ưu tiên
+        description: 'R', // Mô tả
+    }
+    // end: Các tham chiếu ô cố định trong sheet
+
+    const trainingObjectTypeCell: CellObject | undefined = ws[trainingObjectTypeRef]
+    if (trainingObjectTypeCell?.t !== 's' || !trainingObjectTypeCell.v) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: trainingObjectTypeRef,
+            message: 'Đối tượng đào tạo không hợp lệ',
+        })
+    }
+    const trainingCourseCell: CellObject | undefined = ws[trainingCourseRef]
+    if (trainingCourseCell?.t !== 's' || !trainingCourseCell.v) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: trainingCourseRef,
+            message: 'Khoá đào tạo không hợp lệ',
+        })
+    }
+
+    const data = utils.sheet_to_json(ws, {
+        defval: '',
+        blankrows: false,
+        raw: false,
+        header: 'A',
+        range: startRow,
+    }) as (Record<(typeof cols)[keyof typeof cols], string> & {
+        __rowNum__: number
+    })[]
+
+    const students = data
+        .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || '')))
+        .map((row) => {
+            if (!row[cols.code]) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.code}${row.__rowNum__ + 1}`,
+                    message: 'Mã sinh viên không được để trống',
+                })
+            }
+
+            if (!row[cols.fullname]) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.fullname}${row.__rowNum__ + 1}`,
+                    message: 'Họ và tên không được để trống',
+                })
+            }
+
+            if (!row[cols.idCardNumber]) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.idCardNumber}${row.__rowNum__ + 1}`,
+                    message: 'CCCD không được để trống',
+                })
+            }
+
+            if (!row[cols.fixedClass]) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.fixedClass}${row.__rowNum__ + 1}`,
+                    message: 'Lớp quản lý không được để trống',
+                })
+            }
+
+            if (!row[cols.curriculum]) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.curriculum}${row.__rowNum__ + 1}`,
+                    message: 'Chương trình đào tạo không được để trống',
+                })
+            }
+
+            const dateOfBirth = dayjs(row[cols.dateOfBirth], 'DD/MM/YYYY').startOf('day')
+
+            return {
+                stt: row[cols.stt],
+                registerNumber: row[cols.registerNumber]?.trim(),
+                doctoralCode: row[cols.doctoralCode]?.trim(),
+                code: row[cols.code]?.trim() as string,
+                fullname: row[cols.fullname]?.trim() as string,
+                dateOfBirth: dateOfBirth.isValid() ? dateOfBirth.toDate() : null,
+                gender: row[cols.gender]?.trim(),
+                ethnicity: row[cols.ethnicity]?.trim(),
+                nationality: row[cols.nationality]?.trim(),
+                provinceHometown: row[cols.provinceHometown]?.trim(),
+                idCardNumber: row[cols.idCardNumber]?.trim() as string,
+                phoneNumber: row[cols.phoneNumber]?.trim(),
+                admissionCombination: row[cols.admissionCombination]?.trim(),
+                entryScore: row[cols.entryScore]?.trim(),
+                competencyScore: row[cols.competencyScore]?.trim(),
+                fixedClass: row[cols.fixedClass]?.trim() as string,
+                trainingField: row[cols.trainingField]?.trim(),
+                trainingMajor: row[cols.trainingMajor]?.trim(),
+                curriculum: row[cols.curriculum]?.trim() as string,
+                objectType: row[cols.objectType]?.trim(),
+                officerNumber: row[cols.officerNumber]?.trim(),
+                rank: row[cols.rank]?.trim(),
+                position: row[cols.position]?.trim(),
+                department: row[cols.department]?.trim(),
+                departmentAddress: row[cols.departmentAddress]?.trim(),
+                careerYear: row[cols.careerYear]?.trim(),
+                universitySchool: row[cols.universitySchool]?.trim(),
+                universityTrainingType: row[cols.universityTrainingType]?.trim(),
+                universityGraduationYear: row[cols.universityGraduationYear]?.trim(),
+                universityMajor: row[cols.universityMajor]?.trim(),
+                universityRank: row[cols.universityRank]?.trim(),
+                basic: row[cols.basic]?.trim(),
+                facility: row[cols.facility]?.trim(),
+                foreignLanguage: row[cols.foreignLanguage]?.trim(),
+                priorityReason: row[cols.priorityReason]?.trim(),
+                description: row[cols.description]?.trim(),
+            }
+        })
+
+    const duplicateCodes = students
+        .map((student) => student.code)
+        .filter((code, index, arr) => arr.indexOf(code) !== index)
+
+    if (duplicateCodes.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: '',
+            message: `Mã sinh viên bị trùng: ${duplicateCodes.join(', ')}`,
+        })
+    }
+
+    return {
+        trainingObjectType:
+            typeof trainingObjectTypeCell?.v === 'string'
+                ? trainingObjectTypeCell?.v.trim()
+                : undefined,
+        trainingCourse:
+            typeof trainingCourseCell?.v === 'string' ? trainingCourseCell?.v.trim() : undefined,
+        students,
+        errors,
+    }
+}

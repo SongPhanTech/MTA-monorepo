@@ -5,80 +5,9 @@ import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { read, utils, type WorkSheet } from 'xlsx'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { exportPCGDdata } from '../services/lecturer'
-import { fillExcelTemplate, getBufferFromUrl } from '../services/template.service'
-import { getCurrentDateForReport } from '../utils'
 
 dayjs.extend(customParseFormat)
 const app = new OpenAPIHono({ strict: false })
-
-const exportPhanCongGiangDay = createRoute({
-    operationId: 'exportPhanCongGiangDay',
-    path: '/export-phan-cong-giang-day',
-    description: 'Xuất file excel danh sách phân công giảng dạy',
-    tags: ['PlanTraining'],
-    summary: 'Export danh sách phân công giảng dạy',
-    method: 'get',
-    request: {
-        query: z.object({
-            organizationId: z.string().openapi('organizationId', {
-                description: 'ID của đơn vị',
-            }),
-            semesterId: z.string().openapi('semesterId', {
-                description: 'ID của học kỳ',
-            }),
-        }),
-    },
-    responses: {
-        200: {
-            description: 'Export danh sách phân công giảng dạy.',
-            content: {
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
-                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
-                },
-            },
-        },
-
-        400: {
-            description: 'Invalid file upload',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                    }),
-                },
-            },
-        },
-        404: {
-            description: 'Not found',
-            content: {
-                'application/json': {
-                    schema: z.object({
-                        message: z.string(),
-                    }),
-                },
-            },
-        },
-    },
-})
-app.openapi(exportPhanCongGiangDay, async (c) => {
-    const { organizationId, semesterId } = c.req.valid('query')
-
-    const { date, month, year } = getCurrentDateForReport()
-
-    const templateFile = await getBufferFromUrl('LECTURE_PCGD')
-
-    const phanCongData = await exportPCGDdata(organizationId, semesterId)
-    console.log(`data length ${phanCongData.cellData.length}`)
-    console.log(`merge ${phanCongData.mergeData}`)
-    const filledTemplate = await fillExcelTemplate(templateFile, phanCongData)
-
-    const fileName = `PhanCongGiangDay_${date}_${month}_${year}.xlsx`
-
-    c.header('Content-Disposition', `attachment; filename="${fileName}"`)
-    c.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    return c.body(filledTemplate)
-})
 
 const importPhanCongGiangDay = createRoute({
     operationId: 'importPhanCongGiangDay',

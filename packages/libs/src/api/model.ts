@@ -554,12 +554,7 @@ export const sqlTransaction = async (
         ...options,
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(sqlTransactionBodyItem, (_, v) => {
-            if (typeof v === 'bigint') {
-                return v.toString()
-            }
-            return v
-        }),
+        body: JSON.stringify(sqlTransactionBodyItem),
     })
 }
 

@@ -2,7 +2,6 @@ import ChatHeader from '@components/layouts/header/chat-header'
 import SiderChatLayout from '@components/layouts/sider/chat-sider'
 import ChatIframeLayout from '@layouts/chat-iframe-layout'
 import { cn } from '@lib/utils'
-import { useSession } from '@workspace/auth/react'
 import {
     useDeleteConversation,
     useDeleteManyCitationMessage,
@@ -16,7 +15,7 @@ import { useUserSession } from '@/hooks/useUserSession'
 import type { ConversationDataFromAPI } from '@/navigations/sider-tro-ly-ao'
 import { generateMenusTroLyAo } from '@/navigations/sider-tro-ly-ao'
 
-const { Header, Content } = Layout
+const { Content } = Layout
 
 const ChatLayout = ({
     children,
@@ -31,6 +30,7 @@ const ChatLayout = ({
     const { sessionId } = useUserSession()
     const [isDeleting, setIsDeleting] = useState(false)
     const [isInIframe, setIsInIframe] = useState(false)
+    const [isResizing, setIsResizing] = useState(false)
     const [collapsed, setCollapsed] = useState(() => {
         if (typeof window !== 'undefined') {
             const isMobile = window.innerWidth < 768
@@ -39,8 +39,6 @@ const ChatLayout = ({
         }
         return false
     })
-
-    const { data: userCurrent } = useSession()
 
     // Check if running in iframe
     useEffect(() => {
@@ -89,13 +87,47 @@ const ChatLayout = ({
         }
     }
 
-    // Initialize responsive collapse on mount
+    // Initialize responsive collapse on mount and handle resize
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+        if (typeof window === 'undefined') return
+
+        let resizeTimer: NodeJS.Timeout
+
+        const handleResize = () => {
+            // Disable transitions during resize
+            setIsResizing(true)
+            clearTimeout(resizeTimer)
+
             const isMobile = window.innerWidth < 768
             if (isMobile) {
-                setCollapsed(true)
+                setCollapsed((prev) => {
+                    // Only update if not already collapsed to avoid unnecessary animation
+                    return prev ? prev : true
+                })
+            } else {
+                // On desktop, restore from localStorage or default to open
+                const storedCollapsed = localStorage.getItem('chat-sider-collapsed') === 'true'
+                setCollapsed((prev) => {
+                    // Only update if different from current state
+                    return prev !== storedCollapsed ? storedCollapsed : prev
+                })
             }
+
+            // Re-enable transitions after resize is done
+            resizeTimer = setTimeout(() => {
+                setIsResizing(false)
+            }, 100)
+        }
+
+        // Set initial state
+        handleResize()
+
+        // Add resize listener
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
+            clearTimeout(resizeTimer)
         }
     }, [])
 
@@ -156,20 +188,37 @@ const ChatLayout = ({
                     onCollapse={handleCollapsed}
                     showCollapseButton={showSiderChat}
                 />
-                <Layout className="flex-1">
+                <Layout className="flex-1 relative">
+                    {/* Backdrop overlay for mobile when sider is open */}
+                    {showSiderChat && !collapsed && (
+                        <div
+                            className="md:hidden absolute inset-0 bg-black/50 z-40 transition-opacity duration-300"
+                            onClick={() => handleCollapsed(true)}
+                        />
+                    )}
+
+                    {/* Sider - responsive behavior */}
                     {showSiderChat && (
                         <div
-                            className={`transition-all duration-300 ease-in-out overflow-hidden h-full ${!collapsed ? 'w-[290px] opacity-100' : 'w-0 opacity-0'}`}
+                            className={`
+                                h-full
+                                ${
+                                    !collapsed
+                                        ? 'md:w-[290px] md:opacity-100 md:relative'
+                                        : 'md:w-0 md:opacity-0'
+                                }
+                                ${isResizing ? '' : 'md:transition-all md:duration-300 md:ease-in-out'}
+                                md:overflow-hidden
+                                max-md:absolute max-md:left-0 max-md:top-0 max-md:bottom-0 max-md:z-50 max-md:w-[290px]
+                                ${!collapsed ? 'max-md:translate-x-0' : 'max-md:-translate-x-full'}
+                                ${isResizing ? '' : 'max-md:transition-transform max-md:duration-300 max-md:ease-in-out'}
+                            `}
                         >
-                            <div
-                                className={`transition-opacity duration-300 h-full ${!collapsed ? 'opacity-100' : 'opacity-0'}`}
-                            >
-                                <SiderChatLayout
-                                    items={generateMenusTroLyAo(conversationMenuList)}
-                                    theme={'light'}
-                                    onDelete={handleDelete}
-                                />
-                            </div>
+                            <SiderChatLayout
+                                items={generateMenusTroLyAo(conversationMenuList)}
+                                theme={'light'}
+                                onDelete={handleDelete}
+                            />
                         </div>
                     )}
                     <Content

@@ -1,5 +1,4 @@
 import ConfirmModal from './confirm-dialog'
-import ModalPrintStudentSubjectScore from './modal-in-phieu-diem'
 import ModalLearningResult from './modal-ket-qua-hoc-tap-ctdt'
 import ModalPrintToKQHT from './modal-print-ket-qua-hoc-tap'
 import PutUpdateProfileModal from './put-update-profile'
@@ -11,6 +10,5 @@ export {
     ConfirmModal,
     ThongTinBaoCaoModal,
     ModalPrintToKQHT,
-    ModalPrintStudentSubjectScore,
     ModalLearningResult,
 }

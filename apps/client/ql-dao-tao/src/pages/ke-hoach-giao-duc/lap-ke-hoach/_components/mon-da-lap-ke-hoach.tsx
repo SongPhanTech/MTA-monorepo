@@ -3,6 +3,8 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { getMinioUrl } from '@workspace/constant'
+import { $Enums } from '@workspace/db/client'
 import {
     useDeleteManyPlanTrainingSubject,
     useFindFirstPlanTraining,
@@ -21,7 +23,7 @@ type MonDaLapKeHoachForm = {
     subjectSelected?: Array<string>
 }
 
-export default function MonDaLapKeHoach() {
+export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(100)
@@ -93,6 +95,9 @@ export default function MonDaLapKeHoach() {
                                   }
                                 : {}),
                         },
+                        subjectClassType: hocLai
+                            ? $Enums.SubjectClassType.RETAKE
+                            : $Enums.SubjectClassType.NORMAL,
                     },
                 },
                 _count: {
@@ -101,6 +106,9 @@ export default function MonDaLapKeHoach() {
                             where: {
                                 deletedAt: null,
                                 active: true,
+                                subjectClassType: hocLai
+                                    ? $Enums.SubjectClassType.RETAKE
+                                    : $Enums.SubjectClassType.NORMAL,
                             },
                         },
                     },
@@ -157,8 +165,9 @@ export default function MonDaLapKeHoach() {
                             type="primary"
                             onClick={() =>
                                 exportFromTemplate({
-                                    templateUrl:
-                                        '/lms/templates/ke-hoach-dao-tao/ke-hoach-mo-lop.xlsx',
+                                    templateUrl: getMinioUrl(
+                                        '/mta/template/ke-hoach-dao-tao/ke-hoach-mo-lop.xlsx'
+                                    ),
                                     sheets: [
                                         {
                                             sheet: 'KeHoachMoLop',

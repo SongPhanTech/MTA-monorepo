@@ -9,6 +9,7 @@ import type { FixedClass, SubjectClass } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,
     useFindManyTrainingCourse,
+    useFindManyTrainingLocation,
     useFindManyTrainingMajor,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
@@ -35,6 +36,7 @@ interface OpenSubjectClassForm {
             maxStudent: number
             countOld: number
             examType?: $Enums.ExamType | null
+            trainingLocationId?: string | null
         }
     >
     subjectClassToFixedClass?: Record<
@@ -174,7 +176,7 @@ const FixedClassDragItem: React.FC<{
     )
 }
 
-export default function SubjectOpeningPlan() {
+export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolean }) {
     const { canSome } = useAbility()
     const [form] = Form.useForm<OpenSubjectClassForm>()
     const [currentPage, setCurrentPage] = useState(1)
@@ -211,14 +213,17 @@ export default function SubjectOpeningPlan() {
                                   },
                                   fixedClasses: {
                                       some: {
-                                          trainingCourseId: trainingCourseId || undefined,
+                                          trainingCourseId,
                                           curriculumVersion: {
                                               curriculum: {
-                                                  trainingMajorId: trainingMajorId || undefined,
+                                                  trainingMajorId,
                                               },
                                           },
                                       },
                                   },
+                                  subjectClassType: hocLai
+                                      ? $Enums.SubjectClassType.RETAKE
+                                      : $Enums.SubjectClassType.NORMAL,
                               },
                           },
                       }
@@ -226,6 +231,21 @@ export default function SubjectOpeningPlan() {
             },
             include: {
                 planTrainingSubjects: {
+                    where: {
+                        subjectClassType: hocLai
+                            ? $Enums.SubjectClassType.RETAKE
+                            : $Enums.SubjectClassType.NORMAL,
+                        fixedClasses: {
+                            some: {
+                                trainingCourseId,
+                                curriculumVersion: {
+                                    curriculum: {
+                                        trainingMajorId,
+                                    },
+                                },
+                            },
+                        },
+                    },
                     include: {
                         subjectVersion: {
                             include: {
@@ -284,7 +304,23 @@ export default function SubjectOpeningPlan() {
                 },
                 _count: {
                     select: {
-                        planTrainingSubjects: true,
+                        planTrainingSubjects: {
+                            where: {
+                                subjectClassType: hocLai
+                                    ? $Enums.SubjectClassType.RETAKE
+                                    : $Enums.SubjectClassType.NORMAL,
+                                fixedClasses: {
+                                    some: {
+                                        trainingCourseId,
+                                        curriculumVersion: {
+                                            curriculum: {
+                                                trainingMajorId,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
                     },
                 },
             },
@@ -313,6 +349,8 @@ export default function SubjectOpeningPlan() {
                             ),
                             countOld: cur.subjectVersion.subjectClass.length ?? 0,
                             examType: cur.subjectVersion?.examType,
+                            trainingLocationId:
+                                cur.subjectVersion?.subjectClass[0]?.trainingLocationId || null,
                         }
                         return acc
                     },
@@ -368,6 +406,11 @@ export default function SubjectOpeningPlan() {
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
         where: { trainingObjectTypeId, deletedAt: null, active: true },
+    })
+
+    const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
+        orderBy: { name: 'asc' },
+        where: { deletedAt: null, active: true },
     })
 
     const { hideSpinner, showSpinner } = useSpinner()
@@ -443,6 +486,7 @@ export default function SubjectOpeningPlan() {
                                     maxStudent: subjectVersion.count,
                                     examType: subjectVersion.examType,
                                     schedule: $Enums.SubjectClassSchedule.MORNING,
+                                    trainingLocationId: subjectVersion.trainingLocationId || null,
                                 }))
                             ),
                     },
@@ -687,7 +731,7 @@ export default function SubjectOpeningPlan() {
                                                     (i: any) => {
                                                         return {
                                                             key: i?.id,
-                                                            label: `${i?.code}`,
+                                                            label: `${i?.code} (${(subjectClassToFixed?.[i?.subjectId]?.[i?.id] || []).reduce((sum, fcId) => sum + (fcId.count || 0), 0)})`,
                                                         }
                                                     }
                                                 )}
@@ -811,7 +855,23 @@ export default function SubjectOpeningPlan() {
                                                 ]}
                                                 required
                                             >
-                                                <Select />
+                                                <Select
+                                                    allowClear
+                                                    showSearch
+                                                    dropdownStyle={{
+                                                        maxHeight: 400,
+                                                        minWidth: 300,
+                                                    }}
+                                                    filterOption={(input, option) =>
+                                                        String(option?.label ?? '')
+                                                            ?.toLowerCase()
+                                                            ?.includes(input?.toLowerCase())
+                                                    }
+                                                    options={trainingLocationData.map((e) => ({
+                                                        label: e.name,
+                                                        value: e.id,
+                                                    }))}
+                                                />
                                             </Form.Item>
                                         </>
                                     ),
@@ -966,6 +1026,6 @@ export default function SubjectOpeningPlan() {
     )
 }
 
-SubjectOpeningPlan.getLayout = function getLayout(page: React.ReactElement) {
+KeHoachMoLopMonHoc.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

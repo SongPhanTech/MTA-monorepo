@@ -3,6 +3,7 @@ import { queryClient } from '@api/index'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import useScoreToWords from '@hooks/useScoreToWords'
+import { useSession } from '@workspace/auth/react'
 import type { Prisma, SubjectClass } from '@workspace/db/client'
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
 import { getScoreStatistics } from '@workspace/libs/utils'
@@ -79,6 +80,7 @@ export type DataTable = Prisma.StudentSubjectScoreGetPayload<{
     }
 }>
 
+
 const ModalPrintStudentSubjectScore = () => {
     const formattedDate = '..., ngày ... tháng ... năm ...'
     const printRef = useRef<HTMLDivElement>(null)
@@ -88,6 +90,9 @@ const ModalPrintStudentSubjectScore = () => {
     const { isOpen, onClose, input } = useDisclosure<ModalPrintToKQHTInput>({
         tag: 'ModalPrintStudentSubjectScore',
     })
+
+     const { data: session } = useSession()
+        const profileName = session?.preferred_username || ''
 
     const { data } = useFindUniqueSubjectClass(
         {
@@ -488,7 +493,8 @@ const ModalPrintStudentSubjectScore = () => {
                                     </td>
                                     <td className="border border-black text-center">{''}</td>
                                     <td className="border border-black text-left">
-                                        {convert(
+                                        {((item?.attendanceScore && item?.midtermScore && item?.examScore)||item?.manualFinalScore ||
+                                                item?.finalScore)&& convert(
                                             item?.manualFinalScore ||
                                                 item?.finalScore?.toNumber() ||
                                                 0
@@ -527,6 +533,8 @@ const ModalPrintStudentSubjectScore = () => {
                         ))}
                     </div>
                 </div>
+                    <div className="mt-3">Người in: {profileName}</div>
+
                 <Row gutter={[16, 0]} className="mt-6 text-center">
                     <Col span={8} className="flex flex-col items-center justify-center">
                         <div className="italic text-left">{formattedDate}</div>

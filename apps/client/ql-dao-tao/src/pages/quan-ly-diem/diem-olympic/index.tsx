@@ -12,7 +12,7 @@ import {
     useFindManyArchivedAward,
     useUpdateArchivedAward,
 } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
+import { useAwardScore } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Modal, Row, Tag } from 'antd'
@@ -154,30 +154,33 @@ export default function ArchivedAward() {
             },
         })
     }
+
+    const { mutateAsync: updateAwardScore } = useAwardScore()
     const handleAprove = async (status: string) => {
         try {
-            console.log(selectedRowKeys)
-
             if (selectedRowKeys?.length > 0) {
-                let listSqlTransaction: any = []
-                listSqlTransaction = [
-                    ...listSqlTransaction,
-                    ...selectedRowKeys.map((item: any) => {
-                        return {
-                            model: 'ArchivedAward',
-                            operation: 'update',
-                            data: {
-                                where: {
-                                    id: item,
-                                },
-                                data: {
-                                    status,
-                                },
-                            },
-                        }
-                    }),
-                ]
-                const res = await sqlTransaction(listSqlTransaction)
+                // let listSqlTransaction: any = []
+                // listSqlTransaction = [
+                //     ...listSqlTransaction,
+                //     ...selectedRowKeys.map((item: any) => {
+                //         return {
+                //             model: 'ArchivedAward',
+                //             operation: 'update',
+                //             data: {
+                //                 where: {
+                //                     id: item,
+                //                 },
+                //                 data: {
+                //                     status,
+                //                 },
+                //             },
+                //         }
+                //     }),
+                // ]
+                // const res = await sqlTransaction(listSqlTransaction)
+                   const res= await updateAwardScore({
+                    data:{archivedAwardIds:selectedRowKeys as string[]}
+                })
                 if (res?.status === 200) {
                     message.success('Phê duyệt thành công')
                     refetch()
@@ -201,7 +204,7 @@ export default function ArchivedAward() {
                     <Col span={24} className="mt-3">
                         <Flex justify="end">
                             {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                 'THEM'
                             ) && (
                                 // <Popover
@@ -244,7 +247,7 @@ export default function ArchivedAward() {
                                 </>
                             )}
                             {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                 'THEM'
                             ) && (
                                 <Button onClick={handleModal} type="primary" className="ml-3">
@@ -324,7 +327,7 @@ export default function ArchivedAward() {
                             align: 'center',
                             fixed: 'right',
                             hidden: !canSome(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                 'SUA',
                                 'XOA'
                             ),
@@ -332,7 +335,7 @@ export default function ArchivedAward() {
                                 return (
                                     <Row className="justify-center gap-2">
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                             'SUA'
                                         ) &&
                                             status === 'PENDING' && (
@@ -342,7 +345,7 @@ export default function ArchivedAward() {
                                                 />
                                             )}
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_CONG,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_QL_DIEM_CONG,
                                             'XOA'
                                         ) &&
                                             status === 'PENDING' && (

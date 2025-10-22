@@ -212,7 +212,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         />
                     </FormItem>
                 </Col>
-                <Col span={12}>
+                {/* <Col span={12}>
                     <FormItem
                         form={form}
                         name="questionBankId"
@@ -234,7 +234,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                             disabled={!isDraft}
                         />
                     </FormItem>
-                </Col>
+                </Col> */}
                 <Col span={12}>
                     <FormItem form={form} name="subjectClass" label="Lớp thi">
                         <TreeSelectSubjectVersion

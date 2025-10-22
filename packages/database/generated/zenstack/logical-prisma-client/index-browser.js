@@ -419,6 +419,7 @@ exports.Prisma.QuaTrinhCongTacScalarFieldEnum = {
   tuThangNam: 'tuThangNam',
   denThangNam: 'denThangNam',
   donVi: 'donVi',
+  diaChi: 'diaChi',
   chucDanh: 'chucDanh',
   chucVuDangDoan: 'chucVuDangDoan',
   soQuyetDinh: 'soQuyetDinh',
@@ -1423,7 +1424,8 @@ exports.Prisma.PlanTrainingSubjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   planTrainingId: 'planTrainingId',
-  subjectVersionId: 'subjectVersionId'
+  subjectVersionId: 'subjectVersionId',
+  subjectClassType: 'subjectClassType'
 };
 
 exports.Prisma.StudentScoreConvertScalarFieldEnum = {
@@ -1920,6 +1922,7 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   subjectId: 'subjectId',
   schedule: 'schedule',
   maxStudent: 'maxStudent',
+  type: 'type',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   cancelled: 'cancelled',
@@ -2270,10 +2273,26 @@ exports.Prisma.StudentScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  entryScore: 'entryScore',
   note: 'note',
   from: 'from',
   to: 'to',
+  registerNumber: 'registerNumber',
+  doctoralCode: 'doctoralCode',
+  admissionCombination: 'admissionCombination',
+  entryScore: 'entryScore',
+  competencyScore: 'competencyScore',
+  department: 'department',
+  departmentAddress: 'departmentAddress',
+  careerYear: 'careerYear',
+  universitySchool: 'universitySchool',
+  universityTrainingType: 'universityTrainingType',
+  universityGraduationYear: 'universityGraduationYear',
+  universityMajor: 'universityMajor',
+  universityRank: 'universityRank',
+  basic: 'basic',
+  facility: 'facility',
+  foreignLanguage: 'foreignLanguage',
+  priorityReason: 'priorityReason',
   trainingLocationId: 'trainingLocationId',
   unionLeader: 'unionLeader',
   status: 'status',
@@ -3185,6 +3204,185 @@ exports.Prisma.SurveyResponseScalarFieldEnum = {
   answeredAt: 'answeredAt'
 };
 
+exports.Prisma.QuestionBankScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.DifficultyScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  level: 'level'
+};
+
+exports.Prisma.KnowledgeBlockScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  subjectVersionId: 'subjectVersionId',
+  name: 'name'
+};
+
+exports.Prisma.QuestionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  content: 'content',
+  type: 'type',
+  point: 'point',
+  explanation: 'explanation',
+  isAutoGraded: 'isAutoGraded',
+  questionBankId: 'questionBankId',
+  knowledgeBlockId: 'knowledgeBlockId',
+  difficultyId: 'difficultyId'
+};
+
+exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  questionId: 'questionId',
+  content: 'content',
+  isCorrect: 'isCorrect',
+  order: 'order'
+};
+
+exports.Prisma.FillInBlankSlotScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  questionId: 'questionId',
+  order: 'order',
+  correctAnswer: 'correctAnswer'
+};
+
+exports.Prisma.OrderingItemScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  questionId: 'questionId',
+  content: 'content',
+  correctOrder: 'correctOrder'
+};
+
+exports.Prisma.ExamScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  status: 'status',
+  questionBankId: 'questionBankId',
+  lockExamCode: 'lockExamCode',
+  duration: 'duration'
+};
+
+exports.Prisma.ExamRoomScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  examId: 'examId',
+  roomId: 'roomId',
+  firstSupervisorId: 'firstSupervisorId',
+  secondSupervisorId: 'secondSupervisorId',
+  lockExamCode: 'lockExamCode',
+  start: 'start',
+  end: 'end'
+};
+
+exports.Prisma.TestStructureRuleScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  examId: 'examId',
+  knowledgeBlockId: 'knowledgeBlockId',
+  questionPoint: 'questionPoint',
+  questionType: 'questionType',
+  count: 'count'
+};
+
+exports.Prisma.ExamBankScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  examId: 'examId',
+  examCode: 'examCode'
+};
+
+exports.Prisma.ExamBankQuestionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  examBankId: 'examBankId',
+  questionId: 'questionId',
+  order: 'order'
+};
+
+exports.Prisma.ExamSessionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  examId: 'examId',
+  examRoomId: 'examRoomId',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  examCode: 'examCode'
+};
+
 exports.Prisma.StaffScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3478,182 +3676,6 @@ exports.Prisma.NoteReminderScalarFieldEnum = {
   repeatType: 'repeatType',
   isNotified: 'isNotified',
   noteId: 'noteId'
-};
-
-exports.Prisma.QuestionBankScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  name: 'name',
-  subjectVersionId: 'subjectVersionId'
-};
-
-exports.Prisma.DifficultyScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  name: 'name',
-  level: 'level'
-};
-
-exports.Prisma.KnowledgeBlockScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  subjectVersionId: 'subjectVersionId',
-  name: 'name'
-};
-
-exports.Prisma.QuestionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  content: 'content',
-  type: 'type',
-  point: 'point',
-  explanation: 'explanation',
-  isAutoGraded: 'isAutoGraded',
-  questionBankId: 'questionBankId',
-  knowledgeBlockId: 'knowledgeBlockId',
-  difficultyId: 'difficultyId'
-};
-
-exports.Prisma.MultipleChoiceOptionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  questionId: 'questionId',
-  content: 'content',
-  isCorrect: 'isCorrect',
-  order: 'order'
-};
-
-exports.Prisma.FillInBlankSlotScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  questionId: 'questionId',
-  order: 'order',
-  correctAnswer: 'correctAnswer'
-};
-
-exports.Prisma.OrderingItemScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  questionId: 'questionId',
-  content: 'content',
-  correctOrder: 'correctOrder'
-};
-
-exports.Prisma.ExamScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  title: 'title',
-  status: 'status',
-  questionBankId: 'questionBankId',
-  lockExamCode: 'lockExamCode',
-  startTime: 'startTime',
-  duration: 'duration'
-};
-
-exports.Prisma.ExamRoomScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  examId: 'examId',
-  roomId: 'roomId'
-};
-
-exports.Prisma.TestStructureRuleScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  examId: 'examId',
-  knowledgeBlockId: 'knowledgeBlockId',
-  questionPoint: 'questionPoint',
-  questionType: 'questionType',
-  count: 'count'
-};
-
-exports.Prisma.ExamBankScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  examId: 'examId',
-  examCode: 'examCode'
-};
-
-exports.Prisma.ExamBankQuestionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  examBankId: 'examBankId',
-  questionId: 'questionId',
-  order: 'order'
-};
-
-exports.Prisma.ExamSessionScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  examId: 'examId',
-  examRoomId: 'examRoomId',
-  studentSubjectScoreId: 'studentSubjectScoreId',
-  examCode: 'examCode'
 };
 
 exports.Prisma.AcademicWarningRuleScalarFieldEnum = {
@@ -4298,6 +4320,7 @@ exports.Prisma.QuaTrinhCongTacOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   donVi: 'donVi',
+  diaChi: 'diaChi',
   chucDanh: 'chucDanh',
   chucVuDangDoan: 'chucVuDangDoan',
   soQuyetDinh: 'soQuyetDinh',
@@ -5430,6 +5453,17 @@ exports.Prisma.StudentOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   note: 'note',
+  registerNumber: 'registerNumber',
+  doctoralCode: 'doctoralCode',
+  admissionCombination: 'admissionCombination',
+  department: 'department',
+  departmentAddress: 'departmentAddress',
+  universitySchool: 'universitySchool',
+  universityTrainingType: 'universityTrainingType',
+  universityMajor: 'universityMajor',
+  universityRank: 'universityRank',
+  foreignLanguage: 'foreignLanguage',
+  priorityReason: 'priorityReason',
   trainingLocationId: 'trainingLocationId',
   unionLeader: 'unionLeader',
   fixedClassId: 'fixedClassId',
@@ -5963,6 +5997,115 @@ exports.Prisma.SurveyResponseOrderByRelevanceFieldEnum = {
   surveyChoiceId: 'surveyChoiceId'
 };
 
+exports.Prisma.QuestionBankOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name',
+  subjectVersionId: 'subjectVersionId'
+};
+
+exports.Prisma.DifficultyOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name'
+};
+
+exports.Prisma.KnowledgeBlockOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  subjectVersionId: 'subjectVersionId',
+  name: 'name'
+};
+
+exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  content: 'content',
+  explanation: 'explanation',
+  questionBankId: 'questionBankId',
+  knowledgeBlockId: 'knowledgeBlockId',
+  difficultyId: 'difficultyId'
+};
+
+exports.Prisma.MultipleChoiceOptionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  questionId: 'questionId',
+  content: 'content'
+};
+
+exports.Prisma.FillInBlankSlotOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  questionId: 'questionId',
+  correctAnswer: 'correctAnswer'
+};
+
+exports.Prisma.OrderingItemOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  questionId: 'questionId',
+  content: 'content'
+};
+
+exports.Prisma.ExamOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  questionBankId: 'questionBankId'
+};
+
+exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  examId: 'examId',
+  roomId: 'roomId',
+  firstSupervisorId: 'firstSupervisorId',
+  secondSupervisorId: 'secondSupervisorId'
+};
+
+exports.Prisma.TestStructureRuleOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  examId: 'examId',
+  knowledgeBlockId: 'knowledgeBlockId'
+};
+
+exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  examId: 'examId',
+  examCode: 'examCode'
+};
+
+exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  examBankId: 'examBankId',
+  questionId: 'questionId'
+};
+
+exports.Prisma.ExamSessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  examId: 'examId',
+  examRoomId: 'examRoomId',
+  studentSubjectScoreId: 'studentSubjectScoreId',
+  examCode: 'examCode'
+};
+
 exports.Prisma.StaffOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6128,115 +6271,6 @@ exports.Prisma.NoteReminderOrderByRelevanceFieldEnum = {
   description: 'description',
   title: 'title',
   noteId: 'noteId'
-};
-
-exports.Prisma.QuestionBankOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  name: 'name',
-  subjectVersionId: 'subjectVersionId'
-};
-
-exports.Prisma.DifficultyOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  name: 'name'
-};
-
-exports.Prisma.KnowledgeBlockOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  subjectVersionId: 'subjectVersionId',
-  name: 'name'
-};
-
-exports.Prisma.QuestionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  content: 'content',
-  explanation: 'explanation',
-  questionBankId: 'questionBankId',
-  knowledgeBlockId: 'knowledgeBlockId',
-  difficultyId: 'difficultyId'
-};
-
-exports.Prisma.MultipleChoiceOptionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  questionId: 'questionId',
-  content: 'content'
-};
-
-exports.Prisma.FillInBlankSlotOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  questionId: 'questionId',
-  correctAnswer: 'correctAnswer'
-};
-
-exports.Prisma.OrderingItemOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  questionId: 'questionId',
-  content: 'content'
-};
-
-exports.Prisma.ExamOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  title: 'title',
-  questionBankId: 'questionBankId',
-  startTime: 'startTime'
-};
-
-exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  examId: 'examId',
-  roomId: 'roomId'
-};
-
-exports.Prisma.TestStructureRuleOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  examId: 'examId',
-  knowledgeBlockId: 'knowledgeBlockId'
-};
-
-exports.Prisma.ExamBankOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  examId: 'examId',
-  examCode: 'examCode'
-};
-
-exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  examBankId: 'examBankId',
-  questionId: 'questionId'
-};
-
-exports.Prisma.ExamSessionOrderByRelevanceFieldEnum = {
-  id: 'id',
-  code: 'code',
-  description: 'description',
-  examId: 'examId',
-  examRoomId: 'examRoomId',
-  studentSubjectScoreId: 'studentSubjectScoreId',
-  examCode: 'examCode'
 };
 
 exports.Prisma.AcademicWarningRuleOrderByRelevanceFieldEnum = {
@@ -6540,6 +6574,12 @@ exports.MessageSender = exports.$Enums.MessageSender = {
   BOT: 'BOT'
 };
 
+exports.SubjectClassType = exports.$Enums.SubjectClassType = {
+  NORMAL: 'NORMAL',
+  RETAKE: 'RETAKE',
+  REEXAM: 'REEXAM'
+};
+
 exports.ScoreConvertStatus = exports.$Enums.ScoreConvertStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
@@ -6803,6 +6843,23 @@ exports.SurveyQuestionType = exports.$Enums.SurveyQuestionType = {
   SINGLE_CHOICE: 'SINGLE_CHOICE'
 };
 
+exports.QuestionType = exports.$Enums.QuestionType = {
+  ESSAY: 'ESSAY',
+  ORAL: 'ORAL',
+  SINGLE_CHOICE: 'SINGLE_CHOICE',
+  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+  FILL_IN_BLANK: 'FILL_IN_BLANK',
+  ORDERING: 'ORDERING'
+};
+
+exports.ExamStatus = exports.$Enums.ExamStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ONGOING: 'ONGOING',
+  FINISHED: 'FINISHED',
+  ARCHIVED: 'ARCHIVED'
+};
+
 exports.GraduationSessionStatus = exports.$Enums.GraduationSessionStatus = {
   PLANNING: 'PLANNING',
   OPEN_FOR_APPLICATION: 'OPEN_FOR_APPLICATION',
@@ -6836,23 +6893,6 @@ exports.ReminderRepeatType = exports.$Enums.ReminderRepeatType = {
   WEEKLY: 'WEEKLY',
   MONTHLY: 'MONTHLY',
   YEARLY: 'YEARLY'
-};
-
-exports.QuestionType = exports.$Enums.QuestionType = {
-  ESSAY: 'ESSAY',
-  ORAL: 'ORAL',
-  SINGLE_CHOICE: 'SINGLE_CHOICE',
-  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
-  FILL_IN_BLANK: 'FILL_IN_BLANK',
-  ORDERING: 'ORDERING'
-};
-
-exports.ExamStatus = exports.$Enums.ExamStatus = {
-  DRAFT: 'DRAFT',
-  PUBLISHED: 'PUBLISHED',
-  ONGOING: 'ONGOING',
-  FINISHED: 'FINISHED',
-  ARCHIVED: 'ARCHIVED'
 };
 
 exports.FeedbackStatus = exports.$Enums.FeedbackStatus = {
@@ -7056,6 +7096,19 @@ exports.Prisma.ModelName = {
   SurveyChoice: 'SurveyChoice',
   SurveySession: 'SurveySession',
   SurveyResponse: 'SurveyResponse',
+  QuestionBank: 'QuestionBank',
+  Difficulty: 'Difficulty',
+  KnowledgeBlock: 'KnowledgeBlock',
+  Question: 'Question',
+  MultipleChoiceOption: 'MultipleChoiceOption',
+  FillInBlankSlot: 'FillInBlankSlot',
+  OrderingItem: 'OrderingItem',
+  Exam: 'Exam',
+  ExamRoom: 'ExamRoom',
+  TestStructureRule: 'TestStructureRule',
+  ExamBank: 'ExamBank',
+  ExamBankQuestion: 'ExamBankQuestion',
+  ExamSession: 'ExamSession',
   Staff: 'Staff',
   StaffHistory: 'StaffHistory',
   Scholarship: 'Scholarship',
@@ -7074,19 +7127,6 @@ exports.Prisma.ModelName = {
   NoteFolder: 'NoteFolder',
   NoteTag: 'NoteTag',
   NoteReminder: 'NoteReminder',
-  QuestionBank: 'QuestionBank',
-  Difficulty: 'Difficulty',
-  KnowledgeBlock: 'KnowledgeBlock',
-  Question: 'Question',
-  MultipleChoiceOption: 'MultipleChoiceOption',
-  FillInBlankSlot: 'FillInBlankSlot',
-  OrderingItem: 'OrderingItem',
-  Exam: 'Exam',
-  ExamRoom: 'ExamRoom',
-  TestStructureRule: 'TestStructureRule',
-  ExamBank: 'ExamBank',
-  ExamBankQuestion: 'ExamBankQuestion',
-  ExamSession: 'ExamSession',
   AcademicWarningRule: 'AcademicWarningRule',
   AcademicWarning: 'AcademicWarning',
   DisciplinaryWarning: 'DisciplinaryWarning',

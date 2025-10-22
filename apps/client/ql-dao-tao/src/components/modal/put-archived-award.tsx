@@ -6,11 +6,13 @@ import type { ArchivedAward, DocumentFile } from '@workspace/db/client'
 import {
     useCreateArchivedAward,
     useFindManyAward,
+    useFindManyFixedClass,
     useFindManyStudent,
+    useFindManyTrainingCourse,
     useFindUniqueArchivedAward,
     useUpdateArchivedAward,
 } from '@workspace/db/hooks'
-import { Col, Form, message, Select as AntdSelect, DatePicker, InputNumber } from 'antd'
+import { Col, Form, message, InputNumber } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -18,9 +20,12 @@ import 'dayjs/locale/vi'
 import Select from '@components/commons/select'
 import DocumentPaths from '@components/commons/documentPaths'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
+import DatePicker from '@components/commons/date-picker'
 export type PutArchivedAward = ArchivedAward & {
     documentFiles?: DocumentFile[]
     bonusScore: number
+    trainingCoursesId?:string
+    fixedClassesId?:string
 }
 dayjs.locale('vi')
 const PutArchivedAwardModal = () => {
@@ -43,37 +48,35 @@ const PutArchivedAwardModal = () => {
     const { mutateAsync: createArchivedAward } = useCreateArchivedAward()
     const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
     const { data: awardData = [] } = useFindManyAward()
+      const { data: trainingCourses = [] } =
+        useFindManyTrainingCourse({
+            where:{
+                trainingObjectTypeId
+            },
+            orderBy: { name: 'asc' },
+        }, { enabled: !!trainingObjectTypeId })
+
+    // Lấy danh sách FixedClass
+    const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass({
+        where: {
+            trainingCourseId: {
+                in: trainingCourses.map((course) => course.id),
+            },
+        },
+        // skip: trainingCourses.length ? 0 : 1,
+    })
+    const fixedClassId=Form.useWatch('fixedClassesId',form)
+    const trainingCoursesId=Form.useWatch('trainingCoursesId',form)
     const { data: studentData = [] } = useFindManyStudent(
         {
             where: {
-                trainingObjectType: {
-                    id: trainingObjectTypeId,
-                },
-                ...(filters.textSearch &&
-                    filters.textSearch !== '' && {
-                        userProfile: {
-                            OR: [
-                                {
-                                    firstName: {
-                                        contains: filters.textSearch,
-                                        mode: 'insensitive',
-                                    },
-                                },
-                                {
-                                    lastName: {
-                                        contains: filters.textSearch,
-                                        mode: 'insensitive',
-                                    },
-                                },
-                                {
-                                    code: {
-                                        contains: filters.textSearch,
-                                        mode: 'insensitive',
-                                    },
-                                },
-                            ],
-                        },
-                    }),
+                trainingObjectTypeId,
+                ...(!!trainingCoursesId||!!fixedClassId?{
+                      fixedClass:{
+                    ...(trainingCoursesId?{trainingCourseId:trainingCoursesId}:{}),
+                    ...(fixedClassId?{id:fixedClassId}:{})
+                }
+                }:{})
             },
             include: {
                 userProfile: true,
@@ -174,6 +177,15 @@ const PutArchivedAwardModal = () => {
             where: { id },
             include: {
                 documentFiles: true,
+                student:{
+                    include:{
+                        fixedClass:{
+                            include:{
+                                trainingCourse:true
+                            }
+                        }
+                    }
+                }
             },
         },
         { enabled: !!id }
@@ -184,7 +196,10 @@ const PutArchivedAwardModal = () => {
         if (initialData) {
             form.setFieldsValue({
                 ...initialData,
+                date:dayjs(initialData.date),
                 documentFiles: initialData.documentFiles,
+                trainingCoursesId:initialData?.student?.fixedClass?.trainingCourseId ||'',
+                fixedClassesId:initialData?.student?.fixedClassId||''
             })
             setDocument(initialData.documentFiles)
         } else {
@@ -203,7 +218,7 @@ const PutArchivedAwardModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa điểm oplympic' : 'Thêm mới điểm oplympic'}
+            title={id ? 'Chỉnh sửa đơn cộng điểm oplympic' : 'Thêm mới đơn cộng điểm oplympic'}
             className="w-[700px]"
         >
             <Col span={24} className="mb-4">
@@ -230,20 +245,42 @@ const PutArchivedAwardModal = () => {
                     <InputNumber disabled min={1} className="w-full" placeholder="Nhập điểm" />
                 </FormItem>
             </Col>
+                    <Col span={24} className="mb-4">
+                <FormItem form={form} name="trainingCoursesId" label="Khoá">
+                    <Select
+                        showSearch
+                        style={{ width: '100%' }}
+                        placeholder="Chọn khoá"
+                        options={trainingCourses.map((item) => ({
+                            label: `${item?.code || ''} - ${item.name}`,
+                            value: item.id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
+                    <Col span={24} className="mb-4">
+                <FormItem form={form} name="fixedClassesId" label="Lớp quản lý">
+                    <Select
+                        showSearch
+                        style={{ width: '100%' }}
+                        placeholder="Chọn lớp quản lý"
+                        options={fixedClasses.map((item) => ({
+                            label: `${item?.code || ''} - ${item.name}`,
+                            value: item.id,
+                        }))}
+                    />
+                </FormItem>
+            </Col>
             <Col span={24} className="mb-4">
                 <FormItem form={form} name="studentId" label="Học viên, sinh viên" required>
-                    <AntdSelect
+                    <Select
                         showSearch
                         style={{ width: '100%' }}
                         placeholder="Chọn sinh viên"
                         options={studentData.map((item) => ({
-                            label: `${item.userProfile?.code || ''} - ${item.userProfile?.lastName} ${item.userProfile?.firstName} `,
+                            label: `${item.userProfile?.code || ''} - ${item.userProfile?.lastName} ${item.userProfile?.firstName}`,
                             value: item.id,
                         }))}
-                        onSearch={(value) => {
-                            console.log(value)
-                            setFilters({ ...filters, textSearch: value })
-                        }}
                     />
                 </FormItem>
             </Col>

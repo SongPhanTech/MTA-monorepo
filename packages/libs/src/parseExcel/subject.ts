@@ -8,6 +8,7 @@ export type SubjectResult = {
     organizationCode: string | undefined
     credit: number
     period: number
+    schedulePeriod: number
     semester: number | null
     type: $Enums.SubjectRequirementType
     subjectVersionType: $Enums.SubjectVersionType
@@ -58,8 +59,8 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         orgCode: 'H', // Khoa, Viện phụ trách
         credit: 'I', // Số tín chỉ
         // structure: 'I', // Cấu trúc
-        periodCtdt: 'K', // Số tiết CTĐT
-        periodTkb: 'L', // Số tiết TKB
+        period: 'K', // Số tiết CTĐT
+        schedulePeriod: 'L', // Số tiết TKB
         theory: 'M', // LT
         practice: 'N', // TL, BT
         discussion: 'O', // ThL
@@ -156,7 +157,8 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             continue
         }
 
-        const period = parseIntField(row[cols.periodTkb]) || 0
+        const period = parseIntField(row[cols.period]) || 0
+        const schedulePeriod = parseIntField(row[cols.schedulePeriod]) || 0
         const semester = parseIntField(row[cols.semester]) || null
 
         // Parse loại bắt buộc
@@ -203,6 +205,7 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             organizationCode,
             credit,
             period,
+            schedulePeriod,
             semester,
             type,
             subjectVersionType,
@@ -218,31 +221,106 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
         })
     }
 
-    // // Kiểm tra trùng lặp training blocks
-    // const duplicateTrainingBlocks = trainingBlocks
-    //     .map(({ name }) => name)
-    //     .filter((name, index, arr) => arr.indexOf(name) !== index)
+    // Kiểm tra trùng lặp subjects
+    const duplicateSubjects = subjects.filter((s, index, arr) => arr.indexOf(s) !== index)
 
-    // if (duplicateTrainingBlocks.length) {
-    //     errors.push({
-    //         sheetRef: sheetName,
-    //         cellRef: null,
-    //         message: `Khối kiến thức bị trùng: ${duplicateTrainingBlocks.join(', ')}`,
-    //     })
-    // }
-
-    // // Kiểm tra trùng lặp subjects
-    // const duplicateSubjects = trainingBlocks
-    //     .flatMap(({ subjects }) => subjects.map(({ name }) => name))
-    //     .filter((name, index, arr) => arr.indexOf(name) !== index)
-
-    // if (duplicateSubjects.length) {
-    //     errors.push({
-    //         sheetRef: sheetName,
-    //         cellRef: null,
-    //         message: `Môn học bị trùng: ${duplicateSubjects.join(', ')}`,
-    //     })
-    // }
+    if (duplicateSubjects.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: null,
+            message: `Môn học bị trùng: ${duplicateSubjects.join(', ')}`,
+        })
+    }
 
     return { subjects, errors }
+}
+
+export interface TrainingBlockResult {
+    trainingBlockName: string
+    credit: number
+}
+
+export interface ParseTrainingBlockResult {
+    trainingBlocks: TrainingBlockResult[]
+    errors: ParseSheetError[]
+}
+
+export const parseSheetTrainingBlock = (file: ArrayBufferLike): ParseTrainingBlockResult => {
+    const wb = read(file)
+    const sheetName = 'KKT_TU_CHON'
+
+    const errors: ParseSheetError[] = []
+    const ws = wb.Sheets[sheetName]
+    if (!ws) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: sheetName,
+            message: `Không tìm thấy sheet "${sheetName}" trong file`,
+        })
+        return { errors, trainingBlocks: [] }
+    }
+
+    // Mapping cột theo đúng cấu trúc Excel
+    const cols = {
+        trainingBlock: 'A', // tên khối kiến thức
+        electiveCreditsRequired: 'B', // số tín chỉ tự chọn yêu cầu
+    } as const
+
+    const startRow = 1 // Dòng bắt đầu đọc dữ liệu (bỏ qua header)
+
+    const rows = utils.sheet_to_json(ws, {
+        defval: '',
+        blankrows: false,
+        raw: false,
+        header: 'A',
+        range: startRow,
+    }) as (Record<(typeof cols)[keyof typeof cols], string | null> & {
+        __rowNum__: number
+    })[]
+
+    const trainingBlocks: TrainingBlockResult[] = []
+
+    for (const row of rows) {
+        const rowNumber = row.__rowNum__ + 1
+        const trainingBlock = row[cols.trainingBlock]?.trim()
+        if (!trainingBlock) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.trainingBlock}${rowNumber}`,
+                message: 'Tên khối kiến thức không được để trống',
+            })
+            continue
+        }
+
+        // Parse các trường bắt buộc
+        const credit = Number.parseInt(row[cols.electiveCreditsRequired] || '', 10)
+        if (credit === undefined || Number.isNaN(credit)) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.electiveCreditsRequired}${rowNumber}`,
+                message: `Số tín chỉ không hợp lệ cho KKT "${trainingBlock}"`,
+            })
+            continue
+        }
+
+        trainingBlocks.push({
+            trainingBlockName: trainingBlock,
+            credit,
+        })
+    }
+
+    // Kiểm tra trùng lặp training blocks
+    const duplicateTrainingBlocks = trainingBlocks
+        .map(({ trainingBlockName }) => trainingBlockName)
+        .filter((name, index, arr) => arr.indexOf(name) !== index)
+
+    if (duplicateTrainingBlocks.length) {
+        errors.push({
+            sheetRef: sheetName,
+            cellRef: null,
+            message: `Khối kiến thức bị trùng: ${duplicateTrainingBlocks.join(', ')}`,
+        })
+    }
+
+    return { trainingBlocks, errors }
 }
