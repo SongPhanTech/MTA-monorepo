@@ -559,7 +559,7 @@ const handleExportBangDiemNganHan = () => {
             exportFromTemplate({
                 templateUrl: getMinioUrl('/mta/template/bang-diem-ngan-dai-han.xlsx'), 
                 sheets: allSheetOptions,
-                fileName: `BangDiem-ChiTiet-TungSinhVien.xlsx`,
+                fileName: 'BangDiem-ChiTiet-TungSinhVien.xlsx',
                 mergeSheetsToOne: true,
             });
 

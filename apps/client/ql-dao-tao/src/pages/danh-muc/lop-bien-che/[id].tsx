@@ -10,7 +10,6 @@ import type { Student } from "@workspace/db/client";
 import {
   useFindManyCurriculumVersion,
   useFindManyDM_GioiTinh,
-  useFindManySemester,
   useFindManyStudent,
   useFindManyTrainingField,
   useFindManyTrainingMajor,
@@ -41,10 +40,9 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useDisclosure } from "react-hook-disclosure-modal";
 import { useTrainingObjectTypeStore } from "@workspace/ui";
-import { exportFromTemplate, TableRow } from "@workspace/libs/template-excel";
-import { createSimpleExcel, SimpleRowData } from "@workspace/libs/create-excel";
+import { exportFromTemplate, type TableRow } from "@workspace/libs/template-excel";
 import { sqlTransaction } from "@workspace/libs/api/model";
-import { IMonHoc, IHocKi } from "./ket-qua-hoc-tap/[id]";
+import type { IMonHoc, IHocKi } from "./ket-qua-hoc-tap/[id]";
 import { useScoreConverter } from "@hooks/scoreConverter";
 import { getMinioUrl } from "@workspace/constant";
 
@@ -309,6 +307,14 @@ export default function StudentFixedClassPage() {
         },
       },
       curriculumVersionParallel: true,
+      subjectClassStudent: {
+        include: {
+          subjectVersion:{
+            include: {
+              subject: true 
+            }} 
+        },
+      },
     },
     orderBy: {
       userProfile: {
@@ -316,6 +322,109 @@ export default function StudentFixedClassPage() {
       },
     },
   });
+
+   const handleExportDiemLop = () => {
+          showSpinner();
+          try {
+              const subjectsInOrder = fixedClass?.curriculumVersion?.trainingBlocks
+                  .flatMap(block => block.subjects)
+                  .sort((a, b) => (a.semester || 0) - (b.semester || 0));
+              const tongSoHP = subjectsInOrder?.length;
+              const tongSoTC = subjectsInOrder?.reduce((sum, s) => sum + (s.subject.credit || 0), 0);
+              
+              const chuthichMonHoc = subjectsInOrder?.map((s, index) => 
+                  `M${index + 1}. ${s.subject.name}`
+              );
+  
+            const studentRows = data.map((student, index) => {
+                  // !!! TODO: LOGIC QUAN TRỌNG NHẤT
+                  // Cần map điểm của sinh viên với danh sách môn học ở trên
+                  const diem: (string | number | null)[] = (subjectsInOrder || []).map(subjectInfo => {
+                      const scoreData = (student as any).subjectClassStudent?.find(
+                          (score: any) => 
+                            score.subjectVersion?.subject?.id === subjectInfo.subject.id
+                      );
+                      if (scoreData) {
+                          return scoreData.manualFinalScore ?? scoreData.finalScore;
+                      }
+                      return null;
+                  });
+                  // !!! TODO: Lấy các trường đã include
+                  const ccta = (student as any).englishCertificate || null;
+                  const tbc = (student as any).gpa || null;
+                  
+                  // !!! TODO: Lấy ĐLV (Điểm luận văn)
+                  const dlv = null;
+                  return {
+                    cells: [
+                      { value: index + 1, align: "center" as const, border: true },
+                      { value: student.userProfile.fullname, border: true },
+                      { value: student.userProfile.dateOfBirth ? dayjs(student.userProfile.dateOfBirth).format("DD/MM/YYYY") : "", align: "center" as const, border: true },
+                      { value: student.trainingObjectType?.name || "", align: "center" as const, border: true }, 
+                      ...diem.map(d => ({ 
+                          value: d !== null ? String(d) : null, 
+                          align: "right" as const, 
+                          border: true 
+                      })),
+                      { value: ccta !== null ? String(ccta) : null, align: "right" as const, border: true },
+                      { value: tbc !== null ? String(tbc) : null, align: "right" as const, border: true, bold: true },
+                      { value: dlv !== null ? String(dlv) : null, align: "right" as const, border: true, bold: true },
+                    ]
+                  };
+              });
+  
+              const columnFooterRows : TableRow[]= [];
+              const maxRowsPerColumn = 9; 
+              
+              for (let i = 0; i < maxRowsPerColumn; i++) {
+                  const cell1 = chuthichMonHoc?.[i] ? { value: chuthichMonHoc[i], border: false, colSpan: 10 } : { value: null, border: false, colSpan: 10 };
+                  const cell2 = chuthichMonHoc?.[i + 9] ? { value: chuthichMonHoc[i + 9], border: false, colSpan: 10 } : { value: null, border: false, colSpan: 10 };
+                  const cell3 = chuthichMonHoc?.[i + 18] ? { value: chuthichMonHoc[i + 18], border: false, colSpan: 10 } : { value: null, border: false, colSpan: 10 };
+                  
+                  columnFooterRows.push({ cells: [cell1, cell2, cell3] });
+              }
+  
+              const ghiChuRows: TableRow[] = [
+                { cells: [{ value: null, border: false }] }, 
+                { cells: [{ value: 'GHI CHÚ:', border: false, bold: true, colSpan: 10 }] },
+                { cells: [{ value: "1. 'Null': Môn đã lên danh sách thi nhưng chưa thi hoặc giáo viên chưa nhập điểm", border: false, colSpan: 20 }] },
+                { cells: [{ value: "2. ' ': Môn chưa lên danh sách thi", border: false, colSpan: 20 }] },
+                { cells: [{ value: "3. 'Miễn': Môn miễn học", border: false, colSpan: 20 }] },
+                { cells: [{ value: "4. 'HT': Môn hoãn thi", border: false, colSpan: 20 }] },
+                { cells: [{ value: "4. 'CT': Môn cấm thi", border: false, colSpan: 20 }] },
+                { cells: [{ value: "5. 'ĐCT': Môn đình chỉ thi", border: false, colSpan: 20 }] },
+                { cells: [{ value: "6. Điểm TBC: Tính điểm trung bình cộng của tất cả các môn đã có điểm ở thời điểm xuất file excel điểm (Không tính điểm môn chưa thi, không tính điểm môn hoãn thi, miễn thi)", border: false, colSpan: 30 }] },
+            ];
+  
+              exportFromTemplate({
+                templateUrl: getMinioUrl('/mta/template/Bangdiemtheolop.xlsx'),
+                sheets: [
+                  {
+                    sheet: "BaoCaoDiem", 
+                    data: {
+                      khoa: `KẾT QUẢ ĐÀO TẠO TOÀN ${fixedClass?.trainingCourse.name?.toUpperCase()}`,
+                      chuyenNganh: `${fixedClass?.curriculumVersion?.curriculum.trainingMajor.code} - ${fixedClass?.curriculumVersion?.curriculum.trainingMajor.name}`,
+                      lop: fixedClass?.name || null,
+                      tongSoHP: tongSoHP || null,
+                      tongSoTC: tongSoTC || null,
+                    },
+                    tableStartCell: { row: 9, col: 1 }, 
+                    rows: [
+                      ...studentRows, 
+                      ...columnFooterRows, 
+                      ...ghiChuRows
+                    ], 
+                  },
+                ],
+                fileName: `BangDiem-${fixedClass?.name}.xlsx`,
+              });
+          } catch (error) {
+              console.error("Export failed:", error);
+              message.error("Xuất file thất bại, vui lòng thử lại!");
+          } finally {
+              hideSpinner();
+          }
+      };
 
   const debouncedRefetch = useCallback(
     _.debounce(() => {
@@ -552,8 +661,8 @@ export default function StudentFixedClassPage() {
             const diemTBHe4_Raw =
               tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi;
 
-            const diemTBHe10 = parseFloat(diemTBHe10_Raw.toFixed(1));
-            const diemTBHe4 = parseFloat(diemTBHe4_Raw.toFixed(1));
+            const diemTBHe10 = Number.parseFloat(diemTBHe10_Raw.toFixed(1));
+            const diemTBHe4 = Number.parseFloat(diemTBHe4_Raw.toFixed(1));
 
             hocKis.push({
               TenHocKi:
@@ -580,7 +689,7 @@ export default function StudentFixedClassPage() {
                 // 2. Tạo đối tượng Date
          const date = new Date(dateInput);
                 // 3. Kiểm tra nếu ngày không hợp lệ
-                if (isNaN(date.getTime())) {
+                if (Number.isNaN(date.getTime())) {
                     return '';
                 }
                 // 4. Trả về định dạng dd/mm/yyyy
@@ -686,11 +795,11 @@ export default function StudentFixedClassPage() {
       const tongdiemhe10 =
         tongtinchi === 0
           ? 0
-          : parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1));
+          : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1));
       const tongdiemhe4 =
         tongtinchi === 0
           ? 0
-          : parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1));
+          : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1));
       const totalRow: TableRow = {
         cells: [
           { value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false },
@@ -782,7 +891,7 @@ export default function StudentFixedClassPage() {
     exportFromTemplate({
       templateUrl: getMinioUrl('/mta/template/quatrinh.xlsx'),
       sheets: allSheetOptions,
-      fileName: `DGQT.xlsx`,
+      fileName: 'DGQT.xlsx',
       mergeSheetsToOne: true,
     });
     } catch (error) {
@@ -918,8 +1027,8 @@ export default function StudentFixedClassPage() {
             const diemTBHe4_Raw =
               tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi;
 
-            const diemTBHe10 = parseFloat(diemTBHe10_Raw.toFixed(1));
-            const diemTBHe4 = parseFloat(diemTBHe4_Raw.toFixed(1));
+            const diemTBHe10 = Number.parseFloat(diemTBHe10_Raw.toFixed(1));
+            const diemTBHe4 = Number.parseFloat(diemTBHe4_Raw.toFixed(1));
 
             hocKis.push({
               TenHocKi:
@@ -946,7 +1055,7 @@ export default function StudentFixedClassPage() {
                 // 2. Tạo đối tượng Date
          const date = new Date(dateInput);
                 // 3. Kiểm tra nếu ngày không hợp lệ
-                if (isNaN(date.getTime())) {
+                if (Number.isNaN(date.getTime())) {
                     return '';
                 }
                 // 4. Trả về định dạng dd/mm/yyyy
@@ -1052,11 +1161,11 @@ export default function StudentFixedClassPage() {
       const tongdiemhe10 =
         tongtinchi === 0
           ? 0
-          : parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1));
+          : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1));
       const tongdiemhe4 =
         tongtinchi === 0
           ? 0
-          : parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1));
+          : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1));
       const totalRow: TableRow = {
         cells: [
           { value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false },
@@ -1148,7 +1257,7 @@ export default function StudentFixedClassPage() {
     exportFromTemplate({
       templateUrl: getMinioUrl('/mta/template/quatrinh.xlsx'),
       sheets: allSheetOptions,
-      fileName: `DGQT.xlsx`,
+      fileName: 'DGQT.xlsx',
       mergeSheetsToOne: true,
     });
     } catch (error) {
@@ -1184,6 +1293,13 @@ export default function StudentFixedClassPage() {
             {/* Hàng chứa các button */}
             <Col xs={12}>
               <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
+                <Button
+                                                                        className="mr-3"
+                                                                        type="primary"
+                                                                        onClick={handleExportDiemLop}
+                                                                    >
+                                                                       Xuất bảng điểm
+                                                                    </Button>
                 <Dropdown
                   menu={{
                     items: [
