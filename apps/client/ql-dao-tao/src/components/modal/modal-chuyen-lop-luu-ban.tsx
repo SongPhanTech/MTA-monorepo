@@ -113,7 +113,7 @@ const ModalChuyenLopLuuBan = () => {
                     classChanges: listObject.map((i) => {
                         return {
                             decisionId: i.id,
-                            changeCurriculumVersion: !!i.changeCurriculumVersion,
+                            changeCurriculumVersion: i.changeCurriculumVersion,
                             fixedClassId: i.newFixedClassId,
                         }
                     }),
@@ -271,6 +271,10 @@ const ModalChuyenLopLuuBan = () => {
                                                     [record.id, 'newFixedClassId'],
                                                     undefined
                                                 )
+                                                form.setFieldValue(
+                                                    [record.id, 'changeCurriculumVersion'],
+                                                    false
+                                                )
                                             }}
                                             options={newTrainingCourses.map((tc) => ({
                                                 label: tc.name,
@@ -343,8 +347,9 @@ const ModalChuyenLopLuuBan = () => {
                                         name={[record.id, 'changeCurriculumVersion']}
                                         className="mb-0 flex justify-center items-center"
                                         valuePropName="checked"
+                                        initialValue={false}
                                     >
-                                        <Switch />
+                                        <Switch disabled />
                                     </Form.Item>
                                 )
                             },
