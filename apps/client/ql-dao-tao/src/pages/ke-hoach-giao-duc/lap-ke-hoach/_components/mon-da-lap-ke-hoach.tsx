@@ -94,7 +94,9 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                   }
                                 : {}),
                         },
-                        subjectClassType: $Enums.SubjectClassType.NORMAL,
+                        subjectClassType: hocLai
+                            ? $Enums.SubjectClassType.RETAKE
+                            : $Enums.SubjectClassType.NORMAL,
                     },
                 },
                 _count: {
@@ -103,7 +105,9 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                             where: {
                                 deletedAt: null,
                                 active: true,
-                                subjectClassType: $Enums.SubjectClassType.NORMAL,
+                                subjectClassType: hocLai
+                                    ? $Enums.SubjectClassType.RETAKE
+                                    : $Enums.SubjectClassType.NORMAL,
                             },
                         },
                     },

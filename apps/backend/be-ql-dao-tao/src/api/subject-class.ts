@@ -613,12 +613,7 @@ where rn = 1
     ${trainingCourseId}::TEXT IS NULL
     OR trainingCourseId = ${trainingCourseId}
   )
-  and (
-    ${search}::TEXT IS NULL
-        OR code ILIKE ${search}
-        OR name ILIKE ${search}
-    )
-    and id = ${subjectVersionId}::TEXT
+  and id = ${subjectVersionId}
 `
     const students = await prisma.student.findMany({
         where: {
