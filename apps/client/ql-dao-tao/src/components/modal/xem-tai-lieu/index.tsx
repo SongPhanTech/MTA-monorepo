@@ -293,12 +293,7 @@ declare global {
     }
 }
 
-const OnlyOfficeViewer = ({
-    uri,
-    title = 'Tài liệu',
-    fileType = 'docx',
-    mode = 'view',
-}: Props) => {
+const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode = 'view' }: Props) => {
     useEffect(() => {
         const id = createId()
         const placeholderContainer = document.getElementById('placeholder-container')

@@ -3,9 +3,7 @@ import DangKyHoc from '@pages/ke-hoach-giao-duc/dang-ky-hoc'
 import type React from 'react'
 
 export default function DangKyHocLai() {
-    return (
-        <DangKyHoc hocLai/>
-    )
+    return <DangKyHoc hocLai />
 }
 
 DangKyHocLai.getLayout = function getLayout(page: React.ReactElement) {

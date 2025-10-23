@@ -1534,7 +1534,9 @@ export default function StudentFixedClassPage() {
                                                 key: 'KHTK-ding-huong-ung-dung',
                                                 onClick: async () => {
                                                     const res = await loadFile(
-                                                        getMinioUrl('/mta/template/chuong-trinh-dao-tao/KHTK-ding-huong-ung-dung.docx')
+                                                        getMinioUrl(
+                                                            '/mta/template/chuong-trinh-dao-tao/KHTK-ding-huong-ung-dung.docx'
+                                                        )
                                                     )
                                                     const doc = new Docxtemplater(res, {
                                                         linebreaks: true,

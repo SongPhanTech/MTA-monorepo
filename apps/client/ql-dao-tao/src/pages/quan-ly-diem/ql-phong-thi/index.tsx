@@ -10,7 +10,7 @@ import { useCountExamRoom, useFindManyExamRoom } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import {  Modal, Row, Col, Tooltip } from 'antd'
+import { Modal, Row, Col, Tooltip } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo, useState } from 'react'
@@ -45,24 +45,23 @@ export default function SubjectClassScore() {
         })
     }
 
-
-
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    const where:any= useMemo(() => {
+    const where: any = useMemo(() => {
         return {
-            ...((trainingObjectTypeId||semesterId)?{
-                exam: {
-                   
-                        subjectClass: {
-                             some:{
-                            trainingObjectTypeId,
-                            semesterId
-                        }
-                    }
-                }
-            }:{})
+            ...(trainingObjectTypeId || semesterId
+                ? {
+                      exam: {
+                          subjectClass: {
+                              some: {
+                                  trainingObjectTypeId,
+                                  semesterId,
+                              },
+                          },
+                      },
+                  }
+                : {}),
         }
-    }, [filters,trainingObjectTypeId,semesterId])
+    }, [filters, trainingObjectTypeId, semesterId])
 
     const { data = [], refetch } = useFindManyExamRoom({
         where,
@@ -86,7 +85,7 @@ export default function SubjectClassScore() {
                     studentSubjectScore: true,
                 },
             },
-            _count:true
+            _count: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -166,53 +165,49 @@ export default function SubjectClassScore() {
                                 dataIndex: 'fullname',
                                 width: 150,
                                 render: (_, record) =>
-                                    `${record?.start ||''} - ${record?.end ||''}`,
+                                    `${record?.start || ''} - ${record?.end || ''}`,
                             },
-                             {
+                            {
                                 title: 'Ngày thi',
                                 dataIndex: 'fullname',
                                 width: 150,
                                 render: (_, record) =>
-                                    `${formatDate(record?.exam?.subjectClass[0]?.examDate) ||''}`,
+                                    `${formatDate(record?.exam?.subjectClass[0]?.examDate) || ''}`,
                             },
-                             {
+                            {
                                 title: 'Số thí sinh',
                                 dataIndex: 'fullname',
                                 width: 150,
                                 align: 'center',
-                                render: (_, record) =>{
+                                render: (_, record) => {
                                     return record?._count?.examSessions
-                                }
-                                   
+                                },
                             },
-                                    {
+                            {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                        'NHAP_DIEM'
-                                    ) && (
-                                            <Tooltip
-                                                title={'Nhập điểm theo phách'}
-                                                placement="top"
-                                            >
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                                            'NHAP_DIEM'
+                                        ) && (
+                                            <Tooltip title={'Nhập điểm theo phách'} placement="top">
                                                 <EyeOutlined
                                                     onClick={() => {
                                                         router.push(
-                                                            ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH + `?examRoomId=${id}`
+                                                            ROUTER_PATH.QL_DAO_TAO
+                                                                .QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH +
+                                                                `?examRoomId=${id}`
                                                         )
                                                     }}
                                                 />
                                             </Tooltip>
                                         )}
-                                      
                                     </Row>
                                 ),
                             },
-
                         ]}
                         data={data}
                         pagination={{

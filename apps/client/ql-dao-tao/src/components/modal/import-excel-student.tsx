@@ -2,7 +2,7 @@ import { CloseOutlined } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-import {importStudent} from '@workspace/libs/api/training'
+import { importStudent } from '@workspace/libs/api/training'
 import { parseSheetStudent } from '@workspace/libs/parseExcel'
 import { Button, Col, Collapse, Empty, Modal, message, Row, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
@@ -42,8 +42,8 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                 e.target?.result as ArrayBuffer
             )
             setPreviewData(students)
-            console.log('students', students);
-            
+            console.log('students', students)
+
             setData({ trainingObjectType, trainingCourse })
             if (errors.length === 0) {
                 setDisabledButton(false)
@@ -229,7 +229,6 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
             </Row>
 
             <Table
-
                 columns={[
                     {
                         title: 'STT',
@@ -238,14 +237,14 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                         fixed: 'left',
                         render: (_, __, index: number) => index + 1 + (currentPage - 1) * 10,
                     },
-                     {
+                    {
                         title: 'Số BD',
                         width: 80,
                         align: 'center',
                         fixed: 'left',
                         dataIndex: 'registerNumber',
                     },
-                      {
+                    {
                         title: 'MÃ HSTS',
                         width: 80,
                         align: 'center',
@@ -312,13 +311,13 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                         key: 'idCardNumber',
                         width: 100,
                     },
-                        {
+                    {
                         title: 'Nơi sinh (Tỉnh)',
                         dataIndex: 'provinceHometown',
                         key: 'provinceHometown',
                         width: 150,
                     },
-                       {
+                    {
                         title: 'Số điện thoại',
                         dataIndex: 'phoneNumber',
                         key: 'phoneNumber',
@@ -377,118 +376,117 @@ const ImportStudentModal = ({ visible, onCancel }: ImportStudentModalProps) => {
                             <div className={!value ? 'td-error' : ''}>{value}</div>
                         ),
                     },
-                        {
+                    {
                         title: 'Loại HV',
                         dataIndex: 'objectType',
                         key: 'objectType',
                         align: 'center',
                         width: 100,
                     },
-                        {
+                    {
                         title: 'Số hiệu SQ/QNCN',
                         dataIndex: 'officerNumber',
                         key: 'officerNumber',
                         align: 'center',
                         width: 100,
                     },
-                        {
+                    {
                         title: 'Cấp bậc',
                         dataIndex: 'rank',
                         key: 'rank',
                         align: 'center',
                         width: 150,
                     },
-                        {
+                    {
                         title: 'Chức vụ',
                         dataIndex: 'position',
                         key: 'position',
                         align: 'center',
                         width: 150,
                     },
-                        {
+                    {
                         title: 'Cơ quan đơn vị',
                         dataIndex: 'department',
                         key: 'department',
                         align: 'center',
                         width: 150,
                     },
-                        {
+                    {
                         title: 'Địa chỉ cơ quan',
                         dataIndex: 'departmentAddress',
                         key: 'departmentAddress',
                         align: 'center',
                         width: 150,
                     },
-                        {
+                    {
                         title: 'Năm vào nghề',
                         dataIndex: 'careerYear',
                         key: 'careerYear',
                         align: 'center',
                         width: 150,
                     },
-                         {
+                    {
                         title: 'Văn bằng đại học',
-                            children:[
-                                    {
-                        title: 'Trường',
-                        dataIndex: 'universitySchool',
-                        key: 'universitySchool',
-                        align: 'center',
-                        width: 150,
+                        children: [
+                            {
+                                title: 'Trường',
+                                dataIndex: 'universitySchool',
+                                key: 'universitySchool',
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Hệ ĐT',
+                                dataIndex: 'universityTrainingType',
+                                key: 'universityTrainingType',
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Năm TN',
+                                dataIndex: 'universityGraduationYear',
+                                key: 'universityGraduationYear',
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Ngành',
+                                dataIndex: 'universityMajor',
+                                key: 'universityMajor',
+                                align: 'center',
+                                width: 150,
+                            },
+                            {
+                                title: 'Loại TN',
+                                dataIndex: 'universityRank',
+                                key: 'universityRank',
+                                align: 'center',
+                                width: 150,
+                            },
+                        ],
                     },
-                                  {
-                        title: 'Hệ ĐT',
-                        dataIndex: 'universityTrainingType',
-                        key: 'universityTrainingType',
-                        align: 'center',
-                        width: 150,
-                    },
-                                  {
-                        title: 'Năm TN',
-                        dataIndex: 'universityGraduationYear',
-                        key: 'universityGraduationYear',
-                        align: 'center',
-                        width: 150,
-                    },
-                                  {
-                        title: 'Ngành',
-                        dataIndex: 'universityMajor',
-                        key: 'universityMajor',
-                        align: 'center',
-                        width: 150,
-                    },
-                                      {
-                        title: 'Loại TN',
-                        dataIndex: 'universityRank',
-                        key: 'universityRank',
-                        align: 'center',
-                        width: 150,
-                    },
-                            ]
-                      
-                    },
-                                        {
+                    {
                         title: 'Cơ bản',
                         dataIndex: 'basic',
                         key: 'basic',
                         align: 'center',
                         width: 150,
                     },
-                                  {
+                    {
                         title: 'Cơ sở',
                         dataIndex: 'facility',
                         key: 'facility',
                         align: 'center',
                         width: 150,
                     },
-                                  {
+                    {
                         title: 'Ngoại ngữ',
                         dataIndex: 'foreignLanguage',
                         key: 'foreignLanguage',
                         align: 'center',
                         width: 150,
                     },
-                                      {
+                    {
                         title: 'Lý do ưu tiên',
                         dataIndex: 'priorityReason',
                         key: 'priorityReason',

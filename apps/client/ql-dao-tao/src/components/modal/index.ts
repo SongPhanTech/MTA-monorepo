@@ -198,5 +198,5 @@ export {
     PutArchivedAwardModal,
     PutCertificateOnSubjectScoreModal,
     PutCertificateArchivedModal,
-    PutDeadlineScoreModal
+    PutDeadlineScoreModal,
 }
