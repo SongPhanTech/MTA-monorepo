@@ -6,6 +6,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
+import { cn } from '@lib/utils'
 import { type Prisma, type SubjectClass, type SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
@@ -707,7 +708,7 @@ export default function ClassSubject() {
                                                 // onClick={() => handleModal()}
                                                 type="primary"
                                             >
-                                                Thời gian nhập điểm TX/CC
+                                                Đặt hạn nhập điểm TX/CC
                                             </Button>
                                         </Popover>
                                         <Popover
@@ -758,7 +759,7 @@ export default function ClassSubject() {
                                                 // onClick={() => handleModal()}
                                                 type="primary"
                                             >
-                                                Hạn nhập điểm thi
+                                                Đặt hạn nhập điểm thi
                                             </Button>
                                         </Popover>
                                     </>
@@ -768,20 +769,29 @@ export default function ClassSubject() {
                     </Row>
                 </Col>
 
-                <Col span={24}>
+                <Col span={24} className="mt-4">
                     <Table
                         filters={filters}
                         setFilters={setFilters}
                         rowKey="id"
                         id="training-category"
+                        className="table-subject-score"
                         // rowClassName={rowClassName}
                         // rowSelection={rowSelection}
+                          onRow={(record) => {
+                                return {
+                                    className: cn(
+                                        record?.subject?.examType === 'OfflineWritten' ? 'text-blue-500' : '',
+                                        (dayjs()?.isBefore(record?.scoreDeadline) || record?.enteredScore) ? '' : 'bg-red-100',
+                                        dayjs().isBefore(record?.examScoreDeadline) || record?.enteredExamScore ? '' : 'bg-red-300'
+                                    ),
+                                }
+                            }}
                         columns={[
                             {
                                 title: 'STT',
                                 width: 60,
                                 align: 'center',
-                                fixed: 'left',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
@@ -820,7 +830,7 @@ export default function ClassSubject() {
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.examType ? (
                                         <div
-                                            className={`${record?.subject?.examType === 'OfflineWritten' ? 'text-red-500' : ''}`}
+                                            // className={`${record?.subject?.examType === 'OfflineWritten' ? 'text-red-500' : ''}`}
                                         >
                                             {getExamTypeLabel(record?.subject?.examType)}
                                         </div>
@@ -838,54 +848,44 @@ export default function ClassSubject() {
                             //     render: (record: string) =>
                             //         record ? dayjs(record).format('DD/MM/YYYY') : '',
                             // },
-                            {
-                                title: 'Số ngày',
-                                width: 100,
-                                align: 'center',
-                                render: (__, record) => {
-                                    const today = dayjs()
-                                    const scoreDeadline = dayjs(record?.scoreDeadline)
-                                    const examScoreDeadline = dayjs(record?.examScoreDeadline)
+                            // {
+                            //     title: 'Số ngày',
+                            //     width: 100,
+                            //     align: 'center',
+                            //     render: (__, record) => {
+                            //         const today = dayjs()
+                            //         const scoreDeadline = dayjs(record?.scoreDeadline)
+                            //         const examScoreDeadline = dayjs(record?.examScoreDeadline)
 
-                                    if (!scoreDeadline && !examScoreDeadline) {
-                                        return '-'
-                                    }
+                            //         if (!scoreDeadline && !examScoreDeadline) {
+                            //             return '-'
+                            //         }
 
-                                    let daysRemaining: number
-                                    let deadlineType: string
+                            //         let daysRemaining: number
+                            //         let deadlineType: string
 
-                                    if (today?.isBefore(scoreDeadline)) {
-                                        daysRemaining = scoreDeadline?.diff(today, 'day')
-                                        deadlineType = 'ĐQT'
-                                    } else if (today?.isBefore(examScoreDeadline)) {
-                                        daysRemaining = examScoreDeadline?.diff(today, 'day')
-                                        deadlineType = 'ĐT'
-                                    } else {
-                                        return <div className="text-red-500">Hết hạn</div>
-                                    }
+                            //         if (today?.isBefore(scoreDeadline)) {
+                            //             daysRemaining = scoreDeadline?.diff(today, 'day')
+                            //             deadlineType = 'ĐQT'
+                            //         } else if (today?.isBefore(examScoreDeadline)) {
+                            //             daysRemaining = examScoreDeadline?.diff(today, 'day')
+                            //             deadlineType = 'ĐT'
+                            //         } else {
+                            //             return <div className="text-red-500">Hết hạn</div>
+                            //         }
 
-                                    return (
-                                        <Tooltip
-                                            title={`Còn ${daysRemaining} ngày trước hạn ${deadlineType}`}
-                                        >
-                                            <span
-                                                style={{
-                                                    color:
-                                                        daysRemaining <= 3
-                                                            ? 'red'
-                                                            : daysRemaining <= 7
-                                                              ? 'orange'
-                                                              : 'green',
-                                                    fontWeight: 'bold',
-                                                    marginLeft: '5px',
-                                                }}
-                                            >
-                                                {daysRemaining}
-                                            </span>
-                                        </Tooltip>
-                                    )
-                                },
-                            },
+                            //         return (
+                            //             <Tooltip
+                            //                 title={`Còn ${daysRemaining} ngày trước hạn ${deadlineType}`}
+                            //             >
+                            //                 <span
+                            //                 >
+                            //                     {daysRemaining}
+                            //                 </span>
+                            //             </Tooltip>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Ngày nhập ĐQT',
                                 dataIndex: 'scoreDeadLineStart',
@@ -903,7 +903,7 @@ export default function ClassSubject() {
                                 type: 'date',
                                 render: (_, record) => (
                                     <div
-                                        className={`${dayjs().isBefore(record?.scoreDeadline) ? '' : 'text-red-500'}`}
+                                        // className={`${dayjs().isBefore(record?.scoreDeadline) ? '' : 'text-red-500'}`}
                                     >
                                         {record.scoreDeadline
                                             ? dayjs(record.scoreDeadline).format('DD/MM/YYYY')
@@ -926,95 +926,54 @@ export default function ClassSubject() {
                                 align: 'center',
                                 type: 'date',
                                 render: (record) => {
-                                    // const today = dayjs()
-                                    // const scoreDeadline = dayjs(record?.scoreDeadline)
-                                    // const examScoreDeadline = dayjs(record?.examScoreDeadline)
-
-                                    // if (!scoreDeadline && !examScoreDeadline) {
-                                    //     return '-'
-                                    // }
-
-                                    // let daysRemaining: number
-                                    // let deadlineType: string
-
-                                    // if (today?.isBefore(scoreDeadline)) {
-                                    //     daysRemaining = scoreDeadline?.diff(today, 'day')
-                                    //     deadlineType = 'ĐQT'
-                                    // }
-                                    // else if (today?.isBefore(examScoreDeadline)) {
-                                    //     daysRemaining = examScoreDeadline?.diff(today, 'day')
-                                    //     deadlineType = 'ĐT'
-                                    // } else {
-                                    //     return ''
-                                    // }
-
                                     return (
                                         <div
-                                            className={`${dayjs().isBefore(record?.examScoreDeadline) ? '' : 'text-red-500'}`}
+                                            // className={`${dayjs().isBefore(record?.examScoreDeadline) ? '' : 'text-red-500'}`}
                                         >
                                             {record.examScoreDeadline
                                                 ? dayjs(record.examScoreDeadline).format(
                                                       'DD/MM/YYYY'
                                                   )
                                                 : ''}
-                                            {/* <Tooltip
-                                            title={`Còn ${daysRemaining} ngày trước hạn ${deadlineType}`}
-                                        >
-                                            <span
-                                                style={{
-                                                    color:
-                                                        daysRemaining <= 3
-                                                            ? 'red'
-                                                            : daysRemaining <= 7
-                                                              ? 'orange'
-                                                              : 'green',
-                                                    fontWeight: 'bold',
-                                                    marginLeft: '5px',
-                                                }}
-                                            >
-                                                - {daysRemaining}
-                                            </span>
-                                        </Tooltip> */}
                                         </div>
                                     )
                                 },
                             },
-
-                            {
-                                title: 'Giảng viên',
+                               {
+                                title: 'Trạng thái NĐ',
+                                dataIndex: 'scoreDeadLineStart',
                                 width: 150,
                                 align: 'center',
-                                type: 'input',
-                                dataIndex: 'mainLecturer',
-                                render: (text, record: any) => {
-                                    const mainLecturer = record.mainLecturer
-                                        ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
-                                        : ''
-                                    const extraLecturer = record.extraLecturer
-                                        ? `${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
-                                        : ''
-                                    return (
-                                        <ul>
-                                            {mainLecturer && <li>- {mainLecturer}</li>}
-                                            {extraLecturer && <li>- {extraLecturer}</li>}
-                                        </ul>
-                                    )
-                                },
+                                type: 'date',
+                                render: (__,record) =>{
+                                    return record?.enteredExamScore ? 'Đã nhập điểm thi' : (record?.enteredScore ? 'Đã nhập điểm TX,CC' : <div className="text-red-500">Chưa nhập điểm</div>)
+                                }
                             },
-                            {
-                                title: 'Giảng viên NĐ',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                                dataIndex: 'enterGradeLecturer',
-                                render: (text, record: any) => {
-                                    const enterGradeLecturer = record.enterGradeLecturer
-                                        ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
-                                        : ''
-                                    return <span>{enterGradeLecturer}</span>
-                                },
-                            },
-
+                            // {
+                            //     title: 'Giảng viên',
+                            //     width: 150,
+                            //     align: 'center',
+                            //     type: 'input',
+                            //     dataIndex: 'mainLecturer',
+                            //     render: (text, record: any) => {
+                            //         const mainLecturer = record.mainLecturer
+                            //             ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
+                            //             : ''
+                            //         const extraLecturer = record.extraLecturer
+                            //             ? `${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
+                            //             : ''
+                            //                   const enterGradeLecturer = record.enterGradeLecturer
+                            //             ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
+                            //             : ''
+                            //         return (
+                            //             <ul>
+                            //                 {mainLecturer && <li>- {mainLecturer}</li>}
+                            //                 {extraLecturer && <li>- {extraLecturer}</li>}
+                            //                 {enterGradeLecturer && <li>- {enterGradeLecturer}</li>}
+                            //             </ul>
+                            //         )
+                            //     },
+                            // },
                             {
                                 title: 'Đơn vị phụ trách',
                                 dataIndex: 'danhSachLop',
@@ -1047,7 +1006,6 @@ export default function ClassSubject() {
                                 title: 'Thao tác',
                                 width: 100,
                                 align: 'center',
-                                fixed: 'right',
                                 hidden: !canSome(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
                                     'NHAP_DIEM'

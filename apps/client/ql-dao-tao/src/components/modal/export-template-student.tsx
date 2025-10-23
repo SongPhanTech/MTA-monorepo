@@ -1,5 +1,6 @@
 import { DownloadOutlined } from '@ant-design/icons'
-import {  Flex } from 'antd'
+import { getMinioUrl } from '@workspace/constant'
+import { Flex } from 'antd'
 // import ExcelJS from 'exceljs'
 // import { saveAs } from 'file-saver'
 
@@ -234,8 +235,13 @@ const ExportTemplateStudent = () => {
 
     return (
         <Flex>
-            <a download href="/lms/MauImportDSHV.xls" className="bg-primary text-white px-4 py-1 rounded-lg hover:bg-primary-500" style={{ boxShadow: '0 2px 0 rgba(2, 68, 28, 0.3)'}}>
-            <DownloadOutlined/>
+            <a
+                download
+                href={getMinioUrl('mta/template/MauImportDSHV.xls')}
+                className="bg-primary text-white px-4 py-1 rounded-lg hover:bg-primary-500"
+                style={{ boxShadow: '0 2px 0 rgba(2, 68, 28, 0.3)' }}
+            >
+                <DownloadOutlined />
                 Xuất file mẫu excel
             </a>
         </Flex>

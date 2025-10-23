@@ -15,10 +15,9 @@ import {
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, InputNumber, message, Row, Select, TimePicker } from 'antd'
+import { Button, Col, Flex, Form, InputNumber, message, Row, Select } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
-import dayjs from 'dayjs'
 export type PutExamType = Exam & {
     subjectClass: string[]
     semesterId?: string
@@ -97,14 +96,12 @@ export default function Information({ id, selectedIds }: InformationProps) {
         try {
             showSpinner()
             const data = {
-                title: output.title,
                 status: output.status,
                 // questionBank: {
                 //     connect: {
                 //         id: output.questionBankId,
                 //     },
                 // },
-                startTime: output.startTime,
                 duration: output.duration,
                 // shuffleQuestions: output.shuffleQuestions,
                 // shuffleAnswers: output.shuffleAnswers,
@@ -196,11 +193,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
         <Form form={form} layout="vertical" onFinish={onOk}>
             <Row gutter={16}>
                 <Col span={12}>
-                    <FormItem form={form} name="title" label="Tên kỳ thi" required>
-                        <Input placeholder="Nhập tên kỳ thi" disabled={!isDraft} />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
                     <FormItem form={form} name="duration" label="Thời gian thi (phút)" required>
                         <InputNumber
                             min={0}
@@ -249,21 +241,6 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 <Col span={12}>
                     <FormItem form={form} name="room" label="Phòng thi">
                         <TreeSelectRoom disabled={!isDraft} />
-                    </FormItem>
-                </Col>
-                <Col span={12}>
-                    <FormItem
-                        form={form}
-                        name="startTime"
-                        label="Thời gian bắt đầu"
-                        normalize={(_, value) => dayjs(value).format('HH:mm')}
-                    >
-                        <TimePicker
-                            format={{ format: 'HH:mm', type: 'mask' }}
-                            className="w-full"
-                            placeholder="Chọn thời gian bắt đầu"
-                            disabled={!isDraft}
-                        />
                     </FormItem>
                 </Col>
                 {/* <Col span={12}>

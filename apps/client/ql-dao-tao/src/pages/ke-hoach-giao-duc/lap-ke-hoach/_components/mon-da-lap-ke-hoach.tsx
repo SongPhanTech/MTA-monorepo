@@ -3,6 +3,7 @@ import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { getMinioUrl } from '@workspace/constant'
 import { $Enums } from '@workspace/db/client'
 import {
     useDeleteManyPlanTrainingSubject,
@@ -164,8 +165,9 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                             type="primary"
                             onClick={() =>
                                 exportFromTemplate({
-                                    templateUrl:
-                                        '/lms/templates/ke-hoach-dao-tao/ke-hoach-mo-lop.xlsx',
+                                    templateUrl: getMinioUrl(
+                                        '/mta/template/ke-hoach-dao-tao/ke-hoach-mo-lop.xlsx'
+                                    ),
                                     sheets: [
                                         {
                                             sheet: 'KeHoachMoLop',

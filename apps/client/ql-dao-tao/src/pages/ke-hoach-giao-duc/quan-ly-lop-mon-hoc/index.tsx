@@ -12,7 +12,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { emptyObjectIf } from '@workspace/constant'
+import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import { $Enums, type Prisma, type SubjectClassSchedule } from '@workspace/db/client'
 import {
     useCountDM_DonVi,
@@ -476,7 +476,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                         : {
                               lecturerAssignmentDeadline: null,
                           }),
-                    type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL
+                    type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
                 },
             })
             message.success('Báo dạy thành công')
@@ -569,7 +569,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                     extraLecturerId: { not: null },
                     lecturerAssignmentDeadline: { not: null },
                     submitLecturerAssignmentAt: null,
-                    type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL
+                    type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
                 },
             })
             message.success('Gửi PCGD thành công')
@@ -1007,8 +1007,9 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                                 item?.subject?.managementOrganization?.sMa || 'MTA'
                                         )
                                         exportFromTemplate({
-                                            templateUrl:
-                                                '/lms/templates/ke-hoach-dao-tao/bao-day.xlsx',
+                                            templateUrl: getMinioUrl(
+                                                '/mta/template/ke-hoach-dao-tao/bao-day.xlsx'
+                                            ),
                                             fileName: `Bao_day_${dayjs().format('DD_MM_YYYY')}.xlsx`,
                                             fontFamily: 'Tahoma',
                                             fontSize: 9,
