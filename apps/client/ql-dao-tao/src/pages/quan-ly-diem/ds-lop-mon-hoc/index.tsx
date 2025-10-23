@@ -22,7 +22,6 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     Button,
     Col,
-    DatePicker,
     Flex,
     Form,
     Input,
@@ -32,15 +31,17 @@ import {
     Row,
     Switch,
     Tooltip,
+    DatePicker as AntdDatePicker,
 } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import _ from 'lodash'
-import { CalendarPlus, Search } from 'lucide-react'
+import { CalendarPlus, FilePen, FilePenLine, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-
-const { RangePicker } = DatePicker
+import DatePicker from '@components/commons/date-picker'
+import locale from 'antd/es/date-picker/locale/vi_VN'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 type TimeScore = {
     time: [Dayjs, Dayjs]
     beforeDays: number
@@ -100,7 +101,15 @@ export default function ClassSubject() {
         router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CC_TX}?subjectClassId=${id}`)
     }
 
-    const handleNavigateThi = (id: string) => {
+        const { onOpen, onClose } = useDisclosure<string>({
+            tag: 'PutDeadlineScoreModal',
+        })
+
+    const handleSchudule= (id: string) => {
+       onOpen(id)
+    }
+
+     const handleNavigateThi = (id: string) => {
         router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_THI}?subjectClassId=${id}`)
     }
 
@@ -686,7 +695,8 @@ export default function ClassSubject() {
                                                         name={'time'}
                                                         label="Thời gian nhập điểm TX,CC"
                                                     >
-                                                        <RangePicker
+                                                        <AntdDatePicker.RangePicker
+                                                            locale={locale}
                                                             format={'DD/MM/YYYY'}
                                                             placeholder={['Bắt đầu', 'Kết thúc']}
                                                         />
@@ -1014,13 +1024,21 @@ export default function ClassSubject() {
                                     if (id) {
                                         return (
                                             <Row className="flex justify-center items-center gap-2 text-[#028850]">
+                                                <Tooltip title="Đặt hạn nhập điểm" placement="top">
+                                                    <CalendarPlus
+                                                        size={16}
+                                                        onClick={() => handleSchudule(id)}
+                                                        strokeWidth={2}
+                                                    />
+                                                </Tooltip>
                                                 {(profileId === listUser.lecturer ||
                                                     !!subject?.oneType) && (
                                                     <Tooltip
                                                         title="Nhập điểm TX/CC"
                                                         placement="top"
                                                     >
-                                                        <CalendarPlus
+
+                                                        <FilePen
                                                             size={16}
                                                             onClick={() => handleNavigate(id)}
                                                             strokeWidth={2}
@@ -1029,7 +1047,7 @@ export default function ClassSubject() {
                                                 )}
 
                                                 <Tooltip title="Nhập điểm thi" placement="top">
-                                                    <CalendarPlus
+                                                    <FilePenLine
                                                         size={16}
                                                         onClick={() => handleNavigateThi(id)}
                                                         strokeWidth={2}

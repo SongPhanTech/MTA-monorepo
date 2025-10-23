@@ -97,6 +97,7 @@ import PutArchivedAwardModal from './put-archived-award'
 import PutCertificateOnSubjectScoreModal from './put-certificate-on-subject'
 import PutCertificateArchivedModal from './put-archived-certificate'
 import { XemTaiLieu } from './xem-tai-lieu'
+import PutDeadlineScoreModal from './set-deadline-score'
 export {
     XemTaiLieu,
     ModalViewHistoryChange,
@@ -197,4 +198,5 @@ export {
     PutArchivedAwardModal,
     PutCertificateOnSubjectScoreModal,
     PutCertificateArchivedModal,
+    PutDeadlineScoreModal
 }
