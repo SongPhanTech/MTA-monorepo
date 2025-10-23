@@ -304,14 +304,14 @@ const ModalChuyenLop = () => {
         _.debounce(() => {
             refetch()
         }, 500),
-        [refetch]
+        []
     )
 
     const debouncedRefetchStudentClassArrive = useCallback(
         _.debounce(() => {
             refetchClassArrives()
         }, 500),
-        [refetchClassArrives]
+        []
     )
 
     useEffect(() => {
@@ -437,46 +437,41 @@ const ModalChuyenLop = () => {
             title="Chuyển lớp"
             className="w-[100vw]"
         >
-            <Row gutter={[16, 16]}>
+            <Row gutter={16}>
                 <Col span={11}>
-                    <Flex>
-                        <Col>
-                            <Select
-                                placeholder="Chọn lớp quản lý"
-                                value={filter.fixedClassId}
-                                onChange={(value) => {
-                                    setFilter({
-                                        ...filter,
-                                        fixedClassId: value,
-                                    })
-                                    setCurrentPage(1)
-                                }}
-                                className="w-96"
-                                allowClear
-                                showSearch
-                                filterOption={(input, option) =>
-                                    (option?.label ?? '')
-                                        .toLowerCase()
-                                        .includes(input.toLowerCase())
-                                }
-                                options={fixedClasses.map((fixedClass) => ({
-                                    label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
-                                    value: fixedClass.id,
-                                }))}
-                            />
-                        </Col>
-                        <Col>
-                            <Input
-                                placeholder="Tìm kiếm theo tên..."
-                                value={filter.search}
-                                className="w-72"
-                                onChange={(e) => {
-                                    handleSearch('search', e.target.value)
-                                    setCurrentPage(1)
-                                }}
-                                allowClear
-                            />
-                        </Col>
+                    <Flex gap={8} className="mb-4">
+                        <Select
+                            placeholder="Chọn lớp quản lý"
+                            value={filter.fixedClassId}
+                            onChange={(value) => {
+                                setFilter({
+                                    ...filter,
+                                    fixedClassId: value,
+                                })
+                                setCurrentPage(1)
+                            }}
+                            className="w-96 flex-1 min-w-0"
+                            allowClear
+                            showSearch
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={fixedClasses.map((fixedClass) => ({
+                                label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
+                                value: fixedClass.id,
+                            }))}
+                        />
+
+                        <Input
+                            placeholder="Tìm kiếm theo tên..."
+                            value={filter.search}
+                            className="w-72 flex-1 min-w-0"
+                            onChange={(e) => {
+                                handleSearch('search', e.target.value)
+                                setCurrentPage(1)
+                            }}
+                            allowClear
+                        />
                     </Flex>
                     <Table
                         rowKey="id"
@@ -613,47 +608,38 @@ const ModalChuyenLop = () => {
                     </Flex>
                 </Col>
                 <Col span={11}>
-                    <Flex>
-                        <Col>
-                            <Select
-                                placeholder="Chọn lớp đến"
-                                value={filter.fixedClassArriveId}
-                                onChange={(value) => {
-                                    setFilter({
-                                        ...filter,
-                                        fixedClassArriveId: value,
-                                    })
-                                    setCurrentPageNotClass(1)
-                                }}
-                                className="w-96"
-                                allowClear
-                                showSearch
-                                filterOption={(input, option) =>
-                                    (option?.label ?? '')
-                                        .toLowerCase()
-                                        .includes(input.toLowerCase())
-                                }
-                                options={fixedClasses.map((fixedClass) => ({
-                                    label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
-                                    value: fixedClass.id,
-                                }))}
-                            />
-                        </Col>
-                        <Col>
-                            <Input
-                                placeholder="Tìm kiếm theo tên..."
-                                value={filter.searchClassArrive}
-                                className="w-72"
-                                onChange={(e) => {
-                                    handleSearchStudentClassArrive(
-                                        'searchClassArrive',
-                                        e.target.value
-                                    )
-                                    setCurrentPageNotClass(1)
-                                }}
-                                allowClear
-                            />
-                        </Col>
+                    <Flex gap={8} className="mb-4">
+                        <Select
+                            placeholder="Chọn lớp đến"
+                            value={filter.fixedClassArriveId}
+                            onChange={(value) => {
+                                setFilter({
+                                    ...filter,
+                                    fixedClassArriveId: value,
+                                })
+                                setCurrentPageNotClass(1)
+                            }}
+                            className="w-96 flex-1 min-w-0"
+                            allowClear
+                            showSearch
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={fixedClasses.map((fixedClass) => ({
+                                label: `${fixedClass.name} - ${fixedClass.trainingCourse?.name || ''}`,
+                                value: fixedClass.id,
+                            }))}
+                        />
+                        <Input
+                            placeholder="Tìm kiếm theo tên..."
+                            value={filter.searchClassArrive}
+                            className="w-72 flex-1 min-w-0"
+                            onChange={(e) => {
+                                handleSearchStudentClassArrive('searchClassArrive', e.target.value)
+                                setCurrentPageNotClass(1)
+                            }}
+                            allowClear
+                        />
                     </Flex>
                     <Table
                         rowKey="id"
@@ -661,7 +647,6 @@ const ModalChuyenLop = () => {
                             selectedRowKeys: selectedRowsInClass,
                             onChange: (selectedKeys: any) => setSelectedRowsInClass(selectedKeys),
                             getCheckboxProps: (record) => ({
-                                // Chỉ cho phép chọn sinh viên đã được chuyển từ lớp nguồn
                                 disabled: !transferredStudentIds.includes(record.id),
                             }),
                         }}
