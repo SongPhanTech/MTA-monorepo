@@ -101,6 +101,9 @@ const openSubjectClassRetake = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
+            semesterId: z.string().openapi('semesterId', {
+                description: 'ID học kỳ',
+            }),
         }),
     },
     responses: {
@@ -405,6 +408,7 @@ app.openapi(openSubjectClassRetake, async (c) => {
         trainingCourseId,
         trainingMajorId,
         trainingObjectTypeId,
+        semesterId,
         limit = 10,
         page = 1,
     } = c.req.valid('query')
@@ -466,6 +470,11 @@ app.openapi(openSubjectClassRetake, async (c) => {
             ${trainingCourseId}::TEXT IS NULL
             OR trainingCourseId = ${trainingCourseId}
         )
+        and 
+        (
+            ${semesterId}::TEXT IS NULL
+            OR semesterId = ${semesterId}
+        )
         and (
             ${search}::TEXT IS NULL
                 OR code ILIKE ${search}
@@ -473,8 +482,8 @@ app.openapi(openSubjectClassRetake, async (c) => {
             )
         group by id, code, name, "trainingObjectTypeId", "trainingMajorId", trainingCourseId
         order by code
-        limit ${limit}
-        offset ${limit} * (${page} - 1)
+        ${limit ? `limit ${limit}` : ''}
+        ${limit && page ? `offset ${limit} * (${page} - 1)` : ''}
         `
 
     const { count = 0 }: { count: number } = await prisma.$queryRaw`
@@ -534,6 +543,10 @@ app.openapi(openSubjectClassRetake, async (c) => {
         (
             ${trainingCourseId}::TEXT IS NULL
             OR trainingCourseId = ${trainingCourseId}
+        )
+        (
+            ${semesterId}::TEXT IS NULL
+            OR semesterId = ${semesterId}
         )
         and (
             ${search}::TEXT IS NULL
