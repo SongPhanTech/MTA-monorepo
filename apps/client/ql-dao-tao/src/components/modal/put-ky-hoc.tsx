@@ -176,7 +176,7 @@ const PutSemesterModal = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem form={form} name="endDate" label="Ngày kết thúc">
+                <FormItem form={form} name="endDate" label="Ngày kết thúc" required>
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',

@@ -99,7 +99,6 @@ model SubjectScoreConvert extends Base {
   @@schema("ql-dao-tao")
 }
 
-
 /// Điểm môn học SV - lớp môn học
 // Phòng đào tạo có thể trực tiếp tạo Điểm môn học SV - khi HV/SV chuyển trường, đổi điểm chứng chỉ
 // Lấy bản ghi có finalScore cao nhất làm kết quả cuối cùng
@@ -322,7 +321,7 @@ model Semester extends Base {
   schoolYear              SchoolYear                @relation(fields: [schoolYearId], references: [id])
   schoolYearId            String
   startDate               DateTime
-  endDate                 DateTime?
+  endDate                 DateTime
 
   subjectClasses          SubjectClass[]
   trainingCoursesStart    TrainingCourse[]
@@ -333,11 +332,10 @@ model Semester extends Base {
   disciplinaryWarning     DisciplinaryWarning[]
   studentAcademicDecision StudentAcademicDecision[]
   classRegisterSession    ClassRegisterSession[]
+  planTraining            PlanTraining[]
 
   @@unique([schoolYearId, semesterType]) // mỗi năm học chỉ có một kỳ học chính (kỳ 1 hoặc kỳ 2)
   @@schema("ql-dao-tao")
-
-  planTraining            PlanTraining[]
 }
 
 /// Mốc huấn luyện
@@ -372,9 +370,9 @@ model TrainingCourse extends Base {
   maxTrainingTime            Float?
   /// Chỉ tiêu tuyển sinh
   admissionQuota             Int?
-  /// Ngày nhập học
+  /// Ngày nhập học
   admissionStartDate         DateTime?
-  /// Ngày kết thúc
+  /// Ngày kết thúc
   admissionEndDate           DateTime?
   /// Số QĐ tuyển sinh
   admissionDecision          String?
