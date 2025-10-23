@@ -8419,7 +8419,6 @@ const metadata = {
                 }, endDate: {
                     name: "endDate",
                     type: "DateTime",
-                    isOptional: true,
                 }, subjectClasses: {
                     name: "subjectClasses",
                     type: "SubjectClass",

@@ -14898,7 +14898,6 @@ declare const metadata: {
                 endDate: {
                     name: string;
                     type: string;
-                    isOptional: boolean;
                 };
                 subjectClasses: {
                     name: string;
