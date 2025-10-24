@@ -70,12 +70,11 @@ const SidebarMenuLayout = ({ items }: SiderDefaultLayoutProps) => {
         <Menu
             theme={'light'}
             mode="horizontal"
-            className="mt-14"
+            className="mt-[48px] border-t-slate-200 border-t border-solid"
             selectedKeys={pathname ? [pathname] : []}
             items={getMenus(items)}
             style={{
                 background: 'white',
-                borderTop: '1px solid #f1f1f1',
             }}
         />
     )

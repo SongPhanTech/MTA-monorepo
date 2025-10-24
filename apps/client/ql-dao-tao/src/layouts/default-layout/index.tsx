@@ -89,12 +89,12 @@ const DefaultLayout = ({
             >
                 <Header
                     className={
-                        'flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0 w-full'
+                        'flex justify-between items-center bg-white shadow-sm fixed z-[1000] top-0 w-full p-2 h-fit'
                     }
                 >
                     <div className="flex items-center">
                         <div className="flex items-center justify-center text-center">
-                            <Image src={logo_mta} alt="logo k01" className="w-10 h-10 mr-3" />
+                            <Image src={logo_mta} alt="logo k01" className="w-10 h-8" />
                             <span className="text-base font-bold color text-primary">
                                 Quản lý đào tạo
                             </span>
@@ -103,8 +103,6 @@ const DefaultLayout = ({
                         <div>
                             <Breadcrumb items={listBreadcrumb} />
                         </div>
-
-                        {/* <Divider type="vertical" className="bg-primary h-[30px]" /> */}
                     </div>
                     <HeaderApp />
                 </Header>
