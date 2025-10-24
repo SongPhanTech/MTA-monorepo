@@ -816,7 +816,6 @@ enum SubjectClassType {
   @@schema("ql-dao-tao")
 }
 
-
 /// Lớp môn học
 model SubjectClass extends BaseNoCode {
   code                       String

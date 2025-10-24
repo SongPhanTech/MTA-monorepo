@@ -175,6 +175,12 @@ const NAVIGATION: NavigationType = {
                 icon: CalendarRange,
                 children: [
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_THONG_KE_NO,
+                        label: 'Thống kê nợ',
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_THONG_KE_NO,
+                        description: 'Thống kê nợ',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_LAP_KE_HOACH,
                         label: 'Lập kế hoạch',
                         path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_LAP_KE_HOACH,
