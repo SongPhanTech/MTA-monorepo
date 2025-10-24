@@ -279,7 +279,7 @@ export default function MonTheoKeHoachDuKien() {
                 }
             }}
         >
-            <Row>
+            <Row gutter={[0,8]}>
                 <Col span={20}>
                     <Flex gap={4}>
                         <Col span={8}>
@@ -313,8 +313,11 @@ export default function MonTheoKeHoachDuKien() {
                         </Col>
                     </Flex>
                 </Col>
-                <Col span={4}>
+                <Col span={24}>
                     <Flex justify="end" gap={4}>
+                        <Button type="primary">
+                            Thêm môn
+                        </Button>
                         <Button onClick={onSubmit} type="primary">
                             Lưu kế hoạch
                         </Button>

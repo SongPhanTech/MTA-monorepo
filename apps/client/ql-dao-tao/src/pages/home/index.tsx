@@ -1,7 +1,7 @@
 import News from '@components/dashboard/news'
 import Notifications from '@components/dashboard/notifications'
 import StaffByOrg from '@components/dashboard/staff-by-org'
-import DashboardLayout from '@layouts/dashboard-layout'
+import DefaultLayout from '@layouts/default-layout'
 import { LichCongTac } from '@workspace/ui'
 import { Col, Row, Typography } from 'antd'
 
@@ -84,5 +84,5 @@ function Page() {
 export default Page
 
 Page.getLayout = function getLayout(page: React.ReactElement) {
-    return <DashboardLayout>{page}</DashboardLayout>
+    return <DefaultLayout>{page}</DefaultLayout>
 }
