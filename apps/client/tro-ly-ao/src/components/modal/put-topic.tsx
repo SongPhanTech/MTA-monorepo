@@ -11,7 +11,7 @@ import {
     useUpdateTopic,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, message } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTopics } from '@/hooks/useTopics'
 
@@ -23,6 +23,7 @@ type TopicFormType = {
 
 const PutTopic = () => {
     const { isTopicTypeExists } = useTopics()
+    const [hasUserEditedType, setHasUserEditedType] = useState(false)
     const {
         isOpen,
         onClose,
@@ -42,13 +43,57 @@ const PutTopic = () => {
     })
 
     const [form] = Form.useForm<TopicFormType>()
+    const nameValue = Form.useWatch('name', form)
 
-    // Clear form when opening new modal (no id)
     useEffect(() => {
         if (isOpen && !id) {
             form.resetFields()
+            setHasUserEditedType(false)
         }
     }, [isOpen, id, form])
+
+    const removeVietnameseTones = (str: string): string => {
+        const from =
+            'àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđÀÁẢÃẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆÌÍỈĨỊÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÙÚỦŨỤƯỪỨỬỮỰỲÝỶỸỴĐ'
+        const to =
+            'aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyydAAAAAAAAAAAAAAAAAEEEEEEEEEEEIIIIIOOOOOOOOOOOOOOOOOUUUUUUUUUUUYYYYYD'
+        let result = str
+        for (let i = 0; i < from.length; i++) {
+            result = result.replace(new RegExp(from[i], 'g'), to[i])
+        }
+        return result
+    }
+
+    const generateTypeFromName = (name: string): string => {
+        if (!name) return ''
+
+        const baseType = removeVietnameseTones(name)
+            .toUpperCase()
+            .replace(/[^A-Z0-9]+/g, '_')
+            .replace(/^_+|_+$/g, '')
+
+        let finalType = baseType
+        let counter = 1
+        while (isTopicTypeExists(finalType)) {
+            finalType = `${baseType}_${counter}`
+            counter++
+        }
+
+        return finalType
+    }
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newName = e.target.value
+
+        if (!id && !hasUserEditedType) {
+            if (newName) {
+                const generatedType = generateTypeFromName(newName)
+                form.setFieldValue('type', generatedType)
+            } else {
+                form.setFieldValue('type', '')
+            }
+        }
+    }
 
     useEffect(() => {
         if (id && detail) {
@@ -139,7 +184,7 @@ const PutTopic = () => {
                         label="Tên chủ đề"
                         rules={[{ required: true, message: 'Vui lòng nhập tên chủ đề' }]}
                     >
-                        <Input placeholder="Nhập tên chủ đề" />
+                        <Input placeholder="Nhập tên chủ đề" onChange={handleNameChange} />
                     </FormItem>
                 </Col>
                 <Col span={24}>
@@ -164,11 +209,15 @@ const PutTopic = () => {
                             },
                         ]}
                     >
-                        <Input placeholder="Nhập mã định danh (VD: CHAT_BOT, AI_ASSISTANT)" />
+                        <Input
+                            placeholder="Nhập mã định danh (VD: CHAT_BOT, AI_ASSISTANT)"
+                            onChange={() => setHasUserEditedType(true)}
+                            disabled={!id && !nameValue}
+                        />
                     </FormItem>
                 </Col>
                 <Col span={24}>
-                    <FormItem form={form} name={'description'} label="Mô tả" required>
+                    <FormItem form={form} name={'description'} label="Mô tả">
                         <Input.TextArea rows={4} placeholder="Nhập mô tả cho chủ đề" />
                     </FormItem>
                 </Col>

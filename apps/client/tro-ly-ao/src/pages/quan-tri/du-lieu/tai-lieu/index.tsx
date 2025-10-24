@@ -5,7 +5,7 @@ import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
 import { cn, formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
-import { useCountDocument, useDeleteDocument, useFindManyDocument } from '@workspace/db/hooks'
+import { useCountDocument, useDeleteDocument, useDeleteManyDocumentTopic, useFindManyDocument } from '@workspace/db/hooks'
 import { Button, Input, message, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -38,10 +38,19 @@ function Page() {
     const { onOpen: openSuaTaiLieu } = useDisclosure<string>({
         tag: 'SuaTaiLieu',
     })
-    const { data: totalCountDocument = 0 } = useCountDocument()
-    // Count pending documents
+
     const { data: totalPendingDocument = 0 } = useCountDocument({
         where: { status: $Enums.DocumentStatus.PENDING },
+    })
+
+    const { data: totalFilteredDocument = 0 } = useCountDocument({
+        where: {
+            status: filters.status,
+            title: {
+                contains: filters.title,
+                mode: 'insensitive',
+            },
+        },
     })
     const { data: documents = [] } = useFindManyDocument({
         include: {
@@ -68,12 +77,25 @@ function Page() {
             ...prev,
             pagination: {
                 ...prev.pagination,
-                total: totalCountDocument,
+                total: totalFilteredDocument,
             },
         }))
-    }, [totalCountDocument])
+    }, [totalFilteredDocument])
+
+    useEffect(() => {
+        setTableParams((prev) => ({
+            ...prev,
+            pagination: {
+                ...prev.pagination,
+                current: 1,
+            },
+        }))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filters.status, filters.title])
 
     const { mutateAsync: deleteDocument } = useDeleteDocument()
+    const { mutateAsync: deleteManyDocumentTopic } = useDeleteManyDocumentTopic()
+
     const handleDeleteDocument = async (id: string) => {
         if (!id) return
 
@@ -85,6 +107,10 @@ function Page() {
                 return
             }
 
+            // xóa các DocumentTopic liên quan trước
+            await deleteManyDocumentTopic({ where: { documentId: id } })
+
+            // sau đó xóa Document
             await deleteDocument({ where: { id } })
             message.success('Xoá tài liệu thành công')
         } catch (_error) {
@@ -333,7 +359,7 @@ function Page() {
                         data={documents || []}
                         pagination={{
                             ...tableParams.pagination,
-                            total: totalCountDocument,
+                            total: totalFilteredDocument,
                         }}
                         onChange={(pagination) =>
                             setTableParams({
