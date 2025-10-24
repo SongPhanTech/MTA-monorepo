@@ -177,8 +177,8 @@ export default function ArchivedCertificate() {
                 //     }),
                 // ]
                 // const res = await sqlTransaction(listSqlTransaction)
-                const res= await updateCertificateScore({
-                    data:{archivedCertificateIds:selectedRowKeys as string[]}
+                const res = await updateCertificateScore({
+                    data: { archivedCertificateIds: selectedRowKeys as string[] },
                 })
                 if (res?.status === 200) {
                     message.success('Phê duyệt thành công')

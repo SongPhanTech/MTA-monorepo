@@ -37,18 +37,20 @@ export default function TrainingCoursePage() {
     })
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: initialData } = useFindUniqueTrainingCourse({
-      where: { id: idTrainingCourse.current },
-      include: {
-        trainingObjectType: true,
-        fixedClass: {
-          include: {
-            students: true,
-          }
+    const { data: initialData } = useFindUniqueTrainingCourse(
+        {
+            where: { id: idTrainingCourse.current },
+            include: {
+                trainingObjectType: true,
+                fixedClass: {
+                    include: {
+                        students: true,
+                    },
+                },
+            },
         },
-      }
-
-    }, { enabled: !!idTrainingCourse.current });
+        { enabled: !!idTrainingCourse.current }
+    )
 
     const where = useMemo(
         () => ({
@@ -124,51 +126,61 @@ export default function TrainingCoursePage() {
     const handleExport = async (e: any, id: string) => {
         idTrainingCourse.current = id
         const baseUrl = '/mta/template/'
-        const url = getMinioUrl(baseUrl + (e=== 'P2' ? 'si-so-p2.xlsx' : 'si-so-p7.xlsx'))
+        const url = getMinioUrl(baseUrl + (e === 'P2' ? 'si-so-p2.xlsx' : 'si-so-p7.xlsx'))
         const tableStartCell = e === 'P2' ? { row: 11, col: 1 } : { row: 8, col: 1 }
-        const result = await sqlTransaction(
-        [
+        const result = await sqlTransaction([
             {
-                model: "TrainingCourse",
-                operation: "findUnique",
+                model: 'TrainingCourse',
+                operation: 'findUnique',
                 data: {
                     where: { id: id },
                     include: {
-                      trainingObjectType: true,
-                      fixedClass: {
-                        include: {
-                          students: true,
-                        }
-                      },
-                    }
+                        trainingObjectType: true,
+                        fixedClass: {
+                            include: {
+                                students: true,
+                            },
+                        },
+                    },
                 },
             },
-        ]);
-        console.log('result', result);
-        if (result.status !== 200) return;
-        const data: any = result.data[0];
-        const rows = data?.fixedClass?.map((item: any, index: number) => {
-
-            return {
-                cells: [
-                    { value: index + 1, border: true },
-                    { value: item.code ?? '', border: true },
-                    { value: item.name ?? '', border: true },
-                    { value: item.students?.length ?? 0, border: true , align: 'center', bold: true ,
-                        
-                    },
-                    {value: item.description ?? '', border: true },
-
-                ]
-            }
-        }) ?? []
-         const totalRow = {
+        ])
+        console.log('result', result)
+        if (result.status !== 200) return
+        const data: any = result.data[0]
+        const rows =
+            data?.fixedClass?.map((item: any, index: number) => {
+                return {
+                    cells: [
+                        { value: index + 1, border: true },
+                        { value: item.code ?? '', border: true },
+                        { value: item.name ?? '', border: true },
+                        {
+                            value: item.students?.length ?? 0,
+                            border: true,
+                            align: 'center',
+                            bold: true,
+                        },
+                        { value: item.description ?? '', border: true },
+                    ],
+                }
+            }) ?? []
+        const totalRow = {
             cells: [
-                { value: 'TỔNG', border: true ,colSpan: 3,align: 'center'},
-                { value: initialData?.fixedClass?.reduce((sum, item) => sum + (item.students?.length ?? 0), 0) ?? 0, border: true,bold: true,align: 'center' },
+                { value: 'TỔNG', border: true, colSpan: 3, align: 'center' },
+                {
+                    value:
+                        initialData?.fixedClass?.reduce(
+                            (sum, item) => sum + (item.students?.length ?? 0),
+                            0
+                        ) ?? 0,
+                    border: true,
+                    bold: true,
+                    align: 'center',
+                },
                 { value: '', border: true },
-            ] 
-         }
+            ],
+        }
         exportFromTemplate({
             templateUrl: url,
             sheets: [
@@ -178,14 +190,14 @@ export default function TrainingCoursePage() {
                         dtdt: initialData?.trainingObjectType?.name ?? '',
                         khoa: initialData?.name ?? '',
                     },
-                    tableStartCell:  tableStartCell,
+                    tableStartCell: tableStartCell,
                     //@ts-ignore
-                    rows:[...rows, totalRow]
-                }
+                    rows: [...rows, totalRow],
+                },
             ],
             fileName: `SiSo-${initialData?.name}.xlsx`,
         })
-      };
+    }
 
     const { mutateAsync: updateTrainingCourse } = useUpdateTrainingCourse()
     async function handleDelete(id: string) {
@@ -218,8 +230,6 @@ export default function TrainingCoursePage() {
         <div>
             <Row gutter={[16, 0]}>
                 <Col span={24}>
- 
-
                     <Row gutter={[16, 16]} align="top" justify="space-between">
                         <Col span={12}>
                             {/* <Flex>
@@ -400,62 +410,50 @@ export default function TrainingCoursePage() {
                                 render: (_, { id }) => {
                                     if (id) {
                                         const menu = (
-                                            <Menu 
-                                              // BƯỚC 2: Cập nhật onClick để truyền cả e.key và 'id'
-                                              onClick={(e) => handleExport(e.key, id)}
+                                            <Menu
+                                                // BƯỚC 2: Cập nhật onClick để truyền cả e.key và 'id'
+                                                onClick={(e) => handleExport(e.key, id)}
                                             >
-                                              <Menu.ItemGroup title="Chọn mẫu để xuất">
-                                                <Menu.Item key="P2">
-                                                  Mẫu P2
-                                                </Menu.Item>
-                                                <Menu.Item key="P7">
-                                                  Mẫu P7
-                                                </Menu.Item>
-                                              </Menu.ItemGroup>
+                                                <Menu.ItemGroup title="Chọn mẫu để xuất">
+                                                    <Menu.Item key="P2">Mẫu P2</Menu.Item>
+                                                    <Menu.Item key="P7">Mẫu P7</Menu.Item>
+                                                </Menu.ItemGroup>
                                             </Menu>
-                                          );
+                                        )
                                         return (
-                                          <Row className="justify-center gap-2">
-                                            {can(
-                                              QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_KHOA_HUAN_LUYEN,
-                                              "SUA"
-                                            ) && (
-                                              <EditIcon
-                                                onClick={onOpen.bind(null, id)}
-                                                className="text-sm text-blue-700 cursor-pointer"
-                                              />
-                                            )}
-                                            {can(
-                                              QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_KHOA_HUAN_LUYEN,
-                                              "XOA"
-                                            ) && (
-                                              <DeleteIcon
-                                                popConfirm={{
-                                                  onConfirm: () =>
-                                                    handleDelete(id),
-                                                }}
-                                              />
-                                            )}
-                                            <Tooltip title="Xuất sĩ số">
-                                              <Dropdown
-                                                overlay={menu}
-                                                trigger={["click"]}
-                                              >
-                                                <a
-                                                  onClick={(e) =>
-                                                    e.preventDefault()
-                                                  }
-                                                >
-                                                  <FileDown
-                                                    size={16}
-                                                    strokeWidth={1.5}
-                                                    className="text-base text-blue-700 cursor-pointer"
-                                                  />
-                                                </a>
-                                              </Dropdown>
-                                            </Tooltip>
-                                          </Row>
-                                        );
+                                            <Row className="justify-center gap-2">
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_KHOA_HUAN_LUYEN,
+                                                    'SUA'
+                                                ) && (
+                                                    <EditIcon
+                                                        onClick={onOpen.bind(null, id)}
+                                                        className="text-sm text-blue-700 cursor-pointer"
+                                                    />
+                                                )}
+                                                {can(
+                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_KHOA_HUAN_LUYEN,
+                                                    'XOA'
+                                                ) && (
+                                                    <DeleteIcon
+                                                        popConfirm={{
+                                                            onConfirm: () => handleDelete(id),
+                                                        }}
+                                                    />
+                                                )}
+                                                <Tooltip title="Xuất sĩ số">
+                                                    <Dropdown overlay={menu} trigger={['click']}>
+                                                        <a onClick={(e) => e.preventDefault()}>
+                                                            <FileDown
+                                                                size={16}
+                                                                strokeWidth={1.5}
+                                                                className="text-base text-blue-700 cursor-pointer"
+                                                            />
+                                                        </a>
+                                                    </Dropdown>
+                                                </Tooltip>
+                                            </Row>
+                                        )
                                     }
                                     return ''
                                 },

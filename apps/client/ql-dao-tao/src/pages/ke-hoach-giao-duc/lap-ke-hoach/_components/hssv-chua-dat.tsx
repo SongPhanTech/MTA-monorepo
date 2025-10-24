@@ -142,7 +142,7 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
                 />
             </Col>
             <Col span={2}>
-                <Button type='primary'>Lưu</Button>
+                <Button type="primary">Lưu</Button>
             </Col>
             <Col span={24}>
                 <Table

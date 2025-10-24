@@ -306,7 +306,7 @@ export default function SubjectClassScore() {
                     },
                 },
             },
-             orderBy: {
+            orderBy: {
                 name: 'asc',
             },
         },

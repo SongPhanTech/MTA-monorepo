@@ -8,23 +8,21 @@ import { useMemo, useState } from 'react'
 export default function SubjectClassScore() {
     const router = useRouter()
     const [activeKey, setActiveKey] = useState('1')
-    const examRoomId =router.query.examRoomId as string
+    const examRoomId = router.query.examRoomId as string
     const items = useMemo(() => {
         return [
             {
                 label: 'QL phách',
                 key: '1',
-                children: <SinhPhach/>,
+                children: <SinhPhach />,
             },
             {
                 label: 'Nhập điểm',
                 key: '2',
-                children: <NhapdiemPhach/>,
+                children: <NhapdiemPhach />,
             },
         ]
     }, [])
-
-
 
     return (
         <div className="bg-white">
@@ -36,7 +34,6 @@ export default function SubjectClassScore() {
                         items={items}
                     />
                 </Col>
-               
             </Row>
         </div>
     )

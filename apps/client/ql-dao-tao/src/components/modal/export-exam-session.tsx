@@ -1,12 +1,12 @@
 import { DownloadOutlined } from '@ant-design/icons'
 import { useExamTypeOptions } from '@hooks/examType'
-import {  Button, Flex } from 'antd'
+import { Button, Flex } from 'antd'
 import dayjs from 'dayjs'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 
-const ExportPhach = ({data}:{data:any[]}) => {
-     const { options, getExamTypeLabel } = useExamTypeOptions()
+const ExportPhach = ({ data }: { data: any[] }) => {
+    const { options, getExamTypeLabel } = useExamTypeOptions()
     const exportTemplate = async () => {
         // Tạo workbook mới
         const workbook = new ExcelJS.Workbook()
@@ -34,7 +34,6 @@ const ExportPhach = ({data}:{data:any[]}) => {
                 wrapText: true as const,
             },
         }
-
 
         const headerStyle = {
             font: { ...golbalFontStyle, bold: true, size: 14 },
@@ -140,41 +139,34 @@ const ExportPhach = ({data}:{data:any[]}) => {
         worksheet.getCell('A4').style = headerSubtitleStyle
         worksheet.getRow(4).height = 20
 
-            
         worksheet.mergeCells('A6:B6')
         worksheet.getCell('A6').value = 'Lớp học phần:'
         worksheet.getCell('A6').style = headerStyle
 
-        
         worksheet.getCell('C6').value = data[0]?.studentSubjectScore?.subjectClass?.code
         worksheet.getCell('C6').style = headerStyle
-
 
         worksheet.mergeCells('A7:B7')
         worksheet.getCell('A7').value = 'Tên học phần:'
         worksheet.getCell('A7').style = headerStyle
 
-        
         worksheet.getCell('C7').value = data[0]?.studentSubjectScore?.subjectVersion?.name
         worksheet.getCell('C7').style = headerStyle
 
-
-                     worksheet.mergeCells('A8:B8')
+        worksheet.mergeCells('A8:B8')
         worksheet.getCell('A8').value = 'Giảng viên:'
         worksheet.getCell('A8').style = headerStyle
 
-        
         worksheet.getCell('C8').value = ''
         worksheet.getCell('C8').style = headerStyle
 
-                          worksheet.mergeCells('A9:B9')
+        worksheet.mergeCells('A9:B9')
         worksheet.getCell('A9').value = 'Hệ số điểm chuyên cần: '
         worksheet.getCell('A9').style = headerStyle
 
-        
-        worksheet.getCell('C9').value = data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.coef_1
+        worksheet.getCell('C9').value =
+            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.coef_1
         worksheet.getCell('C9').style = headerStyle
-
 
         worksheet.getCell('E6').value = 'Khoá'
         worksheet.getCell('E6').style = headerStyle
@@ -188,20 +180,21 @@ const ExportPhach = ({data}:{data:any[]}) => {
         worksheet.getCell('E9').value = 'Hệ số điểm TX'
         worksheet.getCell('E9').style = headerStyle
 
-        worksheet.getCell('F6').value = data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.code
+        worksheet.getCell('F6').value =
+            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.code
         worksheet.getCell('F6').style = headerStyle
 
-        worksheet.getCell('F7').value =''
+        worksheet.getCell('F7').value = ''
         worksheet.getCell('F7').style = headerStyle
 
         worksheet.getCell('F8').value = data?.length
         worksheet.getCell('F8').style = headerStyle
 
-        worksheet.getCell('F9').value = data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.coef_2
+        worksheet.getCell('F9').value =
+            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.coef_2
         worksheet.getCell('F9').style = headerStyle
 
-
-             worksheet.getCell('H6').value = 'Ngày thi'
+        worksheet.getCell('H6').value = 'Ngày thi'
         worksheet.getCell('H6').style = headerStyle
 
         worksheet.getCell('H7').value = 'Số tín chỉ'
@@ -219,13 +212,14 @@ const ExportPhach = ({data}:{data:any[]}) => {
         worksheet.getCell('I7').value = data[0]?.studentSubjectScore?.subjectVersion?.credit
         worksheet.getCell('I7').style = headerStyle
 
-        worksheet.getCell('I8').value = getExamTypeLabel(data[0]?.studentSubjectScore?.subjectClass?.examType)
+        worksheet.getCell('I8').value = getExamTypeLabel(
+            data[0]?.studentSubjectScore?.subjectClass?.examType
+        )
         worksheet.getCell('I8').style = headerStyle
 
-        worksheet.getCell('I9').value = data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.coef_3
+        worksheet.getCell('I9').value =
+            data[0]?.studentSubjectScore?.subjectClass?.fixedClasses?.trainingCourse?.coef_3
         worksheet.getCell('I9').style = headerStyle
-
-
 
         const headerRow = worksheet.getRow(11)
         headerRow.values = [
@@ -236,7 +230,7 @@ const ExportPhach = ({data}:{data:any[]}) => {
             'Lớp',
             'Điểm chuyên cần',
             'Điểm thường xuyên',
-            'Số phách'
+            'Số phách',
         ]
         headerRow.eachCell((cell: any) => {
             cell.style = tableHeaderStyle
@@ -261,11 +255,13 @@ const ExportPhach = ({data}:{data:any[]}) => {
                     index + 1,
                     i?.studentSubjectScore?.student?.userProfile?.code,
                     `${i?.studentSubjectScore?.student?.userProfile?.lastName} ${i?.studentSubjectScore?.student?.userProfile?.firstName}`,
-                    dayjs(i?.studentSubjectScore?.student?.userProfile.dateOfBirth).format('DD/MM/YYYY') || '',
+                    dayjs(i?.studentSubjectScore?.student?.userProfile.dateOfBirth).format(
+                        'DD/MM/YYYY'
+                    ) || '',
                     i?.studentSubjectScore?.student?.fixedClass?.name || '',
-                    i.studentSubjectScore?.attendanceScore|| '',
-                    i.studentSubjectScore?.midtermScore|| '',
-                    i.examCode|| '',
+                    i.studentSubjectScore?.attendanceScore || '',
+                    i.studentSubjectScore?.midtermScore || '',
+                    i.examCode || '',
                 ]
                 headerRowValue.eachCell((cell: any) => {
                     cell.style = _dataTextCellStyle
@@ -280,7 +276,7 @@ const ExportPhach = ({data}:{data:any[]}) => {
 
     return (
         <Flex>
-             <Button type="primary" onClick={exportTemplate} icon={<DownloadOutlined />}>
+            <Button type="primary" onClick={exportTemplate} icon={<DownloadOutlined />}>
                 Xuất file phách
             </Button>
         </Flex>

@@ -80,7 +80,6 @@ export type DataTable = Prisma.StudentSubjectScoreGetPayload<{
     }
 }>
 
-
 const ModalPrintStudentSubjectScore = () => {
     const formattedDate = '..., ngày ... tháng ... năm ...'
     const printRef = useRef<HTMLDivElement>(null)
@@ -91,8 +90,8 @@ const ModalPrintStudentSubjectScore = () => {
         tag: 'ModalPrintStudentSubjectScore',
     })
 
-     const { data: session } = useSession()
-        const profileName = session?.preferred_username || ''
+    const { data: session } = useSession()
+    const profileName = session?.preferred_username || ''
 
     const { data } = useFindUniqueSubjectClass(
         {
@@ -493,12 +492,16 @@ const ModalPrintStudentSubjectScore = () => {
                                     </td>
                                     <td className="border border-black text-center">{''}</td>
                                     <td className="border border-black text-left">
-                                        {((item?.attendanceScore && item?.midtermScore && item?.examScore)||item?.manualFinalScore ||
-                                                item?.finalScore)&& convert(
+                                        {((item?.attendanceScore &&
+                                            item?.midtermScore &&
+                                            item?.examScore) ||
                                             item?.manualFinalScore ||
-                                                item?.finalScore?.toNumber() ||
-                                                0
-                                        )}
+                                            item?.finalScore) &&
+                                            convert(
+                                                item?.manualFinalScore ||
+                                                    item?.finalScore?.toNumber() ||
+                                                    0
+                                            )}
                                     </td>
                                     <td className="border border-black text-left">
                                         {(() => {
@@ -533,7 +536,7 @@ const ModalPrintStudentSubjectScore = () => {
                         ))}
                     </div>
                 </div>
-                    <div className="mt-3">Người in: {profileName}</div>
+                <div className="mt-3">Người in: {profileName}</div>
 
                 <Row gutter={[16, 0]} className="mt-6 text-center">
                     <Col span={8} className="flex flex-col items-center justify-center">
