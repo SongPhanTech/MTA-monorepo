@@ -156,15 +156,9 @@ const NAVIGATION: NavigationType = {
                         description: 'Kế hoạch mở lớp môn học',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DANG_KY_HOC,
-                        label: 'Đăng ký học',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_DANG_KY_HOC,
-                        description: 'Đăng ký học',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
                         label: 'Phân công giảng dạy',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
                         description: 'Phân công giảng dạy',
                     },
                     {
@@ -199,12 +193,24 @@ const NAVIGATION: NavigationType = {
                         description: 'Đăng ký học lại',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_QUAN_LY_LOP_MON_HOC,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
                         label: 'Phân công giảng dạy',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_QUAN_LY_LOP_MON_HOC,
+                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_HOC_LAI_PHAN_CONG_GIANG_DAY,
                         description: 'Phân công giảng dạy',
                     },
                 ],
+            },
+            {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
+                label: 'Phân công giảng dạy',
+                icon: CalendarRange,
+                path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
+            },
+            {
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC,
+                label: 'Đăng ký học',
+                path: ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC,
+                description: 'Đăng ký học',
             },
             {
                 id: 'lop-mon-hoc',

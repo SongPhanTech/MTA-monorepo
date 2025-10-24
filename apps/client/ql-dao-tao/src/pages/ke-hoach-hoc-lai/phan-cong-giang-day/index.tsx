@@ -1,5 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
-import PhanCongGiangDay from '@pages/ke-hoach-giao-duc/quan-ly-lop-mon-hoc'
+import PhanCongGiangDay from '@pages/ke-hoach-giao-duc/phan-cong-giang-day'
 import type React from 'react'
 
 export default function PhanCongGiangDayHocLai() {

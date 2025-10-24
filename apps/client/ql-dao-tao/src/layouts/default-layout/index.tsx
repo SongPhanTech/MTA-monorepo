@@ -89,7 +89,7 @@ const DefaultLayout = ({
             >
                 <Header
                     className={
-                        'flex justify-between items-center bg-white shadow-sm fixed z-[1000] top-0 w-full p-2 h-fit'
+                        'flex justify-between items-center bg-white shadow-sm fixed z-[1000] top-0 w-full px-2 h-fit'
                     }
                 >
                     <div className="flex items-center">
@@ -100,20 +100,23 @@ const DefaultLayout = ({
                             </span>
                         </div>
                         <Divider type="vertical" className="bg-primary h-[30px]" />
-                        <div>
-                            <Breadcrumb items={listBreadcrumb} />
-                        </div>
+                        <SelectTrainingObjectType />
+                        <Divider type="vertical" className="bg-primary h-[30px]" />
+                        <div className='mr-2'>Học kỳ đang làm việc</div>
+                        <TreeSelectSemester />
+                        <Divider type="vertical" className="bg-primary h-[30px]" />
+                        <Breadcrumb items={listBreadcrumb} />
                     </div>
                     <HeaderApp />
                 </Header>
                 <SidebarMenuLayout items={menus} theme={'light'} />
-                <Content className="mx-2 pb-[35px]">
+                <Content className="pb-[35px] mt-[110px] px-2 bg-white">
                     {unLayout ? (
                         children
                     ) : (
                         <div
                             className={cn(
-                                'min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4',
+                                // 'min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4',
                                 className
                             )}
                             style={{
@@ -132,13 +135,6 @@ const DefaultLayout = ({
                     >
                         Đóng góp ý kiến
                     </Button>
-                    <Divider type="vertical" className="bg-primary h-[30px]" />
-                    <SelectTrainingObjectType />
-                    <Divider type="vertical" className="bg-primary h-[30px]" />
-                    <div className="flex items-center gap-2">
-                        <div>Học kỳ đang làm việc </div>
-                        <TreeSelectSemester />
-                    </div>
                 </Footer>
             </Layout>
         </IdleTimerProvider>
