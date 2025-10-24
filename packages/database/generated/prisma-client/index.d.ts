@@ -133136,7 +133136,7 @@ export namespace Prisma {
     semesterType: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date
-    endDate: Date | null
+    endDate: Date
     _count: SemesterCountAggregateOutputType | null
     _min: SemesterMinAggregateOutputType | null
     _max: SemesterMaxAggregateOutputType | null
@@ -133284,7 +133284,7 @@ export namespace Prisma {
       semesterType: $Enums.SemesterType | null
       schoolYearId: string
       startDate: Date
-      endDate: Date | null
+      endDate: Date
     }, ExtArgs["result"]["semester"]>
     composites: {}
   }
@@ -137397,11 +137397,11 @@ export namespace Prisma {
        */
       admissionQuota: number | null
       /**
-       * Ngày nhập học
+       * Ngày nhập học
        */
       admissionStartDate: Date | null
       /**
-       * Ngày kết thúc
+       * Ngày kết thúc
        */
       admissionEndDate: Date | null
       /**
@@ -352420,7 +352420,7 @@ export namespace Prisma {
     semesterType?: EnumSemesterTypeNullableFilter<"Semester"> | $Enums.SemesterType | null
     schoolYearId?: StringFilter<"Semester"> | string
     startDate?: DateTimeFilter<"Semester"> | Date | string
-    endDate?: DateTimeNullableFilter<"Semester"> | Date | string | null
+    endDate?: DateTimeFilter<"Semester"> | Date | string
     schoolYear?: XOR<SchoolYearScalarRelationFilter, SchoolYearWhereInput>
     subjectClasses?: SubjectClassListRelationFilter
     trainingCoursesStart?: TrainingCourseListRelationFilter
@@ -352447,7 +352447,7 @@ export namespace Prisma {
     semesterType?: SortOrderInput | SortOrder
     schoolYearId?: SortOrder
     startDate?: SortOrder
-    endDate?: SortOrderInput | SortOrder
+    endDate?: SortOrder
     schoolYear?: SchoolYearOrderByWithRelationInput
     subjectClasses?: SubjectClassOrderByRelationAggregateInput
     trainingCoursesStart?: TrainingCourseOrderByRelationAggregateInput
@@ -352479,7 +352479,7 @@ export namespace Prisma {
     semesterType?: EnumSemesterTypeNullableFilter<"Semester"> | $Enums.SemesterType | null
     schoolYearId?: StringFilter<"Semester"> | string
     startDate?: DateTimeFilter<"Semester"> | Date | string
-    endDate?: DateTimeNullableFilter<"Semester"> | Date | string | null
+    endDate?: DateTimeFilter<"Semester"> | Date | string
     schoolYear?: XOR<SchoolYearScalarRelationFilter, SchoolYearWhereInput>
     subjectClasses?: SubjectClassListRelationFilter
     trainingCoursesStart?: TrainingCourseListRelationFilter
@@ -352506,7 +352506,7 @@ export namespace Prisma {
     semesterType?: SortOrderInput | SortOrder
     schoolYearId?: SortOrder
     startDate?: SortOrder
-    endDate?: SortOrderInput | SortOrder
+    endDate?: SortOrder
     _count?: SemesterCountOrderByAggregateInput
     _max?: SemesterMaxOrderByAggregateInput
     _min?: SemesterMinOrderByAggregateInput
@@ -352528,7 +352528,7 @@ export namespace Prisma {
     semesterType?: EnumSemesterTypeNullableWithAggregatesFilter<"Semester"> | $Enums.SemesterType | null
     schoolYearId?: StringWithAggregatesFilter<"Semester"> | string
     startDate?: DateTimeWithAggregatesFilter<"Semester"> | Date | string
-    endDate?: DateTimeNullableWithAggregatesFilter<"Semester"> | Date | string | null
+    endDate?: DateTimeWithAggregatesFilter<"Semester"> | Date | string
   }
 
   export type MilestoneWhereInput = {
@@ -379512,7 +379512,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
@@ -379539,7 +379539,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
@@ -379564,7 +379564,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
@@ -379591,7 +379591,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
@@ -379617,7 +379617,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
   }
 
   export type SemesterUpdateManyMutationInput = {
@@ -379632,7 +379632,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type SemesterUncheckedUpdateManyInput = {
@@ -379648,7 +379648,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MilestoneCreateInput = {
@@ -483740,7 +483740,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
@@ -483766,7 +483766,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
@@ -483901,7 +483901,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
@@ -483927,7 +483927,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
@@ -488772,7 +488772,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutSemesterInput
@@ -488797,7 +488797,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
@@ -489008,7 +489008,7 @@ export namespace Prisma {
     semesterType?: EnumSemesterTypeNullableFilter<"Semester"> | $Enums.SemesterType | null
     schoolYearId?: StringFilter<"Semester"> | string
     startDate?: DateTimeFilter<"Semester"> | Date | string
-    endDate?: DateTimeNullableFilter<"Semester"> | Date | string | null
+    endDate?: DateTimeFilter<"Semester"> | Date | string
   }
 
   export type MilestoneUpsertWithWhereUniqueWithoutSchoolYearInput = {
@@ -490548,7 +490548,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutSemesterInput
@@ -490574,7 +490574,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
     studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutSemesterInput
@@ -491229,7 +491229,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutSemesterNestedInput
@@ -491255,7 +491255,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
     studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutSemesterNestedInput
@@ -499341,7 +499341,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
@@ -499367,7 +499367,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
@@ -499588,7 +499588,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
@@ -499614,7 +499614,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
@@ -500493,7 +500493,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutSemesterInput
@@ -500519,7 +500519,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
     studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutSemesterInput
@@ -501579,7 +501579,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutSemesterNestedInput
@@ -501605,7 +501605,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
     studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutSemesterNestedInput
@@ -513713,7 +513713,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
@@ -513739,7 +513739,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
@@ -513936,7 +513936,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
@@ -513962,7 +513962,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
@@ -517735,7 +517735,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
@@ -517761,7 +517761,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
@@ -518100,7 +518100,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
@@ -518126,7 +518126,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
@@ -518248,7 +518248,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
@@ -518274,7 +518274,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     studentSemesterResult?: StudentSemesterResultUncheckedCreateNestedManyWithoutSemesterInput
@@ -518405,7 +518405,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
@@ -518431,7 +518431,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     studentSemesterResult?: StudentSemesterResultUncheckedUpdateManyWithoutSemesterNestedInput
@@ -540496,7 +540496,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
@@ -540522,7 +540522,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
@@ -540760,7 +540760,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
@@ -540786,7 +540786,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
@@ -546051,7 +546051,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
@@ -546077,7 +546077,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
@@ -546317,7 +546317,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
@@ -546343,7 +546343,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
@@ -546534,7 +546534,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     schoolYear: SchoolYearCreateNestedOneWithoutSemestersInput
     subjectClasses?: SubjectClassCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseCreateNestedManyWithoutSemesterStartInput
@@ -546560,7 +546560,7 @@ export namespace Prisma {
     semesterType?: $Enums.SemesterType | null
     schoolYearId: string
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
     subjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutSemesterInput
     trainingCoursesStart?: TrainingCourseUncheckedCreateNestedManyWithoutSemesterStartInput
     trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutSemesterInput
@@ -546786,7 +546786,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     schoolYear?: SchoolYearUpdateOneRequiredWithoutSemestersNestedInput
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
@@ -546812,7 +546812,7 @@ export namespace Prisma {
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     schoolYearId?: StringFieldUpdateOperationsInput | string
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
@@ -572694,7 +572694,7 @@ export namespace Prisma {
     shortName?: string | null
     semesterType?: $Enums.SemesterType | null
     startDate: Date | string
-    endDate?: Date | string | null
+    endDate: Date | string
   }
 
   export type MilestoneCreateManySchoolYearInput = {
@@ -572771,7 +572771,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutSemesterNestedInput
@@ -572796,7 +572796,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     subjectClasses?: SubjectClassUncheckedUpdateManyWithoutSemesterNestedInput
     trainingCoursesStart?: TrainingCourseUncheckedUpdateManyWithoutSemesterStartNestedInput
     trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutSemesterNestedInput
@@ -572821,7 +572821,7 @@ export namespace Prisma {
     shortName?: NullableStringFieldUpdateOperationsInput | string | null
     semesterType?: NullableEnumSemesterTypeFieldUpdateOperationsInput | $Enums.SemesterType | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MilestoneUpdateWithoutSchoolYearInput = {

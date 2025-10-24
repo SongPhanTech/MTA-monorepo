@@ -1,5 +1,5 @@
 import { CloseCircleOutlined, InboxOutlined } from '@ant-design/icons'
-import { fetchReadDocumentContentDocumentDocumentReaderGet } from '@api/qa/qaComponents'
+import { fetchReadDocumentContentDocumentDocumentReaderPost } from '@api/qa/qaComponents'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
@@ -116,18 +116,14 @@ const ThemTaiLieu = () => {
                             })
                         },
                     })
-                    const selectedTopicIds = form.getFieldValue('topicIds')
-                    const firstTopicId = selectedTopicIds?.[0]
-                    const selectedTopic = selectableTopicOptions.find(
-                        (topic) => topic.id === firstTopicId
-                    )
+                    const currentTopicIds = form.getFieldValue('topicIds')
                     const resReaderDocument =
-                        await fetchReadDocumentContentDocumentDocumentReaderGet({
-                            queryParams: {
+                        await fetchReadDocumentContentDocumentDocumentReaderPost({
+                            body: {
                                 uri_file: resPresignedUrl.fileName,
-                                topic_type: selectedTopic?.type || '',
-                            } as any,
-                        })
+                                topic_ids: currentTopicIds,
+                            },
+                        } as any)
                     form.setFieldsValue({
                         files: {
                             ...form.getFieldValue('files'),

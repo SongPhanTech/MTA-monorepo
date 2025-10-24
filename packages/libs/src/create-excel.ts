@@ -7,20 +7,20 @@ import { saveAs } from 'file-saver'
 export interface SimpleCellData {
     /** Giá trị của ô */
     value: string | number | null | Date
-    
+
     /** Tùy chọn gộp ô */
     merge?: {
         rowSpan?: number
         colSpan?: number
     }
-    
-    /** * Tùy chọn Font chữ 
-     * (Đây là nơi bạn chỉnh màu chữ) 
+
+    /** * Tùy chọn Font chữ
+     * (Đây là nơi bạn chỉnh màu chữ)
      */
     font?: {
-        /** * Màu chữ dạng ARGB, ví dụ: 'FFFF0000' (Đỏ), 'FF00FF00' (Xanh) 
+        /** * Màu chữ dạng ARGB, ví dụ: 'FFFF0000' (Đỏ), 'FF00FF00' (Xanh)
          */
-        color?: string 
+        color?: string
         bold?: boolean
         size?: number
         name?: string
@@ -53,7 +53,6 @@ export interface SimpleExportOptions {
     fileName: string
 }
 
-
 // 2. HÀM HELPER CHÍNH
 
 /**
@@ -70,7 +69,7 @@ export async function createSimpleExcel(options: SimpleExportOptions): Promise<v
     rows.forEach((rowData, rowIndex) => {
         // rowIndex trong mảng (bắt đầu từ 0)
         // excelRowIndex trong ExcelJS (bắt đầu từ 1)
-        const excelRowIndex = rowIndex + 1 
+        const excelRowIndex = rowIndex + 1
         const excelRow = worksheet.getRow(excelRowIndex)
 
         if (rowData.height) {
@@ -109,7 +108,7 @@ export async function createSimpleExcel(options: SimpleExportOptions): Promise<v
                     fgColor: { argb: cellData.fill.bgColor },
                 }
             }
-            
+
             // 4. Áp dụng Căn lề
             if (cellData.alignment) {
                 cell.alignment = cellData.alignment
@@ -132,10 +131,10 @@ export async function createSimpleExcel(options: SimpleExportOptions): Promise<v
 
                 if (rowSpan > 1 || colSpan > 1) {
                     worksheet.mergeCells(
-                        excelRowIndex,                      // Hàng bắt đầu
-                        excelColIndex,                      // Cột bắt đầu
-                        excelRowIndex + rowSpan - 1,        // Hàng kết thúc
-                        excelColIndex + colSpan - 1         // Cột kết thúc
+                        excelRowIndex, // Hàng bắt đầu
+                        excelColIndex, // Cột bắt đầu
+                        excelRowIndex + rowSpan - 1, // Hàng kết thúc
+                        excelColIndex + colSpan - 1 // Cột kết thúc
                     )
                 }
             }

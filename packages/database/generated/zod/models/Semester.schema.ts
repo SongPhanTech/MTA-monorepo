@@ -19,7 +19,7 @@ const baseSchema = z.object({
     shortName: z.string().nullish(),
     semesterType: SemesterTypeSchema.nullish(),
     startDate: z.coerce.date(),
-    endDate: z.coerce.date().nullish(),
+    endDate: z.coerce.date(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -76,7 +76,7 @@ export const SemesterPrismaUpdateSchema = z.object({
     shortName: z.string().nullish(),
     semesterType: SemesterTypeSchema.nullish(),
     startDate: z.coerce.date(),
-    endDate: z.coerce.date().nullish()
+    endDate: z.coerce.date()
 }).partial().passthrough();
 
 

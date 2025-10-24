@@ -178,8 +178,8 @@ export default function ArchivedAward() {
                 //     }),
                 // ]
                 // const res = await sqlTransaction(listSqlTransaction)
-                   const res= await updateAwardScore({
-                    data:{archivedAwardIds:selectedRowKeys as string[]}
+                const res = await updateAwardScore({
+                    data: { archivedAwardIds: selectedRowKeys as string[] },
                 })
                 if (res?.status === 200) {
                     message.success('Phê duyệt thành công')

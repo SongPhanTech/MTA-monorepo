@@ -2741,7 +2741,7 @@ model Semester {
   schoolYear              SchoolYear                @relation(fields: [schoolYearId], references: [id])
   schoolYearId            String
   startDate               DateTime
-  endDate                 DateTime?
+  endDate                 DateTime
   subjectClasses          SubjectClass[]
   trainingCoursesStart    TrainingCourse[]
   trainingScoreSession    TrainingScoreSession[]
@@ -2819,9 +2819,9 @@ model TrainingCourse {
   maxTrainingTime            Float?
   /// Chỉ tiêu tuyển sinh
   admissionQuota             Int?
-  /// Ngày nhập học
+  /// Ngày nhập học
   admissionStartDate         DateTime?
-  /// Ngày kết thúc
+  /// Ngày kết thúc
   admissionEndDate           DateTime?
   /// Số QĐ tuyển sinh
   admissionDecision          String?

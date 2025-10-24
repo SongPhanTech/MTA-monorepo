@@ -24,8 +24,8 @@ import DatePicker from '@components/commons/date-picker'
 export type PutArchivedAward = ArchivedAward & {
     documentFiles?: DocumentFile[]
     bonusScore: number
-    trainingCoursesId?:string
-    fixedClassesId?:string
+    trainingCoursesId?: string
+    fixedClassesId?: string
 }
 dayjs.locale('vi')
 const PutArchivedAwardModal = () => {
@@ -48,13 +48,15 @@ const PutArchivedAwardModal = () => {
     const { mutateAsync: createArchivedAward } = useCreateArchivedAward()
     const { mutateAsync: updateArchivedAward } = useUpdateArchivedAward()
     const { data: awardData = [] } = useFindManyAward()
-      const { data: trainingCourses = [] } =
-        useFindManyTrainingCourse({
-            where:{
-                trainingObjectTypeId
+    const { data: trainingCourses = [] } = useFindManyTrainingCourse(
+        {
+            where: {
+                trainingObjectTypeId,
             },
             orderBy: { name: 'asc' },
-        }, { enabled: !!trainingObjectTypeId })
+        },
+        { enabled: !!trainingObjectTypeId }
+    )
 
     // Lấy danh sách FixedClass
     const { data: fixedClasses = [], isLoading: fixedClassesLoading } = useFindManyFixedClass({
@@ -65,18 +67,20 @@ const PutArchivedAwardModal = () => {
         },
         // skip: trainingCourses.length ? 0 : 1,
     })
-    const fixedClassId=Form.useWatch('fixedClassesId',form)
-    const trainingCoursesId=Form.useWatch('trainingCoursesId',form)
+    const fixedClassId = Form.useWatch('fixedClassesId', form)
+    const trainingCoursesId = Form.useWatch('trainingCoursesId', form)
     const { data: studentData = [] } = useFindManyStudent(
         {
             where: {
                 trainingObjectTypeId,
-                ...(!!trainingCoursesId||!!fixedClassId?{
-                      fixedClass:{
-                    ...(trainingCoursesId?{trainingCourseId:trainingCoursesId}:{}),
-                    ...(fixedClassId?{id:fixedClassId}:{})
-                }
-                }:{})
+                ...(!!trainingCoursesId || !!fixedClassId
+                    ? {
+                          fixedClass: {
+                              ...(trainingCoursesId ? { trainingCourseId: trainingCoursesId } : {}),
+                              ...(fixedClassId ? { id: fixedClassId } : {}),
+                          },
+                      }
+                    : {}),
             },
             include: {
                 userProfile: true,
@@ -177,15 +181,15 @@ const PutArchivedAwardModal = () => {
             where: { id },
             include: {
                 documentFiles: true,
-                student:{
-                    include:{
-                        fixedClass:{
-                            include:{
-                                trainingCourse:true
-                            }
-                        }
-                    }
-                }
+                student: {
+                    include: {
+                        fixedClass: {
+                            include: {
+                                trainingCourse: true,
+                            },
+                        },
+                    },
+                },
             },
         },
         { enabled: !!id }
@@ -196,10 +200,10 @@ const PutArchivedAwardModal = () => {
         if (initialData) {
             form.setFieldsValue({
                 ...initialData,
-                date:dayjs(initialData.date),
+                date: dayjs(initialData.date),
                 documentFiles: initialData.documentFiles,
-                trainingCoursesId:initialData?.student?.fixedClass?.trainingCourseId ||'',
-                fixedClassesId:initialData?.student?.fixedClassId||''
+                trainingCoursesId: initialData?.student?.fixedClass?.trainingCourseId || '',
+                fixedClassesId: initialData?.student?.fixedClassId || '',
             })
             setDocument(initialData.documentFiles)
         } else {
@@ -245,7 +249,7 @@ const PutArchivedAwardModal = () => {
                     <InputNumber disabled min={1} className="w-full" placeholder="Nhập điểm" />
                 </FormItem>
             </Col>
-                    <Col span={24} className="mb-4">
+            <Col span={24} className="mb-4">
                 <FormItem form={form} name="trainingCoursesId" label="Khoá">
                     <Select
                         showSearch
@@ -258,7 +262,7 @@ const PutArchivedAwardModal = () => {
                     />
                 </FormItem>
             </Col>
-                    <Col span={24} className="mb-4">
+            <Col span={24} className="mb-4">
                 <FormItem form={form} name="fixedClassesId" label="Lớp quản lý">
                     <Select
                         showSearch

@@ -4,9 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { ExamStatus } from '@workspace/db'
 import { useCountExamSession, useFindManyExamSession, useFindUniqueExam } from '@workspace/db/hooks'
-import { genExamCode, useSaveExamScore } from '@workspace/libs/api/exam'
-import { Button, Col, Flex, InputNumber, message, Row } from 'antd'
-import { Edit, Shuffle } from 'lucide-react'
+import { Col, Flex, InputNumber, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
 
 interface ExamFaxProps {
@@ -24,26 +22,6 @@ export default function ManageExamCode({ id }: ExamFaxProps) {
     const [editedData, setEditedData] = useState<Record<string, { id?: string; score?: number }>>(
         {}
     )
-
-    const handleGenExamCode = async () => {
-        try {
-            showSpinner()
-            const res = await genExamCode({ examId: id })
-            if (res.status === 400 || res.status === 404) {
-                message.error(res.data.message)
-                return
-            }
-            message.success('Sinh phách thành công')
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
 
     const where = useMemo(
         () => ({
@@ -85,7 +63,6 @@ export default function ManageExamCode({ id }: ExamFaxProps) {
         return initialValue?.status === ExamStatus.FINISHED
     }, [id, initialValue?.status])
 
-    const { mutateAsync: updateManyExamFaxes } = useSaveExamScore()
     async function handleUpdateExamFaxes() {
         try {
             showSpinner()
@@ -102,13 +79,6 @@ export default function ManageExamCode({ id }: ExamFaxProps) {
 
             if (updates.length === 0) {
                 message.info('Không có dữ liệu nào thay đổi')
-                return
-            }
-
-            const res = await updateManyExamFaxes({ data: updates })
-
-            if (res.status === 400) {
-                message.error(`${res.data.message}`)
                 return
             }
 
@@ -139,18 +109,14 @@ export default function ManageExamCode({ id }: ExamFaxProps) {
                         </Col>
                         <Col span={12}>
                             <Flex justify="end" gap={4}>
-                                <Button disabled={!isFinished} onClick={() => handleGenExamCode()}>
-                                    <Shuffle />
-                                    Sinh phách tự động
-                                </Button>
-                                <Button
+                                {/* <Button
                                     type="primary"
                                     disabled={!isFinished}
                                     onClick={handleUpdateExamFaxes}
                                 >
                                     <Edit />
                                     Cập nhật
-                                </Button>
+                                </Button> */}
                             </Flex>
                         </Col>
                     </Row>

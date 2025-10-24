@@ -408,6 +408,22 @@ const XetXuLyHocTap = ({ semesterId, actionTaken }: XetXuLyHocTapProps) => {
                                 setFilters(value)
                                 setCurrentPage(1)
                             }}
+                            onRow={(record) => ({
+                                onClick: () => {
+                                    if (record?.updatedResult) return
+                                    const selectedKeys =
+                                        decisionSelection.selectedRowKeys as React.Key[]
+                                    const isSelected = selectedKeys.includes(record.id)
+
+                                    const newSelectedKeys = isSelected
+                                        ? selectedKeys.filter((key) => key !== record.id)
+                                        : [...selectedKeys, record.id]
+
+                                    decisionSelection.onChange?.(newSelectedKeys, [], {
+                                        type: 'all',
+                                    })
+                                },
+                            })}
                             columns={[
                                 {
                                     title: 'STT',
