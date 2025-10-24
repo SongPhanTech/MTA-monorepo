@@ -1,6 +1,7 @@
 import NAVIGATION, {
     type DANG_KY_HOC_PERMISSION,
     type KHAO_THI_PERMISSION,
+    MenuItem,
     type QL_DAO_TAO_PERMISSION,
     type QL_HO_SO_PERMISSION,
     ROUTER_PATH,
@@ -322,7 +323,7 @@ function getDynamicBreadcrumb(
     navKey: keyof typeof NAVIGATION,
     pathname: string
 ): { title: string; href?: string }[] | [] {
-    const menus =
+    const menus: MenuItem[] =
         NAVIGATION[navKey]?.menus.map((i) => {
             if (i?.id === 'danh-muc-ho-so') {
                 return { ...i, children: listRouter }
@@ -335,18 +336,26 @@ function getDynamicBreadcrumb(
         if (pathname === menu?.path) {
             return [{ title: menu?.label as string }]
         }
-
         // Có children
         if (menu?.children) {
-            const child = menu?.children?.find((child) => child?.path === pathname)
-            if (child) {
-                // return `${menu?.label} / ${child?.label}`
-                return [{ title: menu?.label as string }, { title: child?.label as string }]
+            for (const child of menu?.children || []) {
+                if (child.children) {
+                    for (const grandChild of child.children) {
+                        if (grandChild?.path === pathname) {
+                            return [
+                                { title: menu?.label as string },
+                                { title: child?.label as string, href: child?.path },
+                                { title: grandChild?.label as string },
+                            ]
+                        }
+                    }
+                }
+                if(child?.path === pathname) {
+                    return [{ title: menu?.label as string }, { title: child?.label as string }]
+                }
             }
         }
     }
-
-    // Fallback
     return []
 }
 

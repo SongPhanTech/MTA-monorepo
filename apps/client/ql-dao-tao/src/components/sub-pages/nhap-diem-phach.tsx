@@ -1,13 +1,13 @@
 import Table from '@components/commons/table'
 import { useFindManyExamSession } from '@workspace/db/hooks'
-import {  useSaveExamScore } from '@workspace/libs/api/training'
+import { useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, message, Modal } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
 export default function NhapdiemPhach() {
     const router = useRouter()
-    const [form] = Form.useForm<{list:{score: number|null}[]}>()
+    const [form] = Form.useForm<{ list: { score: number | null }[] }>()
     const examRoomId = router.query.examRoomId as string
     const { data = [], refetch } = useFindManyExamSession(
         {
@@ -26,9 +26,9 @@ export default function NhapdiemPhach() {
                     },
                 },
             },
-            orderBy:{
-                examCode: 'asc'
-            }
+            orderBy: {
+                examCode: 'asc',
+            },
         },
         {
             enabled: !!examRoomId,
@@ -51,15 +51,15 @@ export default function NhapdiemPhach() {
     }
     const { mutateAsync: saveScore } = useSaveExamScore()
 
-        // const listForm = Form.useWatch('list', form) || []
+    // const listForm = Form.useWatch('list', form) || []
     const hanldeGenCode = async () => {
-        const dataForm=form.getFieldsValue()
-        const dataSubmit= Object.entries(dataForm.list).map(([key, value_]) => {
-                return {
-                    id: key,
-                    ...value_
-                }
-            })
+        const dataForm = form.getFieldsValue()
+        const dataSubmit = Object.entries(dataForm.list).map(([key, value_]) => {
+            return {
+                id: key,
+                ...value_,
+            }
+        })
         const res = await saveScore({
             data: dataSubmit,
         })
@@ -67,14 +67,11 @@ export default function NhapdiemPhach() {
             message.success('Sinh phách thành công')
             refetch()
         }
-   
-
     }
     return (
         <>
             <Col span={24}>
                 <Flex justify="end" align="center">
-        
                     <Button
                         type="primary"
                         onClick={() => {
@@ -87,59 +84,53 @@ export default function NhapdiemPhach() {
                 </Flex>
             </Col>
             <Col span={24}>
-                        <Form form={form}>
-                                                    <Form.Item name="list">
-                                                         <Table
-                    rowKey="id"
-                    columns={[
-                        {
-                            title: 'STT',
-                            width: 60,
-                            align: 'center',
-                            fixed: 'left',
-                            render: (_, __, index) => index + 1,
-                        },
-                        {
-                            title: 'Phách',
-                            dataIndex: 'name',
-                            render: (_, record: any) => record?.examCode || '',
-                        },
-                          {
-                            title: 'Điểm',
-                            width: 200,
-                            align: 'center',
-                            fixed: 'left',
-                               render: (_, record) => {
-                                                            return (
-                                                                <Form.Item
-                                                                    className="w-full mb-0"
-                                                                    name={[
-                                                                        'list',
-                                                                        record.id,
-                                                                        'score',
-                                                                    ]}
-                                                                    label=""
-                                                                >
-                                                                    <InputNumber
-                                                                        min={0}
-                                                                        style={{
-                                                                            width: '100%',
-                                                                        }}
-                                                                        step={0}
-                                                                        controls={false}
-                                                                   
-                                                                    />
-                                                                </Form.Item>
-                                                            )
-                                                        },
-                        },
-                    ]}
-                    data={data}
-                    pagination={false}
-                />
-                                                    </Form.Item>
-                                                </Form>
-               
+                <Form form={form}>
+                    <Form.Item name="list">
+                        <Table
+                            rowKey="id"
+                            columns={[
+                                {
+                                    title: 'STT',
+                                    width: 60,
+                                    align: 'center',
+                                    fixed: 'left',
+                                    render: (_, __, index) => index + 1,
+                                },
+                                {
+                                    title: 'Phách',
+                                    dataIndex: 'name',
+                                    render: (_, record: any) => record?.examCode || '',
+                                },
+                                {
+                                    title: 'Điểm',
+                                    width: 200,
+                                    align: 'center',
+                                    fixed: 'left',
+                                    render: (_, record) => {
+                                        return (
+                                            <Form.Item
+                                                className="w-full mb-0"
+                                                name={['list', record.id, 'score']}
+                                                label=""
+                                            >
+                                                <InputNumber
+                                                    min={0}
+                                                    style={{
+                                                        width: '100%',
+                                                    }}
+                                                    step={0}
+                                                    controls={false}
+                                                />
+                                            </Form.Item>
+                                        )
+                                    },
+                                },
+                            ]}
+                            data={data}
+                            pagination={false}
+                        />
+                    </Form.Item>
+                </Form>
             </Col>
         </>
     )

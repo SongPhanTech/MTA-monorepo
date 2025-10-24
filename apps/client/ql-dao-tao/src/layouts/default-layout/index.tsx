@@ -1,22 +1,20 @@
-import { HomeOutlined } from '@ant-design/icons'
+import HeaderApp from '@/components/header'
 import logo_mta from '@assets/images/daotao.svg'
-import SiderDefaultLayout from '@components/layouts/sider'
+import SidebarMenuLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
-import { useFindManyTrainingObjectType, useFindUniqueConfig } from '@workspace/db/hooks'
+import { useFindUniqueConfig } from '@workspace/db/hooks'
 import { getDynamicBreadcrumb } from '@workspace/permissions/hooks'
-import { ROUTER_PATH } from '@workspace/router'
 import { SelectTrainingObjectType, TreeSelectSemester } from '@workspace/ui'
-import { Breadcrumb, Divider, Layout, theme } from 'antd'
+import { Breadcrumb, Button, Divider, Layout, message, theme } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { type ReactNode, useMemo } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
-import HeaderApp from '@/components/header'
 
-const { Header, Content } = Layout
+const { Header, Content, Footer } = Layout
 interface BreadcrumbListProps {
     title: string
     href?: string
@@ -36,21 +34,10 @@ const DefaultLayout = ({
     const router = useRouter()
     const currentPath = router.pathname
     const breadcrumb = getDynamicBreadcrumb('QL_DAO_TAO', currentPath)
-    const [collapsed, setCollapsed] = useState(() => {
-        return typeof window !== 'undefined' && localStorage.getItem('collapsed') === 'true'
-    })
 
     const listBreadcrumb = useMemo(() => {
         return breadcrumb?.length > 0
             ? [
-                  {
-                      title: (
-                          <Link href="/home">
-                              <HomeOutlined className="mr-1" />
-                              Trang chủ
-                          </Link>
-                      ),
-                  },
                   ...breadcrumb.map((i: { title: string; href?: string }) => {
                       if (i?.href) {
                           return {
@@ -64,14 +51,6 @@ const DefaultLayout = ({
               ]
             : breadcrumbList
               ? [
-                    {
-                        title: (
-                            <Link href="/home">
-                                <HomeOutlined className="mr-1" />
-                                Trang chủ
-                            </Link>
-                        ),
-                    },
                     ...breadcrumbList.map((i: { title: string; href?: string }) => {
                         if (i?.href) {
                             return {
@@ -83,16 +62,7 @@ const DefaultLayout = ({
                         }
                     }),
                 ]
-              : [
-                    {
-                        title: (
-                            <Link href={ROUTER_PATH.QL_DAO_TAO.HOME}>
-                                <HomeOutlined className="mr-1" />
-                                Trang chủ
-                            </Link>
-                        ),
-                    },
-                ]
+              : []
     }, [breadcrumb, breadcrumbList])
     const menus = useMenuList()
 
@@ -106,88 +76,70 @@ const DefaultLayout = ({
         token: { colorBgContainer },
     } = theme.useToken()
 
-    const handleCollapsed = (value?: boolean) => {
-        if (typeof window !== 'undefined') {
-            const newValue = value ?? localStorage.getItem('collapsed') === 'true'
-            setCollapsed(newValue)
-            localStorage.setItem('collapsed', newValue.toString())
-        }
-    }
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    useEffect(() => {
-        handleCollapsed()
-    }, [])
-    const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectType({
-        orderBy: {
-            name: 'asc',
-        },
-    })
     return (
         <IdleTimerProvider
             timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
             onIdle={() => {}}
         >
-            <Layout style={{ minHeight: '100vh' }} hasSider>
-                <SiderDefaultLayout
-                    logo1={<Image src={logo_mta} alt="logo k01" className="size-10" />}
-                    logo2={
+            <Layout
+                style={{
+                    transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
+                    minHeight: '100vh',
+                }}
+            >
+                <Header
+                    className={
+                        'flex justify-between items-center bg-white shadow-sm fixed z-[1000] top-0 w-full p-2 h-fit'
+                    }
+                >
+                    <div className="flex items-center">
                         <div className="flex items-center justify-center text-center">
-                            <Image src={logo_mta} alt="logo k01" className="w-10 h-10 mr-3" />
+                            <Image src={logo_mta} alt="logo k01" className="w-10 h-8" />
                             <span className="text-base font-bold color text-primary">
                                 Quản lý đào tạo
                             </span>
                         </div>
-                    }
-                    items={menus}
-                    onCollapse={handleCollapsed}
-                    collapsed={collapsed}
-                    theme={'light'}
-                />
-                <Layout
-                    style={{
-                        marginInlineStart: collapsed ? 80 : 230, // Điều chỉnh margin theo trạng thái collapsed
-                        transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
-                    }}
-                >
-                    <Header
-                        className={`flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  ${collapsed ? 'w-[calc(100%-80px)] left-[80px]' : 'w-[calc(100%-230px)] left-[230px]'}`}
-                    >
-                        {/* <span className="text-lg font-bold text-primary">
-                            {headerChildren ? headerChildren : title}
-                        </span> */}
-
-                        <div className="flex items-center">
-                            <SelectTrainingObjectType />
-                            <Divider type="vertical" className="bg-primary h-[30px]" />
-                            <div className="flex items-center gap-2">
-                                <div>Học kỳ</div>
-                                <TreeSelectSemester />
-                            </div>
-                            {/* <Divider type="vertical" className="bg-primary h-[30px]" /> */}
+                        <Divider type="vertical" className="bg-primary h-[30px]" />
+                        <div>
+                            <Breadcrumb items={listBreadcrumb} />
                         </div>
-                        <HeaderApp />
-                    </Header>
-                    <Content className="mx-2 mt-[70px]">
-                        {unLayout ? (
-                            children
-                        ) : (
-                            <div
-                                className={cn(
-                                    'min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4',
-                                    className
-                                )}
-                                style={{
-                                    background: colorBgContainer,
-                                }}
-                            >
-                                <div className="mt-1 mb-6">
-                                    <Breadcrumb items={listBreadcrumb} />
-                                </div>
-                                {children}
-                            </div>
-                        )}
-                    </Content>
-                </Layout>
+                    </div>
+                    <HeaderApp />
+                </Header>
+                <SidebarMenuLayout items={menus} theme={'light'} />
+                <Content className="mx-2 pb-[35px]">
+                    {unLayout ? (
+                        children
+                    ) : (
+                        <div
+                            className={cn(
+                                'min-h-[calc(100vh-64px-24px)] bg-white rounded-lg shadow-sm p-4',
+                                className
+                            )}
+                            style={{
+                                background: colorBgContainer,
+                            }}
+                        >
+                            {children}
+                        </div>
+                    )}
+                </Content>
+                <Footer className="fixed bottom-0 w-full bg-red z-[1000] flex items-center p-2">
+                    <Button
+                        onClick={() => {
+                            message.info('Chức năng đang phát triển!')
+                        }}
+                    >
+                        Đóng góp ý kiến
+                    </Button>
+                    <Divider type="vertical" className="bg-primary h-[30px]" />
+                    <SelectTrainingObjectType />
+                    <Divider type="vertical" className="bg-primary h-[30px]" />
+                    <div className="flex items-center gap-2">
+                        <div>Học kỳ đang làm việc </div>
+                        <TreeSelectSemester />
+                    </div>
+                </Footer>
             </Layout>
         </IdleTimerProvider>
     )

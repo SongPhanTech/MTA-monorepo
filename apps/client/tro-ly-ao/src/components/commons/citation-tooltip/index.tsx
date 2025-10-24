@@ -83,7 +83,7 @@ export default function CitationTooltip({ citation, onClick }: CitationTooltipPr
                 if (left - halfTooltipWidth < 16) {
                     left = halfTooltipWidth + 16
                 }
-                
+
                 if (left + halfTooltipWidth > viewportWidth - 16) {
                     left = viewportWidth - halfTooltipWidth - 16
                 }
