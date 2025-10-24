@@ -175,7 +175,7 @@ export default function SubjectClassScore() {
             const list = dataTable.find(
                 (i: any) => !i.examScore || !dataSubmit.list[i.id].examScore
             )
-            if (!list && subjectClassId ) {
+            if (!list && subjectClassId) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
                     {
@@ -194,7 +194,7 @@ export default function SubjectClassScore() {
                 (i: any) => i.examScore || i.description || i.suspended || i.suspendedReason
             )
 
-            if (listChange?.length > 0 &&profileId !== listUser.P13) {
+            if (listChange?.length > 0 && profileId !== listUser.P13) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
                     ...listChange.map((item: any) => {
@@ -267,12 +267,11 @@ export default function SubjectClassScore() {
                         }
                     }),
                 ]
-               
             }
             if (listSqlTransaction?.length > 0) {
                 const res = await sqlTransaction(listSqlTransaction)
                 if (res?.status === 200) {
-                    if(mesasge){
+                    if (mesasge) {
                         message.success(mesasge)
                     }
                     message.success('Đã cập nhật điểm thi thành công!')
@@ -308,7 +307,7 @@ export default function SubjectClassScore() {
     }
 
     const {
-        data: subjectClassData=[],
+        data: subjectClassData = [],
         isFetching,
         isLoading,
     } = useFindManySubjectClass(
@@ -598,12 +597,17 @@ export default function SubjectClassScore() {
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const disabledForm: boolean = useMemo(() => {
         return !(
-            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
-            dataDetailSubjectClass?.examScoreDeadline &&
-            dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
-            !dataDetailSubjectClass?.isLockExamScore &&
-              (dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
-                    profileId !== listUser.P13)
+            (
+                can(
+                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                    'NHAP_DIEM'
+                ) &&
+                dataDetailSubjectClass?.examScoreDeadline &&
+                dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
+                !dataDetailSubjectClass?.isLockExamScore &&
+                dataDetailSubjectClass?.examType !== 'OfflineWritten' &&
+                profileId !== listUser.P13
+            )
             // ((dataDetailSubjectClass?.examType === 'OfflineWritten' &&
             //     profileId === listUser.P13) ||
             //   )
@@ -640,9 +644,7 @@ export default function SubjectClassScore() {
     const listForm = Form.useWatch('list', form) || []
     useEffect(() => {
         if (listForm) {
-            const item = Object.values(listForm).find(
-                (i: any) => i?.examScore !==i.examScoreOld
-            )
+            const item = Object.values(listForm).find((i: any) => i?.examScore !== i.examScoreOld)
             if (item) {
                 setIsChanged(true)
             }
@@ -673,27 +675,25 @@ export default function SubjectClassScore() {
             {isFetching ? (
                 <Skeleton />
             ) : (
-                <Row gutter={[8,8]}>
+                <Row gutter={[8, 8]}>
                     <Col span={24}>
                         <Col span={6}>
-                                <Select
-                                    placeholder="Chọn lớp môn học"
-                                    options={subjectClassData?.map((i) => {
-                                        return {
-                                            label: `${i.name}-${i.code}`,
-                                            value: i.id,
-                                            key: i.id,
-                                        }
-                                    })}
-                                    className="w-full mb-3"
-                                    defaultValue={subjectClassId}
-                                    onChange={(value) => {
-                                        // form.setFieldsValue([]);
-                                        router.push(
-                                            `/quan-ly-diem/ql-diem-thi?subjectClassId=${value}`
-                                        )
-                                    }}
-                                />
+                            <Select
+                                placeholder="Chọn lớp môn học"
+                                options={subjectClassData?.map((i) => {
+                                    return {
+                                        label: `${i.name}-${i.code}`,
+                                        value: i.id,
+                                        key: i.id,
+                                    }
+                                })}
+                                className="w-full mb-3"
+                                defaultValue={subjectClassId}
+                                onChange={(value) => {
+                                    // form.setFieldsValue([]);
+                                    router.push(`/quan-ly-diem/ql-diem-thi?subjectClassId=${value}`)
+                                }}
+                            />
                         </Col>
                     </Col>
                     {isFetchingSubject ? (
@@ -880,8 +880,8 @@ export default function SubjectClassScore() {
                                                 >
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
-                                                        onChange={()=>{
-                                                          setMesasge('Khóa điểm CC/TX thành công')
+                                                        onChange={() => {
+                                                            setMesasge('Khóa điểm CC/TX thành công')
                                                         }}
                                                     >
                                                         Khóa điểm CC/TX
@@ -895,8 +895,8 @@ export default function SubjectClassScore() {
                                                 >
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
-                                                          onChange={()=>{
-                                                          setMesasge('Khóa điểm thi thành công')
+                                                        onChange={() => {
+                                                            setMesasge('Khóa điểm thi thành công')
                                                         }}
                                                     >
                                                         Khóa điểm thi
@@ -910,8 +910,10 @@ export default function SubjectClassScore() {
                                                 >
                                                     <Checkbox
                                                         disabled={profileId !== listUser?.P13}
-                                                            onChange={()=>{
-                                                          setMesasge('P13 đã nhận Phiếu điểm thành công')
+                                                        onChange={() => {
+                                                            setMesasge(
+                                                                'P13 đã nhận Phiếu điểm thành công'
+                                                            )
                                                         }}
                                                     >
                                                         P13 đã nhận Phiếu điểm
@@ -923,9 +925,12 @@ export default function SubjectClassScore() {
                                                     name="scoreChecked"
                                                     valuePropName="checked"
                                                 >
-                                                    <Checkbox disabled={profileId !== listUser?.P2}
-                                                          onChange={()=>{
-                                                          setMesasge('P2/P7 đã kiểm tra thành công')
+                                                    <Checkbox
+                                                        disabled={profileId !== listUser?.P2}
+                                                        onChange={() => {
+                                                            setMesasge(
+                                                                'P2/P7 đã kiểm tra thành công'
+                                                            )
                                                         }}
                                                     >
                                                         P2/P7 đã kiểm tra
@@ -957,7 +962,7 @@ export default function SubjectClassScore() {
                                     <Form form={form}>
                                         <Form.Item name="list">
                                             <Table
-                                              className="table-subject-score"
+                                                className="table-subject-score"
                                                 rowKey="id"
                                                 id="student-subject-score"
                                                 filters={filterTable}
@@ -1231,7 +1236,11 @@ export default function SubjectClassScore() {
                                                             return (
                                                                 <Form.Item
                                                                     className="w-full mb-0"
-                                                                    name={['list',record.id, 'suspended']}
+                                                                    name={[
+                                                                        'list',
+                                                                        record.id,
+                                                                        'suspended',
+                                                                    ]}
                                                                     label=""
                                                                     valuePropName="checked"
                                                                 >
@@ -1251,28 +1260,29 @@ export default function SubjectClassScore() {
                                                         dataIndex: 'suspendedReason',
                                                         width: 140,
                                                         render: (_, record) => {
-                                                                const suspended = listForm[record.id]?.suspended
-                                                                    return (
-                                                                        <Form.Item
-                                                                            name={[
-                                                                              'list',
-                                                                                record.id,
-                                                                                'suspendedReason',
-                                                                            ]}
-                                                                            style={{ margin: 0 }}
-                                                                        >
-                                                                            <Input
-                                                                                placeholder="Nhập lý do đình chỉ"
-                                                                                disabled={
-                                                                                    !(
-                                                                                        suspended &&
-                                                                                        profileId ===
-                                                                                            listUser.P13
-                                                                                    )
-                                                                                }
-                                                                            />
-                                                                        </Form.Item>
-                                                                    )
+                                                            const suspended =
+                                                                listForm[record.id]?.suspended
+                                                            return (
+                                                                <Form.Item
+                                                                    name={[
+                                                                        'list',
+                                                                        record.id,
+                                                                        'suspendedReason',
+                                                                    ]}
+                                                                    style={{ margin: 0 }}
+                                                                >
+                                                                    <Input
+                                                                        placeholder="Nhập lý do đình chỉ"
+                                                                        disabled={
+                                                                            !(
+                                                                                suspended &&
+                                                                                profileId ===
+                                                                                    listUser.P13
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </Form.Item>
+                                                            )
                                                         },
                                                     },
 
@@ -1286,7 +1296,7 @@ export default function SubjectClassScore() {
                                                                 <Form.Item
                                                                     className="w-full mb-0"
                                                                     name={[
-                                                                      'list',
+                                                                        'list',
                                                                         record.id,
                                                                         'description',
                                                                     ]}

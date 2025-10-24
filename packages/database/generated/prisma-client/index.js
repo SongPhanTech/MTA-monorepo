@@ -7162,7 +7162,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/luanbt/swantech/MTA-monorepo/packages/database/generated/prisma-client",
+      "value": "/Users/docuong/MyData/7.Swantech/MTA-monorepo/packages/database/generated/prisma-client",
       "fromEnvVar": null
     },
     "config": {
@@ -7200,7 +7200,7 @@ const config = {
       "multiSchema",
       "typedSql"
     ],
-    "sourceFilePath": "/Users/luanbt/swantech/MTA-monorepo/packages/database/prisma/schema.prisma",
+    "sourceFilePath": "/Users/docuong/MyData/7.Swantech/MTA-monorepo/packages/database/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -7214,6 +7214,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

@@ -101,15 +101,15 @@ export default function ClassSubject() {
         router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CC_TX}?subjectClassId=${id}`)
     }
 
-        const { onOpen, onClose } = useDisclosure<string>({
-            tag: 'PutDeadlineScoreModal',
-        })
+    const { onOpen, onClose } = useDisclosure<string>({
+        tag: 'PutDeadlineScoreModal',
+    })
 
-    const handleSchudule= (id: string) => {
-       onOpen(id)
+    const handleSchudule = (id: string) => {
+        onOpen(id)
     }
 
-     const handleNavigateThi = (id: string) => {
+    const handleNavigateThi = (id: string) => {
         router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_THI}?subjectClassId=${id}`)
     }
 
@@ -788,15 +788,22 @@ export default function ClassSubject() {
                         className="table-subject-score"
                         // rowClassName={rowClassName}
                         // rowSelection={rowSelection}
-                          onRow={(record) => {
-                                return {
-                                    className: cn(
-                                        record?.subject?.examType === 'OfflineWritten' ? 'text-blue-500' : '',
-                                        (dayjs()?.isBefore(record?.scoreDeadline) || record?.enteredScore) ? '' : 'bg-red-100',
-                                        dayjs().isBefore(record?.examScoreDeadline) || record?.enteredExamScore ? '' : 'bg-red-300'
-                                    ),
-                                }
-                            }}
+                        onRow={(record) => {
+                            return {
+                                className: cn(
+                                    record?.subject?.examType === 'OfflineWritten'
+                                        ? 'text-blue-500'
+                                        : '',
+                                    dayjs()?.isBefore(record?.scoreDeadline) || record?.enteredScore
+                                        ? ''
+                                        : 'bg-red-100',
+                                    dayjs().isBefore(record?.examScoreDeadline) ||
+                                        record?.enteredExamScore
+                                        ? ''
+                                        : 'bg-red-300'
+                                ),
+                            }
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -840,7 +847,7 @@ export default function ClassSubject() {
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.examType ? (
                                         <div
-                                            // className={`${record?.subject?.examType === 'OfflineWritten' ? 'text-red-500' : ''}`}
+                                        // className={`${record?.subject?.examType === 'OfflineWritten' ? 'text-red-500' : ''}`}
                                         >
                                             {getExamTypeLabel(record?.subject?.examType)}
                                         </div>
@@ -913,7 +920,7 @@ export default function ClassSubject() {
                                 type: 'date',
                                 render: (_, record) => (
                                     <div
-                                        // className={`${dayjs().isBefore(record?.scoreDeadline) ? '' : 'text-red-500'}`}
+                                    // className={`${dayjs().isBefore(record?.scoreDeadline) ? '' : 'text-red-500'}`}
                                     >
                                         {record.scoreDeadline
                                             ? dayjs(record.scoreDeadline).format('DD/MM/YYYY')
@@ -938,7 +945,7 @@ export default function ClassSubject() {
                                 render: (record) => {
                                     return (
                                         <div
-                                            // className={`${dayjs().isBefore(record?.examScoreDeadline) ? '' : 'text-red-500'}`}
+                                        // className={`${dayjs().isBefore(record?.examScoreDeadline) ? '' : 'text-red-500'}`}
                                         >
                                             {record.examScoreDeadline
                                                 ? dayjs(record.examScoreDeadline).format(
@@ -949,15 +956,21 @@ export default function ClassSubject() {
                                     )
                                 },
                             },
-                               {
+                            {
                                 title: 'Trạng thái NĐ',
                                 dataIndex: 'scoreDeadLineStart',
                                 width: 150,
                                 align: 'center',
                                 type: 'date',
-                                render: (__,record) =>{
-                                    return record?.enteredExamScore ? 'Đã nhập điểm thi' : (record?.enteredScore ? 'Đã nhập điểm TX,CC' : <div className="text-red-500">Chưa nhập điểm</div>)
-                                }
+                                render: (__, record) => {
+                                    return record?.enteredExamScore ? (
+                                        'Đã nhập điểm thi'
+                                    ) : record?.enteredScore ? (
+                                        'Đã nhập điểm TX,CC'
+                                    ) : (
+                                        <div className="text-red-500">Chưa nhập điểm</div>
+                                    )
+                                },
                             },
                             // {
                             //     title: 'Giảng viên',
@@ -1037,7 +1050,6 @@ export default function ClassSubject() {
                                                         title="Nhập điểm TX/CC"
                                                         placement="top"
                                                     >
-
                                                         <FilePen
                                                             size={16}
                                                             onClick={() => handleNavigate(id)}

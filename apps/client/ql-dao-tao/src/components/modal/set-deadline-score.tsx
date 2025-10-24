@@ -24,32 +24,32 @@ const PutDeadlineScoreModal = () => {
     })
     const { showSpinner, hideSpinner } = useSpinner()
 
- const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
     async function onOk(output?: PutUpdateTime) {
         if (!output) return
         try {
             showSpinner()
-            let dataSubmit:any={}
-            if(output?.time &&output?.time.length===2){
-                dataSubmit={
+            let dataSubmit: any = {}
+            if (output?.time && output?.time.length === 2) {
+                dataSubmit = {
                     scoreDeadline: output?.time[0],
                     examScoreDeadline: output?.time[1],
                 }
             }
-            if(output?.examScoreDeadline){
-                dataSubmit={
+            if (output?.examScoreDeadline) {
+                dataSubmit = {
                     ...dataSubmit,
                     examScoreDeadline: output?.examScoreDeadline,
                 }
             }
-            const res=await updateSubjectClass({
+            const res = await updateSubjectClass({
                 data: dataSubmit,
                 where: {
                     id,
                 },
             })
-            if(res){
+            if (res) {
                 message.success('Đặt hạn nhập điểm thành công')
             }
             // refetch() lại danh sách level
@@ -58,8 +58,8 @@ const PutDeadlineScoreModal = () => {
             })
             onClose()
         } catch (error: any) {
-           console.log(error);
-           
+            console.log(error)
+
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()

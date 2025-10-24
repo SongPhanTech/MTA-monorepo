@@ -22,19 +22,19 @@ export default function SinhPhach() {
                         student: {
                             include: {
                                 userProfile: true,
-                                fixedClass:true
+                                fixedClass: true,
                             },
                         },
-                        subjectClass:{
+                        subjectClass: {
                             include: {
-                               fixedClasses: {
-                                   include: {
-                                       trainingCourse: true
-                                   }
-                               }
-                            }
+                                fixedClasses: {
+                                    include: {
+                                        trainingCourse: true,
+                                    },
+                                },
+                            },
                         },
-                        subjectVersion:true
+                        subjectVersion: true,
                     },
                 },
             },
@@ -61,7 +61,6 @@ export default function SinhPhach() {
     const { mutateAsync: genCode } = useGenExamRoomCode()
     const { mutateAsync: updateExamRoom } = useUpdateExamRoom()
     const hanldeGenCode = async () => {
-
         const res = await genCode({
             data: {
                 examRoomId,
@@ -71,39 +70,42 @@ export default function SinhPhach() {
             message.success('Sinh phách thành công')
             refetch()
         }
-        if(checked!==data[0]?.exam?.lockExamCode) {
+        if (checked !== data[0]?.exam?.lockExamCode) {
             await updateExamRoom({
                 where: {
-                    id: examRoomId
+                    id: examRoomId,
                 },
                 data: {
-                    lockExamCode: checked
-                }
+                    lockExamCode: checked,
+                },
             })
         }
-
     }
     return (
         <>
             <Col span={24}>
                 <Flex justify="space-between" align="center">
-                    <Checkbox defaultChecked={checked} onChange={(value) => {
-                        setChecked(value.target.checked)
-                    }}>Khoá sinh phách</Checkbox>
-                    <Flex justify="end" align="center">
-                      <ExportPhach data={data}/>
-                        <Button
-                        type="primary"
-                        className="ml-3"
-                        onClick={() => {
-                            handleSave()
+                    <Checkbox
+                        defaultChecked={checked}
+                        onChange={(value) => {
+                            setChecked(value.target.checked)
                         }}
-                        disabled={disabled}
                     >
-                        Tạo phách
-                    </Button>
+                        Khoá sinh phách
+                    </Checkbox>
+                    <Flex justify="end" align="center">
+                        <ExportPhach data={data} />
+                        <Button
+                            type="primary"
+                            className="ml-3"
+                            onClick={() => {
+                                handleSave()
+                            }}
+                            disabled={disabled}
+                        >
+                            Tạo phách
+                        </Button>
                     </Flex>
-                
                 </Flex>
             </Col>
             <Col span={24}>

@@ -79,9 +79,9 @@ export default function MonKySau() {
                     select: {
                         subjectVersionId: true,
                     },
-                    where:{
-                        subjectClassType: $Enums.SubjectClassType.NORMAL
-                    }
+                    where: {
+                        subjectClassType: $Enums.SubjectClassType.NORMAL,
+                    },
                 },
             },
         },

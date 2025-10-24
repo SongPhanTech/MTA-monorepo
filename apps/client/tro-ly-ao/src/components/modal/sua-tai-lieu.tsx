@@ -8,7 +8,7 @@ import {
     useUpdateDocument,
 } from '@workspace/db/hooks'
 import { Col, Form, Input, Modal, message } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { useTopics } from '@/hooks/useTopics'
 
@@ -19,6 +19,7 @@ type DocumentEditFormType = {
 }
 
 const SuaTaiLieu = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const { selectableTopicOptions } = useTopics()
     const { data: classifications = [] } = useFindManyDocumentClassification({
         orderBy: { name: 'asc' },
@@ -60,9 +61,15 @@ const SuaTaiLieu = () => {
         }
     }, [document, isOpen, form])
 
-    const onFinish = async (values: DocumentEditFormType) => {
-        if (!documentId) return
+    const handleClose = () => {
+        setIsSubmitting(false)
+        onClose()
+    }
 
+    const onFinish = async (values: DocumentEditFormType) => {
+        if (!documentId || isSubmitting) return
+
+        setIsSubmitting(true)
         try {
             await updateDocument({
                 where: { id: documentId },
@@ -88,10 +95,11 @@ const SuaTaiLieu = () => {
             }
 
             message.success('Cập nhật tài liệu thành công')
-            onClose()
+            handleClose()
         } catch (_error) {
             console.error('Error updating document:', _error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            setIsSubmitting(false)
         }
     }
 
@@ -99,10 +107,11 @@ const SuaTaiLieu = () => {
         <Modal
             title="Sửa tài liệu"
             open={isOpen}
-            onCancel={onClose}
+            onCancel={handleClose}
             okText="Lưu"
             cancelText="Hủy"
             onOk={form.submit}
+            confirmLoading={isSubmitting}
         >
             <Form form={form} onFinish={onFinish} layout="vertical" className="mt-4">
                 <Col span={24}>
@@ -112,7 +121,7 @@ const SuaTaiLieu = () => {
                         label="Tên tài liệu"
                         rules={[{ required: true, message: 'Vui lòng nhập tên tài liệu' }]}
                     >
-                        <Input placeholder="Nhập tên tài liệu" />
+                        <Input placeholder="Nhập tên tài liệu" disabled={isSubmitting} />
                     </FormItem>
                 </Col>
                 <Col span={24}>
@@ -131,6 +140,7 @@ const SuaTaiLieu = () => {
                                 value: topic.id,
                                 label: topic.name,
                             }))}
+                            disabled={isSubmitting}
                         />
                     </FormItem>
                 </Col>
@@ -143,6 +153,7 @@ const SuaTaiLieu = () => {
                                 value: classification.id,
                                 label: classification.name,
                             }))}
+                            disabled={isSubmitting}
                         />
                     </FormItem>
                 </Col>
