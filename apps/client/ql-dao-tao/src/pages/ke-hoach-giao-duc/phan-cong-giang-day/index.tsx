@@ -48,43 +48,6 @@ import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-type DataSubmit = Prisma.SubjectClassGetPayload<{
-    include: {
-        semester: true
-        mainLecturer: {
-            include: {
-                userProfile: true
-            }
-        }
-        subject: {
-            include: {
-                managementOrganization: true
-            }
-        }
-        extraLecturer: {
-            include: {
-                userProfile: true
-            }
-        }
-        enterGradeLecturer: {
-            include: {
-                userProfile: true
-            }
-        }
-        room: {
-            include: {
-                building: {
-                    include: {
-                        trainingLocation: true
-                    }
-                }
-            }
-        }
-        subjectClassStudent: true
-        subjectClassTimes: true
-    }
-}> & { rowSpan?: number }
-
 type TeachingAssignmentForm = {
     subjectClass: Record<
         string,
@@ -96,6 +59,7 @@ type TeachingAssignmentForm = {
             examType: $Enums.ExamType | null
             roomId: string | null
             trainingLocationId: string | null
+            submitLecturerAssignmentAt?: Date | null
         }
     >
 }
@@ -105,7 +69,13 @@ type BaoDayForm = {
     isOverride: boolean
 }
 
-export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean }) {
+export default function PhanCongGiangDay({
+    hocLai = false,
+    khoaBoMon = false,
+}: {
+    hocLai?: boolean
+    khoaBoMon?: boolean
+}) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -134,20 +104,17 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
     const [formBaoDay] = Form.useForm<BaoDayForm>()
 
     const { id: semesterId } = useSemesterStore()
-    const [isEdit, setIsEdit] = useState(false)
     const { options, getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const canXemTatCa = can(
-        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
         'XEM_TAT_CA'
     )
 
     const canSua = can(
-        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
         'SUA'
     )
-
-    const isBoMon = !canXemTatCa && canSua
 
     const where = useMemo(
         () =>
@@ -319,7 +286,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                 deletedAt: null,
                 active: true,
                 trainingObjectTypeId,
-                ...(isBoMon
+                ...(khoaBoMon
                     ? {
                           lecturerAssignmentDeadline: {
                               not: null,
@@ -328,7 +295,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                     : {}),
                 type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
             }) satisfies Prisma.SubjectClassWhereInput,
-        [filters, semesterId, trainingObjectTypeId, isBoMon]
+        [filters, semesterId, trainingObjectTypeId, khoaBoMon, hocLai]
     )
 
     const { data: dmDonViData = [], refetch } = useFindManyDM_DonVi(
@@ -461,7 +428,6 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
 
     const guiBaoDay = async (values: BaoDayForm) => {
         try {
-            setIsEdit(false)
             showSpinner()
             await updateManySubjectClass({
                 data: {
@@ -519,7 +485,6 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
 
     async function handleSaveData(values: TeachingAssignmentForm) {
         try {
-            setIsEdit(false)
             showSpinner()
             const res = await sqlTransaction(
                 Object.entries(values.subjectClass).map(([id, subjectClass]) => ({
@@ -555,12 +520,10 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
 
     async function handleGuiPCGD() {
         try {
-            setIsEdit(false)
             showSpinner()
             await updateManySubjectClass({
                 data: {
                     submitLecturerAssignmentAt: new Date(),
-                    lecturerAssignmentDeadline: new Date(),
                 },
                 where: {
                     trainingObjectTypeId,
@@ -649,11 +612,6 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
         onOpen()
     }
 
-    const handleCancel = () => {
-        setIsEdit(false)
-        resetForm()
-    }
-
     const resetForm = useCallback(() => {
         form.setFieldsValue({
             subjectClass: dataWithRowSpan
@@ -670,6 +628,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                             examType: curr.examType,
                             roomId: curr.roomId,
                             trainingLocationId: curr.trainingLocationId,
+                            submitLecturerAssignmentAt: curr.submitLecturerAssignmentAt,
                         }
                         return acc
                     },
@@ -689,57 +648,20 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
             <Row gutter={[8, 8]}>
                 <Col span={24}>
                     <Flex justify="end" gap={4}>
-                        {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            'THEM'
-                        ) && (
-                            <Button
-                                onClick={() => handleModal()}
-                                //TODO: handle save
-                                type="primary"
-                            >
-                                Thêm mới lớp MH
-                            </Button>
-                        )}
-                        {!isBoMon && (
-                            <Popover
-                                content={
-                                    <Form
-                                        form={formBaoDay}
-                                        initialValues={{ isOverride: false }}
-                                        onFinish={guiBaoDay}
-                                    >
-                                        <FormItem
-                                            form={formBaoDay}
-                                            name={'deadline'}
-                                            label="Hạn PCGD"
-                                        >
-                                            <DatePicker />
-                                        </FormItem>
-                                        <FormItem
-                                            form={formBaoDay}
-                                            name={'isOverride'}
-                                            label="Ghi đè PCGD"
-                                            className="mt-2"
-                                        >
-                                            <Switch />
-                                        </FormItem>
-                                        <Col span={24} className="text-right mt-4">
-                                            <Button type="primary" htmlType="submit">
-                                                Gửi báo dạy
-                                            </Button>
-                                        </Col>
-                                    </Form>
-                                }
-                                title="Báo dạy cho Khoa/Viện/Bộ môn"
-                                trigger="click"
-                                placement="bottomRight"
-                            >
-                                <Button type="primary">Báo dạy</Button>
-                            </Popover>
-                        )}
-                        {isEdit ? (
-                            <>
+                        {!khoaBoMon &&
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                'THEM'
+                            ) && (
+                                <Button onClick={() => handleModal()} type="primary">
+                                    Thêm mới lớp MH
+                                </Button>
+                            )}
+                        {khoaBoMon &&
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                'SUA'
+                            ) && (
                                 <Button
                                     onClick={() => form.submit()}
                                     type="primary"
@@ -747,32 +669,10 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                 >
                                     Lưu
                                 </Button>
-                                <Button
-                                    onClick={() => handleCancel()}
-                                    type="primary"
-                                    disabled={!dmDonViData.length}
-                                >
-                                    Hủy
-                                </Button>
-                            </>
-                        ) : (
+                            )}
+                        {khoaBoMon &&
                             can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                                'SUA'
-                            ) && (
-                                <Button
-                                    onClick={() => setIsEdit(true)}
-                                    //TODO: handle save
-                                    type="primary"
-                                    disabled={!dmDonViData.length}
-                                >
-                                    PCGD
-                                </Button>
-                            )
-                        )}
-                        {isBoMon &&
-                            can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
                                 'SUA'
                             ) && (
                                 // TODO: Bỏ check quyền xem tất cả khi hoàn thành xong
@@ -795,7 +695,46 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                     </Button>
                                 </Popconfirm>
                             )}
-                        {!isBoMon && (
+                        {!khoaBoMon && (
+                            <Popover
+                                content={
+                                    <Form
+                                        form={formBaoDay}
+                                        initialValues={{ isOverride: false }}
+                                        onFinish={guiBaoDay}
+                                    >
+                                        <FormItem
+                                            form={formBaoDay}
+                                            name={'deadline'}
+                                            required
+                                            label="Hạn phân công giảng dạy"
+                                        >
+                                            <DatePicker />
+                                        </FormItem>
+                                        <FormItem
+                                            form={formBaoDay}
+                                            name={'isOverride'}
+                                            label="Ghi đè hạn PCGD"
+                                            className="mt-2"
+                                        >
+                                            <Switch />
+                                        </FormItem>
+                                        <Col span={24} className="text-right mt-4">
+                                            <Button type="primary" htmlType="submit">
+                                                Gửi báo dạy
+                                            </Button>
+                                        </Col>
+                                    </Form>
+                                }
+                                title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                trigger="click"
+                                placement="bottomRight"
+                            >
+                                <Button type="primary">Báo dạy</Button>
+                            </Popover>
+                        )}
+
+                        {!khoaBoMon && (
                             <Button
                                 onClick={async () => {
                                     try {
@@ -1215,18 +1154,19 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                 Xuất báo dạy
                             </Button>
                         )}
-                        {can(
-                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
-                            'NHAP_EXCEL'
-                        ) && (
-                            <Button
-                                type="primary"
-                                onClick={() => onOpenModalNhapTKB(semesterId || '')}
-                            >
-                                <EditIcon stroke="white" />
-                                Nhập từ TKB
-                            </Button>
-                        )}
+                        {!khoaBoMon &&
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                'NHAP_EXCEL'
+                            ) && (
+                                <Button
+                                    type="primary"
+                                    onClick={() => onOpenModalNhapTKB(semesterId || '')}
+                                >
+                                    <EditIcon stroke="white" />
+                                    Nhập từ TKB
+                                </Button>
+                            )}
                     </Flex>
                 </Col>
                 <Col span={4}>
@@ -1246,13 +1186,13 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                 <Col span={7}>
                     <TreeSelectDepartment
                         className="w-full"
-                        rootId={canXemTatCa ? '0' : orgId}
+                        rootId={!khoaBoMon ? '0' : orgId}
                         onChange={(val) => handleFilterChange('organization', val)}
                     />
                 </Col>
                 <Col span={24}>
                     <Form form={form} onFinish={handleSaveData}>
-                        {canXemTatCa && (
+                        {!khoaBoMon && (
                             <p className="mt-1">
                                 Khoa/Viện/Bộ môn chỉ có thể nhìn thấy lớp môn học có hạn phân công
                                 giảng dạy.
@@ -1277,13 +1217,17 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                         { value: false, label: 'Chưa phân công giảng dạy' },
                                     ],
                                     render: (_, record) => (
-                                        <Checkbox
-                                            checked={
-                                                !!record.lecturerId &&
-                                                !!record.extraLecturerId &&
-                                                !!record.submitLecturerAssignmentAt
-                                            }
-                                        />
+                                        <FormItem
+                                            form={form}
+                                            name={[
+                                                'subjectClass',
+                                                record.id,
+                                                'submitLecturerAssignmentAt',
+                                            ]}
+                                            valuePropName="checked"
+                                        >
+                                            <Checkbox />
+                                        </FormItem>
                                     ),
                                 },
                                 {
@@ -1292,7 +1236,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                     width: 100,
                                     align: 'center',
                                     render: (_, record) =>
-                                        canXemTatCa ? (
+                                        canXemTatCa && !khoaBoMon ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -1391,7 +1335,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                     type: 'input',
                                     dataIndex: 'mainLecturer',
                                     render: (__, record) =>
-                                        isEdit ? (
+                                        khoaBoMon ? (
                                             <FormItem
                                                 form={form}
                                                 name={['subjectClass', record.id, 'lecturerId']}
@@ -1404,11 +1348,10 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                                             : []
                                                     }
                                                     disabled={
-                                                        record.lecturerAssignmentDeadline
-                                                            ? dayjs(
-                                                                  record.lecturerAssignmentDeadline
-                                                              ).isBefore(dayjs().startOf('day'))
-                                                            : true
+                                                        !!record.lecturerAssignmentDeadline &&
+                                                        dayjs(
+                                                            record.lecturerAssignmentDeadline
+                                                        ).isBefore(dayjs().startOf('day'))
                                                     }
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId ??
@@ -1417,6 +1360,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                                 />
                                             </FormItem>
                                         ) : (
+                                            !!record.submitLecturerAssignmentAt &&
                                             (record?.mainLecturer?.userProfile?.fullname ?? '-')
                                         ),
                                 },
@@ -1427,7 +1371,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                     type: 'input',
                                     dataIndex: 'extraLecturer',
                                     render: (__, record) =>
-                                        isEdit ? (
+                                        khoaBoMon ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -1444,11 +1388,10 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                                             : []
                                                     }
                                                     disabled={
-                                                        record.lecturerAssignmentDeadline
-                                                            ? dayjs(
-                                                                  record.lecturerAssignmentDeadline
-                                                              ).isBefore(dayjs().startOf('day'))
-                                                            : true
+                                                        !!record.lecturerAssignmentDeadline &&
+                                                        dayjs(
+                                                            record.lecturerAssignmentDeadline
+                                                        ).isBefore(dayjs().startOf('day'))
                                                     }
                                                     organizationId={
                                                         record?.subject?.managementOrganizationId
@@ -1456,6 +1399,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                                 />
                                             </FormItem>
                                         ) : (
+                                            !!record.submitLecturerAssignmentAt &&
                                             (record?.extraLecturer?.userProfile?.fullname ?? '-')
                                         ),
                                 },
@@ -1467,17 +1411,17 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                     type: 'select',
                                     options: options,
                                     render: (__, record) =>
-                                        isEdit ? (
+                                        khoaBoMon ? (
                                             <FormItem
                                                 form={form}
                                                 name={['subjectClass', record.id, 'examType']}
                                             >
-                                                <Select options={options} disabled={!isEdit} />
+                                                <Select options={options} disabled={!khoaBoMon} />
                                             </FormItem>
-                                        ) : record.examType ? (
-                                            getExamTypeLabel(record.examType)
                                         ) : (
-                                            '-'
+                                            !!record.submitLecturerAssignmentAt &&
+                                            record.examType &&
+                                            getExamTypeLabel(record.examType)
                                         ),
                                 },
                                 {
@@ -1487,7 +1431,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                     width: 150,
                                     type: 'input',
                                     render: (_, record) =>
-                                        isEdit ? (
+                                        !khoaBoMon ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -1513,7 +1457,6 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                                         width: 400,
                                                         maxHeight: 400,
                                                     }}
-                                                    disabled={!isEdit}
                                                 />
                                             </FormItem>
                                         ) : record.trainingLocation ? (
@@ -1527,63 +1470,58 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                     dataIndex: 'roomId',
                                     align: 'center',
                                     width: 200,
-                                    render: (_, record) =>
-                                        isEdit ? (
-                                            <FormItem
-                                                form={form}
-                                                name={['subjectClass', record.id, 'roomId']}
-                                            >
-                                                <TreeSelect
-                                                    treeData={buildingData
-                                                        .filter((e) =>
-                                                            subjectClassForm[record.id]
-                                                                ?.trainingLocationId ||
-                                                            record.trainingLocationId
-                                                                ? e.trainingLocationId ===
-                                                                  (subjectClassForm[record.id]
-                                                                      ?.trainingLocationId ||
-                                                                      record.trainingLocationId)
-                                                                : true
-                                                        )
-                                                        .map((e) => ({
-                                                            label: e.name,
-                                                            value: e.id,
-                                                            selectable: false,
-                                                            children: e.rooms.map((room) => ({
-                                                                label: room.name,
-                                                                value: room.id,
-                                                                selectable: true,
-                                                            })),
-                                                        }))}
-                                                    filterTreeNode={(input, option) =>
-                                                        (option?.title ?? '')
-                                                            .toString()
-                                                            .toLowerCase()
-                                                            .includes(input.toLowerCase())
-                                                    }
-                                                    showSearch
-                                                    allowClear
-                                                    treeNodeFilterProp="title"
-                                                    multiple={false}
-                                                    showCheckedStrategy="SHOW_CHILD"
-                                                    dropdownStyle={{
-                                                        width: 400,
-                                                        maxHeight: 400,
-                                                    }}
-                                                />
-                                            </FormItem>
-                                        ) : record.room ? (
-                                            record.room?.name
-                                        ) : (
-                                            '-'
-                                        ),
+                                    render: (_, record) => (
+                                        <FormItem
+                                            form={form}
+                                            name={['subjectClass', record.id, 'roomId']}
+                                        >
+                                            <TreeSelect
+                                                treeData={buildingData
+                                                    .filter((e) =>
+                                                        subjectClassForm?.[record?.id]
+                                                            ?.trainingLocationId ||
+                                                        record.trainingLocationId
+                                                            ? e.trainingLocationId ===
+                                                              (subjectClassForm[record.id]
+                                                                  ?.trainingLocationId ||
+                                                                  record.trainingLocationId)
+                                                            : true
+                                                    )
+                                                    .map((e) => ({
+                                                        label: e.name,
+                                                        value: e.id,
+                                                        selectable: false,
+                                                        children: e.rooms.map((room) => ({
+                                                            label: room.name,
+                                                            value: room.id,
+                                                            selectable: true,
+                                                        })),
+                                                    }))}
+                                                filterTreeNode={(input, option) =>
+                                                    (option?.title ?? '')
+                                                        .toString()
+                                                        .toLowerCase()
+                                                        .includes(input.toLowerCase())
+                                                }
+                                                showSearch
+                                                allowClear
+                                                treeNodeFilterProp="title"
+                                                multiple={false}
+                                                showCheckedStrategy="SHOW_CHILD"
+                                                dropdownStyle={{
+                                                    width: 400,
+                                                    maxHeight: 400,
+                                                }}
+                                            />
+                                        </FormItem>
+                                    ),
                                 },
                                 {
                                     title: 'Giảng viên nhập điểm',
                                     width: 200,
                                     align: 'center',
                                     render: (__, record) =>
-                                        isEdit ? (
+                                        khoaBoMon ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -1598,17 +1536,17 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                                         record?.subject?.managementOrganizationId
                                                     }
                                                     disabled={
-                                                        record.lecturerAssignmentDeadline
-                                                            ? dayjs(
-                                                                  record.lecturerAssignmentDeadline
-                                                              ).isBefore(dayjs().startOf('day'))
-                                                            : true
+                                                        !!record.lecturerAssignmentDeadline &&
+                                                        dayjs(
+                                                            record.lecturerAssignmentDeadline
+                                                        ).isBefore(dayjs().startOf('day'))
                                                     }
                                                 />
                                             </FormItem>
                                         ) : (
+                                            !!record.submitLecturerAssignmentAt &&
                                             (record?.enterGradeLecturer?.userProfile?.fullname ??
-                                            '-')
+                                                '-')
                                         ),
                                 },
 
@@ -1681,9 +1619,8 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                     title: 'Thao tác',
                                     width: 100,
                                     align: 'center',
-                                    fixed: 'right',
                                     hidden: !canSome(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
                                         'SUA',
                                         'XOA'
                                     ),
@@ -1692,7 +1629,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                             return (
                                                 <Row className="justify-center gap-2">
                                                     {can(
-                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
                                                         'SUA'
                                                     ) && (
                                                         <EditIcon
@@ -1704,7 +1641,7 @@ export default function PhanCongGiangDay({ hocLai = false }: { hocLai?: boolean 
                                                         />
                                                     )}
                                                     {can(
-                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
                                                         'XOA'
                                                     ) && (
                                                         <DeleteIcon

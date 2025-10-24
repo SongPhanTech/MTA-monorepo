@@ -9,22 +9,23 @@ import { Search } from 'lucide-react'
 import { type Key, useCallback, useMemo, useState } from 'react'
 
 interface FilterProps {
-    searchText: string | null
+    searchText?: string | null
     trainingCourseId?: string
     fixedClassId?: string
 }
 
 interface RegisterClassProps {
     subjectVersionId?: string
+    viewOnly?: boolean
 }
 
-export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
+export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [numberOfPages, setNumberOfPages] = useState(50)
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
 
     const [filters, setFilters] = useState<FilterProps>({
-        searchText: '',
+        searchText: undefined,
         trainingCourseId: undefined,
         fixedClassId: undefined,
     })
@@ -42,7 +43,7 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
 
     const { data: res, refetch } = useOpenSubjectClassRetakeStudents(
         {
-            search: filters.searchText || '',
+            search: filters.searchText || undefined,
             trainingObjectTypeId: trainingObjectTypeId || '',
             trainingCourseId: filters.trainingCourseId,
             subjectVersionId: subjectVersionId || '',
@@ -141,9 +142,11 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
                     onChange={(value) => handleFilterChange('fixedClassId', value)}
                 />
             </Col>
-            <Col span={2}>
-                <Button type="primary">Lưu</Button>
-            </Col>
+            {!viewOnly && (
+                <Col span={2}>
+                    <Button type="primary">Lưu</Button>
+                </Col>
+            )}
             <Col span={24}>
                 <Table
                     rowKey="id"
@@ -163,14 +166,18 @@ export default function HSSVChuaDat({ subjectVersionId }: RegisterClassProps) {
                         style: { cursor: 'pointer' },
                         columnWidth: 35,
                     })}
-                    rowSelection={{
-                        selectedRowKeys: selectedRowKeys,
-                        onChange: (selectedRowKeys) => {
-                            handleRowSelection(selectedRowKeys)
-                        },
-                        type: 'checkbox',
-                        columnWidth: 35,
-                    }}
+                    rowSelection={
+                        !viewOnly
+                            ? {
+                                  selectedRowKeys: selectedRowKeys,
+                                  onChange: (selectedRowKeys) => {
+                                      handleRowSelection(selectedRowKeys)
+                                  },
+                                  type: 'checkbox',
+                                  columnWidth: 35,
+                              }
+                            : undefined
+                    }
                     columns={[
                         {
                             title: 'TT',

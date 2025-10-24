@@ -6,7 +6,8 @@
  */
 
 export interface PaginationQuery {
-    page?: number
+    /** @nullable */
+    page?: number | null
     /** @nullable */
     limit?: number | null
 }

@@ -1,7 +1,10 @@
+import type { ThemeConfig } from 'antd'
+
 const lightThemeCustom = {
     token: {
         colorPrimary: '#028850',
         fontFamily: '"Noto Serif", serif',
+        fontSize: 13,
     },
     components: {
         Table: {
@@ -14,12 +17,13 @@ const lightThemeCustom = {
             itemSelectedColor: '#fff',
             itemSelectedBg: '#028850',
             subMenuItemSelectedColor: '#028850',
+            itemHoverColor: '#028850',
         },
         Layout: {
             bodyBg: '#F3F6FB',
             headerPadding: '0 20px',
         },
     },
-}
+} satisfies ThemeConfig
 
 export { lightThemeCustom }

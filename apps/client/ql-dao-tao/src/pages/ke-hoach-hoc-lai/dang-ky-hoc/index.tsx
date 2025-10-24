@@ -1,5 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
-import DangKyHoc from '@pages/ke-hoach-giao-duc/dang-ky-hoc'
+import DangKyHoc from '@pages/dang-ky-hoc'
 import type React from 'react'
 
 export default function DangKyHocLai() {

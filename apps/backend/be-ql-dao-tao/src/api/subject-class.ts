@@ -101,6 +101,12 @@ const openSubjectClassRetake = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
+            semesterId: z
+                .string()
+                .openapi('semesterId', {
+                    description: 'ID học kỳ',
+                })
+                .optional(),
         }),
     },
     responses: {
@@ -157,13 +163,13 @@ const openSubjectClassRetakeStudents = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
-            page: z.string().openapi('page', {
+            page: z.number({ coerce: true }).openapi('page', {
                 description: 'Số trang',
-                default: '1',
+                default: 1,
             }),
-            pageSize: z.string().openapi('pageSize', {
+            pageSize: z.number({ coerce: true }).openapi('pageSize', {
                 description: 'Số lượng bản ghi trên mỗi trang',
-                default: '10',
+                default: 10,
             }),
         }),
     },
@@ -405,9 +411,11 @@ app.openapi(openSubjectClassRetake, async (c) => {
         trainingCourseId,
         trainingMajorId,
         trainingObjectTypeId,
-        limit = 10,
-        page = 1,
+        semesterId,
+        limit,
+        page,
     } = c.req.valid('query')
+
     const res = await prisma.$queryRaw`
         with mon_no as (select sv.id,
                 sv.code,
@@ -442,8 +450,9 @@ app.openapi(openSubjectClassRetake, async (c) => {
                             on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                     inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                     inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-        where TBS."subjectId" = sv.id)
-        select id, code, name, "trainingObjectTypeId", "trainingMajorId", trainingCourseId, count("studentId")::INTEGER as count
+        where TBS."subjectId" = sv.id and (${semesterId}::TEXT IS NULL OR SC."semesterId" = ${semesterId})
+        )
+        select id, code, name, count("studentId")::INTEGER as count
         -- select *
         from mon_no
         where rn = 1
@@ -468,16 +477,16 @@ app.openapi(openSubjectClassRetake, async (c) => {
         )
         and (
             ${search}::TEXT IS NULL
-                OR code ILIKE ${search}
-                OR name ILIKE ${search}
+                OR code ILIKE ${`%${search}%`}
+                OR name ILIKE ${`%${search}%`}
             )
-        group by id, code, name, "trainingObjectTypeId", "trainingMajorId", trainingCourseId
+        group by id, code, name
         order by code
         limit ${limit}
         offset ${limit} * (${page} - 1)
         `
 
-    const { count = 0 }: { count: number } = await prisma.$queryRaw`
+    const countRaw: { count: number }[] = await prisma.$queryRaw`
         with mon_no as (select sv.id,
                 sv.code,
                 sv.name,
@@ -499,21 +508,21 @@ app.openapi(openSubjectClassRetake, async (c) => {
                                                     TC."scoreToPassConditional"                           as truot_mon,
                 row_number()
                 over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc) as rn
-        from "ql-dao-tao"."SubjectVersion" as sv
-                    inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
-                    inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
-                    inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
-                    inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
-                    inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
-                    inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                            on CV.id = TBOCV."curriculumVersionId"
-                    inner join "ql-dao-tao"."TrainingBlockSubject" TBS
-                            on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
-                    inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
-                    inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-        where TBS."subjectId" = sv.id)
-        select count("id")::INTEGER as count
-        -- select *
+            from "ql-dao-tao"."SubjectVersion" as sv
+                inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                        on CV.id = TBOCV."curriculumVersionId"
+                inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                        on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+            where TBS."subjectId" = sv.id and (${semesterId}::TEXT IS NULL OR SC."semesterId" = ${semesterId})
+        )
+        select count(DISTINCT id)::INTEGER as count
         from mon_no
         where rn = 1
         and (truot_mon = true or cam_thi = true or dinh_chi = true)
@@ -537,17 +546,16 @@ app.openapi(openSubjectClassRetake, async (c) => {
         )
         and (
             ${search}::TEXT IS NULL
-                OR code ILIKE ${search}
-                OR name ILIKE ${search}
+                OR code ILIKE ${`%${search}%`}
+                OR name ILIKE ${`%${search}%`}
             )
-        group by id, code, name, "trainingObjectTypeId", "trainingMajorId", trainingCourseId
         `
 
-    return c.json({ data: res, count }, 200)
+    return c.json({ data: res, count: countRaw[0]?.count }, 200)
 })
 
 app.openapi(openSubjectClassRetakeStudents, async (c) => {
-    const { search, trainingCourseId, trainingObjectTypeId, subjectVersionId } =
+    const { page, pageSize, search, trainingCourseId, trainingObjectTypeId, subjectVersionId } =
         c.req.valid('query')
     const res = await prisma.$queryRaw<
         {
@@ -565,6 +573,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
     >`with mon_no as (select sv.id,
                        sv.code,
                        sv.name,
+                       "UP"."fullname",
                        sv."trainingObjectTypeId",
                        C."trainingMajorId",
                        TC.id                                                                                    as trainingCourseId,
@@ -586,6 +595,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                 from "ql-dao-tao"."SubjectVersion" as sv
                          inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
                          inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                         inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
                          inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
                          inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
                          inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
@@ -613,8 +623,16 @@ where rn = 1
     ${trainingCourseId}::TEXT IS NULL
     OR trainingCourseId = ${trainingCourseId}
   )
-  and id = ${subjectVersionId}
+  and (
+    ${search}::TEXT IS NULL
+        OR code ILIKE ${`%${search}%`}
+        OR "fullname" ILIKE ${`%${search}%`}
+    )
+    and id = ${subjectVersionId}
+    limit ${pageSize}
+    offset ${pageSize} * (${page} - 1)
 `
+
     const students = await prisma.student.findMany({
         where: {
             id: {

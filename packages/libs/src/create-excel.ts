@@ -1,4 +1,4 @@
-import ExcelJS, { Alignment, Border, Font, Fill } from 'exceljs'
+import ExcelJS, { type Alignment, type Font } from 'exceljs'
 import { saveAs } from 'file-saver'
 
 // 1. ĐỊNH NGHĨA CÁC KIỂU DỮ LIỆU (INTERFACES)
@@ -101,7 +101,7 @@ export async function createSimpleExcel(options: SimpleExportOptions): Promise<v
             }
 
             // 3. Áp dụng Màu nền
-            if (cellData.fill && cellData.fill.bgColor) {
+            if (cellData.fill?.bgColor) {
                 cell.fill = {
                     type: 'pattern',
                     pattern: 'solid',

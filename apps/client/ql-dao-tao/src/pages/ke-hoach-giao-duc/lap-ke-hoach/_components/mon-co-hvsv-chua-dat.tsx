@@ -1,7 +1,7 @@
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { type TrainingMajor } from '@workspace/db/client'
+import type { TrainingMajor } from '@workspace/db/client'
 import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
