@@ -34,6 +34,7 @@ export interface ExportOptions {
     fontFamily?: string
     fontSize?: number
     mergeSheetsToOne?: boolean
+    sheetName?: string
 }
 
 function cloneWorksheet(
@@ -187,8 +188,8 @@ async function handleExcelJSDefault(
                             fgColor: { argb: cellData.bgColor },
                         }
                     }
-                    const applyBorder = cellData.border ?? true 
-                    
+                    const applyBorder = cellData.border ?? true
+
                     if (applyBorder) {
                         cell.border = {
                             top: { style: 'thin' },
@@ -381,34 +382,33 @@ function appendSheet(
 
     sourceSheet.model.merges.forEach((mergeRange: string) => {
         // mergeRange có dạng "A5:C6"
-        
+
         try {
-            const [startCell, endCell] = mergeRange.split(':');
+            const [startCell, endCell] = mergeRange.split(':')
 
             // Phân tích ô bắt đầu (ví dụ "A5")
-            const startMatch = startCell?.match(/([A-Z]+)(\d+)/);
-            if (!startMatch) return; // Bỏ qua nếu không khớp
-            const startCol = startMatch[1]; // "A"
-            const startRow = parseInt(startMatch[2] ?? '0'); // 5
+            const startMatch = startCell?.match(/([A-Z]+)(\d+)/)
+            if (!startMatch) return // Bỏ qua nếu không khớp
+            const startCol = startMatch[1] // "A"
+            const startRow = parseInt(startMatch[2] ?? '0') // 5
 
             // Phân tích ô kết thúc (ví dụ "C6")
-            const endMatch = endCell?.match(/([A-Z]+)(\d+)/);
-            if (!endMatch) return; // Bỏ qua nếu không khớp
-            const endCol = endMatch[1]; // "C"
-            const endRow = parseInt(endMatch[2] ?? '0'); // 6
+            const endMatch = endCell?.match(/([A-Z]+)(\d+)/)
+            if (!endMatch) return // Bỏ qua nếu không khớp
+            const endCol = endMatch[1] // "C"
+            const endRow = parseInt(endMatch[2] ?? '0') // 6
 
             // Tính toán lại tọa độ hàng mới
-            const newStartRow = startRow + rowOffset;
-            const newEndRow = endRow + rowOffset;
+            const newStartRow = startRow + rowOffset
+            const newEndRow = endRow + rowOffset
 
             // Tạo chuỗi range mới (ví dụ "A55:C56")
-            const newRange = `${startCol}${newStartRow}:${endCol}${newEndRow}`;
-            
-            // Merge bằng chuỗi, giống như cloneWorksheet
-            masterSheet.mergeCells(newRange);
+            const newRange = `${startCol}${newStartRow}:${endCol}${newEndRow}`
 
+            // Merge bằng chuỗi, giống như cloneWorksheet
+            masterSheet.mergeCells(newRange)
         } catch (e) {
-            console.error("Error processing merge range:", mergeRange, e);
+            console.error('Error processing merge range:', mergeRange, e)
         }
     })
 }
@@ -435,7 +435,7 @@ async function handleExcelJSMergeSheets(
     // 1. TẠO TẤT CẢ CÁC SHEET TẠM TRONG BỘ NHỚ
     for (const sheetOption of sheets) {
         const { sheet, data = {}, rows, tableStartCell, hiddenColumns } = sheetOption
-        
+
         // Mỗi sheetOption BẮT BUỘC phải có tên sheet duy nhất
         const sheetName = String(sheet || new Date().getTime())
         const worksheet = cloneWorksheet(workbook, firstSheet, sheetName)
@@ -446,7 +446,7 @@ async function handleExcelJSMergeSheets(
                 worksheet.getColumn(colName).hidden = true
             })
         }
-        
+
         // 1b. Thay thế placeholder {{...}}
         worksheet.eachRow((row) => {
             row.eachCell((cell) => {
@@ -466,7 +466,7 @@ async function handleExcelJSMergeSheets(
         // 1c. Render bảng động
         if (rows && tableStartCell) {
             let currentRow = tableStartCell.row
-            
+
             if (rows.length > 1) {
                 worksheet.spliceRows(tableStartCell.row + 1, 0, ...Array(rows.length - 1).fill([]))
             }
@@ -497,17 +497,21 @@ async function handleExcelJSMergeSheets(
                             fgColor: { argb: cellData.bgColor },
                         }
                     }
-                    
+
                     const applyBorder = cellData.border ?? true
                     if (applyBorder) {
                         cell.border = {
-                            top: { style: 'thin' }, left: { style: 'thin' },
-                            bottom: { style: 'thin' }, right: { style: 'thin' },
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' },
                         }
                     } else {
-                         cell.border = {
-                            top: { style: undefined }, left: { style: undefined },
-                            bottom: { style: undefined }, right: { style: undefined },
+                        cell.border = {
+                            top: { style: undefined },
+                            left: { style: undefined },
+                            bottom: { style: undefined },
+                            right: { style: undefined },
                         }
                     }
 
@@ -515,8 +519,10 @@ async function handleExcelJSMergeSheets(
                     const rowSpan = cellData.rowSpan ?? 1
                     if (colSpan > 1 || rowSpan > 1) {
                         worksheet.mergeCells(
-                            currentRow, currentCol,
-                            currentRow + rowSpan - 1, currentCol + colSpan - 1
+                            currentRow,
+                            currentCol,
+                            currentRow + rowSpan - 1,
+                            currentCol + colSpan - 1
                         )
                     }
                     currentCol += colSpan
@@ -525,17 +531,17 @@ async function handleExcelJSMergeSheets(
                 currentRow++
             }
         }
-        
+
         // 1d. Thêm sheet đã xử lý vào danh sách tạm
         tempWorksheets.push(worksheet)
     }
 
     // 2. GỘP CÁC SHEET TẠM VÀO MASTER SHEET
     if (tempWorksheets.length === 0) {
-        throw new Error("No data provided to export");
+        throw new Error('No data provided to export')
     }
 
-    const masterSheet = tempWorksheets[0]; // Lấy sheet đầu tiên làm sheet chính
+    const masterSheet = tempWorksheets[0] // Lấy sheet đầu tiên làm sheet chính
 
     // Gộp từ sheet thứ 2 trở đi
     if (tempWorksheets.length > 1) {
@@ -543,18 +549,22 @@ async function handleExcelJSMergeSheets(
 
         for (let i = 1; i < tempWorksheets.length; i++) {
             const sheetToCopy = tempWorksheets[i]
-            
+
             // Thêm 2 hàng trống để ngăn cách
             masterSheet?.addRow({})
             masterSheet?.addRow({})
             currentRowOffset += 2
-            
+
             // Copy nội dung
-            appendSheet(masterSheet as ExcelJS.Worksheet, sheetToCopy as ExcelJS.Worksheet, currentRowOffset + 1)
-            
+            appendSheet(
+                masterSheet as ExcelJS.Worksheet,
+                sheetToCopy as ExcelJS.Worksheet,
+                currentRowOffset + 1
+            )
+
             // Cập nhật lại offset
             currentRowOffset = masterSheet?.lastRow ? masterSheet.lastRow.number : 0
-            
+
             // Xóa sheet tạm sau khi copy
             workbook.removeWorksheet(sheetToCopy?.id ?? '')
         }
@@ -562,10 +572,10 @@ async function handleExcelJSMergeSheets(
 
     // 3. XÓA TEMPLATE GỐC VÀ XUẤT FILE
     workbook.removeWorksheet(firstSheet.id)
-    
+
     // Đổi tên sheet chính (nếu muốn)
     //@ts-ignore
-    masterSheet.name = "TongHopDiem"
+    masterSheet.name = options.sheetName || 'TongHopDiem'
 
     const outBuffer = await workbook.xlsx.writeBuffer()
     saveAs(
@@ -583,7 +593,6 @@ async function handleExcelJSExport(
     options: ExportOptions
 ) {
     if (options.mergeSheetsToOne) {
-       
         await handleExcelJSMergeSheets(templateUrl, sheets, fileName, options)
     } else {
         await handleExcelJSDefault(templateUrl, sheets, fileName, options)

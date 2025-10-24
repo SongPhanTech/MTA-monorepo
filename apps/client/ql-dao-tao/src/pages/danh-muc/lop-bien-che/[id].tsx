@@ -1,4 +1,4 @@
-import { DownloadOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
+import { DownloadOutlined, FileExcelOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import ExportStudentInFixedClass from '@components/modal/export-list-student-in-fixedClass'
@@ -293,6 +293,8 @@ export default function StudentFixedClassPage() {
             curriculumVersion: {
                 include: {
                     curriculum: true,
+                    trainingTime: true,
+                    trainingLanguage: true,
                 },
             },
             curriculumVersionParallel: true,
@@ -313,7 +315,7 @@ export default function StudentFixedClassPage() {
         },
     })
 
-    const handleExportDiemLop = () => {
+    const handleExportDiemLop = async () => {
         showSpinner()
         try {
             const subjectsInOrder = fixedClass?.curriculumVersion?.trainingBlocks
@@ -573,11 +575,11 @@ export default function StudentFixedClassPage() {
         setOpen(true)
     }
 
-    const handleExportQuaTrinh = async () => {
+    const handleExportCaNhan = async () => {
         const result: any[] = []
+        showSpinner()
         try {
-            for (const item of data) {
-                showSpinner()
+            const tasks = data.map(async (item) => {
                 const res = await sqlTransaction([
                     {
                         model: 'Semester',
@@ -635,50 +637,79 @@ export default function StudentFixedClassPage() {
                                 schoolYear: true,
                             },
                             orderBy: {
-                                createdAt: 'asc',
+                                startDate: 'asc',
                             },
                         },
                     },
                 ])
+
+                return { item, res }
+            })
+            const allResults = await Promise.all(tasks)
+            for (const { item, res } of allResults) {
                 if (res.status === 200) {
                     const hocKis: IHocKi[] = []
                     if ((res.data[0] as any[]).length) {
                         const rawData = res.data[0] as any[]
+                        const bestAttemptsMap = new Map<
+                            string,
+                            { score: number; semesterId: string }
+                        >()
+                        for (const semester of rawData) {
+                            for (const subjectClass of semester.subjectClasses) {
+                                for (const scs of subjectClass.subjectClassStudent) {
+                                    // scs = subjectClassStudent
+                                    const subjectId = scs.subjectVersion?.id
+                                    if (!subjectId) continue
 
-                        // Đổi "item" thành "semester" để tránh nhầm lẫn với "item" (student) bên ngoài
+                                    const currentScore =
+                                        scs?.manualFinalScore || Number(scs?.finalScore) || 0
+                                    const existingBest = bestAttemptsMap.get(subjectId)
+
+                                    if (!existingBest || currentScore >= existingBest.score) {
+                                        bestAttemptsMap.set(subjectId, {
+                                            score: currentScore,
+                                            semesterId: semester.id,
+                                        })
+                                    }
+                                }
+                            }
+                        }
                         rawData.forEach((semester) => {
-                            const monhoc: IMonHoc[] = [] // Khởi tạo mảng môn học cho MỖI HỌC KỲ
-
-                            // Vòng lặp này CHỈ DÙNG ĐỂ gom các môn học
+                            const monhoc: IMonHoc[] = []
                             semester.subjectClasses.forEach((subjectClass: any) => {
                                 subjectClass.subjectClassStudent.forEach(
                                     (subjectClassStudent: any) => {
-                                        monhoc.push({
-                                            TenMonhoc: subjectClassStudent.subjectVersion.name,
-                                            MaMH:
-                                                subjectClassStudent.subjectVersion.code?.slice(
-                                                    0,
-                                                    2
-                                                ) ?? '',
-                                            soTC: subjectClassStudent.subjectVersion.credit,
-                                            diemhe10:
-                                                subjectClassStudent?.manualFinalScore ||
-                                                Number(subjectClassStudent?.finalScore) ||
-                                                0,
-                                            diemhe4:
-                                                convertScore(
-                                                    subjectClassStudent?.manualFinalScore ||
-                                                        Number(subjectClassStudent?.finalScore) ||
-                                                        0
-                                                ).base4 ?? 0,
-                                            diemchu:
-                                                convertScore(
-                                                    subjectClassStudent?.manualFinalScore ||
-                                                        Number(subjectClassStudent?.finalScore) ||
-                                                        0
-                                                ).letter ?? '',
-                                            ghichu: subjectClassStudent.description ?? '',
-                                        })
+                                        const subjectId = subjectClassStudent.subjectVersion?.id
+                                        if (!subjectId) return
+
+                                        const bestAttempt = bestAttemptsMap.get(subjectId)
+                                        const currentScore =
+                                            subjectClassStudent?.manualFinalScore ||
+                                            Number(subjectClassStudent?.finalScore) ||
+                                            0
+
+                                        if (bestAttempt && bestAttempt.semesterId === semester.id) {
+                                            const diemchu: string =
+                                                convertScore(currentScore).letter ?? ''
+
+                                            if (diemchu.toUpperCase() < 'F') {
+                                                monhoc.push({
+                                                    TenMonhoc:
+                                                        subjectClassStudent.subjectVersion.name,
+                                                    MaMH:
+                                                        subjectClassStudent.subjectVersion.code?.slice(
+                                                            0,
+                                                            2
+                                                        ) ?? '',
+                                                    soTC: subjectClassStudent.subjectVersion.credit,
+                                                    diemhe10: currentScore,
+                                                    diemhe4: convertScore(currentScore).base4 ?? 0,
+                                                    diemchu: diemchu,
+                                                    ghichu: subjectClassStudent.description ?? '',
+                                                })
+                                            }
+                                        }
                                     }
                                 )
                             })
@@ -721,14 +752,11 @@ export default function StudentFixedClassPage() {
                     const sampleStudentData = {
                         fullname: item.userProfile?.fullname,
                         dateOfBirth: ((dateInput) => {
-                            // 1. Kiểm tra nếu không có ngày
                             if (!dateInput) {
                                 return ''
                             }
                             try {
-                                // 2. Tạo đối tượng Date
                                 const date = new Date(dateInput)
-                                // 3. Kiểm tra nếu ngày không hợp lệ
                                 if (Number.isNaN(date.getTime())) {
                                     return ''
                                 }
@@ -745,10 +773,8 @@ export default function StudentFixedClassPage() {
                         hocKis: hocKis,
                     }
                     result.push(sampleStudentData)
-                    // console.log('result', result);
                 }
             }
-
             const allSheetOptions = result.map((sampleStudentData) => {
                 const tableRows = sampleStudentData.hocKis.flatMap((hocKi: IHocKi) => {
                     const hocKiRow: TableRow = {
@@ -904,6 +930,383 @@ export default function StudentFixedClassPage() {
                     ],
                 }
                 return {
+                    sheet: `${sampleStudentData.maSV} - ${sampleStudentData.fullname}`,
+                    data: {
+                        fullname: sampleStudentData.fullname,
+                        dateOfBirth: sampleStudentData.dateOfBirth,
+                        htdt: sampleStudentData.htdt,
+                        maSV: sampleStudentData.maSV,
+                        nganh: sampleStudentData.nganh,
+                        lop: sampleStudentData.lop,
+                    },
+                    tableStartCell: { row: 11, col: 1 },
+                    rows: [
+                        ...tableRows,
+                        gapRow,
+                        gapRow,
+                        totalRow,
+                        diemTBHe10Row,
+                        diemTBHe4Row,
+                        xepLoaiRow,
+                        dateSignatureRow,
+                        titleSignatureRow,
+                        nameSignatureRow,
+                    ],
+                    hiddenColumns: ['H', 'M', 'N', 'R', 'J', 'K', 'L'],
+                }
+            })
+            exportFromTemplate({
+                templateUrl: getMinioUrl('/mta/template/quatrinh.xlsx'),
+                sheets: allSheetOptions,
+                fileName: 'BDCN',
+                mergeSheetsToOne: true,
+                sheetName: 'BDCN',
+            })
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+    const handleExportQuaTrinh = async () => {
+        const result: any[] = []
+        showSpinner()
+        try {
+            const tasks = data.map(async (item) => {
+                const res = await sqlTransaction([
+                    {
+                        model: 'Semester',
+                        operation: 'findMany',
+                        data: {
+                            where: {
+                                subjectClasses: {
+                                    some: {
+                                        subjectClassStudent: {
+                                            some: {
+                                                studentId: item.id,
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            include: {
+                                subjectClasses: {
+                                    where: {
+                                        subjectClassStudent: {
+                                            some: {
+                                                studentId: item.id,
+                                            },
+                                        },
+                                    },
+                                    include: {
+                                        subjectClassStudent: {
+                                            where: {
+                                                studentId: item.id,
+                                            },
+                                            include: {
+                                                subjectVersion: true,
+                                                certificates: {
+                                                    include: {
+                                                        archivedCertificate: true,
+                                                    },
+                                                },
+                                                awards: {
+                                                    include: {
+                                                        archivedAward: true,
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                                trainingCoursesStart: {
+                                    where: {
+                                        id: item.fixedClass?.trainingCourseId ?? undefined,
+                                    },
+                                    include: {
+                                        scoreConverts: true,
+                                    },
+                                },
+                                schoolYear: true,
+                            },
+                            orderBy: {
+                                createdAt: 'asc',
+                            },
+                        },
+                    },
+                ])
+
+                return { item, res }
+            })
+            const allResults = await Promise.all(tasks)
+            for (const { item, res } of allResults) {
+                if (res.status === 200) {
+                    const hocKis: IHocKi[] = []
+                    if ((res.data[0] as any[]).length) {
+                        const rawData = res.data[0] as any[]
+
+                        // Đổi "item" thành "semester" để tránh nhầm lẫn với "item" (student) bên ngoài
+                        rawData.forEach((semester) => {
+                            const monhoc: IMonHoc[] = [] // Khởi tạo mảng môn học cho MỖI HỌC KỲ
+
+                            // Vòng lặp này CHỈ DÙNG ĐỂ gom các môn học
+                            semester.subjectClasses.forEach((subjectClass: any) => {
+                                subjectClass.subjectClassStudent.forEach(
+                                    (subjectClassStudent: any) => {
+                                        monhoc.push({
+                                            TenMonhoc: subjectClassStudent.subjectVersion.name,
+                                            MaMH:
+                                                subjectClassStudent.subjectVersion.code?.slice(
+                                                    0,
+                                                    2
+                                                ) ?? '',
+                                            soTC: subjectClassStudent.subjectVersion.credit,
+                                            diemhe10:
+                                                subjectClassStudent?.manualFinalScore ||
+                                                Number(subjectClassStudent?.finalScore) ||
+                                                0,
+                                            diemhe4:
+                                                convertScore(
+                                                    subjectClassStudent?.manualFinalScore ||
+                                                        Number(subjectClassStudent?.finalScore) ||
+                                                        0
+                                                ).base4 ?? 0,
+                                            diemchu:
+                                                convertScore(
+                                                    subjectClassStudent?.manualFinalScore ||
+                                                        Number(subjectClassStudent?.finalScore) ||
+                                                        0
+                                                ).letter ?? '',
+                                            ghichu: subjectClassStudent.description ?? '',
+                                        })
+                                    }
+                                )
+                            })
+                            const tongSoTinChi = monhoc.reduce(
+                                (acc, curr) => acc + (curr.soTC ?? 0),
+                                0
+                            )
+
+                            const tongDiemNhanTinChiHe10 = monhoc.reduce(
+                                (acc, curr) => acc + (curr.diemhe10 ?? 0) * (curr.soTC ?? 0),
+                                0
+                            )
+                            const tongDiemNhanTinChiHe4 = monhoc.reduce(
+                                (acc, curr) => acc + (curr.diemhe4 ?? 0) * (curr.soTC ?? 0),
+                                0
+                            )
+
+                            const diemTBHe10_Raw =
+                                tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi
+                            const diemTBHe4_Raw =
+                                tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi
+
+                            const diemTBHe10 = Number.parseFloat(diemTBHe10_Raw.toFixed(1))
+                            const diemTBHe4 = Number.parseFloat(diemTBHe4_Raw.toFixed(1))
+
+                            hocKis.push({
+                                TenHocKi:
+                                    semester.code +
+                                    '-' +
+                                    semester.name +
+                                    '-' +
+                                    semester.schoolYear?.name,
+                                SoTinChiKy: tongSoTinChi,
+                                DiemTBKyHe10: diemTBHe10,
+                                DiemTBKyHe4: diemTBHe4,
+                                monHocs: monhoc,
+                            })
+                        })
+                    }
+                    const sampleStudentData = {
+                        fullname: item.userProfile?.fullname,
+                        dateOfBirth: ((dateInput) => {
+                            // 1. Kiểm tra nếu không có ngày
+                            if (!dateInput) {
+                                return ''
+                            }
+                            try {
+                                // 2. Tạo đối tượng Date
+                                const date = new Date(dateInput)
+                                // 3. Kiểm tra nếu ngày không hợp lệ
+                                if (Number.isNaN(date.getTime())) {
+                                    return ''
+                                }
+                                // 4. Trả về định dạng dd/mm/yyyy
+                                return date.toLocaleDateString('vi-VN')
+                            } catch (e) {
+                                return '' // Trả về rỗng nếu có lỗi
+                            }
+                        })(item.userProfile?.dateOfBirth),
+                        maSV: item.code,
+                        htdt: item.trainingObjectType?.name,
+                        nganh: item.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name,
+                        lop: item.fixedClass?.name,
+                        hocKis: hocKis,
+                    }
+                    result.push(sampleStudentData)
+                }
+            }
+            const allSheetOptions = result.map((sampleStudentData) => {
+                const tableRows = sampleStudentData.hocKis.flatMap((hocKi: IHocKi) => {
+                    const hocKiRow: TableRow = {
+                        cells: [
+                            {
+                                value: hocKi.TenHocKi ?? '',
+                                colSpan: 19,
+                                bold: true,
+                                align: 'left',
+                                border: true,
+                            },
+                        ],
+                    }
+                    //@ts-ignore
+                    const monHocRows: TableRow[] =
+                        hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
+                            cells: [
+                                { value: index + 1 },
+                                { value: monHoc.TenMonhoc ?? '', colSpan: 6, border: true },
+                                { value: monHoc.MaMH ?? '' },
+                                { value: monHoc.soTC, align: 'center' },
+                                { value: monHoc.diem01 ?? 0, align: 'right' },
+                                { value: monHoc.diem02 ?? 0, align: 'right' },
+                                { value: monHoc.diem07 ?? 0, align: 'right' },
+                                {
+                                    value: ((monHoc.diemhe10 || 0) * (monHoc.soTC || 0)).toFixed(1),
+                                    align: 'right',
+                                },
+                                {
+                                    value: ((monHoc.diemhe4 || 0) * (monHoc.soTC || 0)).toFixed(1),
+                                    align: 'right',
+                                },
+                                { value: monHoc.diemhe10 ?? 0, align: 'right' },
+                                { value: monHoc.diemhe4 ?? 0, align: 'right' },
+                                { value: monHoc.diemchu ?? '', align: 'center' },
+                                { value: null },
+                                { value: monHoc.ghichu ?? '' },
+                            ],
+                        })) ?? []
+
+                    const trungBinhRow: TableRow = {
+                        cells: [
+                            { value: null },
+                            {
+                                value: 'Điểm trung bình học kỳ:',
+                                colSpan: 6,
+                                bold: true,
+                                align: 'center',
+                            },
+                            { value: null }, // Cột 7
+                            { value: hocKi.SoTinChiKy ?? 0, bold: true, align: 'center' }, // Cột 8
+                            { value: null }, // Cột 9
+                            { value: null }, // Cột 10
+                            { value: null }, // Cột 11
+                            { value: null }, // Cột 12
+                            { value: null }, // Cột 13
+                            { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: 'right' }, // Cột 14
+                            { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: 'right' }, // Cột 15
+                            { value: null }, // Cột 16
+                            { value: null }, // Cột 17
+                            { value: null }, // Cột 18
+                        ],
+                    }
+
+                    return [hocKiRow, ...monHocRows, trungBinhRow]
+                })
+
+                const gapRow: TableRow = {
+                    cells: [{ value: null, colSpan: 18, border: false }],
+                }
+                const tongtinchi = sampleStudentData.hocKis.reduce(
+                    (acc: number, curr: IHocKi) => acc + (curr.SoTinChiKy ?? 0),
+                    0
+                )
+
+                // Tính điểm trung bình hệ 10 toàn khóa: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
+                const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
+                    (acc: number, curr: IHocKi) =>
+                        acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
+                    0
+                )
+                const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
+                    (acc: number, curr: IHocKi) =>
+                        acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
+                    0
+                )
+
+                const tongdiemhe10 =
+                    tongtinchi === 0
+                        ? 0
+                        : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
+                const tongdiemhe4 =
+                    tongtinchi === 0
+                        ? 0
+                        : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
+                const totalRow: TableRow = {
+                    cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false }],
+                }
+                const diemTBHe10Row: TableRow = {
+                    cells: [
+                        {
+                            value: `Điểm trung bình hệ 10 toàn khóa: ${tongdiemhe10}`,
+                            colSpan: 18,
+                            border: false,
+                        },
+                    ],
+                }
+                const diemTBHe4Row: TableRow = {
+                    cells: [
+                        {
+                            value: `Điểm trung bình hệ 4 toàn khóa: ${tongdiemhe4}`,
+                            colSpan: 18,
+                            border: false,
+                        },
+                    ],
+                }
+                const xeploai = convertScore(tongdiemhe10).classification
+                const xepLoaiRow: TableRow = {
+                    cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false }],
+                }
+
+                const dateSignatureRow: TableRow = {
+                    cells: [
+                        { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+                        {
+                            value: `Hà Nội, ngày ${new Date().getDate()} tháng ${
+                                new Date().getMonth() + 1
+                            } năm ${new Date().getFullYear()}`,
+                            colSpan: 6,
+                            border: false,
+                            align: 'center',
+                        },
+                    ],
+                }
+
+                const titleSignatureRow: TableRow = {
+                    cells: [
+                        { value: null, colSpan: 12, border: false },
+                        {
+                            value: '  KT. TRƯỞNG PHÒNG \n PHÓ TRƯỞNG PHÒNG',
+                            colSpan: 6,
+                            border: false,
+                            align: 'center',
+                            bold: true,
+                        },
+                    ],
+                }
+                const nameSignatureRow: TableRow = {
+                    cells: [
+                        { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+                        {
+                            value: 'Đại tá, TS Nguyễn Văn Bình												',
+                            colSpan: 6,
+                            border: false,
+                            align: 'center',
+                            bold: true,
+                        },
+                    ],
+                }
+                return {
                     sheet: `${sampleStudentData.maSV} - ${sampleStudentData.fullname}`, // Tên sheet tạm duy nhất
                     data: {
                         fullname: sampleStudentData.fullname,
@@ -922,14 +1325,15 @@ export default function StudentFixedClassPage() {
                         titleSignatureRow,
                         nameSignatureRow,
                     ],
-                    hiddenColumns: ['M', 'N', 'R', 'J', 'K', 'L'],
+                    hiddenColumns: ['H', 'M', 'N', 'R', 'J', 'K', 'L'],
                 }
             })
             exportFromTemplate({
                 templateUrl: getMinioUrl('/mta/template/quatrinh.xlsx'),
                 sheets: allSheetOptions,
-                fileName: 'DGQT.xlsx',
+                fileName: 'BDQT.xlsx',
                 mergeSheetsToOne: true,
+                sheetName: 'BDQT',
             })
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -939,9 +1343,9 @@ export default function StudentFixedClassPage() {
     }
     const handleExportBangDiem = async () => {
         const result: any[] = []
+        showSpinner()
         try {
-            for (const item of data) {
-                showSpinner()
+            const tasks = data.map(async (item) => {
                 const res = await sqlTransaction([
                     {
                         model: 'Semester',
@@ -1004,16 +1408,18 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 ])
+
+                return { item, res }
+            })
+            const allResults = await Promise.all(tasks)
+            for (const { item, res } of allResults) {
                 if (res.status === 200) {
                     const hocKis: IHocKi[] = []
                     if ((res.data[0] as any[]).length) {
                         const rawData = res.data[0] as any[]
 
-                        // Đổi "item" thành "semester" để tránh nhầm lẫn với "item" (student) bên ngoài
                         rawData.forEach((semester) => {
-                            const monhoc: IMonHoc[] = [] // Khởi tạo mảng môn học cho MỖI HỌC KỲ
-
-                            // Vòng lặp này CHỈ DÙNG ĐỂ gom các môn học
+                            const monhoc: IMonHoc[] = []
                             semester.subjectClasses.forEach((subjectClass: any) => {
                                 subjectClass.subjectClassStudent.forEach(
                                     (subjectClassStudent: any) => {
@@ -1083,173 +1489,133 @@ export default function StudentFixedClassPage() {
                             })
                         })
                     }
+                    console.log('item', item)
                     const sampleStudentData = {
                         fullname: item.userProfile?.fullname,
                         dateOfBirth: ((dateInput) => {
-                            // 1. Kiểm tra nếu không có ngày
                             if (!dateInput) {
                                 return ''
                             }
                             try {
-                                // 2. Tạo đối tượng Date
                                 const date = new Date(dateInput)
-                                // 3. Kiểm tra nếu ngày không hợp lệ
                                 if (Number.isNaN(date.getTime())) {
                                     return ''
                                 }
-                                // 4. Trả về định dạng dd/mm/yyyy
                                 return date.toLocaleDateString('vi-VN')
                             } catch (e) {
                                 return '' // Trả về rỗng nếu có lỗi
                             }
                         })(item.userProfile?.dateOfBirth),
                         maSV: item.code,
-                        htdt: item.trainingObjectType?.name,
                         nganh: item.fixedClass?.curriculumVersion?.curriculum?.trainingMajor?.name,
-                        lop: item.fixedClass?.name,
+                        soChungChi: '0',
+                        ngaynhaphoc: item.fixedClass?.trainingCourse?.admissionStartDate,
+                        thoigian: item.curriculumVersion?.trainingTime?.name,
+                        khoa: item.fixedClass?.trainingCourse?.name,
+                        ctdt: item.trainingObjectType?.name,
+                        ngonngu: item.curriculumVersion?.trainingLanguage?.name,
                         hocKis: hocKis,
                     }
                     result.push(sampleStudentData)
-                    // console.log('result', result);
                 }
             }
-
+            let globalCounter = 1
             const allSheetOptions = result.map((sampleStudentData) => {
                 const tableRows = sampleStudentData.hocKis.flatMap((hocKi: IHocKi) => {
-                    const hocKiRow: TableRow = {
-                        cells: [
-                            {
-                                value: hocKi.TenHocKi ?? '',
-                                colSpan: 19,
-                                bold: true,
-                                align: 'left',
-                                border: true,
-                            },
-                        ],
-                    }
                     //@ts-ignore
                     const monHocRows: TableRow[] =
-                        hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
+                        hocKi?.monHocs?.map((monHoc: IMonHoc) => ({
                             cells: [
-                                { value: index + 1 },
-                                { value: monHoc.TenMonhoc ?? '', colSpan: 6, border: true },
-                                { value: monHoc.MaMH ?? '' },
+                                { value: globalCounter++ },
+                                { value: monHoc.TenMonhoc ?? '', colSpan: 8, border: true },
                                 { value: monHoc.soTC, align: 'center' },
-                                { value: monHoc.diem01 ?? 0, align: 'right' },
-                                { value: monHoc.diem02 ?? 0, align: 'right' },
-                                { value: monHoc.diem07 ?? 0, align: 'right' },
-                                { value: null },
-                                { value: null },
                                 { value: monHoc.diemhe10 ?? 0, align: 'right' },
-                                { value: monHoc.diemhe4 ?? 0, align: 'right' },
-                                { value: monHoc.diemchu ?? '', align: 'center' },
-                                { value: null },
-                                { value: monHoc.ghichu ?? '' },
                             ],
                         })) ?? []
-
-                    // Dòng trung bình học kỳ
-                    const trungBinhRow: TableRow = {
-                        cells: [
-                            { value: null },
-                            {
-                                value: 'Điểm trung bình học kỳ:',
-                                colSpan: 6,
-                                bold: true,
-                                align: 'center',
-                            },
-                            { value: null }, // Cột 7
-                            { value: hocKi.SoTinChiKy ?? 0, bold: true, align: 'center' }, // Cột 8
-                            { value: null }, // Cột 9
-                            { value: null }, // Cột 10
-                            { value: null }, // Cột 11
-                            { value: null }, // Cột 12
-                            { value: null }, // Cột 13
-                            { value: hocKi.DiemTBKyHe10 ?? 0, bold: true, align: 'right' }, // Cột 14
-                            { value: hocKi.DiemTBKyHe4 ?? 0, bold: true, align: 'right' }, // Cột 15
-                            { value: null }, // Cột 16
-                            { value: null }, // Cột 17
-                            { value: null }, // Cột 18
-                        ],
-                    }
-
-                    return [hocKiRow, ...monHocRows, trungBinhRow]
+                    return [...monHocRows]
                 })
 
                 const gapRow: TableRow = {
                     cells: [{ value: null, colSpan: 18, border: false }],
                 }
-                const tongtinchi = sampleStudentData.hocKis.reduce(
-                    (acc: number, curr: IHocKi) => acc + (curr.SoTinChiKy ?? 0),
-                    0
+                const allMonHocs = sampleStudentData.hocKis.flatMap(
+                    (hocKi: IHocKi) => hocKi.monHocs
                 )
 
-                // Tính điểm trung bình hệ 10 toàn khóa: tổng (điểm TB kỳ × số tín chỉ kỳ) / tổng số tín chỉ
-                const tongDiemNhanTinChiHe10 = sampleStudentData.hocKis.reduce(
-                    (acc: number, curr: IHocKi) =>
-                        acc + (curr.DiemTBKyHe10 ?? 0) * (curr.SoTinChiKy ?? 0),
-                    0
-                )
-                const tongDiemNhanTinChiHe4 = sampleStudentData.hocKis.reduce(
-                    (acc: number, curr: IHocKi) =>
-                        acc + (curr.DiemTBKyHe4 ?? 0) * (curr.SoTinChiKy ?? 0),
-                    0
+                const { tongDiemCoTrongSo, tongTrongSo } = allMonHocs.reduce(
+                    (acc: { tongDiemCoTrongSo: number; tongTrongSo: number }, mon: IMonHoc) => {
+                        const diem = mon.diemhe10 ?? 0
+                        const tc = mon.soTC ?? 0
+
+                        acc.tongDiemCoTrongSo += diem * tc
+                        acc.tongTrongSo += tc
+
+                        return acc
+                    },
+                    { tongDiemCoTrongSo: 0, tongTrongSo: 0 } // Giá trị khởi tạo là một object
                 )
 
-                const tongdiemhe10 =
-                    tongtinchi === 0
-                        ? 0
-                        : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
-                const tongdiemhe4 =
-                    tongtinchi === 0
-                        ? 0
-                        : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
+                // 3. Tính điểm TB (đã sửa lỗi cú pháp)
+                const diemTB =
+                    tongTrongSo > 0 ? Math.round((tongDiemCoTrongSo / tongTrongSo) * 100) / 100 : 0
+
+                let hang = ''
+                if (diemTB >= 9.0) {
+                    hang = 'Xuất sắc'
+                } else if (diemTB >= 8.0) {
+                    hang = 'Giỏi'
+                } else if (diemTB >= 7.0) {
+                    hang = 'Khá'
+                } else if (diemTB >= 6.0) {
+                    hang = 'Trung bình'
+                } else if (diemTB >= 5.0) {
+                    hang = 'Trung bình yếu'
+                } else {
+                    hang = 'Yếu'
+                }
                 const totalRow: TableRow = {
-                    cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false }],
-                }
-                const diemTBHe10Row: TableRow = {
                     cells: [
                         {
-                            value: `Điểm trung bình hệ 10 toàn khóa: ${tongdiemhe10}`,
-                            colSpan: 18,
+                            value: `Điểm trung bình chung tốt nghiệp: ${diemTB}`,
                             border: false,
+                            colSpan: 7,
+                            bold: true,
+                        },
+                        {
+                            value: `Hạng tốt nghiệp: ${hang}`,
+                            border: false,
+                            colSpan: 10,
+                            bold: true,
                         },
                     ],
                 }
-                const diemTBHe4Row: TableRow = {
-                    cells: [
-                        {
-                            value: `Điểm trung bình hệ 4 toàn khóa: ${tongdiemhe4}`,
-                            colSpan: 18,
-                            border: false,
-                        },
-                    ],
-                }
-                const xeploai = convertScore(tongdiemhe10).classification
-                const xepLoaiRow: TableRow = {
-                    cells: [{ value: `Xếp loại: ${xeploai}`, colSpan: 18, border: false }],
-                }
-
                 const dateSignatureRow: TableRow = {
                     cells: [
-                        { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
                         {
-                            value: `Hà Nội, ngày ${new Date().getDate()} tháng ${
-                                new Date().getMonth() + 1
-                            } năm ${new Date().getFullYear()}`,
-                            colSpan: 6,
+                            value: `Hà Nội, ngày ${new Date().getDate()} tháng ${new Date().getMonth() + 1} năm ${new Date().getFullYear()}`,
+                            colSpan: 5,
                             border: false,
                             align: 'center',
                         },
                     ],
                 }
-
                 const titleSignatureRow: TableRow = {
                     cells: [
-                        { value: null, colSpan: 12, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
                         {
-                            value: '  KT. TRƯỞNG PHÒNG \n PHÓ TRƯỞNG PHÒNG',
-                            colSpan: 6,
+                            value: 'TL. GIÁM ĐỐC ',
+                            colSpan: 5,
                             border: false,
                             align: 'center',
                             bold: true,
@@ -1258,10 +1624,15 @@ export default function StudentFixedClassPage() {
                 }
                 const nameSignatureRow: TableRow = {
                     cells: [
-                        { value: null, colSpan: 12, border: false }, // Ô trống bên trái
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
+                        { value: null, border: false },
                         {
-                            value: 'Đại tá, TS Nguyễn Văn Bình												',
-                            colSpan: 6,
+                            value: 'TRƯỞNG PHÒNG SAU ĐẠI HỌC',
+                            colSpan: 5,
                             border: false,
                             align: 'center',
                             bold: true,
@@ -1269,35 +1640,40 @@ export default function StudentFixedClassPage() {
                     ],
                 }
                 return {
-                    sheet: `${sampleStudentData.maSV} - ${sampleStudentData.fullname}`, // Tên sheet tạm duy nhất
+                    sheet: `${sampleStudentData.maSV} - ${sampleStudentData.fullname}`,
                     data: {
+                        soChungChi: sampleStudentData.soChungChi,
                         fullname: sampleStudentData.fullname,
-                        dateOfBirth: sampleStudentData.dateOfBirth,
-                        htdt: sampleStudentData.htdt,
                         maSV: sampleStudentData.maSV,
+                        dateOfBirth: sampleStudentData.dateOfBirth,
+                        khoa: sampleStudentData.khoa,
+                        ngaynhaphoc: sampleStudentData.ngaynhaphoc,
+                        ctdt: sampleStudentData.ctdt,
                         nganh: sampleStudentData.nganh,
-                        lop: sampleStudentData.lop,
+                        thoigian: sampleStudentData.thoigian,
+                        ngonngu: sampleStudentData.ngonngu,
                     },
-                    tableStartCell: { row: 11, col: 1 },
+                    tableStartCell: { row: 15, col: 1 },
                     rows: [
                         ...tableRows,
                         gapRow,
+                        totalRow,
                         gapRow,
                         dateSignatureRow,
                         titleSignatureRow,
                         nameSignatureRow,
                     ],
-                    hiddenColumns: ['M', 'N', 'R', 'J', 'K', 'L'],
                 }
             })
             exportFromTemplate({
-                templateUrl: getMinioUrl('/mta/template/quatrinh.xlsx'),
+                templateUrl: getMinioUrl('/mta/template/bang-diem-ngan-dai-han.xlsx'),
                 sheets: allSheetOptions,
-                fileName: 'DGQT.xlsx',
+                fileName: 'BangDiemNganHan%2cDaiHan',
                 mergeSheetsToOne: true,
             })
         } catch (error) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+            console.error('Error exporting template:', error)
         } finally {
             hideSpinner()
         }
@@ -1320,19 +1696,12 @@ export default function StudentFixedClassPage() {
             <Row gutter={[16, 0]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[8, 8]} align="top" justify="space-between">
-                        <Col span={12} />
+                    <Row gutter={[16, 0]} align="top" justify="space-between">
+                        {/* <Col span={12} /> */}
 
                         {/* Hàng chứa các button */}
-                        <Col xs={12}>
+                        <Col span={24}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
-                                <Button
-                                    className="mr-3"
-                                    type="primary"
-                                    onClick={handleExportDiemLop}
-                                >
-                                    Xuất bảng điểm
-                                </Button>
                                 <Dropdown
                                     menu={{
                                         items: [
@@ -1862,25 +2231,36 @@ export default function StudentFixedClassPage() {
                                 <Button onClick={handleModalPrint} type="primary">
                                     In danh sách
                                 </Button>
-                                <Tooltip title="Xuất file excel đánh giá quá trình">
-                                    <Button
-                                        onClick={async () => await handleExportQuaTrinh()}
-                                        type="primary"
-                                        icon={<DownloadOutlined />}
-                                    >
-                                        Đánh giá quá trình
+                                <Dropdown
+                                    menu={{
+                                        items: [
+                                            {
+                                                label: 'Bảng điểm quá trình',
+                                                key: 'export-bang-diem-qua-trinh',
+                                                onClick: async () => await handleExportQuaTrinh(),
+                                            },
+                                            {
+                                                label: 'Bảng điểm cá nhân',
+                                                key: 'export-bang-diem-ca-nhan',
+                                                onClick: async () => await handleExportCaNhan(),
+                                            },
+                                            {
+                                                label: 'Bảng điểm ngắn hạn, dài hạn',
+                                                key: 'export-bang-diem-ngan-han-dai-han',
+                                                onClick: async () => await handleExportBangDiem(),
+                                            },
+                                            {
+                                                label: 'Bảng điểm theo lớp, kết quả đào tạo toàn khoá',
+                                                key: 'export-bang-diem-theo-lop-ket-qua-dao-tao-toan-khoa',
+                                                onClick: async () => await handleExportDiemLop(),
+                                            },
+                                        ],
+                                    }}
+                                >
+                                    <Button type="primary" icon={<DownloadOutlined />}>
+                                        Xuất bảng điểm
                                     </Button>
-                                </Tooltip>
-                                <Tooltip title="Xuất file excel bảng điểm ngắn hạn, dài hạn">
-                                    <Button
-                                        onClick={async () => await handleExportBangDiem()}
-                                        type="primary"
-                                        icon={<DownloadOutlined />}
-                                    >
-                                        Bảng điểm ngắn hạn, dài hạn
-                                    </Button>
-                                </Tooltip>
-
+                                </Dropdown>
                                 <Button onClick={handleModal} type="primary">
                                     Thêm SV
                                 </Button>
