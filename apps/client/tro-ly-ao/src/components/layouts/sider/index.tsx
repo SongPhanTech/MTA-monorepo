@@ -17,8 +17,6 @@ interface SiderDefaultLayoutProps {
 }
 
 function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
-    console.log('Converting menus to antd format:', menus)
-
     const result = menus.map((item) => ({
         label: item.children ? (
             item.label
@@ -47,7 +45,6 @@ function getMenus(menus: MenuItem[]): ItemType<MenuItemType>[] {
             : undefined,
     }))
 
-    console.log('Converted menu items:', result)
     return result
 }
 
@@ -66,7 +63,6 @@ const findOpenKeys = (menus: MenuItem[], currentPath: string | null): string[] =
     return []
 }
 
-// Component SiderDefaultLayout
 const SiderDefaultLayout = ({
     collapsed,
     theme,
@@ -77,12 +73,7 @@ const SiderDefaultLayout = ({
 }: SiderDefaultLayoutProps) => {
     const pathname = usePathname()
 
-    console.log('SiderDefaultLayout received items:', items)
-    console.log('Current pathname:', pathname)
-
     const [openKeys, setOpenKeys] = useState<string[]>(findOpenKeys(items, pathname))
-
-    console.log('Open keys:', openKeys)
 
     return (
         <Sider

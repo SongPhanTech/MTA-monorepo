@@ -38,10 +38,19 @@ function Page() {
     const { onOpen: openSuaTaiLieu } = useDisclosure<string>({
         tag: 'SuaTaiLieu',
     })
-    const { data: totalCountDocument = 0 } = useCountDocument()
     // Count pending documents
     const { data: totalPendingDocument = 0 } = useCountDocument({
         where: { status: $Enums.DocumentStatus.PENDING },
+    })
+
+    const { data: totalFilteredDocument = 0 } = useCountDocument({
+        where: {
+            status: filters.status,
+            title: {
+                contains: filters.title,
+                mode: 'insensitive',
+            },
+        },
     })
     const { data: documents = [] } = useFindManyDocument({
         include: {
@@ -68,10 +77,21 @@ function Page() {
             ...prev,
             pagination: {
                 ...prev.pagination,
-                total: totalCountDocument,
+                total: totalFilteredDocument,
             },
         }))
-    }, [totalCountDocument])
+    }, [totalFilteredDocument])
+
+    useEffect(() => {
+        setTableParams((prev) => ({
+            ...prev,
+            pagination: {
+                ...prev.pagination,
+                current: 1,
+            },
+        }))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filters.status, filters.title])
 
     const { mutateAsync: deleteDocument } = useDeleteDocument()
     const handleDeleteDocument = async (id: string) => {
@@ -333,7 +353,7 @@ function Page() {
                         data={documents || []}
                         pagination={{
                             ...tableParams.pagination,
-                            total: totalCountDocument,
+                            total: totalFilteredDocument,
                         }}
                         onChange={(pagination) =>
                             setTableParams({
