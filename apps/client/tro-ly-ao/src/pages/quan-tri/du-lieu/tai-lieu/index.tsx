@@ -5,7 +5,7 @@ import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
 import { cn, formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
-import { useCountDocument, useDeleteDocument, useFindManyDocument } from '@workspace/db/hooks'
+import { useCountDocument, useDeleteDocument, useDeleteManyDocumentTopic, useFindManyDocument } from '@workspace/db/hooks'
 import { Button, Input, message, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -38,7 +38,7 @@ function Page() {
     const { onOpen: openSuaTaiLieu } = useDisclosure<string>({
         tag: 'SuaTaiLieu',
     })
-    // Count pending documents
+
     const { data: totalPendingDocument = 0 } = useCountDocument({
         where: { status: $Enums.DocumentStatus.PENDING },
     })
@@ -94,6 +94,8 @@ function Page() {
     }, [filters.status, filters.title])
 
     const { mutateAsync: deleteDocument } = useDeleteDocument()
+    const { mutateAsync: deleteManyDocumentTopic } = useDeleteManyDocumentTopic()
+
     const handleDeleteDocument = async (id: string) => {
         if (!id) return
 
@@ -105,6 +107,10 @@ function Page() {
                 return
             }
 
+            // xóa các DocumentTopic liên quan trước
+            await deleteManyDocumentTopic({ where: { documentId: id } })
+
+            // sau đó xóa Document
             await deleteDocument({ where: { id } })
             message.success('Xoá tài liệu thành công')
         } catch (_error) {
