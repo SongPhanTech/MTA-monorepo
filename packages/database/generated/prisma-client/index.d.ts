@@ -29320,11 +29320,13 @@ export namespace Prisma {
 
   export type QuestionBankCountOutputType = {
     questions: number
+    testStructureRules: number
     exam: number
   }
 
   export type QuestionBankCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     questions?: boolean | QuestionBankCountOutputTypeCountQuestionsArgs
+    testStructureRules?: boolean | QuestionBankCountOutputTypeCountTestStructureRulesArgs
     exam?: boolean | QuestionBankCountOutputTypeCountExamArgs
   }
 
@@ -29344,6 +29346,13 @@ export namespace Prisma {
    */
   export type QuestionBankCountOutputTypeCountQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: QuestionWhereInput
+  }
+
+  /**
+   * QuestionBankCountOutputType without action
+   */
+  export type QuestionBankCountOutputTypeCountTestStructureRulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TestStructureRuleWhereInput
   }
 
   /**
@@ -258322,6 +258331,7 @@ export namespace Prisma {
     subjectVersionId?: boolean
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     questions?: boolean | QuestionBank$questionsArgs<ExtArgs>
+    testStructureRules?: boolean | QuestionBank$testStructureRulesArgs<ExtArgs>
     exam?: boolean | QuestionBank$examArgs<ExtArgs>
     _count?: boolean | QuestionBankCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["questionBank"]>
@@ -258368,6 +258378,7 @@ export namespace Prisma {
   export type QuestionBankInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subjectVersion?: boolean | SubjectVersionDefaultArgs<ExtArgs>
     questions?: boolean | QuestionBank$questionsArgs<ExtArgs>
+    testStructureRules?: boolean | QuestionBank$testStructureRulesArgs<ExtArgs>
     exam?: boolean | QuestionBank$examArgs<ExtArgs>
     _count?: boolean | QuestionBankCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -258383,6 +258394,7 @@ export namespace Prisma {
     objects: {
       subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>
       questions: Prisma.$QuestionPayload<ExtArgs>[]
+      testStructureRules: Prisma.$TestStructureRulePayload<ExtArgs>[]
       exam: Prisma.$ExamPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -258791,6 +258803,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     subjectVersion<T extends SubjectVersionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectVersionDefaultArgs<ExtArgs>>): Prisma__SubjectVersionClient<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     questions<T extends QuestionBank$questionsArgs<ExtArgs> = {}>(args?: Subset<T, QuestionBank$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    testStructureRules<T extends QuestionBank$testStructureRulesArgs<ExtArgs> = {}>(args?: Subset<T, QuestionBank$testStructureRulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestStructureRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     exam<T extends QuestionBank$examArgs<ExtArgs> = {}>(args?: Subset<T, QuestionBank$examArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -259247,6 +259260,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: QuestionScalarFieldEnum | QuestionScalarFieldEnum[]
+  }
+
+  /**
+   * QuestionBank.testStructureRules
+   */
+  export type QuestionBank$testStructureRulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TestStructureRule
+     */
+    select?: TestStructureRuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TestStructureRule
+     */
+    omit?: TestStructureRuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TestStructureRuleInclude<ExtArgs> | null
+    where?: TestStructureRuleWhereInput
+    orderBy?: TestStructureRuleOrderByWithRelationInput | TestStructureRuleOrderByWithRelationInput[]
+    cursor?: TestStructureRuleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TestStructureRuleScalarFieldEnum | TestStructureRuleScalarFieldEnum[]
   }
 
   /**
@@ -269241,6 +269278,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     examId: string | null
+    questionBankId: string | null
     knowledgeBlockId: string | null
     questionPoint: number | null
     questionType: $Enums.QuestionType | null
@@ -269256,6 +269294,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     examId: string | null
+    questionBankId: string | null
     knowledgeBlockId: string | null
     questionPoint: number | null
     questionType: $Enums.QuestionType | null
@@ -269271,6 +269310,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     examId: number
+    questionBankId: number
     knowledgeBlockId: number
     questionPoint: number
     questionType: number
@@ -269298,6 +269338,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     examId?: true
+    questionBankId?: true
     knowledgeBlockId?: true
     questionPoint?: true
     questionType?: true
@@ -269313,6 +269354,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     examId?: true
+    questionBankId?: true
     knowledgeBlockId?: true
     questionPoint?: true
     questionType?: true
@@ -269328,6 +269370,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     examId?: true
+    questionBankId?: true
     knowledgeBlockId?: true
     questionPoint?: true
     questionType?: true
@@ -269429,7 +269472,8 @@ export namespace Prisma {
     deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
-    examId: string
+    examId: string | null
+    questionBankId: string | null
     knowledgeBlockId: string
     questionPoint: number
     questionType: $Enums.QuestionType
@@ -269464,11 +269508,13 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     examId?: boolean
+    questionBankId?: boolean
     knowledgeBlockId?: boolean
     questionPoint?: boolean
     questionType?: boolean
     count?: boolean
-    exam?: boolean | ExamDefaultArgs<ExtArgs>
+    exam?: boolean | TestStructureRule$examArgs<ExtArgs>
+    questionBank?: boolean | TestStructureRule$questionBankArgs<ExtArgs>
     knowledgeBlock?: boolean | KnowledgeBlockDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["testStructureRule"]>
 
@@ -269481,11 +269527,13 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     examId?: boolean
+    questionBankId?: boolean
     knowledgeBlockId?: boolean
     questionPoint?: boolean
     questionType?: boolean
     count?: boolean
-    exam?: boolean | ExamDefaultArgs<ExtArgs>
+    exam?: boolean | TestStructureRule$examArgs<ExtArgs>
+    questionBank?: boolean | TestStructureRule$questionBankArgs<ExtArgs>
     knowledgeBlock?: boolean | KnowledgeBlockDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["testStructureRule"]>
 
@@ -269498,11 +269546,13 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     examId?: boolean
+    questionBankId?: boolean
     knowledgeBlockId?: boolean
     questionPoint?: boolean
     questionType?: boolean
     count?: boolean
-    exam?: boolean | ExamDefaultArgs<ExtArgs>
+    exam?: boolean | TestStructureRule$examArgs<ExtArgs>
+    questionBank?: boolean | TestStructureRule$questionBankArgs<ExtArgs>
     knowledgeBlock?: boolean | KnowledgeBlockDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["testStructureRule"]>
 
@@ -269515,30 +269565,35 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     examId?: boolean
+    questionBankId?: boolean
     knowledgeBlockId?: boolean
     questionPoint?: boolean
     questionType?: boolean
     count?: boolean
   }
 
-  export type TestStructureRuleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "knowledgeBlockId" | "questionPoint" | "questionType" | "count", ExtArgs["result"]["testStructureRule"]>
+  export type TestStructureRuleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "examId" | "questionBankId" | "knowledgeBlockId" | "questionPoint" | "questionType" | "count", ExtArgs["result"]["testStructureRule"]>
   export type TestStructureRuleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    exam?: boolean | ExamDefaultArgs<ExtArgs>
+    exam?: boolean | TestStructureRule$examArgs<ExtArgs>
+    questionBank?: boolean | TestStructureRule$questionBankArgs<ExtArgs>
     knowledgeBlock?: boolean | KnowledgeBlockDefaultArgs<ExtArgs>
   }
   export type TestStructureRuleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    exam?: boolean | ExamDefaultArgs<ExtArgs>
+    exam?: boolean | TestStructureRule$examArgs<ExtArgs>
+    questionBank?: boolean | TestStructureRule$questionBankArgs<ExtArgs>
     knowledgeBlock?: boolean | KnowledgeBlockDefaultArgs<ExtArgs>
   }
   export type TestStructureRuleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    exam?: boolean | ExamDefaultArgs<ExtArgs>
+    exam?: boolean | TestStructureRule$examArgs<ExtArgs>
+    questionBank?: boolean | TestStructureRule$questionBankArgs<ExtArgs>
     knowledgeBlock?: boolean | KnowledgeBlockDefaultArgs<ExtArgs>
   }
 
   export type $TestStructureRulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "TestStructureRule"
     objects: {
-      exam: Prisma.$ExamPayload<ExtArgs>
+      exam: Prisma.$ExamPayload<ExtArgs> | null
+      questionBank: Prisma.$QuestionBankPayload<ExtArgs> | null
       knowledgeBlock: Prisma.$KnowledgeBlockPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -269549,7 +269604,8 @@ export namespace Prisma {
       deletedAt: Date | null
       createdAt: Date
       updatedAt: Date
-      examId: string
+      examId: string | null
+      questionBankId: string | null
       knowledgeBlockId: string
       questionPoint: number
       questionType: $Enums.QuestionType
@@ -269948,7 +270004,8 @@ export namespace Prisma {
    */
   export interface Prisma__TestStructureRuleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    exam<T extends ExamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExamDefaultArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    exam<T extends TestStructureRule$examArgs<ExtArgs> = {}>(args?: Subset<T, TestStructureRule$examArgs<ExtArgs>>): Prisma__ExamClient<$Result.GetResult<Prisma.$ExamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    questionBank<T extends TestStructureRule$questionBankArgs<ExtArgs> = {}>(args?: Subset<T, TestStructureRule$questionBankArgs<ExtArgs>>): Prisma__QuestionBankClient<$Result.GetResult<Prisma.$QuestionBankPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     knowledgeBlock<T extends KnowledgeBlockDefaultArgs<ExtArgs> = {}>(args?: Subset<T, KnowledgeBlockDefaultArgs<ExtArgs>>): Prisma__KnowledgeBlockClient<$Result.GetResult<Prisma.$KnowledgeBlockPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -269987,6 +270044,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"TestStructureRule", 'DateTime'>
     readonly updatedAt: FieldRef<"TestStructureRule", 'DateTime'>
     readonly examId: FieldRef<"TestStructureRule", 'String'>
+    readonly questionBankId: FieldRef<"TestStructureRule", 'String'>
     readonly knowledgeBlockId: FieldRef<"TestStructureRule", 'String'>
     readonly questionPoint: FieldRef<"TestStructureRule", 'Float'>
     readonly questionType: FieldRef<"TestStructureRule", 'QuestionType'>
@@ -270384,6 +270442,44 @@ export namespace Prisma {
      * Limit how many TestStructureRules to delete.
      */
     limit?: number
+  }
+
+  /**
+   * TestStructureRule.exam
+   */
+  export type TestStructureRule$examArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Exam
+     */
+    select?: ExamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Exam
+     */
+    omit?: ExamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExamInclude<ExtArgs> | null
+    where?: ExamWhereInput
+  }
+
+  /**
+   * TestStructureRule.questionBank
+   */
+  export type TestStructureRule$questionBankArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuestionBank
+     */
+    select?: QuestionBankSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuestionBank
+     */
+    omit?: QuestionBankOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuestionBankInclude<ExtArgs> | null
+    where?: QuestionBankWhereInput
   }
 
   /**
@@ -338314,6 +338410,7 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     examId: 'examId',
+    questionBankId: 'questionBankId',
     knowledgeBlockId: 'knowledgeBlockId',
     questionPoint: 'questionPoint',
     questionType: 'questionType',
@@ -341803,6 +341900,7 @@ export namespace Prisma {
     code: 'code',
     description: 'description',
     examId: 'examId',
+    questionBankId: 'questionBankId',
     knowledgeBlockId: 'knowledgeBlockId'
   };
 
@@ -363200,6 +363298,7 @@ export namespace Prisma {
     subjectVersionId?: StringFilter<"QuestionBank"> | string
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     questions?: QuestionListRelationFilter
+    testStructureRules?: TestStructureRuleListRelationFilter
     exam?: ExamListRelationFilter
   }
 
@@ -363215,6 +363314,7 @@ export namespace Prisma {
     subjectVersionId?: SortOrder
     subjectVersion?: SubjectVersionOrderByWithRelationInput
     questions?: QuestionOrderByRelationAggregateInput
+    testStructureRules?: TestStructureRuleOrderByRelationAggregateInput
     exam?: ExamOrderByRelationAggregateInput
     _relevance?: QuestionBankOrderByRelevanceInput
   }
@@ -363235,6 +363335,7 @@ export namespace Prisma {
     subjectVersionId?: StringFilter<"QuestionBank"> | string
     subjectVersion?: XOR<SubjectVersionScalarRelationFilter, SubjectVersionWhereInput>
     questions?: QuestionListRelationFilter
+    testStructureRules?: TestStructureRuleListRelationFilter
     exam?: ExamListRelationFilter
   }, "id" | "code" | "subjectVersionId_name">
 
@@ -364046,12 +364147,14 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"TestStructureRule"> | Date | string | null
     createdAt?: DateTimeFilter<"TestStructureRule"> | Date | string
     updatedAt?: DateTimeFilter<"TestStructureRule"> | Date | string
-    examId?: StringFilter<"TestStructureRule"> | string
+    examId?: StringNullableFilter<"TestStructureRule"> | string | null
+    questionBankId?: StringNullableFilter<"TestStructureRule"> | string | null
     knowledgeBlockId?: StringFilter<"TestStructureRule"> | string
     questionPoint?: FloatFilter<"TestStructureRule"> | number
     questionType?: EnumQuestionTypeFilter<"TestStructureRule"> | $Enums.QuestionType
     count?: IntFilter<"TestStructureRule"> | number
-    exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
+    exam?: XOR<ExamNullableScalarRelationFilter, ExamWhereInput> | null
+    questionBank?: XOR<QuestionBankNullableScalarRelationFilter, QuestionBankWhereInput> | null
     knowledgeBlock?: XOR<KnowledgeBlockScalarRelationFilter, KnowledgeBlockWhereInput>
   }
 
@@ -364063,12 +364166,14 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    examId?: SortOrder
+    examId?: SortOrderInput | SortOrder
+    questionBankId?: SortOrderInput | SortOrder
     knowledgeBlockId?: SortOrder
     questionPoint?: SortOrder
     questionType?: SortOrder
     count?: SortOrder
     exam?: ExamOrderByWithRelationInput
+    questionBank?: QuestionBankOrderByWithRelationInput
     knowledgeBlock?: KnowledgeBlockOrderByWithRelationInput
     _relevance?: TestStructureRuleOrderByRelevanceInput
   }
@@ -364077,6 +364182,7 @@ export namespace Prisma {
     id?: string
     code?: string
     examId_knowledgeBlockId_questionPoint_questionType?: TestStructureRuleExamIdKnowledgeBlockIdQuestionPointQuestionTypeCompoundUniqueInput
+    questionBankId_knowledgeBlockId_questionPoint_questionType?: TestStructureRuleQuestionBankIdKnowledgeBlockIdQuestionPointQuestionTypeCompoundUniqueInput
     AND?: TestStructureRuleWhereInput | TestStructureRuleWhereInput[]
     OR?: TestStructureRuleWhereInput[]
     NOT?: TestStructureRuleWhereInput | TestStructureRuleWhereInput[]
@@ -364085,14 +364191,16 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"TestStructureRule"> | Date | string | null
     createdAt?: DateTimeFilter<"TestStructureRule"> | Date | string
     updatedAt?: DateTimeFilter<"TestStructureRule"> | Date | string
-    examId?: StringFilter<"TestStructureRule"> | string
+    examId?: StringNullableFilter<"TestStructureRule"> | string | null
+    questionBankId?: StringNullableFilter<"TestStructureRule"> | string | null
     knowledgeBlockId?: StringFilter<"TestStructureRule"> | string
     questionPoint?: FloatFilter<"TestStructureRule"> | number
     questionType?: EnumQuestionTypeFilter<"TestStructureRule"> | $Enums.QuestionType
     count?: IntFilter<"TestStructureRule"> | number
-    exam?: XOR<ExamScalarRelationFilter, ExamWhereInput>
+    exam?: XOR<ExamNullableScalarRelationFilter, ExamWhereInput> | null
+    questionBank?: XOR<QuestionBankNullableScalarRelationFilter, QuestionBankWhereInput> | null
     knowledgeBlock?: XOR<KnowledgeBlockScalarRelationFilter, KnowledgeBlockWhereInput>
-  }, "id" | "code" | "examId_knowledgeBlockId_questionPoint_questionType">
+  }, "id" | "code" | "examId_knowledgeBlockId_questionPoint_questionType" | "questionBankId_knowledgeBlockId_questionPoint_questionType">
 
   export type TestStructureRuleOrderByWithAggregationInput = {
     id?: SortOrder
@@ -364102,7 +364210,8 @@ export namespace Prisma {
     deletedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    examId?: SortOrder
+    examId?: SortOrderInput | SortOrder
+    questionBankId?: SortOrderInput | SortOrder
     knowledgeBlockId?: SortOrder
     questionPoint?: SortOrder
     questionType?: SortOrder
@@ -364125,7 +364234,8 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"TestStructureRule"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"TestStructureRule"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TestStructureRule"> | Date | string
-    examId?: StringWithAggregatesFilter<"TestStructureRule"> | string
+    examId?: StringNullableWithAggregatesFilter<"TestStructureRule"> | string | null
+    questionBankId?: StringNullableWithAggregatesFilter<"TestStructureRule"> | string | null
     knowledgeBlockId?: StringWithAggregatesFilter<"TestStructureRule"> | string
     questionPoint?: FloatWithAggregatesFilter<"TestStructureRule"> | number
     questionType?: EnumQuestionTypeWithAggregatesFilter<"TestStructureRule"> | $Enums.QuestionType
@@ -391656,6 +391766,7 @@ export namespace Prisma {
     name: string
     subjectVersion: SubjectVersionCreateNestedOneWithoutQuestionBanksInput
     questions?: QuestionCreateNestedManyWithoutQuestionBankInput
+    testStructureRules?: TestStructureRuleCreateNestedManyWithoutQuestionBankInput
     exam?: ExamCreateNestedManyWithoutQuestionBankInput
   }
 
@@ -391670,6 +391781,7 @@ export namespace Prisma {
     name: string
     subjectVersionId: string
     questions?: QuestionUncheckedCreateNestedManyWithoutQuestionBankInput
+    testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutQuestionBankInput
     exam?: ExamUncheckedCreateNestedManyWithoutQuestionBankInput
   }
 
@@ -391684,6 +391796,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutQuestionBanksNestedInput
     questions?: QuestionUpdateManyWithoutQuestionBankNestedInput
+    testStructureRules?: TestStructureRuleUpdateManyWithoutQuestionBankNestedInput
     exam?: ExamUpdateManyWithoutQuestionBankNestedInput
   }
 
@@ -391698,6 +391811,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
     questions?: QuestionUncheckedUpdateManyWithoutQuestionBankNestedInput
+    testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutQuestionBankNestedInput
     exam?: ExamUncheckedUpdateManyWithoutQuestionBankNestedInput
   }
 
@@ -392586,7 +392700,8 @@ export namespace Prisma {
     questionPoint: number
     questionType: $Enums.QuestionType
     count: number
-    exam: ExamCreateNestedOneWithoutTestStructureRulesInput
+    exam?: ExamCreateNestedOneWithoutTestStructureRulesInput
+    questionBank?: QuestionBankCreateNestedOneWithoutTestStructureRulesInput
     knowledgeBlock: KnowledgeBlockCreateNestedOneWithoutStructureRulesInput
   }
 
@@ -392598,7 +392713,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    examId: string
+    examId?: string | null
+    questionBankId?: string | null
     knowledgeBlockId: string
     questionPoint: number
     questionType: $Enums.QuestionType
@@ -392616,7 +392732,8 @@ export namespace Prisma {
     questionPoint?: FloatFieldUpdateOperationsInput | number
     questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     count?: IntFieldUpdateOperationsInput | number
-    exam?: ExamUpdateOneRequiredWithoutTestStructureRulesNestedInput
+    exam?: ExamUpdateOneWithoutTestStructureRulesNestedInput
+    questionBank?: QuestionBankUpdateOneWithoutTestStructureRulesNestedInput
     knowledgeBlock?: KnowledgeBlockUpdateOneRequiredWithoutStructureRulesNestedInput
   }
 
@@ -392628,7 +392745,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    examId?: StringFieldUpdateOperationsInput | string
+    examId?: NullableStringFieldUpdateOperationsInput | string | null
+    questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     knowledgeBlockId?: StringFieldUpdateOperationsInput | string
     questionPoint?: FloatFieldUpdateOperationsInput | number
     questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
@@ -392643,7 +392761,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    examId: string
+    examId?: string | null
+    questionBankId?: string | null
     knowledgeBlockId: string
     questionPoint: number
     questionType: $Enums.QuestionType
@@ -392671,7 +392790,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    examId?: StringFieldUpdateOperationsInput | string
+    examId?: NullableStringFieldUpdateOperationsInput | string | null
+    questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     knowledgeBlockId?: StringFieldUpdateOperationsInput | string
     questionPoint?: FloatFieldUpdateOperationsInput | number
     questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
@@ -412699,7 +412819,17 @@ export namespace Prisma {
     none?: QuestionWhereInput
   }
 
+  export type TestStructureRuleListRelationFilter = {
+    every?: TestStructureRuleWhereInput
+    some?: TestStructureRuleWhereInput
+    none?: TestStructureRuleWhereInput
+  }
+
   export type QuestionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TestStructureRuleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -412798,16 +412928,6 @@ export namespace Prisma {
 
   export type DifficultySumOrderByAggregateInput = {
     level?: SortOrder
-  }
-
-  export type TestStructureRuleListRelationFilter = {
-    every?: TestStructureRuleWhereInput
-    some?: TestStructureRuleWhereInput
-    none?: TestStructureRuleWhereInput
-  }
-
-  export type TestStructureRuleOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type KnowledgeBlockOrderByRelevanceInput = {
@@ -413362,6 +413482,13 @@ export namespace Prisma {
     questionType: $Enums.QuestionType
   }
 
+  export type TestStructureRuleQuestionBankIdKnowledgeBlockIdQuestionPointQuestionTypeCompoundUniqueInput = {
+    questionBankId: string
+    knowledgeBlockId: string
+    questionPoint: number
+    questionType: $Enums.QuestionType
+  }
+
   export type TestStructureRuleCountOrderByAggregateInput = {
     id?: SortOrder
     code?: SortOrder
@@ -413371,6 +413498,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     examId?: SortOrder
+    questionBankId?: SortOrder
     knowledgeBlockId?: SortOrder
     questionPoint?: SortOrder
     questionType?: SortOrder
@@ -413391,6 +413519,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     examId?: SortOrder
+    questionBankId?: SortOrder
     knowledgeBlockId?: SortOrder
     questionPoint?: SortOrder
     questionType?: SortOrder
@@ -413406,6 +413535,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     examId?: SortOrder
+    questionBankId?: SortOrder
     knowledgeBlockId?: SortOrder
     questionPoint?: SortOrder
     questionType?: SortOrder
@@ -436494,6 +436624,13 @@ export namespace Prisma {
     connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
   }
 
+  export type TestStructureRuleCreateNestedManyWithoutQuestionBankInput = {
+    create?: XOR<TestStructureRuleCreateWithoutQuestionBankInput, TestStructureRuleUncheckedCreateWithoutQuestionBankInput> | TestStructureRuleCreateWithoutQuestionBankInput[] | TestStructureRuleUncheckedCreateWithoutQuestionBankInput[]
+    connectOrCreate?: TestStructureRuleCreateOrConnectWithoutQuestionBankInput | TestStructureRuleCreateOrConnectWithoutQuestionBankInput[]
+    createMany?: TestStructureRuleCreateManyQuestionBankInputEnvelope
+    connect?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
+  }
+
   export type ExamCreateNestedManyWithoutQuestionBankInput = {
     create?: XOR<ExamCreateWithoutQuestionBankInput, ExamUncheckedCreateWithoutQuestionBankInput> | ExamCreateWithoutQuestionBankInput[] | ExamUncheckedCreateWithoutQuestionBankInput[]
     connectOrCreate?: ExamCreateOrConnectWithoutQuestionBankInput | ExamCreateOrConnectWithoutQuestionBankInput[]
@@ -436506,6 +436643,13 @@ export namespace Prisma {
     connectOrCreate?: QuestionCreateOrConnectWithoutQuestionBankInput | QuestionCreateOrConnectWithoutQuestionBankInput[]
     createMany?: QuestionCreateManyQuestionBankInputEnvelope
     connect?: QuestionWhereUniqueInput | QuestionWhereUniqueInput[]
+  }
+
+  export type TestStructureRuleUncheckedCreateNestedManyWithoutQuestionBankInput = {
+    create?: XOR<TestStructureRuleCreateWithoutQuestionBankInput, TestStructureRuleUncheckedCreateWithoutQuestionBankInput> | TestStructureRuleCreateWithoutQuestionBankInput[] | TestStructureRuleUncheckedCreateWithoutQuestionBankInput[]
+    connectOrCreate?: TestStructureRuleCreateOrConnectWithoutQuestionBankInput | TestStructureRuleCreateOrConnectWithoutQuestionBankInput[]
+    createMany?: TestStructureRuleCreateManyQuestionBankInputEnvelope
+    connect?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
   }
 
   export type ExamUncheckedCreateNestedManyWithoutQuestionBankInput = {
@@ -436537,6 +436681,20 @@ export namespace Prisma {
     deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
   }
 
+  export type TestStructureRuleUpdateManyWithoutQuestionBankNestedInput = {
+    create?: XOR<TestStructureRuleCreateWithoutQuestionBankInput, TestStructureRuleUncheckedCreateWithoutQuestionBankInput> | TestStructureRuleCreateWithoutQuestionBankInput[] | TestStructureRuleUncheckedCreateWithoutQuestionBankInput[]
+    connectOrCreate?: TestStructureRuleCreateOrConnectWithoutQuestionBankInput | TestStructureRuleCreateOrConnectWithoutQuestionBankInput[]
+    upsert?: TestStructureRuleUpsertWithWhereUniqueWithoutQuestionBankInput | TestStructureRuleUpsertWithWhereUniqueWithoutQuestionBankInput[]
+    createMany?: TestStructureRuleCreateManyQuestionBankInputEnvelope
+    set?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
+    disconnect?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
+    delete?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
+    connect?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
+    update?: TestStructureRuleUpdateWithWhereUniqueWithoutQuestionBankInput | TestStructureRuleUpdateWithWhereUniqueWithoutQuestionBankInput[]
+    updateMany?: TestStructureRuleUpdateManyWithWhereWithoutQuestionBankInput | TestStructureRuleUpdateManyWithWhereWithoutQuestionBankInput[]
+    deleteMany?: TestStructureRuleScalarWhereInput | TestStructureRuleScalarWhereInput[]
+  }
+
   export type ExamUpdateManyWithoutQuestionBankNestedInput = {
     create?: XOR<ExamCreateWithoutQuestionBankInput, ExamUncheckedCreateWithoutQuestionBankInput> | ExamCreateWithoutQuestionBankInput[] | ExamUncheckedCreateWithoutQuestionBankInput[]
     connectOrCreate?: ExamCreateOrConnectWithoutQuestionBankInput | ExamCreateOrConnectWithoutQuestionBankInput[]
@@ -436563,6 +436721,20 @@ export namespace Prisma {
     update?: QuestionUpdateWithWhereUniqueWithoutQuestionBankInput | QuestionUpdateWithWhereUniqueWithoutQuestionBankInput[]
     updateMany?: QuestionUpdateManyWithWhereWithoutQuestionBankInput | QuestionUpdateManyWithWhereWithoutQuestionBankInput[]
     deleteMany?: QuestionScalarWhereInput | QuestionScalarWhereInput[]
+  }
+
+  export type TestStructureRuleUncheckedUpdateManyWithoutQuestionBankNestedInput = {
+    create?: XOR<TestStructureRuleCreateWithoutQuestionBankInput, TestStructureRuleUncheckedCreateWithoutQuestionBankInput> | TestStructureRuleCreateWithoutQuestionBankInput[] | TestStructureRuleUncheckedCreateWithoutQuestionBankInput[]
+    connectOrCreate?: TestStructureRuleCreateOrConnectWithoutQuestionBankInput | TestStructureRuleCreateOrConnectWithoutQuestionBankInput[]
+    upsert?: TestStructureRuleUpsertWithWhereUniqueWithoutQuestionBankInput | TestStructureRuleUpsertWithWhereUniqueWithoutQuestionBankInput[]
+    createMany?: TestStructureRuleCreateManyQuestionBankInputEnvelope
+    set?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
+    disconnect?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
+    delete?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
+    connect?: TestStructureRuleWhereUniqueInput | TestStructureRuleWhereUniqueInput[]
+    update?: TestStructureRuleUpdateWithWhereUniqueWithoutQuestionBankInput | TestStructureRuleUpdateWithWhereUniqueWithoutQuestionBankInput[]
+    updateMany?: TestStructureRuleUpdateManyWithWhereWithoutQuestionBankInput | TestStructureRuleUpdateManyWithWhereWithoutQuestionBankInput[]
+    deleteMany?: TestStructureRuleScalarWhereInput | TestStructureRuleScalarWhereInput[]
   }
 
   export type ExamUncheckedUpdateManyWithoutQuestionBankNestedInput = {
@@ -437399,18 +437571,36 @@ export namespace Prisma {
     connect?: ExamWhereUniqueInput
   }
 
+  export type QuestionBankCreateNestedOneWithoutTestStructureRulesInput = {
+    create?: XOR<QuestionBankCreateWithoutTestStructureRulesInput, QuestionBankUncheckedCreateWithoutTestStructureRulesInput>
+    connectOrCreate?: QuestionBankCreateOrConnectWithoutTestStructureRulesInput
+    connect?: QuestionBankWhereUniqueInput
+  }
+
   export type KnowledgeBlockCreateNestedOneWithoutStructureRulesInput = {
     create?: XOR<KnowledgeBlockCreateWithoutStructureRulesInput, KnowledgeBlockUncheckedCreateWithoutStructureRulesInput>
     connectOrCreate?: KnowledgeBlockCreateOrConnectWithoutStructureRulesInput
     connect?: KnowledgeBlockWhereUniqueInput
   }
 
-  export type ExamUpdateOneRequiredWithoutTestStructureRulesNestedInput = {
+  export type ExamUpdateOneWithoutTestStructureRulesNestedInput = {
     create?: XOR<ExamCreateWithoutTestStructureRulesInput, ExamUncheckedCreateWithoutTestStructureRulesInput>
     connectOrCreate?: ExamCreateOrConnectWithoutTestStructureRulesInput
     upsert?: ExamUpsertWithoutTestStructureRulesInput
+    disconnect?: ExamWhereInput | boolean
+    delete?: ExamWhereInput | boolean
     connect?: ExamWhereUniqueInput
     update?: XOR<XOR<ExamUpdateToOneWithWhereWithoutTestStructureRulesInput, ExamUpdateWithoutTestStructureRulesInput>, ExamUncheckedUpdateWithoutTestStructureRulesInput>
+  }
+
+  export type QuestionBankUpdateOneWithoutTestStructureRulesNestedInput = {
+    create?: XOR<QuestionBankCreateWithoutTestStructureRulesInput, QuestionBankUncheckedCreateWithoutTestStructureRulesInput>
+    connectOrCreate?: QuestionBankCreateOrConnectWithoutTestStructureRulesInput
+    upsert?: QuestionBankUpsertWithoutTestStructureRulesInput
+    disconnect?: QuestionBankWhereInput | boolean
+    delete?: QuestionBankWhereInput | boolean
+    connect?: QuestionBankWhereUniqueInput
+    update?: XOR<XOR<QuestionBankUpdateToOneWithWhereWithoutTestStructureRulesInput, QuestionBankUpdateWithoutTestStructureRulesInput>, QuestionBankUncheckedUpdateWithoutTestStructureRulesInput>
   }
 
   export type KnowledgeBlockUpdateOneRequiredWithoutStructureRulesNestedInput = {
@@ -497025,6 +497215,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     questions?: QuestionCreateNestedManyWithoutQuestionBankInput
+    testStructureRules?: TestStructureRuleCreateNestedManyWithoutQuestionBankInput
     exam?: ExamCreateNestedManyWithoutQuestionBankInput
   }
 
@@ -497038,6 +497229,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     questions?: QuestionUncheckedCreateNestedManyWithoutQuestionBankInput
+    testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutQuestionBankInput
     exam?: ExamUncheckedCreateNestedManyWithoutQuestionBankInput
   }
 
@@ -534583,6 +534775,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TestStructureRuleCreateWithoutQuestionBankInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    questionPoint: number
+    questionType: $Enums.QuestionType
+    count: number
+    exam?: ExamCreateNestedOneWithoutTestStructureRulesInput
+    knowledgeBlock: KnowledgeBlockCreateNestedOneWithoutStructureRulesInput
+  }
+
+  export type TestStructureRuleUncheckedCreateWithoutQuestionBankInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    examId?: string | null
+    knowledgeBlockId: string
+    questionPoint: number
+    questionType: $Enums.QuestionType
+    count: number
+  }
+
+  export type TestStructureRuleCreateOrConnectWithoutQuestionBankInput = {
+    where: TestStructureRuleWhereUniqueInput
+    create: XOR<TestStructureRuleCreateWithoutQuestionBankInput, TestStructureRuleUncheckedCreateWithoutQuestionBankInput>
+  }
+
+  export type TestStructureRuleCreateManyQuestionBankInputEnvelope = {
+    data: TestStructureRuleCreateManyQuestionBankInput | TestStructureRuleCreateManyQuestionBankInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ExamCreateWithoutQuestionBankInput = {
     id?: string
     code?: string | null
@@ -534783,6 +535015,41 @@ export namespace Prisma {
     questionBankId?: StringFilter<"Question"> | string
     knowledgeBlockId?: StringNullableFilter<"Question"> | string | null
     difficultyId?: StringNullableFilter<"Question"> | string | null
+  }
+
+  export type TestStructureRuleUpsertWithWhereUniqueWithoutQuestionBankInput = {
+    where: TestStructureRuleWhereUniqueInput
+    update: XOR<TestStructureRuleUpdateWithoutQuestionBankInput, TestStructureRuleUncheckedUpdateWithoutQuestionBankInput>
+    create: XOR<TestStructureRuleCreateWithoutQuestionBankInput, TestStructureRuleUncheckedCreateWithoutQuestionBankInput>
+  }
+
+  export type TestStructureRuleUpdateWithWhereUniqueWithoutQuestionBankInput = {
+    where: TestStructureRuleWhereUniqueInput
+    data: XOR<TestStructureRuleUpdateWithoutQuestionBankInput, TestStructureRuleUncheckedUpdateWithoutQuestionBankInput>
+  }
+
+  export type TestStructureRuleUpdateManyWithWhereWithoutQuestionBankInput = {
+    where: TestStructureRuleScalarWhereInput
+    data: XOR<TestStructureRuleUpdateManyMutationInput, TestStructureRuleUncheckedUpdateManyWithoutQuestionBankInput>
+  }
+
+  export type TestStructureRuleScalarWhereInput = {
+    AND?: TestStructureRuleScalarWhereInput | TestStructureRuleScalarWhereInput[]
+    OR?: TestStructureRuleScalarWhereInput[]
+    NOT?: TestStructureRuleScalarWhereInput | TestStructureRuleScalarWhereInput[]
+    id?: StringFilter<"TestStructureRule"> | string
+    code?: StringNullableFilter<"TestStructureRule"> | string | null
+    active?: BoolFilter<"TestStructureRule"> | boolean
+    description?: StringNullableFilter<"TestStructureRule"> | string | null
+    deletedAt?: DateTimeNullableFilter<"TestStructureRule"> | Date | string | null
+    createdAt?: DateTimeFilter<"TestStructureRule"> | Date | string
+    updatedAt?: DateTimeFilter<"TestStructureRule"> | Date | string
+    examId?: StringNullableFilter<"TestStructureRule"> | string | null
+    questionBankId?: StringNullableFilter<"TestStructureRule"> | string | null
+    knowledgeBlockId?: StringFilter<"TestStructureRule"> | string
+    questionPoint?: FloatFilter<"TestStructureRule"> | number
+    questionType?: EnumQuestionTypeFilter<"TestStructureRule"> | $Enums.QuestionType
+    count?: IntFilter<"TestStructureRule"> | number
   }
 
   export type ExamUpsertWithWhereUniqueWithoutQuestionBankInput = {
@@ -535041,7 +535308,8 @@ export namespace Prisma {
     questionPoint: number
     questionType: $Enums.QuestionType
     count: number
-    exam: ExamCreateNestedOneWithoutTestStructureRulesInput
+    exam?: ExamCreateNestedOneWithoutTestStructureRulesInput
+    questionBank?: QuestionBankCreateNestedOneWithoutTestStructureRulesInput
   }
 
   export type TestStructureRuleUncheckedCreateWithoutKnowledgeBlockInput = {
@@ -535052,7 +535320,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    examId: string
+    examId?: string | null
+    questionBankId?: string | null
     questionPoint: number
     questionType: $Enums.QuestionType
     count: number
@@ -535215,24 +535484,6 @@ export namespace Prisma {
     data: XOR<TestStructureRuleUpdateManyMutationInput, TestStructureRuleUncheckedUpdateManyWithoutKnowledgeBlockInput>
   }
 
-  export type TestStructureRuleScalarWhereInput = {
-    AND?: TestStructureRuleScalarWhereInput | TestStructureRuleScalarWhereInput[]
-    OR?: TestStructureRuleScalarWhereInput[]
-    NOT?: TestStructureRuleScalarWhereInput | TestStructureRuleScalarWhereInput[]
-    id?: StringFilter<"TestStructureRule"> | string
-    code?: StringNullableFilter<"TestStructureRule"> | string | null
-    active?: BoolFilter<"TestStructureRule"> | boolean
-    description?: StringNullableFilter<"TestStructureRule"> | string | null
-    deletedAt?: DateTimeNullableFilter<"TestStructureRule"> | Date | string | null
-    createdAt?: DateTimeFilter<"TestStructureRule"> | Date | string
-    updatedAt?: DateTimeFilter<"TestStructureRule"> | Date | string
-    examId?: StringFilter<"TestStructureRule"> | string
-    knowledgeBlockId?: StringFilter<"TestStructureRule"> | string
-    questionPoint?: FloatFilter<"TestStructureRule"> | number
-    questionType?: EnumQuestionTypeFilter<"TestStructureRule"> | $Enums.QuestionType
-    count?: IntFilter<"TestStructureRule"> | number
-  }
-
   export type MultipleChoiceOptionCreateWithoutQuestionInput = {
     id?: string
     code?: string | null
@@ -535347,6 +535598,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     subjectVersion: SubjectVersionCreateNestedOneWithoutQuestionBanksInput
+    testStructureRules?: TestStructureRuleCreateNestedManyWithoutQuestionBankInput
     exam?: ExamCreateNestedManyWithoutQuestionBankInput
   }
 
@@ -535360,6 +535612,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     name: string
     subjectVersionId: string
+    testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutQuestionBankInput
     exam?: ExamUncheckedCreateNestedManyWithoutQuestionBankInput
   }
 
@@ -535580,6 +535833,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutQuestionBanksNestedInput
+    testStructureRules?: TestStructureRuleUpdateManyWithoutQuestionBankNestedInput
     exam?: ExamUpdateManyWithoutQuestionBankNestedInput
   }
 
@@ -535593,6 +535847,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
+    testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutQuestionBankNestedInput
     exam?: ExamUncheckedUpdateManyWithoutQuestionBankNestedInput
   }
 
@@ -536011,6 +536266,7 @@ export namespace Prisma {
     name: string
     subjectVersion: SubjectVersionCreateNestedOneWithoutQuestionBanksInput
     questions?: QuestionCreateNestedManyWithoutQuestionBankInput
+    testStructureRules?: TestStructureRuleCreateNestedManyWithoutQuestionBankInput
   }
 
   export type QuestionBankUncheckedCreateWithoutExamInput = {
@@ -536024,6 +536280,7 @@ export namespace Prisma {
     name: string
     subjectVersionId: string
     questions?: QuestionUncheckedCreateNestedManyWithoutQuestionBankInput
+    testStructureRules?: TestStructureRuleUncheckedCreateNestedManyWithoutQuestionBankInput
   }
 
   export type QuestionBankCreateOrConnectWithoutExamInput = {
@@ -536317,6 +536574,7 @@ export namespace Prisma {
     questionPoint: number
     questionType: $Enums.QuestionType
     count: number
+    questionBank?: QuestionBankCreateNestedOneWithoutTestStructureRulesInput
     knowledgeBlock: KnowledgeBlockCreateNestedOneWithoutStructureRulesInput
   }
 
@@ -536328,6 +536586,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    questionBankId?: string | null
     knowledgeBlockId: string
     questionPoint: number
     questionType: $Enums.QuestionType
@@ -536446,6 +536705,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     subjectVersion?: SubjectVersionUpdateOneRequiredWithoutQuestionBanksNestedInput
     questions?: QuestionUpdateManyWithoutQuestionBankNestedInput
+    testStructureRules?: TestStructureRuleUpdateManyWithoutQuestionBankNestedInput
   }
 
   export type QuestionBankUncheckedUpdateWithoutExamInput = {
@@ -536459,6 +536719,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     subjectVersionId?: StringFieldUpdateOperationsInput | string
     questions?: QuestionUncheckedUpdateManyWithoutQuestionBankNestedInput
+    testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutQuestionBankNestedInput
   }
 
   export type SubjectClassUpsertWithWhereUniqueWithoutExamInput = {
@@ -537186,6 +537447,39 @@ export namespace Prisma {
     create: XOR<ExamCreateWithoutTestStructureRulesInput, ExamUncheckedCreateWithoutTestStructureRulesInput>
   }
 
+  export type QuestionBankCreateWithoutTestStructureRulesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    subjectVersion: SubjectVersionCreateNestedOneWithoutQuestionBanksInput
+    questions?: QuestionCreateNestedManyWithoutQuestionBankInput
+    exam?: ExamCreateNestedManyWithoutQuestionBankInput
+  }
+
+  export type QuestionBankUncheckedCreateWithoutTestStructureRulesInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    subjectVersionId: string
+    questions?: QuestionUncheckedCreateNestedManyWithoutQuestionBankInput
+    exam?: ExamUncheckedCreateNestedManyWithoutQuestionBankInput
+  }
+
+  export type QuestionBankCreateOrConnectWithoutTestStructureRulesInput = {
+    where: QuestionBankWhereUniqueInput
+    create: XOR<QuestionBankCreateWithoutTestStructureRulesInput, QuestionBankUncheckedCreateWithoutTestStructureRulesInput>
+  }
+
   export type KnowledgeBlockCreateWithoutStructureRulesInput = {
     id?: string
     code?: string | null
@@ -537266,6 +537560,45 @@ export namespace Prisma {
     examBank?: ExamBankUncheckedUpdateManyWithoutExamNestedInput
     examSessions?: ExamSessionUncheckedUpdateManyWithoutExamNestedInput
     examRooms?: ExamRoomUncheckedUpdateManyWithoutExamNestedInput
+  }
+
+  export type QuestionBankUpsertWithoutTestStructureRulesInput = {
+    update: XOR<QuestionBankUpdateWithoutTestStructureRulesInput, QuestionBankUncheckedUpdateWithoutTestStructureRulesInput>
+    create: XOR<QuestionBankCreateWithoutTestStructureRulesInput, QuestionBankUncheckedCreateWithoutTestStructureRulesInput>
+    where?: QuestionBankWhereInput
+  }
+
+  export type QuestionBankUpdateToOneWithWhereWithoutTestStructureRulesInput = {
+    where?: QuestionBankWhereInput
+    data: XOR<QuestionBankUpdateWithoutTestStructureRulesInput, QuestionBankUncheckedUpdateWithoutTestStructureRulesInput>
+  }
+
+  export type QuestionBankUpdateWithoutTestStructureRulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    subjectVersion?: SubjectVersionUpdateOneRequiredWithoutQuestionBanksNestedInput
+    questions?: QuestionUpdateManyWithoutQuestionBankNestedInput
+    exam?: ExamUpdateManyWithoutQuestionBankNestedInput
+  }
+
+  export type QuestionBankUncheckedUpdateWithoutTestStructureRulesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    subjectVersionId?: StringFieldUpdateOperationsInput | string
+    questions?: QuestionUncheckedUpdateManyWithoutQuestionBankNestedInput
+    exam?: ExamUncheckedUpdateManyWithoutQuestionBankNestedInput
   }
 
   export type KnowledgeBlockUpsertWithoutStructureRulesInput = {
@@ -578348,6 +578681,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     questions?: QuestionUpdateManyWithoutQuestionBankNestedInput
+    testStructureRules?: TestStructureRuleUpdateManyWithoutQuestionBankNestedInput
     exam?: ExamUpdateManyWithoutQuestionBankNestedInput
   }
 
@@ -578361,6 +578695,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     name?: StringFieldUpdateOperationsInput | string
     questions?: QuestionUncheckedUpdateManyWithoutQuestionBankNestedInput
+    testStructureRules?: TestStructureRuleUncheckedUpdateManyWithoutQuestionBankNestedInput
     exam?: ExamUncheckedUpdateManyWithoutQuestionBankNestedInput
   }
 
@@ -593100,6 +593435,21 @@ export namespace Prisma {
     difficultyId?: string | null
   }
 
+  export type TestStructureRuleCreateManyQuestionBankInput = {
+    id?: string
+    code?: string | null
+    active?: boolean
+    description?: string | null
+    deletedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    examId?: string | null
+    knowledgeBlockId: string
+    questionPoint: number
+    questionType: $Enums.QuestionType
+    count: number
+  }
+
   export type ExamCreateManyQuestionBankInput = {
     id?: string
     code?: string | null
@@ -593170,6 +593520,51 @@ export namespace Prisma {
     isAutoGraded?: BoolFieldUpdateOperationsInput | boolean
     knowledgeBlockId?: NullableStringFieldUpdateOperationsInput | string | null
     difficultyId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TestStructureRuleUpdateWithoutQuestionBankInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionPoint?: FloatFieldUpdateOperationsInput | number
+    questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+    count?: IntFieldUpdateOperationsInput | number
+    exam?: ExamUpdateOneWithoutTestStructureRulesNestedInput
+    knowledgeBlock?: KnowledgeBlockUpdateOneRequiredWithoutStructureRulesNestedInput
+  }
+
+  export type TestStructureRuleUncheckedUpdateWithoutQuestionBankInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    examId?: NullableStringFieldUpdateOperationsInput | string | null
+    knowledgeBlockId?: StringFieldUpdateOperationsInput | string
+    questionPoint?: FloatFieldUpdateOperationsInput | number
+    questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+    count?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type TestStructureRuleUncheckedUpdateManyWithoutQuestionBankInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    examId?: NullableStringFieldUpdateOperationsInput | string | null
+    knowledgeBlockId?: StringFieldUpdateOperationsInput | string
+    questionPoint?: FloatFieldUpdateOperationsInput | number
+    questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
+    count?: IntFieldUpdateOperationsInput | number
   }
 
   export type ExamUpdateWithoutQuestionBankInput = {
@@ -593326,7 +593721,8 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    examId: string
+    examId?: string | null
+    questionBankId?: string | null
     questionPoint: number
     questionType: $Enums.QuestionType
     count: number
@@ -593402,7 +593798,8 @@ export namespace Prisma {
     questionPoint?: FloatFieldUpdateOperationsInput | number
     questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     count?: IntFieldUpdateOperationsInput | number
-    exam?: ExamUpdateOneRequiredWithoutTestStructureRulesNestedInput
+    exam?: ExamUpdateOneWithoutTestStructureRulesNestedInput
+    questionBank?: QuestionBankUpdateOneWithoutTestStructureRulesNestedInput
   }
 
   export type TestStructureRuleUncheckedUpdateWithoutKnowledgeBlockInput = {
@@ -593413,7 +593810,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    examId?: StringFieldUpdateOperationsInput | string
+    examId?: NullableStringFieldUpdateOperationsInput | string | null
+    questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     questionPoint?: FloatFieldUpdateOperationsInput | number
     questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     count?: IntFieldUpdateOperationsInput | number
@@ -593427,7 +593825,8 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    examId?: StringFieldUpdateOperationsInput | string
+    examId?: NullableStringFieldUpdateOperationsInput | string | null
+    questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     questionPoint?: FloatFieldUpdateOperationsInput | number
     questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     count?: IntFieldUpdateOperationsInput | number
@@ -593717,6 +594116,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    questionBankId?: string | null
     knowledgeBlockId: string
     questionPoint: number
     questionType: $Enums.QuestionType
@@ -594101,6 +594501,7 @@ export namespace Prisma {
     questionPoint?: FloatFieldUpdateOperationsInput | number
     questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     count?: IntFieldUpdateOperationsInput | number
+    questionBank?: QuestionBankUpdateOneWithoutTestStructureRulesNestedInput
     knowledgeBlock?: KnowledgeBlockUpdateOneRequiredWithoutStructureRulesNestedInput
   }
 
@@ -594112,6 +594513,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     knowledgeBlockId?: StringFieldUpdateOperationsInput | string
     questionPoint?: FloatFieldUpdateOperationsInput | number
     questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
@@ -594126,6 +594528,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
     knowledgeBlockId?: StringFieldUpdateOperationsInput | string
     questionPoint?: FloatFieldUpdateOperationsInput | number
     questionType?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType

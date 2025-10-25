@@ -21,12 +21,14 @@ const baseSchema = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    exam: z.record(z.unknown()),
+    exam: z.record(z.unknown()).optional(),
+    questionBank: z.record(z.unknown()).optional(),
     knowledgeBlock: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
-    examId: z.string(),
+    examId: z.string().nullish(),
+    questionBankId: z.string().nullish(),
     knowledgeBlockId: z.string(),
 }
 );

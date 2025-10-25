@@ -18803,6 +18803,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'questionBank',
+                }, testStructureRules: {
+                    name: "testStructureRules",
+                    type: "TestStructureRule",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'questionBank',
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -19575,6 +19581,7 @@ const metadata = {
                     name: "exam",
                     type: "Exam",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'testStructureRules',
                     isRelationOwner: true,
@@ -19582,8 +19589,24 @@ const metadata = {
                 }, examId: {
                     name: "examId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'exam',
+                }, questionBank: {
+                    name: "questionBank",
+                    type: "QuestionBank",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'testStructureRules',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "questionBankId" },
+                }, questionBankId: {
+                    name: "questionBankId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'questionBank',
                 }, knowledgeBlock: {
                     name: "knowledgeBlock",
                     type: "KnowledgeBlock",
@@ -19617,9 +19640,12 @@ const metadata = {
                 }, examId_knowledgeBlockId_questionPoint_questionType: {
                     name: "examId_knowledgeBlockId_questionPoint_questionType",
                     fields: ["examId", "knowledgeBlockId", "questionPoint", "questionType"]
+                }, questionBankId_knowledgeBlockId_questionPoint_questionType: {
+                    name: "questionBankId_knowledgeBlockId_questionPoint_questionType",
+                    fields: ["questionBankId", "knowledgeBlockId", "questionPoint", "questionType"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         examBank: {
             name: 'ExamBank', fields: {

@@ -3338,6 +3338,7 @@ exports.Prisma.TestStructureRuleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   examId: 'examId',
+  questionBankId: 'questionBankId',
   knowledgeBlockId: 'knowledgeBlockId',
   questionPoint: 'questionPoint',
   questionType: 'questionType',
@@ -6077,6 +6078,7 @@ exports.Prisma.TestStructureRuleOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   examId: 'examId',
+  questionBankId: 'questionBankId',
   knowledgeBlockId: 'knowledgeBlockId'
 };
 

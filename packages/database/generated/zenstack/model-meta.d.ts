@@ -33596,6 +33596,13 @@ declare const metadata: {
                     isArray: boolean;
                     backLink: string;
                 };
+                testStructureRules: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isArray: boolean;
+                    backLink: string;
+                };
                 exam: {
                     name: string;
                     type: string;
@@ -35021,6 +35028,7 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
+                    isOptional: boolean;
                     attributes: {
                         name: string;
                         args: {
@@ -35037,6 +35045,32 @@ declare const metadata: {
                 examId: {
                     name: string;
                     type: string;
+                    isOptional: boolean;
+                    isForeignKey: boolean;
+                    relationField: string;
+                };
+                questionBank: {
+                    name: string;
+                    type: string;
+                    isDataModel: boolean;
+                    isOptional: boolean;
+                    attributes: {
+                        name: string;
+                        args: {
+                            name: string;
+                            value: null[];
+                        }[];
+                    }[];
+                    backLink: string;
+                    isRelationOwner: boolean;
+                    foreignKeyMapping: {
+                        id: string;
+                    };
+                };
+                questionBankId: {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
                     isForeignKey: boolean;
                     relationField: string;
                 };
@@ -35086,6 +35120,10 @@ declare const metadata: {
                     fields: string[];
                 };
                 examId_knowledgeBlockId_questionPoint_questionType: {
+                    name: string;
+                    fields: string[];
+                };
+                questionBankId_knowledgeBlockId_questionPoint_questionType: {
                     name: string;
                     fields: string[];
                 };

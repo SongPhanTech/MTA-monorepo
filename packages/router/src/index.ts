@@ -677,11 +677,11 @@ const NAVIGATION: NavigationType = {
                         label: 'Chuẩn đầu ra',
                         path: ROUTER_PATH.KHAO_THI.DANH_MUC_DANH_MUC_CHUONG_MUC,
                     },
-                    // {
-                    //     id: KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_MUC_DO_KHO,
-                    //     label: 'Danh mục mức độ khó',
-                    //     path: ROUTER_PATH.KHAO_THI.DANH_MUC_MUC_DO_KHO,
-                    // },
+                    {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_DANH_MUC_MUC_DO_KHO,
+                        label: 'Mức độ khó',
+                        path: ROUTER_PATH.KHAO_THI.DANH_MUC_MUC_DO_KHO,
+                    },
                 ],
             },
             {

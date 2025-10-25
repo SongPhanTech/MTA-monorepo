@@ -20,6 +20,7 @@ const baseSchema = z.object({
 const relationSchema = z.object({
     subjectVersion: z.record(z.unknown()),
     questions: z.array(z.unknown()).optional(),
+    testStructureRules: z.array(z.unknown()).optional(),
     exam: z.array(z.unknown()).optional(),
 }
 );

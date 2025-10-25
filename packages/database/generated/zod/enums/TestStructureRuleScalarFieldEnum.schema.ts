@@ -7,4 +7,4 @@
 
 import { z } from 'zod';
 
-export const TestStructureRuleScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "examId", "knowledgeBlockId", "questionPoint", "questionType", "count"])
+export const TestStructureRuleScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "examId", "questionBankId", "knowledgeBlockId", "questionPoint", "questionType", "count"])
