@@ -1480,11 +1480,11 @@ export default function PhanCongGiangDay({
                                                     .filter((e) =>
                                                         subjectClassForm?.[record?.id]
                                                             ?.trainingLocationId ||
-                                                        record.trainingLocationId
+                                                        record?.trainingLocationId
                                                             ? e.trainingLocationId ===
-                                                              (subjectClassForm[record.id]
+                                                              (subjectClassForm?.[record.id]
                                                                   ?.trainingLocationId ||
-                                                                  record.trainingLocationId)
+                                                                  record?.trainingLocationId)
                                                             : true
                                                     )
                                                     .map((e) => ({
@@ -1501,7 +1501,7 @@ export default function PhanCongGiangDay({
                                                     (option?.title ?? '')
                                                         .toString()
                                                         .toLowerCase()
-                                                        .includes(input.toLowerCase())
+                                                        .includes(input?.toLowerCase())
                                                 }
                                                 showSearch
                                                 allowClear
