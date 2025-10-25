@@ -5,8 +5,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import TestStructureRule from './components/cau-hinh-sinh-de'
-import ExamBank from './components/danh-sach-de-thi'
-import ManageExamCode from './components/ql-phach'
 import Information from './components/thong-tin-ky-thi'
 
 export default function PageId() {
@@ -39,16 +37,6 @@ export default function PageId() {
             label: 'Cấu hình sinh đề tự động',
             children: <TestStructureRule id={id} />,
         },
-        {
-            key: 'examBank',
-            label: 'Danh sách đề thi',
-            children: <ExamBank id={id} />,
-        },
-        {
-            key: 'examCode',
-            label: 'Quản lý phách',
-            children: <ManageExamCode id={id} />,
-        },
     ]
 
     return (
@@ -59,8 +47,6 @@ export default function PageId() {
                 options={[
                     { label: 'Thông tin kỳ thi', value: 'infor' },
                     { label: 'Cấu hình sinh đề tự động', value: 'sinhDeTuDong' },
-                    { label: 'Danh sách đề thi', value: 'examBank' },
-                    { label: 'Quản lý phách', value: 'examCode' },
                 ]}
                 style={{ marginBottom: 14 }}
             />
