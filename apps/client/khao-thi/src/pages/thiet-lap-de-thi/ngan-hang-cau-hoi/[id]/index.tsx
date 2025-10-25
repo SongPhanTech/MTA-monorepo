@@ -125,6 +125,7 @@ export default function QuestionPage() {
             include: {
                 knowledgeBlock: true,
                 difficulty: true,
+                multipleChoiceOptions:true
             },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
@@ -381,17 +382,20 @@ export default function QuestionPage() {
                                 width: 300,
                                 type: 'input',
 
-                                render: (html: string) => (
-                                    <HtmlTruncate key="explanation">
+                                render: (__,record) => {
+                                    return (record.type === QuestionType.MULTIPLE_CHOICE ||
+                                        record.type === QuestionType.SINGLE_CHOICE)?(<div>{record?.multipleChoiceOptions.length} lựa chọn</div>):(
+                                            <HtmlTruncate key="explanation">
                                         <div
                                             dangerouslySetInnerHTML={{
-                                                __html: html
-                                                    ? renderWithMath(html)
+                                                __html: record.explanation
+                                                    ? renderWithMath(record.explanation)
                                                     : '<i>Chưa có nội dung</i>',
                                             }}
                                         />
                                     </HtmlTruncate>
-                                ),
+                                    )
+                                },
                             },
                             // {
                             //     title: 'Tự động chấm điểm',
