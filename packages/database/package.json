@@ -26,13 +26,14 @@
     },
     "devDependencies": {
         "@paralleldrive/cuid2": "github:paralleldrive/cuid2",
+        "@tanstack/react-query": "catalog:",
+        "@types/node": "catalog:",
         "@workspace/typescript-config": "workspace:*",
         "@zenstackhq/openapi": "catalog:",
         "@zenstackhq/server": "catalog:",
         "@zenstackhq/tanstack-query": "catalog:",
         "prisma": "catalog:",
         "prisma-dbml-generator": "catalog:",
-        "zenstack": "catalog:",
-        "@types/node": "catalog:"
+        "zenstack": "catalog:"
     }
 }

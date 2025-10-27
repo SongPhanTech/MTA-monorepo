@@ -75,7 +75,7 @@ export default function EvaluationPeriodPage() {
                 },
             },
         },
-        { efetchOnWindowFocus: false, enabled: !!id }
+        { refetchOnWindowFocus: false, enabled: !!id }
     )
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>

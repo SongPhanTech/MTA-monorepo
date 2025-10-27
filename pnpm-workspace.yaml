@@ -58,6 +58,7 @@ catalog:
   '@zenstackhq/runtime': ^2.16.1
   '@zenstackhq/server': ^2.16.1
   '@zenstackhq/tanstack-query': ^2.16.1
+  '@tanstack/react-query': 5.90.5
   antd: ^5.23.1
   autoprefixer: ^10.4.20
   axios: 1.7.9

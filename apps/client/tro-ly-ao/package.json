@@ -20,7 +20,7 @@
 		"@openapi-codegen/cli": "catalog:",
 		"@openapi-codegen/typescript": "catalog:",
 		"@t3-oss/env-nextjs": "catalog:",
-		"@tanstack/react-query": "^5.62.3",
+		"@tanstack/react-query": "catalog:",
 		"@workspace/auth": "workspace:*",
 		"@workspace/constant": "workspace:*",
 		"@workspace/db": "workspace:*",

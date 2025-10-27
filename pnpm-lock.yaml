@@ -72,6 +72,9 @@ catalogs:
     '@t3-oss/env-nextjs':
       specifier: 0.12.0
       version: 0.12.0
+    '@tanstack/react-query':
+      specifier: 5.90.5
+      version: 5.90.5
     '@tiptap/extension-color':
       specifier: 2.26.1
       version: 2.26.1
@@ -731,7 +734,7 @@ importers:
         specifier: 'catalog:'
         version: 0.12.0(typescript@5.9.3)(zod@3.25.76)
       '@tanstack/react-query':
-        specifier: ^5.62.3
+        specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
       '@tiptap/extension-color':
         specifier: 'catalog:'
@@ -999,7 +1002,7 @@ importers:
         specifier: 'catalog:'
         version: 0.12.0(typescript@5.9.3)(zod@3.25.76)
       '@tanstack/react-query':
-        specifier: ^5.62.3
+        specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
       '@tiptap/extension-color':
         specifier: 'catalog:'
@@ -1282,7 +1285,7 @@ importers:
         specifier: 'catalog:'
         version: 0.12.0(typescript@5.9.3)(zod@3.25.76)
       '@tanstack/react-query':
-        specifier: ^5.62.3
+        specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
       '@tiptap/extension-color':
         specifier: 'catalog:'
@@ -1550,7 +1553,7 @@ importers:
         specifier: 'catalog:'
         version: 0.12.0(typescript@5.9.3)(zod@3.25.76)
       '@tanstack/react-query':
-        specifier: ^5.62.3
+        specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
       '@workspace/auth':
         specifier: workspace:*
@@ -1767,7 +1770,7 @@ importers:
         specifier: 'catalog:'
         version: 0.12.0(typescript@5.9.3)(zod@3.25.76)
       '@tanstack/react-query':
-        specifier: ^5.62.3
+        specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
       '@workspace/auth':
         specifier: workspace:*
@@ -1992,6 +1995,9 @@ importers:
       '@paralleldrive/cuid2':
         specifier: github:paralleldrive/cuid2
         version: https://codeload.github.com/paralleldrive/cuid2/tar.gz/499df75f294e0af2d79ca64f7d896df75857364c
+      '@tanstack/react-query':
+        specifier: 'catalog:'
+        version: 5.90.5(react@18.3.1)
       '@types/node':
         specifier: 'catalog:'
         version: 20.19.23
@@ -2020,7 +2026,7 @@ importers:
   packages/libs:
     dependencies:
       '@tanstack/react-query':
-        specifier: ^5.69.0
+        specifier: 'catalog:'
         version: 5.90.5(react@18.3.1)
       '@workspace/db':
         specifier: workspace:*
