@@ -50,27 +50,27 @@ const PutSurveyExamModal = () => {
     const [choices, setChoices] = useState<Choices[]>([
         {
             answer: '1',
-            description: 'Hoàn toàn đồng ý',
+            description: 'Rất không hài lòng',
             requireExplanation: false,
         },
         {
             answer: '2',
-            description: 'Đồng ý',
+            description: 'Khong hài lòng',
             requireExplanation: false,
         },
         {
             answer: '3',
-            description: 'Không đồng ý',
+            description: 'Phân vân',
             requireExplanation: false,
         },
         {
             answer: '4',
-            description: 'Hoàn toàn không đồng ý',
+            description: 'Hài lòng',
             requireExplanation: false,
         },
         {
-            answer: '0',
-            description: 'Không ý kiến',
+            answer: '5',
+            description: 'Rất hài lòng',
             requireExplanation: false,
         },
     ])
@@ -161,7 +161,6 @@ const PutSurveyExamModal = () => {
             message.error('Bạn phải thêm câu hỏi cho đợt khảo sát')
             return
         }
-        console.log('output', output, choices)
 
         try {
             showSpinner()
