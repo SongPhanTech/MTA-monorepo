@@ -3,6 +3,8 @@ import { AcademicActionType, type Prisma, StudentStatus } from '@workspace/db'
 import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetHeQuanSu, parseSheetStudent, zParseSheetError } from '@workspace/libs/parseExcel'
 import { splitFullName } from '@workspace/libs/utils'
+import dayjs from 'dayjs'
+import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import {
@@ -21,6 +23,7 @@ import {
     buildPositionMapOrThrow,
     buildProvinceMapOrThrow,
     buildRankMapOrThrow,
+    getTemplateBuffer,
 } from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
@@ -832,10 +835,10 @@ const debtStatistics = createRoute({
     },
     responses: {
         200: {
-            description: 'debt statistics',
+            description: 'Export thống kê nợ',
             content: {
-                'application/json': {
-                    schema: z.object({ message: z.string() }),
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
                 },
             },
         },
@@ -855,98 +858,237 @@ const debtStatistics = createRoute({
 app.openapi(debtStatistics, async (c) => {
     const { trainingObjectTypeId, trainingCourseId, date = new Date() } = c.req.valid('query')
 
-    // const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
-    //     where: { id: trainingCourseId },
-    //     select: { scoreToPass: true },
-    // })
+    const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
+        where: { id: trainingObjectTypeId },
+        select: { name: true },
+    })
 
-    // const students = await prisma.student.findMany({
-    //     where: {
-    //         trainingObjectType: { id: trainingObjectTypeId },
-    //         fixedClass: { trainingCourse: { id: trainingCourseId } },
-    //     },
-    //     include: {
-    //         subjectClassStudent: {
-    //             where: {
-    //                 subjectClass: {
-    //                     cancelled: false,
-    //                     semester: { endDate: { lte: date } },
-    //                 },
-    //             },
-    //         },
-    //     },
-    // })
+    const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
+        where: { id: trainingCourseId },
+        select: { name: true },
+    })
 
     type Result = {
         studentId: string
-        diem_cuoi: number | null
-        withdrew: boolean
-        exempted: boolean
-        examPostponed: boolean
-        cam_thi: boolean
-        ly_do_cam_thi: string | null
-        dinh_chi: boolean
-        ly_do_dinh_chi: string | null
-        truot_mon: boolean
+        studentCode: string
+        fullname: string
+        dateOfBirth: string
+        fixedClassCode: string
+        subjectCode: string
+        subjectName: string
+        subjectCredit: number
+        semesterCode: string
+        finalScore: number | null
     }[]
 
     const res = await prisma.$queryRaw<Result>`
-                    with mon_no as (select sv.id,
-                       sv.code,
-                       sv.name,
-                       "UP"."fullname",
-                       sv."trainingObjectTypeId",
-                       C."trainingMajorId",
-                       TC.id                                                                                    as trainingCourseId,
-                       SSS."studentId",
-                       SSS."finalScore"                                                                         as diem_cuoi,
-                       SSS.withdrew,
-                       SSS.exempted,
-                       SSS."examPostponed",
-                       SSS."examBanned"                                                                         as cam_thi,
-                       SSS."examBannedReason"                                                                   as ly_do_cam_thi,
-                       SSS.suspended                                                                            as dinh_chi,
-                       SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
-                       TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
-                       TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
-                       TBS."useForFinalScore" = false and SSS."finalScore" <
-                                                          TC."scoreToPassConditional"                           as truot_mon,
-                       over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
-                    from "ql-dao-tao"."SubjectVersion" as sv
-                         inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
-                         inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
-                         inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
-                         inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
-                         inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
-                         inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
-                         inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
-                                    on CV.id = TBOCV."curriculumVersionId"
-                         inner join "ql-dao-tao"."TrainingBlockSubject" TBS
-                                    on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
-                         inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
-                         inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                    where TBS."subjectId" = sv.id)
-                    select "studentId", diem_cuoi, withdrew, exempted, "examPostponed", cam_thi, ly_do_cam_thi, dinh_chi, ly_do_dinh_chi, truot_mon
-                    from mon_no
-                    where rn = 1
-                    and (truot_mon = true or cam_thi = true or dinh_chi = true)
-                    and withdrew = false        -- rút khỏi lớp
-                    and exempted = false        -- miễn học
-                    and "examPostponed" = false -- hoãn thi
-                    and 
-                    (
-                        ${trainingObjectTypeId}::TEXT IS NULL
-                        OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-                    )
-                    and 
-                    (
-                        ${trainingCourseId}::TEXT IS NULL
-                        OR trainingCourseId = ${trainingCourseId}
-                    )
-                `
+                    select
+                        SSS."studentId",
+                        S."code" as "studentCode",
+                        "UP"."fullname" as "fullname",
+                        "UP"."dateOfBirth" as "dateOfBirth",
+                        FC.code as "fixedClassCode",
+                        sv.code as "subjectCode",
+                        sv.name as "subjectName",
+                        sv.credit as "subjectCredit",
+                        SEM.code as "semesterCode",
+                        SSS."finalScore" as "finalScore"
+                    from "ql-dao-tao"."StudentSubjectScore" as SSS
+                        inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                        inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
+                        inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                        inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                        inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                        inner join "ql-dao-tao"."Semester" SEM on SEM.id = SC."semesterId"
+                        inner join "ql-dao-tao"."SubjectVersion" sv on sv.id = SSS."subjectVersionId"
+                        inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                        inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV on CV.id = TBOCV."curriculumVersionId"
+                        inner join "ql-dao-tao"."TrainingBlockSubject" TBS on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId" and TBS."subjectId" = sv.id
+                    where
+                        SC.cancelled = false and
+                        SEM."endDate" <= ${date} and
+                        (
+                            SSS."finalScore" is null or
+                            (TBS.graduation = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                            (TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                            (TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                            SSS."examBanned" = true or
+                            SSS.suspended = true
+                        )
+                        and SSS.withdrew = false
+                        and SSS.exempted = false
+                        and SSS."examPostponed" = false
+                        and (
+                            ${trainingObjectTypeId}::TEXT IS NULL
+                            OR sv."trainingObjectTypeId" = ${trainingObjectTypeId}
+                        )
+                        and (
+                            ${trainingCourseId}::TEXT IS NULL
+                            OR TC.id = ${trainingCourseId}
+                        )
+                        and not exists (
+                            select 1
+                            from "ql-dao-tao"."StudentSubjectScore" as SSS_pass
+                                inner join "ql-dao-tao"."Student" S_pass on S_pass.id = SSS_pass."studentId"
+                                inner join "ql-dao-tao"."SubjectVersion" sv_pass on sv_pass.id = SSS_pass."subjectVersionId"
+                                inner join "ql-dao-tao"."FixedClass" FC_pass on FC_pass.id = S_pass."fixedClassId"
+                                inner join "ql-dao-tao"."TrainingCourse" TC_pass on TC_pass.id = FC_pass."trainingCourseId"
+                                inner join "ql-dao-tao"."CurriculumVersion" CV_pass on CV_pass.id = S_pass."curriculumVersionId"
+                                inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV_pass on CV_pass.id = TBOCV_pass."curriculumVersionId"
+                                inner join "ql-dao-tao"."TrainingBlockSubject" TBS_pass on TBOCV_pass.id = TBS_pass."trainingBlockOnCurriculumVersionId" and TBS_pass."subjectId" = sv_pass.id
+                            where
+                                SSS_pass."studentId" = SSS."studentId" and sv_pass.id = sv.id
+                                and SSS_pass.withdrew = false
+                                and SSS_pass.exempted = false
+                                and SSS_pass."examPostponed" = false
+                                and SSS_pass."examBanned" = false
+                                and SSS_pass.suspended = false
+                                and (
+                                    (TBS_pass.graduation = true and SSS_pass."finalScore" >= TC_pass."scoreToPassGraduation" or SSS_pass."manualFinalScore" >= TC_pass."scoreToPassGraduation") or
+                                    (TBS_pass."useForFinalScore" = true and SSS_pass."finalScore" >= TC_pass."scoreToPass" or SSS_pass."manualFinalScore" >= TC_pass."scoreToPass") or
+                                    (TBS_pass."useForFinalScore" = false and SSS_pass."finalScore" >= TC_pass."scoreToPassConditional" or SSS_pass."manualFinalScore" >= TC_pass."scoreToPassConditional")
+                                )
+                        )
+                    order by SSS."studentId", sv.id
+                    `
 
-    return c.json({
-        message: '',
+    type SubjectAttempt = {
+        semesterCode: string
+        finalScore: number | null
+    }
+
+    type DebtSubject = {
+        subjectCode: string
+        subjectName: string
+        subjectCredit: number
+        attempts: SubjectAttempt[]
+    }
+
+    type StudentDebtSummary = {
+        studentId: string
+        studentCode: string
+        fullname: string
+        dateOfBirth: string
+        fixedClassCode: string
+        subjects: DebtSubject[]
+    }
+
+    const studentDebtMap = res.reduce(
+        (acc, record) => {
+            const {
+                studentId,
+                studentCode,
+                fullname,
+                dateOfBirth,
+                fixedClassCode,
+                subjectCode,
+                subjectName,
+                subjectCredit,
+                semesterCode,
+                finalScore,
+            } = record
+
+            if (!acc[studentId]) {
+                acc[studentId] = {
+                    studentId,
+                    studentCode,
+                    fullname,
+                    dateOfBirth,
+                    fixedClassCode,
+                    subjects: {},
+                }
+            }
+
+            if (!acc[studentId].subjects[subjectCode]) {
+                acc[studentId].subjects[subjectCode] = {
+                    subjectCode,
+                    subjectName,
+                    subjectCredit,
+                    attempts: [],
+                }
+            }
+
+            acc[studentId].subjects[subjectCode].attempts.push({ semesterCode, finalScore })
+
+            return acc
+        },
+        {} as Record<
+            string,
+            {
+                studentId: string
+                studentCode: string
+                fullname: string
+                dateOfBirth: string
+                fixedClassCode: string
+                subjects: Record<string, DebtSubject>
+            }
+        >
+    )
+
+    const debtSummary: StudentDebtSummary[] = Object.values(studentDebtMap).map((student) => ({
+        ...student,
+        subjects: Object.values(student.subjects),
+    }))
+
+    const rows = debtSummary.flatMap((s) => {
+        const totalDebtSubject = s.subjects.length
+        const totalDebtCredit = Object.values(s.subjects).reduce(
+            (acc, subject) => acc + subject.subjectCredit,
+            0
+        )
+
+        return s.subjects.map((subject) => {
+            const finalScores = subject.attempts.map((attempt) => attempt.finalScore)
+            let type = 'THI LẠI'
+            let note = 'Đã thi trượt 1 lần'
+
+            if (finalScores[finalScores.length - 1] === null) {
+                type = 'CHƯA THI'
+                note = 'Chưa thi hoặc GV chưa nhập điểm thi'
+            } else if (finalScores.length > 1) {
+                type = 'HỌC LẠI'
+                note = `Đã thi trượt ít nhất ${finalScores.length} lần`
+            }
+
+            return {
+                studentCode: s.studentCode,
+                fullname: s.fullname,
+                dateOfBirth: s.dateOfBirth ? dayjs(s.dateOfBirth).format('DD/MM/YYYY') : '',
+                fixedClassCode: s.fixedClassCode,
+                totalDebtSubject,
+                totalDebtCredit,
+                subjectCode: subject.subjectCode,
+                subjectName: subject.subjectName,
+                subjectCredit: subject.subjectCredit,
+                semesters: subject.attempts.map((attempt) => attempt.semesterCode).join('/'),
+                finalScores: subject.attempts
+                    .map((attempt) => String(attempt.finalScore))
+                    .join('/'),
+                type,
+                note,
+            }
+        })
+    })
+
+    const buffer = await getTemplateBuffer(prisma, 'THONG_KE_NO')
+    const template = new XlsxTemplate(buffer)
+    const sheetName = 'DS HV nợ môn'
+
+    template.substitute(sheetName, {
+        ĐTĐT: trainingObjectType.name,
+        KHOÁ: trainingCourse.name,
+        DATE: dayjs(date).format('DD/MM/YYYY'),
+        data: rows.map((r, idx) => ({ no: idx + 1, ...r })),
+    })
+
+    const result = await template.generate({ type: 'arraybuffer' })
+
+    const fileName = `thong_ke_no_${trainingObjectType.name}_${trainingCourse.name}.xlsx`
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'Content-Disposition': disposition,
     })
 })
 

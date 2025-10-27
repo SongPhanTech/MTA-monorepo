@@ -34,6 +34,21 @@ export const getCurrentDateForReport = () => {
     return { date, month, year }
 }
 
+export const getTemplateBuffer = async (
+    prisma: PrismaClient,
+    templateCode: string
+): Promise<Buffer<ArrayBuffer>> => {
+    const templateFile = await prisma.templateFile.findUniqueOrThrow({
+        where: { code: templateCode },
+    })
+
+    const res = await fetch(templateFile.path)
+    const buffer = await res.arrayBuffer()
+    const nodeBuffer = Buffer.from(buffer)
+
+    return nodeBuffer
+}
+
 export const buildGenderMapOrThrow = async (
     prisma: PrismaClient,
     names: (string | undefined)[]
@@ -652,4 +667,13 @@ export const buildDMChuyenNganhMap = async (
     })
 
     return new Map(data.map(({ name, id }) => [name, id]))
+}
+
+export const fetchBuffer = async (url: string): Promise<Buffer> => {
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    const arrayBuffer = await response.arrayBuffer()
+    return Buffer.from(arrayBuffer)
 }
