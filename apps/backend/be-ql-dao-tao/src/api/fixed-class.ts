@@ -1,8 +1,11 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { read, utils } from 'xlsx'
-
+import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
+import { getTemplateBuffer } from '../utils'
+
+const app = new OpenAPIHono({ strict: false })
 
 const classDivision = createRoute({
     operationId: 'classDivision',
@@ -34,8 +37,6 @@ const classDivision = createRoute({
         },
     },
 })
-
-const app = new OpenAPIHono({ strict: false })
 
 app.openapi(classDivision, async (c) => {
     const { file } = c.req.valid('form')
@@ -98,6 +99,100 @@ app.openapi(classDivision, async (c) => {
         )
     })
     return c.json(data, 200)
+})
+
+const fixedClassStudentCount = createRoute({
+    operationId: 'fixed-class-student-count',
+    tags: ['FixedClass'],
+    path: '/fixed-class-student-count',
+    method: 'get',
+    request: {
+        query: z.object({
+            trainingObjectTypeId: z.string(),
+            trainingCourseId: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export quân số học viên theo khoá',
+            content: {
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        400: {
+            description: 'Bad request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(fixedClassStudentCount, async (c) => {
+    const { trainingObjectTypeId, trainingCourseId } = c.req.valid('query')
+
+    const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
+        where: { id: trainingObjectTypeId },
+        select: { name: true },
+    })
+
+    const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
+        where: { id: trainingCourseId },
+        select: { name: true },
+    })
+
+    const classes = await prisma.fixedClass.findMany({
+        where: {
+            deletedAt: null,
+            trainingCourseId,
+            OR: [
+                {
+                    curriculumVersion: {
+                        trainingObjectType: {
+                            id: trainingObjectTypeId,
+                        },
+                    },
+                },
+                { curriculumVersion: null },
+            ],
+        },
+        select: {
+            code: true,
+            name: true,
+            _count: {
+                select: {
+                    students: true,
+                },
+            },
+        },
+    })
+
+    console.log(classes)
+
+    const buffer = await getTemplateBuffer(prisma, 'THONG_KE_QUAN_SO_HOC_VIEN_THEO_KHOA')
+    const template = new XlsxTemplate(buffer)
+
+    template.substitute(1, {
+        ĐTĐT: trainingObjectType.name,
+        KHOÁ: trainingCourse.name,
+        data: classes.map((r, idx) => ({ no: idx + 1, count: r._count.students, ...r })),
+    })
+
+    const result = await template.generate({ type: 'arraybuffer' })
+
+    const fileName = `thong_ke_no_${trainingObjectType.name}_${trainingCourse.name}.xlsx`
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'Content-Disposition': disposition,
+    })
 })
 
 export default app

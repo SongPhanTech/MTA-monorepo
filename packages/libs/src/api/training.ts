@@ -45,6 +45,8 @@ import type {
     ExportStudentResultSemesterJson200Item,
     ExportStudentResultSemesterJson404,
     ExportStudentResultSemesterJsonParams,
+    FixedClassStudentCount400,
+    FixedClassStudentCountParams,
     GenExamCode,
     GenExamCode400,
     GenExamCode404,
@@ -736,6 +738,169 @@ export const useClassDivision = <TError = void, TContext = unknown>(
     const mutationOptions = getClassDivisionMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
+}
+
+export type fixedClassStudentCountResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type fixedClassStudentCountResponse400 = {
+    data: FixedClassStudentCount400
+    status: 400
+}
+
+export type fixedClassStudentCountResponseComposite =
+    | fixedClassStudentCountResponse200
+    | fixedClassStudentCountResponse400
+
+export type fixedClassStudentCountResponse = fixedClassStudentCountResponseComposite & {
+    headers: Headers
+}
+
+export const getFixedClassStudentCountUrl = (params: FixedClassStudentCountParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/fixed-class/fixed-class-student-count?${stringifiedParams}`
+        : '/api/fixed-class/fixed-class-student-count'
+}
+
+export const fixedClassStudentCount = async (
+    params: FixedClassStudentCountParams,
+    options?: RequestInit
+): Promise<fixedClassStudentCountResponse> => {
+    return customTrainingFetch<fixedClassStudentCountResponse>(
+        getFixedClassStudentCountUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getFixedClassStudentCountQueryKey = (params: FixedClassStudentCountParams) => {
+    return ['/api/fixed-class/fixed-class-student-count', ...(params ? [params] : [])] as const
+}
+
+export const getFixedClassStudentCountQueryOptions = <
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getFixedClassStudentCountQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassStudentCount>>> = ({
+        signal,
+    }) => fixedClassStudentCount(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof fixedClassStudentCount>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type FixedClassStudentCountQueryResult = NonNullable<
+    Awaited<ReturnType<typeof fixedClassStudentCount>>
+>
+export type FixedClassStudentCountQueryError = FixedClassStudentCount400
+
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getFixedClassStudentCountQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
 }
 
 /**
