@@ -4,9 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-
 import type { OpenSubjectClassFixedClassItem } from './openSubjectClassFixedClassItem'
-import type { OpenSubjectClassSubjectClassItem } from './openSubjectClassSubjectClassItem'
 
 export interface OpenSubjectClass {
     trainingMajorId: string
@@ -17,7 +15,6 @@ export interface OpenSubjectClass {
     subjectVersionCode: string
     managementOrganizationCode: string
     subjectVersionCredit: number
-    subjectClass: OpenSubjectClassSubjectClassItem[]
     fixedClass: OpenSubjectClassFixedClassItem[]
     countStudent: number
 }

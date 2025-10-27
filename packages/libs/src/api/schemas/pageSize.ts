@@ -7,5 +7,6 @@
 
 /**
  * Số lượng bản ghi trên mỗi trang
+ * @nullable
  */
-export type PageSize = string
+export type PageSize = number | null

@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
+import type { FixedClassId } from './fixedClassId'
 import type { Search } from './search'
 import type { SemesterId } from './semesterId'
 import type { TrainingCourseId } from './trainingCourseId'
@@ -14,9 +15,10 @@ import type { TrainingObjectTypeId } from './trainingObjectTypeId'
 export type OpenSubjectClassRetakeParams = {
     page?: number | null
     limit?: number | null
-    trainingCourseId?: TrainingCourseId
+    trainingCourseId?: TrainingCourseId & unknown
     trainingMajorId?: TrainingMajorId
     search?: Search
     trainingObjectTypeId: TrainingObjectTypeId
     semesterId?: SemesterId & unknown
+    fixedClassId?: FixedClassId
 }

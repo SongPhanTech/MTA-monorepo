@@ -351,6 +351,14 @@ async function main() {
                 extensions: 'docx',
                 numberField: 0,
             },
+            {
+                name: 'Thống kê nợ môn',
+                code: 'THONG_KE_NO',
+                path: 'https://minio.swantech.vn/mta/template/thong_ke_no.xlsx',
+                fileType: 'DOWNLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
         ],
     })
 
