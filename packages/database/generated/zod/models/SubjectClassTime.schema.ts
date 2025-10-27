@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,8 +18,21 @@ const baseSchema = z.object({
     endPeriod: z.number(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    dayOfWeek: z.number(),
+    startPeriod: z.number(),
+    endPeriod: z.number(),
+}
+).strict();
 const relationSchema = z.object({
-    subjectClass: z.record(z.unknown()),
+    subjectClass: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -44,7 +56,7 @@ export const SubjectClassTimeSchema = SubjectClassTimeScalarSchema.merge(fkSchem
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SubjectClassTimePrismaCreateSchema = baseSchema.partial().passthrough();
+export const SubjectClassTimePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -54,21 +66,21 @@ export const SubjectClassTimePrismaCreateSchema = baseSchema.partial().passthrou
 export const SubjectClassTimePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    dayOfWeek: z.union([z.number(), z.record(z.unknown())]),
-    startPeriod: z.union([z.number(), z.record(z.unknown())]),
-    endPeriod: z.union([z.number(), z.record(z.unknown())])
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    dayOfWeek: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    startPeriod: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    endPeriod: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `SubjectClassTime` schema for create operations excluding foreign keys and relations.
  */
-export const SubjectClassTimeCreateScalarSchema = baseSchema.partial({
+export const SubjectClassTimeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -82,7 +94,7 @@ export const SubjectClassTimeCreateSchema = SubjectClassTimeCreateScalarSchema.m
 /**
  * `SubjectClassTime` schema for update operations excluding foreign keys and relations.
  */
-export const SubjectClassTimeUpdateScalarSchema = baseSchema.partial();
+export const SubjectClassTimeUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

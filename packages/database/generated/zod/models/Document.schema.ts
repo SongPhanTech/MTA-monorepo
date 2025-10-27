@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { DocumentStatus } from '../../zenstack/models';
@@ -25,10 +24,27 @@ const baseSchema = z.object({
     reason: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    title: z.string().nullish(),
+    body: z.string().nullish(),
+    status: DocumentStatusSchema,
+    uri: z.string().nullish(),
+    fileType: z.string().nullish(),
+    fileSize: z.number().nullish(),
+    reason: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    classification: z.record(z.unknown()).optional(),
-    uploadedBy: z.record(z.unknown()),
-    approvedBy: z.record(z.unknown()).optional(),
+    classification: z.record(z.string(), z.unknown()).optional(),
+    uploadedBy: z.record(z.string(), z.unknown()),
+    approvedBy: z.record(z.string(), z.unknown()).optional(),
     topics: z.array(z.unknown()).optional(),
 }
 );
@@ -55,7 +71,7 @@ export const DocumentSchema = DocumentScalarSchema.merge(fkSchema).merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DocumentPrismaCreateSchema = baseSchema.partial().passthrough();
+export const DocumentPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -65,17 +81,17 @@ export const DocumentPrismaCreateSchema = baseSchema.partial().passthrough();
 export const DocumentPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     title: z.string().nullish(),
     body: z.string().nullish(),
     status: DocumentStatusSchema,
     uri: z.string().nullish(),
     fileType: z.string().nullish(),
-    fileSize: z.union([z.number().nullish(), z.record(z.unknown())]),
+    fileSize: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     reason: z.string().nullish()
 }).partial().passthrough();
 
@@ -83,7 +99,7 @@ export const DocumentPrismaUpdateSchema = z.object({
 /**
  * `Document` schema for create operations excluding foreign keys and relations.
  */
-export const DocumentCreateScalarSchema = baseSchema.partial({
+export const DocumentCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
@@ -97,7 +113,7 @@ export const DocumentCreateSchema = DocumentCreateScalarSchema.merge(fkSchema);
 /**
  * `Document` schema for update operations excluding foreign keys and relations.
  */
-export const DocumentUpdateScalarSchema = baseSchema.partial();
+export const DocumentUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

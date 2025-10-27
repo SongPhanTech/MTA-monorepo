@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { DecimalSchema } from '../common';
@@ -21,10 +20,23 @@ const baseSchema = z.object({
     priorityRank: z.number(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    amount: DecimalSchema,
+    gpaAtAward: z.number(),
+    priorityRank: z.number(),
+}
+).strict();
 const relationSchema = z.object({
-    student: z.record(z.unknown()),
-    semester: z.record(z.unknown()),
-    scholarship: z.record(z.unknown()),
+    student: z.record(z.string(), z.unknown()),
+    semester: z.record(z.string(), z.unknown()),
+    scholarship: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -50,7 +62,7 @@ export const ScholarshipAwardSchema = ScholarshipAwardScalarSchema.merge(fkSchem
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ScholarshipAwardPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ScholarshipAwardPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -60,21 +72,21 @@ export const ScholarshipAwardPrismaCreateSchema = baseSchema.partial().passthrou
 export const ScholarshipAwardPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     amount: DecimalSchema,
-    gpaAtAward: z.union([z.number(), z.record(z.unknown())]),
-    priorityRank: z.union([z.number(), z.record(z.unknown())])
+    gpaAtAward: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    priorityRank: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `ScholarshipAward` schema for create operations excluding foreign keys and relations.
  */
-export const ScholarshipAwardCreateScalarSchema = baseSchema.partial({
+export const ScholarshipAwardCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -88,7 +100,7 @@ export const ScholarshipAwardCreateSchema = ScholarshipAwardCreateScalarSchema.m
 /**
  * `ScholarshipAward` schema for update operations excluding foreign keys and relations.
  */
-export const ScholarshipAwardUpdateScalarSchema = baseSchema.partial();
+export const ScholarshipAwardUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

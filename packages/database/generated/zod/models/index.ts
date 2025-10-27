@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 export * from './Config.schema';
 export * from './ChangeLog.schema';
@@ -105,6 +104,7 @@ export * from './ClassRegisterSessionCredit.schema';
 export * from './ClassRegisterSession.schema';
 export * from './ClassRegisterLogs.schema';
 export * from './SubjectClass.schema';
+export * from './SubjectClassHistory.schema';
 export * from './SubjectClassTime.schema';
 export * from './ClassSchedule.schema';
 export * from './TrainingObjectType.schema';

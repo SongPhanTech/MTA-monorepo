@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -20,25 +19,39 @@ const baseSchema = z.object({
     mimeType: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    path: z.string(),
+    size: z.bigint(),
+    mimeType: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    archivedCertificate: z.record(z.unknown()).optional(),
-    trainingCourse: z.record(z.unknown()).optional(),
-    archivedAward: z.record(z.unknown()).optional(),
-    curriculum: z.record(z.unknown()).optional(),
-    curriculumVersion: z.record(z.unknown()).optional(),
-    subjectVersion: z.record(z.unknown()).optional(),
-    studentAcademicDecision: z.record(z.unknown()).optional(),
-    notification: z.record(z.unknown()).optional(),
-    decision: z.record(z.unknown()).optional(),
-    defenseRecord: z.record(z.unknown()).optional(),
-    diplomaFront: z.record(z.unknown()).optional(),
-    diplomaBack: z.record(z.unknown()).optional(),
-    diplomaVerification: z.record(z.unknown()).optional(),
-    diplomaVerificationFront: z.record(z.unknown()).optional(),
-    diplomaVerificationBack: z.record(z.unknown()).optional(),
-    trainingField: z.record(z.unknown()).optional(),
-    studentScoreConvert: z.record(z.unknown()).optional(),
-    note: z.record(z.unknown()).optional(),
+    archivedCertificate: z.record(z.string(), z.unknown()).optional(),
+    trainingCourse: z.record(z.string(), z.unknown()).optional(),
+    archivedAward: z.record(z.string(), z.unknown()).optional(),
+    curriculum: z.record(z.string(), z.unknown()).optional(),
+    curriculumVersion: z.record(z.string(), z.unknown()).optional(),
+    subjectVersion: z.record(z.string(), z.unknown()).optional(),
+    studentAcademicDecision: z.record(z.string(), z.unknown()).optional(),
+    notification: z.record(z.string(), z.unknown()).optional(),
+    decision: z.record(z.string(), z.unknown()).optional(),
+    defenseRecord: z.record(z.string(), z.unknown()).optional(),
+    diplomaFront: z.record(z.string(), z.unknown()).optional(),
+    diplomaBack: z.record(z.string(), z.unknown()).optional(),
+    diplomaVerification: z.record(z.string(), z.unknown()).optional(),
+    diplomaVerificationFront: z.record(z.string(), z.unknown()).optional(),
+    diplomaVerificationBack: z.record(z.string(), z.unknown()).optional(),
+    trainingField: z.record(z.string(), z.unknown()).optional(),
+    studentScoreConvert: z.record(z.string(), z.unknown()).optional(),
+    note: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -79,7 +92,7 @@ export const DocumentFileSchema = DocumentFileScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DocumentFilePrismaCreateSchema = baseSchema.partial().passthrough();
+export const DocumentFilePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -89,11 +102,11 @@ export const DocumentFilePrismaCreateSchema = baseSchema.partial().passthrough()
 export const DocumentFilePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     path: z.string(),
     size: z.bigint(),
@@ -104,7 +117,7 @@ export const DocumentFilePrismaUpdateSchema = z.object({
 /**
  * `DocumentFile` schema for create operations excluding foreign keys and relations.
  */
-export const DocumentFileCreateScalarSchema = baseSchema.partial({
+export const DocumentFileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -118,7 +131,7 @@ export const DocumentFileCreateSchema = DocumentFileCreateScalarSchema.merge(fkS
 /**
  * `DocumentFile` schema for update operations excluding foreign keys and relations.
  */
-export const DocumentFileUpdateScalarSchema = baseSchema.partial();
+export const DocumentFileUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -23,8 +22,25 @@ const baseSchema = z.object({
     thoiGianKetThuc: z.coerce.date().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    cuongVi: z.string().nullish(),
+    donVi: z.string().nullish(),
+    diaDiem: z.string().nullish(),
+    vaiTro: z.string().nullish(),
+    doiTuong: z.string().nullish(),
+    thoiGianBatDau: z.coerce.date().nullish(),
+    thoiGianKetThuc: z.coerce.date().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    userProfile: z.record(z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -48,7 +64,7 @@ export const ChienDauSchema = ChienDauScalarSchema.merge(fkSchema).merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ChienDauPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ChienDauPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -58,11 +74,11 @@ export const ChienDauPrismaCreateSchema = baseSchema.partial().passthrough();
 export const ChienDauPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     cuongVi: z.string().nullish(),
     donVi: z.string().nullish(),
     diaDiem: z.string().nullish(),
@@ -76,7 +92,7 @@ export const ChienDauPrismaUpdateSchema = z.object({
 /**
  * `ChienDau` schema for create operations excluding foreign keys and relations.
  */
-export const ChienDauCreateScalarSchema = baseSchema.partial({
+export const ChienDauCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -90,7 +106,7 @@ export const ChienDauCreateSchema = ChienDauCreateScalarSchema.merge(fkSchema);
 /**
  * `ChienDau` schema for update operations excluding foreign keys and relations.
  */
-export const ChienDauUpdateScalarSchema = baseSchema.partial();
+export const ChienDauUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

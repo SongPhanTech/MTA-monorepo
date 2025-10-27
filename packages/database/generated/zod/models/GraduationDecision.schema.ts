@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { DecimalSchema } from '../common';
@@ -25,14 +24,31 @@ const baseSchema = z.object({
     totalCopy: z.number().default(0).nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    decisionDate: z.coerce.date(),
+    notes: z.string().nullish(),
+    finalGpa: DecimalSchema,
+    originalDiplomaNumber: z.string().nullish(),
+    diplomaNumber: z.string().nullish(),
+    diplomaIssueDate: z.coerce.date().nullish(),
+    totalCopy: z.number().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    application: z.record(z.unknown()),
-    student: z.record(z.unknown()),
-    trainingMajor: z.record(z.unknown()).optional(),
-    finalRanking: z.record(z.unknown()),
-    diplomaType: z.record(z.unknown()).optional(),
-    diplomaFront: z.record(z.unknown()).optional(),
-    diplomaBack: z.record(z.unknown()).optional(),
+    application: z.record(z.string(), z.unknown()),
+    student: z.record(z.string(), z.unknown()),
+    trainingMajor: z.record(z.string(), z.unknown()).optional(),
+    finalRanking: z.record(z.string(), z.unknown()),
+    diplomaType: z.record(z.string(), z.unknown()).optional(),
+    diplomaFront: z.record(z.string(), z.unknown()).optional(),
+    diplomaBack: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -60,7 +76,7 @@ export const GraduationDecisionSchema = GraduationDecisionScalarSchema.merge(fkS
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const GraduationDecisionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const GraduationDecisionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -70,25 +86,25 @@ export const GraduationDecisionPrismaCreateSchema = baseSchema.partial().passthr
 export const GraduationDecisionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    decisionDate: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    decisionDate: z.coerce.date(),
     notes: z.string().nullish(),
     finalGpa: DecimalSchema,
     originalDiplomaNumber: z.string().nullish(),
     diplomaNumber: z.string().nullish(),
     diplomaIssueDate: z.coerce.date().nullish(),
-    totalCopy: z.union([z.number().default(0).nullish(), z.record(z.unknown())])
+    totalCopy: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `GraduationDecision` schema for create operations excluding foreign keys and relations.
  */
-export const GraduationDecisionCreateScalarSchema = baseSchema.partial({
+export const GraduationDecisionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, decisionDate: true, totalCopy: true
 });
 
@@ -102,7 +118,7 @@ export const GraduationDecisionCreateSchema = GraduationDecisionCreateScalarSche
 /**
  * `GraduationDecision` schema for update operations excluding foreign keys and relations.
  */
-export const GraduationDecisionUpdateScalarSchema = baseSchema.partial();
+export const GraduationDecisionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

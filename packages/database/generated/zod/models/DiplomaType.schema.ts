@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { DiplomaTypeEnumSchema } from '../enums/DiplomaTypeEnum.schema';
@@ -15,6 +14,19 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string(),
+    englishName: z.string().nullish(),
+    type: DiplomaTypeEnumSchema,
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     englishName: z.string().nullish(),
     type: DiplomaTypeEnumSchema,
@@ -42,7 +54,7 @@ export const DiplomaTypeSchema = DiplomaTypeScalarSchema.merge(relationSchema.pa
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DiplomaTypePrismaCreateSchema = baseSchema.partial().passthrough();
+export const DiplomaTypePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -52,11 +64,11 @@ export const DiplomaTypePrismaCreateSchema = baseSchema.partial().passthrough();
 export const DiplomaTypePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     englishName: z.string().nullish(),
     type: DiplomaTypeEnumSchema
@@ -66,7 +78,7 @@ export const DiplomaTypePrismaUpdateSchema = z.object({
 /**
  * `DiplomaType` schema for create operations excluding foreign keys and relations.
  */
-export const DiplomaTypeCreateScalarSchema = baseSchema.partial({
+export const DiplomaTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -74,7 +86,7 @@ export const DiplomaTypeCreateScalarSchema = baseSchema.partial({
 /**
  * `DiplomaType` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DiplomaTypeCreateSchema = baseSchema.partial({
+export const DiplomaTypeCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -82,7 +94,7 @@ export const DiplomaTypeCreateSchema = baseSchema.partial({
 /**
  * `DiplomaType` schema for update operations excluding foreign keys and relations.
  */
-export const DiplomaTypeUpdateScalarSchema = baseSchema.partial();
+export const DiplomaTypeUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

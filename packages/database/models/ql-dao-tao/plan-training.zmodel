@@ -202,8 +202,8 @@ model StudentSubjectScoreHistory extends Base {
   suspended             Boolean?
   suspendedReason       String?
 
-  updatedBy             UserProfile         @relation(fields: [updatedById], references: [id])
-  updatedById           String
+  updatedBy             UserProfile?        @relation(fields: [updatedById], references: [id])
+  updatedById           String?
 
   @@schema("ql-dao-tao")
 }
@@ -847,7 +847,7 @@ model SubjectClass extends BaseNoCode {
   exam                       Exam?                 @relation(fields: [examId], references: [id])
   examId                     String?
 
-  /// ngày bắt dầu nhập điểm CC/TX
+  /// ngày bắt đầu nhập điểm CC/TX
   scoreDeadLineStart         DateTime? // default 20 ngày trước ngày thi
   /// ngày kết thúc nhập điểm CC/TX
   scoreDeadline              DateTime? // default 10 ngày trước ngày thi
@@ -897,6 +897,27 @@ model SubjectClass extends BaseNoCode {
   surveyObjectTypes          SurveyObjectType[]
   classRegisterLogs          ClassRegisterLogs[]
   subjectClassTimes          SubjectClassTime[]  // Thứ trong tuần và tiết học
+
+  subjectClassHistory        SubjectClassHistory[]
+  @@schema("ql-dao-tao")
+}
+
+model SubjectClassHistory extends Base {
+  subjectClass       SubjectClass @relation(fields: [subjectClassId], references: [id])
+  subjectClassId     String
+
+  scoreDeadLineStart DateTime?
+  scoreDeadline      DateTime?
+  examScoreDeadline  DateTime?
+
+  isLockScore        Boolean?
+  isLockExamScore    Boolean?
+
+  scoreSubmitted     Boolean?
+  scoreChecked       Boolean?
+
+  updatedBy          UserProfile? @relation(fields: [updatedById], references: [id])
+  updatedById        String?
 
   @@schema("ql-dao-tao")
 }
