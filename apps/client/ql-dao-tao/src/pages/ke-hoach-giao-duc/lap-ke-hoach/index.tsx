@@ -80,7 +80,7 @@ export default function LapKeHoach({ hocLai = false }: { hocLai?: boolean }) {
           ]
 
     return (
-        <Row gutter={[12, 0]} className="bg-white">
+        <Row gutter={[8, 0]}>
             <Col span={14}>
                 <Tabs activeKey={activeLeftTab} onChange={setActiveLeftTab}>
                     {leftTabs.map((tab) => (

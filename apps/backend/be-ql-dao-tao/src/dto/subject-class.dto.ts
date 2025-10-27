@@ -11,13 +11,6 @@ export const OpenSubjectClass = z
         subjectVersionCode: z.string(),
         managementOrganizationCode: z.string(),
         subjectVersionCredit: z.number(),
-        subjectClass: z.array(
-            z.object({
-                subjectClassId: z.string(),
-                subjectClassName: z.string(),
-                subjectClassCode: z.string(),
-            })
-        ),
         fixedClass: z.array(
             z.object({
                 fixedClassId: z.string(),
