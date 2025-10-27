@@ -107,6 +107,8 @@ const PutSurveyQuestionGroupModal = () => {
                 <FormItem form={form} name="surveyTopicId" label="Chủ đề khảo sát" required>
                     <Select
                         placeholder="Chọn chủ đề khảo sát"
+                        mode="multiple"
+                        maxTagCount={'responsive'}
                         options={SurveyTopicData.map((i: SurveyTopic) => {
                             return {
                                 value: i.id,
