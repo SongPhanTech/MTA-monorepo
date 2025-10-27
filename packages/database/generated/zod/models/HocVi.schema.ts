@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,23 +18,11 @@ const baseSchema = z.object({
     year: z.number().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    linhVuc: z.string().nullish(),
-    year: z.number().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    academicDegreeType: z.record(z.string(), z.unknown()).optional(),
-    nationality: z.record(z.string(), z.unknown()).optional(),
-    truong: z.record(z.string(), z.unknown()).optional(),
-    userProfile: z.record(z.string(), z.unknown()),
+    academicDegreeType: z.record(z.unknown()).optional(),
+    nationality: z.record(z.unknown()).optional(),
+    truong: z.record(z.unknown()).optional(),
+    userProfile: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -60,7 +49,7 @@ export const HocViSchema = HocViScalarSchema.merge(fkSchema).merge(relationSchem
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const HocViPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const HocViPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -70,20 +59,20 @@ export const HocViPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passt
 export const HocViPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     linhVuc: z.string().nullish(),
-    year: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    year: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `HocVi` schema for create operations excluding foreign keys and relations.
  */
-export const HocViCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const HocViCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -97,7 +86,7 @@ export const HocViCreateSchema = HocViCreateScalarSchema.merge(fkSchema);
 /**
  * `HocVi` schema for update operations excluding foreign keys and relations.
  */
-export const HocViUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const HocViUpdateScalarSchema = baseSchema.partial();
 
 
 /**

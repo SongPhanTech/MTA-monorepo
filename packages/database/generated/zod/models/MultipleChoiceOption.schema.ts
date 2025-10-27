@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,21 +19,8 @@ const baseSchema = z.object({
     order: z.number(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    content: z.string(),
-    isCorrect: z.boolean(),
-    order: z.number(),
-}
-).strict();
 const relationSchema = z.object({
-    question: z.record(z.string(), z.unknown()),
+    question: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -56,7 +44,7 @@ export const MultipleChoiceOptionSchema = MultipleChoiceOptionScalarSchema.merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const MultipleChoiceOptionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const MultipleChoiceOptionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -66,21 +54,21 @@ export const MultipleChoiceOptionPrismaCreateSchema = baseSchemaWithoutDefaults.
 export const MultipleChoiceOptionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     content: z.string(),
-    isCorrect: z.boolean(),
-    order: z.union([z.number(), z.record(z.string(), z.unknown())])
+    isCorrect: z.boolean().default(false),
+    order: z.union([z.number(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `MultipleChoiceOption` schema for create operations excluding foreign keys and relations.
  */
-export const MultipleChoiceOptionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const MultipleChoiceOptionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isCorrect: true
 });
 
@@ -94,7 +82,7 @@ export const MultipleChoiceOptionCreateSchema = MultipleChoiceOptionCreateScalar
 /**
  * `MultipleChoiceOption` schema for update operations excluding foreign keys and relations.
  */
-export const MultipleChoiceOptionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const MultipleChoiceOptionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

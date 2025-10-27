@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { PaymentStatus } from '../../zenstack/models';
@@ -23,23 +24,9 @@ const baseSchema = z.object({
     transactionCode: z.string().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    amount: DecimalSchema,
-    status: PaymentStatusSchema,
-    paymentDate: z.coerce.date().nullish(),
-    transactionCode: z.string().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    expert: z.record(z.string(), z.unknown()),
-    councilMember: z.record(z.string(), z.unknown()).optional(),
+    expert: z.record(z.unknown()),
+    councilMember: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -64,7 +51,7 @@ export const PaymentRecordSchema = PaymentRecordScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const PaymentRecordPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const PaymentRecordPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -74,11 +61,11 @@ export const PaymentRecordPrismaCreateSchema = baseSchemaWithoutDefaults.partial
 export const PaymentRecordPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     amount: DecimalSchema,
     status: PaymentStatusSchema,
     paymentDate: z.coerce.date().nullish(),
@@ -89,7 +76,7 @@ export const PaymentRecordPrismaUpdateSchema = z.object({
 /**
  * `PaymentRecord` schema for create operations excluding foreign keys and relations.
  */
-export const PaymentRecordCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const PaymentRecordCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
@@ -103,7 +90,7 @@ export const PaymentRecordCreateSchema = PaymentRecordCreateScalarSchema.merge(f
 /**
  * `PaymentRecord` schema for update operations excluding foreign keys and relations.
  */
-export const PaymentRecordUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const PaymentRecordUpdateScalarSchema = baseSchema.partial();
 
 
 /**

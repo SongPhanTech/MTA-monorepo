@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { CriteriaFieldSchema } from '../enums/CriteriaField.schema';
@@ -25,26 +26,8 @@ const baseSchema = z.object({
     semesterCondition: z.number().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    field: CriteriaFieldSchema,
-    operator: CriteriaOperatorSchema,
-    invert: z.boolean(),
-    threshold: z.number(),
-    tuple: z.array(z.string()),
-    severity: z.number(),
-    yearCondition: z.number().nullish(),
-    semesterCondition: z.number().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    trainingCourse: z.record(z.string(), z.unknown()),
+    trainingCourse: z.record(z.unknown()),
     academicWarning: z.array(z.unknown()).optional(),
 }
 );
@@ -69,7 +52,7 @@ export const AcademicWarningRuleSchema = AcademicWarningRuleScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const AcademicWarningRulePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const AcademicWarningRulePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -79,26 +62,26 @@ export const AcademicWarningRulePrismaCreateSchema = baseSchemaWithoutDefaults.p
 export const AcademicWarningRulePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     field: CriteriaFieldSchema,
     operator: CriteriaOperatorSchema,
-    invert: z.boolean(),
-    threshold: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    invert: z.boolean().default(false),
+    threshold: z.union([z.number(), z.record(z.unknown())]),
     tuple: z.array(z.string()),
-    severity: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    yearCondition: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    semesterCondition: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    severity: z.union([z.number(), z.record(z.unknown())]),
+    yearCondition: z.union([z.number().nullish(), z.record(z.unknown())]),
+    semesterCondition: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `AcademicWarningRule` schema for create operations excluding foreign keys and relations.
  */
-export const AcademicWarningRuleCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const AcademicWarningRuleCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, invert: true, tuple: true
 });
 
@@ -112,7 +95,7 @@ export const AcademicWarningRuleCreateSchema = AcademicWarningRuleCreateScalarSc
 /**
  * `AcademicWarningRule` schema for update operations excluding foreign keys and relations.
  */
-export const AcademicWarningRuleUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const AcademicWarningRuleUpdateScalarSchema = baseSchema.partial();
 
 
 /**

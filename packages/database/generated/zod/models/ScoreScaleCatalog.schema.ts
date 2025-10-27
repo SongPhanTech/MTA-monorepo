@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,20 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-    minValue: z.number(),
-    maxValue: z.number(),
-    passFrom: z.number().nullish(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
     minValue: z.number(),
     maxValue: z.number(),
@@ -55,7 +42,7 @@ export const ScoreScaleCatalogSchema = ScoreScaleCatalogScalarSchema.merge(relat
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ScoreScaleCatalogPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ScoreScaleCatalogPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -65,22 +52,22 @@ export const ScoreScaleCatalogPrismaCreateSchema = baseSchemaWithoutDefaults.par
 export const ScoreScaleCatalogPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
-    minValue: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    maxValue: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    passFrom: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    minValue: z.union([z.number(), z.record(z.unknown())]),
+    maxValue: z.union([z.number(), z.record(z.unknown())]),
+    passFrom: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `ScoreScaleCatalog` schema for create operations excluding foreign keys and relations.
  */
-export const ScoreScaleCatalogCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ScoreScaleCatalogCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -88,7 +75,7 @@ export const ScoreScaleCatalogCreateScalarSchema = baseSchemaWithoutDefaults.par
 /**
  * `ScoreScaleCatalog` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const ScoreScaleCatalogCreateSchema = baseSchemaWithoutDefaults.partial({
+export const ScoreScaleCatalogCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -96,7 +83,7 @@ export const ScoreScaleCatalogCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `ScoreScaleCatalog` schema for update operations excluding foreign keys and relations.
  */
-export const ScoreScaleCatalogUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ScoreScaleCatalogUpdateScalarSchema = baseSchema.partial();
 
 
 /**

@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,17 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -48,7 +38,7 @@ export const DM_SucKhoeSchema = DM_SucKhoeScalarSchema.merge(relationSchema.part
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DM_SucKhoePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DM_SucKhoePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -58,11 +48,11 @@ export const DM_SucKhoePrismaCreateSchema = baseSchemaWithoutDefaults.partial().
 export const DM_SucKhoePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string()
 }).partial().passthrough();
 
@@ -70,7 +60,7 @@ export const DM_SucKhoePrismaUpdateSchema = z.object({
 /**
  * `DM_SucKhoe` schema for create operations excluding foreign keys and relations.
  */
-export const DM_SucKhoeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DM_SucKhoeCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -78,7 +68,7 @@ export const DM_SucKhoeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `DM_SucKhoe` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DM_SucKhoeCreateSchema = baseSchemaWithoutDefaults.partial({
+export const DM_SucKhoeCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -86,7 +76,7 @@ export const DM_SucKhoeCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `DM_SucKhoe` schema for update operations excluding foreign keys and relations.
  */
-export const DM_SucKhoeUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DM_SucKhoeUpdateScalarSchema = baseSchema.partial();
 
 
 /**

@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import type { Prisma, ClusterSurvey } from "../zenstack/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
@@ -327,7 +328,7 @@ export function useSuspenseCountClusterSurvey<TArgs extends Prisma.ClusterSurvey
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('ClusterSurvey', `${endpoint}/clusterSurvey/count`, args, options, fetch);
 }
 
-export function useCheckClusterSurvey<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string; isPublic?: boolean; anonymous?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckClusterSurvey<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string; additionalSuggestion?: boolean; isPublic?: boolean; anonymous?: boolean; surveyTopicId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('ClusterSurvey', `${endpoint}/clusterSurvey/check`, args, options, fetch);
 }

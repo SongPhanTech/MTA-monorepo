@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { SurveyQuestionTypeSchema } from '../enums/SurveyQuestionType.schema';
@@ -18,22 +19,10 @@ const baseSchema = z.object({
     type: SurveyQuestionTypeSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    type: SurveyQuestionTypeSchema,
-}
-).strict();
 const relationSchema = z.object({
-    surveyQuestionGroup: z.record(z.string(), z.unknown()).optional(),
-    survey: z.record(z.string(), z.unknown()).optional(),
-    clusterSurvey: z.record(z.string(), z.unknown()).optional(),
+    surveyQuestionGroup: z.record(z.unknown()).optional(),
+    survey: z.record(z.unknown()).optional(),
+    clusterSurvey: z.record(z.unknown()).optional(),
     surveyResponses: z.array(z.unknown()).optional(),
 }
 );
@@ -60,7 +49,7 @@ export const SurveyQuestionSchema = SurveyQuestionScalarSchema.merge(fkSchema).m
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SurveyQuestionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const SurveyQuestionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -70,11 +59,11 @@ export const SurveyQuestionPrismaCreateSchema = baseSchemaWithoutDefaults.partia
 export const SurveyQuestionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     type: SurveyQuestionTypeSchema
 }).partial().passthrough();
@@ -83,7 +72,7 @@ export const SurveyQuestionPrismaUpdateSchema = z.object({
 /**
  * `SurveyQuestion` schema for create operations excluding foreign keys and relations.
  */
-export const SurveyQuestionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const SurveyQuestionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -97,7 +86,7 @@ export const SurveyQuestionCreateSchema = SurveyQuestionCreateScalarSchema.merge
 /**
  * `SurveyQuestion` schema for update operations excluding foreign keys and relations.
  */
-export const SurveyQuestionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const SurveyQuestionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

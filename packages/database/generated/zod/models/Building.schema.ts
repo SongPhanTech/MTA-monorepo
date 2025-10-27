@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,20 +18,8 @@ const baseSchema = z.object({
     floor: z.number().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    floor: z.number().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    trainingLocation: z.record(z.string(), z.unknown()).optional(),
+    trainingLocation: z.record(z.unknown()).optional(),
     rooms: z.array(z.unknown()).optional(),
 }
 );
@@ -55,7 +44,7 @@ export const BuildingSchema = BuildingScalarSchema.merge(fkSchema).merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const BuildingPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const BuildingPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -65,20 +54,20 @@ export const BuildingPrismaCreateSchema = baseSchemaWithoutDefaults.partial().pa
 export const BuildingPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
-    floor: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    floor: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `Building` schema for create operations excluding foreign keys and relations.
  */
-export const BuildingCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const BuildingCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -92,7 +81,7 @@ export const BuildingCreateSchema = BuildingCreateScalarSchema.merge(fkSchema);
 /**
  * `Building` schema for update operations excluding foreign keys and relations.
  */
-export const BuildingUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const BuildingUpdateScalarSchema = baseSchema.partial();
 
 
 /**

@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,20 +18,8 @@ const baseSchema = z.object({
     source: z.string().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    tableName: z.string(),
-    recordId: z.string(),
-    operation: z.string(),
-    changedAt: z.coerce.date(),
-    oldData: z.any().nullish(),
-    newData: z.any().nullish(),
-    transactionId: z.string().nullish(),
-    source: z.string().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    userProfile: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -54,7 +43,7 @@ export const ChangeLogSchema = ChangeLogScalarSchema.merge(fkSchema).merge(relat
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ChangeLogPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ChangeLogPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -66,7 +55,7 @@ export const ChangeLogPrismaUpdateSchema = z.object({
     tableName: z.string(),
     recordId: z.string(),
     operation: z.string(),
-    changedAt: z.coerce.date(),
+    changedAt: z.coerce.date().default(() => new Date()),
     oldData: z.any().nullish(),
     newData: z.any().nullish(),
     transactionId: z.string().nullish(),
@@ -77,7 +66,7 @@ export const ChangeLogPrismaUpdateSchema = z.object({
 /**
  * `ChangeLog` schema for create operations excluding foreign keys and relations.
  */
-export const ChangeLogCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ChangeLogCreateScalarSchema = baseSchema.partial({
     id: true, changedAt: true
 });
 
@@ -91,7 +80,7 @@ export const ChangeLogCreateSchema = ChangeLogCreateScalarSchema.merge(fkSchema)
 /**
  * `ChangeLog` schema for update operations excluding foreign keys and relations.
  */
-export const ChangeLogUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ChangeLogUpdateScalarSchema = baseSchema.partial();
 
 
 /**

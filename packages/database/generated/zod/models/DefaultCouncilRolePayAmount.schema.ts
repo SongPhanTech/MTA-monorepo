@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { CouncilRoleSchema } from '../enums/CouncilRole.schema';
@@ -16,18 +17,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    role: CouncilRoleSchema,
-    amount: DecimalSchema,
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     role: CouncilRoleSchema,
     amount: DecimalSchema,
 }
@@ -49,7 +38,7 @@ export const DefaultCouncilRolePayAmountSchema = DefaultCouncilRolePayAmountScal
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DefaultCouncilRolePayAmountPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DefaultCouncilRolePayAmountPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -59,11 +48,11 @@ export const DefaultCouncilRolePayAmountPrismaCreateSchema = baseSchemaWithoutDe
 export const DefaultCouncilRolePayAmountPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     role: CouncilRoleSchema,
     amount: DecimalSchema
 }).partial().passthrough();
@@ -72,7 +61,7 @@ export const DefaultCouncilRolePayAmountPrismaUpdateSchema = z.object({
 /**
  * `DefaultCouncilRolePayAmount` schema for create operations excluding foreign keys and relations.
  */
-export const DefaultCouncilRolePayAmountCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DefaultCouncilRolePayAmountCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -80,7 +69,7 @@ export const DefaultCouncilRolePayAmountCreateScalarSchema = baseSchemaWithoutDe
 /**
  * `DefaultCouncilRolePayAmount` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DefaultCouncilRolePayAmountCreateSchema = baseSchemaWithoutDefaults.partial({
+export const DefaultCouncilRolePayAmountCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -88,7 +77,7 @@ export const DefaultCouncilRolePayAmountCreateSchema = baseSchemaWithoutDefaults
 /**
  * `DefaultCouncilRolePayAmount` schema for update operations excluding foreign keys and relations.
  */
-export const DefaultCouncilRolePayAmountUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DefaultCouncilRolePayAmountUpdateScalarSchema = baseSchema.partial();
 
 
 /**

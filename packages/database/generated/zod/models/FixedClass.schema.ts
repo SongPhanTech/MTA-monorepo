@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -20,30 +21,15 @@ const baseSchema = z.object({
     initSize: z.number().default(0),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    summary: z.string().nullish(),
-    startYear: z.number().nullish(),
-    graduated: z.boolean().nullish(),
-    initSize: z.number(),
-}
-).strict();
 const relationSchema = z.object({
-    classMonitor: z.record(z.string(), z.unknown()).optional(),
-    unionLeader: z.record(z.string(), z.unknown()).optional(),
-    trainingCourse: z.record(z.string(), z.unknown()),
-    managementOrganization: z.record(z.string(), z.unknown()).optional(),
-    lecturerManagement: z.record(z.string(), z.unknown()).optional(),
-    staffManagement: z.record(z.string(), z.unknown()).optional(),
+    classMonitor: z.record(z.unknown()).optional(),
+    unionLeader: z.record(z.unknown()).optional(),
+    trainingCourse: z.record(z.unknown()),
+    managementOrganization: z.record(z.unknown()).optional(),
+    lecturerManagement: z.record(z.unknown()).optional(),
+    staffManagement: z.record(z.unknown()).optional(),
     students: z.array(z.unknown()).optional(),
-    curriculumVersion: z.record(z.string(), z.unknown()).optional(),
+    curriculumVersion: z.record(z.unknown()).optional(),
     subjectClasses: z.array(z.unknown()).optional(),
     notifications: z.array(z.unknown()).optional(),
     surveyObjectTypes: z.array(z.unknown()).optional(),
@@ -78,7 +64,7 @@ export const FixedClassSchema = FixedClassScalarSchema.merge(fkSchema).merge(rel
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const FixedClassPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const FixedClassPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -88,23 +74,23 @@ export const FixedClassPrismaCreateSchema = baseSchemaWithoutDefaults.partial().
 export const FixedClassPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     summary: z.string().nullish(),
-    startYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    graduated: z.boolean().nullish(),
-    initSize: z.union([z.number(), z.record(z.string(), z.unknown())])
+    startYear: z.union([z.number().nullish(), z.record(z.unknown())]),
+    graduated: z.boolean().default(false).nullish(),
+    initSize: z.union([z.number().default(0), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `FixedClass` schema for create operations excluding foreign keys and relations.
  */
-export const FixedClassCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const FixedClassCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, graduated: true, initSize: true
 });
 
@@ -118,7 +104,7 @@ export const FixedClassCreateSchema = FixedClassCreateScalarSchema.merge(fkSchem
 /**
  * `FixedClass` schema for update operations excluding foreign keys and relations.
  */
-export const FixedClassUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const FixedClassUpdateScalarSchema = baseSchema.partial();
 
 
 /**

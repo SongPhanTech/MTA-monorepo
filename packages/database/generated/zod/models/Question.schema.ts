@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { QuestionType } from '../../zenstack/models';
@@ -22,28 +23,13 @@ const baseSchema = z.object({
     isAutoGraded: z.boolean().default(false),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    content: z.string(),
-    type: QuestionTypeSchema,
-    point: z.number(),
-    explanation: z.string().nullish(),
-    isAutoGraded: z.boolean(),
-}
-).strict();
 const relationSchema = z.object({
     multipleChoiceOptions: z.array(z.unknown()).optional(),
     fillInBlankSlots: z.array(z.unknown()).optional(),
     orderingItems: z.array(z.unknown()).optional(),
-    questionBank: z.record(z.string(), z.unknown()),
-    knowledgeBlock: z.record(z.string(), z.unknown()).optional(),
-    difficulty: z.record(z.string(), z.unknown()).optional(),
+    questionBank: z.record(z.unknown()),
+    knowledgeBlock: z.record(z.unknown()).optional(),
+    difficulty: z.record(z.unknown()).optional(),
     sessionQuestions: z.array(z.unknown()).optional(),
 }
 );
@@ -70,7 +56,7 @@ export const QuestionSchema = QuestionScalarSchema.merge(fkSchema).merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const QuestionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const QuestionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -80,23 +66,23 @@ export const QuestionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().pa
 export const QuestionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     content: z.string(),
     type: QuestionTypeSchema,
-    point: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    point: z.union([z.number().default(1), z.record(z.unknown())]),
     explanation: z.string().nullish(),
-    isAutoGraded: z.boolean()
+    isAutoGraded: z.boolean().default(false)
 }).partial().passthrough();
 
 
 /**
  * `Question` schema for create operations excluding foreign keys and relations.
  */
-export const QuestionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const QuestionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, type: true, point: true, isAutoGraded: true
 });
 
@@ -110,7 +96,7 @@ export const QuestionCreateSchema = QuestionCreateScalarSchema.merge(fkSchema);
 /**
  * `Question` schema for update operations excluding foreign keys and relations.
  */
-export const QuestionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const QuestionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

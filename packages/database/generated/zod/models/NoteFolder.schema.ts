@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,22 +19,9 @@ const baseSchema = z.object({
     sortOrder: z.number().default(0),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    icon: z.string().nullish(),
-    sortOrder: z.number(),
-}
-).strict();
 const relationSchema = z.object({
-    student: z.record(z.string(), z.unknown()),
-    parent: z.record(z.string(), z.unknown()).optional(),
+    student: z.record(z.unknown()),
+    parent: z.record(z.unknown()).optional(),
     children: z.array(z.unknown()).optional(),
     notes: z.array(z.unknown()).optional(),
 }
@@ -60,7 +48,7 @@ export const NoteFolderSchema = NoteFolderScalarSchema.merge(fkSchema).merge(rel
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const NoteFolderPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const NoteFolderPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -70,21 +58,21 @@ export const NoteFolderPrismaCreateSchema = baseSchemaWithoutDefaults.partial().
 export const NoteFolderPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     icon: z.string().nullish(),
-    sortOrder: z.union([z.number(), z.record(z.string(), z.unknown())])
+    sortOrder: z.union([z.number().default(0), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `NoteFolder` schema for create operations excluding foreign keys and relations.
  */
-export const NoteFolderCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const NoteFolderCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, sortOrder: true
 });
 
@@ -98,7 +86,7 @@ export const NoteFolderCreateSchema = NoteFolderCreateScalarSchema.merge(fkSchem
 /**
  * `NoteFolder` schema for update operations excluding foreign keys and relations.
  */
-export const NoteFolderUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const NoteFolderUpdateScalarSchema = baseSchema.partial();
 
 
 /**

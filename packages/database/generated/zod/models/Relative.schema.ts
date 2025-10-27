@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { RelativeTypeSchema } from '../enums/RelativeType.schema';
@@ -23,25 +24,8 @@ const baseSchema = z.object({
     information: z.string().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    type: RelativeTypeSchema,
-    birthYear: z.number().nullish(),
-    queQuan: z.string().nullish(),
-    noiOHienTai: z.string().nullish(),
-    job: z.string().nullish(),
-    information: z.string().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    userProfile: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -65,7 +49,7 @@ export const RelativeSchema = RelativeScalarSchema.merge(fkSchema).merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const RelativePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const RelativePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -75,14 +59,14 @@ export const RelativePrismaCreateSchema = baseSchemaWithoutDefaults.partial().pa
 export const RelativePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     type: RelativeTypeSchema,
-    birthYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    birthYear: z.union([z.number().nullish(), z.record(z.unknown())]),
     queQuan: z.string().nullish(),
     noiOHienTai: z.string().nullish(),
     job: z.string().nullish(),
@@ -93,7 +77,7 @@ export const RelativePrismaUpdateSchema = z.object({
 /**
  * `Relative` schema for create operations excluding foreign keys and relations.
  */
-export const RelativeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const RelativeCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -107,7 +91,7 @@ export const RelativeCreateSchema = RelativeCreateScalarSchema.merge(fkSchema);
 /**
  * `Relative` schema for update operations excluding foreign keys and relations.
  */
-export const RelativeUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const RelativeUpdateScalarSchema = baseSchema.partial();
 
 
 /**

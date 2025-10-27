@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -16,20 +17,9 @@ const baseSchema = z.object({
     finalScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    finalScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }),
-}
-).strict();
 const relationSchema = z.object({
-    certificate: z.record(z.string(), z.unknown()),
-    subject: z.record(z.string(), z.unknown()),
+    certificate: z.record(z.unknown()),
+    subject: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -54,7 +44,7 @@ export const CertificateOnSubjectSchema = CertificateOnSubjectScalarSchema.merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const CertificateOnSubjectPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const CertificateOnSubjectPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -64,19 +54,19 @@ export const CertificateOnSubjectPrismaCreateSchema = baseSchemaWithoutDefaults.
 export const CertificateOnSubjectPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    finalScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }), z.record(z.string(), z.unknown())])
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    finalScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `CertificateOnSubject` schema for create operations excluding foreign keys and relations.
  */
-export const CertificateOnSubjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const CertificateOnSubjectCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -90,7 +80,7 @@ export const CertificateOnSubjectCreateSchema = CertificateOnSubjectCreateScalar
 /**
  * `CertificateOnSubject` schema for update operations excluding foreign keys and relations.
  */
-export const CertificateOnSubjectUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const CertificateOnSubjectUpdateScalarSchema = baseSchema.partial();
 
 
 /**

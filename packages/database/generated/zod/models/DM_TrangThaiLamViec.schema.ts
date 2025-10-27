@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,17 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -44,7 +34,7 @@ export const DM_TrangThaiLamViecSchema = DM_TrangThaiLamViecScalarSchema;
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DM_TrangThaiLamViecPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DM_TrangThaiLamViecPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -54,11 +44,11 @@ export const DM_TrangThaiLamViecPrismaCreateSchema = baseSchemaWithoutDefaults.p
 export const DM_TrangThaiLamViecPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string()
 }).partial().passthrough();
 
@@ -66,7 +56,7 @@ export const DM_TrangThaiLamViecPrismaUpdateSchema = z.object({
 /**
  * `DM_TrangThaiLamViec` schema for create operations excluding foreign keys and relations.
  */
-export const DM_TrangThaiLamViecCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DM_TrangThaiLamViecCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -74,7 +64,7 @@ export const DM_TrangThaiLamViecCreateScalarSchema = baseSchemaWithoutDefaults.p
 /**
  * `DM_TrangThaiLamViec` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DM_TrangThaiLamViecCreateSchema = baseSchemaWithoutDefaults.partial({
+export const DM_TrangThaiLamViecCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -82,7 +72,7 @@ export const DM_TrangThaiLamViecCreateSchema = baseSchemaWithoutDefaults.partial
 /**
  * `DM_TrangThaiLamViec` schema for update operations excluding foreign keys and relations.
  */
-export const DM_TrangThaiLamViecUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DM_TrangThaiLamViecUpdateScalarSchema = baseSchema.partial();
 
 
 /**

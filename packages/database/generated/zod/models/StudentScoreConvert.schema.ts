@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -15,18 +16,8 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-}
-).strict();
 const relationSchema = z.object({
-    student: z.record(z.string(), z.unknown()),
+    student: z.record(z.unknown()),
     documentFiles: z.array(z.unknown()).optional(),
     subjectScoreConvert: z.array(z.unknown()).optional(),
 }
@@ -52,7 +43,7 @@ export const StudentScoreConvertSchema = StudentScoreConvertScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StudentScoreConvertPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const StudentScoreConvertPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -62,18 +53,18 @@ export const StudentScoreConvertPrismaCreateSchema = baseSchemaWithoutDefaults.p
 export const StudentScoreConvertPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date()
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date())
 }).partial().passthrough();
 
 
 /**
  * `StudentScoreConvert` schema for create operations excluding foreign keys and relations.
  */
-export const StudentScoreConvertCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const StudentScoreConvertCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -87,7 +78,7 @@ export const StudentScoreConvertCreateSchema = StudentScoreConvertCreateScalarSc
 /**
  * `StudentScoreConvert` schema for update operations excluding foreign keys and relations.
  */
-export const StudentScoreConvertUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const StudentScoreConvertUpdateScalarSchema = baseSchema.partial();
 
 
 /**

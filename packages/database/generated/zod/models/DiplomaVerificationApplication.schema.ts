@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { DiplomaVerificationStatus } from '../../zenstack/models';
@@ -33,37 +34,11 @@ const baseSchema = z.object({
     status: DiplomaVerificationStatusSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    fullname: z.string(),
-    idCardNumber: z.string(),
-    dateOfBirth: z.coerce.date().nullish(),
-    phoneNumber: z.string(),
-    email: z.string(),
-    reason: z.string(),
-    originalDiplomaNumber: z.string(),
-    diplomaNumber: z.string(),
-    trainingMajor: z.string().nullish(),
-    trainingLevel: z.string().nullish(),
-    trainingForm: z.string().nullish(),
-    trainingCourseStartYear: z.number().nullish(),
-    trainingCourseEndYear: z.number().nullish(),
-    diplomaIssueDate: z.coerce.date().nullish(),
-    classification: z.string().nullish(),
-    status: DiplomaVerificationStatusSchema,
-}
-).strict();
 const relationSchema = z.object({
     attachments: z.array(z.unknown()).optional(),
-    diplomaFront: z.record(z.string(), z.unknown()).optional(),
-    diplomaBack: z.record(z.string(), z.unknown()).optional(),
-    student: z.record(z.string(), z.unknown()).optional(),
+    diplomaFront: z.record(z.unknown()).optional(),
+    diplomaBack: z.record(z.unknown()).optional(),
+    student: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -87,7 +62,7 @@ export const DiplomaVerificationApplicationSchema = DiplomaVerificationApplicati
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DiplomaVerificationApplicationPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DiplomaVerificationApplicationPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -97,11 +72,11 @@ export const DiplomaVerificationApplicationPrismaCreateSchema = baseSchemaWithou
 export const DiplomaVerificationApplicationPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     fullname: z.string(),
     idCardNumber: z.string(),
     dateOfBirth: z.coerce.date().nullish(),
@@ -113,8 +88,8 @@ export const DiplomaVerificationApplicationPrismaUpdateSchema = z.object({
     trainingMajor: z.string().nullish(),
     trainingLevel: z.string().nullish(),
     trainingForm: z.string().nullish(),
-    trainingCourseStartYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    trainingCourseEndYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    trainingCourseStartYear: z.union([z.number().nullish(), z.record(z.unknown())]),
+    trainingCourseEndYear: z.union([z.number().nullish(), z.record(z.unknown())]),
     diplomaIssueDate: z.coerce.date().nullish(),
     classification: z.string().nullish(),
     status: DiplomaVerificationStatusSchema
@@ -124,7 +99,7 @@ export const DiplomaVerificationApplicationPrismaUpdateSchema = z.object({
 /**
  * `DiplomaVerificationApplication` schema for create operations excluding foreign keys and relations.
  */
-export const DiplomaVerificationApplicationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DiplomaVerificationApplicationCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
@@ -138,7 +113,7 @@ export const DiplomaVerificationApplicationCreateSchema = DiplomaVerificationApp
 /**
  * `DiplomaVerificationApplication` schema for update operations excluding foreign keys and relations.
  */
-export const DiplomaVerificationApplicationUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DiplomaVerificationApplicationUpdateScalarSchema = baseSchema.partial();
 
 
 /**

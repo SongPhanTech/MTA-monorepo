@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { DecimalSchema } from '../common';
@@ -23,24 +24,8 @@ const baseSchema = z.object({
     effectiveTo: z.coerce.date().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    rankOrder: z.number(),
-    baseAmount: DecimalSchema,
-    multiplier: z.number(),
-    effectiveFrom: z.coerce.date().nullish(),
-    effectiveTo: z.coerce.date().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    trainingCourse: z.record(z.string(), z.unknown()),
+    trainingCourse: z.record(z.unknown()),
     criteria: z.array(z.unknown()).optional(),
     awards: z.array(z.unknown()).optional(),
 }
@@ -66,7 +51,7 @@ export const ScholarshipSchema = ScholarshipScalarSchema.merge(fkSchema).merge(r
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ScholarshipPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ScholarshipPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -76,15 +61,15 @@ export const ScholarshipPrismaCreateSchema = baseSchemaWithoutDefaults.partial()
 export const ScholarshipPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
-    rankOrder: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    rankOrder: z.union([z.number(), z.record(z.unknown())]),
     baseAmount: DecimalSchema,
-    multiplier: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    multiplier: z.union([z.number().default(1), z.record(z.unknown())]),
     effectiveFrom: z.coerce.date().nullish(),
     effectiveTo: z.coerce.date().nullish()
 }).partial().passthrough();
@@ -93,7 +78,7 @@ export const ScholarshipPrismaUpdateSchema = z.object({
 /**
  * `Scholarship` schema for create operations excluding foreign keys and relations.
  */
-export const ScholarshipCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ScholarshipCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, multiplier: true
 });
 
@@ -107,7 +92,7 @@ export const ScholarshipCreateSchema = ScholarshipCreateScalarSchema.merge(fkSch
 /**
  * `Scholarship` schema for update operations excluding foreign keys and relations.
  */
-export const ScholarshipUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ScholarshipUpdateScalarSchema = baseSchema.partial();
 
 
 /**

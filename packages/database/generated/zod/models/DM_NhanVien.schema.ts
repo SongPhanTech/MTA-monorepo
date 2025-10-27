@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -42,45 +43,8 @@ const baseSchema = z.object({
     sAvatarId: z.string().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    Id: z.string().uuid(),
-    sMa: z.string().nullish(),
-    sTen: z.string().nullish(),
-    sGhiChu: z.string().nullish(),
-    iSTT: z.number().nullish(),
-    bActive: z.boolean().nullish(),
-    bDeleted: z.boolean().nullish(),
-    bSystem: z.boolean().nullish(),
-    iDictionaryKey: z.number().nullish(),
-    dNgayTao: z.coerce.date().nullish(),
-    dNgaySua: z.coerce.date().nullish(),
-    sNguoiTao: z.string().nullish(),
-    sNguoiSua: z.string().nullish(),
-    sThietBiTao: z.string().nullish(),
-    sThietBiSua: z.string().nullish(),
-    sCCCD: z.string().nullish(),
-    sHoVaDem: z.string().nullish(),
-    sTenDayDu: z.string().nullish(),
-    dNgaySinh: z.coerce.date().nullish(),
-    iGioiTinh: z.number().nullish(),
-    sDM_QuocGiaId: z.string().uuid().nullish(),
-    sDM_TinhId: z.string().uuid().nullish(),
-    sDM_QuanHuyenId: z.string().uuid().nullish(),
-    sDM_XaPhuongId: z.string().uuid().nullish(),
-    sDiaChi: z.string().nullish(),
-    sSDTDiDong: z.string().nullish(),
-    sEmail: z.string().nullish(),
-    bLaNguoiDung: z.boolean().nullish(),
-    bLaCanBoNhanVien: z.boolean().nullish(),
-    bLaHocVien: z.boolean().nullish(),
-    sDM_DonViId: z.string().uuid().nullish(),
-    sDM_ViTriCongViecId: z.string().uuid().nullish(),
-    sQuanlyTrucTiepId: z.string().uuid().nullish(),
-    sAvatarId: z.string().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    group: z.record(z.string(), z.unknown()).optional(),
+    group: z.record(z.unknown()).optional(),
     notification: z.array(z.unknown()).optional(),
     feedback: z.array(z.unknown()).optional(),
 }
@@ -106,7 +70,7 @@ export const DM_NhanVienSchema = DM_NhanVienScalarSchema.merge(fkSchema).merge(r
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DM_NhanVienPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DM_NhanVienPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -118,11 +82,11 @@ export const DM_NhanVienPrismaUpdateSchema = z.object({
     sMa: z.string().nullish(),
     sTen: z.string().nullish(),
     sGhiChu: z.string().nullish(),
-    iSTT: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    bActive: z.boolean().nullish(),
-    bDeleted: z.boolean().nullish(),
-    bSystem: z.boolean().nullish(),
-    iDictionaryKey: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    iSTT: z.union([z.number().default(0).nullish(), z.record(z.unknown())]),
+    bActive: z.boolean().default(true).nullish(),
+    bDeleted: z.boolean().default(false).nullish(),
+    bSystem: z.boolean().default(false).nullish(),
+    iDictionaryKey: z.union([z.number().default(0).nullish(), z.record(z.unknown())]),
     dNgayTao: z.coerce.date().nullish(),
     dNgaySua: z.coerce.date().nullish(),
     sNguoiTao: z.string().nullish(),
@@ -133,7 +97,7 @@ export const DM_NhanVienPrismaUpdateSchema = z.object({
     sHoVaDem: z.string().nullish(),
     sTenDayDu: z.string().nullish(),
     dNgaySinh: z.coerce.date().nullish(),
-    iGioiTinh: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    iGioiTinh: z.union([z.number().nullish(), z.record(z.unknown())]),
     sDM_QuocGiaId: z.string().uuid().nullish(),
     sDM_TinhId: z.string().uuid().nullish(),
     sDM_QuanHuyenId: z.string().uuid().nullish(),
@@ -154,7 +118,7 @@ export const DM_NhanVienPrismaUpdateSchema = z.object({
 /**
  * `DM_NhanVien` schema for create operations excluding foreign keys and relations.
  */
-export const DM_NhanVienCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DM_NhanVienCreateScalarSchema = baseSchema.partial({
     Id: true, iSTT: true, bActive: true, bDeleted: true, bSystem: true, iDictionaryKey: true
 });
 
@@ -168,7 +132,7 @@ export const DM_NhanVienCreateSchema = DM_NhanVienCreateScalarSchema.merge(fkSch
 /**
  * `DM_NhanVien` schema for update operations excluding foreign keys and relations.
  */
-export const DM_NhanVienUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DM_NhanVienUpdateScalarSchema = baseSchema.partial();
 
 
 /**

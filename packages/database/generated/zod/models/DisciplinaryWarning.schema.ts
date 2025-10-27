@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,21 +18,9 @@ const baseSchema = z.object({
     increasedFrom: z.number().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    level: z.number(),
-    increasedFrom: z.number().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    student: z.record(z.string(), z.unknown()),
-    semester: z.record(z.string(), z.unknown()).optional(),
+    student: z.record(z.unknown()),
+    semester: z.record(z.unknown()).optional(),
     reasonDetails: z.array(z.unknown()).optional(),
 }
 );
@@ -57,7 +46,7 @@ export const DisciplinaryWarningSchema = DisciplinaryWarningScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DisciplinaryWarningPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DisciplinaryWarningPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -67,20 +56,20 @@ export const DisciplinaryWarningPrismaCreateSchema = baseSchemaWithoutDefaults.p
 export const DisciplinaryWarningPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    level: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    increasedFrom: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    level: z.union([z.number(), z.record(z.unknown())]),
+    increasedFrom: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `DisciplinaryWarning` schema for create operations excluding foreign keys and relations.
  */
-export const DisciplinaryWarningCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DisciplinaryWarningCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -94,7 +83,7 @@ export const DisciplinaryWarningCreateSchema = DisciplinaryWarningCreateScalarSc
 /**
  * `DisciplinaryWarning` schema for update operations excluding foreign keys and relations.
  */
-export const DisciplinaryWarningUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DisciplinaryWarningUpdateScalarSchema = baseSchema.partial();
 
 
 /**

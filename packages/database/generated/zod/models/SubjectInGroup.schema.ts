@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { EquivalencySideSchema } from '../enums/EquivalencySide.schema';
@@ -17,20 +18,9 @@ const baseSchema = z.object({
     side: EquivalencySideSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    side: EquivalencySideSchema,
-}
-).strict();
 const relationSchema = z.object({
-    subject: z.record(z.string(), z.unknown()),
-    equivalencyGroup: z.record(z.string(), z.unknown()),
+    subject: z.record(z.unknown()),
+    equivalencyGroup: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -55,7 +45,7 @@ export const SubjectInGroupSchema = SubjectInGroupScalarSchema.merge(fkSchema).m
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SubjectInGroupPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const SubjectInGroupPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -65,11 +55,11 @@ export const SubjectInGroupPrismaCreateSchema = baseSchemaWithoutDefaults.partia
 export const SubjectInGroupPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     side: EquivalencySideSchema
 }).partial().passthrough();
 
@@ -77,7 +67,7 @@ export const SubjectInGroupPrismaUpdateSchema = z.object({
 /**
  * `SubjectInGroup` schema for create operations excluding foreign keys and relations.
  */
-export const SubjectInGroupCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const SubjectInGroupCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -91,7 +81,7 @@ export const SubjectInGroupCreateSchema = SubjectInGroupCreateScalarSchema.merge
 /**
  * `SubjectInGroup` schema for update operations excluding foreign keys and relations.
  */
-export const SubjectInGroupUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const SubjectInGroupUpdateScalarSchema = baseSchema.partial();
 
 
 /**

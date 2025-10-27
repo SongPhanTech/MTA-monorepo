@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -21,27 +22,11 @@ const baseSchema = z.object({
     numberCreditsElective: z.number().default(0),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    englishName: z.string().nullish(),
-    summary: z.string(),
-    numberCreditsMajor: z.number(),
-    numberCreditsRequired: z.number(),
-    numberCreditsElective: z.number(),
-}
-).strict();
 const relationSchema = z.object({
-    organization: z.record(z.string(), z.unknown()),
-    secondOrganization: z.record(z.string(), z.unknown()).optional(),
-    thirdOrganization: z.record(z.string(), z.unknown()).optional(),
-    trainingField: z.record(z.string(), z.unknown()),
+    organization: z.record(z.unknown()),
+    secondOrganization: z.record(z.unknown()).optional(),
+    thirdOrganization: z.record(z.unknown()).optional(),
+    trainingField: z.record(z.unknown()),
     trainingObjectTypes: z.array(z.unknown()).optional(),
     curriculum: z.array(z.unknown()).optional(),
     graduationDecision: z.array(z.unknown()).optional(),
@@ -73,7 +58,7 @@ export const TrainingMajorSchema = TrainingMajorScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingMajorPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const TrainingMajorPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -83,24 +68,24 @@ export const TrainingMajorPrismaCreateSchema = baseSchemaWithoutDefaults.partial
 export const TrainingMajorPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     englishName: z.string().nullish(),
     summary: z.string(),
-    numberCreditsMajor: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    numberCreditsRequired: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    numberCreditsElective: z.union([z.number(), z.record(z.string(), z.unknown())])
+    numberCreditsMajor: z.union([z.number().default(0), z.record(z.unknown())]),
+    numberCreditsRequired: z.union([z.number().default(0), z.record(z.unknown())]),
+    numberCreditsElective: z.union([z.number().default(0), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `TrainingMajor` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingMajorCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const TrainingMajorCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, numberCreditsMajor: true, numberCreditsRequired: true, numberCreditsElective: true
 });
 
@@ -114,7 +99,7 @@ export const TrainingMajorCreateSchema = TrainingMajorCreateScalarSchema.merge(f
 /**
  * `TrainingMajor` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingMajorUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const TrainingMajorUpdateScalarSchema = baseSchema.partial();
 
 
 /**

@@ -3,10 +3,9 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
-import type { ModelMeta } from "@zenstackhq/runtime";
-
-const metadata: ModelMeta = {
+const metadata = {
     models: {
         config: {
             name: 'Config', fields: {
@@ -18144,6 +18143,12 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyTopic',
                 }, survey: {
                     name: "survey",
                     type: "Survey",
@@ -18271,6 +18276,9 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, additionalSuggestion: {
+                    name: "additionalSuggestion",
+                    type: "Boolean",
                 }, startDate: {
                     name: "startDate",
                     type: "DateTime",
@@ -18286,6 +18294,19 @@ const metadata: ModelMeta = {
                     name: "anonymous",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, surveyTopic: {
+                    name: "surveyTopic",
+                    type: "SurveyTopic",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'clusterSurvey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyTopicId" },
+                }, surveyTopicId: {
+                    name: "surveyTopicId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyTopic',
                 }, surveyObjectType: {
                     name: "surveyObjectType",
                     type: "SurveyObjectType",
