@@ -1923,6 +1923,7 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   schedule: 'schedule',
   maxStudent: 'maxStudent',
   type: 'type',
+  status: 'status',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   cancelled: 'cancelled',
@@ -6672,6 +6673,11 @@ exports.SubjectClassSchedule = exports.$Enums.SubjectClassSchedule = {
   MORNING: 'MORNING',
   AFTERNOON: 'AFTERNOON',
   EVENING: 'EVENING'
+};
+
+exports.SubjectClassStatus = exports.$Enums.SubjectClassStatus = {
+  DRAFT: 'DRAFT',
+  OFFICIAL: 'OFFICIAL'
 };
 
 exports.PeriodType = exports.$Enums.PeriodType = {

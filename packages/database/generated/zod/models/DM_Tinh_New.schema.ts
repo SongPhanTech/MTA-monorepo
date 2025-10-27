@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -15,27 +16,6 @@ const baseSchema = z.object({
     bDeleted: z.boolean().default(false).nullish(),
     bSystem: z.boolean().default(false).nullish(),
     iDictionaryKey: z.number().default(0).nullish(),
-    dNgayTao: z.coerce.date().nullish(),
-    dNgaySua: z.coerce.date().nullish(),
-    sNguoiTao: z.string().nullish(),
-    sNguoiSua: z.string().nullish(),
-    sThietBiTao: z.string().nullish(),
-    sThietBiSua: z.string().nullish(),
-    sDM_QuocGiaId: z.string().uuid().nullish(),
-    iDM_KhuVucDiaLy_Id: z.number().nullish(),
-    iDM_DonViHanhChinhId: z.number().nullish(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    Id: z.string().uuid(),
-    sMa: z.string().nullish(),
-    sTen: z.string().nullish(),
-    sGhiChu: z.string().nullish(),
-    iSTT: z.number().nullish(),
-    bActive: z.boolean().nullish(),
-    bDeleted: z.boolean().nullish(),
-    bSystem: z.boolean().nullish(),
-    iDictionaryKey: z.number().nullish(),
     dNgayTao: z.coerce.date().nullish(),
     dNgaySua: z.coerce.date().nullish(),
     sNguoiTao: z.string().nullish(),
@@ -72,7 +52,7 @@ export const DM_Tinh_NewSchema = DM_Tinh_NewScalarSchema.merge(relationSchema.pa
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DM_Tinh_NewPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DM_Tinh_NewPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -84,11 +64,11 @@ export const DM_Tinh_NewPrismaUpdateSchema = z.object({
     sMa: z.string().nullish(),
     sTen: z.string().nullish(),
     sGhiChu: z.string().nullish(),
-    iSTT: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    bActive: z.boolean().nullish(),
-    bDeleted: z.boolean().nullish(),
-    bSystem: z.boolean().nullish(),
-    iDictionaryKey: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    iSTT: z.union([z.number().default(0).nullish(), z.record(z.unknown())]),
+    bActive: z.boolean().default(true).nullish(),
+    bDeleted: z.boolean().default(false).nullish(),
+    bSystem: z.boolean().default(false).nullish(),
+    iDictionaryKey: z.union([z.number().default(0).nullish(), z.record(z.unknown())]),
     dNgayTao: z.coerce.date().nullish(),
     dNgaySua: z.coerce.date().nullish(),
     sNguoiTao: z.string().nullish(),
@@ -96,15 +76,15 @@ export const DM_Tinh_NewPrismaUpdateSchema = z.object({
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
     sDM_QuocGiaId: z.string().uuid().nullish(),
-    iDM_KhuVucDiaLy_Id: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    iDM_DonViHanhChinhId: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    iDM_KhuVucDiaLy_Id: z.union([z.number().nullish(), z.record(z.unknown())]),
+    iDM_DonViHanhChinhId: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `DM_Tinh_New` schema for create operations excluding foreign keys and relations.
  */
-export const DM_Tinh_NewCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DM_Tinh_NewCreateScalarSchema = baseSchema.partial({
     Id: true, iSTT: true, bActive: true, bDeleted: true, bSystem: true, iDictionaryKey: true
 });
 
@@ -112,7 +92,7 @@ export const DM_Tinh_NewCreateScalarSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `DM_Tinh_New` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DM_Tinh_NewCreateSchema = baseSchemaWithoutDefaults.partial({
+export const DM_Tinh_NewCreateSchema = baseSchema.partial({
     Id: true, iSTT: true, bActive: true, bDeleted: true, bSystem: true, iDictionaryKey: true
 });
 
@@ -120,7 +100,7 @@ export const DM_Tinh_NewCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `DM_Tinh_New` schema for update operations excluding foreign keys and relations.
  */
-export const DM_Tinh_NewUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DM_Tinh_NewUpdateScalarSchema = baseSchema.partial();
 
 
 /**

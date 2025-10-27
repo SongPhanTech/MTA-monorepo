@@ -61,7 +61,6 @@ const Page: NextPage = () => {
 }
 export default Page
 
-
 // todo: tạm bỏ
 // import Loading from '@components/commons/loading'
 // import { ROUTER_PATH } from '@workspace/router'

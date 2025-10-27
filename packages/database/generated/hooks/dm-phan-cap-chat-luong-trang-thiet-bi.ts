@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import type { Prisma, DM_PhanCap_ChatLuong_TrangThietBi } from "../zenstack/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';

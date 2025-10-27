@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -22,27 +23,10 @@ const baseSchema = z.object({
     score: z.number().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    order: z.number(),
-    currentSituation: z.string(),
-    strengths: z.string(),
-    weakness: z.string(),
-    actionPlan: z.string(),
-    score: z.number().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    standard: z.record(z.string(), z.unknown()),
-    scoreScale: z.record(z.string(), z.unknown()),
-    evaluationCouncil: z.record(z.string(), z.unknown()).optional(),
+    standard: z.record(z.unknown()),
+    scoreScale: z.record(z.unknown()),
+    evaluationCouncil: z.record(z.unknown()).optional(),
     requirementCriterions: z.array(z.unknown()).optional(),
 }
 );
@@ -69,7 +53,7 @@ export const EvaluationCriterionSchema = EvaluationCriterionScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const EvaluationCriterionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const EvaluationCriterionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -79,25 +63,25 @@ export const EvaluationCriterionPrismaCreateSchema = baseSchemaWithoutDefaults.p
 export const EvaluationCriterionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
-    order: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    currentSituation: z.string(),
-    strengths: z.string(),
-    weakness: z.string(),
-    actionPlan: z.string(),
-    score: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    order: z.union([z.number(), z.record(z.unknown())]),
+    currentSituation: z.string().default(""),
+    strengths: z.string().default(""),
+    weakness: z.string().default(""),
+    actionPlan: z.string().default(""),
+    score: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `EvaluationCriterion` schema for create operations excluding foreign keys and relations.
  */
-export const EvaluationCriterionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const EvaluationCriterionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, currentSituation: true, strengths: true, weakness: true, actionPlan: true
 });
 
@@ -111,7 +95,7 @@ export const EvaluationCriterionCreateSchema = EvaluationCriterionCreateScalarSc
 /**
  * `EvaluationCriterion` schema for update operations excluding foreign keys and relations.
  */
-export const EvaluationCriterionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const EvaluationCriterionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

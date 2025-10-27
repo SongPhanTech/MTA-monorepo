@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { CriteriaFieldSchema } from '../enums/CriteriaField.schema';
@@ -23,24 +24,8 @@ const baseSchema = z.object({
     bonusValue: z.number().default(0),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    field: CriteriaFieldSchema,
-    invert: z.boolean(),
-    operator: CriteriaOperatorSchema,
-    value: z.number(),
-    tuple: z.array(z.string()),
-    bonusValue: z.number(),
-}
-).strict();
 const relationSchema = z.object({
-    scholarship: z.record(z.string(), z.unknown()),
+    scholarship: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -64,7 +49,7 @@ export const ScholarshipCriteriaSchema = ScholarshipCriteriaScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ScholarshipCriteriaPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ScholarshipCriteriaPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -74,24 +59,24 @@ export const ScholarshipCriteriaPrismaCreateSchema = baseSchemaWithoutDefaults.p
 export const ScholarshipCriteriaPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     field: CriteriaFieldSchema,
-    invert: z.boolean(),
+    invert: z.boolean().default(false),
     operator: CriteriaOperatorSchema,
-    value: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    value: z.union([z.number(), z.record(z.unknown())]),
     tuple: z.array(z.string()),
-    bonusValue: z.union([z.number(), z.record(z.string(), z.unknown())])
+    bonusValue: z.union([z.number().default(0), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `ScholarshipCriteria` schema for create operations excluding foreign keys and relations.
  */
-export const ScholarshipCriteriaCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ScholarshipCriteriaCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, invert: true, tuple: true, bonusValue: true
 });
 
@@ -105,7 +90,7 @@ export const ScholarshipCriteriaCreateSchema = ScholarshipCriteriaCreateScalarSc
 /**
  * `ScholarshipCriteria` schema for update operations excluding foreign keys and relations.
  */
-export const ScholarshipCriteriaUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ScholarshipCriteriaUpdateScalarSchema = baseSchema.partial();
 
 
 /**

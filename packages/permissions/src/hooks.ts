@@ -350,7 +350,7 @@ function getDynamicBreadcrumb(
                         }
                     }
                 }
-                if(child?.path === pathname) {
+                if (child?.path === pathname) {
                     return [{ title: menu?.label as string }, { title: child?.label as string }]
                 }
             }

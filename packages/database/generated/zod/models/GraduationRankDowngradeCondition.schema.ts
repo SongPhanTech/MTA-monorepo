@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { CriteriaFieldSchema } from '../enums/CriteriaField.schema';
@@ -22,23 +23,8 @@ const baseSchema = z.object({
     tuple: z.array(z.string()),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    field: CriteriaFieldSchema,
-    operator: CriteriaOperatorSchema,
-    invert: z.boolean(),
-    value: z.number(),
-    tuple: z.array(z.string()),
-}
-).strict();
 const relationSchema = z.object({
-    downgradeRule: z.record(z.string(), z.unknown()),
+    downgradeRule: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -62,7 +48,7 @@ export const GraduationRankDowngradeConditionSchema = GraduationRankDowngradeCon
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const GraduationRankDowngradeConditionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const GraduationRankDowngradeConditionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -72,15 +58,15 @@ export const GraduationRankDowngradeConditionPrismaCreateSchema = baseSchemaWith
 export const GraduationRankDowngradeConditionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     field: CriteriaFieldSchema,
     operator: CriteriaOperatorSchema,
-    invert: z.boolean(),
-    value: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    invert: z.boolean().default(false),
+    value: z.union([z.number(), z.record(z.unknown())]),
     tuple: z.array(z.string())
 }).partial().passthrough();
 
@@ -88,7 +74,7 @@ export const GraduationRankDowngradeConditionPrismaUpdateSchema = z.object({
 /**
  * `GraduationRankDowngradeCondition` schema for create operations excluding foreign keys and relations.
  */
-export const GraduationRankDowngradeConditionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const GraduationRankDowngradeConditionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, invert: true, tuple: true
 });
 
@@ -102,7 +88,7 @@ export const GraduationRankDowngradeConditionCreateSchema = GraduationRankDowngr
 /**
  * `GraduationRankDowngradeCondition` schema for update operations excluding foreign keys and relations.
  */
-export const GraduationRankDowngradeConditionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const GraduationRankDowngradeConditionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

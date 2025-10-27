@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,21 +18,9 @@ const baseSchema = z.object({
     name: z.string(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    order: z.number(),
-    name: z.string(),
-}
-).strict();
 const relationSchema = z.object({
-    standard: z.record(z.string(), z.unknown()),
-    scoreScale: z.record(z.string(), z.unknown()),
+    standard: z.record(z.unknown()),
+    scoreScale: z.record(z.unknown()),
     requirementCriterionCatalog: z.array(z.unknown()).optional(),
 }
 );
@@ -57,7 +46,7 @@ export const CriterionCatalogSchema = CriterionCatalogScalarSchema.merge(fkSchem
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const CriterionCatalogPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const CriterionCatalogPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -67,12 +56,12 @@ export const CriterionCatalogPrismaCreateSchema = baseSchemaWithoutDefaults.part
 export const CriterionCatalogPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    order: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    order: z.union([z.number(), z.record(z.unknown())]),
     name: z.string()
 }).partial().passthrough();
 
@@ -80,7 +69,7 @@ export const CriterionCatalogPrismaUpdateSchema = z.object({
 /**
  * `CriterionCatalog` schema for create operations excluding foreign keys and relations.
  */
-export const CriterionCatalogCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const CriterionCatalogCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -94,7 +83,7 @@ export const CriterionCatalogCreateSchema = CriterionCatalogCreateScalarSchema.m
 /**
  * `CriterionCatalog` schema for update operations excluding foreign keys and relations.
  */
-export const CriterionCatalogUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const CriterionCatalogUpdateScalarSchema = baseSchema.partial();
 
 
 /**

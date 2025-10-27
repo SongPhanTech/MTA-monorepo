@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { DecisionTypeSchema } from '../enums/DecisionType.schema';
@@ -18,21 +19,9 @@ const baseSchema = z.object({
     type: DecisionTypeSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    issueDate: z.coerce.date(),
-    type: DecisionTypeSchema,
-}
-).strict();
 const relationSchema = z.object({
     documentFile: z.array(z.unknown()).optional(),
-    thesisProject: z.record(z.string(), z.unknown()),
+    thesisProject: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -56,7 +45,7 @@ export const DecisionSchema = DecisionScalarSchema.merge(fkSchema).merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DecisionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DecisionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -66,11 +55,11 @@ export const DecisionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().pa
 export const DecisionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     issueDate: z.coerce.date(),
     type: DecisionTypeSchema
 }).partial().passthrough();
@@ -79,7 +68,7 @@ export const DecisionPrismaUpdateSchema = z.object({
 /**
  * `Decision` schema for create operations excluding foreign keys and relations.
  */
-export const DecisionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DecisionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -93,7 +82,7 @@ export const DecisionCreateSchema = DecisionCreateScalarSchema.merge(fkSchema);
 /**
  * `Decision` schema for update operations excluding foreign keys and relations.
  */
-export const DecisionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DecisionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

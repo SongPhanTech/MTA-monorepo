@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,22 +19,9 @@ const baseSchema = z.object({
     viet: z.string().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    nghe: z.string().nullish(),
-    noi: z.string().nullish(),
-    viet: z.string().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    danToc: z.record(z.string(), z.unknown()).optional(),
-    userProfile: z.record(z.string(), z.unknown()),
+    danToc: z.record(z.unknown()).optional(),
+    userProfile: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -58,7 +46,7 @@ export const TiengDanTocSchema = TiengDanTocScalarSchema.merge(fkSchema).merge(r
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TiengDanTocPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const TiengDanTocPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -68,11 +56,11 @@ export const TiengDanTocPrismaCreateSchema = baseSchemaWithoutDefaults.partial()
 export const TiengDanTocPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     nghe: z.string().nullish(),
     noi: z.string().nullish(),
     viet: z.string().nullish()
@@ -82,7 +70,7 @@ export const TiengDanTocPrismaUpdateSchema = z.object({
 /**
  * `TiengDanToc` schema for create operations excluding foreign keys and relations.
  */
-export const TiengDanTocCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const TiengDanTocCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -96,7 +84,7 @@ export const TiengDanTocCreateSchema = TiengDanTocCreateScalarSchema.merge(fkSch
 /**
  * `TiengDanToc` schema for update operations excluding foreign keys and relations.
  */
-export const TiengDanTocUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const TiengDanTocUpdateScalarSchema = baseSchema.partial();
 
 
 /**

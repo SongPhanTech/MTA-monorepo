@@ -372,7 +372,14 @@ const Table = <T extends Record<string, unknown>>({
                     if (!item.options) return
                     return (
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
-                            <FilterSelect item={item} onCheckAllChange={onCheckAllChange} onCheckChange = {onCheckChange} checkAll={checkAll} indeterminate={indeterminate} filtersTable={filtersTable}/>
+                            <FilterSelect
+                                item={item}
+                                onCheckAllChange={onCheckAllChange}
+                                onCheckChange={onCheckChange}
+                                checkAll={checkAll}
+                                indeterminate={indeterminate}
+                                filtersTable={filtersTable}
+                            />
                             <ListButton
                                 clear={() => {
                                     setFiltersTable({

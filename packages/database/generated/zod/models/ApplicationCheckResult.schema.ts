@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,21 +18,9 @@ const baseSchema = z.object({
     actualValue: z.number().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    passed: z.boolean(),
-    actualValue: z.number().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    studentGraduationApplication: z.record(z.string(), z.unknown()),
-    rankingCondition: z.record(z.string(), z.unknown()),
+    studentGraduationApplication: z.record(z.unknown()),
+    rankingCondition: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -56,7 +45,7 @@ export const ApplicationCheckResultSchema = ApplicationCheckResultScalarSchema.m
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ApplicationCheckResultPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ApplicationCheckResultPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -66,20 +55,20 @@ export const ApplicationCheckResultPrismaCreateSchema = baseSchemaWithoutDefault
 export const ApplicationCheckResultPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     passed: z.boolean(),
-    actualValue: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    actualValue: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `ApplicationCheckResult` schema for create operations excluding foreign keys and relations.
  */
-export const ApplicationCheckResultCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ApplicationCheckResultCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -93,7 +82,7 @@ export const ApplicationCheckResultCreateSchema = ApplicationCheckResultCreateSc
 /**
  * `ApplicationCheckResult` schema for update operations excluding foreign keys and relations.
  */
-export const ApplicationCheckResultUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ApplicationCheckResultUpdateScalarSchema = baseSchema.partial();
 
 
 /**

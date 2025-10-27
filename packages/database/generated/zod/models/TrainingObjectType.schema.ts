@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { TrainingObjectTypesSchema } from '../enums/TrainingObjectTypes.schema';
@@ -18,21 +19,9 @@ const baseSchema = z.object({
     type: TrainingObjectTypesSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    type: TrainingObjectTypesSchema,
-}
-).strict();
 const relationSchema = z.object({
-    trainingForm: z.record(z.string(), z.unknown()).optional(),
-    trainingLevel: z.record(z.string(), z.unknown()).optional(),
+    trainingForm: z.record(z.unknown()).optional(),
+    trainingLevel: z.record(z.unknown()).optional(),
     trainingCourse: z.array(z.unknown()).optional(),
     curriculum: z.array(z.unknown()).optional(),
     curriculumVersion: z.array(z.unknown()).optional(),
@@ -69,7 +58,7 @@ export const TrainingObjectTypeSchema = TrainingObjectTypeScalarSchema.merge(fkS
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingObjectTypePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const TrainingObjectTypePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -79,11 +68,11 @@ export const TrainingObjectTypePrismaCreateSchema = baseSchemaWithoutDefaults.pa
 export const TrainingObjectTypePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     type: TrainingObjectTypesSchema
 }).partial().passthrough();
@@ -92,7 +81,7 @@ export const TrainingObjectTypePrismaUpdateSchema = z.object({
 /**
  * `TrainingObjectType` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingObjectTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const TrainingObjectTypeCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -106,7 +95,7 @@ export const TrainingObjectTypeCreateSchema = TrainingObjectTypeCreateScalarSche
 /**
  * `TrainingObjectType` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingObjectTypeUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const TrainingObjectTypeUpdateScalarSchema = baseSchema.partial();
 
 
 /**

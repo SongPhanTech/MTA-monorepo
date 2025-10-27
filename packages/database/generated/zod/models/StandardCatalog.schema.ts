@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,18 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    order: z.number(),
-    name: z.string(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     order: z.number(),
     name: z.string(),
 }
@@ -50,7 +39,7 @@ export const StandardCatalogSchema = StandardCatalogScalarSchema.merge(relationS
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StandardCatalogPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const StandardCatalogPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -60,12 +49,12 @@ export const StandardCatalogPrismaCreateSchema = baseSchemaWithoutDefaults.parti
 export const StandardCatalogPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    order: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    order: z.union([z.number(), z.record(z.unknown())]),
     name: z.string()
 }).partial().passthrough();
 
@@ -73,7 +62,7 @@ export const StandardCatalogPrismaUpdateSchema = z.object({
 /**
  * `StandardCatalog` schema for create operations excluding foreign keys and relations.
  */
-export const StandardCatalogCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const StandardCatalogCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -81,7 +70,7 @@ export const StandardCatalogCreateScalarSchema = baseSchemaWithoutDefaults.parti
 /**
  * `StandardCatalog` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const StandardCatalogCreateSchema = baseSchemaWithoutDefaults.partial({
+export const StandardCatalogCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -89,7 +78,7 @@ export const StandardCatalogCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `StandardCatalog` schema for update operations excluding foreign keys and relations.
  */
-export const StandardCatalogUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const StandardCatalogUpdateScalarSchema = baseSchema.partial();
 
 
 /**

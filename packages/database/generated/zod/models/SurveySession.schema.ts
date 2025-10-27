@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,24 +20,10 @@ const baseSchema = z.object({
     isCompleted: z.boolean().default(false),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    additionalSuggestion: z.string().nullish(),
-    startedAt: z.coerce.date(),
-    completedAt: z.coerce.date().nullish(),
-    isCompleted: z.boolean(),
-}
-).strict();
 const relationSchema = z.object({
-    survey: z.record(z.string(), z.unknown()),
-    student: z.record(z.string(), z.unknown()).optional(),
-    surveyObjectType: z.record(z.string(), z.unknown()).optional(),
+    survey: z.record(z.unknown()),
+    student: z.record(z.unknown()).optional(),
+    surveyObjectType: z.record(z.unknown()).optional(),
     responses: z.array(z.unknown()).optional(),
 }
 );
@@ -63,7 +50,7 @@ export const SurveySessionSchema = SurveySessionScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SurveySessionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const SurveySessionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -73,22 +60,22 @@ export const SurveySessionPrismaCreateSchema = baseSchemaWithoutDefaults.partial
 export const SurveySessionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     additionalSuggestion: z.string().nullish(),
-    startedAt: z.coerce.date(),
+    startedAt: z.coerce.date().default(() => new Date()),
     completedAt: z.coerce.date().nullish(),
-    isCompleted: z.boolean()
+    isCompleted: z.boolean().default(false)
 }).partial().passthrough();
 
 
 /**
  * `SurveySession` schema for create operations excluding foreign keys and relations.
  */
-export const SurveySessionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const SurveySessionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, startedAt: true, isCompleted: true
 });
 
@@ -102,7 +89,7 @@ export const SurveySessionCreateSchema = SurveySessionCreateScalarSchema.merge(f
 /**
  * `SurveySession` schema for update operations excluding foreign keys and relations.
  */
-export const SurveySessionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const SurveySessionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

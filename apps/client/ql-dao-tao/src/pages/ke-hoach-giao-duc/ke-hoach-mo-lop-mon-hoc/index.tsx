@@ -6,12 +6,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import type { FixedClass, SubjectClass } from '@workspace/db/client'
 import { $Enums } from '@workspace/db/client'
-import {
-    useFindFirstPlanTraining,
-    useFindManyTrainingCourse,
-    useFindManyTrainingLocation,
-    useFindManyTrainingMajor,
-} from '@workspace/db/hooks'
+import { useFindFirstPlanTraining, useFindManyTrainingLocation } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -34,7 +29,6 @@ interface OpenSubjectClassForm {
             name: string | null
             code: string | null
             maxStudent: number
-            countOld: number
             examType?: $Enums.ExamType | null
             trainingLocationId?: string | null
         }
@@ -347,7 +341,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                 (sum, fc) => sum + (fc._count?.students ?? 0),
                                 0
                             ),
-                            countOld: cur.subjectVersion.subjectClass.length ?? 0,
+                            // countOld: cur.subjectVersion.subjectClass.length ?? 0,
                             examType: cur.subjectVersion?.examType,
                             trainingLocationId:
                                 cur.subjectVersion?.subjectClass[0]?.trainingLocationId || null,
@@ -399,15 +393,6 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
         []
     )
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
-
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
-        where: { trainingObjectTypeId, deletedAt: null, active: true },
-    })
-
     const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
         orderBy: { name: 'asc' },
         where: { deletedAt: null, active: true },
@@ -420,7 +405,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
             if (!semesterId || !trainingObjectTypeId) return
             showSpinner()
             const listSubjectVersionIds = Object.entries(subjectClassNumber)
-                .filter(([, subjectVersion]) => subjectVersion.count !== subjectVersion.countOld)
+                // .filter(([, subjectVersion]) => subjectVersion.count !== subjectVersion.countOld)
                 .map(([key]) => key)
 
             const res = await sqlTransaction([
@@ -472,10 +457,10 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                     operation: 'createMany',
                     data: {
                         data: Object.entries(subjectClassNumber)
-                            .filter(
-                                ([, subjectVersion]) =>
-                                    subjectVersion.count !== subjectVersion.countOld
-                            )
+                            // .filter(
+                            //     ([, subjectVersion]) =>
+                            //         subjectVersion.count !== subjectVersion.countOld
+                            // )
                             .flatMap(([subjectVersionId, subjectVersion]) =>
                                 new Array(subjectVersion.count).fill(0).map((_, index) => ({
                                     subjectId: subjectVersionId,
@@ -607,12 +592,12 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                 return {
                                     className: cn(
                                         subjectClassNumber?.[record.subjectVersionId]?.count
-                                            ? ''
-                                            : 'bg-red-100',
-                                        subjectClassNumber?.[record.subjectVersionId]?.count ===
-                                            subjectClassNumber?.[record.subjectVersionId]?.countOld
-                                            ? ''
-                                            : 'bg-yellow-100'
+                                        //     ? ''
+                                        //     : 'bg-red-100',
+                                        // subjectClassNumber?.[record.subjectVersionId]?.count ===
+                                        //     subjectClassNumber?.[record.subjectVersionId]?.countOld
+                                        //     ? ''
+                                        //     : 'bg-yellow-100'
                                     ),
                                 }
                             }}
@@ -744,7 +729,7 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                     align: 'center',
                                 },
                                 {
-                                    title: 'Số SV max',
+                                    title: 'Số SV tối đa / LMH',
                                     width: 150,
                                     align: 'center',
                                     render: (_, record, idx) => (
@@ -836,107 +821,6 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                     }))}
                                                 />
                                             </Form.Item>
-                                        </>
-                                    ),
-                                },
-                                {
-                                    title: 'Số lớp MH',
-                                    width: 80,
-                                    align: 'center',
-                                    render: (__, record, idx) => (
-                                        <>
-                                            <Form.Item
-                                                name={[
-                                                    'subjectClassNumber',
-                                                    record?.subjectVersionId,
-                                                    'count',
-                                                ]}
-                                                required
-                                            >
-                                                <InputNumber
-                                                    step={0}
-                                                    id={`lmh-${record?.subjectVersionId}`}
-                                                    controls={false}
-                                                    onKeyDown={(e) => {
-                                                        if (
-                                                            e.key === 'ArrowUp' ||
-                                                            e.key === 'ArrowDown'
-                                                        ) {
-                                                            e.preventDefault()
-                                                            e.stopPropagation()
-                                                            if (!data) return
-                                                            const nextId =
-                                                                data[
-                                                                    idx +
-                                                                        (e.key === 'ArrowUp'
-                                                                            ? -1
-                                                                            : 1)
-                                                                ]?.subjectVersionId
-                                                            document
-                                                                .getElementById(`lmh-${nextId}`)
-                                                                ?.focus()
-                                                            return
-                                                            // Handle the logic for ArrowUp key press
-                                                        }
-
-                                                        const allowedKeys = [
-                                                            'Backspace',
-                                                            'Delete',
-                                                            'ArrowLeft',
-                                                            'ArrowRight',
-                                                            'Tab',
-                                                            'Meta',
-                                                            'Control',
-                                                        ]
-                                                        if (
-                                                            !/[0-9]/.test(e.key) &&
-                                                            !allowedKeys.includes(e.key)
-                                                        ) {
-                                                            e.preventDefault()
-                                                        }
-                                                    }}
-                                                />
-                                            </Form.Item>
-                                            <Form.Item
-                                                name={[
-                                                    'subjectClassNumber',
-                                                    record?.subjectVersionId,
-                                                    'name',
-                                                ]}
-                                                hidden
-                                            />
-                                            <Form.Item
-                                                name={[
-                                                    'subjectClassNumber',
-                                                    record?.subjectVersionId,
-                                                    'code',
-                                                ]}
-                                                hidden
-                                            />
-                                            <Form.Item
-                                                name={[
-                                                    'subjectClassNumber',
-                                                    record?.subjectVersionId,
-                                                    'maxStudent',
-                                                ]}
-                                                hidden
-                                            />
-                                            <Form.Item
-                                                name={[
-                                                    'subjectClassNumber',
-                                                    record?.subjectVersionId,
-                                                    'countOld',
-                                                ]}
-                                                hidden
-                                            />{' '}
-                                            <Form.Item
-                                                name={[
-                                                    'subjectClassNumber',
-                                                    record?.subjectVersionId,
-                                                    'examType',
-                                                ]}
-                                                hidden
-                                            />
                                         </>
                                     ),
                                 },

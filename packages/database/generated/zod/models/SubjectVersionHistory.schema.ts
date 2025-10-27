@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,21 +18,9 @@ const baseSchema = z.object({
     action: z.string(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    content: z.string(),
-    action: z.string(),
-}
-).strict();
 const relationSchema = z.object({
-    subjectVersion: z.record(z.string(), z.unknown()),
-    updatedBy: z.record(z.string(), z.unknown()),
+    subjectVersion: z.record(z.unknown()),
+    updatedBy: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -56,7 +45,7 @@ export const SubjectVersionHistorySchema = SubjectVersionHistoryScalarSchema.mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SubjectVersionHistoryPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const SubjectVersionHistoryPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -66,11 +55,11 @@ export const SubjectVersionHistoryPrismaCreateSchema = baseSchemaWithoutDefaults
 export const SubjectVersionHistoryPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     content: z.string(),
     action: z.string()
 }).partial().passthrough();
@@ -79,7 +68,7 @@ export const SubjectVersionHistoryPrismaUpdateSchema = z.object({
 /**
  * `SubjectVersionHistory` schema for create operations excluding foreign keys and relations.
  */
-export const SubjectVersionHistoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const SubjectVersionHistoryCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -93,7 +82,7 @@ export const SubjectVersionHistoryCreateSchema = SubjectVersionHistoryCreateScal
 /**
  * `SubjectVersionHistory` schema for update operations excluding foreign keys and relations.
  */
-export const SubjectVersionHistoryUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const SubjectVersionHistoryUpdateScalarSchema = baseSchema.partial();
 
 
 /**

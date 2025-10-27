@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { CouncilProposalStatus } from '../../zenstack/models';
@@ -19,20 +20,8 @@ const baseSchema = z.object({
     status: CouncilProposalStatusSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    proposedDate: z.coerce.date(),
-    status: CouncilProposalStatusSchema,
-}
-).strict();
 const relationSchema = z.object({
-    studentThesisRegistration: z.record(z.string(), z.unknown()).optional(),
+    studentThesisRegistration: z.record(z.unknown()).optional(),
     thesis: z.array(z.unknown()).optional(),
     members: z.array(z.unknown()).optional(),
 }
@@ -58,7 +47,7 @@ export const CouncilSchema = CouncilScalarSchema.merge(fkSchema).merge(relationS
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const CouncilPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const CouncilPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -68,12 +57,12 @@ export const CouncilPrismaCreateSchema = baseSchemaWithoutDefaults.partial().pas
 export const CouncilPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    proposedDate: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    proposedDate: z.coerce.date().default(() => new Date()),
     status: CouncilProposalStatusSchema
 }).partial().passthrough();
 
@@ -81,7 +70,7 @@ export const CouncilPrismaUpdateSchema = z.object({
 /**
  * `Council` schema for create operations excluding foreign keys and relations.
  */
-export const CouncilCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const CouncilCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, proposedDate: true, status: true
 });
 
@@ -95,7 +84,7 @@ export const CouncilCreateSchema = CouncilCreateScalarSchema.merge(fkSchema);
 /**
  * `Council` schema for update operations excluding foreign keys and relations.
  */
-export const CouncilUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const CouncilUpdateScalarSchema = baseSchema.partial();
 
 
 /**

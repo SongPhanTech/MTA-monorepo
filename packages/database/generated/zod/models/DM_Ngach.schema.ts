@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,17 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -48,7 +38,7 @@ export const DM_NgachSchema = DM_NgachScalarSchema.merge(relationSchema.partial(
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DM_NgachPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DM_NgachPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -58,11 +48,11 @@ export const DM_NgachPrismaCreateSchema = baseSchemaWithoutDefaults.partial().pa
 export const DM_NgachPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string()
 }).partial().passthrough();
 
@@ -70,7 +60,7 @@ export const DM_NgachPrismaUpdateSchema = z.object({
 /**
  * `DM_Ngach` schema for create operations excluding foreign keys and relations.
  */
-export const DM_NgachCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DM_NgachCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -78,7 +68,7 @@ export const DM_NgachCreateScalarSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `DM_Ngach` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DM_NgachCreateSchema = baseSchemaWithoutDefaults.partial({
+export const DM_NgachCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -86,7 +76,7 @@ export const DM_NgachCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `DM_Ngach` schema for update operations excluding foreign keys and relations.
  */
-export const DM_NgachUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DM_NgachUpdateScalarSchema = baseSchema.partial();
 
 
 /**

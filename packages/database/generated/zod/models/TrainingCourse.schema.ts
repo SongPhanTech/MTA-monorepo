@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { AcademicRankingBaseTypeSchema } from '../enums/AcademicRankingBaseType.schema';
@@ -40,44 +41,10 @@ const baseSchema = z.object({
     scoreToRetain: z.number().default(6.9),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    startYear: z.number().nullish(),
-    endYear: z.number().nullish(),
-    academicYear: z.string().nullish(),
-    maxTrainingTime: z.number().nullish(),
-    admissionQuota: z.number().nullish(),
-    admissionStartDate: z.coerce.date().nullish(),
-    admissionEndDate: z.coerce.date().nullish(),
-    admissionDecision: z.string().nullish(),
-    studentRecognitionDecision: z.string().nullish(),
-    regulation: z.string().nullish(),
-    isGeneralInfoLocked: z.boolean(),
-    isRegulationLocked: z.boolean(),
-    isScoreConfigLocked: z.boolean(),
-    baseScore: AcademicRankingBaseTypeSchema,
-    coef_1: z.number(),
-    coef_2: z.number(),
-    coef_3: z.number(),
-    scoreToTakeExam: z.number(),
-    scoreToPass: z.number(),
-    scoreToPassConditional: z.number(),
-    scoreToTakeGraduation: z.number(),
-    scoreToPassGraduation: z.number(),
-    scoreToRetain: z.number(),
-}
-).strict();
 const relationSchema = z.object({
-    semesterStart: z.record(z.string(), z.unknown()),
-    trainingLanguage: z.record(z.string(), z.unknown()).optional(),
-    trainingObjectType: z.record(z.string(), z.unknown()),
+    semesterStart: z.record(z.unknown()),
+    trainingLanguage: z.record(z.unknown()).optional(),
+    trainingObjectType: z.record(z.unknown()),
     trainingCourseRegulation: z.array(z.unknown()).optional(),
     fixedClass: z.array(z.unknown()).optional(),
     scoreConverts: z.array(z.unknown()).optional(),
@@ -114,7 +81,7 @@ export const TrainingCourseSchema = TrainingCourseScalarSchema.merge(fkSchema).m
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingCoursePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const TrainingCoursePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -124,42 +91,42 @@ export const TrainingCoursePrismaCreateSchema = baseSchemaWithoutDefaults.partia
 export const TrainingCoursePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
-    startYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    endYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    startYear: z.union([z.number().nullish(), z.record(z.unknown())]),
+    endYear: z.union([z.number().nullish(), z.record(z.unknown())]),
     academicYear: z.string().nullish(),
-    maxTrainingTime: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    admissionQuota: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    maxTrainingTime: z.union([z.number().nullish(), z.record(z.unknown())]),
+    admissionQuota: z.union([z.number().nullish(), z.record(z.unknown())]),
     admissionStartDate: z.coerce.date().nullish(),
     admissionEndDate: z.coerce.date().nullish(),
     admissionDecision: z.string().nullish(),
     studentRecognitionDecision: z.string().nullish(),
     regulation: z.string().nullish(),
-    isGeneralInfoLocked: z.boolean(),
-    isRegulationLocked: z.boolean(),
-    isScoreConfigLocked: z.boolean(),
+    isGeneralInfoLocked: z.boolean().default(false),
+    isRegulationLocked: z.boolean().default(false),
+    isScoreConfigLocked: z.boolean().default(false),
     baseScore: AcademicRankingBaseTypeSchema,
-    coef_1: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    coef_2: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    coef_3: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    scoreToTakeExam: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    scoreToPass: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    scoreToPassConditional: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    scoreToTakeGraduation: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    scoreToPassGraduation: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    scoreToRetain: z.union([z.number(), z.record(z.string(), z.unknown())])
+    coef_1: z.union([z.number().default(0.1), z.record(z.unknown())]),
+    coef_2: z.union([z.number().default(0.3), z.record(z.unknown())]),
+    coef_3: z.union([z.number().default(0.6), z.record(z.unknown())]),
+    scoreToTakeExam: z.union([z.number().default(0), z.record(z.unknown())]),
+    scoreToPass: z.union([z.number().default(4), z.record(z.unknown())]),
+    scoreToPassConditional: z.union([z.number().default(5), z.record(z.unknown())]),
+    scoreToTakeGraduation: z.union([z.number().default(5), z.record(z.unknown())]),
+    scoreToPassGraduation: z.union([z.number().default(5.5), z.record(z.unknown())]),
+    scoreToRetain: z.union([z.number().default(6.9), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `TrainingCourse` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingCourseCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const TrainingCourseCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isGeneralInfoLocked: true, isRegulationLocked: true, isScoreConfigLocked: true, coef_1: true, coef_2: true, coef_3: true, scoreToTakeExam: true, scoreToPass: true, scoreToPassConditional: true, scoreToTakeGraduation: true, scoreToPassGraduation: true, scoreToRetain: true
 });
 
@@ -173,7 +140,7 @@ export const TrainingCourseCreateSchema = TrainingCourseCreateScalarSchema.merge
 /**
  * `TrainingCourse` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingCourseUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const TrainingCourseUpdateScalarSchema = baseSchema.partial();
 
 
 /**

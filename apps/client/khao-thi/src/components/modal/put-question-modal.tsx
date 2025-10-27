@@ -108,7 +108,7 @@ const PutQuestionModal = () => {
                     return
                 }
                 if (input?.id) {
-                       await updateQuestion({
+                    await updateQuestion({
                         data,
                         where: {
                             id: input.id,

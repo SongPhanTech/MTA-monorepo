@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,24 +20,10 @@ const baseSchema = z.object({
     renderPath: z.string().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    englishName: z.string().nullish(),
-    information: z.string().nullish(),
-    renderPath: z.string().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    managementOrganization: z.record(z.string(), z.unknown()),
-    trainingMajor: z.record(z.string(), z.unknown()),
-    trainingObjectType: z.record(z.string(), z.unknown()),
+    managementOrganization: z.record(z.unknown()),
+    trainingMajor: z.record(z.unknown()),
+    trainingObjectType: z.record(z.unknown()),
     trainingBlocks: z.array(z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
     curriculumVersion: z.array(z.unknown()).optional(),
@@ -65,7 +52,7 @@ export const CurriculumSchema = CurriculumScalarSchema.merge(fkSchema).merge(rel
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const CurriculumPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const CurriculumPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -75,11 +62,11 @@ export const CurriculumPrismaCreateSchema = baseSchemaWithoutDefaults.partial().
 export const CurriculumPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     englishName: z.string().nullish(),
     information: z.string().nullish(),
@@ -90,7 +77,7 @@ export const CurriculumPrismaUpdateSchema = z.object({
 /**
  * `Curriculum` schema for create operations excluding foreign keys and relations.
  */
-export const CurriculumCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const CurriculumCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -104,7 +91,7 @@ export const CurriculumCreateSchema = CurriculumCreateScalarSchema.merge(fkSchem
 /**
  * `Curriculum` schema for update operations excluding foreign keys and relations.
  */
-export const CurriculumUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const CurriculumUpdateScalarSchema = baseSchema.partial();
 
 
 /**

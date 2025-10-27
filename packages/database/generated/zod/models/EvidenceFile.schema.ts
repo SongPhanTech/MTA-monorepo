@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,23 +20,9 @@ const baseSchema = z.object({
     size: z.bigint(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    path: z.string(),
-    mimeType: z.string(),
-    size: z.bigint(),
-}
-).strict();
 const relationSchema = z.object({
-    evidence: z.record(z.string(), z.unknown()),
-    userProfile: z.record(z.string(), z.unknown()).optional(),
+    evidence: z.record(z.unknown()),
+    userProfile: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -60,7 +47,7 @@ export const EvidenceFileSchema = EvidenceFileScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const EvidenceFilePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const EvidenceFilePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -70,11 +57,11 @@ export const EvidenceFilePrismaCreateSchema = baseSchemaWithoutDefaults.partial(
 export const EvidenceFilePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     path: z.string(),
     mimeType: z.string(),
@@ -85,7 +72,7 @@ export const EvidenceFilePrismaUpdateSchema = z.object({
 /**
  * `EvidenceFile` schema for create operations excluding foreign keys and relations.
  */
-export const EvidenceFileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const EvidenceFileCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -99,7 +86,7 @@ export const EvidenceFileCreateSchema = EvidenceFileCreateScalarSchema.merge(fkS
 /**
  * `EvidenceFile` schema for update operations excluding foreign keys and relations.
  */
-export const EvidenceFileUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const EvidenceFileUpdateScalarSchema = baseSchema.partial();
 
 
 /**

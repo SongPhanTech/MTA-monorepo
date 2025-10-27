@@ -19,7 +19,6 @@ import {
     useDeleteSubjectClass,
     useFindManyBuilding,
     useFindManyDM_DonVi,
-    useFindManyTrainingCourse,
     useFindManyTrainingLocation,
     useUpdateManySubjectClass,
 } from '@workspace/db/hooks'
@@ -460,11 +459,6 @@ export default function PhanCongGiangDay({
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
     const treeData = buildOrgTree(manageOrgData, canXemTatCa ? '0' : orgId)
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
-        where: { trainingObjectTypeId, deletedAt: null, active: true },
-    })
-
     const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
         orderBy: { name: 'asc' },
         where: { deletedAt: null, active: true },
@@ -740,21 +734,15 @@ export default function PhanCongGiangDay({
                                 <Button type="primary">Báo dạy</Button>
                             </Popover>
                         )}
-
+                        {!khoaBoMon &&
+                            can(
+                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                'DUYET'
+                            ) && <Button type="primary">Duyệt báo dạy</Button>}
                         {!khoaBoMon && (
                             <Button
                                 onClick={async () => {
                                     try {
-                                        // new PrismaClient().subjectClass.findMany({
-                                        //     include:{
-                                        //         subject:{
-                                        //             select:{
-
-                                        //             }
-                                        //         }
-                                        //     }
-                                        // })
-
                                         const res = await sqlTransaction([
                                             {
                                                 model: 'SubjectClass',

@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { DecimalSchema } from '../common';
@@ -20,21 +21,8 @@ const baseSchema = z.object({
     isProfileComplete: z.boolean().default(false),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    finalScore: DecimalSchema.nullish(),
-    comments: z.string().nullish(),
-    isProfileComplete: z.boolean(),
-}
-).strict();
 const relationSchema = z.object({
-    thesis: z.record(z.string(), z.unknown()),
+    thesis: z.record(z.unknown()),
     documents: z.array(z.unknown()).optional(),
 }
 );
@@ -59,7 +47,7 @@ export const DefenseRecordSchema = DefenseRecordScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DefenseRecordPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DefenseRecordPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -69,21 +57,21 @@ export const DefenseRecordPrismaCreateSchema = baseSchemaWithoutDefaults.partial
 export const DefenseRecordPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     finalScore: DecimalSchema.nullish(),
     comments: z.string().nullish(),
-    isProfileComplete: z.boolean()
+    isProfileComplete: z.boolean().default(false)
 }).partial().passthrough();
 
 
 /**
  * `DefenseRecord` schema for create operations excluding foreign keys and relations.
  */
-export const DefenseRecordCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DefenseRecordCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isProfileComplete: true
 });
 
@@ -97,7 +85,7 @@ export const DefenseRecordCreateSchema = DefenseRecordCreateScalarSchema.merge(f
 /**
  * `DefenseRecord` schema for update operations excluding foreign keys and relations.
  */
-export const DefenseRecordUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DefenseRecordUpdateScalarSchema = baseSchema.partial();
 
 
 /**

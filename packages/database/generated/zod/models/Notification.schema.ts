@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { NotificationType, NotificationPriority } from '../../zenstack/models';
@@ -25,28 +26,11 @@ const baseSchema = z.object({
     targetAll: z.boolean().default(false),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    title: z.string(),
-    content: z.string(),
-    type: NotificationTypeSchema,
-    priority: NotificationPrioritySchema,
-    publishedAt: z.coerce.date(),
-    expiresAt: z.coerce.date().nullish(),
-    targetAll: z.boolean(),
-}
-).strict();
 const relationSchema = z.object({
     targetCourses: z.array(z.unknown()).optional(),
     targetClasses: z.array(z.unknown()).optional(),
     targetStudents: z.array(z.unknown()).optional(),
-    createdBy: z.record(z.string(), z.unknown()),
+    createdBy: z.record(z.unknown()),
     attachments: z.array(z.unknown()).optional(),
 }
 );
@@ -71,7 +55,7 @@ export const NotificationSchema = NotificationScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const NotificationPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const NotificationPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -81,25 +65,25 @@ export const NotificationPrismaCreateSchema = baseSchemaWithoutDefaults.partial(
 export const NotificationPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     title: z.string(),
     content: z.string(),
     type: NotificationTypeSchema,
     priority: NotificationPrioritySchema,
-    publishedAt: z.coerce.date(),
+    publishedAt: z.coerce.date().default(() => new Date()),
     expiresAt: z.coerce.date().nullish(),
-    targetAll: z.boolean()
+    targetAll: z.boolean().default(false)
 }).partial().passthrough();
 
 
 /**
  * `Notification` schema for create operations excluding foreign keys and relations.
  */
-export const NotificationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const NotificationCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, type: true, priority: true, publishedAt: true, targetAll: true
 });
 
@@ -113,7 +97,7 @@ export const NotificationCreateSchema = NotificationCreateScalarSchema.merge(fkS
 /**
  * `Notification` schema for update operations excluding foreign keys and relations.
  */
-export const NotificationUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const NotificationUpdateScalarSchema = baseSchema.partial();
 
 
 /**

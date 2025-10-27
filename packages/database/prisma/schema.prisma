@@ -198,6 +198,13 @@ enum SubjectClassType {
   @@schema("ql-dao-tao")
 }
 
+enum SubjectClassStatus {
+  DRAFT
+  OFFICIAL
+
+  @@schema("ql-dao-tao")
+}
+
 enum TrainingObjectTypes {
   MILITARY
   CIVILIAN
@@ -2982,6 +2989,7 @@ model SubjectClass {
   schedule                   SubjectClassSchedule?
   maxStudent                 Int
   type                       SubjectClassType      @default(NORMAL)
+  status                     SubjectClassStatus    @default(DRAFT)
   trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId       String
   semester                   Semester              @relation(fields: [semesterId], references: [id])

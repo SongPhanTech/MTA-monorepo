@@ -3,10 +3,9 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
-import type { ModelMeta } from "@zenstackhq/runtime";
-
-const metadata: ModelMeta = {
+const metadata = {
     models: {
         config: {
             name: 'Config', fields: {
@@ -10590,6 +10589,10 @@ const metadata: ModelMeta = {
                 }, type: {
                     name: "type",
                     type: "SubjectClassType",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, status: {
+                    name: "status",
+                    type: "SubjectClassStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",

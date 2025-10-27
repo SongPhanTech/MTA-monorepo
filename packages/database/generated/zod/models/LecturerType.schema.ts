@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,17 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -49,7 +39,7 @@ export const LecturerTypeSchema = LecturerTypeScalarSchema.merge(relationSchema.
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const LecturerTypePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const LecturerTypePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -59,11 +49,11 @@ export const LecturerTypePrismaCreateSchema = baseSchemaWithoutDefaults.partial(
 export const LecturerTypePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string()
 }).partial().passthrough();
 
@@ -71,7 +61,7 @@ export const LecturerTypePrismaUpdateSchema = z.object({
 /**
  * `LecturerType` schema for create operations excluding foreign keys and relations.
  */
-export const LecturerTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const LecturerTypeCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -79,7 +69,7 @@ export const LecturerTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial(
 /**
  * `LecturerType` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const LecturerTypeCreateSchema = baseSchemaWithoutDefaults.partial({
+export const LecturerTypeCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -87,7 +77,7 @@ export const LecturerTypeCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `LecturerType` schema for update operations excluding foreign keys and relations.
  */
-export const LecturerTypeUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const LecturerTypeUpdateScalarSchema = baseSchema.partial();
 
 
 /**

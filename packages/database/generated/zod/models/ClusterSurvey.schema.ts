@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,21 +19,6 @@ const baseSchema = z.object({
     endDate: z.coerce.date().nullish(),
     isPublic: z.boolean().default(false),
     anonymous: z.boolean().default(true),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    startDate: z.coerce.date(),
-    endDate: z.coerce.date().nullish(),
-    isPublic: z.boolean(),
-    anonymous: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -60,7 +46,7 @@ export const ClusterSurveySchema = ClusterSurveyScalarSchema.merge(relationSchem
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ClusterSurveyPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ClusterSurveyPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -70,23 +56,23 @@ export const ClusterSurveyPrismaCreateSchema = baseSchemaWithoutDefaults.partial
 export const ClusterSurveyPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
-    isPublic: z.boolean(),
-    anonymous: z.boolean()
+    isPublic: z.boolean().default(false),
+    anonymous: z.boolean().default(true)
 }).partial().passthrough();
 
 
 /**
  * `ClusterSurvey` schema for create operations excluding foreign keys and relations.
  */
-export const ClusterSurveyCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ClusterSurveyCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isPublic: true, anonymous: true
 });
 
@@ -94,7 +80,7 @@ export const ClusterSurveyCreateScalarSchema = baseSchemaWithoutDefaults.partial
 /**
  * `ClusterSurvey` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const ClusterSurveyCreateSchema = baseSchemaWithoutDefaults.partial({
+export const ClusterSurveyCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isPublic: true, anonymous: true
 });
 
@@ -102,7 +88,7 @@ export const ClusterSurveyCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `ClusterSurvey` schema for update operations excluding foreign keys and relations.
  */
-export const ClusterSurveyUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ClusterSurveyUpdateScalarSchema = baseSchema.partial();
 
 
 /**

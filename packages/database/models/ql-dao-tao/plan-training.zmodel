@@ -816,6 +816,12 @@ enum SubjectClassType {
   @@schema("ql-dao-tao")
 }
 
+enum SubjectClassStatus {
+  DRAFT // Nháp
+  OFFICIAL // Chính thức
+  @@schema("ql-dao-tao")
+}
+
 /// Lớp môn học
 model SubjectClass extends BaseNoCode {
   code                       String
@@ -827,6 +833,7 @@ model SubjectClass extends BaseNoCode {
   schedule                   SubjectClassSchedule?
   maxStudent                 Int // Số SV tối đa
   type                       SubjectClassType      @default(NORMAL)
+  status                     SubjectClassStatus    @default(DRAFT)
   // Đối tượng đào tạo
   trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
   trainingObjectTypeId       String

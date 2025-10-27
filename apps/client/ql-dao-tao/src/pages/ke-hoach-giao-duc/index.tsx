@@ -1,8 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
-import {
-    useFindManyFixedClass,
-    useFindManyTrainingMajor
-} from '@workspace/db/hooks'
+import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/hooks'
 import { SelectTrainingCourse, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Flex, Form, Select, Tabs } from 'antd'
 import type React from 'react'

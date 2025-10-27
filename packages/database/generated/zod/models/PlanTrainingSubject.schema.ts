@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { SubjectClassType } from '../../zenstack/models';
@@ -17,19 +18,9 @@ const baseSchema = z.object({
     subjectClassType: SubjectClassTypeSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    subjectClassType: SubjectClassTypeSchema,
-}
-).strict();
 const relationSchema = z.object({
-    planTraining: z.record(z.string(), z.unknown()),
-    subjectVersion: z.record(z.string(), z.unknown()),
+    planTraining: z.record(z.unknown()),
+    subjectVersion: z.record(z.unknown()),
     fixedClasses: z.array(z.unknown()).optional(),
 }
 );
@@ -55,7 +46,7 @@ export const PlanTrainingSubjectSchema = PlanTrainingSubjectScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const PlanTrainingSubjectPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const PlanTrainingSubjectPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -64,11 +55,11 @@ export const PlanTrainingSubjectPrismaCreateSchema = baseSchemaWithoutDefaults.p
  */
 export const PlanTrainingSubjectPrismaUpdateSchema = z.object({
     id: z.string(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     subjectClassType: SubjectClassTypeSchema
 }).partial().passthrough();
 
@@ -76,7 +67,7 @@ export const PlanTrainingSubjectPrismaUpdateSchema = z.object({
 /**
  * `PlanTrainingSubject` schema for create operations excluding foreign keys and relations.
  */
-export const PlanTrainingSubjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const PlanTrainingSubjectCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, subjectClassType: true
 });
 
@@ -90,7 +81,7 @@ export const PlanTrainingSubjectCreateSchema = PlanTrainingSubjectCreateScalarSc
 /**
  * `PlanTrainingSubject` schema for update operations excluding foreign keys and relations.
  */
-export const PlanTrainingSubjectUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const PlanTrainingSubjectUpdateScalarSchema = baseSchema.partial();
 
 
 /**
