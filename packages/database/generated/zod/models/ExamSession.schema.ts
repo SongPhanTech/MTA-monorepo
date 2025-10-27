@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,10 +16,21 @@ const baseSchema = z.object({
     examCode: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    examCode: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    exam: z.record(z.unknown()),
-    examRoom: z.record(z.unknown()),
-    studentSubjectScore: z.record(z.unknown()),
+    exam: z.record(z.string(), z.unknown()),
+    examRoom: z.record(z.string(), z.unknown()),
+    studentSubjectScore: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -46,7 +56,7 @@ export const ExamSessionSchema = ExamSessionScalarSchema.merge(fkSchema).merge(r
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ExamSessionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ExamSessionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,11 +66,11 @@ export const ExamSessionPrismaCreateSchema = baseSchema.partial().passthrough();
 export const ExamSessionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     examCode: z.string().nullish()
 }).partial().passthrough();
 
@@ -68,7 +78,7 @@ export const ExamSessionPrismaUpdateSchema = z.object({
 /**
  * `ExamSession` schema for create operations excluding foreign keys and relations.
  */
-export const ExamSessionCreateScalarSchema = baseSchema.partial({
+export const ExamSessionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -82,7 +92,7 @@ export const ExamSessionCreateSchema = ExamSessionCreateScalarSchema.merge(fkSch
 /**
  * `ExamSession` schema for update operations excluding foreign keys and relations.
  */
-export const ExamSessionUpdateScalarSchema = baseSchema.partial();
+export const ExamSessionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

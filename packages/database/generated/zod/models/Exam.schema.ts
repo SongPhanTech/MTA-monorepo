@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { ExamStatus } from '../../zenstack/models';
@@ -21,8 +20,21 @@ const baseSchema = z.object({
     duration: z.number().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    status: ExamStatusSchema,
+    lockExamCode: z.boolean(),
+    duration: z.number().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    questionBank: z.record(z.unknown()).optional(),
+    questionBank: z.record(z.string(), z.unknown()).optional(),
     subjectClass: z.array(z.unknown()).optional(),
     studentSubjectScore: z.array(z.unknown()).optional(),
     room: z.array(z.unknown()).optional(),
@@ -53,7 +65,7 @@ export const ExamSchema = ExamScalarSchema.merge(fkSchema).merge(relationSchema.
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ExamPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ExamPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -63,21 +75,21 @@ export const ExamPrismaCreateSchema = baseSchema.partial().passthrough();
 export const ExamPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     status: ExamStatusSchema,
-    lockExamCode: z.boolean().default(false),
-    duration: z.union([z.number().nullish(), z.record(z.unknown())])
+    lockExamCode: z.boolean(),
+    duration: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `Exam` schema for create operations excluding foreign keys and relations.
  */
-export const ExamCreateScalarSchema = baseSchema.partial({
+export const ExamCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true, lockExamCode: true
 });
 
@@ -91,7 +103,7 @@ export const ExamCreateSchema = ExamCreateScalarSchema.merge(fkSchema);
 /**
  * `Exam` schema for update operations excluding foreign keys and relations.
  */
-export const ExamUpdateScalarSchema = baseSchema.partial();
+export const ExamUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

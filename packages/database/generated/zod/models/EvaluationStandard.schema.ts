@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -20,8 +19,22 @@ const baseSchema = z.object({
     conclusion: z.string().default(""),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    order: z.number(),
+    opening: z.string(),
+    conclusion: z.string(),
+}
+).strict();
 const relationSchema = z.object({
-    period: z.record(z.unknown()),
+    period: z.record(z.string(), z.unknown()),
     criteria: z.array(z.unknown()).optional(),
 }
 );
@@ -46,7 +59,7 @@ export const EvaluationStandardSchema = EvaluationStandardScalarSchema.merge(fkS
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const EvaluationStandardPrismaCreateSchema = baseSchema.partial().passthrough();
+export const EvaluationStandardPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,22 +69,22 @@ export const EvaluationStandardPrismaCreateSchema = baseSchema.partial().passthr
 export const EvaluationStandardPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
-    order: z.union([z.number(), z.record(z.unknown())]),
-    opening: z.string().default(""),
-    conclusion: z.string().default("")
+    order: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    opening: z.string(),
+    conclusion: z.string()
 }).partial().passthrough();
 
 
 /**
  * `EvaluationStandard` schema for create operations excluding foreign keys and relations.
  */
-export const EvaluationStandardCreateScalarSchema = baseSchema.partial({
+export const EvaluationStandardCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, opening: true, conclusion: true
 });
 
@@ -85,7 +98,7 @@ export const EvaluationStandardCreateSchema = EvaluationStandardCreateScalarSche
 /**
  * `EvaluationStandard` schema for update operations excluding foreign keys and relations.
  */
-export const EvaluationStandardUpdateScalarSchema = baseSchema.partial();
+export const EvaluationStandardUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

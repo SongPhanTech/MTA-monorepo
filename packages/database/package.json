@@ -32,6 +32,7 @@
         "@zenstackhq/tanstack-query": "catalog:",
         "prisma": "catalog:",
         "prisma-dbml-generator": "catalog:",
-        "zenstack": "catalog:"
+        "zenstack": "catalog:",
+        "@types/node": "catalog:"
     }
 }

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,9 +18,22 @@ const baseSchema = z.object({
     donVi: z.string(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    tuThangNam: z.coerce.date().nullish(),
+    denThangNam: z.coerce.date().nullish(),
+    donVi: z.string(),
+}
+).strict();
 const relationSchema = z.object({
-    chucVu: z.record(z.unknown()),
-    userProfile: z.record(z.unknown()),
+    chucVu: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -46,7 +58,7 @@ export const QuaTrinhCuDiCongTacSchema = QuaTrinhCuDiCongTacScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const QuaTrinhCuDiCongTacPrismaCreateSchema = baseSchema.partial().passthrough();
+export const QuaTrinhCuDiCongTacPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,11 +68,11 @@ export const QuaTrinhCuDiCongTacPrismaCreateSchema = baseSchema.partial().passth
 export const QuaTrinhCuDiCongTacPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     tuThangNam: z.coerce.date().nullish(),
     denThangNam: z.coerce.date().nullish(),
     donVi: z.string()
@@ -70,7 +82,7 @@ export const QuaTrinhCuDiCongTacPrismaUpdateSchema = z.object({
 /**
  * `QuaTrinhCuDiCongTac` schema for create operations excluding foreign keys and relations.
  */
-export const QuaTrinhCuDiCongTacCreateScalarSchema = baseSchema.partial({
+export const QuaTrinhCuDiCongTacCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -84,7 +96,7 @@ export const QuaTrinhCuDiCongTacCreateSchema = QuaTrinhCuDiCongTacCreateScalarSc
 /**
  * `QuaTrinhCuDiCongTac` schema for update operations excluding foreign keys and relations.
  */
-export const QuaTrinhCuDiCongTacUpdateScalarSchema = baseSchema.partial();
+export const QuaTrinhCuDiCongTacUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

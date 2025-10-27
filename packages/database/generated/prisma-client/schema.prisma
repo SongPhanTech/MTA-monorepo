@@ -765,6 +765,7 @@ model UserProfile {
   faqsApproved                  FAQ[]                        @relation("FAQApproved")
   conversations                 Conversation[]
   subjectVersionHistory         SubjectVersionHistory[]
+  subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
 
   @@schema("ql-nguoi-dung")
@@ -2349,8 +2350,8 @@ model StudentSubjectScoreHistory {
   examBannedReason      String?
   suspended             Boolean?
   suspendedReason       String?
-  updatedBy             UserProfile         @relation(fields: [updatedById], references: [id])
-  updatedById           String
+  updatedBy             UserProfile?        @relation(fields: [updatedById], references: [id])
+  updatedById           String?
 
   @@schema("ql-dao-tao")
 }
@@ -2993,7 +2994,7 @@ model SubjectClass {
   examType                   ExamType?
   exam                       Exam?                 @relation(fields: [examId], references: [id])
   examId                     String?
-  /// ngày bắt dầu nhập điểm CC/TX
+  /// ngày bắt đầu nhập điểm CC/TX
   scoreDeadLineStart         DateTime?
   /// ngày kết thúc nhập điểm CC/TX
   scoreDeadline              DateTime?
@@ -3025,6 +3026,30 @@ model SubjectClass {
   surveyObjectTypes          SurveyObjectType[]
   classRegisterLogs          ClassRegisterLogs[]
   subjectClassTimes          SubjectClassTime[]
+  subjectClassHistory        SubjectClassHistory[]
+
+  @@schema("ql-dao-tao")
+}
+
+model SubjectClassHistory {
+  id                 String       @id() @default(cuid())
+  code               String?      @unique()
+  active             Boolean      @default(true)
+  description        String?      @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @default(now()) @updatedAt()
+  subjectClass       SubjectClass @relation(fields: [subjectClassId], references: [id])
+  subjectClassId     String
+  scoreDeadLineStart DateTime?
+  scoreDeadline      DateTime?
+  examScoreDeadline  DateTime?
+  isLockScore        Boolean?
+  isLockExamScore    Boolean?
+  scoreSubmitted     Boolean?
+  scoreChecked       Boolean?
+  updatedBy          UserProfile? @relation(fields: [updatedById], references: [id])
+  updatedById        String?
 
   @@schema("ql-dao-tao")
 }

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -15,8 +14,17 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+}
+).strict();
 const relationSchema = z.object({
-    trainingObjectType: z.record(z.unknown()),
+    trainingObjectType: z.record(z.string(), z.unknown()),
     planTrainingDelaySubjects: z.array(z.unknown()).optional(),
 }
 );
@@ -41,7 +49,7 @@ export const PlanTrainingDelaySchema = PlanTrainingDelayScalarSchema.merge(fkSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const PlanTrainingDelayPrismaCreateSchema = baseSchema.partial().passthrough();
+export const PlanTrainingDelayPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -50,18 +58,18 @@ export const PlanTrainingDelayPrismaCreateSchema = baseSchema.partial().passthro
  */
 export const PlanTrainingDelayPrismaUpdateSchema = z.object({
     id: z.string(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date())
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date()
 }).partial().passthrough();
 
 
 /**
  * `PlanTrainingDelay` schema for create operations excluding foreign keys and relations.
  */
-export const PlanTrainingDelayCreateScalarSchema = baseSchema.partial({
+export const PlanTrainingDelayCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -75,7 +83,7 @@ export const PlanTrainingDelayCreateSchema = PlanTrainingDelayCreateScalarSchema
 /**
  * `PlanTrainingDelay` schema for update operations excluding foreign keys and relations.
  */
-export const PlanTrainingDelayUpdateScalarSchema = baseSchema.partial();
+export const PlanTrainingDelayUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

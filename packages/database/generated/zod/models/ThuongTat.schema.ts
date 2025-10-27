@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -21,9 +20,24 @@ const baseSchema = z.object({
     thoiGianGiamDinh: z.coerce.date().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    tiLe: z.number().nullish(),
+    nguyenNhan: z.string().nullish(),
+    thoiGian: z.coerce.date().nullish(),
+    noiBiThuong: z.string().nullish(),
+    thoiGianGiamDinh: z.coerce.date().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    loai: z.record(z.unknown()),
-    userProfile: z.record(z.unknown()),
+    loai: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -48,7 +62,7 @@ export const ThuongTatSchema = ThuongTatScalarSchema.merge(fkSchema).merge(relat
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ThuongTatPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ThuongTatPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -58,12 +72,12 @@ export const ThuongTatPrismaCreateSchema = baseSchema.partial().passthrough();
 export const ThuongTatPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    tiLe: z.union([z.number().nullish(), z.record(z.unknown())]),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    tiLe: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     nguyenNhan: z.string().nullish(),
     thoiGian: z.coerce.date().nullish(),
     noiBiThuong: z.string().nullish(),
@@ -74,7 +88,7 @@ export const ThuongTatPrismaUpdateSchema = z.object({
 /**
  * `ThuongTat` schema for create operations excluding foreign keys and relations.
  */
-export const ThuongTatCreateScalarSchema = baseSchema.partial({
+export const ThuongTatCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -88,7 +102,7 @@ export const ThuongTatCreateSchema = ThuongTatCreateScalarSchema.merge(fkSchema)
 /**
  * `ThuongTat` schema for update operations excluding foreign keys and relations.
  */
-export const ThuongTatUpdateScalarSchema = baseSchema.partial();
+export const ThuongTatUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

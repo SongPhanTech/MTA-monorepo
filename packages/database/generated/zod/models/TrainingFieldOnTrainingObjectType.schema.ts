@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -16,9 +15,19 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+}
+).strict();
 const relationSchema = z.object({
-    trainingField: z.record(z.unknown()),
-    trainingObjectType: z.record(z.unknown()),
+    trainingField: z.record(z.string(), z.unknown()),
+    trainingObjectType: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -43,7 +52,7 @@ export const TrainingFieldOnTrainingObjectTypeSchema = TrainingFieldOnTrainingOb
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingFieldOnTrainingObjectTypePrismaCreateSchema = baseSchema.partial().passthrough();
+export const TrainingFieldOnTrainingObjectTypePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -53,18 +62,18 @@ export const TrainingFieldOnTrainingObjectTypePrismaCreateSchema = baseSchema.pa
 export const TrainingFieldOnTrainingObjectTypePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date())
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date()
 }).partial().passthrough();
 
 
 /**
  * `TrainingFieldOnTrainingObjectType` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingFieldOnTrainingObjectTypeCreateScalarSchema = baseSchema.partial({
+export const TrainingFieldOnTrainingObjectTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -78,7 +87,7 @@ export const TrainingFieldOnTrainingObjectTypeCreateSchema = TrainingFieldOnTrai
 /**
  * `TrainingFieldOnTrainingObjectType` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingFieldOnTrainingObjectTypeUpdateScalarSchema = baseSchema.partial();
+export const TrainingFieldOnTrainingObjectTypeUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { ConfigKeySchema } from '../enums/ConfigKey.schema';
@@ -15,6 +14,18 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    key: ConfigKeySchema,
+    value: z.string(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     key: ConfigKeySchema,
     value: z.string(),
 }
@@ -36,7 +47,7 @@ export const ConfigSchema = ConfigScalarSchema;
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ConfigPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ConfigPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -46,11 +57,11 @@ export const ConfigPrismaCreateSchema = baseSchema.partial().passthrough();
 export const ConfigPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     key: ConfigKeySchema,
     value: z.string()
 }).partial().passthrough();
@@ -59,7 +70,7 @@ export const ConfigPrismaUpdateSchema = z.object({
 /**
  * `Config` schema for create operations excluding foreign keys and relations.
  */
-export const ConfigCreateScalarSchema = baseSchema.partial({
+export const ConfigCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -67,7 +78,7 @@ export const ConfigCreateScalarSchema = baseSchema.partial({
 /**
  * `Config` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const ConfigCreateSchema = baseSchema.partial({
+export const ConfigCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -75,7 +86,7 @@ export const ConfigCreateSchema = baseSchema.partial({
 /**
  * `Config` schema for update operations excluding foreign keys and relations.
  */
-export const ConfigUpdateScalarSchema = baseSchema.partial();
+export const ConfigUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
