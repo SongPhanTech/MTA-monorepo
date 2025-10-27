@@ -818,4 +818,136 @@ app.openapi(importHeQuanSu, async (c) => {
     )
 })
 
+const debtStatistics = createRoute({
+    operationId: 'debt-statistics',
+    tags: ['Student'],
+    path: '/debt-statistics',
+    method: 'get',
+    request: {
+        query: z.object({
+            trainingObjectTypeId: z.string(),
+            trainingCourseId: z.string(),
+            date: z.coerce.date().optional(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'debt statistics',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+        400: {
+            description: 'Bad request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(debtStatistics, async (c) => {
+    const { trainingObjectTypeId, trainingCourseId, date = new Date() } = c.req.valid('query')
+
+    // const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
+    //     where: { id: trainingCourseId },
+    //     select: { scoreToPass: true },
+    // })
+
+    // const students = await prisma.student.findMany({
+    //     where: {
+    //         trainingObjectType: { id: trainingObjectTypeId },
+    //         fixedClass: { trainingCourse: { id: trainingCourseId } },
+    //     },
+    //     include: {
+    //         subjectClassStudent: {
+    //             where: {
+    //                 subjectClass: {
+    //                     cancelled: false,
+    //                     semester: { endDate: { lte: date } },
+    //                 },
+    //             },
+    //         },
+    //     },
+    // })
+
+    type Result = {
+        studentId: string
+        diem_cuoi: number | null
+        withdrew: boolean
+        exempted: boolean
+        examPostponed: boolean
+        cam_thi: boolean
+        ly_do_cam_thi: string | null
+        dinh_chi: boolean
+        ly_do_dinh_chi: string | null
+        truot_mon: boolean
+    }[]
+
+    const res = await prisma.$queryRaw<Result>`
+                    with mon_no as (select sv.id,
+                       sv.code,
+                       sv.name,
+                       "UP"."fullname",
+                       sv."trainingObjectTypeId",
+                       C."trainingMajorId",
+                       TC.id                                                                                    as trainingCourseId,
+                       SSS."studentId",
+                       SSS."finalScore"                                                                         as diem_cuoi,
+                       SSS.withdrew,
+                       SSS.exempted,
+                       SSS."examPostponed",
+                       SSS."examBanned"                                                                         as cam_thi,
+                       SSS."examBannedReason"                                                                   as ly_do_cam_thi,
+                       SSS.suspended                                                                            as dinh_chi,
+                       SSS."suspendedReason"                                                                    as ly_do_dinh_chi,
+                       TBS."graduation" = true and SSS."finalScore" < TC."scoreToPassGraduation" or
+                       TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass" or
+                       TBS."useForFinalScore" = false and SSS."finalScore" <
+                                                          TC."scoreToPassConditional"                           as truot_mon,
+                       over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
+                    from "ql-dao-tao"."SubjectVersion" as sv
+                         inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
+                         inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                         inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
+                         inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                         inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                         inner join "ql-dao-tao"."Curriculum" C on C.id = CV."curriculumId"
+                         inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV
+                                    on CV.id = TBOCV."curriculumVersionId"
+                         inner join "ql-dao-tao"."TrainingBlockSubject" TBS
+                                    on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
+                         inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                         inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                    where TBS."subjectId" = sv.id)
+                    select "studentId", diem_cuoi, withdrew, exempted, "examPostponed", cam_thi, ly_do_cam_thi, dinh_chi, ly_do_dinh_chi, truot_mon
+                    from mon_no
+                    where rn = 1
+                    and (truot_mon = true or cam_thi = true or dinh_chi = true)
+                    and withdrew = false        -- rút khỏi lớp
+                    and exempted = false        -- miễn học
+                    and "examPostponed" = false -- hoãn thi
+                    and 
+                    (
+                        ${trainingObjectTypeId}::TEXT IS NULL
+                        OR "trainingObjectTypeId" = ${trainingObjectTypeId}
+                    )
+                    and 
+                    (
+                        ${trainingCourseId}::TEXT IS NULL
+                        OR trainingCourseId = ${trainingCourseId}
+                    )
+                `
+
+    return c.json({
+        message: '',
+    })
+})
+
 export default app
