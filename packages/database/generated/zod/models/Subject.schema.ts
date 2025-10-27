@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,8 +18,21 @@ const baseSchema = z.object({
     information: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    englishName: z.string().nullish(),
+    information: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    managementOrganization: z.record(z.unknown()).optional(),
+    managementOrganization: z.record(z.string(), z.unknown()).optional(),
     subjectVersion: z.array(z.unknown()).optional(),
     certificateOnSubject: z.array(z.unknown()).optional(),
     awardOnSubject: z.array(z.unknown()).optional(),
@@ -47,7 +59,7 @@ export const SubjectSchema = SubjectScalarSchema.merge(fkSchema).merge(relationS
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SubjectPrismaCreateSchema = baseSchema.partial().passthrough();
+export const SubjectPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -57,11 +69,11 @@ export const SubjectPrismaCreateSchema = baseSchema.partial().passthrough();
 export const SubjectPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     englishName: z.string().nullish(),
     information: z.string().nullish()
@@ -71,7 +83,7 @@ export const SubjectPrismaUpdateSchema = z.object({
 /**
  * `Subject` schema for create operations excluding foreign keys and relations.
  */
-export const SubjectCreateScalarSchema = baseSchema.partial({
+export const SubjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -85,7 +97,7 @@ export const SubjectCreateSchema = SubjectCreateScalarSchema.merge(fkSchema);
 /**
  * `Subject` schema for update operations excluding foreign keys and relations.
  */
-export const SubjectUpdateScalarSchema = baseSchema.partial();
+export const SubjectUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

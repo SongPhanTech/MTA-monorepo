@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -15,9 +14,18 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+}
+).strict();
 const relationSchema = z.object({
-    trainingObjectType: z.record(z.unknown()),
-    semester: z.record(z.unknown()),
+    trainingObjectType: z.record(z.string(), z.unknown()),
+    semester: z.record(z.string(), z.unknown()),
     planTrainingSubjects: z.array(z.unknown()).optional(),
 }
 );
@@ -43,7 +51,7 @@ export const PlanTrainingSchema = PlanTrainingScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const PlanTrainingPrismaCreateSchema = baseSchema.partial().passthrough();
+export const PlanTrainingPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -52,18 +60,18 @@ export const PlanTrainingPrismaCreateSchema = baseSchema.partial().passthrough()
  */
 export const PlanTrainingPrismaUpdateSchema = z.object({
     id: z.string(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date())
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date()
 }).partial().passthrough();
 
 
 /**
  * `PlanTraining` schema for create operations excluding foreign keys and relations.
  */
-export const PlanTrainingCreateScalarSchema = baseSchema.partial({
+export const PlanTrainingCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -77,7 +85,7 @@ export const PlanTrainingCreateSchema = PlanTrainingCreateScalarSchema.merge(fkS
 /**
  * `PlanTraining` schema for update operations excluding foreign keys and relations.
  */
-export const PlanTrainingUpdateScalarSchema = baseSchema.partial();
+export const PlanTrainingUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

@@ -13,6 +13,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
 import { Button, Col, Flex, Form, Input, InputNumber, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
+import { PlusCircle } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DndProvider, type DragSourceMonitor, useDrag, useDrop } from 'react-dnd'
@@ -648,6 +649,15 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                                 />
                                                             )
                                                         )}
+                                                        <div
+                                                            onClick={() => {}}
+                                                            className="border border-dashed border-gray-400 rounded p-1 bg-green-100 select-none"
+                                                            style={{
+                                                                height: 40,
+                                                            }}
+                                                        >
+                                                            <PlusCircle />
+                                                        </div>
                                                     </div>
                                                     <div className="flex h-fit">
                                                         {record?.fixedClasses.map(

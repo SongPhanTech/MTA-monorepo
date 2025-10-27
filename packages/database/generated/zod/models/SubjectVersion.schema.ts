@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { SubjectVersionType } from '../../zenstack/models';
@@ -43,11 +42,45 @@ const baseSchema = z.object({
     rules: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    isLocked: z.boolean(),
+    name: z.string(),
+    codeTkb: z.string().nullish(),
+    examType: ExamTypeSchema,
+    type: SubjectVersionTypeSchema,
+    onePoint: z.boolean(),
+    credit: z.number(),
+    week: z.number().nullish(),
+    period: z.number(),
+    schedulePeriod: z.number().nullish(),
+    numberOfTheory: z.number().nullish(),
+    numberOfPractical: z.number().nullish(),
+    numberOfSelfStudy: z.number().nullish(),
+    numberOfPractice: z.number().nullish(),
+    numberOfReview: z.number().nullish(),
+    numberOfExam: z.number().nullish(),
+    numberOfOther: z.number().nullish(),
+    objectives: z.string().nullish(),
+    learningOutcome: z.string().nullish(),
+    structure: z.string().nullish(),
+    guild: z.string().nullish(),
+    academicResults: z.string().nullish(),
+    materials: z.string().nullish(),
+    rules: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    managementOrganization: z.record(z.unknown()).optional(),
-    subject: z.record(z.unknown()),
-    trainingObjectType: z.record(z.unknown()),
-    subjectVersionCategory: z.record(z.unknown()).optional(),
+    managementOrganization: z.record(z.string(), z.unknown()).optional(),
+    subject: z.record(z.string(), z.unknown()),
+    trainingObjectType: z.record(z.string(), z.unknown()),
+    subjectVersionCategory: z.record(z.string(), z.unknown()).optional(),
     trainingBlocks: z.array(z.unknown()).optional(),
     prerequisiteSubject: z.array(z.unknown()).optional(),
     dependentSubject: z.array(z.unknown()).optional(),
@@ -89,7 +122,7 @@ export const SubjectVersionSchema = SubjectVersionScalarSchema.merge(fkSchema).m
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SubjectVersionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const SubjectVersionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -99,28 +132,28 @@ export const SubjectVersionPrismaCreateSchema = baseSchema.partial().passthrough
 export const SubjectVersionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    isLocked: z.boolean().default(false),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    isLocked: z.boolean(),
     name: z.string(),
     codeTkb: z.string().nullish(),
     examType: ExamTypeSchema,
     type: SubjectVersionTypeSchema,
-    onePoint: z.boolean().default(false),
-    credit: z.union([z.number(), z.record(z.unknown())]),
-    week: z.union([z.number().nullish(), z.record(z.unknown())]),
-    period: z.union([z.number().default(0), z.record(z.unknown())]),
-    schedulePeriod: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfTheory: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfPractical: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfSelfStudy: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfPractice: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfReview: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfExam: z.union([z.number().nullish(), z.record(z.unknown())]),
-    numberOfOther: z.union([z.number().nullish(), z.record(z.unknown())]),
+    onePoint: z.boolean(),
+    credit: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    week: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    period: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    schedulePeriod: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    numberOfTheory: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    numberOfPractical: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    numberOfSelfStudy: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    numberOfPractice: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    numberOfReview: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    numberOfExam: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    numberOfOther: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     objectives: z.string().nullish(),
     learningOutcome: z.string().nullish(),
     structure: z.string().nullish(),
@@ -134,7 +167,7 @@ export const SubjectVersionPrismaUpdateSchema = z.object({
 /**
  * `SubjectVersion` schema for create operations excluding foreign keys and relations.
  */
-export const SubjectVersionCreateScalarSchema = baseSchema.partial({
+export const SubjectVersionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isLocked: true, type: true, onePoint: true, period: true
 });
 
@@ -148,7 +181,7 @@ export const SubjectVersionCreateSchema = SubjectVersionCreateScalarSchema.merge
 /**
  * `SubjectVersion` schema for update operations excluding foreign keys and relations.
  */
-export const SubjectVersionUpdateScalarSchema = baseSchema.partial();
+export const SubjectVersionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

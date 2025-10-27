@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { ClassRegisterStatus } from '../../zenstack/models';
@@ -20,10 +19,22 @@ const baseSchema = z.object({
     reason: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    status: ClassRegisterStatusSchema,
+    reason: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    classRegisterSession: z.record(z.unknown()),
-    subjectClass: z.record(z.unknown()),
-    student: z.record(z.unknown()),
+    classRegisterSession: z.record(z.string(), z.unknown()),
+    subjectClass: z.record(z.string(), z.unknown()),
+    student: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -49,7 +60,7 @@ export const ClassRegisterLogsSchema = ClassRegisterLogsScalarSchema.merge(fkSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ClassRegisterLogsPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ClassRegisterLogsPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -59,11 +70,11 @@ export const ClassRegisterLogsPrismaCreateSchema = baseSchema.partial().passthro
 export const ClassRegisterLogsPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     status: ClassRegisterStatusSchema,
     reason: z.string().nullish()
 }).partial().passthrough();
@@ -72,7 +83,7 @@ export const ClassRegisterLogsPrismaUpdateSchema = z.object({
 /**
  * `ClassRegisterLogs` schema for create operations excluding foreign keys and relations.
  */
-export const ClassRegisterLogsCreateScalarSchema = baseSchema.partial({
+export const ClassRegisterLogsCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
@@ -86,7 +97,7 @@ export const ClassRegisterLogsCreateSchema = ClassRegisterLogsCreateScalarSchema
 /**
  * `ClassRegisterLogs` schema for update operations excluding foreign keys and relations.
  */
-export const ClassRegisterLogsUpdateScalarSchema = baseSchema.partial();
+export const ClassRegisterLogsUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

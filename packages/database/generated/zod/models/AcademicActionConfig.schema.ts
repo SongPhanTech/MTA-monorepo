@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { AcademicActionTypeSchema } from '../enums/AcademicActionType.schema';
@@ -19,8 +18,20 @@ const baseSchema = z.object({
     actionType: AcademicActionTypeSchema,
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    actionType: AcademicActionTypeSchema,
+}
+).strict();
 const relationSchema = z.object({
-    trainingCourse: z.record(z.unknown()),
+    trainingCourse: z.record(z.string(), z.unknown()),
     ruleSets: z.array(z.unknown()).optional(),
     decisions: z.array(z.unknown()).optional(),
 }
@@ -46,7 +57,7 @@ export const AcademicActionConfigSchema = AcademicActionConfigScalarSchema.merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const AcademicActionConfigPrismaCreateSchema = baseSchema.partial().passthrough();
+export const AcademicActionConfigPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,11 +67,11 @@ export const AcademicActionConfigPrismaCreateSchema = baseSchema.partial().passt
 export const AcademicActionConfigPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     actionType: AcademicActionTypeSchema
 }).partial().passthrough();
@@ -69,7 +80,7 @@ export const AcademicActionConfigPrismaUpdateSchema = z.object({
 /**
  * `AcademicActionConfig` schema for create operations excluding foreign keys and relations.
  */
-export const AcademicActionConfigCreateScalarSchema = baseSchema.partial({
+export const AcademicActionConfigCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -83,7 +94,7 @@ export const AcademicActionConfigCreateSchema = AcademicActionConfigCreateScalar
 /**
  * `AcademicActionConfig` schema for update operations excluding foreign keys and relations.
  */
-export const AcademicActionConfigUpdateScalarSchema = baseSchema.partial();
+export const AcademicActionConfigUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

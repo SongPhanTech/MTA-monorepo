@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,8 +18,21 @@ const baseSchema = z.object({
     questions: z.array(z.string()),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    order: z.number(),
+    name: z.string(),
+    questions: z.array(z.string()),
+}
+).strict();
 const relationSchema = z.object({
-    criterionCatalog: z.record(z.unknown()),
+    criterionCatalog: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -44,7 +56,7 @@ export const RequirementCriterionCatalogSchema = RequirementCriterionCatalogScal
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const RequirementCriterionCatalogPrismaCreateSchema = baseSchema.partial().passthrough();
+export const RequirementCriterionCatalogPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -54,12 +66,12 @@ export const RequirementCriterionCatalogPrismaCreateSchema = baseSchema.partial(
 export const RequirementCriterionCatalogPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    order: z.union([z.number(), z.record(z.unknown())]),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    order: z.union([z.number(), z.record(z.string(), z.unknown())]),
     name: z.string(),
     questions: z.array(z.string())
 }).partial().passthrough();
@@ -68,7 +80,7 @@ export const RequirementCriterionCatalogPrismaUpdateSchema = z.object({
 /**
  * `RequirementCriterionCatalog` schema for create operations excluding foreign keys and relations.
  */
-export const RequirementCriterionCatalogCreateScalarSchema = baseSchema.partial({
+export const RequirementCriterionCatalogCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, questions: true
 });
 
@@ -82,7 +94,7 @@ export const RequirementCriterionCatalogCreateSchema = RequirementCriterionCatal
 /**
  * `RequirementCriterionCatalog` schema for update operations excluding foreign keys and relations.
  */
-export const RequirementCriterionCatalogUpdateScalarSchema = baseSchema.partial();
+export const RequirementCriterionCatalogUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

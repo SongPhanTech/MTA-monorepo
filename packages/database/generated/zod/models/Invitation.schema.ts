@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,8 +17,20 @@ const baseSchema = z.object({
     isConfirmed: z.boolean().default(false),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    sentDate: z.coerce.date(),
+    isConfirmed: z.boolean(),
+}
+).strict();
 const relationSchema = z.object({
-    councilMember: z.record(z.unknown()),
+    councilMember: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -43,7 +54,7 @@ export const InvitationSchema = InvitationScalarSchema.merge(fkSchema).merge(rel
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const InvitationPrismaCreateSchema = baseSchema.partial().passthrough();
+export const InvitationPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -53,20 +64,20 @@ export const InvitationPrismaCreateSchema = baseSchema.partial().passthrough();
 export const InvitationPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    sentDate: z.coerce.date().default(() => new Date()),
-    isConfirmed: z.boolean().default(false)
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    sentDate: z.coerce.date(),
+    isConfirmed: z.boolean()
 }).partial().passthrough();
 
 
 /**
  * `Invitation` schema for create operations excluding foreign keys and relations.
  */
-export const InvitationCreateScalarSchema = baseSchema.partial({
+export const InvitationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, sentDate: true, isConfirmed: true
 });
 
@@ -80,7 +91,7 @@ export const InvitationCreateSchema = InvitationCreateScalarSchema.merge(fkSchem
 /**
  * `Invitation` schema for update operations excluding foreign keys and relations.
  */
-export const InvitationUpdateScalarSchema = baseSchema.partial();
+export const InvitationUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

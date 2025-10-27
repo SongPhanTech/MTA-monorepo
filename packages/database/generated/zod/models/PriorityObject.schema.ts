@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,17 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -38,7 +48,7 @@ export const PriorityObjectSchema = PriorityObjectScalarSchema.merge(relationSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const PriorityObjectPrismaCreateSchema = baseSchema.partial().passthrough();
+export const PriorityObjectPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -48,11 +58,11 @@ export const PriorityObjectPrismaCreateSchema = baseSchema.partial().passthrough
 export const PriorityObjectPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string()
 }).partial().passthrough();
 
@@ -60,7 +70,7 @@ export const PriorityObjectPrismaUpdateSchema = z.object({
 /**
  * `PriorityObject` schema for create operations excluding foreign keys and relations.
  */
-export const PriorityObjectCreateScalarSchema = baseSchema.partial({
+export const PriorityObjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -68,7 +78,7 @@ export const PriorityObjectCreateScalarSchema = baseSchema.partial({
 /**
  * `PriorityObject` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const PriorityObjectCreateSchema = baseSchema.partial({
+export const PriorityObjectCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -76,7 +86,7 @@ export const PriorityObjectCreateSchema = baseSchema.partial({
 /**
  * `PriorityObject` schema for update operations excluding foreign keys and relations.
  */
-export const PriorityObjectUpdateScalarSchema = baseSchema.partial();
+export const PriorityObjectUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
