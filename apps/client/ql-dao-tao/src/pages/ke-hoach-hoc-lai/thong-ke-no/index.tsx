@@ -26,19 +26,6 @@ interface SubjectBySemesterForm {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-export const options = {
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top' as const,
-        },
-        title: {
-            display: true,
-            text: 'Số SV nợ',
-        },
-    },
-}
-
 export default function DangKyHocLai() {
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const { id: semesterId } = useSemesterStore()
@@ -70,6 +57,21 @@ export default function DangKyHocLai() {
 
     const rawData = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
 
+    const options = useMemo(() => {
+        return {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top' as const,
+                },
+                title: {
+                    display: true,
+                    text: rawData.length ? 'Số SV nợ' : 'Không có SV nợ',
+                },
+            },
+        }
+    }, [rawData.length])
+
     const labels = useMemo(() => {
         return rawData.map((item) => [item.code, item.name].join(' - '))
     }, [rawData])
@@ -91,7 +93,6 @@ export default function DangKyHocLai() {
         const e = getElementAtEvent(chartRef.current, event)
         if (e[0]) {
             setSubjectVersionId(rawData.at(e[0].index)?.id)
-            console.log('sid', rawData.at(e[0].index)?.id)
         }
     }
 

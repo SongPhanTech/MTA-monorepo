@@ -163,14 +163,8 @@ const openSubjectClassRetakeStudents = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
-            page: z.number({ coerce: true }).openapi('page', {
-                description: 'Số trang',
-                default: 1,
-            }),
-            pageSize: z.number({ coerce: true }).openapi('pageSize', {
-                description: 'Số lượng bản ghi trên mỗi trang',
-                default: 10,
-            }),
+            page: z.number({ coerce: true }).default(1),
+            pageSize: z.number({ coerce: true }).default(10),
         }),
     },
     responses: {
@@ -678,20 +672,22 @@ app.openapi(openSubjectClassRetake, async (c) => {
 app.openapi(openSubjectClassRetakeStudents, async (c) => {
     const { page, pageSize, search, trainingCourseId, trainingObjectTypeId, subjectVersionId } =
         c.req.valid('query')
-    const res = await prisma.$queryRaw<
-        {
-            studentId: string
-            diem_cuoi: number | null
-            withdrew: boolean
-            exempted: boolean
-            examPostponed: boolean
-            cam_thi: boolean
-            ly_do_cam_thi: string | null
-            dinh_chi: boolean
-            ly_do_dinh_chi: string | null
-            truot_mon: boolean
-        }[]
-    >`with mon_no as (select sv.id,
+
+    type Result = {
+        studentId: string
+        diem_cuoi: number | null
+        withdrew: boolean
+        exempted: boolean
+        examPostponed: boolean
+        cam_thi: boolean
+        ly_do_cam_thi: string | null
+        dinh_chi: boolean
+        ly_do_dinh_chi: string | null
+        truot_mon: boolean
+    }[]
+
+    const res = await prisma.$queryRaw<Result>`
+                    with mon_no as (select sv.id,
                        sv.code,
                        sv.name,
                        "UP"."fullname",
@@ -713,7 +709,7 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                                           TC."scoreToPassConditional"                           as truot_mon,
                        row_number()
                        over (partition by SSS."studentId",SSS."subjectVersionId" order by SSS."createdAt" desc)::INTEGER as rn
-                from "ql-dao-tao"."SubjectVersion" as sv
+                    from "ql-dao-tao"."SubjectVersion" as sv
                          inner join "ql-dao-tao"."StudentSubjectScore" SSS on sv.id = SSS."subjectVersionId"
                          inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
                          inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
@@ -726,33 +722,33 @@ app.openapi(openSubjectClassRetakeStudents, async (c) => {
                                     on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId"
                          inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
                          inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
-                where TBS."subjectId" = sv.id)
-select "studentId", diem_cuoi, withdrew, exempted, "examPostponed", cam_thi, ly_do_cam_thi, dinh_chi, ly_do_dinh_chi, truot_mon
-from mon_no
-where rn = 1
-  and (truot_mon = true or cam_thi = true or dinh_chi = true)
-  and withdrew = false        -- rút khỏi lớp
-  and exempted = false        -- miễn học
-  and "examPostponed" = false -- hoãn thi
-  and 
-  (
-    ${trainingObjectTypeId}::TEXT IS NULL
-    OR "trainingObjectTypeId" = ${trainingObjectTypeId}
-  )
-  and 
-  (
-    ${trainingCourseId}::TEXT IS NULL
-    OR trainingCourseId = ${trainingCourseId}
-  )
-  and (
-    ${search}::TEXT IS NULL
-        OR code ILIKE ${`%${search}%`}
-        OR "fullname" ILIKE ${`%${search}%`}
-    )
-    and id = ${subjectVersionId}
-    limit ${pageSize}
-    offset ${pageSize} * (${page} - 1)
-`
+                    where TBS."subjectId" = sv.id)
+                    select "studentId", diem_cuoi, withdrew, exempted, "examPostponed", cam_thi, ly_do_cam_thi, dinh_chi, ly_do_dinh_chi, truot_mon
+                    from mon_no
+                    where rn = 1
+                    and (truot_mon = true or cam_thi = true or dinh_chi = true)
+                    and withdrew = false        -- rút khỏi lớp
+                    and exempted = false        -- miễn học
+                    and "examPostponed" = false -- hoãn thi
+                    and 
+                    (
+                        ${trainingObjectTypeId}::TEXT IS NULL
+                        OR "trainingObjectTypeId" = ${trainingObjectTypeId}
+                    )
+                    and 
+                    (
+                        ${trainingCourseId}::TEXT IS NULL
+                        OR trainingCourseId = ${trainingCourseId}
+                    )
+                    and (
+                        ${search}::TEXT IS NULL
+                            OR code ILIKE ${`%${search}%`}
+                            OR "fullname" ILIKE ${`%${search}%`}
+                        )
+                        and id = ${subjectVersionId}
+                        limit ${pageSize}
+                        offset ${pageSize} * (${page} - 1)
+                    `
 
     const students = await prisma.student.findMany({
         where: {

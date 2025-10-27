@@ -4,11 +4,18 @@ const prisma = new PrismaClient()
 
 const now = new Date().toISOString()
 
-const semesters = await prisma.semester.findFirst({
-    where: {
-        startDate: { lte: now },
-        endDate: { gte: now },
-    },
+await prisma.templateFile.createMany({
+    skipDuplicates: true,
+    data: [
+        {
+            name: 'Thống kê nợ môn',
+            code: 'THONG_KE_NO',
+            path: 'https://minio.swantech.vn/mta/template/thong_ke_no.xlsx',
+            fileType: 'DOWNLOAD',
+            extensions: 'xlsx',
+            numberField: 0,
+        },
+    ],
 })
 
-console.log(semesters)
+// console.log(semesters)

@@ -6,8 +6,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import type { TrainingCourse } from '@workspace/db/client'
-import type { Prisma } from '@workspace/db/client'
+import type { Prisma, TrainingCourse } from '@workspace/db/client'
 import {
     useCountClassRegisterSession,
     useDeleteClassRegisterSession,
@@ -176,7 +175,7 @@ export default function ClassRegisterSession() {
                         <Col span={8}>
                             <Flex justify="end" gap={4}>
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                                     'THEM'
                                 ) && (
                                     <Button
@@ -202,12 +201,12 @@ export default function ClassRegisterSession() {
                         onRowClick={({ id }) => {
                             if (
                                 can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                                     'XEM_CHI_TIET'
                                 )
                             ) {
                                 router.push(
-                                    `${ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC}/${id}`
+                                    `${ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE_ID}/${id}`
                                 )
                             }
                         }}
@@ -317,7 +316,7 @@ export default function ClassRegisterSession() {
                                 align: 'center',
                                 fixed: 'right',
                                 hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                                     'XEM_CHI_TIET',
                                     'SUA',
                                     'XOA'
@@ -325,7 +324,7 @@ export default function ClassRegisterSession() {
                                 render: (_, { id }) => (
                                     <Row className="justify-center gap-2">
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                                             'XEM_CHI_TIET'
                                         ) && (
                                             <Tooltip title="Xem các đơn đăng ký" placement="top">
@@ -333,7 +332,7 @@ export default function ClassRegisterSession() {
                                             </Tooltip>
                                         )}
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                                             'SUA'
                                         ) && (
                                             <EditIcon
@@ -345,7 +344,7 @@ export default function ClassRegisterSession() {
                                             />
                                         )}
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                                             'XOA'
                                         ) && (
                                             <DeleteIcon
