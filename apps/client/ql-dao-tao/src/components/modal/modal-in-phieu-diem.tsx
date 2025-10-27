@@ -136,7 +136,7 @@ const ModalPrintStudentSubjectScore = () => {
                 },
             },
         },
-        { enabel: input?.dataTable?.[0]?.subjectClass?.id }
+        { enabled: !!input?.dataTable?.[0]?.subjectClass?.id }
     )
     const statistics = getScoreStatistics(input?.dataTable || [])
     const firstTrainingCourse = useMemo(() => {

@@ -47,8 +47,8 @@ export default function HSSVChuaDat({ subjectVersionId, viewOnly }: RegisterClas
             trainingObjectTypeId: trainingObjectTypeId || '',
             trainingCourseId: filters.trainingCourseId,
             subjectVersionId: subjectVersionId || '',
-            page: `${currentPage}`,
-            pageSize: `${numberOfPages}`,
+            page: currentPage,
+            pageSize: numberOfPages,
         },
         { query: { enabled: !!trainingObjectTypeId && !!subjectVersionId } }
     )

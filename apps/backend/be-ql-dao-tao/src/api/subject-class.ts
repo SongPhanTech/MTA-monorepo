@@ -163,14 +163,8 @@ const openSubjectClassRetakeStudents = createRoute({
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
-            page: z.number({ coerce: true }).openapi('page', {
-                description: 'Số trang',
-                default: 1,
-            }),
-            pageSize: z.number({ coerce: true }).openapi('pageSize', {
-                description: 'Số lượng bản ghi trên mỗi trang',
-                default: 10,
-            }),
+            page: z.number({ coerce: true }).default(1),
+            pageSize: z.number({ coerce: true }).default(10),
         }),
     },
     responses: {
