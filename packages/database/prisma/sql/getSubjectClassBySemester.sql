@@ -70,60 +70,55 @@ WITH FCS AS (
                 sc.id
 )
 SELECT json_build_object(
-                'subjectVersionCode',
-                subject_version_code,
-                'trainingCourseId',
-                training_course_id,
-                'managementOrganizationId',
-                management_organization_id,
-                'managementOrganizationName',
-                management_organization_name,
-                'managementOrganizationCode',
-                management_organization_code,
-                'subjectVersionId',
-                subject_version_id,
-                'subjectVersionName',
-                subject_version_name,
-                'subjectVersionCredit',
-                subject_version_credit,
-                'subjectClass',
-                json_agg(
-                        json_build_object(
-                                'subjectClassId',
-                                subject_class_id,
-                                'subjectClassCode',
-                                subject_class_code,
-                                'subjectClassName',
-                                subject_class_name
-                        )
-                ),
-                'curriculumVersion',
-                json_agg(
-                        json_build_object(
-                                'curriculumVersionId',
-                                curriculum_version_id,
-                                'curriculumVersionName',
-                                curriculum_version_name,
-                                'curriculumVersionCode',
-                                curriculum_version_code
-                        )
-                ),
-                'fixedClass',
-                json_agg(
-                        json_build_object(
-                                'fixedClassId',
-                                fixed_class_id,
-                                'fixedClassCode',
-                                fixed_class_code,
-                                'fixedClassName',
-                                fixed_class_name,
-                                'fixedClassCount',
-                                fixed_class_count,
-                                'fixedClassSemester',
-                                fixed_class_semester
-                        )
-                )
-        ) as data
+               'subjectVersionCode',
+               subject_version_code,
+               'managementOrganizationId',
+               management_organization_id,
+               'managementOrganizationName',
+               management_organization_name,
+               'managementOrganizationCode',
+               management_organization_code,
+               'subjectVersionId',
+               subject_version_id,
+               'subjectVersionName',
+               subject_version_name,
+               'subjectVersionCredit',
+               subject_version_credit,
+               'subjectClass',
+               json_agg(
+                       json_build_object(
+                               'subjectClassId',
+                               subject_class_id,
+                               'subjectClassCode',
+                               subject_class_code,
+                               'subjectClassName',
+                               subject_class_name
+                       )
+               ),
+               'fixedClass',
+               json_agg(
+                       json_build_object(
+                               'fixedClassId',
+                               fixed_class_id,
+                               'fixedClassCode',
+                               fixed_class_code,
+                               'fixedClassName',
+                               fixed_class_name,
+                               'fixedClassCount',
+                               fixed_class_count,
+                               'fixedClassSemester',
+                               fixed_class_semester,
+                               'curriculumVersionId',
+                               curriculum_version_id,
+                               'curriculumVersionName',
+                               curriculum_version_name,
+                               'curriculumVersionCode',
+                               curriculum_version_code,
+                               'trainingCourseId',
+                               training_course_id
+                       )
+               )
+       ) as data
 FROM FCS
 WHERE training_block_subject_semester = fixed_class_semester
         AND active = TRUE
@@ -150,7 +145,6 @@ GROUP BY subject_version_id,
         subject_version_code,
         subject_version_credit,
         subject_version_name,
-        training_course_id,
         management_organization_id,
         management_organization_code,
         management_organization_name

@@ -7,6 +7,7 @@ import type { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
 import { $Enums } from '@workspace/db/client'
 import { useFindFirstPlanTraining } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { OpenSubjectClassFixedClassItem } from '@workspace/libs/api/schemas/openSubjectClassFixedClassItem'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -69,16 +70,15 @@ export default function MonTheoKeHoachDuKien() {
         }
     )
 
-    const data = useMemo(
-        () =>
-            res?.status === 200
-                ? res?.data?.data.map((subjectVersion) => ({
-                      id: subjectVersion.subjectVersionId,
-                      ...subjectVersion,
-                  }))
-                : [],
-        [res]
-    )
+    const data = useMemo(() => {
+        return res?.status === 200
+            ? res?.data?.data.map((subjectVersion) => ({
+                  id: subjectVersion.subjectVersionId,
+                  ...subjectVersion,
+              }))
+            : []
+    }, [res])
+    console.log('data', data)
 
     useEffect(() => {
         if (planTrainingData) {
@@ -346,37 +346,19 @@ export default function MonTheoKeHoachDuKien() {
                                 title: 'Danh sách lớp quản lý',
                                 dataIndex: 'fixedClass',
                                 align: 'center',
-                                width: 180,
+                                width: 250,
                                 render: (__, record) => {
                                     return record?.fixedClass.length ? (
                                         <TextTruncate
-                                            arr={record?.fixedClass.map((i: any) => {
-                                                return {
-                                                    key: i?.fixedClassId,
-                                                    label: `Kỳ ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
+                                            arr={record?.fixedClass.map(
+                                                (i: OpenSubjectClassFixedClassItem) => {
+                                                    return {
+                                                        key: i?.fixedClassId,
+                                                        label: `${i.fixedClassCode} (${i.fixedClassCount}) - ${i.curriculumVersionCode} - Kỳ ${i.fixedClassSemester}`,
+                                                    }
                                                 }
-                                            })}
+                                            )}
                                             key="fixedClass"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'CTĐT',
-                                dataIndex: 'curriculumVersion',
-                                align: 'center',
-                                render: (__, record) => {
-                                    return record?.curriculumVersion.length ? (
-                                        <TextTruncate
-                                            arr={record?.curriculumVersion.map((i: any) => {
-                                                return {
-                                                    key: i?.curriculumVersionId,
-                                                    label: `${i?.curriculumVersionCode} - ${i?.curriculumVersionName}`,
-                                                }
-                                            })}
-                                            key="curriculumVersion"
                                         />
                                     ) : (
                                         ''

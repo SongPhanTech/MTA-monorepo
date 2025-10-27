@@ -209,14 +209,14 @@ export function diffArrays<T, K extends keyof T>(a: T[], b: T[], key: K) {
 }
 
 export function diffArraysKey<T>(a: T[], b: T[], keys: (keyof T)[]) {
-  const getKey = (item: T) => keys.map(k => String(item[k])).join('|')
+    const getKey = (item: T) => keys.map((k) => String(item[k])).join('|')
 
-  const bKeys = new Set(b.map(getKey))
-  const aKeys = new Set(a.map(getKey))
+    const bKeys = new Set(b.map(getKey))
+    const aKeys = new Set(a.map(getKey))
 
-  const onlyInA = a.filter(itemA => !bKeys.has(getKey(itemA)))
-  const onlyInB = b.filter(itemB => !aKeys.has(getKey(itemB)))
-  const both = a.filter(itemA => bKeys.has(getKey(itemA)))
+    const onlyInA = a.filter((itemA) => !bKeys.has(getKey(itemA)))
+    const onlyInB = b.filter((itemB) => !aKeys.has(getKey(itemB)))
+    const both = a.filter((itemA) => bKeys.has(getKey(itemA)))
 
-  return { onlyInA, onlyInB, both }
+    return { onlyInA, onlyInB, both }
 }

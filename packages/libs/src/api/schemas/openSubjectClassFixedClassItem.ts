@@ -11,4 +11,8 @@ export type OpenSubjectClassFixedClassItem = {
     fixedClassCount: number
     fixedClassSemester: number
     fixedClassCode: string
+    trainingCourseId: string
+    curriculumVersionId: string
+    curriculumVersionName: string
+    curriculumVersionCode: string
 }

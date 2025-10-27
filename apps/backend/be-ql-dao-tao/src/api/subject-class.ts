@@ -377,13 +377,13 @@ app.openapi(openSubjectClass, async (c) => {
                                 self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
                             !!value.fixedClassId
                     ),
-                    curriculumVersion: item.curriculumVersion.filter(
-                        (value, index, self) =>
-                            index ===
-                                self.findIndex(
-                                    (t) => t.curriculumVersionId === value.curriculumVersionId
-                                ) && !!value.curriculumVersionId
-                    ),
+                    // curriculumVersion: item.curriculumVersion.filter(
+                    //     (value, index, self) =>
+                    //         index ===
+                    //             self.findIndex(
+                    //                 (t) => t.curriculumVersionId === value.curriculumVersionId
+                    //             ) && !!value.curriculumVersionId
+                    // ),
                     subjectClass: item.subjectClass.filter(
                         (value, index, self) =>
                             index ===
