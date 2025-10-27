@@ -12,7 +12,7 @@ import {
     useFindUniqueSemester,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { OpenSubjectClassFixedClassItem } from '@workspace/libs/api/schemas/openSubjectClassFixedClassItem'
+import type { OpenSubjectClassFixedClassItem } from '@workspace/libs/api/schemas/openSubjectClassFixedClassItem'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -56,16 +56,14 @@ export default function MonKySau() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res, refetch } = useOpenSubjectClass(
         {
-            page: `${currentPage}`,
-            pageSize: `${numberOfPages}`,
             semesterId: semesterId as string,
             search: searchText,
-            trainingCourseId,
+            trainingCourseId: trainingCourseId as string,
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             nextSemester: 'true',
         },
-        { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
+        { query: { enabled: !!semesterId && !!trainingObjectTypeId && !!trainingCourseId } }
     )
 
     const { data: planTrainingData } = useFindFirstPlanTraining(

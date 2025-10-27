@@ -5,20 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 
-import type { FixedClassId } from './fixedClassId'
-import type { NextSemester } from './nextSemester'
-import type { Search } from './search'
-import type { SemesterId } from './semesterId'
-import type { TrainingCourseId } from './trainingCourseId'
-import type { TrainingMajorId } from './trainingMajorId'
-import type { TrainingObjectTypeId } from './trainingObjectTypeId'
-
 export type OpenSubjectClassParams = {
-    semesterId: SemesterId
-    trainingCourseId: TrainingCourseId
-    trainingMajorId?: TrainingMajorId
-    search?: Search
-    trainingObjectTypeId: TrainingObjectTypeId
-    nextSemester: NextSemester
-    fixedClassId?: FixedClassId
+    semesterId: string
+    trainingCourseId: string
+    trainingMajorId?: string
+    search?: string
+    trainingObjectTypeId: string
+    nextSemester?: string
+    fixedClassId?: string
 }

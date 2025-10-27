@@ -17,37 +17,13 @@ const openSubjectClass = createRoute({
     summary: 'Lấy danh sách lớp môn học đã mở',
     request: {
         query: z.object({
-            semesterId: z.string().openapi('semesterId', {
-                description: 'ID của học kỳ',
-            }),
-            trainingCourseId: z.string().openapi('trainingCourseId', {
-                description: 'ID khoá đào tạo',
-            }),
-            trainingMajorId: z
-                .string()
-                .openapi('trainingMajorId', {
-                    description: 'ID của chuyên ngành đào tạo',
-                })
-                .optional(),
-            search: z
-                .string()
-                .openapi('search', {
-                    description: 'Từ khoá tìm kiếm',
-                })
-                .optional(),
-            trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
-                description: 'ID loại đối tượng đào tạo',
-            }),
-            nextSemester: z.string().openapi('nextSemester', {
-                description: 'Xem học kỳ tiếp theo',
-                default: 'false',
-            }),
-            fixedClassId: z
-                .string()
-                .openapi('fixedClassId', {
-                    description: 'ID lớp quản lý',
-                })
-                .optional(),
+            semesterId: z.string(),
+            trainingCourseId: z.string(),
+            trainingMajorId: z.string().optional(),
+            search: z.string().optional(),
+            trainingObjectTypeId: z.string(),
+            nextSemester: z.string().default('false'),
+            fixedClassId: z.string().optional(),
         }),
     },
     responses: {
@@ -145,24 +121,10 @@ const openSubjectClassRetakeStudents = createRoute({
     summary: 'Lấy danh sách sinh viên nợ môn học',
     request: {
         query: z.object({
-            subjectVersionId: z.string().openapi('subjectVersionId', {
-                description: 'ID môn học',
-            }),
-            trainingCourseId: z
-                .string()
-                .openapi('trainingCourseId', {
-                    description: 'ID của khóa đào tạo',
-                })
-                .optional(),
-            search: z
-                .string()
-                .openapi('search', {
-                    description: 'Từ khoá tìm kiếm',
-                })
-                .optional(),
-            trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
-                description: 'ID loại đối tượng đào tạo',
-            }),
+            subjectVersionId: z.string(),
+            trainingCourseId: z.string().optional(),
+            search: z.string().optional(),
+            trainingObjectTypeId: z.string(),
             page: z.number({ coerce: true }).default(1),
             pageSize: z.number({ coerce: true }).default(10),
         }),
