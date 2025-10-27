@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,8 +17,20 @@ const baseSchema = z.object({
     value: z.number(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    code: z.string(),
+    name: z.string(),
+    value: z.number(),
+}
+).strict();
 const relationSchema = z.object({
-    trainingCourse: z.record(z.unknown()),
+    trainingCourse: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -43,7 +54,7 @@ export const TrainingCourseRegulationSchema = TrainingCourseRegulationScalarSche
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingCourseRegulationPrismaCreateSchema = baseSchema.partial().passthrough();
+export const TrainingCourseRegulationPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -52,21 +63,21 @@ export const TrainingCourseRegulationPrismaCreateSchema = baseSchema.partial().p
  */
 export const TrainingCourseRegulationPrismaUpdateSchema = z.object({
     id: z.string(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     code: z.string(),
     name: z.string(),
-    value: z.union([z.number(), z.record(z.unknown())])
+    value: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `TrainingCourseRegulation` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingCourseRegulationCreateScalarSchema = baseSchema.partial({
+export const TrainingCourseRegulationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -80,7 +91,7 @@ export const TrainingCourseRegulationCreateSchema = TrainingCourseRegulationCrea
 /**
  * `TrainingCourseRegulation` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingCourseRegulationUpdateScalarSchema = baseSchema.partial();
+export const TrainingCourseRegulationUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -20,9 +19,23 @@ const baseSchema = z.object({
     thoiGianKetThuc: z.coerce.date().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    hinhThucDaoTao: z.string().nullish(),
+    noiDaoTao: z.string().nullish(),
+    thoiGianBatDau: z.coerce.date().nullish(),
+    thoiGianKetThuc: z.coerce.date().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    dM_TrinhDoTinHoc: z.record(z.unknown()),
-    userProfile: z.record(z.unknown()),
+    dM_TrinhDoTinHoc: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -47,7 +60,7 @@ export const TinHocSchema = TinHocScalarSchema.merge(fkSchema).merge(relationSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TinHocPrismaCreateSchema = baseSchema.partial().passthrough();
+export const TinHocPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -57,11 +70,11 @@ export const TinHocPrismaCreateSchema = baseSchema.partial().passthrough();
 export const TinHocPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     hinhThucDaoTao: z.string().nullish(),
     noiDaoTao: z.string().nullish(),
     thoiGianBatDau: z.coerce.date().nullish(),
@@ -72,7 +85,7 @@ export const TinHocPrismaUpdateSchema = z.object({
 /**
  * `TinHoc` schema for create operations excluding foreign keys and relations.
  */
-export const TinHocCreateScalarSchema = baseSchema.partial({
+export const TinHocCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -86,7 +99,7 @@ export const TinHocCreateSchema = TinHocCreateScalarSchema.merge(fkSchema);
 /**
  * `TinHoc` schema for update operations excluding foreign keys and relations.
  */
-export const TinHocUpdateScalarSchema = baseSchema.partial();
+export const TinHocUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 export * from './config';
 export * from './change-log';
@@ -105,6 +104,7 @@ export * from './class-register-session-credit';
 export * from './class-register-session';
 export * from './class-register-logs';
 export * from './subject-class';
+export * from './subject-class-history';
 export * from './subject-class-time';
 export * from './class-schedule';
 export * from './training-object-type';

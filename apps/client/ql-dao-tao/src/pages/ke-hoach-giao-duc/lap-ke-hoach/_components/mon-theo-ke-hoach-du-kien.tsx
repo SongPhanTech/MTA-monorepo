@@ -1,18 +1,17 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
 import { $Enums } from '@workspace/db/client'
-import { useFindFirstPlanTraining } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import type { OpenSubjectClassFixedClassItem } from '@workspace/libs/api/schemas/openSubjectClassFixedClassItem'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
@@ -24,8 +23,6 @@ interface SubjectBySemesterForm {
 export default function MonTheoKeHoachDuKien() {
     const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(100)
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
@@ -35,8 +32,8 @@ export default function MonTheoKeHoachDuKien() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res, refetch } = useOpenSubjectClass(
         {
-            page: `${currentPage}`,
-            pageSize: `${numberOfPages}`,
+            page: '1',
+            pageSize: '1000',
             semesterId: semesterId as string,
             search: searchText,
             trainingCourseId,
@@ -47,47 +44,45 @@ export default function MonTheoKeHoachDuKien() {
         { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
     )
 
-    const { data: planTrainingData } = useFindFirstPlanTraining(
-        {
-            where: {
-                semesterId: semesterId as string,
-                trainingObjectTypeId,
-            },
-            select: {
-                planTrainingSubjects: {
-                    select: {
-                        subjectVersionId: true,
-                    },
-                    where: {
-                        subjectClassType: $Enums.SubjectClassType.NORMAL,
-                    },
-                },
-            },
-        },
-        {
-            enabled: !!semesterId && !!trainingObjectTypeId,
-        }
-    )
+    // const { data: planTrainingData } = useFindFirstPlanTraining(
+    //     {
+    //         where: {
+    //             semesterId: semesterId as string,
+    //             trainingObjectTypeId,
+    //         },
+    //         select: {
+    //             planTrainingSubjects: {
+    //                 select: {
+    //                     subjectVersionId: true,
+    //                 },
+    //                 where: {
+    //                     subjectClassType: $Enums.SubjectClassType.NORMAL,
+    //                 },
+    //             },
+    //         },
+    //     },
+    //     {
+    //         enabled: !!semesterId && !!trainingObjectTypeId,
+    //     }
+    // )
 
-    const data = useMemo(
-        () =>
-            res?.status === 200
-                ? res?.data?.data.map((subjectVersion) => ({
-                      id: subjectVersion.subjectVersionId,
-                      ...subjectVersion,
-                  }))
-                : [],
-        [res]
-    )
+    const data = useMemo(() => {
+        return res?.status === 200
+            ? res?.data?.data.map((subjectVersion) => ({
+                  id: subjectVersion.subjectVersionId,
+                  ...subjectVersion,
+              }))
+            : []
+    }, [res])
 
-    useEffect(() => {
-        if (planTrainingData) {
-            form.setFieldValue(
-                'subjectSelected',
-                planTrainingData.planTrainingSubjects.map((subject) => subject.subjectVersionId)
-            )
-        }
-    }, [planTrainingData, form])
+    // useEffect(() => {
+    //     if (planTrainingData) {
+    //         form.setFieldValue(
+    //             'subjectSelected',
+    //             planTrainingData.planTrainingSubjects.map((subject) => subject.subjectVersionId)
+    //         )
+    //     }
+    // }, [planTrainingData, form])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -267,14 +262,14 @@ export default function MonTheoKeHoachDuKien() {
                 <Col span={24}>
                     <Flex justify="space-between" gap={4}>
                         <Col span={8}>
-                            <Form.Item className="mb-0" name="searchText">
+                            <Form.Item className="m-0" name="searchText">
                                 <Input id="search" placeholder="Tìm kiếm" allowClear />
                             </Form.Item>
                         </Col>
                         <Flex gap={8}>
-                            <Button type="primary">Thêm môn</Button>
+                            <Button type="primary">Khởi tạo môn</Button>
                             <Button onClick={onSubmit} type="primary">
-                                Lưu kế hoạch
+                                Đưa môn vào KHDG
                             </Button>
                         </Flex>
                     </Flex>
@@ -320,8 +315,7 @@ export default function MonTheoKeHoachDuKien() {
                                 title: 'TT',
                                 width: 35,
                                 align: 'center',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                render: (_, __, index) => index + 1,
                             },
                             {
                                 title: 'Mã MH',
@@ -346,37 +340,19 @@ export default function MonTheoKeHoachDuKien() {
                                 title: 'Danh sách lớp quản lý',
                                 dataIndex: 'fixedClass',
                                 align: 'center',
-                                width: 180,
+                                width: 250,
                                 render: (__, record) => {
                                     return record?.fixedClass.length ? (
                                         <TextTruncate
-                                            arr={record?.fixedClass.map((i: any) => {
-                                                return {
-                                                    key: i?.fixedClassId,
-                                                    label: `Kỳ ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
+                                            arr={record?.fixedClass.map(
+                                                (i: OpenSubjectClassFixedClassItem) => {
+                                                    return {
+                                                        key: i?.fixedClassId,
+                                                        label: `${i.fixedClassCode} (${i.fixedClassCount}) - ${i.curriculumVersionCode} - Kỳ ${i.fixedClassSemester}`,
+                                                    }
                                                 }
-                                            })}
+                                            )}
                                             key="fixedClass"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'CTĐT',
-                                dataIndex: 'curriculumVersion',
-                                align: 'center',
-                                render: (__, record) => {
-                                    return record?.curriculumVersion.length ? (
-                                        <TextTruncate
-                                            arr={record?.curriculumVersion.map((i: any) => {
-                                                return {
-                                                    key: i?.curriculumVersionId,
-                                                    label: `${i?.curriculumVersionCode} - ${i?.curriculumVersionName}`,
-                                                }
-                                            })}
-                                            key="curriculumVersion"
                                         />
                                     ) : (
                                         ''
@@ -396,19 +372,7 @@ export default function MonTheoKeHoachDuKien() {
                                 align: 'center',
                             },
                         ]}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: res?.data?.count ?? 0,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>

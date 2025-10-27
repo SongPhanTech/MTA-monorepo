@@ -1,6 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { $Enums } from '@workspace/db'
-import { countSubjectClassBySemester, getSubjectClassBySemester } from '@workspace/db/sql'
 import { read, utils } from 'xlsx'
 import { prisma } from '..'
 import { EnrollFixedClassOnSubjectClass, OpenSubjectClass } from '../dto/subject-class.dto'
@@ -21,12 +20,9 @@ const openSubjectClass = createRoute({
             semesterId: z.string().openapi('semesterId', {
                 description: 'ID của học kỳ',
             }),
-            trainingCourseId: z
-                .string()
-                .openapi('trainingCourseId', {
-                    description: 'ID ngành đào tạo',
-                })
-                .optional(),
+            trainingCourseId: z.string().openapi('trainingCourseId', {
+                description: 'ID khoá đào tạo',
+            }),
             trainingMajorId: z
                 .string()
                 .openapi('trainingMajorId', {
@@ -39,14 +35,6 @@ const openSubjectClass = createRoute({
                     description: 'Từ khoá tìm kiếm',
                 })
                 .optional(),
-            page: z.string().openapi('page', {
-                description: 'Số trang',
-                default: '1',
-            }),
-            pageSize: z.string().openapi('pageSize', {
-                description: 'Số lượng bản ghi trên mỗi trang',
-                default: '10',
-            }),
             trainingObjectTypeId: z.string().openapi('trainingObjectTypeId', {
                 description: 'ID loại đối tượng đào tạo',
             }),
@@ -54,6 +42,12 @@ const openSubjectClass = createRoute({
                 description: 'Xem học kỳ tiếp theo',
                 default: 'false',
             }),
+            fixedClassId: z
+                .string()
+                .openapi('fixedClassId', {
+                    description: 'ID lớp quản lý',
+                })
+                .optional(),
         }),
     },
     responses: {
@@ -105,6 +99,12 @@ const openSubjectClassRetake = createRoute({
                 .string()
                 .openapi('semesterId', {
                     description: 'ID học kỳ',
+                })
+                .optional(),
+            fixedClassId: z
+                .string()
+                .openapi('fixedClassId', {
+                    description: 'ID lớp quản lý',
                 })
                 .optional(),
         }),
@@ -298,12 +298,11 @@ app.openapi(openSubjectClass, async (c) => {
     const {
         semesterId,
         search,
-        page,
-        pageSize,
         trainingCourseId,
         trainingMajorId,
         trainingObjectTypeId,
         nextSemester,
+        fixedClassId,
     } = c.req.valid('query')
 
     const nextSemesterBool = nextSemester === 'true'
@@ -339,36 +338,267 @@ app.openapi(openSubjectClass, async (c) => {
             semesterYear = semesterYear + 1
         }
     }
-    const res = (await prisma.$queryRawTyped(
-        getSubjectClassBySemester(
-            semesterYear,
-            semesterType,
-            trainingCourseId ?? null,
-            search ? `%${search}%` : null,
-            trainingMajorId ?? null,
-            trainingObjectTypeId,
-            Number(page),
-            Number(pageSize)
+    const res = await prisma.$queryRaw<
+        {
+            data: OpenSubjectClass
+        }[]
+    >`
+WITH FCS AS (SELECT sv.id                             as subject_version_id,
+                    sv.code                           as subject_version_code,
+                    sv.credit                         as subject_version_credit,
+                    cv.id                             as curriculum_version_id,
+                    cv.name                           as curriculum_version_name,
+                    cv.code                           as curriculum_version_code,
+                    sv.name                           as subject_version_name,
+                    tbs.semester                      as training_block_subject_semester,
+                    ((${semesterYear} - fc."startYear") * 2 + ${semesterType}) as fixed_class_semester,
+                    fc."startYear"                    as fixed_class_start_year,
+                    fc.id                             as fixed_class_id,
+                    fc.name                           as fixed_class_name,
+                    fc.code                           as fixed_class_code,
+                    fc.active                         as active,
+                    fc.graduated                      as graduated,
+                    fc."trainingCourseId"             as training_course_id,
+                    c."trainingMajorId"               as training_major_id,
+                    c."managementOrganizationId"      as management_organization_id,
+                    dv."sTen"                         as management_organization_name,
+                    dv."sMa"                          as management_organization_code,
+                    tc."trainingObjectTypeId"         as training_object_type_id,
+                    COUNT(fc.id)                      as fixed_class_count
+             FROM "ql-dao-tao"."SubjectVersion" sv
+                      JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
+                      JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" tbocv
+                           ON tbs."trainingBlockOnCurriculumVersionId" = tbocv.id
+                      JOIN "ql-dao-tao"."CurriculumVersion" cv ON tbocv."curriculumVersionId" = cv.id
+                      JOIN "ql-dao-tao"."Curriculum" c ON cv."curriculumId" = c.id
+                      JOIN "ql-dao-tao"."FixedClass" fc ON cv.id = fc."curriculumVersionId"
+                      JOIN "ql-dao-tao"."Student" s ON fc.id = s."fixedClassId"
+                      JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
+                      LEFT JOIN "mta"."DM_DonVi" dv ON c."managementOrganizationId" = dv."Id"
+             WHERE fc.active = TRUE
+               AND tbs."deletedAt" IS NULL
+               AND tbs."active" = TRUE
+               AND tbocv."deletedAt" IS NULL
+               AND tbocv."active" = TRUE
+               AND cv."deletedAt" IS NULL
+               AND cv."active" = TRUE
+               AND fc."deletedAt" IS NULL
+               AND fc."active" = TRUE
+               AND sv."deletedAt" IS NULL
+               AND sv."active" = TRUE
+             GROUP BY sv.code,
+                      tbs.semester,
+                      fc."startYear",
+                      fc.id,
+                      cv.id,
+                      cv.code,
+                      cv.name,
+                      sv.id,
+                      c."trainingMajorId",
+                      c."managementOrganizationId",
+                      tc."trainingObjectTypeId",
+                      dv."sTen",
+                      dv."sMa")
+SELECT json_build_object(
+               'subjectVersionCode',
+               subject_version_code,
+               'managementOrganizationId',
+               management_organization_id,
+               'managementOrganizationName',
+               management_organization_name,
+               'managementOrganizationCode',
+               management_organization_code,
+               'subjectVersionId',
+               subject_version_id,
+               'subjectVersionName',
+               subject_version_name,
+               'subjectVersionCredit',
+               subject_version_credit,
+               'fixedClass',
+               json_agg(
+                       json_build_object(
+                               'fixedClassId',
+                               fixed_class_id,
+                               'fixedClassCode',
+                               fixed_class_code,
+                               'fixedClassName',
+                               fixed_class_name,
+                               'fixedClassCount',
+                               fixed_class_count,
+                               'fixedClassSemester',
+                               fixed_class_semester,
+                               'curriculumVersionId',
+                               curriculum_version_id,
+                               'curriculumVersionName',
+                               curriculum_version_name,
+                               'curriculumVersionCode',
+                               curriculum_version_code,
+                               'trainingCourseId',
+                               training_course_id
+                       )
+               )
+       ) as data
+FROM FCS
+WHERE training_block_subject_semester = fixed_class_semester
+  AND active = TRUE
+  AND graduated = FALSE
+  AND training_object_type_id = ${trainingObjectTypeId}
+        AND (
+                (
+                        ${trainingCourseId ?? null}::TEXT IS NULL
+                        OR training_course_id = ${trainingCourseId}
+                )
+                AND (
+                        ${trainingMajorId ?? null}::TEXT IS NULL
+                        OR training_major_id = ${trainingMajorId}
+                )
+                AND (
+                        ${search ?? null}::TEXT IS NULL
+                        OR subject_version_name ILIKE ${search}
+                        OR subject_version_code ILIKE ${search}
+                        OR fixed_class_name ILIKE ${search}
+                        OR fixed_class_code ILIKE ${search}
+                )
         )
-    )) as {
-        data: OpenSubjectClass
-    }[]
+GROUP BY subject_version_id,
+         subject_version_code,
+         subject_version_credit,
+         subject_version_name,
+         management_organization_id,
+         management_organization_code,
+         management_organization_name
 
-    const count = await prisma.$queryRawTyped(
-        countSubjectClassBySemester(
-            semesterYear,
-            semesterType,
-            trainingCourseId ?? null,
-            search ? `%${search}%` : null,
-            trainingMajorId ?? null,
-            trainingObjectTypeId
+`
+
+    const planTraining = await prisma.planTraining.findFirst({
+        where: {
+            trainingObjectTypeId,
+            semesterId,
+        },
+        select: {
+            planTrainingSubjects: {
+                select: {
+                    subjectVersionId: true,
+                },
+                where: {
+                    subjectClassType: $Enums.SubjectClassType.NORMAL,
+                },
+            },
+        },
+    })
+
+    const count = await prisma.$queryRaw<
+        {
+            total: bigint
+        }[]
+    >`
+  WITH FCS AS (SELECT sv.id                             as subject_version_id,
+                    sv.code                           as subject_version_code,
+                    sv.credit                         as subject_version_credit,
+                    cv.id                             as curriculum_version_id,
+                    cv.name                           as curriculum_version_name,
+                    cv.code                           as curriculum_version_code,
+                    sv.name                           as subject_version_name,
+                    tbs.semester                      as training_block_subject_semester,
+                    ((${semesterYear} - fc."startYear") * 2 + ${semesterType}) as fixed_class_semester,
+                    fc."startYear"                    as fixed_class_start_year,
+                    fc.id                             as fixed_class_id,
+                    fc.name                           as fixed_class_name,
+                    fc.code                           as fixed_class_code,
+                    fc.active                         as active,
+                    fc.graduated                      as graduated,
+                    fc."trainingCourseId"             as training_course_id,
+                    c."trainingMajorId"               as training_major_id,
+                    c."managementOrganizationId"      as management_organization_id,
+                    dv."sTen"                         as management_organization_name,
+                    dv."sMa"                          as management_organization_code,
+                    tc."trainingObjectTypeId"         as training_object_type_id,
+                    COUNT(fc.id)                      as fixed_class_count
+             FROM "ql-dao-tao"."SubjectVersion" sv
+                      JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
+                      JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" tbocv
+                           ON tbs."trainingBlockOnCurriculumVersionId" = tbocv.id
+                      JOIN "ql-dao-tao"."CurriculumVersion" cv ON tbocv."curriculumVersionId" = cv.id
+                      JOIN "ql-dao-tao"."Curriculum" c ON cv."curriculumId" = c.id
+                      JOIN "ql-dao-tao"."FixedClass" fc ON cv.id = fc."curriculumVersionId"
+                      JOIN "ql-dao-tao"."Student" s ON fc.id = s."fixedClassId"
+                      JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
+                      LEFT JOIN "mta"."DM_DonVi" dv ON c."managementOrganizationId" = dv."Id"
+             WHERE fc.active = TRUE
+               AND tbs."deletedAt" IS NULL
+               AND tbs."active" = TRUE
+               AND tbocv."deletedAt" IS NULL
+               AND tbocv."active" = TRUE
+               AND cv."deletedAt" IS NULL
+               AND cv."active" = TRUE
+               AND fc."deletedAt" IS NULL
+               AND fc."active" = TRUE
+               AND sv."deletedAt" IS NULL
+               AND sv."active" = TRUE
+             GROUP BY sv.code,
+                      tbs.semester,
+                      fc."startYear",
+                      fc.id,
+                      cv.id,
+                      cv.code,
+                      cv.name,
+                      sv.id,
+                      c."trainingMajorId",
+                      c."managementOrganizationId",
+                      tc."trainingObjectTypeId",
+                      dv."sTen",
+                      dv."sMa")
+SELECT COUNT(*) AS "total"
+FROM (
+        SELECT 1
+        FROM FCS
+        WHERE training_block_subject_semester = fixed_class_semester
+            AND active = TRUE
+            AND graduated = FALSE
+           AND training_object_type_id = ${trainingObjectTypeId}
+             AND (
+                (
+                        ${trainingCourseId ?? null}::TEXT IS NULL
+                        OR training_course_id = ${trainingCourseId}
+                )
+                AND (
+                        ${trainingMajorId ?? null}::TEXT IS NULL
+                        OR training_major_id = ${trainingMajorId}
+                )
+                AND (
+                        ${search ?? null}::TEXT IS NULL
+                        OR subject_version_name ILIKE ${search}
+                        OR subject_version_code ILIKE ${search}
+                        OR fixed_class_name ILIKE ${search}
+                        OR fixed_class_code ILIKE ${search}
+                )
         )
-    )
+GROUP BY subject_version_id,
+         subject_version_code,
+         subject_version_credit,
+         subject_version_name,
+         management_organization_id,
+         management_organization_code,
+         management_organization_name
+    ) AS result_groups;
+    `
 
     return c.json(
         {
             data: res
                 .map((e) => e.data)
+                .filter((item) =>
+                    planTraining
+                        ? planTraining.planTrainingSubjects.some(
+                              (pts) => pts.subjectVersionId !== item.subjectVersionId
+                          )
+                        : true
+                )
+                .filter((item) =>
+                    item.fixedClass.some((fc) =>
+                        fixedClassId ? fc.fixedClassId === fixedClassId : true
+                    )
+                )
                 .map((item) => ({
                     ...item,
                     fixedClass: item.fixedClass.filter(
@@ -376,19 +606,6 @@ app.openapi(openSubjectClass, async (c) => {
                             index ===
                                 self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
                             !!value.fixedClassId
-                    ),
-                    curriculumVersion: item.curriculumVersion.filter(
-                        (value, index, self) =>
-                            index ===
-                                self.findIndex(
-                                    (t) => t.curriculumVersionId === value.curriculumVersionId
-                                ) && !!value.curriculumVersionId
-                    ),
-                    subjectClass: item.subjectClass.filter(
-                        (value, index, self) =>
-                            index ===
-                                self.findIndex((t) => t.subjectClassId === value.subjectClassId) &&
-                            !!value.subjectClassId
                     ),
                     countStudent: item.fixedClass
                         .filter(

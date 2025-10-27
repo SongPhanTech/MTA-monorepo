@@ -26,6 +26,8 @@
     },
     "devDependencies": {
         "@paralleldrive/cuid2": "github:paralleldrive/cuid2",
+        "@tanstack/react-query": "catalog:",
+        "@types/node": "catalog:",
         "@workspace/typescript-config": "workspace:*",
         "@zenstackhq/openapi": "catalog:",
         "@zenstackhq/server": "catalog:",

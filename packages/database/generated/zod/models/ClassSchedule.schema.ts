@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { PeriodType } from '../../zenstack/models';
@@ -25,13 +24,30 @@ const baseSchema = z.object({
     cancelReason: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    periodType: PeriodTypeSchema,
+    startPeriod: z.number(),
+    endPeriod: z.number(),
+    classDate: z.coerce.date(),
+    notes: z.string().nullish(),
+    isReplacement: z.boolean(),
+    cancelReason: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    subjectClass: z.record(z.unknown()),
-    room: z.record(z.unknown()).optional(),
-    lecturer: z.record(z.unknown()).optional(),
-    extraLecturer: z.record(z.unknown()).optional(),
-    originalSchedule: z.record(z.unknown()).optional(),
-    replacementSchedule: z.record(z.unknown()).optional(),
+    subjectClass: z.record(z.string(), z.unknown()),
+    room: z.record(z.string(), z.unknown()).optional(),
+    lecturer: z.record(z.string(), z.unknown()).optional(),
+    extraLecturer: z.record(z.string(), z.unknown()).optional(),
+    originalSchedule: z.record(z.string(), z.unknown()).optional(),
+    replacementSchedule: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -59,7 +75,7 @@ export const ClassScheduleSchema = ClassScheduleScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ClassSchedulePrismaCreateSchema = baseSchema.partial().passthrough();
+export const ClassSchedulePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -69,17 +85,17 @@ export const ClassSchedulePrismaCreateSchema = baseSchema.partial().passthrough(
 export const ClassSchedulePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     periodType: PeriodTypeSchema,
-    startPeriod: z.union([z.number(), z.record(z.unknown())]),
-    endPeriod: z.union([z.number(), z.record(z.unknown())]),
+    startPeriod: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    endPeriod: z.union([z.number(), z.record(z.string(), z.unknown())]),
     classDate: z.coerce.date(),
     notes: z.string().nullish(),
-    isReplacement: z.boolean().default(false),
+    isReplacement: z.boolean(),
     cancelReason: z.string().nullish()
 }).partial().passthrough();
 
@@ -87,7 +103,7 @@ export const ClassSchedulePrismaUpdateSchema = z.object({
 /**
  * `ClassSchedule` schema for create operations excluding foreign keys and relations.
  */
-export const ClassScheduleCreateScalarSchema = baseSchema.partial({
+export const ClassScheduleCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, periodType: true, isReplacement: true
 });
 
@@ -101,7 +117,7 @@ export const ClassScheduleCreateSchema = ClassScheduleCreateScalarSchema.merge(f
 /**
  * `ClassSchedule` schema for update operations excluding foreign keys and relations.
  */
-export const ClassScheduleUpdateScalarSchema = baseSchema.partial();
+export const ClassScheduleUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

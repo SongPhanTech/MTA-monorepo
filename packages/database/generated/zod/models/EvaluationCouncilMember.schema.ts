@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { EvaluationMemberRoleSchema } from '../enums/EvaluationMemberRole.schema';
@@ -18,9 +17,20 @@ const baseSchema = z.object({
     role: z.array(EvaluationMemberRoleSchema),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    role: z.array(EvaluationMemberRoleSchema),
+}
+).strict();
 const relationSchema = z.object({
-    evaluationCouncil: z.record(z.unknown()),
-    lecturer: z.record(z.unknown()),
+    evaluationCouncil: z.record(z.string(), z.unknown()),
+    lecturer: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -45,7 +55,7 @@ export const EvaluationCouncilMemberSchema = EvaluationCouncilMemberScalarSchema
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const EvaluationCouncilMemberPrismaCreateSchema = baseSchema.partial().passthrough();
+export const EvaluationCouncilMemberPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -55,11 +65,11 @@ export const EvaluationCouncilMemberPrismaCreateSchema = baseSchema.partial().pa
 export const EvaluationCouncilMemberPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     role: z.array(EvaluationMemberRoleSchema)
 }).partial().passthrough();
 
@@ -67,7 +77,7 @@ export const EvaluationCouncilMemberPrismaUpdateSchema = z.object({
 /**
  * `EvaluationCouncilMember` schema for create operations excluding foreign keys and relations.
  */
-export const EvaluationCouncilMemberCreateScalarSchema = baseSchema.partial({
+export const EvaluationCouncilMemberCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, role: true
 });
 
@@ -81,7 +91,7 @@ export const EvaluationCouncilMemberCreateSchema = EvaluationCouncilMemberCreate
 /**
  * `EvaluationCouncilMember` schema for update operations excluding foreign keys and relations.
  */
-export const EvaluationCouncilMemberUpdateScalarSchema = baseSchema.partial();
+export const EvaluationCouncilMemberUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

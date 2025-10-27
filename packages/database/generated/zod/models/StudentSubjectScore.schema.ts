@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { DecimalSchema } from '../common';
@@ -46,12 +45,50 @@ const baseSchema = z.object({
     isImproving: z.boolean().default(false),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    attendanceScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
+    midtermScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
+    examScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
+    finalScore: DecimalSchema.refine(v => {
+        try {
+            return new Decimal(v.toString()).gte(0);
+        } catch {
+            return false;
+        }
+    }, { message: "Điểm tối thiểu là 0" }).refine(v => {
+        try {
+            return new Decimal(v.toString()).lte(10);
+        } catch {
+            return false;
+        }
+    }, { message: "Điểm tối đa là 10" }).nullish(),
+    manualFinalScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
+    examPostponed: z.boolean(),
+    examPostponedReason: z.string().nullish(),
+    exempted: z.boolean(),
+    withdrew: z.boolean(),
+    examBanned: z.boolean(),
+    examBannedReason: z.string().nullish(),
+    suspended: z.boolean(),
+    suspendedReason: z.string().nullish(),
+    repeated: z.boolean(),
+    repeatedReason: z.string().nullish(),
+    isImproving: z.boolean(),
+}
+).strict();
 const relationSchema = z.object({
-    subjectClass: z.record(z.unknown()).optional(),
-    subjectVersion: z.record(z.unknown()),
-    student: z.record(z.unknown()),
-    exam: z.record(z.unknown()).optional(),
-    examSession: z.record(z.unknown()).optional(),
+    subjectClass: z.record(z.string(), z.unknown()).optional(),
+    subjectVersion: z.record(z.string(), z.unknown()),
+    student: z.record(z.string(), z.unknown()),
+    exam: z.record(z.string(), z.unknown()).optional(),
+    examSession: z.record(z.string(), z.unknown()).optional(),
     graduationGpaScores: z.array(z.unknown()).optional(),
     graduationSupplementaryScore: z.array(z.unknown()).optional(),
     certificates: z.array(z.unknown()).optional(),
@@ -84,7 +121,7 @@ export const StudentSubjectScoreSchema = StudentSubjectScoreScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StudentSubjectScorePrismaCreateSchema = baseSchema.partial().passthrough();
+export const StudentSubjectScorePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -94,14 +131,14 @@ export const StudentSubjectScorePrismaCreateSchema = baseSchema.partial().passth
 export const StudentSubjectScorePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    attendanceScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
-    midtermScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
-    examScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    attendanceScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
+    midtermScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
+    examScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
     finalScore: DecimalSchema.refine(v => {
         try {
             return new Decimal(v.toString()).gte(0);
@@ -115,25 +152,25 @@ export const StudentSubjectScorePrismaUpdateSchema = z.object({
             return false;
         }
     }, { message: "Điểm tối đa là 10" }).nullish(),
-    manualFinalScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
-    examPostponed: z.boolean().default(false),
+    manualFinalScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
+    examPostponed: z.boolean(),
     examPostponedReason: z.string().nullish(),
-    exempted: z.boolean().default(false),
-    withdrew: z.boolean().default(false),
-    examBanned: z.boolean().default(false),
+    exempted: z.boolean(),
+    withdrew: z.boolean(),
+    examBanned: z.boolean(),
     examBannedReason: z.string().nullish(),
-    suspended: z.boolean().default(false),
+    suspended: z.boolean(),
     suspendedReason: z.string().nullish(),
-    repeated: z.boolean().default(false),
+    repeated: z.boolean(),
     repeatedReason: z.string().nullish(),
-    isImproving: z.boolean().default(false)
+    isImproving: z.boolean()
 }).partial().passthrough();
 
 
 /**
  * `StudentSubjectScore` schema for create operations excluding foreign keys and relations.
  */
-export const StudentSubjectScoreCreateScalarSchema = baseSchema.partial({
+export const StudentSubjectScoreCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, examPostponed: true, exempted: true, withdrew: true, examBanned: true, suspended: true, repeated: true, isImproving: true
 });
 
@@ -147,7 +184,7 @@ export const StudentSubjectScoreCreateSchema = StudentSubjectScoreCreateScalarSc
 /**
  * `StudentSubjectScore` schema for update operations excluding foreign keys and relations.
  */
-export const StudentSubjectScoreUpdateScalarSchema = baseSchema.partial();
+export const StudentSubjectScoreUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

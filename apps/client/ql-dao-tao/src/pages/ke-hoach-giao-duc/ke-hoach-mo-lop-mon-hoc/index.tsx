@@ -4,8 +4,8 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { $Enums, type TrainingMajor } from '@workspace/db/client'
 import type { FixedClass, SubjectClass } from '@workspace/db/client'
+import { $Enums } from '@workspace/db/client'
 import {
     useFindFirstPlanTraining,
     useFindManyTrainingCourse,
@@ -559,43 +559,6 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                 <Col span={8}>
                                     <Form.Item className="m-0" name="searchText">
                                         <Input id="search" placeholder="Tìm kiếm" allowClear />
-                                    </Form.Item>
-                                </Col>
-
-                                <Col span={8}>
-                                    <Form.Item
-                                        className="m-0"
-                                        name="trainingMajorId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Chọn chuyên ngành đào tạo"
-                                            options={trainingMajorData.map((i: TrainingMajor) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            }))}
-                                            allowClear
-                                        />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={8}>
-                                    <Form.Item
-                                        className="m-0"
-                                        name="trainingCourseId"
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                        labelAlign="left"
-                                    >
-                                        <Select
-                                            placeholder="Khoá đào tạo"
-                                            options={trainingCourseData.map((i) => ({
-                                                value: i.id,
-                                                label: i.name,
-                                            }))}
-                                            allowClear
-                                        />
                                     </Form.Item>
                                 </Col>
                             </Flex>

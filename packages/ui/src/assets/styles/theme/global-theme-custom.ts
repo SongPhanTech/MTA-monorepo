@@ -4,7 +4,7 @@ const lightThemeCustom = {
     token: {
         colorPrimary: '#028850',
         fontFamily: '"Noto Serif", serif',
-        fontSize: 13,
+        fontSize: 12,
     },
     components: {
         Table: {

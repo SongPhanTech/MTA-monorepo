@@ -73,6 +73,9 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                     },
                                 },
                             },
+                            orderBy: {
+                                code: 'asc',
+                            },
                         },
                         subjectVersion: {
                             include: {
@@ -320,7 +323,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                             title: 'Mã MH',
                             dataIndex: ['subjectVersion', 'code'],
                             align: 'center',
-                            width: 100,
+                            width: 80,
                         },
                         {
                             title: 'Tên môn',
@@ -344,7 +347,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                         arr={record?.fixedClasses.map((i: any) => {
                                             return {
                                                 key: i?.id,
-                                                label: ` ${i.code} (${i._count?.students})`,
+                                                label: `${i.code} (${i._count?.students})`,
                                             }
                                         })}
                                         key="fixedClass"

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -20,8 +19,22 @@ const baseSchema = z.object({
     tuitionPerCredit: z.number().default(0),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date(),
+    tuitionPerCredit: z.number(),
+}
+).strict();
 const relationSchema = z.object({
-    semester: z.record(z.unknown()),
+    semester: z.record(z.string(), z.unknown()),
     creditLimit: z.array(z.unknown()).optional(),
     trainingCourses: z.array(z.unknown()).optional(),
     classRegisterLogs: z.array(z.unknown()).optional(),
@@ -48,7 +61,7 @@ export const ClassRegisterSessionSchema = ClassRegisterSessionScalarSchema.merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ClassRegisterSessionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ClassRegisterSessionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -58,22 +71,22 @@ export const ClassRegisterSessionPrismaCreateSchema = baseSchema.partial().passt
 export const ClassRegisterSessionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
-    tuitionPerCredit: z.union([z.number().default(0), z.record(z.unknown())])
+    tuitionPerCredit: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `ClassRegisterSession` schema for create operations excluding foreign keys and relations.
  */
-export const ClassRegisterSessionCreateScalarSchema = baseSchema.partial({
+export const ClassRegisterSessionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, tuitionPerCredit: true
 });
 
@@ -87,7 +100,7 @@ export const ClassRegisterSessionCreateSchema = ClassRegisterSessionCreateScalar
 /**
  * `ClassRegisterSession` schema for update operations excluding foreign keys and relations.
  */
-export const ClassRegisterSessionUpdateScalarSchema = baseSchema.partial();
+export const ClassRegisterSessionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

@@ -3,7 +3,15 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
-export const DecimalSchema = z.union([z.number(), z.string(), z.object({ d: z.number().array(), e: z.number(), s: z.number() }).passthrough()]);
+export const DecimalSchema = z.any().refine((val) => {
+    if (typeof val === 'string' || typeof val === 'number') {
+        return true;
+    }
+    // Decimal.js shape
+    if (typeof val === 'object' && val && Array.isArray(val.d) && typeof val.e === 'number' && typeof val.s === 'number') {
+        return true;
+    }
+    return false;
+}, { message: 'Not a valid Decimal value' });

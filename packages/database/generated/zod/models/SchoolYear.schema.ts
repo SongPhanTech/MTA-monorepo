@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,19 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string(),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date().nullish(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
@@ -43,7 +55,7 @@ export const SchoolYearSchema = SchoolYearScalarSchema.merge(relationSchema.part
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SchoolYearPrismaCreateSchema = baseSchema.partial().passthrough();
+export const SchoolYearPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -53,11 +65,11 @@ export const SchoolYearPrismaCreateSchema = baseSchema.partial().passthrough();
 export const SchoolYearPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish()
@@ -67,7 +79,7 @@ export const SchoolYearPrismaUpdateSchema = z.object({
 /**
  * `SchoolYear` schema for create operations excluding foreign keys and relations.
  */
-export const SchoolYearCreateScalarSchema = baseSchema.partial({
+export const SchoolYearCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -75,7 +87,7 @@ export const SchoolYearCreateScalarSchema = baseSchema.partial({
 /**
  * `SchoolYear` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const SchoolYearCreateSchema = baseSchema.partial({
+export const SchoolYearCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -83,7 +95,7 @@ export const SchoolYearCreateSchema = baseSchema.partial({
 /**
  * `SchoolYear` schema for update operations excluding foreign keys and relations.
  */
-export const SchoolYearUpdateScalarSchema = baseSchema.partial();
+export const SchoolYearUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

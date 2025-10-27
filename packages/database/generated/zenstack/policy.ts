@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { type QueryContext, type CrudContract, type PermissionCheckerContext } from "@zenstackhq/runtime";
 import { allFieldsEqual } from "@zenstackhq/runtime/validation";
@@ -2047,6 +2046,26 @@ const policy: PolicyDef = {
                 update: { guard: SubjectClass_update, },
                 postUpdate: { guard: SubjectClass_postUpdate, },
                 delete: { guard: SubjectClass_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        subjectClassHistory: {
+            modelLevel: {
+                read: { guard: SubjectClassHistory_read, },
+                create: { guard: SubjectClassHistory_create, inputChecker: SubjectClassHistory_create_input, },
+                update: { guard: SubjectClassHistory_update, },
+                postUpdate: { guard: SubjectClassHistory_postUpdate, },
+                delete: { guard: SubjectClassHistory_delete, }
             },
             fieldLevel: {
                 read:
@@ -5062,6 +5081,7 @@ const policy: PolicyDef = {
         classRegisterSession: { hasValidation: false },
         classRegisterLogs: { hasValidation: false },
         subjectClass: { hasValidation: false },
+        subjectClassHistory: { hasValidation: false },
         subjectClassTime: { hasValidation: false },
         classSchedule: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
@@ -11684,6 +11704,71 @@ function SubjectClass_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_SubjectClass_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassHistory_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SubjectClassHistory_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassHistory_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassHistory_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassHistory_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SubjectClassHistory_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassHistory_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassHistory_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SubjectClassHistory_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SubjectClassHistory_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassHistory_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
