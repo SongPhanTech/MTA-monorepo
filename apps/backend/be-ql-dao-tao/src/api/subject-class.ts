@@ -487,136 +487,40 @@ GROUP BY subject_version_id,
         },
     })
 
-    const count = await prisma.$queryRaw<
-        {
-            total: bigint
-        }[]
-    >`
-  WITH FCS AS (SELECT sv.id                             as subject_version_id,
-                    sv.code                           as subject_version_code,
-                    sv.credit                         as subject_version_credit,
-                    cv.id                             as curriculum_version_id,
-                    cv.name                           as curriculum_version_name,
-                    cv.code                           as curriculum_version_code,
-                    sv.name                           as subject_version_name,
-                    tbs.semester                      as training_block_subject_semester,
-                    ((${semesterYear} - fc."startYear") * 2 + ${semesterType}) as fixed_class_semester,
-                    fc."startYear"                    as fixed_class_start_year,
-                    fc.id                             as fixed_class_id,
-                    fc.name                           as fixed_class_name,
-                    fc.code                           as fixed_class_code,
-                    fc.active                         as active,
-                    fc.graduated                      as graduated,
-                    fc."trainingCourseId"             as training_course_id,
-                    c."trainingMajorId"               as training_major_id,
-                    c."managementOrganizationId"      as management_organization_id,
-                    dv."sTen"                         as management_organization_name,
-                    dv."sMa"                          as management_organization_code,
-                    tc."trainingObjectTypeId"         as training_object_type_id,
-                    COUNT(fc.id)                      as fixed_class_count
-             FROM "ql-dao-tao"."SubjectVersion" sv
-                      JOIN "ql-dao-tao"."TrainingBlockSubject" tbs ON sv.id = tbs."subjectId"
-                      JOIN "ql-dao-tao"."TrainingBlockOnCurriculumVersion" tbocv
-                           ON tbs."trainingBlockOnCurriculumVersionId" = tbocv.id
-                      JOIN "ql-dao-tao"."CurriculumVersion" cv ON tbocv."curriculumVersionId" = cv.id
-                      JOIN "ql-dao-tao"."Curriculum" c ON cv."curriculumId" = c.id
-                      JOIN "ql-dao-tao"."FixedClass" fc ON cv.id = fc."curriculumVersionId"
-                      JOIN "ql-dao-tao"."Student" s ON fc.id = s."fixedClassId"
-                      JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
-                      LEFT JOIN "mta"."DM_DonVi" dv ON c."managementOrganizationId" = dv."Id"
-             WHERE fc.active = TRUE
-               AND tbs."deletedAt" IS NULL
-               AND tbs."active" = TRUE
-               AND tbocv."deletedAt" IS NULL
-               AND tbocv."active" = TRUE
-               AND cv."deletedAt" IS NULL
-               AND cv."active" = TRUE
-               AND fc."deletedAt" IS NULL
-               AND fc."active" = TRUE
-               AND sv."deletedAt" IS NULL
-               AND sv."active" = TRUE
-             GROUP BY sv.code,
-                      tbs.semester,
-                      fc."startYear",
-                      fc.id,
-                      cv.id,
-                      cv.code,
-                      cv.name,
-                      sv.id,
-                      c."trainingMajorId",
-                      c."managementOrganizationId",
-                      tc."trainingObjectTypeId",
-                      dv."sTen",
-                      dv."sMa")
-SELECT COUNT(*) AS "total"
-FROM (
-        SELECT 1
-        FROM FCS
-        WHERE training_block_subject_semester = fixed_class_semester
-            AND active = TRUE
-            AND graduated = FALSE
-           AND training_object_type_id = ${trainingObjectTypeId}
-             AND (
-                (
-                        ${trainingCourseId ?? null}::TEXT IS NULL
-                        OR training_course_id = ${trainingCourseId}
-                )
-                AND (
-                        ${trainingMajorId ?? null}::TEXT IS NULL
-                        OR training_major_id = ${trainingMajorId}
-                )
-                AND (
-                        ${search ?? null}::TEXT IS NULL
-                        OR subject_version_name ILIKE ${search}
-                        OR subject_version_code ILIKE ${search}
-                        OR fixed_class_name ILIKE ${search}
-                        OR fixed_class_code ILIKE ${search}
-                )
+    const listSubjectAlreadyInPlanTraining = planTraining
+        ? planTraining.planTrainingSubjects.map((pts) => pts.subjectVersionId)
+        : []
+
+    const data = res
+        .map((e) => e.data)
+        .filter((item) =>
+            listSubjectAlreadyInPlanTraining.length > 0
+                ? !listSubjectAlreadyInPlanTraining.includes(item.subjectVersionId)
+                : true
         )
-GROUP BY subject_version_id,
-         subject_version_code,
-         subject_version_credit,
-         subject_version_name,
-         management_organization_id,
-         management_organization_code,
-         management_organization_name
-    ) AS result_groups;
-    `
+        .filter((item) =>
+            item.fixedClass.some((fc) => (fixedClassId ? fc.fixedClassId === fixedClassId : true))
+        )
+        .map((item) => ({
+            ...item,
+            fixedClass: item.fixedClass.filter(
+                (value, index, self) =>
+                    index === self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
+                    !!value.fixedClassId
+            ),
+            countStudent: item.fixedClass
+                .filter(
+                    (value, index, self) =>
+                        index === self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
+                        !!value.fixedClassId
+                )
+                .reduce((acc, curr) => acc + curr.fixedClassCount, 0),
+        }))
 
     return c.json(
         {
-            data: res
-                .map((e) => e.data)
-                .filter((item) =>
-                    planTraining
-                        ? planTraining.planTrainingSubjects.some(
-                              (pts) => pts.subjectVersionId !== item.subjectVersionId
-                          )
-                        : true
-                )
-                .filter((item) =>
-                    item.fixedClass.some((fc) =>
-                        fixedClassId ? fc.fixedClassId === fixedClassId : true
-                    )
-                )
-                .map((item) => ({
-                    ...item,
-                    fixedClass: item.fixedClass.filter(
-                        (value, index, self) =>
-                            index ===
-                                self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
-                            !!value.fixedClassId
-                    ),
-                    countStudent: item.fixedClass
-                        .filter(
-                            (value, index, self) =>
-                                index ===
-                                    self.findIndex((t) => t.fixedClassId === value.fixedClassId) &&
-                                !!value.fixedClassId
-                        )
-                        .reduce((acc, curr) => acc + curr.fixedClassCount, 0),
-                })),
-            count: Number(count[0]?.total),
+            data,
+            count: data.length,
         },
         200
     )

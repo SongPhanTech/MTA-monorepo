@@ -17,6 +17,6 @@ export type OpenSubjectClassRetakeStudentsParams = {
     trainingCourseId?: TrainingCourseId & unknown
     search?: Search
     trainingObjectTypeId: TrainingObjectTypeId
-    page?: (Page & number) | null
-    pageSize?: (PageSize & number) | null
+    page?: Page
+    pageSize?: PageSize
 }

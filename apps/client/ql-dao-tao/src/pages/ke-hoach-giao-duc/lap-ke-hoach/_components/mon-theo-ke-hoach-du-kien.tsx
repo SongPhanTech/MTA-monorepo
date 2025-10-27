@@ -8,14 +8,13 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import type { OpenSubjectClassFixedClassItem } from '@workspace/libs/api/schemas/openSubjectClassFixedClassItem'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
-    trainingCourseId?: string
     trainingMajorId?: string
     subjectSelected?: Array<string>
 }
@@ -25,46 +24,22 @@ export default function MonTheoKeHoachDuKien() {
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
-    const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const { id: trainingCourseId } = useTrainingCourseStore()
     const { data: res, refetch } = useOpenSubjectClass(
         {
-            page: '1',
-            pageSize: '1000',
             semesterId: semesterId as string,
             search: searchText,
-            trainingCourseId,
+            trainingCourseId: trainingCourseId ?? '',
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             nextSemester: 'false',
         },
         { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
     )
-
-    // const { data: planTrainingData } = useFindFirstPlanTraining(
-    //     {
-    //         where: {
-    //             semesterId: semesterId as string,
-    //             trainingObjectTypeId,
-    //         },
-    //         select: {
-    //             planTrainingSubjects: {
-    //                 select: {
-    //                     subjectVersionId: true,
-    //                 },
-    //                 where: {
-    //                     subjectClassType: $Enums.SubjectClassType.NORMAL,
-    //                 },
-    //             },
-    //         },
-    //     },
-    //     {
-    //         enabled: !!semesterId && !!trainingObjectTypeId,
-    //     }
-    // )
 
     const data = useMemo(() => {
         return res?.status === 200
@@ -74,15 +49,6 @@ export default function MonTheoKeHoachDuKien() {
               }))
             : []
     }, [res])
-
-    // useEffect(() => {
-    //     if (planTrainingData) {
-    //         form.setFieldValue(
-    //             'subjectSelected',
-    //             planTrainingData.planTrainingSubjects.map((subject) => subject.subjectVersionId)
-    //         )
-    //     }
-    // }, [planTrainingData, form])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {

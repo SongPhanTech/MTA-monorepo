@@ -7,5 +7,6 @@
 
 /**
  * Số trang
+ * @nullable
  */
-export type Page = string
+export type Page = number | null
