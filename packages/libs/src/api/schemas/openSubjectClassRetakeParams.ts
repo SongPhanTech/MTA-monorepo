@@ -15,10 +15,10 @@ import type { TrainingObjectTypeId } from './trainingObjectTypeId'
 export type OpenSubjectClassRetakeParams = {
     page?: number | null
     limit?: number | null
-    trainingCourseId?: TrainingCourseId & unknown
+    trainingCourseId?: TrainingCourseId
     trainingMajorId?: TrainingMajorId
     search?: Search
     trainingObjectTypeId: TrainingObjectTypeId
-    semesterId?: SemesterId & unknown
+    semesterId?: SemesterId
     fixedClassId?: FixedClassId
 }

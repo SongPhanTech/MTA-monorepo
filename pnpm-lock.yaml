@@ -379,7 +379,7 @@ catalogs:
       specifier: ^0.8.13
       version: 0.8.13
     xlsx-template:
-      specifier: 1.4.4
+      specifier: ^1.4.4
       version: 1.4.4
     zenstack:
       specifier: ^2.16.1
@@ -1929,6 +1929,9 @@ importers:
       '@workspace/db':
         specifier: workspace:*
         version: link:../database
+      '@workspace/libs':
+        specifier: workspace:*
+        version: link:../libs
       hono:
         specifier: 'catalog:'
         version: 4.10.3

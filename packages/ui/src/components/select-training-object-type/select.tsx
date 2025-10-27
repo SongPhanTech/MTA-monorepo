@@ -1,15 +1,12 @@
 import { useFindManyTrainingObjectType } from '@workspace/db/hooks'
 import { Select, type SelectProps } from 'antd'
-// import { useEffect } from 'react'
 import { useTrainingObjectTypeStore } from './hook'
 
 type AntdSelectProps = SelectProps
 
 const SelectTrainingObjectType = (props: AntdSelectProps) => {
     const { data: doiTuongDaoTao = [] } = useFindManyTrainingObjectType({
-        orderBy: {
-            name: 'asc',
-        },
+        orderBy: { name: 'asc' },
     })
     const { id, onSelect } = useTrainingObjectTypeStore()
 
@@ -20,7 +17,7 @@ const SelectTrainingObjectType = (props: AntdSelectProps) => {
     // }, [id, doiTuongDaoTao, onSelect])
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 font-bold">
             <p>ĐTĐT</p>
             <Select
                 placeholder="Chọn đối tượng đào tạo"
