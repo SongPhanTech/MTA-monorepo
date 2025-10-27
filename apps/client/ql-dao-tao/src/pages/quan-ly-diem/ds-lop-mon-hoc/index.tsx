@@ -10,12 +10,12 @@ import { cn } from '@lib/utils'
 import { type Prisma, type SubjectClass, type SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
+    useFindManyFixedClass,
     useFindManySubjectClass,
-    useUpdateSubjectClass,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useCreateExams, useCreateNewReExamList } from '@workspace/libs/api/training'
-import { listUser } from '@workspace/libs/constants'
+// import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -35,13 +35,14 @@ import {
 } from 'antd'
 import dayjs, { type Dayjs } from 'dayjs'
 import _ from 'lodash'
-import { CalendarPlus, FilePen, FilePenLine, Search } from 'lucide-react'
+import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from '@components/commons/date-picker'
 import locale from 'antd/es/date-picker/locale/vi_VN'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import Select from '@components/commons/select'
 type TimeScore = {
     time: [Dayjs, Dayjs]
     beforeDays: number
@@ -55,17 +56,6 @@ type TimeScoreExam = {
 type HoldAnExam = {
     isGroupBySubject: boolean
 }
-
-type SubjectClassRelation = Prisma.SubjectClassGetPayload<{
-    include: {
-        subject: true
-        subjectClassStudent: {
-            include: {
-                student: true
-            }
-        }
-    }
-}>
 
 export default function ClassSubject() {
     const { canSome, can } = useAbility()
@@ -94,12 +84,10 @@ export default function ClassSubject() {
         credit: undefined,
         mainLecturer: undefined,
         enterGradeLecturer: undefined,
+        fixedClassId: undefined,
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
-    const handleNavigate = (id: string) => {
-        router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_CC_TX}?subjectClassId=${id}`)
-    }
 
     const { onOpen, onClose } = useDisclosure<string>({
         tag: 'PutDeadlineScoreModal',
@@ -108,11 +96,6 @@ export default function ClassSubject() {
     const handleSchudule = (id: string) => {
         onOpen(id)
     }
-
-    const handleNavigateThi = (id: string) => {
-        router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_THI}?subjectClassId=${id}`)
-    }
-
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
@@ -130,9 +113,34 @@ export default function ClassSubject() {
 
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
+
+        // Lấy danh sách FixedClass
+    const { data: fixedClasses = [] } = useFindManyFixedClass({
+        where: {
+            ...(trainingObjectTypeId||semesterId) && {
+                trainingCourse: {
+                    ...(trainingObjectTypeId && { trainingObjectTypeId }),
+                    ...(semesterId && { semesterStartId: semesterId }),
+                }
+            }
+        },
+        include: {
+            trainingCourse: {
+                include:{
+                    trainingObjectType: true,
+                    semesterStart: true
+                }
+            }
+        },
+        orderBy: { name: 'asc' }
+        // skip: trainingCourses.length ? 0 : 1,
+    },{
+        enabled:!!trainingObjectTypeId || !!semesterId
+    })
     //#region Mới
     /* Mới */
-    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+
+
     const where = useMemo(() => {
         return {
             ...(semesterId ? { semesterId } : {}),
@@ -179,6 +187,14 @@ export default function ClassSubject() {
                       },
                   }
                 : {}),
+                ...(filters.fixedClassId
+                ? {
+                    fixedClasses: {
+                        some: {
+                            id: filters.fixedClassId
+                        }
+                    }
+                }:{}),
             ...(filters.mainLecturer
                 ? {
                       mainLecturer: {
@@ -292,7 +308,7 @@ export default function ClassSubject() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         form.setFieldsValue({
             time: [],
@@ -312,115 +328,26 @@ export default function ClassSubject() {
     const { data: count } = useCountSubjectClass({
         where,
     })
-    const handleFilterApply = (newFilters: Partial<FilterProps>) => {
-        setFilters((prev) => {
-            const updatedFilters = { ...prev, ...newFilters }
-            debouncedRefetch()
-            return updatedFilters
-        })
-    }
-    /* Mới */
-    // #endregion
-    const handleCheckExamDate = () => {
-        dataTable.forEach((item: SubjectClass) => {
-            if (item.examDate) {
-                if (!item.examScoreDeadline) {
-                    const examDate = new Date(item.examDate)
-                    const examScoreDeadline = new Date(examDate.getTime() + 7 * 24 * 60 * 60 * 1000)
-                    item.examScoreDeadline = examScoreDeadline
-                    if (item.examScoreDeadline <= new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true
-                    } else if (examDate >= new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true
-                    } else {
-                        item.isLockExamScore = false
-                    }
-                    updateSubjectClass({
-                        where: { id: item.id },
-                        data: {
-                            examScoreDeadline,
-                            isLockExamScore: item.isLockExamScore,
-                        },
-                    }).catch((error) => {
-                        message.error('Error updating examScoreDeadline for item:', error)
-                    })
-                } else {
-                    const examDate = new Date(item.examDate)
-                    if (item.examScoreDeadline < new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true
-                    } else if (examDate >= new Date(new Date().setHours(24, 0, 0, 0))) {
-                        item.isLockExamScore = true
-                    } else {
-                        item.isLockExamScore = false
-                    }
-                    updateSubjectClass({
-                        where: { id: item.id },
-                        data: { isLockExamScore: item.isLockExamScore },
-                    }).catch((error) => {
-                        message.error('Error updating examScoreDeadline for item:', error)
-                    })
-                }
-                // Kiểm tra và cập nhật scoreDeadline
-                if (!item.scoreDeadline) {
-                    const examDate = new Date(item.examDate)
-                    const scoreDeadline = new Date(examDate.getTime() - 7 * 24 * 60 * 60 * 1000)
-                    item.scoreDeadline = scoreDeadline
-                    if (item.scoreDeadline < new Date()) {
-                        item.isLockScore = true
-                    } else {
-                        item.isLockScore = false
-                    }
-                    updateSubjectClass({
-                        where: { id: item.id },
-                        data: { scoreDeadline, isLockScore: item.isLockScore },
-                    }).catch((error) => {
-                        message.error('Error updating scoreDeadline for item:', error)
-                    })
-                } else {
-                    if (item.scoreDeadline < new Date()) {
-                        item.isLockScore = true
-                    } else {
-                        item.isLockScore = false
-                    }
-                    updateSubjectClass({
-                        where: { id: item.id },
-                        data: { isLockScore: item.isLockScore },
-                    }).catch((error) => {
-                        message.error('Error updating scoreDeadline for item:', error)
-                    })
-                }
-            }
-        })
-    }
-
-    // const rowClassName = (record:any) => {
-    //     if (record.examType ==='OfflineWritten') return 'bg-red-50'
-    //     return ''
-    //     }
-
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <>
-    useEffect(() => {
-        handleCheckExamDate()
-    }, [])
 
     const handleUpdateTime = async (values: TimeScore) => {
         try {
             showSpinner()
-            const res = await sqlTransaction([
-                {
-                    model: 'SubjectClass',
-                    operation: 'findMany',
-                    data: {
-                        where,
-                    },
-                },
-            ])
-            if (res?.status === 200 && res?.data.length > 0) {
-                const list: any = res?.data[0]
+            // const res = await sqlTransaction([
+            //     {
+            //         model: 'SubjectClass',
+            //         operation: 'findMany',
+            //         data: {
+            //             where,
+            //         },
+            //     },
+            // ])
+            // if (res?.status === 200 && res?.data.length > 0) {
+                // const list: any = res?.data[0]
                 let listTransaction: any = []
-                listTransaction = list.map((i: SubjectClass) => {
-                    if (i?.examDate && values?.beforeDays && values?.fromDays) {
-                        const scoreDeadLineStart = dayjs(i?.examDate)
+                listTransaction = selectedRowKeys.map((i) => {
+                    const result= dataTable.find((item: SubjectClass) => item.id === i)
+                    if (result?.examDate && values?.beforeDays && values?.fromDays) {
+                        const scoreDeadLineStart = dayjs(result?.examDate)
                             .subtract(values?.fromDays, 'day')
                             .toDate()
                         const scoreDeadline = dayjs(scoreDeadLineStart)
@@ -430,7 +357,7 @@ export default function ClassSubject() {
                             model: 'SubjectClass',
                             operation: 'update',
                             data: {
-                                where: { id: i.id },
+                                where: { id: i },
                                 data: {
                                     scoreDeadLineStart,
                                     scoreDeadline,
@@ -442,7 +369,7 @@ export default function ClassSubject() {
                         model: 'SubjectClass',
                         operation: 'update',
                         data: {
-                            where: { id: i.id },
+                            where: { id: i },
                             data: {
                                 scoreDeadLineStart: values?.time[0].toDate(),
                                 scoreDeadline: values?.time[1].toDate(),
@@ -459,7 +386,7 @@ export default function ClassSubject() {
                         setOpen(false)
                     }
                 }
-            }
+            // }
         } catch (error: any) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
@@ -480,18 +407,18 @@ export default function ClassSubject() {
                 },
             ])
             if (res?.status === 200 && res?.data.length > 0) {
-                const list: any = res?.data[0]
                 let listTransaction: any = []
-                listTransaction = list.map((i: SubjectClass) => {
-                    if (i?.examDate && values?.beforeDays) {
-                        const examScoreDeadline = dayjs(i?.examDate)
+                listTransaction = selectedRowKeys.map((i) => {
+                    const result= dataTable.find((item: SubjectClass) => item.id === i)
+                    if (result?.examDate && values?.beforeDays) {
+                        const examScoreDeadline = dayjs(result?.examDate)
                             .add(values?.beforeDays, 'day')
                             .toDate()
                         return {
                             model: 'SubjectClass',
                             operation: 'update',
                             data: {
-                                where: { id: i.id },
+                                where: { id: i },
                                 data: {
                                     examScoreDeadline,
                                 },
@@ -502,7 +429,7 @@ export default function ClassSubject() {
                         model: 'SubjectClass',
                         operation: 'update',
                         data: {
-                            where: { id: i.id },
+                            where: { id: i },
                             data: {
                                 examScoreDeadline: values?.examScoreDeadline,
                             },
@@ -584,6 +511,13 @@ export default function ClassSubject() {
         }
     }
 
+        const rowSelection = {
+        selectedRowKeys,
+        onChange: (newSelectedRowKeys: React.Key[]) => {
+            setSelectedRowKeys(newSelectedRowKeys)
+        },
+    }
+
     return (
         <div>
             <Row>
@@ -591,6 +525,25 @@ export default function ClassSubject() {
                     <Row align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
+                                             <Col span={8}>
+                                    <Form.Item className="m-0" name="searchText">
+                                        <Select
+                                        options={fixedClasses.map(i=>{
+                                            return {
+                                                value: i.id,
+                                                label: `${i?.code} - ${i.name}`
+                                            }
+                                        })}
+                                            id="search"
+                                            onChange={(e) =>
+                                                handleFilterChange('fixedClassId', e)
+                                            }
+                                            placeholder="Chọn lớp quản lý"
+                                            style={{ height: 32 }}
+                                            allowClear
+                                            
+                                        />
+                                    </Form.Item></Col>
                                 <Col span={8}>
                                     <Form.Item className="m-0" name="searchText">
                                         <Input
@@ -608,10 +561,13 @@ export default function ClassSubject() {
                                                     }}
                                                 />
                                             }
+                                            className='w-full ml-3'
                                             allowClear
                                         />
                                     </Form.Item>
+                                
                                 </Col>
+                   
                             </Flex>
                         </Col>
                         <Col span={6}>
@@ -667,7 +623,7 @@ export default function ClassSubject() {
                                                     <FormItem
                                                         form={form}
                                                         name={'beforeDays'}
-                                                        label="Số ngày nhập điểm TX,CC"
+                                                        label="Số ngày"
                                                         className="mb-2"
                                                     >
                                                         <InputNumber
@@ -681,7 +637,7 @@ export default function ClassSubject() {
                                                         form={form}
                                                         className="mb-2"
                                                         name={'fromDays'}
-                                                        label="Thời gian NĐ tính theo ngày thi"
+                                                        label="Bắt đầu - Ngày thi"
                                                     >
                                                         <InputNumber
                                                             className="w-full"
@@ -693,7 +649,7 @@ export default function ClassSubject() {
                                                     <FormItem
                                                         form={form}
                                                         name={'time'}
-                                                        label="Thời gian nhập điểm TX,CC"
+                                                        label="Thời gian nhập điểm quá trình"
                                                     >
                                                         <AntdDatePicker.RangePicker
                                                             locale={locale}
@@ -708,7 +664,7 @@ export default function ClassSubject() {
                                                     </Col>
                                                 </Form>
                                             }
-                                            title="Sửa thời gian nhập điểm TX,CC"
+                                            title="Gán hạn nhập điểm quá trình"
                                             trigger="click"
                                             placement="bottomRight"
                                             open={open}
@@ -716,6 +672,7 @@ export default function ClassSubject() {
                                         >
                                             <Button
                                                 // onClick={() => handleModal()}
+                                                disabled={selectedRowKeys.length === 0}
                                                 type="primary"
                                             >
                                                 Đặt hạn nhập điểm TX/CC
@@ -731,7 +688,7 @@ export default function ClassSubject() {
                                                     <FormItem
                                                         form={form}
                                                         name={'beforeDays'}
-                                                        label="Số ngày nhập điểm thi"
+                                                        label="Số ngày"
                                                         className="mb-2"
                                                     >
                                                         <InputNumber
@@ -759,7 +716,7 @@ export default function ClassSubject() {
                                                     </Col>
                                                 </Form>
                                             }
-                                            title="Sửa thời gian nhập điểm thi"
+                                            title="Gán hạn nhập điểm thi"
                                             trigger="click"
                                             placement="bottomRight"
                                             open={openExam}
@@ -767,6 +724,7 @@ export default function ClassSubject() {
                                         >
                                             <Button
                                                 // onClick={() => handleModal()}
+                                                disabled={selectedRowKeys.length === 0}
                                                 type="primary"
                                             >
                                                 Đặt hạn nhập điểm thi
@@ -787,27 +745,27 @@ export default function ClassSubject() {
                         id="training-category"
                         className="table-subject-score"
                         // rowClassName={rowClassName}
-                        // rowSelection={rowSelection}
+                        rowSelection={rowSelection}
                         onRow={(record) => {
                             return {
                                 className: cn(
                                     record?.subject?.examType === 'OfflineWritten'
                                         ? 'text-blue-500'
                                         : '',
-                                    dayjs()?.isBefore(record?.scoreDeadline) || record?.enteredScore
-                                        ? ''
-                                        : 'bg-red-100',
-                                    dayjs().isBefore(record?.examScoreDeadline) ||
-                                        record?.enteredExamScore
-                                        ? ''
-                                        : 'bg-red-300'
+                                    (dayjs()?.isAfter(record?.scoreDeadline) && !record?.enteredScore)
+                                        ? 'text-red-500'
+                                        : '',
+                                    (dayjs().isAfter(record?.examScoreDeadline) &&
+                                        !record?.enteredExamScore)
+                                        ? 'text-red-600'
+                                        : ''
                                 ),
                             }
                         }}
                         columns={[
                             {
                                 title: 'STT',
-                                width: 60,
+                                width: 40,
                                 align: 'center',
                                 render: (_, __, index) =>
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
@@ -822,8 +780,8 @@ export default function ClassSubject() {
                             {
                                 title: 'Môn học',
                                 dataIndex: 'name',
-                                width: 200,
-                                align: 'center',
+                                width: 175,
+                                align: 'left',
                                 type: 'input',
                                 render: (text, record: { subject?: SubjectVersion }) =>
                                     record.subject?.name || text,
@@ -838,10 +796,10 @@ export default function ClassSubject() {
                             //         record.subject?.credit || text,
                             // },
                             {
-                                title: 'Hình thức thi',
+                                title: 'Thi',
                                 dataIndex: 'examType',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 type: 'select',
                                 options: options,
                                 render: (__, record: { subject?: SubjectVersion }) => {
@@ -856,6 +814,22 @@ export default function ClassSubject() {
                                     )
                                 },
                             },
+                            {
+                                title: 'Trạng thái NĐ',
+                                dataIndex: 'scoreDeadLineStart',
+                                width: 120,
+                                align: 'center',
+                                type: 'date',
+                                render: (__, record) => {
+                                    return record?.enteredExamScore ? (
+                                        'Đã nhập điểm thi'
+                                    ) : record?.enteredScore ? (
+                                        'Đã nhập điểm TX,CC'
+                                    ) : (
+                                        <div className="text-red-500">Chưa nhập điểm</div>
+                                    )
+                                },
+                            },
                             // {
                             //     title: 'Ngày bắt đầu',
                             //     dataIndex: 'startDate',
@@ -865,55 +839,18 @@ export default function ClassSubject() {
                             //     render: (record: string) =>
                             //         record ? dayjs(record).format('DD/MM/YYYY') : '',
                             // },
-                            // {
-                            //     title: 'Số ngày',
-                            //     width: 100,
-                            //     align: 'center',
-                            //     render: (__, record) => {
-                            //         const today = dayjs()
-                            //         const scoreDeadline = dayjs(record?.scoreDeadline)
-                            //         const examScoreDeadline = dayjs(record?.examScoreDeadline)
-
-                            //         if (!scoreDeadline && !examScoreDeadline) {
-                            //             return '-'
-                            //         }
-
-                            //         let daysRemaining: number
-                            //         let deadlineType: string
-
-                            //         if (today?.isBefore(scoreDeadline)) {
-                            //             daysRemaining = scoreDeadline?.diff(today, 'day')
-                            //             deadlineType = 'ĐQT'
-                            //         } else if (today?.isBefore(examScoreDeadline)) {
-                            //             daysRemaining = examScoreDeadline?.diff(today, 'day')
-                            //             deadlineType = 'ĐT'
-                            //         } else {
-                            //             return <div className="text-red-500">Hết hạn</div>
-                            //         }
-
-                            //         return (
-                            //             <Tooltip
-                            //                 title={`Còn ${daysRemaining} ngày trước hạn ${deadlineType}`}
-                            //             >
-                            //                 <span
-                            //                 >
-                            //                     {daysRemaining}
-                            //                 </span>
-                            //             </Tooltip>
-                            //         )
-                            //     },
-                            // },
+                        
                             {
-                                title: 'Ngày nhập ĐQT',
+                                title: 'Ngày NĐQT',
                                 dataIndex: 'scoreDeadLineStart',
-                                width: 150,
+                                width: 120,
                                 align: 'center',
                                 type: 'date',
                                 render: (record: string) =>
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
-                                title: 'Hạn ĐQT',
+                                title: 'Hạn NĐQT',
                                 width: 120,
                                 dataIndex: 'scoreDeadline',
                                 align: 'center',
@@ -927,6 +864,36 @@ export default function ClassSubject() {
                                             : ''}
                                     </div>
                                 ),
+                            },
+                         {
+                                title: 'Hạn ĐQT',
+                                width: 100,
+                                align: 'center',
+                                render: (__, record) => {
+                                    const today = dayjs()
+                                    const scoreDeadline = dayjs(record?.scoreDeadline)
+                                       if (!scoreDeadline ) {
+                                        return '-'
+                                    }
+                                    let daysRemaining: number
+
+                                    if (today?.isBefore(scoreDeadline)) {
+                                        daysRemaining = scoreDeadline?.diff(today, 'day')
+                                    } else {
+                                        return <div className="text-red-500">Hết hạn</div>
+                                    }
+
+                                    return (
+                                        <Tooltip
+                                            title={`Còn ${daysRemaining} ngày trước hạn ĐQT`}
+                                        >
+                                            <span
+                                            >
+                                                {daysRemaining}
+                                            </span>
+                                        </Tooltip>
+                                    )
+                                },
                             },
                             {
                                 title: 'Ngày thi',
@@ -956,51 +923,80 @@ export default function ClassSubject() {
                                     )
                                 },
                             },
-                            {
-                                title: 'Trạng thái NĐ',
-                                dataIndex: 'scoreDeadLineStart',
-                                width: 150,
+
+                                 {
+                                title: 'Hạn ĐQT',
+                                width: 100,
                                 align: 'center',
-                                type: 'date',
                                 render: (__, record) => {
-                                    return record?.enteredExamScore ? (
-                                        'Đã nhập điểm thi'
-                                    ) : record?.enteredScore ? (
-                                        'Đã nhập điểm TX,CC'
-                                    ) : (
-                                        <div className="text-red-500">Chưa nhập điểm</div>
+                                    const today = dayjs()
+                                    const examScoreDeadline = dayjs(record?.examScoreDeadline)
+
+                                    if (!examScoreDeadline) {
+                                        return '-'
+                                    }
+
+                                    let daysRemaining: number
+
+                                 if (today?.isBefore(examScoreDeadline)) {
+                                        daysRemaining = examScoreDeadline?.diff(today, 'day')
+                                    } else {
+                                        return <div className="text-red-500">Hết hạn</div>
+                                    }
+
+                                    return (
+                                        <Tooltip
+                                            title={`Còn ${daysRemaining} ngày trước hạn ĐT`}
+                                        >
+                                            <span
+                                            >
+                                                {daysRemaining}
+                                            </span>
+                                        </Tooltip>
                                     )
                                 },
                             },
-                            // {
-                            //     title: 'Giảng viên',
-                            //     width: 150,
-                            //     align: 'center',
-                            //     type: 'input',
-                            //     dataIndex: 'mainLecturer',
-                            //     render: (text, record: any) => {
-                            //         const mainLecturer = record.mainLecturer
-                            //             ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
-                            //             : ''
-                            //         const extraLecturer = record.extraLecturer
-                            //             ? `${record.extraLecturer.userProfile.lastName} ${record.extraLecturer.userProfile.firstName}`
-                            //             : ''
-                            //                   const enterGradeLecturer = record.enterGradeLecturer
-                            //             ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
-                            //             : ''
-                            //         return (
-                            //             <ul>
-                            //                 {mainLecturer && <li>- {mainLecturer}</li>}
-                            //                 {extraLecturer && <li>- {extraLecturer}</li>}
-                            //                 {enterGradeLecturer && <li>- {enterGradeLecturer}</li>}
-                            //             </ul>
-                            //         )
-                            //     },
-                            // },
+                 
                             {
-                                title: 'Đơn vị phụ trách',
+                                title: 'Giảng viên 1',
+                                width: 150,
+                                align: 'center',
+                                type: 'input',
+                                dataIndex: 'mainLecturer',
+                                render: (text, record: any) => {
+                                    const mainLecturer = record.mainLecturer
+                                        ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
+                                        : ''
+                                  
+                                    return (
+                                        <ul>
+                                            {mainLecturer && <li>- {mainLecturer}</li>}
+                                        </ul>
+                                    )
+                                },
+                            },
+
+                              {
+                                title: 'Giảng viên NĐ',
+                                width: 150,
+                                align: 'center',
+                                type: 'input',
+                                dataIndex: 'mainLecturer',
+                                render: (text, record: any) => {
+                                              const enterGradeLecturer = record.enterGradeLecturer
+                                        ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
+                                        : ''
+                                    return (
+                                        <ul>
+                                            {enterGradeLecturer && <li>- {enterGradeLecturer}</li>}
+                                        </ul>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'ĐV phụ trách',
                                 dataIndex: 'danhSachLop',
-                                width: 130,
+                                width: 100,
                                 align: 'center',
                                 render: (text, record: any) => {
                                     return (
@@ -1010,21 +1006,6 @@ export default function ClassSubject() {
                                     )
                                 },
                             },
-                            // {
-                            //     title: 'Trạng thái',
-                            //     dataIndex: 'trangThai',
-                            //     width: 150,
-                            //     align: 'center',
-                            //     render: (text, record) => {
-                            //         if (record.active === true || record.active === 'active') {
-                            //             return <Tag color="green">Đang hoạt động</Tag>
-                            //         }
-                            //         if (record.active === false || record.active === 'inactive') {
-                            //             return <Tag color="red">Kết thúc</Tag>
-                            //         }
-                            //         return ''
-                            //     },
-                            // },
                             {
                                 title: 'Thao tác',
                                 width: 100,
@@ -1044,7 +1025,7 @@ export default function ClassSubject() {
                                                         strokeWidth={2}
                                                     />
                                                 </Tooltip>
-                                                {(profileId === listUser.lecturer ||
+                                                {/* {(profileId === listUser.lecturer ||
                                                     !!subject?.oneType) && (
                                                     <Tooltip
                                                         title="Nhập điểm TX/CC"
@@ -1064,7 +1045,7 @@ export default function ClassSubject() {
                                                         onClick={() => handleNavigateThi(id)}
                                                         strokeWidth={2}
                                                     />
-                                                </Tooltip>
+                                                </Tooltip> */}
                                             </Row>
                                         )
                                     }
