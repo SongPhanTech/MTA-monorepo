@@ -32423,6 +32423,7 @@ declare const metadata: {
                     isDataModel: boolean;
                     isArray: boolean;
                     backLink: string;
+                    isRelationOwner: boolean;
                 };
             };
             uniqueConstraints: {
@@ -32529,24 +32530,9 @@ declare const metadata: {
                     name: string;
                     type: string;
                     isDataModel: boolean;
-                    attributes: {
-                        name: string;
-                        args: {
-                            name: string;
-                            value: null[];
-                        }[];
-                    }[];
+                    isArray: boolean;
                     backLink: string;
                     isRelationOwner: boolean;
-                    foreignKeyMapping: {
-                        id: string;
-                    };
-                };
-                surveyTopicId: {
-                    name: string;
-                    type: string;
-                    isForeignKey: boolean;
-                    relationField: string;
                 };
             };
             uniqueConstraints: {

@@ -18161,6 +18161,7 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'surveyTopic',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18219,15 +18220,9 @@ const metadata = {
                     name: "surveyTopic",
                     type: "SurveyTopic",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    isArray: true,
                     backLink: 'surveyQuestionGroup',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyTopicId" },
-                }, surveyTopicId: {
-                    name: "surveyTopicId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'surveyTopic',
                 },
             }, uniqueConstraints: {
                 id: {

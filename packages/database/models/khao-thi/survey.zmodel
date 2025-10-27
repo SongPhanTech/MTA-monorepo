@@ -55,8 +55,7 @@ model SurveyTopic extends Base {
 model SurveyQuestionGroup extends Base {
   name           String
   surveyQuestion SurveyQuestion[]
-  surveyTopic    SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId  String
+  surveyTopic    SurveyTopic[]
   @@schema("khao-thi")
 }
 
