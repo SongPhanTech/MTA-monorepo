@@ -646,8 +646,15 @@ export default function PhanCongGiangDay({
     return (
         <div>
             <Row gutter={[8, 8]}>
-                <Col span={24}>
-                    <Flex justify="end" gap={4}>
+                <Flex justify="space-between" gap={4}>
+                    <Col span={12}>
+                        <TreeSelectDepartment
+                            className="w-full"
+                            rootId={!khoaBoMon ? '0' : orgId}
+                            onChange={(val) => handleFilterChange('organization', val)}
+                        />
+                    </Col>
+                    <Flex>
                         {!khoaBoMon &&
                             can(
                                 QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
@@ -1168,28 +1175,7 @@ export default function PhanCongGiangDay({
                                 </Button>
                             )}
                     </Flex>
-                </Col>
-                <Col span={4}>
-                    <Select
-                        placeholder="Chọn khoá"
-                        options={trainingCourseData.map((i) => {
-                            return {
-                                value: i.id,
-                                label: i.name,
-                            }
-                        })}
-                        style={{ width: '100%' }}
-                        onChange={(val) => handleFilterChange('trainingCourseId', val)}
-                        allowClear
-                    />
-                </Col>
-                <Col span={7}>
-                    <TreeSelectDepartment
-                        className="w-full"
-                        rootId={!khoaBoMon ? '0' : orgId}
-                        onChange={(val) => handleFilterChange('organization', val)}
-                    />
-                </Col>
+                </Flex>
                 <Col span={24}>
                     <Form form={form} onFinish={handleSaveData}>
                         {!khoaBoMon && (

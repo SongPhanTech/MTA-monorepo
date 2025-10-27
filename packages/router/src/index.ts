@@ -139,35 +139,10 @@ const NAVIGATION: NavigationType = {
                 ],
             },
             {
-                id: 'ke-hoach-giao-duc',
+                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC,
                 label: 'Kế hoạch đào tạo',
                 icon: CalendarRange,
-                children: [
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_LAP_KE_HOACH,
-                        label: 'Lập kế hoạch',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_LAP_KE_HOACH,
-                        description: 'Lập kế hoạch',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
-                        label: 'Mở lớp môn học',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
-                        description: 'Kế hoạch mở lớp môn học',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                        label: 'Phân công giảng dạy',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                        description: 'Phân công giảng dạy',
-                    },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
-                        label: 'Đợt đăng ký học online',
-                        path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
-                        description: 'Đợt đăng ký học online',
-                    },
-                ],
+                path: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC,
             },
             {
                 id: 'ke-hoach-hoc-lai',
@@ -213,10 +188,23 @@ const NAVIGATION: NavigationType = {
                 path: ROUTER_PATH.QL_DAO_TAO.KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
             },
             {
-                id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC,
+                id: 'dang-ky-hoc',
                 label: 'Đăng ký học',
-                path: ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC,
                 description: 'Đăng ký học',
+                children: [
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DANG_KY_HOC_OFFLINE,
+                        label: 'Đăng ký học offline',
+                        path: ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC_DANG_KY_HOC_OFFLINE,
+                        description: 'Đăng ký học offline',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
+                        label: 'Đợt đăng ký học online',
+                        path: ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
+                        description: 'Đợt đăng ký học online',
+                    },
+                ],
             },
             {
                 id: 'lop-mon-hoc',

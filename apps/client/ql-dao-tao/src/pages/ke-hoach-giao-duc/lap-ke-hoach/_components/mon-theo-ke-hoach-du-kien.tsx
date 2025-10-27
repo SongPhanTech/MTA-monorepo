@@ -272,7 +272,7 @@ export default function MonTheoKeHoachDuKien() {
                             </Form.Item>
                         </Col>
                         <Flex gap={8}>
-                            <Button type="primary">Thêm môn</Button>
+                            <Button type="primary">Khởi tạo môn</Button>
                             <Button onClick={onSubmit} type="primary">
                                 Lưu kế hoạch
                             </Button>
