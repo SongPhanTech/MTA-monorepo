@@ -1,4 +1,4 @@
-import Select from '@components/commons/select'
+import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
@@ -55,7 +55,6 @@ type OpenSubjectClassForm = {
             code: string | null
             maxStudent: number
             examType?: $Enums.ExamType | null
-            trainingLocationId?: string | null
             subjectClasses?: Record<string, SubjectClassForm>
             isEdit?: boolean
         }
@@ -422,8 +421,6 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                 0
                             ),
                         examType: cur.subjectVersion?.examType,
-                        trainingLocationId:
-                            cur.subjectVersion?.subjectClass[0]?.trainingLocationId || null,
                         subjectClasses: cur.subjectVersion.subjectClass.reduce(
                             (subAcc, subCur) => {
                                 if (!subAcc) {
@@ -459,6 +456,9 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'DM_DonVi'],
+            })
         }, 500),
         []
     )
@@ -590,7 +590,6 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                             maxStudent: e.subjectVersion.maxStudent,
                             examType: e.subjectVersion.examType,
                             schedule: $Enums.SubjectClassSchedule.MORNING,
-                            trainingLocationId: e.subjectVersion.trainingLocationId || null,
                             fixedClasses: {
                                 set: e.fixedClasses?.map((fc) => ({
                                     id: fc.id,
@@ -606,7 +605,6 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                             maxStudent: e.subjectVersion.maxStudent,
                             examType: e.subjectVersion.examType,
                             schedule: $Enums.SubjectClassSchedule.MORNING,
-                            trainingLocationId: e.subjectVersion.trainingLocationId || null,
                             fixedClasses: {
                                 connect: e.fixedClasses?.map((fc) => ({
                                     id: fc.id,
@@ -906,41 +904,6 @@ export default function KeHoachMoLopMonHoc({ hocLai = false }: { hocLai?: boolea
                                                             e.preventDefault()
                                                         }
                                                     }}
-                                                />
-                                            </Form.Item>
-                                        </>
-                                    ),
-                                },
-                                {
-                                    title: 'Khu vực',
-                                    width: 150,
-                                    align: 'center',
-                                    render: (_, record) => (
-                                        <>
-                                            <Form.Item
-                                                name={[
-                                                    'subjectVersions',
-                                                    record?.subjectVersionId,
-                                                    'trainingLocationId',
-                                                ]}
-                                                required
-                                            >
-                                                <Select
-                                                    allowClear
-                                                    showSearch
-                                                    dropdownStyle={{
-                                                        maxHeight: 400,
-                                                        minWidth: 300,
-                                                    }}
-                                                    filterOption={(input, option) =>
-                                                        String(option?.label ?? '')
-                                                            ?.toLowerCase()
-                                                            ?.includes(input?.toLowerCase())
-                                                    }
-                                                    options={trainingLocationData.map((e) => ({
-                                                        label: e.name,
-                                                        value: e.id,
-                                                    }))}
                                                 />
                                             </Form.Item>
                                         </>
