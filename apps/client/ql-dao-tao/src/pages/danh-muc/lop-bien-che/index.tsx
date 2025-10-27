@@ -1,4 +1,4 @@
-import { CheckOutlined } from '@ant-design/icons'
+import { CheckOutlined, DownloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -21,6 +21,9 @@ import {
     useFindManyTrainingObjectType,
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
+import { fixedClassStudentCount } from '@workspace/libs/api/training'
+import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
+import { getFilenameFromContentDisposition } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
@@ -30,7 +33,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -47,6 +49,8 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
         startYear: undefined,
     })
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const [loading, setLoading] = useState(false)
+
     const canReadAll = can(
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
         'XEM_TAT_CA'
@@ -242,6 +246,43 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
     const handleModalChuyenLop = () => {
         onOpenChuyenLop()
     }
+
+    const downloadStatsFile = async () => {
+        if (!trainingObjectTypeId) {
+            message.error('Vui lòng chọn ĐTĐT')
+            return
+        }
+        if (filters.trainingCourses?.length !== 1) {
+            message.error('Vui lòng chọn 1 khoá đào tạo')
+            return
+        }
+        try {
+            setLoading(true)
+            // TODO: cho chọn ngày hoặc lấy ngày từ HK đang chọn
+            const { status, headers, data } = await fixedClassStudentCount({
+                trainingObjectTypeId: trainingObjectTypeId,
+                trainingCourseId: filters.trainingCourses[0],
+            })
+            if (status === 200) {
+                const filename = getFilenameFromContentDisposition(
+                    headers.get('content-disposition') as string
+                )
+                const blob = new Blob([data], { type: headers.get('content-type') as string })
+                const url = window.URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.href = url
+                link.download = filename || 'thong-ke-no.xlsx'
+                link.click()
+                window.URL.revokeObjectURL(url)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Lỗi khi tải file')
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const handleExportBangDiem = () => {
         showSpinner()
         try {
@@ -814,6 +855,10 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                     <Row gutter={[16, 16]} align="top" justify={'end'}>
                         <Col span={4}>
                             <Flex justify="end">
+                                <Button className="mr-3" type="primary" onClick={downloadStatsFile}>
+                                    <DownloadOutlined />
+                                    QS theo khoá
+                                </Button>
                                 <Button
                                     className="mr-3"
                                     type="primary"
