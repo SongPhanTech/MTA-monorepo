@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { MessageSenderSchema } from '../enums/MessageSender.schema';
@@ -18,21 +19,9 @@ const baseSchema = z.object({
     sender: MessageSenderSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    content: z.string().nullish(),
-    sender: MessageSenderSchema,
-}
-).strict();
 const relationSchema = z.object({
     citations: z.array(z.unknown()).optional(),
-    conversation: z.record(z.string(), z.unknown()).optional(),
+    conversation: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -56,7 +45,7 @@ export const MessageSchema = MessageScalarSchema.merge(fkSchema).merge(relationS
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const MessagePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const MessagePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -66,11 +55,11 @@ export const MessagePrismaCreateSchema = baseSchemaWithoutDefaults.partial().pas
 export const MessagePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     content: z.string().nullish(),
     sender: MessageSenderSchema
 }).partial().passthrough();
@@ -79,7 +68,7 @@ export const MessagePrismaUpdateSchema = z.object({
 /**
  * `Message` schema for create operations excluding foreign keys and relations.
  */
-export const MessageCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const MessageCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -93,7 +82,7 @@ export const MessageCreateSchema = MessageCreateScalarSchema.merge(fkSchema);
 /**
  * `Message` schema for update operations excluding foreign keys and relations.
  */
-export const MessageUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const MessageUpdateScalarSchema = baseSchema.partial();
 
 
 /**

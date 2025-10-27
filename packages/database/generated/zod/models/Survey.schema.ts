@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -21,30 +22,14 @@ const baseSchema = z.object({
     additionalSuggestion: z.boolean(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    startDate: z.coerce.date(),
-    endDate: z.coerce.date().nullish(),
-    isPublic: z.boolean(),
-    anonymous: z.boolean(),
-    additionalSuggestion: z.boolean(),
-}
-).strict();
 const relationSchema = z.object({
     surveyObjectType: z.array(z.unknown()).optional(),
-    lecture: z.record(z.string(), z.unknown()).optional(),
-    surveyTopic: z.record(z.string(), z.unknown()),
+    lecture: z.record(z.unknown()).optional(),
+    surveyTopic: z.record(z.unknown()),
     surveyChoice: z.array(z.unknown()).optional(),
     surveyQuestion: z.array(z.unknown()).optional(),
     surveySessions: z.array(z.unknown()).optional(),
-    clusterSurvey: z.record(z.string(), z.unknown()).optional(),
+    clusterSurvey: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -70,7 +55,7 @@ export const SurveySchema = SurveyScalarSchema.merge(fkSchema).merge(relationSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SurveyPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const SurveyPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -80,16 +65,16 @@ export const SurveyPrismaCreateSchema = baseSchemaWithoutDefaults.partial().pass
 export const SurveyPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
-    isPublic: z.boolean(),
-    anonymous: z.boolean(),
+    isPublic: z.boolean().default(false),
+    anonymous: z.boolean().default(true),
     additionalSuggestion: z.boolean()
 }).partial().passthrough();
 
@@ -97,7 +82,7 @@ export const SurveyPrismaUpdateSchema = z.object({
 /**
  * `Survey` schema for create operations excluding foreign keys and relations.
  */
-export const SurveyCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const SurveyCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isPublic: true, anonymous: true
 });
 
@@ -111,7 +96,7 @@ export const SurveyCreateSchema = SurveyCreateScalarSchema.merge(fkSchema);
 /**
  * `Survey` schema for update operations excluding foreign keys and relations.
  */
-export const SurveyUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const SurveyUpdateScalarSchema = baseSchema.partial();
 
 
 /**

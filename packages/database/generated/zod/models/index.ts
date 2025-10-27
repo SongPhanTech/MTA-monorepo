@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 export * from './Config.schema';
 export * from './ChangeLog.schema';

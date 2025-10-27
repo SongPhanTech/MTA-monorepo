@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,17 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -48,7 +38,7 @@ export const EvidenceCategorySchema = EvidenceCategoryScalarSchema.merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const EvidenceCategoryPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const EvidenceCategoryPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -58,11 +48,11 @@ export const EvidenceCategoryPrismaCreateSchema = baseSchemaWithoutDefaults.part
 export const EvidenceCategoryPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string()
 }).partial().passthrough();
 
@@ -70,7 +60,7 @@ export const EvidenceCategoryPrismaUpdateSchema = z.object({
 /**
  * `EvidenceCategory` schema for create operations excluding foreign keys and relations.
  */
-export const EvidenceCategoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const EvidenceCategoryCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -78,7 +68,7 @@ export const EvidenceCategoryCreateScalarSchema = baseSchemaWithoutDefaults.part
 /**
  * `EvidenceCategory` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const EvidenceCategoryCreateSchema = baseSchemaWithoutDefaults.partial({
+export const EvidenceCategoryCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -86,7 +76,7 @@ export const EvidenceCategoryCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `EvidenceCategory` schema for update operations excluding foreign keys and relations.
  */
-export const EvidenceCategoryUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const EvidenceCategoryUpdateScalarSchema = baseSchema.partial();
 
 
 /**

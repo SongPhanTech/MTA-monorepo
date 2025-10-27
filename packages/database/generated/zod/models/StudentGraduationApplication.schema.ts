@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { ApplicationStatus } from '../../zenstack/models';
@@ -19,25 +20,13 @@ const baseSchema = z.object({
     status: ApplicationStatusSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    applicationDate: z.coerce.date(),
-    status: ApplicationStatusSchema,
-}
-).strict();
 const relationSchema = z.object({
-    student: z.record(z.string(), z.unknown()),
-    session: z.record(z.string(), z.unknown()),
+    student: z.record(z.unknown()),
+    session: z.record(z.unknown()),
     applicationCheckResult: z.array(z.unknown()).optional(),
     gpaScore: z.array(z.unknown()).optional(),
     supplementaryScore: z.array(z.unknown()).optional(),
-    decision: z.record(z.string(), z.unknown()).optional(),
+    decision: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -62,7 +51,7 @@ export const StudentGraduationApplicationSchema = StudentGraduationApplicationSc
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StudentGraduationApplicationPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const StudentGraduationApplicationPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -72,12 +61,12 @@ export const StudentGraduationApplicationPrismaCreateSchema = baseSchemaWithoutD
 export const StudentGraduationApplicationPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    applicationDate: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    applicationDate: z.coerce.date().default(() => new Date()),
     status: ApplicationStatusSchema
 }).partial().passthrough();
 
@@ -85,7 +74,7 @@ export const StudentGraduationApplicationPrismaUpdateSchema = z.object({
 /**
  * `StudentGraduationApplication` schema for create operations excluding foreign keys and relations.
  */
-export const StudentGraduationApplicationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const StudentGraduationApplicationCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, applicationDate: true, status: true
 });
 
@@ -99,7 +88,7 @@ export const StudentGraduationApplicationCreateSchema = StudentGraduationApplica
 /**
  * `StudentGraduationApplication` schema for update operations excluding foreign keys and relations.
  */
-export const StudentGraduationApplicationUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const StudentGraduationApplicationUpdateScalarSchema = baseSchema.partial();
 
 
 /**

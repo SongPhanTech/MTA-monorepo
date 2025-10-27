@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 export * from './TransactionIsolationLevel.schema';
 export * from './ConfigScalarFieldEnum.schema';

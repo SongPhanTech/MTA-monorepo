@@ -8661,8 +8661,7 @@ export namespace Prisma {
         deletedAt: 'deletedAt',
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
-        name: 'name',
-        surveyTopicId: 'surveyTopicId'
+        name: 'name'
     };
     export const ClusterSurveyScalarFieldEnum: {
         id: 'id',
@@ -8673,10 +8672,12 @@ export namespace Prisma {
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         name: 'name',
+        additionalSuggestion: 'additionalSuggestion',
         startDate: 'startDate',
         endDate: 'endDate',
         isPublic: 'isPublic',
-        anonymous: 'anonymous'
+        anonymous: 'anonymous',
+        surveyTopicId: 'surveyTopicId'
     };
     export const SurveyScalarFieldEnum: {
         id: 'id',
@@ -11251,14 +11252,14 @@ export namespace Prisma {
         id: 'id',
         code: 'code',
         description: 'description',
-        name: 'name',
-        surveyTopicId: 'surveyTopicId'
+        name: 'name'
     };
     export const ClusterSurveyOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
         description: 'description',
-        name: 'name'
+        name: 'name',
+        surveyTopicId: 'surveyTopicId'
     };
     export const SurveyOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -79107,6 +79108,7 @@ export namespace Prisma {
      */
     export interface Prisma__SurveyTopicClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        clusterSurvey<T extends SurveyTopic$clusterSurveyArgs<ExtArgs> = {}>(args?: Subset<T, SurveyTopic$clusterSurveyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClusterSurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         survey<T extends SurveyTopic$surveyArgs<ExtArgs> = {}>(args?: Subset<T, SurveyTopic$surveyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         surveyQuestionGroup<T extends SurveyTopic$surveyQuestionGroupArgs<ExtArgs> = {}>(args?: Subset<T, SurveyTopic$surveyQuestionGroupArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyQuestionGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
@@ -79489,7 +79491,7 @@ export namespace Prisma {
     export interface Prisma__SurveyQuestionGroupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         surveyQuestion<T extends SurveyQuestionGroup$surveyQuestionArgs<ExtArgs> = {}>(args?: Subset<T, SurveyQuestionGroup$surveyQuestionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
-        surveyTopic<T extends SurveyTopicDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SurveyTopicDefaultArgs<ExtArgs>>): Prisma__SurveyTopicClient<$Result.GetResult<Prisma.$SurveyTopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        surveyTopic<T extends SurveyQuestionGroup$surveyTopicArgs<ExtArgs> = {}>(args?: Subset<T, SurveyQuestionGroup$surveyTopicArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyTopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -79524,7 +79526,6 @@ export namespace Prisma {
         readonly createdAt: FieldRef<"SurveyQuestionGroup", 'DateTime'>;
         readonly updatedAt: FieldRef<"SurveyQuestionGroup", 'DateTime'>;
         readonly name: FieldRef<"SurveyQuestionGroup", 'String'>;
-        readonly surveyTopicId: FieldRef<"SurveyQuestionGroup", 'String'>;
     }
 
     export interface ClusterSurveyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -79870,6 +79871,7 @@ export namespace Prisma {
      */
     export interface Prisma__ClusterSurveyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
+        surveyTopic<T extends SurveyTopicDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SurveyTopicDefaultArgs<ExtArgs>>): Prisma__SurveyTopicClient<$Result.GetResult<Prisma.$SurveyTopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         surveyObjectType<T extends ClusterSurvey$surveyObjectTypeArgs<ExtArgs> = {}>(args?: Subset<T, ClusterSurvey$surveyObjectTypeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         lecturers<T extends ClusterSurvey$lecturersArgs<ExtArgs> = {}>(args?: Subset<T, ClusterSurvey$lecturersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         surveyChoice<T extends ClusterSurvey$surveyChoiceArgs<ExtArgs> = {}>(args?: Subset<T, ClusterSurvey$surveyChoiceArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyChoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
@@ -79909,10 +79911,12 @@ export namespace Prisma {
         readonly createdAt: FieldRef<"ClusterSurvey", 'DateTime'>;
         readonly updatedAt: FieldRef<"ClusterSurvey", 'DateTime'>;
         readonly name: FieldRef<"ClusterSurvey", 'String'>;
+        readonly additionalSuggestion: FieldRef<"ClusterSurvey", 'Boolean'>;
         readonly startDate: FieldRef<"ClusterSurvey", 'DateTime'>;
         readonly endDate: FieldRef<"ClusterSurvey", 'DateTime'>;
         readonly isPublic: FieldRef<"ClusterSurvey", 'Boolean'>;
         readonly anonymous: FieldRef<"ClusterSurvey", 'Boolean'>;
+        readonly surveyTopicId: FieldRef<"ClusterSurvey", 'String'>;
     }
 
     export interface SurveyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -130227,10 +130231,12 @@ export namespace Prisma {
      * Count Type SurveyTopicCountOutputType
      */
     export type SurveyTopicCountOutputType = {
+        clusterSurvey: number
         survey: number
         surveyQuestionGroup: number
     };
     export type SurveyTopicCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        clusterSurvey?: boolean | SurveyTopicCountOutputTypeCountClusterSurveyArgs
         survey?: boolean | SurveyTopicCountOutputTypeCountSurveyArgs
         surveyQuestionGroup?: boolean | SurveyTopicCountOutputTypeCountSurveyQuestionGroupArgs
     };
@@ -130242,6 +130248,12 @@ export namespace Prisma {
          * Select specific fields to fetch from the SurveyTopicCountOutputType
          */
         select?: SurveyTopicCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * SurveyTopicCountOutputType without action
+     */
+    export type SurveyTopicCountOutputTypeCountClusterSurveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ClusterSurveyWhereInput
     };
     /**
      * SurveyTopicCountOutputType without action
@@ -130260,9 +130272,11 @@ export namespace Prisma {
      */
     export type SurveyQuestionGroupCountOutputType = {
         surveyQuestion: number
+        surveyTopic: number
     };
     export type SurveyQuestionGroupCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         surveyQuestion?: boolean | SurveyQuestionGroupCountOutputTypeCountSurveyQuestionArgs
+        surveyTopic?: boolean | SurveyQuestionGroupCountOutputTypeCountSurveyTopicArgs
     };
     /**
      * SurveyQuestionGroupCountOutputType without action
@@ -130278,6 +130292,12 @@ export namespace Prisma {
      */
     export type SurveyQuestionGroupCountOutputTypeCountSurveyQuestionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: SurveyQuestionWhereInput
+    };
+    /**
+     * SurveyQuestionGroupCountOutputType without action
+     */
+    export type SurveyQuestionGroupCountOutputTypeCountSurveyTopicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: SurveyTopicWhereInput
     };
     /**
      * Count Type ClusterSurveyCountOutputType
@@ -267783,6 +267803,7 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
+        clusterSurvey?: boolean | SurveyTopic$clusterSurveyArgs<ExtArgs>
         survey?: boolean | SurveyTopic$surveyArgs<ExtArgs>
         surveyQuestionGroup?: boolean | SurveyTopic$surveyQuestionGroupArgs<ExtArgs>
         _count?: boolean | SurveyTopicCountOutputTypeDefaultArgs<ExtArgs>
@@ -267819,6 +267840,7 @@ export namespace Prisma {
     };
     export type SurveyTopicOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name", ExtArgs["result"]["surveyTopic"]>;
     export type SurveyTopicInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        clusterSurvey?: boolean | SurveyTopic$clusterSurveyArgs<ExtArgs>
         survey?: boolean | SurveyTopic$surveyArgs<ExtArgs>
         surveyQuestionGroup?: boolean | SurveyTopic$surveyQuestionGroupArgs<ExtArgs>
         _count?: boolean | SurveyTopicCountOutputTypeDefaultArgs<ExtArgs>
@@ -267828,6 +267850,7 @@ export namespace Prisma {
     export type $SurveyTopicPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "SurveyTopic"
         objects: {
+            clusterSurvey: Prisma.$ClusterSurveyPayload<ExtArgs>[]
             survey: Prisma.$SurveyPayload<ExtArgs>[]
             surveyQuestionGroup: Prisma.$SurveyQuestionGroupPayload<ExtArgs>[]
         }
@@ -268217,6 +268240,29 @@ export namespace Prisma {
         limit?: number
     };
     /**
+     * SurveyTopic.clusterSurvey
+     */
+    export type SurveyTopic$clusterSurveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ClusterSurvey
+         */
+        select?: ClusterSurveySelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ClusterSurvey
+         */
+        omit?: ClusterSurveyOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClusterSurveyInclude<ExtArgs> | null
+        where?: ClusterSurveyWhereInput
+        orderBy?: ClusterSurveyOrderByWithRelationInput | ClusterSurveyOrderByWithRelationInput[]
+        cursor?: ClusterSurveyWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ClusterSurveyScalarFieldEnum | ClusterSurveyScalarFieldEnum[]
+    };
+    /**
      * SurveyTopic.survey
      */
     export type SurveyTopic$surveyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -268296,7 +268342,6 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         name: string | null
-        surveyTopicId: string | null
     };
     export type SurveyQuestionGroupMaxAggregateOutputType = {
         id: string | null
@@ -268307,7 +268352,6 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         name: string | null
-        surveyTopicId: string | null
     };
     export type SurveyQuestionGroupCountAggregateOutputType = {
         id: number
@@ -268318,7 +268362,6 @@ export namespace Prisma {
         createdAt: number
         updatedAt: number
         name: number
-        surveyTopicId: number
         _all: number
     };
     export type SurveyQuestionGroupMinAggregateInputType = {
@@ -268330,7 +268373,6 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         name?: true
-        surveyTopicId?: true
     };
     export type SurveyQuestionGroupMaxAggregateInputType = {
         id?: true
@@ -268341,7 +268383,6 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         name?: true
-        surveyTopicId?: true
     };
     export type SurveyQuestionGroupCountAggregateInputType = {
         id?: true
@@ -268352,7 +268393,6 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         name?: true
-        surveyTopicId?: true
         _all?: true
     };
     export type SurveyQuestionGroupAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -268430,7 +268470,6 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         name: string
-        surveyTopicId: string
         _count: SurveyQuestionGroupCountAggregateOutputType | null
         _min: SurveyQuestionGroupMinAggregateOutputType | null
         _max: SurveyQuestionGroupMaxAggregateOutputType | null
@@ -268456,9 +268495,8 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
-        surveyTopicId?: boolean
         surveyQuestion?: boolean | SurveyQuestionGroup$surveyQuestionArgs<ExtArgs>
-        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+        surveyTopic?: boolean | SurveyQuestionGroup$surveyTopicArgs<ExtArgs>
         _count?: boolean | SurveyQuestionGroupCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["surveyQuestionGroup"]>;
     export type SurveyQuestionGroupSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -268470,8 +268508,6 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
-        surveyTopicId?: boolean
-        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["surveyQuestionGroup"]>;
     export type SurveyQuestionGroupSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -268482,8 +268518,6 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
-        surveyTopicId?: boolean
-        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["surveyQuestionGroup"]>;
     export type SurveyQuestionGroupSelectScalar = {
         id?: boolean
@@ -268494,25 +268528,20 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
-        surveyTopicId?: boolean
     };
-    export type SurveyQuestionGroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "surveyTopicId", ExtArgs["result"]["surveyQuestionGroup"]>;
+    export type SurveyQuestionGroupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name", ExtArgs["result"]["surveyQuestionGroup"]>;
     export type SurveyQuestionGroupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         surveyQuestion?: boolean | SurveyQuestionGroup$surveyQuestionArgs<ExtArgs>
-        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+        surveyTopic?: boolean | SurveyQuestionGroup$surveyTopicArgs<ExtArgs>
         _count?: boolean | SurveyQuestionGroupCountOutputTypeDefaultArgs<ExtArgs>
     };
-    export type SurveyQuestionGroupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
-    };
-    export type SurveyQuestionGroupIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
-    };
+    export type SurveyQuestionGroupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type SurveyQuestionGroupIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
     export type $SurveyQuestionGroupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "SurveyQuestionGroup"
         objects: {
             surveyQuestion: Prisma.$SurveyQuestionPayload<ExtArgs>[]
-            surveyTopic: Prisma.$SurveyTopicPayload<ExtArgs>
+            surveyTopic: Prisma.$SurveyTopicPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -268523,7 +268552,6 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             name: string
-            surveyTopicId: string
         }, ExtArgs["result"]["surveyQuestionGroup"]>
         composites: {}
     };
@@ -268769,10 +268797,6 @@ export namespace Prisma {
          */
         data: SurveyQuestionGroupCreateManyInput | SurveyQuestionGroupCreateManyInput[]
         skipDuplicates?: boolean
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: SurveyQuestionGroupIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * SurveyQuestionGroup update
@@ -268840,10 +268864,6 @@ export namespace Prisma {
          * Limit how many SurveyQuestionGroups to update.
          */
         limit?: number
-        /**
-         * Choose, which related nodes to fetch as well
-         */
-        include?: SurveyQuestionGroupIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * SurveyQuestionGroup upsert
@@ -268932,6 +268952,29 @@ export namespace Prisma {
         distinct?: SurveyQuestionScalarFieldEnum | SurveyQuestionScalarFieldEnum[]
     };
     /**
+     * SurveyQuestionGroup.surveyTopic
+     */
+    export type SurveyQuestionGroup$surveyTopicArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SurveyTopic
+         */
+        select?: SurveyTopicSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SurveyTopic
+         */
+        omit?: SurveyTopicOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SurveyTopicInclude<ExtArgs> | null
+        where?: SurveyTopicWhereInput
+        orderBy?: SurveyTopicOrderByWithRelationInput | SurveyTopicOrderByWithRelationInput[]
+        cursor?: SurveyTopicWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: SurveyTopicScalarFieldEnum | SurveyTopicScalarFieldEnum[]
+    };
+    /**
      * SurveyQuestionGroup without action
      */
     export type SurveyQuestionGroupDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -268965,10 +269008,12 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         name: string | null
+        additionalSuggestion: boolean | null
         startDate: Date | null
         endDate: Date | null
         isPublic: boolean | null
         anonymous: boolean | null
+        surveyTopicId: string | null
     };
     export type ClusterSurveyMaxAggregateOutputType = {
         id: string | null
@@ -268979,10 +269024,12 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
         name: string | null
+        additionalSuggestion: boolean | null
         startDate: Date | null
         endDate: Date | null
         isPublic: boolean | null
         anonymous: boolean | null
+        surveyTopicId: string | null
     };
     export type ClusterSurveyCountAggregateOutputType = {
         id: number
@@ -268993,10 +269040,12 @@ export namespace Prisma {
         createdAt: number
         updatedAt: number
         name: number
+        additionalSuggestion: number
         startDate: number
         endDate: number
         isPublic: number
         anonymous: number
+        surveyTopicId: number
         _all: number
     };
     export type ClusterSurveyMinAggregateInputType = {
@@ -269008,10 +269057,12 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         name?: true
+        additionalSuggestion?: true
         startDate?: true
         endDate?: true
         isPublic?: true
         anonymous?: true
+        surveyTopicId?: true
     };
     export type ClusterSurveyMaxAggregateInputType = {
         id?: true
@@ -269022,10 +269073,12 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         name?: true
+        additionalSuggestion?: true
         startDate?: true
         endDate?: true
         isPublic?: true
         anonymous?: true
+        surveyTopicId?: true
     };
     export type ClusterSurveyCountAggregateInputType = {
         id?: true
@@ -269036,10 +269089,12 @@ export namespace Prisma {
         createdAt?: true
         updatedAt?: true
         name?: true
+        additionalSuggestion?: true
         startDate?: true
         endDate?: true
         isPublic?: true
         anonymous?: true
+        surveyTopicId?: true
         _all?: true
     };
     export type ClusterSurveyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -269117,10 +269172,12 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         name: string
+        additionalSuggestion: boolean
         startDate: Date
         endDate: Date | null
         isPublic: boolean
         anonymous: boolean
+        surveyTopicId: string
         _count: ClusterSurveyCountAggregateOutputType | null
         _min: ClusterSurveyMinAggregateOutputType | null
         _max: ClusterSurveyMaxAggregateOutputType | null
@@ -269146,10 +269203,13 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
+        additionalSuggestion?: boolean
         startDate?: boolean
         endDate?: boolean
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId?: boolean
+        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
         surveyObjectType?: boolean | ClusterSurvey$surveyObjectTypeArgs<ExtArgs>
         lecturers?: boolean | ClusterSurvey$lecturersArgs<ExtArgs>
         surveyChoice?: boolean | ClusterSurvey$surveyChoiceArgs<ExtArgs>
@@ -269166,10 +269226,13 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
+        additionalSuggestion?: boolean
         startDate?: boolean
         endDate?: boolean
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId?: boolean
+        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["clusterSurvey"]>;
     export type ClusterSurveySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
         id?: boolean
@@ -269180,10 +269243,13 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
+        additionalSuggestion?: boolean
         startDate?: boolean
         endDate?: boolean
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId?: boolean
+        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["clusterSurvey"]>;
     export type ClusterSurveySelectScalar = {
         id?: boolean
@@ -269194,13 +269260,16 @@ export namespace Prisma {
         createdAt?: boolean
         updatedAt?: boolean
         name?: boolean
+        additionalSuggestion?: boolean
         startDate?: boolean
         endDate?: boolean
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId?: boolean
     };
-    export type ClusterSurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "startDate" | "endDate" | "isPublic" | "anonymous", ExtArgs["result"]["clusterSurvey"]>;
+    export type ClusterSurveyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "additionalSuggestion" | "startDate" | "endDate" | "isPublic" | "anonymous" | "surveyTopicId", ExtArgs["result"]["clusterSurvey"]>;
     export type ClusterSurveyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
         surveyObjectType?: boolean | ClusterSurvey$surveyObjectTypeArgs<ExtArgs>
         lecturers?: boolean | ClusterSurvey$lecturersArgs<ExtArgs>
         surveyChoice?: boolean | ClusterSurvey$surveyChoiceArgs<ExtArgs>
@@ -269208,11 +269277,16 @@ export namespace Prisma {
         surveys?: boolean | ClusterSurvey$surveysArgs<ExtArgs>
         _count?: boolean | ClusterSurveyCountOutputTypeDefaultArgs<ExtArgs>
     };
-    export type ClusterSurveyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
-    export type ClusterSurveyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
+    export type ClusterSurveyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+    };
+    export type ClusterSurveyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        surveyTopic?: boolean | SurveyTopicDefaultArgs<ExtArgs>
+    };
     export type $ClusterSurveyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ClusterSurvey"
         objects: {
+            surveyTopic: Prisma.$SurveyTopicPayload<ExtArgs>
             surveyObjectType: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
             lecturers: Prisma.$LecturerPayload<ExtArgs>[]
             surveyChoice: Prisma.$SurveyChoicePayload<ExtArgs>[]
@@ -269228,10 +269302,12 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             name: string
+            additionalSuggestion: boolean
             startDate: Date
             endDate: Date | null
             isPublic: boolean
             anonymous: boolean
+            surveyTopicId: string
         }, ExtArgs["result"]["clusterSurvey"]>
         composites: {}
     };
@@ -269477,6 +269553,10 @@ export namespace Prisma {
          */
         data: ClusterSurveyCreateManyInput | ClusterSurveyCreateManyInput[]
         skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClusterSurveyIncludeCreateManyAndReturn<ExtArgs> | null
     };
     /**
      * ClusterSurvey update
@@ -269544,6 +269624,10 @@ export namespace Prisma {
          * Limit how many ClusterSurveys to update.
          */
         limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ClusterSurveyIncludeUpdateManyAndReturn<ExtArgs> | null
     };
     /**
      * ClusterSurvey upsert
@@ -338248,6 +338332,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SurveyTopic"> | Date | string
         updatedAt?: DateTimeFilter<"SurveyTopic"> | Date | string
         name?: StringFilter<"SurveyTopic"> | string
+        clusterSurvey?: ClusterSurveyListRelationFilter
         survey?: SurveyListRelationFilter
         surveyQuestionGroup?: SurveyQuestionGroupListRelationFilter
     };
@@ -338260,6 +338345,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        clusterSurvey?: ClusterSurveyOrderByRelationAggregateInput
         survey?: SurveyOrderByRelationAggregateInput
         surveyQuestionGroup?: SurveyQuestionGroupOrderByRelationAggregateInput
         _relevance?: SurveyTopicOrderByRelevanceInput
@@ -338276,6 +338362,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SurveyTopic"> | Date | string
         updatedAt?: DateTimeFilter<"SurveyTopic"> | Date | string
         name?: StringFilter<"SurveyTopic"> | string
+        clusterSurvey?: ClusterSurveyListRelationFilter
         survey?: SurveyListRelationFilter
         surveyQuestionGroup?: SurveyQuestionGroupListRelationFilter
     }, "id" | "code">;
@@ -338317,9 +338404,8 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SurveyQuestionGroup"> | Date | string
         updatedAt?: DateTimeFilter<"SurveyQuestionGroup"> | Date | string
         name?: StringFilter<"SurveyQuestionGroup"> | string
-        surveyTopicId?: StringFilter<"SurveyQuestionGroup"> | string
         surveyQuestion?: SurveyQuestionListRelationFilter
-        surveyTopic?: XOR<SurveyTopicScalarRelationFilter, SurveyTopicWhereInput>
+        surveyTopic?: SurveyTopicListRelationFilter
     };
     export type SurveyQuestionGroupOrderByWithRelationInput = {
         id?: SortOrder
@@ -338330,9 +338416,8 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
-        surveyTopicId?: SortOrder
         surveyQuestion?: SurveyQuestionOrderByRelationAggregateInput
-        surveyTopic?: SurveyTopicOrderByWithRelationInput
+        surveyTopic?: SurveyTopicOrderByRelationAggregateInput
         _relevance?: SurveyQuestionGroupOrderByRelevanceInput
     };
     export type SurveyQuestionGroupWhereUniqueInput = Prisma.AtLeast<{
@@ -338347,9 +338432,8 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SurveyQuestionGroup"> | Date | string
         updatedAt?: DateTimeFilter<"SurveyQuestionGroup"> | Date | string
         name?: StringFilter<"SurveyQuestionGroup"> | string
-        surveyTopicId?: StringFilter<"SurveyQuestionGroup"> | string
         surveyQuestion?: SurveyQuestionListRelationFilter
-        surveyTopic?: XOR<SurveyTopicScalarRelationFilter, SurveyTopicWhereInput>
+        surveyTopic?: SurveyTopicListRelationFilter
     }, "id" | "code">;
     export type SurveyQuestionGroupOrderByWithAggregationInput = {
         id?: SortOrder
@@ -338360,7 +338444,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
-        surveyTopicId?: SortOrder
         _count?: SurveyQuestionGroupCountOrderByAggregateInput
         _max?: SurveyQuestionGroupMaxOrderByAggregateInput
         _min?: SurveyQuestionGroupMinOrderByAggregateInput
@@ -338377,7 +338460,6 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"SurveyQuestionGroup"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"SurveyQuestionGroup"> | Date | string
         name?: StringWithAggregatesFilter<"SurveyQuestionGroup"> | string
-        surveyTopicId?: StringWithAggregatesFilter<"SurveyQuestionGroup"> | string
     };
     export type ClusterSurveyWhereInput = {
         AND?: ClusterSurveyWhereInput | ClusterSurveyWhereInput[]
@@ -338391,10 +338473,13 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ClusterSurvey"> | Date | string
         updatedAt?: DateTimeFilter<"ClusterSurvey"> | Date | string
         name?: StringFilter<"ClusterSurvey"> | string
+        additionalSuggestion?: BoolFilter<"ClusterSurvey"> | boolean
         startDate?: DateTimeFilter<"ClusterSurvey"> | Date | string
         endDate?: DateTimeNullableFilter<"ClusterSurvey"> | Date | string | null
         isPublic?: BoolFilter<"ClusterSurvey"> | boolean
         anonymous?: BoolFilter<"ClusterSurvey"> | boolean
+        surveyTopicId?: StringFilter<"ClusterSurvey"> | string
+        surveyTopic?: XOR<SurveyTopicScalarRelationFilter, SurveyTopicWhereInput>
         surveyObjectType?: SurveyObjectTypeListRelationFilter
         lecturers?: LecturerListRelationFilter
         surveyChoice?: SurveyChoiceListRelationFilter
@@ -338410,10 +338495,13 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrderInput | SortOrder
         isPublic?: SortOrder
         anonymous?: SortOrder
+        surveyTopicId?: SortOrder
+        surveyTopic?: SurveyTopicOrderByWithRelationInput
         surveyObjectType?: SurveyObjectTypeOrderByRelationAggregateInput
         lecturers?: LecturerOrderByRelationAggregateInput
         surveyChoice?: SurveyChoiceOrderByRelationAggregateInput
@@ -338433,10 +338521,13 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ClusterSurvey"> | Date | string
         updatedAt?: DateTimeFilter<"ClusterSurvey"> | Date | string
         name?: StringFilter<"ClusterSurvey"> | string
+        additionalSuggestion?: BoolFilter<"ClusterSurvey"> | boolean
         startDate?: DateTimeFilter<"ClusterSurvey"> | Date | string
         endDate?: DateTimeNullableFilter<"ClusterSurvey"> | Date | string | null
         isPublic?: BoolFilter<"ClusterSurvey"> | boolean
         anonymous?: BoolFilter<"ClusterSurvey"> | boolean
+        surveyTopicId?: StringFilter<"ClusterSurvey"> | string
+        surveyTopic?: XOR<SurveyTopicScalarRelationFilter, SurveyTopicWhereInput>
         surveyObjectType?: SurveyObjectTypeListRelationFilter
         lecturers?: LecturerListRelationFilter
         surveyChoice?: SurveyChoiceListRelationFilter
@@ -338452,10 +338543,12 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrderInput | SortOrder
         isPublic?: SortOrder
         anonymous?: SortOrder
+        surveyTopicId?: SortOrder
         _count?: ClusterSurveyCountOrderByAggregateInput
         _max?: ClusterSurveyMaxOrderByAggregateInput
         _min?: ClusterSurveyMinOrderByAggregateInput
@@ -338472,10 +338565,12 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"ClusterSurvey"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"ClusterSurvey"> | Date | string
         name?: StringWithAggregatesFilter<"ClusterSurvey"> | string
+        additionalSuggestion?: BoolWithAggregatesFilter<"ClusterSurvey"> | boolean
         startDate?: DateTimeWithAggregatesFilter<"ClusterSurvey"> | Date | string
         endDate?: DateTimeNullableWithAggregatesFilter<"ClusterSurvey"> | Date | string | null
         isPublic?: BoolWithAggregatesFilter<"ClusterSurvey"> | boolean
         anonymous?: BoolWithAggregatesFilter<"ClusterSurvey"> | boolean
+        surveyTopicId?: StringWithAggregatesFilter<"ClusterSurvey"> | string
     };
     export type SurveyWhereInput = {
         AND?: SurveyWhereInput | SurveyWhereInput[]
@@ -365202,6 +365297,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
         survey?: SurveyCreateNestedManyWithoutSurveyTopicInput
         surveyQuestionGroup?: SurveyQuestionGroupCreateNestedManyWithoutSurveyTopicInput
     };
@@ -365214,6 +365310,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
         survey?: SurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
         surveyQuestionGroup?: SurveyQuestionGroupUncheckedCreateNestedManyWithoutSurveyTopicInput
     };
@@ -365226,6 +365323,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
         survey?: SurveyUpdateManyWithoutSurveyTopicNestedInput
         surveyQuestionGroup?: SurveyQuestionGroupUpdateManyWithoutSurveyTopicNestedInput
     };
@@ -365238,6 +365336,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
         surveyQuestionGroup?: SurveyQuestionGroupUncheckedUpdateManyWithoutSurveyTopicNestedInput
     };
@@ -365281,7 +365380,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         name: string
         surveyQuestion?: SurveyQuestionCreateNestedManyWithoutSurveyQuestionGroupInput
-        surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyQuestionGroupInput
+        surveyTopic?: SurveyTopicCreateNestedManyWithoutSurveyQuestionGroupInput
     };
     export type SurveyQuestionGroupUncheckedCreateInput = {
         id?: string
@@ -365292,8 +365391,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
-        surveyTopicId: string
         surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutSurveyQuestionGroupInput
+        surveyTopic?: SurveyTopicUncheckedCreateNestedManyWithoutSurveyQuestionGroupInput
     };
     export type SurveyQuestionGroupUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365305,7 +365404,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
         surveyQuestion?: SurveyQuestionUpdateManyWithoutSurveyQuestionGroupNestedInput
-        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyQuestionGroupNestedInput
+        surveyTopic?: SurveyTopicUpdateManyWithoutSurveyQuestionGroupNestedInput
     };
     export type SurveyQuestionGroupUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365316,8 +365415,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
-        surveyTopicId?: StringFieldUpdateOperationsInput | string
         surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutSurveyQuestionGroupNestedInput
+        surveyTopic?: SurveyTopicUncheckedUpdateManyWithoutSurveyQuestionGroupNestedInput
     };
     export type SurveyQuestionGroupCreateManyInput = {
         id?: string
@@ -365328,7 +365427,6 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
-        surveyTopicId: string
     };
     export type SurveyQuestionGroupUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365349,7 +365447,6 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
-        surveyTopicId?: StringFieldUpdateOperationsInput | string
     };
     export type ClusterSurveyCreateInput = {
         id?: string
@@ -365360,10 +365457,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopic: SurveyTopicCreateNestedOneWithoutClusterSurveyInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutClusterSurveyInput
         lecturers?: LecturerCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceCreateNestedManyWithoutClusterSurveyInput
@@ -365379,10 +365478,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId: string
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutClusterSurveyInput
         lecturers?: LecturerUncheckedCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutClusterSurveyInput
@@ -365398,10 +365499,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutClusterSurveyNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutClusterSurveyNestedInput
         lecturers?: LecturerUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUpdateManyWithoutClusterSurveyNestedInput
@@ -365417,10 +365520,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutClusterSurveyNestedInput
         lecturers?: LecturerUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutClusterSurveyNestedInput
@@ -365436,10 +365541,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId: string
     };
     export type ClusterSurveyUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365450,6 +365557,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
@@ -365464,10 +365572,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
     };
     export type SurveyCreateInput = {
         id?: string
@@ -384825,11 +384935,15 @@ export namespace Prisma {
         some?: SurveyQuestionWhereInput
         none?: SurveyQuestionWhereInput
     };
-    export type SurveyTopicScalarRelationFilter = {
-        is?: SurveyTopicWhereInput
-        isNot?: SurveyTopicWhereInput
+    export type SurveyTopicListRelationFilter = {
+        every?: SurveyTopicWhereInput
+        some?: SurveyTopicWhereInput
+        none?: SurveyTopicWhereInput
     };
     export type SurveyQuestionOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type SurveyTopicOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type SurveyQuestionGroupOrderByRelevanceInput = {
@@ -384846,7 +384960,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
-        surveyTopicId?: SortOrder
     };
     export type SurveyQuestionGroupMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -384857,7 +384970,6 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
-        surveyTopicId?: SortOrder
     };
     export type SurveyQuestionGroupMinOrderByAggregateInput = {
         id?: SortOrder
@@ -384868,7 +384980,10 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
-        surveyTopicId?: SortOrder
+    };
+    export type SurveyTopicScalarRelationFilter = {
+        is?: SurveyTopicWhereInput
+        isNot?: SurveyTopicWhereInput
     };
     export type SurveyChoiceListRelationFilter = {
         every?: SurveyChoiceWhereInput
@@ -384892,10 +385007,12 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrder
         isPublic?: SortOrder
         anonymous?: SortOrder
+        surveyTopicId?: SortOrder
     };
     export type ClusterSurveyMaxOrderByAggregateInput = {
         id?: SortOrder
@@ -384906,10 +385023,12 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrder
         isPublic?: SortOrder
         anonymous?: SortOrder
+        surveyTopicId?: SortOrder
     };
     export type ClusterSurveyMinOrderByAggregateInput = {
         id?: SortOrder
@@ -384920,10 +385039,12 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         name?: SortOrder
+        additionalSuggestion?: SortOrder
         startDate?: SortOrder
         endDate?: SortOrder
         isPublic?: SortOrder
         anonymous?: SortOrder
+        surveyTopicId?: SortOrder
     };
     export type ClusterSurveyNullableScalarRelationFilter = {
         is?: ClusterSurveyWhereInput | null
@@ -405833,6 +405954,12 @@ export namespace Prisma {
         updateMany?: ClusterSurveyUpdateManyWithWhereWithoutSurveyObjectTypeInput | ClusterSurveyUpdateManyWithWhereWithoutSurveyObjectTypeInput[]
         deleteMany?: ClusterSurveyScalarWhereInput | ClusterSurveyScalarWhereInput[]
     };
+    export type ClusterSurveyCreateNestedManyWithoutSurveyTopicInput = {
+        create?: XOR<ClusterSurveyCreateWithoutSurveyTopicInput, ClusterSurveyUncheckedCreateWithoutSurveyTopicInput> | ClusterSurveyCreateWithoutSurveyTopicInput[] | ClusterSurveyUncheckedCreateWithoutSurveyTopicInput[]
+        connectOrCreate?: ClusterSurveyCreateOrConnectWithoutSurveyTopicInput | ClusterSurveyCreateOrConnectWithoutSurveyTopicInput[]
+        createMany?: ClusterSurveyCreateManySurveyTopicInputEnvelope
+        connect?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
+    };
     export type SurveyCreateNestedManyWithoutSurveyTopicInput = {
         create?: XOR<SurveyCreateWithoutSurveyTopicInput, SurveyUncheckedCreateWithoutSurveyTopicInput> | SurveyCreateWithoutSurveyTopicInput[] | SurveyUncheckedCreateWithoutSurveyTopicInput[]
         connectOrCreate?: SurveyCreateOrConnectWithoutSurveyTopicInput | SurveyCreateOrConnectWithoutSurveyTopicInput[]
@@ -405842,8 +405969,13 @@ export namespace Prisma {
     export type SurveyQuestionGroupCreateNestedManyWithoutSurveyTopicInput = {
         create?: XOR<SurveyQuestionGroupCreateWithoutSurveyTopicInput, SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput> | SurveyQuestionGroupCreateWithoutSurveyTopicInput[] | SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput[]
         connectOrCreate?: SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput | SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput[]
-        createMany?: SurveyQuestionGroupCreateManySurveyTopicInputEnvelope
         connect?: SurveyQuestionGroupWhereUniqueInput | SurveyQuestionGroupWhereUniqueInput[]
+    };
+    export type ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput = {
+        create?: XOR<ClusterSurveyCreateWithoutSurveyTopicInput, ClusterSurveyUncheckedCreateWithoutSurveyTopicInput> | ClusterSurveyCreateWithoutSurveyTopicInput[] | ClusterSurveyUncheckedCreateWithoutSurveyTopicInput[]
+        connectOrCreate?: ClusterSurveyCreateOrConnectWithoutSurveyTopicInput | ClusterSurveyCreateOrConnectWithoutSurveyTopicInput[]
+        createMany?: ClusterSurveyCreateManySurveyTopicInputEnvelope
+        connect?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
     };
     export type SurveyUncheckedCreateNestedManyWithoutSurveyTopicInput = {
         create?: XOR<SurveyCreateWithoutSurveyTopicInput, SurveyUncheckedCreateWithoutSurveyTopicInput> | SurveyCreateWithoutSurveyTopicInput[] | SurveyUncheckedCreateWithoutSurveyTopicInput[]
@@ -405854,8 +405986,20 @@ export namespace Prisma {
     export type SurveyQuestionGroupUncheckedCreateNestedManyWithoutSurveyTopicInput = {
         create?: XOR<SurveyQuestionGroupCreateWithoutSurveyTopicInput, SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput> | SurveyQuestionGroupCreateWithoutSurveyTopicInput[] | SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput[]
         connectOrCreate?: SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput | SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput[]
-        createMany?: SurveyQuestionGroupCreateManySurveyTopicInputEnvelope
         connect?: SurveyQuestionGroupWhereUniqueInput | SurveyQuestionGroupWhereUniqueInput[]
+    };
+    export type ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput = {
+        create?: XOR<ClusterSurveyCreateWithoutSurveyTopicInput, ClusterSurveyUncheckedCreateWithoutSurveyTopicInput> | ClusterSurveyCreateWithoutSurveyTopicInput[] | ClusterSurveyUncheckedCreateWithoutSurveyTopicInput[]
+        connectOrCreate?: ClusterSurveyCreateOrConnectWithoutSurveyTopicInput | ClusterSurveyCreateOrConnectWithoutSurveyTopicInput[]
+        upsert?: ClusterSurveyUpsertWithWhereUniqueWithoutSurveyTopicInput | ClusterSurveyUpsertWithWhereUniqueWithoutSurveyTopicInput[]
+        createMany?: ClusterSurveyCreateManySurveyTopicInputEnvelope
+        set?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
+        disconnect?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
+        delete?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
+        connect?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
+        update?: ClusterSurveyUpdateWithWhereUniqueWithoutSurveyTopicInput | ClusterSurveyUpdateWithWhereUniqueWithoutSurveyTopicInput[]
+        updateMany?: ClusterSurveyUpdateManyWithWhereWithoutSurveyTopicInput | ClusterSurveyUpdateManyWithWhereWithoutSurveyTopicInput[]
+        deleteMany?: ClusterSurveyScalarWhereInput | ClusterSurveyScalarWhereInput[]
     };
     export type SurveyUpdateManyWithoutSurveyTopicNestedInput = {
         create?: XOR<SurveyCreateWithoutSurveyTopicInput, SurveyUncheckedCreateWithoutSurveyTopicInput> | SurveyCreateWithoutSurveyTopicInput[] | SurveyUncheckedCreateWithoutSurveyTopicInput[]
@@ -405874,7 +406018,6 @@ export namespace Prisma {
         create?: XOR<SurveyQuestionGroupCreateWithoutSurveyTopicInput, SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput> | SurveyQuestionGroupCreateWithoutSurveyTopicInput[] | SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput[]
         connectOrCreate?: SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput | SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput[]
         upsert?: SurveyQuestionGroupUpsertWithWhereUniqueWithoutSurveyTopicInput | SurveyQuestionGroupUpsertWithWhereUniqueWithoutSurveyTopicInput[]
-        createMany?: SurveyQuestionGroupCreateManySurveyTopicInputEnvelope
         set?: SurveyQuestionGroupWhereUniqueInput | SurveyQuestionGroupWhereUniqueInput[]
         disconnect?: SurveyQuestionGroupWhereUniqueInput | SurveyQuestionGroupWhereUniqueInput[]
         delete?: SurveyQuestionGroupWhereUniqueInput | SurveyQuestionGroupWhereUniqueInput[]
@@ -405882,6 +406025,19 @@ export namespace Prisma {
         update?: SurveyQuestionGroupUpdateWithWhereUniqueWithoutSurveyTopicInput | SurveyQuestionGroupUpdateWithWhereUniqueWithoutSurveyTopicInput[]
         updateMany?: SurveyQuestionGroupUpdateManyWithWhereWithoutSurveyTopicInput | SurveyQuestionGroupUpdateManyWithWhereWithoutSurveyTopicInput[]
         deleteMany?: SurveyQuestionGroupScalarWhereInput | SurveyQuestionGroupScalarWhereInput[]
+    };
+    export type ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput = {
+        create?: XOR<ClusterSurveyCreateWithoutSurveyTopicInput, ClusterSurveyUncheckedCreateWithoutSurveyTopicInput> | ClusterSurveyCreateWithoutSurveyTopicInput[] | ClusterSurveyUncheckedCreateWithoutSurveyTopicInput[]
+        connectOrCreate?: ClusterSurveyCreateOrConnectWithoutSurveyTopicInput | ClusterSurveyCreateOrConnectWithoutSurveyTopicInput[]
+        upsert?: ClusterSurveyUpsertWithWhereUniqueWithoutSurveyTopicInput | ClusterSurveyUpsertWithWhereUniqueWithoutSurveyTopicInput[]
+        createMany?: ClusterSurveyCreateManySurveyTopicInputEnvelope
+        set?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
+        disconnect?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
+        delete?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
+        connect?: ClusterSurveyWhereUniqueInput | ClusterSurveyWhereUniqueInput[]
+        update?: ClusterSurveyUpdateWithWhereUniqueWithoutSurveyTopicInput | ClusterSurveyUpdateWithWhereUniqueWithoutSurveyTopicInput[]
+        updateMany?: ClusterSurveyUpdateManyWithWhereWithoutSurveyTopicInput | ClusterSurveyUpdateManyWithWhereWithoutSurveyTopicInput[]
+        deleteMany?: ClusterSurveyScalarWhereInput | ClusterSurveyScalarWhereInput[]
     };
     export type SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput = {
         create?: XOR<SurveyCreateWithoutSurveyTopicInput, SurveyUncheckedCreateWithoutSurveyTopicInput> | SurveyCreateWithoutSurveyTopicInput[] | SurveyUncheckedCreateWithoutSurveyTopicInput[]
@@ -405900,7 +406056,6 @@ export namespace Prisma {
         create?: XOR<SurveyQuestionGroupCreateWithoutSurveyTopicInput, SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput> | SurveyQuestionGroupCreateWithoutSurveyTopicInput[] | SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput[]
         connectOrCreate?: SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput | SurveyQuestionGroupCreateOrConnectWithoutSurveyTopicInput[]
         upsert?: SurveyQuestionGroupUpsertWithWhereUniqueWithoutSurveyTopicInput | SurveyQuestionGroupUpsertWithWhereUniqueWithoutSurveyTopicInput[]
-        createMany?: SurveyQuestionGroupCreateManySurveyTopicInputEnvelope
         set?: SurveyQuestionGroupWhereUniqueInput | SurveyQuestionGroupWhereUniqueInput[]
         disconnect?: SurveyQuestionGroupWhereUniqueInput | SurveyQuestionGroupWhereUniqueInput[]
         delete?: SurveyQuestionGroupWhereUniqueInput | SurveyQuestionGroupWhereUniqueInput[]
@@ -405915,16 +406070,21 @@ export namespace Prisma {
         createMany?: SurveyQuestionCreateManySurveyQuestionGroupInputEnvelope
         connect?: SurveyQuestionWhereUniqueInput | SurveyQuestionWhereUniqueInput[]
     };
-    export type SurveyTopicCreateNestedOneWithoutSurveyQuestionGroupInput = {
-        create?: XOR<SurveyTopicCreateWithoutSurveyQuestionGroupInput, SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput>
-        connectOrCreate?: SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput
-        connect?: SurveyTopicWhereUniqueInput
+    export type SurveyTopicCreateNestedManyWithoutSurveyQuestionGroupInput = {
+        create?: XOR<SurveyTopicCreateWithoutSurveyQuestionGroupInput, SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput> | SurveyTopicCreateWithoutSurveyQuestionGroupInput[] | SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput[]
+        connectOrCreate?: SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput | SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput[]
+        connect?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
     };
     export type SurveyQuestionUncheckedCreateNestedManyWithoutSurveyQuestionGroupInput = {
         create?: XOR<SurveyQuestionCreateWithoutSurveyQuestionGroupInput, SurveyQuestionUncheckedCreateWithoutSurveyQuestionGroupInput> | SurveyQuestionCreateWithoutSurveyQuestionGroupInput[] | SurveyQuestionUncheckedCreateWithoutSurveyQuestionGroupInput[]
         connectOrCreate?: SurveyQuestionCreateOrConnectWithoutSurveyQuestionGroupInput | SurveyQuestionCreateOrConnectWithoutSurveyQuestionGroupInput[]
         createMany?: SurveyQuestionCreateManySurveyQuestionGroupInputEnvelope
         connect?: SurveyQuestionWhereUniqueInput | SurveyQuestionWhereUniqueInput[]
+    };
+    export type SurveyTopicUncheckedCreateNestedManyWithoutSurveyQuestionGroupInput = {
+        create?: XOR<SurveyTopicCreateWithoutSurveyQuestionGroupInput, SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput> | SurveyTopicCreateWithoutSurveyQuestionGroupInput[] | SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput[]
+        connectOrCreate?: SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput | SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput[]
+        connect?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
     };
     export type SurveyQuestionUpdateManyWithoutSurveyQuestionGroupNestedInput = {
         create?: XOR<SurveyQuestionCreateWithoutSurveyQuestionGroupInput, SurveyQuestionUncheckedCreateWithoutSurveyQuestionGroupInput> | SurveyQuestionCreateWithoutSurveyQuestionGroupInput[] | SurveyQuestionUncheckedCreateWithoutSurveyQuestionGroupInput[]
@@ -405939,12 +406099,17 @@ export namespace Prisma {
         updateMany?: SurveyQuestionUpdateManyWithWhereWithoutSurveyQuestionGroupInput | SurveyQuestionUpdateManyWithWhereWithoutSurveyQuestionGroupInput[]
         deleteMany?: SurveyQuestionScalarWhereInput | SurveyQuestionScalarWhereInput[]
     };
-    export type SurveyTopicUpdateOneRequiredWithoutSurveyQuestionGroupNestedInput = {
-        create?: XOR<SurveyTopicCreateWithoutSurveyQuestionGroupInput, SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput>
-        connectOrCreate?: SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput
-        upsert?: SurveyTopicUpsertWithoutSurveyQuestionGroupInput
-        connect?: SurveyTopicWhereUniqueInput
-        update?: XOR<XOR<SurveyTopicUpdateToOneWithWhereWithoutSurveyQuestionGroupInput, SurveyTopicUpdateWithoutSurveyQuestionGroupInput>, SurveyTopicUncheckedUpdateWithoutSurveyQuestionGroupInput>
+    export type SurveyTopicUpdateManyWithoutSurveyQuestionGroupNestedInput = {
+        create?: XOR<SurveyTopicCreateWithoutSurveyQuestionGroupInput, SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput> | SurveyTopicCreateWithoutSurveyQuestionGroupInput[] | SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput[]
+        connectOrCreate?: SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput | SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput[]
+        upsert?: SurveyTopicUpsertWithWhereUniqueWithoutSurveyQuestionGroupInput | SurveyTopicUpsertWithWhereUniqueWithoutSurveyQuestionGroupInput[]
+        set?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
+        disconnect?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
+        delete?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
+        connect?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
+        update?: SurveyTopicUpdateWithWhereUniqueWithoutSurveyQuestionGroupInput | SurveyTopicUpdateWithWhereUniqueWithoutSurveyQuestionGroupInput[]
+        updateMany?: SurveyTopicUpdateManyWithWhereWithoutSurveyQuestionGroupInput | SurveyTopicUpdateManyWithWhereWithoutSurveyQuestionGroupInput[]
+        deleteMany?: SurveyTopicScalarWhereInput | SurveyTopicScalarWhereInput[]
     };
     export type SurveyQuestionUncheckedUpdateManyWithoutSurveyQuestionGroupNestedInput = {
         create?: XOR<SurveyQuestionCreateWithoutSurveyQuestionGroupInput, SurveyQuestionUncheckedCreateWithoutSurveyQuestionGroupInput> | SurveyQuestionCreateWithoutSurveyQuestionGroupInput[] | SurveyQuestionUncheckedCreateWithoutSurveyQuestionGroupInput[]
@@ -405958,6 +406123,23 @@ export namespace Prisma {
         update?: SurveyQuestionUpdateWithWhereUniqueWithoutSurveyQuestionGroupInput | SurveyQuestionUpdateWithWhereUniqueWithoutSurveyQuestionGroupInput[]
         updateMany?: SurveyQuestionUpdateManyWithWhereWithoutSurveyQuestionGroupInput | SurveyQuestionUpdateManyWithWhereWithoutSurveyQuestionGroupInput[]
         deleteMany?: SurveyQuestionScalarWhereInput | SurveyQuestionScalarWhereInput[]
+    };
+    export type SurveyTopicUncheckedUpdateManyWithoutSurveyQuestionGroupNestedInput = {
+        create?: XOR<SurveyTopicCreateWithoutSurveyQuestionGroupInput, SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput> | SurveyTopicCreateWithoutSurveyQuestionGroupInput[] | SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput[]
+        connectOrCreate?: SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput | SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput[]
+        upsert?: SurveyTopicUpsertWithWhereUniqueWithoutSurveyQuestionGroupInput | SurveyTopicUpsertWithWhereUniqueWithoutSurveyQuestionGroupInput[]
+        set?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
+        disconnect?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
+        delete?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
+        connect?: SurveyTopicWhereUniqueInput | SurveyTopicWhereUniqueInput[]
+        update?: SurveyTopicUpdateWithWhereUniqueWithoutSurveyQuestionGroupInput | SurveyTopicUpdateWithWhereUniqueWithoutSurveyQuestionGroupInput[]
+        updateMany?: SurveyTopicUpdateManyWithWhereWithoutSurveyQuestionGroupInput | SurveyTopicUpdateManyWithWhereWithoutSurveyQuestionGroupInput[]
+        deleteMany?: SurveyTopicScalarWhereInput | SurveyTopicScalarWhereInput[]
+    };
+    export type SurveyTopicCreateNestedOneWithoutClusterSurveyInput = {
+        create?: XOR<SurveyTopicCreateWithoutClusterSurveyInput, SurveyTopicUncheckedCreateWithoutClusterSurveyInput>
+        connectOrCreate?: SurveyTopicCreateOrConnectWithoutClusterSurveyInput
+        connect?: SurveyTopicWhereUniqueInput
     };
     export type SurveyObjectTypeCreateNestedManyWithoutClusterSurveyInput = {
         create?: XOR<SurveyObjectTypeCreateWithoutClusterSurveyInput, SurveyObjectTypeUncheckedCreateWithoutClusterSurveyInput> | SurveyObjectTypeCreateWithoutClusterSurveyInput[] | SurveyObjectTypeUncheckedCreateWithoutClusterSurveyInput[]
@@ -406014,6 +406196,13 @@ export namespace Prisma {
         connectOrCreate?: SurveyCreateOrConnectWithoutClusterSurveyInput | SurveyCreateOrConnectWithoutClusterSurveyInput[]
         createMany?: SurveyCreateManyClusterSurveyInputEnvelope
         connect?: SurveyWhereUniqueInput | SurveyWhereUniqueInput[]
+    };
+    export type SurveyTopicUpdateOneRequiredWithoutClusterSurveyNestedInput = {
+        create?: XOR<SurveyTopicCreateWithoutClusterSurveyInput, SurveyTopicUncheckedCreateWithoutClusterSurveyInput>
+        connectOrCreate?: SurveyTopicCreateOrConnectWithoutClusterSurveyInput
+        upsert?: SurveyTopicUpsertWithoutClusterSurveyInput
+        connect?: SurveyTopicWhereUniqueInput
+        update?: XOR<XOR<SurveyTopicUpdateToOneWithWhereWithoutClusterSurveyInput, SurveyTopicUpdateWithoutClusterSurveyInput>, SurveyTopicUncheckedUpdateWithoutClusterSurveyInput>
     };
     export type SurveyObjectTypeUpdateManyWithoutClusterSurveyNestedInput = {
         create?: XOR<SurveyObjectTypeCreateWithoutClusterSurveyInput, SurveyObjectTypeUncheckedCreateWithoutClusterSurveyInput> | SurveyObjectTypeCreateWithoutClusterSurveyInput[] | SurveyObjectTypeUncheckedCreateWithoutClusterSurveyInput[]
@@ -487595,10 +487784,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopic: SurveyTopicCreateNestedOneWithoutClusterSurveyInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceCreateNestedManyWithoutClusterSurveyInput
         surveyQuestion?: SurveyQuestionCreateNestedManyWithoutClusterSurveyInput
@@ -487613,10 +487804,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId: string
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutClusterSurveyInput
         surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutClusterSurveyInput
@@ -488386,10 +488579,12 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"ClusterSurvey"> | Date | string
         updatedAt?: DateTimeFilter<"ClusterSurvey"> | Date | string
         name?: StringFilter<"ClusterSurvey"> | string
+        additionalSuggestion?: BoolFilter<"ClusterSurvey"> | boolean
         startDate?: DateTimeFilter<"ClusterSurvey"> | Date | string
         endDate?: DateTimeNullableFilter<"ClusterSurvey"> | Date | string | null
         isPublic?: BoolFilter<"ClusterSurvey"> | boolean
         anonymous?: BoolFilter<"ClusterSurvey"> | boolean
+        surveyTopicId?: StringFilter<"ClusterSurvey"> | string
     };
     export type ExamRoomUpsertWithWhereUniqueWithoutFirstSupervisorInput = {
         where: ExamRoomWhereUniqueInput
@@ -498045,10 +498240,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopic: SurveyTopicCreateNestedOneWithoutClusterSurveyInput
         lecturers?: LecturerCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceCreateNestedManyWithoutClusterSurveyInput
         surveyQuestion?: SurveyQuestionCreateNestedManyWithoutClusterSurveyInput
@@ -498063,10 +498260,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId: string
         lecturers?: LecturerUncheckedCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutClusterSurveyInput
         surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutClusterSurveyInput
@@ -498219,6 +498418,54 @@ export namespace Prisma {
         where: ClusterSurveyScalarWhereInput
         data: XOR<ClusterSurveyUpdateManyMutationInput, ClusterSurveyUncheckedUpdateManyWithoutSurveyObjectTypeInput>
     };
+    export type ClusterSurveyCreateWithoutSurveyTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        additionalSuggestion: boolean
+        startDate: Date | string
+        endDate?: Date | string | null
+        isPublic?: boolean
+        anonymous?: boolean
+        surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutClusterSurveyInput
+        lecturers?: LecturerCreateNestedManyWithoutClusterSurveyInput
+        surveyChoice?: SurveyChoiceCreateNestedManyWithoutClusterSurveyInput
+        surveyQuestion?: SurveyQuestionCreateNestedManyWithoutClusterSurveyInput
+        surveys?: SurveyCreateNestedManyWithoutClusterSurveyInput
+    };
+    export type ClusterSurveyUncheckedCreateWithoutSurveyTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        additionalSuggestion: boolean
+        startDate: Date | string
+        endDate?: Date | string | null
+        isPublic?: boolean
+        anonymous?: boolean
+        surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutClusterSurveyInput
+        lecturers?: LecturerUncheckedCreateNestedManyWithoutClusterSurveyInput
+        surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutClusterSurveyInput
+        surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutClusterSurveyInput
+        surveys?: SurveyUncheckedCreateNestedManyWithoutClusterSurveyInput
+    };
+    export type ClusterSurveyCreateOrConnectWithoutSurveyTopicInput = {
+        where: ClusterSurveyWhereUniqueInput
+        create: XOR<ClusterSurveyCreateWithoutSurveyTopicInput, ClusterSurveyUncheckedCreateWithoutSurveyTopicInput>
+    };
+    export type ClusterSurveyCreateManySurveyTopicInputEnvelope = {
+        data: ClusterSurveyCreateManySurveyTopicInput | ClusterSurveyCreateManySurveyTopicInput[]
+        skipDuplicates?: boolean
+    };
     export type SurveyCreateWithoutSurveyTopicInput = {
         id?: string
         code?: string | null
@@ -498295,9 +498542,18 @@ export namespace Prisma {
         where: SurveyQuestionGroupWhereUniqueInput
         create: XOR<SurveyQuestionGroupCreateWithoutSurveyTopicInput, SurveyQuestionGroupUncheckedCreateWithoutSurveyTopicInput>
     };
-    export type SurveyQuestionGroupCreateManySurveyTopicInputEnvelope = {
-        data: SurveyQuestionGroupCreateManySurveyTopicInput | SurveyQuestionGroupCreateManySurveyTopicInput[]
-        skipDuplicates?: boolean
+    export type ClusterSurveyUpsertWithWhereUniqueWithoutSurveyTopicInput = {
+        where: ClusterSurveyWhereUniqueInput
+        update: XOR<ClusterSurveyUpdateWithoutSurveyTopicInput, ClusterSurveyUncheckedUpdateWithoutSurveyTopicInput>
+        create: XOR<ClusterSurveyCreateWithoutSurveyTopicInput, ClusterSurveyUncheckedCreateWithoutSurveyTopicInput>
+    };
+    export type ClusterSurveyUpdateWithWhereUniqueWithoutSurveyTopicInput = {
+        where: ClusterSurveyWhereUniqueInput
+        data: XOR<ClusterSurveyUpdateWithoutSurveyTopicInput, ClusterSurveyUncheckedUpdateWithoutSurveyTopicInput>
+    };
+    export type ClusterSurveyUpdateManyWithWhereWithoutSurveyTopicInput = {
+        where: ClusterSurveyScalarWhereInput
+        data: XOR<ClusterSurveyUpdateManyMutationInput, ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicInput>
     };
     export type SurveyUpsertWithWhereUniqueWithoutSurveyTopicInput = {
         where: SurveyWhereUniqueInput
@@ -498337,7 +498593,6 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"SurveyQuestionGroup"> | Date | string
         updatedAt?: DateTimeFilter<"SurveyQuestionGroup"> | Date | string
         name?: StringFilter<"SurveyQuestionGroup"> | string
-        surveyTopicId?: StringFilter<"SurveyQuestionGroup"> | string
     };
     export type SurveyQuestionCreateWithoutSurveyQuestionGroupInput = {
         id?: string
@@ -498384,6 +498639,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
         survey?: SurveyCreateNestedManyWithoutSurveyTopicInput
     };
     export type SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput = {
@@ -498395,6 +498651,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
         survey?: SurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
     };
     export type SurveyTopicCreateOrConnectWithoutSurveyQuestionGroupInput = {
@@ -498431,36 +498688,59 @@ export namespace Prisma {
         surveyId?: StringNullableFilter<"SurveyQuestion"> | string | null
         clusterSurveyId?: StringNullableFilter<"SurveyQuestion"> | string | null
     };
-    export type SurveyTopicUpsertWithoutSurveyQuestionGroupInput = {
+    export type SurveyTopicUpsertWithWhereUniqueWithoutSurveyQuestionGroupInput = {
+        where: SurveyTopicWhereUniqueInput
         update: XOR<SurveyTopicUpdateWithoutSurveyQuestionGroupInput, SurveyTopicUncheckedUpdateWithoutSurveyQuestionGroupInput>
         create: XOR<SurveyTopicCreateWithoutSurveyQuestionGroupInput, SurveyTopicUncheckedCreateWithoutSurveyQuestionGroupInput>
-        where?: SurveyTopicWhereInput
     };
-    export type SurveyTopicUpdateToOneWithWhereWithoutSurveyQuestionGroupInput = {
-        where?: SurveyTopicWhereInput
+    export type SurveyTopicUpdateWithWhereUniqueWithoutSurveyQuestionGroupInput = {
+        where: SurveyTopicWhereUniqueInput
         data: XOR<SurveyTopicUpdateWithoutSurveyQuestionGroupInput, SurveyTopicUncheckedUpdateWithoutSurveyQuestionGroupInput>
     };
-    export type SurveyTopicUpdateWithoutSurveyQuestionGroupInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        survey?: SurveyUpdateManyWithoutSurveyTopicNestedInput
+    export type SurveyTopicUpdateManyWithWhereWithoutSurveyQuestionGroupInput = {
+        where: SurveyTopicScalarWhereInput
+        data: XOR<SurveyTopicUpdateManyMutationInput, SurveyTopicUncheckedUpdateManyWithoutSurveyQuestionGroupInput>
     };
-    export type SurveyTopicUncheckedUpdateWithoutSurveyQuestionGroupInput = {
-        id?: StringFieldUpdateOperationsInput | string
-        code?: NullableStringFieldUpdateOperationsInput | string | null
-        active?: BoolFieldUpdateOperationsInput | boolean
-        description?: NullableStringFieldUpdateOperationsInput | string | null
-        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        name?: StringFieldUpdateOperationsInput | string
-        survey?: SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
+    export type SurveyTopicScalarWhereInput = {
+        AND?: SurveyTopicScalarWhereInput | SurveyTopicScalarWhereInput[]
+        OR?: SurveyTopicScalarWhereInput[]
+        NOT?: SurveyTopicScalarWhereInput | SurveyTopicScalarWhereInput[]
+        id?: StringFilter<"SurveyTopic"> | string
+        code?: StringNullableFilter<"SurveyTopic"> | string | null
+        active?: BoolFilter<"SurveyTopic"> | boolean
+        description?: StringNullableFilter<"SurveyTopic"> | string | null
+        deletedAt?: DateTimeNullableFilter<"SurveyTopic"> | Date | string | null
+        createdAt?: DateTimeFilter<"SurveyTopic"> | Date | string
+        updatedAt?: DateTimeFilter<"SurveyTopic"> | Date | string
+        name?: StringFilter<"SurveyTopic"> | string
+    };
+    export type SurveyTopicCreateWithoutClusterSurveyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        survey?: SurveyCreateNestedManyWithoutSurveyTopicInput
+        surveyQuestionGroup?: SurveyQuestionGroupCreateNestedManyWithoutSurveyTopicInput
+    };
+    export type SurveyTopicUncheckedCreateWithoutClusterSurveyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        survey?: SurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
+        surveyQuestionGroup?: SurveyQuestionGroupUncheckedCreateNestedManyWithoutSurveyTopicInput
+    };
+    export type SurveyTopicCreateOrConnectWithoutClusterSurveyInput = {
+        where: SurveyTopicWhereUniqueInput
+        create: XOR<SurveyTopicCreateWithoutClusterSurveyInput, SurveyTopicUncheckedCreateWithoutClusterSurveyInput>
     };
     export type SurveyObjectTypeCreateWithoutClusterSurveyInput = {
         id?: string
@@ -498688,6 +498968,39 @@ export namespace Prisma {
         data: SurveyCreateManyClusterSurveyInput | SurveyCreateManyClusterSurveyInput[]
         skipDuplicates?: boolean
     };
+    export type SurveyTopicUpsertWithoutClusterSurveyInput = {
+        update: XOR<SurveyTopicUpdateWithoutClusterSurveyInput, SurveyTopicUncheckedUpdateWithoutClusterSurveyInput>
+        create: XOR<SurveyTopicCreateWithoutClusterSurveyInput, SurveyTopicUncheckedCreateWithoutClusterSurveyInput>
+        where?: SurveyTopicWhereInput
+    };
+    export type SurveyTopicUpdateToOneWithWhereWithoutClusterSurveyInput = {
+        where?: SurveyTopicWhereInput
+        data: XOR<SurveyTopicUpdateWithoutClusterSurveyInput, SurveyTopicUncheckedUpdateWithoutClusterSurveyInput>
+    };
+    export type SurveyTopicUpdateWithoutClusterSurveyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        survey?: SurveyUpdateManyWithoutSurveyTopicNestedInput
+        surveyQuestionGroup?: SurveyQuestionGroupUpdateManyWithoutSurveyTopicNestedInput
+    };
+    export type SurveyTopicUncheckedUpdateWithoutClusterSurveyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        survey?: SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
+        surveyQuestionGroup?: SurveyQuestionGroupUncheckedUpdateManyWithoutSurveyTopicNestedInput
+    };
     export type SurveyObjectTypeUpsertWithWhereUniqueWithoutClusterSurveyInput = {
         where: SurveyObjectTypeWhereUniqueInput
         update: XOR<SurveyObjectTypeUpdateWithoutClusterSurveyInput, SurveyObjectTypeUncheckedUpdateWithoutClusterSurveyInput>
@@ -498884,6 +499197,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        clusterSurvey?: ClusterSurveyCreateNestedManyWithoutSurveyTopicInput
         surveyQuestionGroup?: SurveyQuestionGroupCreateNestedManyWithoutSurveyTopicInput
     };
     export type SurveyTopicUncheckedCreateWithoutSurveyInput = {
@@ -498895,6 +499209,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutSurveyTopicInput
         surveyQuestionGroup?: SurveyQuestionGroupUncheckedCreateNestedManyWithoutSurveyTopicInput
     };
     export type SurveyTopicCreateOrConnectWithoutSurveyInput = {
@@ -499020,10 +499335,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopic: SurveyTopicCreateNestedOneWithoutClusterSurveyInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutClusterSurveyInput
         lecturers?: LecturerCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceCreateNestedManyWithoutClusterSurveyInput
@@ -499038,10 +499355,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId: string
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutClusterSurveyInput
         lecturers?: LecturerUncheckedCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutClusterSurveyInput
@@ -499151,6 +499470,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
         surveyQuestionGroup?: SurveyQuestionGroupUpdateManyWithoutSurveyTopicNestedInput
     };
     export type SurveyTopicUncheckedUpdateWithoutSurveyInput = {
@@ -499162,6 +499482,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
         surveyQuestionGroup?: SurveyQuestionGroupUncheckedUpdateManyWithoutSurveyTopicNestedInput
     };
     export type SurveyChoiceUpsertWithWhereUniqueWithoutSurveyInput = {
@@ -499221,10 +499542,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutClusterSurveyNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutClusterSurveyNestedInput
         lecturers?: LecturerUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUpdateManyWithoutClusterSurveyNestedInput
@@ -499239,10 +499562,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutClusterSurveyNestedInput
         lecturers?: LecturerUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutClusterSurveyNestedInput
@@ -499257,7 +499582,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
-        surveyTopic: SurveyTopicCreateNestedOneWithoutSurveyQuestionGroupInput
+        surveyTopic?: SurveyTopicCreateNestedManyWithoutSurveyQuestionGroupInput
     };
     export type SurveyQuestionGroupUncheckedCreateWithoutSurveyQuestionInput = {
         id?: string
@@ -499268,7 +499593,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
-        surveyTopicId: string
+        surveyTopic?: SurveyTopicUncheckedCreateNestedManyWithoutSurveyQuestionGroupInput
     };
     export type SurveyQuestionGroupCreateOrConnectWithoutSurveyQuestionInput = {
         where: SurveyQuestionGroupWhereUniqueInput
@@ -499329,10 +499654,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopic: SurveyTopicCreateNestedOneWithoutClusterSurveyInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutClusterSurveyInput
         lecturers?: LecturerCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceCreateNestedManyWithoutClusterSurveyInput
@@ -499347,10 +499674,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId: string
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutClusterSurveyInput
         lecturers?: LecturerUncheckedCreateNestedManyWithoutClusterSurveyInput
         surveyChoice?: SurveyChoiceUncheckedCreateNestedManyWithoutClusterSurveyInput
@@ -499414,7 +499743,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
-        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutSurveyQuestionGroupNestedInput
+        surveyTopic?: SurveyTopicUpdateManyWithoutSurveyQuestionGroupNestedInput
     };
     export type SurveyQuestionGroupUncheckedUpdateWithoutSurveyQuestionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -499425,7 +499754,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
-        surveyTopicId?: StringFieldUpdateOperationsInput | string
+        surveyTopic?: SurveyTopicUncheckedUpdateManyWithoutSurveyQuestionGroupNestedInput
     };
     export type SurveyUpsertWithoutSurveyQuestionInput = {
         update: XOR<SurveyUpdateWithoutSurveyQuestionInput, SurveyUncheckedUpdateWithoutSurveyQuestionInput>
@@ -499496,10 +499825,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutClusterSurveyNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutClusterSurveyNestedInput
         lecturers?: LecturerUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUpdateManyWithoutClusterSurveyNestedInput
@@ -499514,10 +499845,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutClusterSurveyNestedInput
         lecturers?: LecturerUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutClusterSurveyNestedInput
@@ -499609,10 +499942,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopic: SurveyTopicCreateNestedOneWithoutClusterSurveyInput
         surveyObjectType?: SurveyObjectTypeCreateNestedManyWithoutClusterSurveyInput
         lecturers?: LecturerCreateNestedManyWithoutClusterSurveyInput
         surveyQuestion?: SurveyQuestionCreateNestedManyWithoutClusterSurveyInput
@@ -499627,10 +499962,12 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         name: string
+        additionalSuggestion: boolean
         startDate: Date | string
         endDate?: Date | string | null
         isPublic?: boolean
         anonymous?: boolean
+        surveyTopicId: string
         surveyObjectType?: SurveyObjectTypeUncheckedCreateNestedManyWithoutClusterSurveyInput
         lecturers?: LecturerUncheckedCreateNestedManyWithoutClusterSurveyInput
         surveyQuestion?: SurveyQuestionUncheckedCreateNestedManyWithoutClusterSurveyInput
@@ -499745,10 +500082,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutClusterSurveyNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutClusterSurveyNestedInput
         lecturers?: LecturerUpdateManyWithoutClusterSurveyNestedInput
         surveyQuestion?: SurveyQuestionUpdateManyWithoutClusterSurveyNestedInput
@@ -499763,10 +500102,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutClusterSurveyNestedInput
         lecturers?: LecturerUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutClusterSurveyNestedInput
@@ -553391,10 +553732,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutClusterSurveyNestedInput
         surveyObjectType?: SurveyObjectTypeUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUpdateManyWithoutClusterSurveyNestedInput
         surveyQuestion?: SurveyQuestionUpdateManyWithoutClusterSurveyNestedInput
@@ -553409,10 +553752,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
         surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutClusterSurveyNestedInput
@@ -553427,10 +553772,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
     };
     export type ExamRoomUpdateWithoutFirstSupervisorInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -556473,10 +556820,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopic?: SurveyTopicUpdateOneRequiredWithoutClusterSurveyNestedInput
         lecturers?: LecturerUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUpdateManyWithoutClusterSurveyNestedInput
         surveyQuestion?: SurveyQuestionUpdateManyWithoutClusterSurveyNestedInput
@@ -556491,10 +556840,12 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
         lecturers?: LecturerUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutClusterSurveyNestedInput
         surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutClusterSurveyNestedInput
@@ -556509,10 +556860,27 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
         startDate?: DateTimeFieldUpdateOperationsInput | Date | string
         endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         isPublic?: BoolFieldUpdateOperationsInput | boolean
         anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyTopicId?: StringFieldUpdateOperationsInput | string
+    };
+    export type ClusterSurveyCreateManySurveyTopicInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        additionalSuggestion: boolean
+        startDate: Date | string
+        endDate?: Date | string | null
+        isPublic?: boolean
+        anonymous?: boolean
     };
     export type SurveyCreateManySurveyTopicInput = {
         id?: string
@@ -556531,15 +556899,60 @@ export namespace Prisma {
         additionalSuggestion: boolean
         clusterSurveyId?: string | null
     };
-    export type SurveyQuestionGroupCreateManySurveyTopicInput = {
-        id?: string
-        code?: string | null
-        active?: boolean
-        description?: string | null
-        deletedAt?: Date | string | null
-        createdAt?: Date | string
-        updatedAt?: Date | string
-        name: string
+    export type ClusterSurveyUpdateWithoutSurveyTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isPublic?: BoolFieldUpdateOperationsInput | boolean
+        anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectType?: SurveyObjectTypeUpdateManyWithoutClusterSurveyNestedInput
+        lecturers?: LecturerUpdateManyWithoutClusterSurveyNestedInput
+        surveyChoice?: SurveyChoiceUpdateManyWithoutClusterSurveyNestedInput
+        surveyQuestion?: SurveyQuestionUpdateManyWithoutClusterSurveyNestedInput
+        surveys?: SurveyUpdateManyWithoutClusterSurveyNestedInput
+    };
+    export type ClusterSurveyUncheckedUpdateWithoutSurveyTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isPublic?: BoolFieldUpdateOperationsInput | boolean
+        anonymous?: BoolFieldUpdateOperationsInput | boolean
+        surveyObjectType?: SurveyObjectTypeUncheckedUpdateManyWithoutClusterSurveyNestedInput
+        lecturers?: LecturerUncheckedUpdateManyWithoutClusterSurveyNestedInput
+        surveyChoice?: SurveyChoiceUncheckedUpdateManyWithoutClusterSurveyNestedInput
+        surveyQuestion?: SurveyQuestionUncheckedUpdateManyWithoutClusterSurveyNestedInput
+        surveys?: SurveyUncheckedUpdateManyWithoutClusterSurveyNestedInput
+    };
+    export type ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        additionalSuggestion?: BoolFieldUpdateOperationsInput | boolean
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        isPublic?: BoolFieldUpdateOperationsInput | boolean
+        anonymous?: BoolFieldUpdateOperationsInput | boolean
     };
     export type SurveyUpdateWithoutSurveyTopicInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -556685,6 +557098,40 @@ export namespace Prisma {
         type?: EnumSurveyQuestionTypeFieldUpdateOperationsInput | $Enums.SurveyQuestionType
         surveyId?: NullableStringFieldUpdateOperationsInput | string | null
         clusterSurveyId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type SurveyTopicUpdateWithoutSurveyQuestionGroupInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        clusterSurvey?: ClusterSurveyUpdateManyWithoutSurveyTopicNestedInput
+        survey?: SurveyUpdateManyWithoutSurveyTopicNestedInput
+    };
+    export type SurveyTopicUncheckedUpdateWithoutSurveyQuestionGroupInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
+        survey?: SurveyUncheckedUpdateManyWithoutSurveyTopicNestedInput
+    };
+    export type SurveyTopicUncheckedUpdateManyWithoutSurveyQuestionGroupInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
     };
     export type SurveyChoiceCreateManyClusterSurveyInput = {
         id?: string

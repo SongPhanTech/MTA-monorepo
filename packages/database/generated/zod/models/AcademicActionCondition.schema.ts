@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { CriteriaFieldSchema } from '../enums/CriteriaField.schema';
@@ -24,25 +25,8 @@ const baseSchema = z.object({
     isPriorityStudent: z.boolean().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    field: CriteriaFieldSchema,
-    operator: CriteriaOperatorSchema,
-    invert: z.boolean(),
-    value: z.number(),
-    tuple: z.array(z.string()),
-    yearCondition: z.number().nullish(),
-    isPriorityStudent: z.boolean().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    ruleSet: z.record(z.string(), z.unknown()),
+    ruleSet: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -66,7 +50,7 @@ export const AcademicActionConditionSchema = AcademicActionConditionScalarSchema
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const AcademicActionConditionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const AcademicActionConditionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -76,17 +60,17 @@ export const AcademicActionConditionPrismaCreateSchema = baseSchemaWithoutDefaul
 export const AcademicActionConditionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     field: CriteriaFieldSchema,
     operator: CriteriaOperatorSchema,
-    invert: z.boolean(),
-    value: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    invert: z.boolean().default(false),
+    value: z.union([z.number(), z.record(z.unknown())]),
     tuple: z.array(z.string()),
-    yearCondition: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    yearCondition: z.union([z.number().nullish(), z.record(z.unknown())]),
     isPriorityStudent: z.boolean().nullish()
 }).partial().passthrough();
 
@@ -94,7 +78,7 @@ export const AcademicActionConditionPrismaUpdateSchema = z.object({
 /**
  * `AcademicActionCondition` schema for create operations excluding foreign keys and relations.
  */
-export const AcademicActionConditionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const AcademicActionConditionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, invert: true, tuple: true
 });
 
@@ -108,7 +92,7 @@ export const AcademicActionConditionCreateSchema = AcademicActionConditionCreate
 /**
  * `AcademicActionCondition` schema for update operations excluding foreign keys and relations.
  */
-export const AcademicActionConditionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const AcademicActionConditionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

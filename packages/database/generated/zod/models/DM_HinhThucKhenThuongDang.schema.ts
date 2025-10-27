@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,17 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -44,7 +34,7 @@ export const DM_HinhThucKhenThuongDangSchema = DM_HinhThucKhenThuongDangScalarSc
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DM_HinhThucKhenThuongDangPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DM_HinhThucKhenThuongDangPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -54,11 +44,11 @@ export const DM_HinhThucKhenThuongDangPrismaCreateSchema = baseSchemaWithoutDefa
 export const DM_HinhThucKhenThuongDangPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string()
 }).partial().passthrough();
 
@@ -66,7 +56,7 @@ export const DM_HinhThucKhenThuongDangPrismaUpdateSchema = z.object({
 /**
  * `DM_HinhThucKhenThuongDang` schema for create operations excluding foreign keys and relations.
  */
-export const DM_HinhThucKhenThuongDangCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DM_HinhThucKhenThuongDangCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -74,7 +64,7 @@ export const DM_HinhThucKhenThuongDangCreateScalarSchema = baseSchemaWithoutDefa
 /**
  * `DM_HinhThucKhenThuongDang` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DM_HinhThucKhenThuongDangCreateSchema = baseSchemaWithoutDefaults.partial({
+export const DM_HinhThucKhenThuongDangCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -82,7 +72,7 @@ export const DM_HinhThucKhenThuongDangCreateSchema = baseSchemaWithoutDefaults.p
 /**
  * `DM_HinhThucKhenThuongDang` schema for update operations excluding foreign keys and relations.
  */
-export const DM_HinhThucKhenThuongDangUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DM_HinhThucKhenThuongDangUpdateScalarSchema = baseSchema.partial();
 
 
 /**

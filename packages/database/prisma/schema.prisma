@@ -4732,6 +4732,7 @@ model SurveyTopic {
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @default(now()) @updatedAt()
   name                String
+  clusterSurvey       ClusterSurvey[]
   survey              Survey[]
   surveyQuestionGroup SurveyQuestionGroup[]
 
@@ -4748,31 +4749,33 @@ model SurveyQuestionGroup {
   updatedAt      DateTime         @default(now()) @updatedAt()
   name           String
   surveyQuestion SurveyQuestion[]
-  surveyTopic    SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId  String
+  surveyTopic    SurveyTopic[]
 
   @@schema("khao-thi")
 }
 
 /// Khảo sát cụm
 model ClusterSurvey {
-  id               String             @id() @default(cuid())
-  code             String?            @unique()
-  active           Boolean            @default(true)
-  description      String?            @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now()) @updatedAt()
-  name             String
-  startDate        DateTime
-  endDate          DateTime?
-  isPublic         Boolean            @default(false)
-  anonymous        Boolean            @default(true)
-  surveyObjectType SurveyObjectType[]
-  lecturers        Lecturer[]
-  surveyChoice     SurveyChoice[]
-  surveyQuestion   SurveyQuestion[]
-  surveys          Survey[]
+  id                   String             @id() @default(cuid())
+  code                 String?            @unique()
+  active               Boolean            @default(true)
+  description          String?            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now()) @updatedAt()
+  name                 String
+  additionalSuggestion Boolean
+  startDate            DateTime
+  endDate              DateTime?
+  isPublic             Boolean            @default(false)
+  anonymous            Boolean            @default(true)
+  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId        String
+  surveyObjectType     SurveyObjectType[]
+  lecturers            Lecturer[]
+  surveyChoice         SurveyChoice[]
+  surveyQuestion       SurveyQuestion[]
+  surveys              Survey[]
 
   @@schema("khao-thi")
 }

@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -16,21 +17,10 @@ const baseSchema = z.object({
     name: z.string().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    user: z.record(z.string(), z.unknown()).optional(),
-    session: z.record(z.string(), z.unknown()).optional(),
-    topic: z.record(z.string(), z.unknown()).optional(),
+    user: z.record(z.unknown()).optional(),
+    session: z.record(z.unknown()).optional(),
+    topic: z.record(z.unknown()).optional(),
     message: z.array(z.unknown()).optional(),
 }
 );
@@ -57,7 +47,7 @@ export const ConversationSchema = ConversationScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ConversationPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ConversationPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -67,11 +57,11 @@ export const ConversationPrismaCreateSchema = baseSchemaWithoutDefaults.partial(
 export const ConversationPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string().nullish()
 }).partial().passthrough();
 
@@ -79,7 +69,7 @@ export const ConversationPrismaUpdateSchema = z.object({
 /**
  * `Conversation` schema for create operations excluding foreign keys and relations.
  */
-export const ConversationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ConversationCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -93,7 +83,7 @@ export const ConversationCreateSchema = ConversationCreateScalarSchema.merge(fkS
 /**
  * `Conversation` schema for update operations excluding foreign keys and relations.
  */
-export const ConversationUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ConversationUpdateScalarSchema = baseSchema.partial();
 
 
 /**

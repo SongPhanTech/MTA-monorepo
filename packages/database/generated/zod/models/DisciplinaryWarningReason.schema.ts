@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,18 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-    severityLevel: z.number(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
     severityLevel: z.number(),
 }
@@ -50,7 +39,7 @@ export const DisciplinaryWarningReasonSchema = DisciplinaryWarningReasonScalarSc
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DisciplinaryWarningReasonPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const DisciplinaryWarningReasonPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -60,20 +49,20 @@ export const DisciplinaryWarningReasonPrismaCreateSchema = baseSchemaWithoutDefa
 export const DisciplinaryWarningReasonPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
-    severityLevel: z.union([z.number(), z.record(z.string(), z.unknown())])
+    severityLevel: z.union([z.number(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `DisciplinaryWarningReason` schema for create operations excluding foreign keys and relations.
  */
-export const DisciplinaryWarningReasonCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const DisciplinaryWarningReasonCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -81,7 +70,7 @@ export const DisciplinaryWarningReasonCreateScalarSchema = baseSchemaWithoutDefa
 /**
  * `DisciplinaryWarningReason` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DisciplinaryWarningReasonCreateSchema = baseSchemaWithoutDefaults.partial({
+export const DisciplinaryWarningReasonCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -89,7 +78,7 @@ export const DisciplinaryWarningReasonCreateSchema = baseSchemaWithoutDefaults.p
 /**
  * `DisciplinaryWarningReason` schema for update operations excluding foreign keys and relations.
  */
-export const DisciplinaryWarningReasonUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const DisciplinaryWarningReasonUpdateScalarSchema = baseSchema.partial();
 
 
 /**

@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { ArchivedCertificateStatus } from '../../zenstack/models';
@@ -23,25 +24,9 @@ const baseSchema = z.object({
     status: ArchivedCertificateStatusSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    finalScore: z.number(),
-    score: z.number(),
-    issuedBy: z.string(),
-    issuedDate: z.coerce.date(),
-    expiredDate: z.coerce.date().nullish(),
-    status: ArchivedCertificateStatusSchema,
-}
-).strict();
 const relationSchema = z.object({
-    certificate: z.record(z.string(), z.unknown()),
-    student: z.record(z.string(), z.unknown()),
+    certificate: z.record(z.unknown()),
+    student: z.record(z.unknown()),
     documentFiles: z.array(z.unknown()).optional(),
     studentSubjectScore: z.array(z.unknown()).optional(),
 }
@@ -68,7 +53,7 @@ export const ArchivedCertificateSchema = ArchivedCertificateScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ArchivedCertificatePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ArchivedCertificatePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -78,13 +63,13 @@ export const ArchivedCertificatePrismaCreateSchema = baseSchemaWithoutDefaults.p
 export const ArchivedCertificatePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    finalScore: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    score: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    finalScore: z.union([z.number(), z.record(z.unknown())]),
+    score: z.union([z.number(), z.record(z.unknown())]),
     issuedBy: z.string(),
     issuedDate: z.coerce.date(),
     expiredDate: z.coerce.date().nullish(),
@@ -95,7 +80,7 @@ export const ArchivedCertificatePrismaUpdateSchema = z.object({
 /**
  * `ArchivedCertificate` schema for create operations excluding foreign keys and relations.
  */
-export const ArchivedCertificateCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ArchivedCertificateCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
@@ -109,7 +94,7 @@ export const ArchivedCertificateCreateSchema = ArchivedCertificateCreateScalarSc
 /**
  * `ArchivedCertificate` schema for update operations excluding foreign keys and relations.
  */
-export const ArchivedCertificateUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ArchivedCertificateUpdateScalarSchema = baseSchema.partial();
 
 
 /**

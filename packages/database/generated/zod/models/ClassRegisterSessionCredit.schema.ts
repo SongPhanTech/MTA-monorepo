@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { AcademicRankingBaseType } from '../../zenstack/models';
@@ -24,25 +25,8 @@ const baseSchema = z.object({
     base4Max: z.number().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    minCredit: z.number(),
-    maxCredit: z.number(),
-    baseScore: AcademicRankingBaseTypeSchema,
-    base10Min: z.number().nullish(),
-    base10Max: z.number().nullish(),
-    base4Min: z.number().nullish(),
-    base4Max: z.number().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    classRegisterSession: z.record(z.string(), z.unknown()),
+    classRegisterSession: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -66,7 +50,7 @@ export const ClassRegisterSessionCreditSchema = ClassRegisterSessionCreditScalar
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ClassRegisterSessionCreditPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ClassRegisterSessionCreditPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -76,25 +60,25 @@ export const ClassRegisterSessionCreditPrismaCreateSchema = baseSchemaWithoutDef
 export const ClassRegisterSessionCreditPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    minCredit: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    maxCredit: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    minCredit: z.union([z.number().default(0), z.record(z.unknown())]),
+    maxCredit: z.union([z.number().default(25), z.record(z.unknown())]),
     baseScore: AcademicRankingBaseTypeSchema,
-    base10Min: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    base10Max: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    base4Min: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    base4Max: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    base10Min: z.union([z.number().nullish(), z.record(z.unknown())]),
+    base10Max: z.union([z.number().nullish(), z.record(z.unknown())]),
+    base4Min: z.union([z.number().nullish(), z.record(z.unknown())]),
+    base4Max: z.union([z.number().nullish(), z.record(z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `ClassRegisterSessionCredit` schema for create operations excluding foreign keys and relations.
  */
-export const ClassRegisterSessionCreditCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ClassRegisterSessionCreditCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, minCredit: true, maxCredit: true, baseScore: true
 });
 
@@ -108,7 +92,7 @@ export const ClassRegisterSessionCreditCreateSchema = ClassRegisterSessionCredit
 /**
  * `ClassRegisterSessionCredit` schema for update operations excluding foreign keys and relations.
  */
-export const ClassRegisterSessionCreditUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ClassRegisterSessionCreditUpdateScalarSchema = baseSchema.partial();
 
 
 /**

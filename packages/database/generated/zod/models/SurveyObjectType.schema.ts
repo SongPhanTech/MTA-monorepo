@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { SurveyObjectSchema } from '../enums/SurveyObject.schema';
@@ -14,18 +15,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-    type: z.array(SurveyObjectSchema),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
     type: z.array(SurveyObjectSchema),
 }
@@ -59,7 +48,7 @@ export const SurveyObjectTypeSchema = SurveyObjectTypeScalarSchema.merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SurveyObjectTypePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const SurveyObjectTypePrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -69,11 +58,11 @@ export const SurveyObjectTypePrismaCreateSchema = baseSchemaWithoutDefaults.part
 export const SurveyObjectTypePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     type: z.array(SurveyObjectSchema)
 }).partial().passthrough();
@@ -82,7 +71,7 @@ export const SurveyObjectTypePrismaUpdateSchema = z.object({
 /**
  * `SurveyObjectType` schema for create operations excluding foreign keys and relations.
  */
-export const SurveyObjectTypeCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const SurveyObjectTypeCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, type: true
 });
 
@@ -90,7 +79,7 @@ export const SurveyObjectTypeCreateScalarSchema = baseSchemaWithoutDefaults.part
 /**
  * `SurveyObjectType` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const SurveyObjectTypeCreateSchema = baseSchemaWithoutDefaults.partial({
+export const SurveyObjectTypeCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, type: true
 });
 
@@ -98,7 +87,7 @@ export const SurveyObjectTypeCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `SurveyObjectType` schema for update operations excluding foreign keys and relations.
  */
-export const SurveyObjectTypeUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const SurveyObjectTypeUpdateScalarSchema = baseSchema.partial();
 
 
 /**

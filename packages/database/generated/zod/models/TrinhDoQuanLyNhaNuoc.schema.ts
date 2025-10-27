@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,23 +20,9 @@ const baseSchema = z.object({
     thoiGianKetThuc: z.coerce.date().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    hinhThucDaoTao: z.string().nullish(),
-    noiDaoTao: z.string().nullish(),
-    thoiGianBatDau: z.coerce.date().nullish(),
-    thoiGianKetThuc: z.coerce.date().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    userProfile: z.record(z.string(), z.unknown()),
-    trinhDo: z.record(z.string(), z.unknown()).optional(),
+    userProfile: z.record(z.unknown()),
+    trinhDo: z.record(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -60,7 +47,7 @@ export const TrinhDoQuanLyNhaNuocSchema = TrinhDoQuanLyNhaNuocScalarSchema.merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrinhDoQuanLyNhaNuocPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const TrinhDoQuanLyNhaNuocPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -70,11 +57,11 @@ export const TrinhDoQuanLyNhaNuocPrismaCreateSchema = baseSchemaWithoutDefaults.
 export const TrinhDoQuanLyNhaNuocPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     hinhThucDaoTao: z.string().nullish(),
     noiDaoTao: z.string().nullish(),
     thoiGianBatDau: z.coerce.date().nullish(),
@@ -85,7 +72,7 @@ export const TrinhDoQuanLyNhaNuocPrismaUpdateSchema = z.object({
 /**
  * `TrinhDoQuanLyNhaNuoc` schema for create operations excluding foreign keys and relations.
  */
-export const TrinhDoQuanLyNhaNuocCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const TrinhDoQuanLyNhaNuocCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -99,7 +86,7 @@ export const TrinhDoQuanLyNhaNuocCreateSchema = TrinhDoQuanLyNhaNuocCreateScalar
 /**
  * `TrinhDoQuanLyNhaNuoc` schema for update operations excluding foreign keys and relations.
  */
-export const TrinhDoQuanLyNhaNuocUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const TrinhDoQuanLyNhaNuocUpdateScalarSchema = baseSchema.partial();
 
 
 /**

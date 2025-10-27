@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,23 +19,10 @@ const baseSchema = z.object({
     serviceDate: z.coerce.date().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    from: z.coerce.date().nullish(),
-    lectureID: z.string().nullish(),
-    serviceDate: z.coerce.date().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    userProfile: z.record(z.string(), z.unknown()),
-    organization: z.record(z.string(), z.unknown()),
-    lecturerType: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.unknown()),
+    organization: z.record(z.unknown()),
+    lecturerType: z.record(z.unknown()),
     mainSubjectClasses: z.array(z.unknown()).optional(),
     extraSubjectClasses: z.array(z.unknown()).optional(),
     enterGradeClasses: z.array(z.unknown()).optional(),
@@ -76,7 +64,7 @@ export const LecturerSchema = LecturerScalarSchema.merge(fkSchema).merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const LecturerPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const LecturerPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -86,11 +74,11 @@ export const LecturerPrismaCreateSchema = baseSchemaWithoutDefaults.partial().pa
 export const LecturerPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     from: z.coerce.date().nullish(),
     lectureID: z.string().nullish(),
     serviceDate: z.coerce.date().nullish()
@@ -100,7 +88,7 @@ export const LecturerPrismaUpdateSchema = z.object({
 /**
  * `Lecturer` schema for create operations excluding foreign keys and relations.
  */
-export const LecturerCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const LecturerCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -114,7 +102,7 @@ export const LecturerCreateSchema = LecturerCreateScalarSchema.merge(fkSchema);
 /**
  * `Lecturer` schema for update operations excluding foreign keys and relations.
  */
-export const LecturerUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const LecturerUpdateScalarSchema = baseSchema.partial();
 
 
 /**

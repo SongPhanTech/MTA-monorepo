@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { SubjectClassType, SubjectClassStatus } from '../../zenstack/models';
@@ -43,49 +44,16 @@ const baseSchema = z.object({
     scoreChecked: z.boolean().default(false),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    code: z.string(),
-    name: z.string(),
-    startDate: z.coerce.date().nullish(),
-    endDate: z.coerce.date().nullish(),
-    schedule: SubjectClassScheduleSchema.nullish(),
-    maxStudent: z.number(),
-    type: SubjectClassTypeSchema,
-    status: SubjectClassStatusSchema,
-    cancelled: z.boolean(),
-    lecturerAssignmentDeadline: z.coerce.date().nullish(),
-    sendLecturerAssignmentAt: z.coerce.date().nullish(),
-    submitLecturerAssignmentAt: z.coerce.date().nullish(),
-    examDate: z.coerce.date().nullish(),
-    examType: ExamTypeSchema.nullish(),
-    scoreDeadLineStart: z.coerce.date().nullish(),
-    scoreDeadline: z.coerce.date().nullish(),
-    examScoreDeadline: z.coerce.date().nullish(),
-    enteredScore: z.boolean(),
-    enteredExamScore: z.boolean(),
-    issuedScoreAt: z.coerce.date().nullish(),
-    isLockScore: z.boolean(),
-    isLockExamScore: z.boolean(),
-    scoreSubmitted: z.boolean(),
-    scoreChecked: z.boolean(),
-}
-).strict();
 const relationSchema = z.object({
-    subject: z.record(z.string(), z.unknown()),
-    trainingObjectType: z.record(z.string(), z.unknown()),
-    semester: z.record(z.string(), z.unknown()),
-    exam: z.record(z.string(), z.unknown()).optional(),
-    room: z.record(z.string(), z.unknown()).optional(),
-    trainingLocation: z.record(z.string(), z.unknown()).optional(),
-    mainLecturer: z.record(z.string(), z.unknown()).optional(),
-    extraLecturer: z.record(z.string(), z.unknown()).optional(),
-    enterGradeLecturer: z.record(z.string(), z.unknown()).optional(),
+    subject: z.record(z.unknown()),
+    trainingObjectType: z.record(z.unknown()),
+    semester: z.record(z.unknown()),
+    exam: z.record(z.unknown()).optional(),
+    room: z.record(z.unknown()).optional(),
+    trainingLocation: z.record(z.unknown()).optional(),
+    mainLecturer: z.record(z.unknown()).optional(),
+    extraLecturer: z.record(z.unknown()).optional(),
+    enterGradeLecturer: z.record(z.unknown()).optional(),
     subjectClassStudent: z.array(z.unknown()).optional(),
     fixedClasses: z.array(z.unknown()).optional(),
     classSchedules: z.array(z.unknown()).optional(),
@@ -127,7 +95,7 @@ export const SubjectClassSchema = SubjectClassScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SubjectClassPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const SubjectClassPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -136,20 +104,20 @@ export const SubjectClassPrismaCreateSchema = baseSchemaWithoutDefaults.partial(
  */
 export const SubjectClassPrismaUpdateSchema = z.object({
     id: z.string(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     code: z.string(),
     name: z.string(),
     startDate: z.coerce.date().nullish(),
     endDate: z.coerce.date().nullish(),
     schedule: SubjectClassScheduleSchema.nullish(),
-    maxStudent: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    maxStudent: z.union([z.number(), z.record(z.unknown())]),
     type: SubjectClassTypeSchema,
     status: SubjectClassStatusSchema,
-    cancelled: z.boolean(),
+    cancelled: z.boolean().default(false),
     lecturerAssignmentDeadline: z.coerce.date().nullish(),
     sendLecturerAssignmentAt: z.coerce.date().nullish(),
     submitLecturerAssignmentAt: z.coerce.date().nullish(),
@@ -158,20 +126,20 @@ export const SubjectClassPrismaUpdateSchema = z.object({
     scoreDeadLineStart: z.coerce.date().nullish(),
     scoreDeadline: z.coerce.date().nullish(),
     examScoreDeadline: z.coerce.date().nullish(),
-    enteredScore: z.boolean(),
-    enteredExamScore: z.boolean(),
+    enteredScore: z.boolean().default(false),
+    enteredExamScore: z.boolean().default(false),
     issuedScoreAt: z.coerce.date().nullish(),
-    isLockScore: z.boolean(),
-    isLockExamScore: z.boolean(),
-    scoreSubmitted: z.boolean(),
-    scoreChecked: z.boolean()
+    isLockScore: z.boolean().default(false),
+    isLockExamScore: z.boolean().default(true),
+    scoreSubmitted: z.boolean().default(false),
+    scoreChecked: z.boolean().default(false)
 }).partial().passthrough();
 
 
 /**
  * `SubjectClass` schema for create operations excluding foreign keys and relations.
  */
-export const SubjectClassCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const SubjectClassCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, type: true, status: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, scoreSubmitted: true, scoreChecked: true
 });
 
@@ -185,7 +153,7 @@ export const SubjectClassCreateSchema = SubjectClassCreateScalarSchema.merge(fkS
 /**
  * `SubjectClass` schema for update operations excluding foreign keys and relations.
  */
-export const SubjectClassUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const SubjectClassUpdateScalarSchema = baseSchema.partial();
 
 
 /**

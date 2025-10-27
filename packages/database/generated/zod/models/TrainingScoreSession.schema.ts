@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,21 +18,9 @@ const baseSchema = z.object({
     time: z.coerce.date().default(() => new Date()),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    time: z.coerce.date(),
-}
-).strict();
 const relationSchema = z.object({
-    semester: z.record(z.string(), z.unknown()),
-    trainingObjectType: z.record(z.string(), z.unknown()),
+    semester: z.record(z.unknown()),
+    trainingObjectType: z.record(z.unknown()),
     studentTrainingScore: z.array(z.unknown()).optional(),
 }
 );
@@ -57,7 +46,7 @@ export const TrainingScoreSessionSchema = TrainingScoreSessionScalarSchema.merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingScoreSessionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const TrainingScoreSessionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -67,20 +56,20 @@ export const TrainingScoreSessionPrismaCreateSchema = baseSchemaWithoutDefaults.
 export const TrainingScoreSessionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
-    time: z.coerce.date()
+    time: z.coerce.date().default(() => new Date())
 }).partial().passthrough();
 
 
 /**
  * `TrainingScoreSession` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingScoreSessionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const TrainingScoreSessionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, time: true
 });
 
@@ -94,7 +83,7 @@ export const TrainingScoreSessionCreateSchema = TrainingScoreSessionCreateScalar
 /**
  * `TrainingScoreSession` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingScoreSessionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const TrainingScoreSessionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

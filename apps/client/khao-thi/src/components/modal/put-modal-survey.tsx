@@ -7,23 +7,38 @@ import useSpinner from '@hooks/spinner'
 import type { Survey, SurveyObjectType, SurveyTopic } from '@workspace/db'
 import {
     useCreateSurvey,
+    useFindManyLecturer,
+    useFindManySchoolYear,
     useFindManySurveyObjectType,
     useFindManySurveyTopic,
     useFindUniqueSurvey,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio } from 'antd'
-import dayjs from 'dayjs'
-import { useEffect } from 'react'
+import { Col, Form, Input, message, Radio,TreeSelect as TreeSelectAnt } from 'antd'
+import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutSurveyType = Survey & { surveyObjectTypes: string[] }
+export type PutSurveyType = Survey & { surveyObjectTypes: string[] ,semesterId?:string,lectureId?:string,lectureIds?:string[]}   
+
+export interface TreeNodeType {
+    value: string
+    title: React.ReactNode
+    children?: TreeNodeType[]
+    selectable?: boolean
+}
+// Define props for our custom component
+interface CustomTreeSelectProps {
+    placeholder?: string
+    style?: React.CSSProperties
+    dropdownStyle?: React.CSSProperties
+}
+
 const PutSurveyModal = () => {
     const [form] = Form.useForm<PutSurveyType>()
     const {
         isOpen,
         onClose,
-        input: id,
-    } = useDisclosure<string>({
+        input,
+    } = useDisclosure<{id:string,type:string}>({
         tag: 'PutSurveyModal',
         onClose: form.resetFields,
     })
@@ -39,7 +54,10 @@ const PutSurveyModal = () => {
         if (!output) return
         try {
             showSpinner()
-            if (id) {
+            if(input?.type==='multiple'){
+
+            }else {
+            if (input?.id) {
                 await update({
                     data: {
                         code: output.code,
@@ -55,7 +73,7 @@ const PutSurveyModal = () => {
                         anonymous: output.anonymous,
                     },
                     where: {
-                        id,
+                        id:input?.id,
                     },
                 })
                 message.success('Cập nhật thành công')
@@ -82,6 +100,8 @@ const PutSurveyModal = () => {
                 })
                 message.success('Thêm mới thành công')
             }
+            }
+        
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['Level'],
@@ -98,26 +118,83 @@ const PutSurveyModal = () => {
         }
     }
 
+    const { data: schoolYears, isLoading: schoolYearLoading } = useFindManySchoolYear({
+        orderBy: { startDate: 'desc' },
+        include: {
+            semesters: {
+                orderBy: { createdAt: 'desc' },
+            },
+        },
+    })
+
+    const semesterId = Form.useWatch('semesterId', form)
+
+   const { data: lecturerData=[] } = useFindManyLecturer({
+        where:{
+            mainSubjectClasses: {
+                some: {
+                    semester: {
+                        id:semesterId
+                    }
+                }
+            }
+        },
+        orderBy: { userProfile:{
+            firstName: 'asc'
+        } },
+        include: {
+            userProfile:true,
+            mainSubjectClasses: {
+                include:{
+                    semester: true
+                }
+            }
+        },
+
+    },{
+        enabled:!!semesterId
+    })
+    // Tạo treeData từ schoolYears và semesters
+    const treeData: TreeNodeType[] = useMemo(() => {
+        return (
+            schoolYears?.map((schoolYear) => ({
+                value: `schoolYear-${schoolYear.id}`,
+                title: schoolYear.name,
+                selectable: false,
+                children:
+                    schoolYear.semesters.map((semester) => ({
+                        value: semester.id,
+                        title: `${semester.name} - ${schoolYear?.name}`,
+                    })) || [],
+            })) || []
+        )
+    }, [schoolYears])
+
     const { data: survey } = useFindUniqueSurvey(
         {
-            where: { id },
+            where: { id:input?.id },
             include: {
                 surveyObjectType: true,
             },
         },
         {
-            enabled: !!id,
+            enabled: !!input?.id,
         }
     )
+
+        const filterTreeNode = (input: string, treeNode: any) => {
+        return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
+    }
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {
-            form.setFieldsValue({
-                ...survey,
-                startDate: dayjs(survey.startDate),
-                endDate: survey.endDate ? dayjs(survey.endDate) : undefined,
-                surveyObjectTypes: survey.surveyObjectType.map((item) => item.id),
-            })
+            // form.setFieldsValue({
+            //     ...survey,
+            //     startDate: dayjs(survey.startDate),
+            //     endDate: survey.endDate ? dayjs(survey.endDate) : undefined,
+            //     surveyObjectTypes: survey.surveyObjectType.map((item) => item.id),
+
+            // })
         } else {
             form.setFieldsValue({ isPublic: false, anonymous: true, additionalSuggestion: false })
         }
@@ -130,7 +207,7 @@ const PutSurveyModal = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa khảo sát' : 'Thêm mới khảo sát'}
+            title={input?.id ? 'Chỉnh sửa khảo sát' : 'Thêm mới khảo sát'}
             className="w-[1000px]"
         >
             <Col span={12}>
@@ -180,6 +257,58 @@ const PutSurveyModal = () => {
                 <FormItem form={form} name="endDate" label="Thời gian kết thúc">
                     <DatePicker format="DD/MM/YYYY" className="w-full" />
                 </FormItem>
+            </Col>
+
+                  <Col span={12}>
+                <FormItem form={form} name="semesterId" label="Kỳ học" required>
+                           <TreeSelectAnt
+                                showSearch
+                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                placeholder={'Chọn kỳ học'}
+                                allowClear
+                                treeDefaultExpandAll
+                                treeData={treeData}
+                                filterTreeNode={filterTreeNode}
+                                treeNodeFilterProp="title"
+                                loading={schoolYearLoading}
+                            />
+                </FormItem>
+            </Col>
+            <Col span={12}>
+            {
+                input?.type==='multiple'?(
+                      <FormItem form={form} name="lectureIds" label="Giảng viên">
+                           <Select
+                        mode="multiple"
+                        maxTagCount={'responsive'}
+                        placeholder="Chọn minh chứng"
+                        options={lecturerData?.map((i) => {
+                            return {
+                                label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim() ,
+                                value: i.id,
+                                key: i.id,
+                            }
+                        })}
+                     
+                    />
+                </FormItem>
+                ):(
+                      <FormItem form={form} name="lectureId" label="Giảng viên">
+                         <Select
+                        placeholder="Chọn minh chứng"
+                        options={lecturerData?.map((i) => {
+                            return {
+                                label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim() ,
+                                value: i.id,
+                                key: i.id,
+                            }
+                        })}
+                     
+                    />
+                </FormItem>
+                )
+            }
+              
             </Col>
             <Col span={12}>
                 <FormItem

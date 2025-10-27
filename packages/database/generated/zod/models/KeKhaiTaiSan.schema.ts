@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,21 +19,8 @@ const baseSchema = z.object({
     thoiGianKeKhai: z.coerce.date().nullish(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    loai: z.string().nullish(),
-    tenDot: z.string().nullish(),
-    thoiGianKeKhai: z.coerce.date().nullish(),
-}
-).strict();
 const relationSchema = z.object({
-    userProfile: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -56,7 +44,7 @@ export const KeKhaiTaiSanSchema = KeKhaiTaiSanScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const KeKhaiTaiSanPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const KeKhaiTaiSanPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -66,11 +54,11 @@ export const KeKhaiTaiSanPrismaCreateSchema = baseSchemaWithoutDefaults.partial(
 export const KeKhaiTaiSanPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     loai: z.string().nullish(),
     tenDot: z.string().nullish(),
     thoiGianKeKhai: z.coerce.date().nullish()
@@ -80,7 +68,7 @@ export const KeKhaiTaiSanPrismaUpdateSchema = z.object({
 /**
  * `KeKhaiTaiSan` schema for create operations excluding foreign keys and relations.
  */
-export const KeKhaiTaiSanCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const KeKhaiTaiSanCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -94,7 +82,7 @@ export const KeKhaiTaiSanCreateSchema = KeKhaiTaiSanCreateScalarSchema.merge(fkS
 /**
  * `KeKhaiTaiSan` schema for update operations excluding foreign keys and relations.
  */
-export const KeKhaiTaiSanUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const KeKhaiTaiSanUpdateScalarSchema = baseSchema.partial();
 
 
 /**

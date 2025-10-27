@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -13,17 +14,6 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    name: z.string(),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -44,7 +34,7 @@ export const TrainingKPISchema = TrainingKPIScalarSchema;
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingKPIPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const TrainingKPIPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -54,11 +44,11 @@ export const TrainingKPIPrismaCreateSchema = baseSchemaWithoutDefaults.partial()
 export const TrainingKPIPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string()
 }).partial().passthrough();
 
@@ -66,7 +56,7 @@ export const TrainingKPIPrismaUpdateSchema = z.object({
 /**
  * `TrainingKPI` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingKPICreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const TrainingKPICreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -74,7 +64,7 @@ export const TrainingKPICreateScalarSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `TrainingKPI` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const TrainingKPICreateSchema = baseSchemaWithoutDefaults.partial({
+export const TrainingKPICreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -82,7 +72,7 @@ export const TrainingKPICreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `TrainingKPI` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingKPIUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const TrainingKPIUpdateScalarSchema = baseSchema.partial();
 
 
 /**

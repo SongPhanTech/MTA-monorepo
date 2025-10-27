@@ -23,6 +23,10 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { customExamFetch } from './custom-instance'
 import type {
     AnswerStatisticsResponse,
+    CreateClusterSurvey200,
+    CreateClusterSurvey400,
+    CreateClusterSurvey404,
+    CreateClusterSurveyRequest,
     ExportReportSurvey,
     ExportReportSurvey400,
     ExportReportSurvey404,
@@ -436,6 +440,120 @@ export const useGenExamBank = <TError = GenExamBank400 | GenExamBank404, TContex
     TContext
 > => {
     const mutationOptions = getGenExamBankMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Tạo cụm khảo sát
+ * @summary Tạo cụm khảo sát
+ */
+export type createClusterSurveyResponse200 = {
+    data: CreateClusterSurvey200
+    status: 200
+}
+
+export type createClusterSurveyResponse400 = {
+    data: CreateClusterSurvey400
+    status: 400
+}
+
+export type createClusterSurveyResponse404 = {
+    data: CreateClusterSurvey404
+    status: 404
+}
+
+export type createClusterSurveyResponseComposite =
+    | createClusterSurveyResponse200
+    | createClusterSurveyResponse400
+    | createClusterSurveyResponse404
+
+export type createClusterSurveyResponse = createClusterSurveyResponseComposite & {
+    headers: Headers
+}
+
+export const getCreateClusterSurveyUrl = () => {
+    return '/api/survey/cluster-survey'
+}
+
+export const createClusterSurvey = async (
+    createClusterSurveyRequest: CreateClusterSurveyRequest,
+    options?: RequestInit
+): Promise<createClusterSurveyResponse> => {
+    return customExamFetch<createClusterSurveyResponse>(getCreateClusterSurveyUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(createClusterSurveyRequest),
+    })
+}
+
+export const getCreateClusterSurveyMutationOptions = <
+    TError = CreateClusterSurvey400 | CreateClusterSurvey404,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof createClusterSurvey>>,
+        TError,
+        { data: CreateClusterSurveyRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customExamFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof createClusterSurvey>>,
+    TError,
+    { data: CreateClusterSurveyRequest },
+    TContext
+> => {
+    const mutationKey = ['createClusterSurvey']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof createClusterSurvey>>,
+        { data: CreateClusterSurveyRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return createClusterSurvey(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type CreateClusterSurveyMutationResult = NonNullable<
+    Awaited<ReturnType<typeof createClusterSurvey>>
+>
+export type CreateClusterSurveyMutationBody = CreateClusterSurveyRequest
+export type CreateClusterSurveyMutationError = CreateClusterSurvey400 | CreateClusterSurvey404
+
+/**
+ * @summary Tạo cụm khảo sát
+ */
+export const useCreateClusterSurvey = <
+    TError = CreateClusterSurvey400 | CreateClusterSurvey404,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof createClusterSurvey>>,
+            TError,
+            { data: CreateClusterSurveyRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof createClusterSurvey>>,
+    TError,
+    { data: CreateClusterSurveyRequest },
+    TContext
+> => {
+    const mutationOptions = getCreateClusterSurveyMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

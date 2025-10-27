@@ -3124,8 +3124,7 @@ exports.Prisma.SurveyQuestionGroupScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  name: 'name',
-  surveyTopicId: 'surveyTopicId'
+  name: 'name'
 };
 
 exports.Prisma.ClusterSurveyScalarFieldEnum = {
@@ -3137,10 +3136,12 @@ exports.Prisma.ClusterSurveyScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   name: 'name',
+  additionalSuggestion: 'additionalSuggestion',
   startDate: 'startDate',
   endDate: 'endDate',
   isPublic: 'isPublic',
-  anonymous: 'anonymous'
+  anonymous: 'anonymous',
+  surveyTopicId: 'surveyTopicId'
 };
 
 exports.Prisma.SurveyScalarFieldEnum = {
@@ -5965,15 +5966,15 @@ exports.Prisma.SurveyQuestionGroupOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name',
-  surveyTopicId: 'surveyTopicId'
+  name: 'name'
 };
 
 exports.Prisma.ClusterSurveyOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name'
+  name: 'name',
+  surveyTopicId: 'surveyTopicId'
 };
 
 exports.Prisma.SurveyOrderByRelevanceFieldEnum = {

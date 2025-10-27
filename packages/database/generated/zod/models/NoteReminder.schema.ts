@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { ReminderRepeatType } from '../../zenstack/models';
@@ -23,24 +24,8 @@ const baseSchema = z.object({
     isNotified: z.boolean().default(false),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    title: z.string(),
-    reminderTime: z.coerce.date(),
-    isCompleted: z.boolean(),
-    completedAt: z.coerce.date().nullish(),
-    repeatType: ReminderRepeatTypeSchema,
-    isNotified: z.boolean(),
-}
-).strict();
 const relationSchema = z.object({
-    note: z.record(z.string(), z.unknown()),
+    note: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -64,7 +49,7 @@ export const NoteReminderSchema = NoteReminderScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const NoteReminderPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const NoteReminderPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -74,24 +59,24 @@ export const NoteReminderPrismaCreateSchema = baseSchemaWithoutDefaults.partial(
 export const NoteReminderPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     title: z.string(),
     reminderTime: z.coerce.date(),
-    isCompleted: z.boolean(),
+    isCompleted: z.boolean().default(false),
     completedAt: z.coerce.date().nullish(),
     repeatType: ReminderRepeatTypeSchema,
-    isNotified: z.boolean()
+    isNotified: z.boolean().default(false)
 }).partial().passthrough();
 
 
 /**
  * `NoteReminder` schema for create operations excluding foreign keys and relations.
  */
-export const NoteReminderCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const NoteReminderCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isCompleted: true, repeatType: true, isNotified: true
 });
 
@@ -105,7 +90,7 @@ export const NoteReminderCreateSchema = NoteReminderCreateScalarSchema.merge(fkS
 /**
  * `NoteReminder` schema for update operations excluding foreign keys and relations.
  */
-export const NoteReminderUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const NoteReminderUpdateScalarSchema = baseSchema.partial();
 
 
 /**

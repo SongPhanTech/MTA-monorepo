@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { ArchivedCertificateStatus } from '../../zenstack/models';
@@ -20,22 +21,9 @@ const baseSchema = z.object({
     status: ArchivedCertificateStatusSchema,
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    bonusScore: z.number(),
-    date: z.coerce.date().nullish(),
-    status: ArchivedCertificateStatusSchema,
-}
-).strict();
 const relationSchema = z.object({
-    award: z.record(z.string(), z.unknown()),
-    student: z.record(z.string(), z.unknown()),
+    award: z.record(z.unknown()),
+    student: z.record(z.unknown()),
     documentFiles: z.array(z.unknown()).optional(),
     studentSubjectScore: z.array(z.unknown()).optional(),
 }
@@ -62,7 +50,7 @@ export const ArchivedAwardSchema = ArchivedAwardScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ArchivedAwardPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ArchivedAwardPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -72,12 +60,12 @@ export const ArchivedAwardPrismaCreateSchema = baseSchemaWithoutDefaults.partial
 export const ArchivedAwardPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    bonusScore: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    bonusScore: z.union([z.number(), z.record(z.unknown())]),
     date: z.coerce.date().nullish(),
     status: ArchivedCertificateStatusSchema
 }).partial().passthrough();
@@ -86,7 +74,7 @@ export const ArchivedAwardPrismaUpdateSchema = z.object({
 /**
  * `ArchivedAward` schema for create operations excluding foreign keys and relations.
  */
-export const ArchivedAwardCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ArchivedAwardCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
@@ -100,7 +88,7 @@ export const ArchivedAwardCreateSchema = ArchivedAwardCreateScalarSchema.merge(f
 /**
  * `ArchivedAward` schema for update operations excluding foreign keys and relations.
  */
-export const ArchivedAwardUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ArchivedAwardUpdateScalarSchema = baseSchema.partial();
 
 
 /**

@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 import { PermissionTypeSchema } from '../enums/PermissionType.schema';
@@ -17,19 +18,6 @@ const baseSchema = z.object({
     name: z.string(),
     permissionType: PermissionTypeSchema,
     disabled: z.boolean().default(false),
-}
-).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    name: z.string(),
-    permissionType: PermissionTypeSchema,
-    disabled: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -53,7 +41,7 @@ export const PermissionSchema = PermissionScalarSchema.merge(relationSchema.part
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const PermissionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const PermissionPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -63,21 +51,21 @@ export const PermissionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().
 export const PermissionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
     permissionType: PermissionTypeSchema,
-    disabled: z.boolean()
+    disabled: z.boolean().default(false)
 }).partial().passthrough();
 
 
 /**
  * `Permission` schema for create operations excluding foreign keys and relations.
  */
-export const PermissionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const PermissionCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, disabled: true
 });
 
@@ -85,7 +73,7 @@ export const PermissionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `Permission` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const PermissionCreateSchema = baseSchemaWithoutDefaults.partial({
+export const PermissionCreateSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, disabled: true
 });
 
@@ -93,7 +81,7 @@ export const PermissionCreateSchema = baseSchemaWithoutDefaults.partial({
 /**
  * `Permission` schema for update operations excluding foreign keys and relations.
  */
-export const PermissionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const PermissionUpdateScalarSchema = baseSchema.partial();
 
 
 /**

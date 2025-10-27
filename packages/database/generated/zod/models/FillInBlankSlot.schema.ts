@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,20 +18,8 @@ const baseSchema = z.object({
     correctAnswer: z.string(),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    order: z.number(),
-    correctAnswer: z.string(),
-}
-).strict();
 const relationSchema = z.object({
-    question: z.record(z.string(), z.unknown()),
+    question: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -54,7 +43,7 @@ export const FillInBlankSlotSchema = FillInBlankSlotScalarSchema.merge(fkSchema)
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const FillInBlankSlotPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const FillInBlankSlotPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -64,12 +53,12 @@ export const FillInBlankSlotPrismaCreateSchema = baseSchemaWithoutDefaults.parti
 export const FillInBlankSlotPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    order: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
+    order: z.union([z.number(), z.record(z.unknown())]),
     correctAnswer: z.string()
 }).partial().passthrough();
 
@@ -77,7 +66,7 @@ export const FillInBlankSlotPrismaUpdateSchema = z.object({
 /**
  * `FillInBlankSlot` schema for create operations excluding foreign keys and relations.
  */
-export const FillInBlankSlotCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const FillInBlankSlotCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -91,7 +80,7 @@ export const FillInBlankSlotCreateSchema = FillInBlankSlotCreateScalarSchema.mer
 /**
  * `FillInBlankSlot` schema for update operations excluding foreign keys and relations.
  */
-export const FillInBlankSlotUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const FillInBlankSlotUpdateScalarSchema = baseSchema.partial();
 
 
 /**

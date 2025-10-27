@@ -110,6 +110,7 @@ export const SqlTransactionBodyItemModel = {
     ClassRegisterSession: 'ClassRegisterSession',
     ClassRegisterLogs: 'ClassRegisterLogs',
     SubjectClass: 'SubjectClass',
+    SubjectClassHistory: 'SubjectClassHistory',
     SubjectClassTime: 'SubjectClassTime',
     ClassSchedule: 'ClassSchedule',
     TrainingObjectType: 'TrainingObjectType',

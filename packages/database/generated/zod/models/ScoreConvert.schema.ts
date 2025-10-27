@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
+// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -22,25 +23,8 @@ const baseSchema = z.object({
     improvementRegister: z.boolean().default(false),
 }
 ).strict();
-const baseSchemaWithoutDefaults = z.object({
-    id: z.string(),
-    code: z.string().nullish(),
-    active: z.boolean(),
-    description: z.string().nullish(),
-    deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    classification: z.string(),
-    base10Min: z.number(),
-    base10Max: z.number(),
-    letter: z.string(),
-    base4: z.number(),
-    pass: z.boolean(),
-    improvementRegister: z.boolean(),
-}
-).strict();
 const relationSchema = z.object({
-    trainingCourse: z.record(z.string(), z.unknown()),
+    trainingCourse: z.record(z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -64,7 +48,7 @@ export const ScoreConvertSchema = ScoreConvertScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ScoreConvertPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ScoreConvertPrismaCreateSchema = baseSchema.partial().passthrough();
 
 
 /**
@@ -74,25 +58,25 @@ export const ScoreConvertPrismaCreateSchema = baseSchemaWithoutDefaults.partial(
 export const ScoreConvertPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean(),
+    active: z.boolean().default(true),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
+    createdAt: z.coerce.date().default(() => new Date()),
+    updatedAt: z.coerce.date().default(() => new Date()),
     classification: z.string(),
-    base10Min: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    base10Max: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    base10Min: z.union([z.number(), z.record(z.unknown())]),
+    base10Max: z.union([z.number(), z.record(z.unknown())]),
     letter: z.string(),
-    base4: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    base4: z.union([z.number(), z.record(z.unknown())]),
     pass: z.boolean(),
-    improvementRegister: z.boolean()
+    improvementRegister: z.boolean().default(false)
 }).partial().passthrough();
 
 
 /**
  * `ScoreConvert` schema for create operations excluding foreign keys and relations.
  */
-export const ScoreConvertCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ScoreConvertCreateScalarSchema = baseSchema.partial({
     id: true, active: true, createdAt: true, updatedAt: true, improvementRegister: true
 });
 
@@ -106,7 +90,7 @@ export const ScoreConvertCreateSchema = ScoreConvertCreateScalarSchema.merge(fkS
 /**
  * `ScoreConvert` schema for update operations excluding foreign keys and relations.
  */
-export const ScoreConvertUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ScoreConvertUpdateScalarSchema = baseSchema.partial();
 
 
 /**
