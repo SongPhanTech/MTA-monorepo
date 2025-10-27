@@ -765,6 +765,7 @@ model UserProfile {
   faqsApproved                  FAQ[]                        @relation("FAQApproved")
   conversations                 Conversation[]
   subjectVersionHistory         SubjectVersionHistory[]
+  subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
 
   @@schema("ql-nguoi-dung")
@@ -2349,8 +2350,8 @@ model StudentSubjectScoreHistory {
   examBannedReason      String?
   suspended             Boolean?
   suspendedReason       String?
-  updatedBy             UserProfile         @relation(fields: [updatedById], references: [id])
-  updatedById           String
+  updatedBy             UserProfile?        @relation(fields: [updatedById], references: [id])
+  updatedById           String?
 
   @@schema("ql-dao-tao")
 }
@@ -2993,7 +2994,7 @@ model SubjectClass {
   examType                   ExamType?
   exam                       Exam?                 @relation(fields: [examId], references: [id])
   examId                     String?
-  /// ngày bắt dầu nhập điểm CC/TX
+  /// ngày bắt đầu nhập điểm CC/TX
   scoreDeadLineStart         DateTime?
   /// ngày kết thúc nhập điểm CC/TX
   scoreDeadline              DateTime?
@@ -3025,6 +3026,30 @@ model SubjectClass {
   surveyObjectTypes          SurveyObjectType[]
   classRegisterLogs          ClassRegisterLogs[]
   subjectClassTimes          SubjectClassTime[]
+  subjectClassHistory        SubjectClassHistory[]
+
+  @@schema("ql-dao-tao")
+}
+
+model SubjectClassHistory {
+  id                 String       @id() @default(cuid())
+  code               String?      @unique()
+  active             Boolean      @default(true)
+  description        String?      @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @default(now()) @updatedAt()
+  subjectClass       SubjectClass @relation(fields: [subjectClassId], references: [id])
+  subjectClassId     String
+  scoreDeadLineStart DateTime?
+  scoreDeadline      DateTime?
+  examScoreDeadline  DateTime?
+  isLockScore        Boolean?
+  isLockExamScore    Boolean?
+  scoreSubmitted     Boolean?
+  scoreChecked       Boolean?
+  updatedBy          UserProfile? @relation(fields: [updatedById], references: [id])
+  updatedById        String?
 
   @@schema("ql-dao-tao")
 }
@@ -4863,18 +4888,19 @@ model SurveyResponse {
 
 /// Phiên bản ngân hàng câu hỏi
 model QuestionBank {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  name             String
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
-  questions        Question[]
-  exam             Exam[]
+  id                 String              @id() @default(cuid())
+  code               String?             @unique()
+  active             Boolean             @default(true)
+  description        String?             @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @default(now()) @updatedAt()
+  name               String
+  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId   String
+  questions          Question[]
+  testStructureRules TestStructureRule[]
+  exam               Exam[]
 
   @@unique([subjectVersionId, name])
   @@schema("khao-thi")
@@ -5059,8 +5085,10 @@ model TestStructureRule {
   deletedAt        DateTime?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @default(now()) @updatedAt()
-  exam             Exam           @relation(fields: [examId], references: [id])
-  examId           String
+  exam             Exam?          @relation(fields: [examId], references: [id])
+  examId           String?
+  questionBank     QuestionBank?  @relation(fields: [questionBankId], references: [id])
+  questionBankId   String?
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId String
   questionPoint    Float
@@ -5068,6 +5096,7 @@ model TestStructureRule {
   count            Int
 
   @@unique([examId, knowledgeBlockId, questionPoint, questionType])
+  @@unique([questionBankId, knowledgeBlockId, questionPoint, questionType])
   @@schema("khao-thi")
 }
 

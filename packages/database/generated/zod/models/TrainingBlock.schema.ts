@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,8 +17,20 @@ const baseSchema = z.object({
     priority: z.number().default(0),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    priority: z.number(),
+}
+).strict();
 const relationSchema = z.object({
-    parent: z.record(z.unknown()).optional(),
+    parent: z.record(z.string(), z.unknown()).optional(),
     children: z.array(z.unknown()).optional(),
     curriculumVersions: z.array(z.unknown()).optional(),
 }
@@ -45,7 +56,7 @@ export const TrainingBlockSchema = TrainingBlockScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingBlockPrismaCreateSchema = baseSchema.partial().passthrough();
+export const TrainingBlockPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -55,20 +66,20 @@ export const TrainingBlockPrismaCreateSchema = baseSchema.partial().passthrough(
 export const TrainingBlockPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
-    priority: z.union([z.number().default(0), z.record(z.unknown())])
+    priority: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `TrainingBlock` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingBlockCreateScalarSchema = baseSchema.partial({
+export const TrainingBlockCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, priority: true
 });
 
@@ -82,7 +93,7 @@ export const TrainingBlockCreateSchema = TrainingBlockCreateScalarSchema.merge(f
 /**
  * `TrainingBlock` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingBlockUpdateScalarSchema = baseSchema.partial();
+export const TrainingBlockUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

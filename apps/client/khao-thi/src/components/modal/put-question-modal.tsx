@@ -4,8 +4,10 @@ import PutFormModal from '@components/commons/put-modal'
 import { RichTextEditor } from '@components/commons/rich-text-editor'
 import { renderWithMath } from '@components/commons/rich-text-editor/renderWithMath'
 import Select from '@components/commons/select'
+import Table from '@components/commons/table'
 import { useQuestionTypeOptions } from '@hooks/question-type'
 import useSpinner from '@hooks/spinner'
+// import { EditorContent } from '@tiptap/react'
 import { type Question, QuestionType } from '@workspace/db'
 import {
     useCreateQuestion,
@@ -14,13 +16,43 @@ import {
     useFindUniqueQuestion,
     useUpdateQuestion,
 } from '@workspace/db/hooks'
-import { Col, Form, InputNumber, message, Radio, Row } from 'antd'
-import { useEffect, useMemo } from 'react'
+import { Button, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, Tooltip } from 'antd'
+import { useWatch } from 'antd/es/form/Form'
+import { Trash2 } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutQuestionType = Question
+export type PutQuestionType = Question & {
+    multipleChoiceOptions: {
+        content: string
+        isCorrect: boolean
+        id?: string
+    }[]
+}
 const PutQuestionModal = () => {
     const [form] = Form.useForm<PutQuestionType>()
     const { options: questionTypeOptions } = useQuestionTypeOptions()
+    const [dataOptions, setDataOptions] = useState<any>([
+        {
+            key: '1',
+            content: '',
+            isCorrect: false,
+        },
+        {
+            key: '2',
+            content: '',
+            isCorrect: false,
+        },
+        {
+            key: '3',
+            content: '',
+            isCorrect: false,
+        },
+        {
+            key: '4',
+            content: '',
+            isCorrect: false,
+        },
+    ])
     const { isOpen, onClose, input } = useDisclosure<{
         id: string
         questionBankId: string
@@ -55,19 +87,65 @@ const PutQuestionModal = () => {
                 questionBankId: input?.questionBankId,
                 knowledgeBlockId: output.knowledgeBlockId,
             }
-            if (input?.id) {
-                await updateQuestion({
-                    data,
-                    where: {
-                        id: input.id,
-                    },
-                })
-                message.success('Cập nhật thành công')
+            let res: any = null
+
+            if (
+                output.type === QuestionType.MULTIPLE_CHOICE ||
+                output.type === QuestionType.SINGLE_CHOICE
+            ) {
+                const error = output.multipleChoiceOptions.find((i) => !i.content)
+                if (error || !output.multipleChoiceOptions.length) {
+                    message.error('Vui lòng nhập đáp án')
+                    return
+                }
+                const error1 = output.multipleChoiceOptions.filter((i) => !!i.isCorrect)
+                if (
+                    error1.length === 0 ||
+                    (error1.length < 2 && output.type === QuestionType.MULTIPLE_CHOICE) ||
+                    (error1.length > 1 && output.type === QuestionType.SINGLE_CHOICE)
+                ) {
+                    message.error('Vui lòng nhập đúng đáp án')
+                    return
+                }
+                if (input?.id) {
+                       await updateQuestion({
+                        data,
+                        where: {
+                            id: input.id,
+                        },
+                    })
+                } else {
+                    res = await createQuestion({
+                        data: {
+                            ...data,
+                            multipleChoiceOptions: {
+                                createMany: {
+                                    data: output.multipleChoiceOptions.map((i, index: number) => {
+                                        return {
+                                            content: i.content,
+                                            isCorrect: i.isCorrect,
+                                            order: index + 1,
+                                        }
+                                    }),
+                                },
+                            },
+                        },
+                    })
+                }
             } else {
-                await createQuestion({
-                    data,
-                })
-                message.success('Thêm mới thành công')
+                if (input?.id) {
+                    await updateQuestion({
+                        data,
+                        where: {
+                            id: input.id,
+                        },
+                    })
+                    message.success('Cập nhật thành công')
+                } else {
+                    res = await createQuestion({
+                        data,
+                    })
+                }
             }
             queryClient.invalidateQueries({
                 queryKey: ['Question'],
@@ -87,7 +165,7 @@ const PutQuestionModal = () => {
     const { data: initialValue } = useFindUniqueQuestion(
         {
             where: { id: input?.id },
-            include: { questionBank: true },
+            include: { questionBank: true, multipleChoiceOptions: true },
         },
         {
             enabled: !!input?.id,
@@ -102,15 +180,42 @@ const PutQuestionModal = () => {
         orderBy: { level: 'asc' },
     })
 
+    const handleDeleteAnswer = (index: number) => {
+        const data = form.getFieldsValue()?.multipleChoiceOptions || []
+        if (data.length) {
+            const result = data.splice(index, 1)
+            setDataOptions(data)
+            form.setFieldValue('multipleChoiceOptions', data)
+        }
+    }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {
+            setDataOptions(
+                initialValue.multipleChoiceOptions.map((i) => {
+                    return {
+                        key: String(i.order),
+                        content: i.content,
+                        isCorrect: i.isCorrect,
+                        id: i.id,
+                    }
+                })
+            )
             form.setFieldsValue({
                 ...initialValue,
+                multipleChoiceOptions: initialValue.multipleChoiceOptions.map((i) => {
+                    return {
+                        content: i.content,
+                        isCorrect: i.isCorrect,
+                        key: String(i.order),
+                    }
+                }),
             })
         } else {
             form.setFieldsValue({
                 isAutoGraded: false,
+                multipleChoiceOptions: dataOptions,
                 // type: QuestionType.ESSAY, // TODO: clear after add many QuestionType
                 point: 1,
             })
@@ -124,6 +229,8 @@ const PutQuestionModal = () => {
     const fixedHtmlExplanation = useMemo(() => {
         return explanation?.replace(/<li>\s*<p>(.*?)<\/p>\s*<\/li>/g, '<li>$1</li>')
     }, [explanation])
+
+    const listForm = useWatch('multipleChoiceOptions', form) || []
 
     return (
         <PutFormModal
@@ -218,6 +325,125 @@ const PutQuestionModal = () => {
                                         <RichTextEditor />
                                     </FormItem>
                                 )}
+                                {(typeQuestion === QuestionType.SINGLE_CHOICE ||
+                                    typeQuestion === QuestionType.MULTIPLE_CHOICE) && (
+                                    <>
+                                        <FormItem
+                                            form={form}
+                                            label="Đáp án"
+                                            name={'multipleChoiceOptions'}
+                                        >
+                                            <Table
+                                                rowKey="key"
+                                                pagination={false}
+                                                data={dataOptions}
+                                                columns={[
+                                                    {
+                                                        title: 'Đáp án',
+                                                        width: 100,
+                                                        align: 'left',
+                                                        render: (_, __, index) => {
+                                                            return `Đáp án ${index + 1}`
+                                                        },
+                                                    },
+                                                    {
+                                                        title: 'Đáp án',
+                                                        dataIndex: 'content',
+                                                        align: 'center',
+                                                        render: (__, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'multipleChoiceOptions',
+                                                                        index,
+                                                                        'content',
+                                                                    ]}
+                                                                    label=""
+                                                                    required
+                                                                >
+                                                                    <Input placeholder="Nhập đáp án" />
+                                                                    {/* <EditorContent editor={editor} {...editorProps} /> */}
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+                                                    {
+                                                        title: 'Đúng/sai',
+                                                        dataIndex: 'questionType',
+                                                        width: 100,
+                                                        align: 'center',
+                                                        render: (__, record, index: number) => {
+                                                            return (
+                                                                <Form.Item
+                                                                    className="w-full mb-0"
+                                                                    name={[
+                                                                        'multipleChoiceOptions',
+                                                                        index,
+                                                                        'isCorrect',
+                                                                    ]}
+                                                                    label=""
+                                                                    valuePropName="checked"
+                                                                >
+                                                                    <Checkbox />
+                                                                </Form.Item>
+                                                            )
+                                                        },
+                                                    },
+                                                    {
+                                                        title: '',
+                                                        dataIndex: 'questionType',
+                                                        width: 50,
+                                                        align: 'center',
+                                                        render: (__, record, index: number) => {
+                                                            return (
+                                                                <Tooltip title={'Xoá'}>
+                                                                    <Trash2
+                                                                        size={16}
+                                                                        strokeWidth={1.5}
+                                                                        className="text-red-600 cursor-pointer"
+                                                                        onClick={() => {
+                                                                            handleDeleteAnswer(
+                                                                                index
+                                                                            )
+                                                                        }}
+                                                                    />
+                                                                </Tooltip>
+                                                            )
+                                                        },
+                                                    },
+                                                ]}
+                                            />
+                                        </FormItem>
+                                        <div className="flex justify-end">
+                                            <Button
+                                                onClick={() => {
+                                                    const data =
+                                                        form.getFieldsValue()
+                                                            ?.multipleChoiceOptions || []
+                                                    form.setFieldValue('multipleChoiceOptions', [
+                                                        ...data,
+                                                        {
+                                                            content: '',
+                                                            isCorrect: false,
+                                                            key: `${data.length + 1}`,
+                                                        },
+                                                    ])
+                                                    setDataOptions([
+                                                        ...data,
+                                                        {
+                                                            content: '',
+                                                            isCorrect: false,
+                                                            key: `${data.length + 1}`,
+                                                        },
+                                                    ])
+                                                }}
+                                            >
+                                                Thêm Đáp án
+                                            </Button>
+                                        </div>
+                                    </>
+                                )}
                             </Col>
                         </Row>
                     </Col>
@@ -260,6 +486,23 @@ const PutQuestionModal = () => {
                                                     }}
                                                 />
                                             </div>
+                                        </div>
+                                    )}
+                                    {(typeQuestion === QuestionType.SINGLE_CHOICE ||
+                                        typeQuestion === QuestionType.MULTIPLE_CHOICE) && (
+                                        <div>
+                                            <div className="mb-3 font-[500]">Đáp án</div>
+                                            {listForm.length &&
+                                                listForm.map((i: any) => {
+                                                    return (
+                                                        <div
+                                                            className={`flex items-center gap-3 border-solid border-[1px] p-3 mb-3 rounded-[8px] ${i?.isCorrect ? 'border-green-500 bg-green-100' : ''}`}
+                                                        >
+                                                            <Checkbox checked={i?.isCorrect} />
+                                                            <div>{i.content}</div>
+                                                        </div>
+                                                    )
+                                                })}
                                         </div>
                                     )}
                                 </div>

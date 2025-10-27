@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,8 +18,21 @@ const baseSchema = z.object({
     thoiGianKetThuc: z.coerce.date().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string().nullish(),
+    thoiGianBatDau: z.coerce.date().nullish(),
+    thoiGianKetThuc: z.coerce.date().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    userProfile: z.record(z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -44,7 +56,7 @@ export const BoiDuongQuocPhongAnNinhSchema = BoiDuongQuocPhongAnNinhScalarSchema
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const BoiDuongQuocPhongAnNinhPrismaCreateSchema = baseSchema.partial().passthrough();
+export const BoiDuongQuocPhongAnNinhPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -54,11 +66,11 @@ export const BoiDuongQuocPhongAnNinhPrismaCreateSchema = baseSchema.partial().pa
 export const BoiDuongQuocPhongAnNinhPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string().nullish(),
     thoiGianBatDau: z.coerce.date().nullish(),
     thoiGianKetThuc: z.coerce.date().nullish()
@@ -68,7 +80,7 @@ export const BoiDuongQuocPhongAnNinhPrismaUpdateSchema = z.object({
 /**
  * `BoiDuongQuocPhongAnNinh` schema for create operations excluding foreign keys and relations.
  */
-export const BoiDuongQuocPhongAnNinhCreateScalarSchema = baseSchema.partial({
+export const BoiDuongQuocPhongAnNinhCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -82,7 +94,7 @@ export const BoiDuongQuocPhongAnNinhCreateSchema = BoiDuongQuocPhongAnNinhCreate
 /**
  * `BoiDuongQuocPhongAnNinh` schema for update operations excluding foreign keys and relations.
  */
-export const BoiDuongQuocPhongAnNinhUpdateScalarSchema = baseSchema.partial();
+export const BoiDuongQuocPhongAnNinhUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

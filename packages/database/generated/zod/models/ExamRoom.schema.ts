@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,11 +18,24 @@ const baseSchema = z.object({
     end: z.number().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    lockExamCode: z.boolean(),
+    start: z.number().nullish(),
+    end: z.number().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    exam: z.record(z.unknown()),
-    room: z.record(z.unknown()).optional(),
-    firstSupervisor: z.record(z.unknown()).optional(),
-    secondSupervisor: z.record(z.unknown()).optional(),
+    exam: z.record(z.string(), z.unknown()),
+    room: z.record(z.string(), z.unknown()).optional(),
+    firstSupervisor: z.record(z.string(), z.unknown()).optional(),
+    secondSupervisor: z.record(z.string(), z.unknown()).optional(),
     examSessions: z.array(z.unknown()).optional(),
 }
 );
@@ -51,7 +63,7 @@ export const ExamRoomSchema = ExamRoomScalarSchema.merge(fkSchema).merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ExamRoomPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ExamRoomPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -61,21 +73,21 @@ export const ExamRoomPrismaCreateSchema = baseSchema.partial().passthrough();
 export const ExamRoomPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    lockExamCode: z.boolean().default(false),
-    start: z.union([z.number().nullish(), z.record(z.unknown())]),
-    end: z.union([z.number().nullish(), z.record(z.unknown())])
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    lockExamCode: z.boolean(),
+    start: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    end: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `ExamRoom` schema for create operations excluding foreign keys and relations.
  */
-export const ExamRoomCreateScalarSchema = baseSchema.partial({
+export const ExamRoomCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, lockExamCode: true
 });
 
@@ -89,7 +101,7 @@ export const ExamRoomCreateSchema = ExamRoomCreateScalarSchema.merge(fkSchema);
 /**
  * `ExamRoom` schema for update operations excluding foreign keys and relations.
  */
-export const ExamRoomUpdateScalarSchema = baseSchema.partial();
+export const ExamRoomUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

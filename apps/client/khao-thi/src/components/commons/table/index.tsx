@@ -19,6 +19,7 @@ import dayjs from 'dayjs'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import type { ColumnTypeProps, FilterProps } from '../typeFilter'
+import FilterSelect from './filter-select'
 
 dayjs.locale('vi')
 
@@ -28,7 +29,7 @@ export type ColumnOption = {
     children?: ColumnOption[]
 }
 
-type TableProps<T> = {
+type TableProps<T = Record<string, unknown>> = {
     columns?: ColumnsType<T> & {
         type?: string
         distinctFilters?: string[]
@@ -192,22 +193,19 @@ const Table = <T extends Record<string, unknown>>({
         label: string
         children?: TreeNode[]
     }
-    const genFilter = (item: ColumnTypeProps) => {
-        const ListButton = useCallback(
-            ({ clear, click }: { clear: () => void; click: () => void }) => {
-                return (
-                    <div className="flex justify-end gap-2">
-                        <Button size="small" onClick={clear}>
-                            Bỏ lọc
-                        </Button>
-                        <Button type="primary" size="small" onClick={click}>
-                            Lọc
-                        </Button>
-                    </div>
-                )
-            },
-            []
+    const ListButton = useCallback(({ clear, click }: { clear: () => void; click: () => void }) => {
+        return (
+            <div className="flex justify-end gap-2">
+                <Button size="small" onClick={clear}>
+                    Bỏ lọc
+                </Button>
+                <Button type="primary" size="small" onClick={click}>
+                    Lọc
+                </Button>
+            </div>
         )
+    }, [])
+    const genFilter = (item: ColumnTypeProps) => {
         if (item?.type === 'input') {
             return {
                 filterDropdown: (props: FilterDropdownProps) => (
@@ -372,74 +370,9 @@ const Table = <T extends Record<string, unknown>>({
             return {
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
-                    const [input, setInput] = useState('')
-                    const [optionsSerch, setOptionsSerch] = useState(item?.options || [])
-                    const handleSearch = async (value: string) => {
-                        if (!value.trim()) {
-                            setOptionsSerch(item?.options || [])
-                            return
-                        }
-
-                        try {
-                            const response = searchVietnamese(item?.options || [], value.trim())
-                            setOptionsSerch(response)
-                        } catch (_error: unknown) {
-                            setOptionsSerch(item?.options || [])
-                        }
-                    }
                     return (
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
-                            {item.options.length > 0 && (
-                                <div className="max-h-[500px] overflow-y-auto">
-                                    <div className="mb-2">Tìm kiếm</div>
-                                    <Input
-                                        placeholder="Nhập từ khoá cần tìm kiếm"
-                                        prefix={
-                                            <Search
-                                                size={15}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                        value={input}
-                                        onChange={(e) => {
-                                            setInput(e.target.value)
-                                            handleSearch(e.target.value)
-                                        }}
-                                        style={{ height: 36, width: '100%', marginBottom: 16 }}
-                                    />
-                                    {!input && optionsSerch.length > 0 && (
-                                        <Checkbox
-                                            onChange={(e: CheckboxChangeEvent) =>
-                                                onCheckAllChange(item, e)
-                                            }
-                                            indeterminate={indeterminate(item)}
-                                            checked={checkAll(item)}
-                                            className="mb-3"
-                                        >
-                                            Chọn tất cả
-                                        </Checkbox>
-                                    )}
-
-                                    <Checkbox.Group
-                                        className="mb-3"
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: 12,
-                                        }}
-                                        value={
-                                            filtersTable[
-                                                item.dataIndex as keyof FilterProps
-                                            ] as string[]
-                                        }
-                                        onChange={(e: string[]) => onCheckChange(item, e)}
-                                        options={optionsSerch}
-                                    />
-                                </div>
-                            )}
+                            <FilterSelect item={item} onCheckAllChange={onCheckAllChange} onCheckChange = {onCheckChange} checkAll={checkAll} indeterminate={indeterminate} filtersTable={filtersTable}/>
                             <ListButton
                                 clear={() => {
                                     setFiltersTable({
@@ -500,20 +433,20 @@ const Table = <T extends Record<string, unknown>>({
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
                     const [input, setInput] = useState('')
-                    const [optionsSerch, setOptionsSerch] = useState(item?.options || [])
+                    const [optionsSearch, setOptionsSearch] = useState(item?.options || [])
                     const [checkStrictly, setCheckStrictly] = useState(false)
 
                     const handleSearchTree = async (value: string) => {
                         if (!value.trim()) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                             return
                         }
 
                         try {
                             const response = searchVietnameseTree(item?.options || [], value.trim())
-                            setOptionsSerch(response)
+                            setOptionsSearch(response)
                         } catch (_error: unknown) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                         }
                     }
                     return (
@@ -542,7 +475,7 @@ const Table = <T extends Record<string, unknown>>({
                                 checkable={true}
                                 defaultExpandAll={true}
                                 multiple={true}
-                                treeData={optionsSerch}
+                                treeData={optionsSearch}
                                 checkedKeys={
                                     filtersTable[item.dataIndex as keyof FilterProps] as string[]
                                 }
@@ -820,7 +753,7 @@ const Table = <T extends Record<string, unknown>>({
             id={id}
             rowKey={rowKey}
             size="small"
-            className="mt-4 custom-scrollbar"
+            className="mt-2 custom-scrollbar"
             rowSelection={rowSelection}
             columns={
                 columns.map((column) => ({
@@ -852,6 +785,7 @@ const Table = <T extends Record<string, unknown>>({
                     : false
             }
             expandable={expandable}
+            {...rest}
             onRow={(record) => ({
                 onClick: () => {
                     if (onRowClick) {
@@ -864,9 +798,10 @@ const Table = <T extends Record<string, unknown>>({
                     }
                 },
                 style: { cursor: 'pointer' },
-                className: record.id === selectedRow ? 'bg-blue-100' : '',
+                className:
+                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : '',
+                ...rest.onRow?.(record),
             })}
-            {...rest}
         />
     )
 }

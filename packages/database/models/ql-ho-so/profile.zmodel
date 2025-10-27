@@ -247,8 +247,8 @@ model UserProfile extends Base {
   faqsApproved                  FAQ[]                        @relation("FAQApproved")
   conversations                 Conversation[]
   subjectVersionHistory         SubjectVersionHistory[]
+  subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
-
 
   @@auth()
   @@schema("ql-nguoi-dung")

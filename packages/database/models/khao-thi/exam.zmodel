@@ -29,13 +29,14 @@ enum ExamStatus {
 
 /// Phiên bản ngân hàng câu hỏi
 model QuestionBank extends Base {
-  name             String           // Tên ngân hàng câu hỏi
+  name               String           // Tên ngân hàng câu hỏi
 
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
+  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId   String
 
-  questions        Question[]
-  exam             Exam[]
+  questions          Question[]
+  testStructureRules TestStructureRule[]
+  exam               Exam[]
 
   @@unique([subjectVersionId, name])
   @@schema("khao-thi")
@@ -243,8 +244,12 @@ model ExamRoom extends Base {
 
 /// Cấu hình tạo đề tự động cho kỳ thi
 model TestStructureRule extends Base {
-  exam             Exam           @relation(fields: [examId], references: [id])
-  examId           String
+  exam             Exam?          @relation(fields: [examId], references: [id])
+  examId           String?
+
+  questionBank     QuestionBank?  @relation(fields: [questionBankId], references: [id])
+  questionBankId   String?
+
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId String
   questionPoint    Float
@@ -254,6 +259,8 @@ model TestStructureRule extends Base {
   count            Int
 
   @@unique([examId, knowledgeBlockId, questionPoint, questionType])
+  @@unique([questionBankId, knowledgeBlockId, questionPoint, questionType])
+
   @@schema("khao-thi")
 }
 

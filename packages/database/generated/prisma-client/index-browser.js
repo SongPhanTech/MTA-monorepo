@@ -1949,6 +1949,25 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   enterGradeLecturerId: 'enterGradeLecturerId'
 };
 
+exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  subjectClassId: 'subjectClassId',
+  scoreDeadLineStart: 'scoreDeadLineStart',
+  scoreDeadline: 'scoreDeadline',
+  examScoreDeadline: 'examScoreDeadline',
+  isLockScore: 'isLockScore',
+  isLockExamScore: 'isLockExamScore',
+  scoreSubmitted: 'scoreSubmitted',
+  scoreChecked: 'scoreChecked',
+  updatedById: 'updatedById'
+};
+
 exports.Prisma.SubjectClassTimeScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -3338,6 +3357,7 @@ exports.Prisma.TestStructureRuleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   examId: 'examId',
+  questionBankId: 'questionBankId',
   knowledgeBlockId: 'knowledgeBlockId',
   questionPoint: 'questionPoint',
   questionType: 'questionType',
@@ -5255,6 +5275,14 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   enterGradeLecturerId: 'enterGradeLecturerId'
 };
 
+exports.Prisma.SubjectClassHistoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  subjectClassId: 'subjectClassId',
+  updatedById: 'updatedById'
+};
+
 exports.Prisma.SubjectClassTimeOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6077,6 +6105,7 @@ exports.Prisma.TestStructureRuleOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   examId: 'examId',
+  questionBankId: 'questionBankId',
   knowledgeBlockId: 'knowledgeBlockId'
 };
 
@@ -7017,6 +7046,7 @@ exports.Prisma.ModelName = {
   ClassRegisterSession: 'ClassRegisterSession',
   ClassRegisterLogs: 'ClassRegisterLogs',
   SubjectClass: 'SubjectClass',
+  SubjectClassHistory: 'SubjectClassHistory',
   SubjectClassTime: 'SubjectClassTime',
   ClassSchedule: 'ClassSchedule',
   TrainingObjectType: 'TrainingObjectType',

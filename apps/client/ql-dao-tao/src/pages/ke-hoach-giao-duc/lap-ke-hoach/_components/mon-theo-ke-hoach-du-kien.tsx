@@ -1,17 +1,13 @@
 import { queryClient } from '@api/index'
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import type { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
-import { $Enums, type TrainingMajor } from '@workspace/db/client'
-import {
-    useFindFirstPlanTraining,
-    useFindManyTrainingCourse,
-    useFindManyTrainingMajor,
-} from '@workspace/db/hooks'
+import { $Enums } from '@workspace/db/client'
+import { useFindFirstPlanTraining } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { OpenSubjectClassFixedClassItem } from '@workspace/libs/api/schemas/openSubjectClassFixedClassItem'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -74,16 +70,15 @@ export default function MonTheoKeHoachDuKien() {
         }
     )
 
-    const data = useMemo(
-        () =>
-            res?.status === 200
-                ? res?.data?.data.map((subjectVersion) => ({
-                      id: subjectVersion.subjectVersionId,
-                      ...subjectVersion,
-                  }))
-                : [],
-        [res]
-    )
+    const data = useMemo(() => {
+        return res?.status === 200
+            ? res?.data?.data.map((subjectVersion) => ({
+                  id: subjectVersion.subjectVersionId,
+                  ...subjectVersion,
+              }))
+            : []
+    }, [res])
+    console.log('data', data)
 
     useEffect(() => {
         if (planTrainingData) {
@@ -103,15 +98,6 @@ export default function MonTheoKeHoachDuKien() {
         []
     )
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
-
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
-        where: { trainingObjectTypeId, deletedAt: null, active: true },
-    })
-
     const { showSpinner, hideSpinner } = useSpinner()
 
     const onSubmit = async () => {
@@ -121,11 +107,9 @@ export default function MonTheoKeHoachDuKien() {
             const delaySubject = data.filter(
                 (subject) => !subjectSelected.includes(subject.subjectVersionId)
             )
-
             const subject = data.filter((subject) =>
                 subjectSelected.includes(subject.subjectVersionId)
             )
-
             let planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
@@ -279,45 +263,20 @@ export default function MonTheoKeHoachDuKien() {
                 }
             }}
         >
-            <Row>
-                <Col span={20}>
-                    <Flex gap={4}>
+            <Row gutter={[0, 8]}>
+                <Col span={24}>
+                    <Flex justify="space-between" gap={4}>
                         <Col span={8}>
                             <Form.Item className="mb-0" name="searchText">
                                 <Input id="search" placeholder="Tìm kiếm" allowClear />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
-                            <Form.Item className="mb-0" name="trainingMajorId" labelAlign="left">
-                                <Select
-                                    placeholder="Chọn chuyên ngành đào tạo"
-                                    options={trainingMajorData.map((i: TrainingMajor) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col span={8}>
-                            <Form.Item className="mb-0" name="trainingCourseId" labelAlign="left">
-                                <Select
-                                    placeholder="Khoá đào tạo"
-                                    options={trainingCourseData.map((i) => ({
-                                        value: i.id,
-                                        label: i.name,
-                                    }))}
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Flex>
-                </Col>
-                <Col span={4}>
-                    <Flex justify="end" gap={4}>
-                        <Button onClick={onSubmit} type="primary">
-                            Lưu kế hoạch
-                        </Button>
+                        <Flex gap={8}>
+                            <Button type="primary">Khởi tạo môn</Button>
+                            <Button onClick={onSubmit} type="primary">
+                                Lưu kế hoạch
+                            </Button>
+                        </Flex>
                     </Flex>
                 </Col>
                 <Col span={24}>
@@ -387,37 +346,19 @@ export default function MonTheoKeHoachDuKien() {
                                 title: 'Danh sách lớp quản lý',
                                 dataIndex: 'fixedClass',
                                 align: 'center',
-                                width: 180,
+                                width: 250,
                                 render: (__, record) => {
                                     return record?.fixedClass.length ? (
                                         <TextTruncate
-                                            arr={record?.fixedClass.map((i: any) => {
-                                                return {
-                                                    key: i?.fixedClassId,
-                                                    label: `Kỳ ${i.fixedClassSemester} - ${i.fixedClassCode} (${i.fixedClassCount})`,
+                                            arr={record?.fixedClass.map(
+                                                (i: OpenSubjectClassFixedClassItem) => {
+                                                    return {
+                                                        key: i?.fixedClassId,
+                                                        label: `${i.fixedClassCode} (${i.fixedClassCount}) - ${i.curriculumVersionCode} - Kỳ ${i.fixedClassSemester}`,
+                                                    }
                                                 }
-                                            })}
+                                            )}
                                             key="fixedClass"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
-                                },
-                            },
-                            {
-                                title: 'CTĐT',
-                                dataIndex: 'curriculumVersion',
-                                align: 'center',
-                                render: (__, record) => {
-                                    return record?.curriculumVersion.length ? (
-                                        <TextTruncate
-                                            arr={record?.curriculumVersion.map((i: any) => {
-                                                return {
-                                                    key: i?.curriculumVersionId,
-                                                    label: `${i?.curriculumVersionCode} - ${i?.curriculumVersionName}`,
-                                                }
-                                            })}
-                                            key="curriculumVersion"
                                         />
                                     ) : (
                                         ''

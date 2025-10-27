@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -16,9 +15,19 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+}
+).strict();
 const relationSchema = z.object({
-    document: z.record(z.unknown()),
-    topic: z.record(z.unknown()),
+    document: z.record(z.string(), z.unknown()),
+    topic: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -43,7 +52,7 @@ export const DocumentTopicSchema = DocumentTopicScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DocumentTopicPrismaCreateSchema = baseSchema.partial().passthrough();
+export const DocumentTopicPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -53,18 +62,18 @@ export const DocumentTopicPrismaCreateSchema = baseSchema.partial().passthrough(
 export const DocumentTopicPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date())
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date()
 }).partial().passthrough();
 
 
 /**
  * `DocumentTopic` schema for create operations excluding foreign keys and relations.
  */
-export const DocumentTopicCreateScalarSchema = baseSchema.partial({
+export const DocumentTopicCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -78,7 +87,7 @@ export const DocumentTopicCreateSchema = DocumentTopicCreateScalarSchema.merge(f
 /**
  * `DocumentTopic` schema for update operations excluding foreign keys and relations.
  */
-export const DocumentTopicUpdateScalarSchema = baseSchema.partial();
+export const DocumentTopicUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

@@ -35,9 +35,9 @@ export default function TextTruncate({ arr }: TypeProps) {
                     paddingLeft: 0,
                     margin: 0,
                 }}
-                className={`content text-left ${classContent}  ${show ? '' : 'line-clamp-2'} `}
+                className={`content text-left ${classContent}  ${show ? '' : 'line-clamp-3'} `}
             >
-                {arr?.map((val: any, index: number) => (
+                {arr?.map((val) => (
                     <li key={val.key}>- {val.label}</li>
                 ))}
             </ul>

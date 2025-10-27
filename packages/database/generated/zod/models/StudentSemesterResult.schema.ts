@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { AcademicRankingBaseTypeSchema } from '../enums/AcademicRankingBaseType.schema';
@@ -50,9 +49,49 @@ const baseSchema = z.object({
     expelled: z.boolean().default(false),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    code: z.string(),
+    studyYear: z.number(),
+    semesterIndexInCourse: z.number(),
+    isLastSemester: z.boolean(),
+    baseScore: AcademicRankingBaseTypeSchema,
+    gpaBase4: DecimalSchema,
+    cumulativeGpaBase4: DecimalSchema,
+    gpaBase10: DecimalSchema,
+    cumulativeGpaBase10: DecimalSchema,
+    conductScore: z.number().nullish(),
+    studentTrainingType: StudentTrainingTypeSchema,
+    lowestFinalScore: z.number(),
+    lowestGraduationScore: z.number().nullish(),
+    totalCredits: z.number(),
+    registeredCredits: z.number(),
+    retakingCredits: z.number(),
+    passedCredits: z.number(),
+    failedCredits: z.number(),
+    accumulatedCredits: z.number(),
+    totalCreditsByCurriculum: z.number(),
+    totalFailedCredits: z.number(),
+    foreignLangPass: z.boolean(),
+    isClassMonitor: z.boolean(),
+    isUnionLeader: z.boolean(),
+    entryScore: z.number().nullish(),
+    isImproving: z.boolean(),
+    postponeWithReason: z.boolean(),
+    academicWarningLevel: z.number(),
+    disciplinaryWarningLevel: z.number(),
+    suspended: z.boolean(),
+    expelled: z.boolean(),
+}
+).strict();
 const relationSchema = z.object({
-    student: z.record(z.unknown()),
-    semester: z.record(z.unknown()),
+    student: z.record(z.string(), z.unknown()),
+    semester: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -77,7 +116,7 @@ export const StudentSemesterResultSchema = StudentSemesterResultScalarSchema.mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StudentSemesterResultPrismaCreateSchema = baseSchema.partial().passthrough();
+export const StudentSemesterResultPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -86,49 +125,49 @@ export const StudentSemesterResultPrismaCreateSchema = baseSchema.partial().pass
  */
 export const StudentSemesterResultPrismaUpdateSchema = z.object({
     id: z.string(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     code: z.string(),
-    studyYear: z.union([z.number(), z.record(z.unknown())]),
-    semesterIndexInCourse: z.union([z.number(), z.record(z.unknown())]),
+    studyYear: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    semesterIndexInCourse: z.union([z.number(), z.record(z.string(), z.unknown())]),
     isLastSemester: z.boolean(),
     baseScore: AcademicRankingBaseTypeSchema,
     gpaBase4: DecimalSchema,
     cumulativeGpaBase4: DecimalSchema,
     gpaBase10: DecimalSchema,
     cumulativeGpaBase10: DecimalSchema,
-    conductScore: z.union([z.number().nullish(), z.record(z.unknown())]),
+    conductScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     studentTrainingType: StudentTrainingTypeSchema,
-    lowestFinalScore: z.union([z.number(), z.record(z.unknown())]),
-    lowestGraduationScore: z.union([z.number().nullish(), z.record(z.unknown())]),
-    totalCredits: z.union([z.number(), z.record(z.unknown())]),
-    registeredCredits: z.union([z.number(), z.record(z.unknown())]),
-    retakingCredits: z.union([z.number(), z.record(z.unknown())]),
-    passedCredits: z.union([z.number(), z.record(z.unknown())]),
-    failedCredits: z.union([z.number(), z.record(z.unknown())]),
-    accumulatedCredits: z.union([z.number(), z.record(z.unknown())]),
-    totalCreditsByCurriculum: z.union([z.number(), z.record(z.unknown())]),
-    totalFailedCredits: z.union([z.number(), z.record(z.unknown())]),
+    lowestFinalScore: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    lowestGraduationScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    totalCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    registeredCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    retakingCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    passedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    failedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    accumulatedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    totalCreditsByCurriculum: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    totalFailedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     foreignLangPass: z.boolean(),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
-    entryScore: z.union([z.number().nullish(), z.record(z.unknown())]),
+    entryScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     isImproving: z.boolean(),
-    postponeWithReason: z.boolean().default(false),
-    academicWarningLevel: z.union([z.number().default(0), z.record(z.unknown())]),
-    disciplinaryWarningLevel: z.union([z.number().default(0), z.record(z.unknown())]),
-    suspended: z.boolean().default(false),
-    expelled: z.boolean().default(false)
+    postponeWithReason: z.boolean(),
+    academicWarningLevel: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    disciplinaryWarningLevel: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    suspended: z.boolean(),
+    expelled: z.boolean()
 }).partial().passthrough();
 
 
 /**
  * `StudentSemesterResult` schema for create operations excluding foreign keys and relations.
  */
-export const StudentSemesterResultCreateScalarSchema = baseSchema.partial({
+export const StudentSemesterResultCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, postponeWithReason: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
 });
 
@@ -142,7 +181,7 @@ export const StudentSemesterResultCreateSchema = StudentSemesterResultCreateScal
 /**
  * `StudentSemesterResult` schema for update operations excluding foreign keys and relations.
  */
-export const StudentSemesterResultUpdateScalarSchema = baseSchema.partial();
+export const StudentSemesterResultUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

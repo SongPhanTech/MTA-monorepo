@@ -6,13 +6,17 @@
  */
 
 import type { Search } from './search'
+import type { SemesterId } from './semesterId'
 import type { TrainingCourseId } from './trainingCourseId'
 import type { TrainingMajorId } from './trainingMajorId'
 import type { TrainingObjectTypeId } from './trainingObjectTypeId'
 
 export type OpenSubjectClassRetakeParams = {
+    page?: number | null
+    limit?: number | null
     trainingCourseId?: TrainingCourseId
     trainingMajorId?: TrainingMajorId
     search?: Search
     trainingObjectTypeId: TrainingObjectTypeId
+    semesterId?: SemesterId & unknown
 }

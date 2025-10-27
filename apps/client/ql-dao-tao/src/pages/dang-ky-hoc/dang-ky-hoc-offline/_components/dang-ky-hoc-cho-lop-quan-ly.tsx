@@ -69,6 +69,19 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                     },
                 },
             },
+            _count: {
+                select: {
+                    subjectClassStudent: {
+                        where: {
+                            student: {
+                                active: true,
+                                status: 'ENROLLED',
+                                deletedAt: null,
+                            },
+                        },
+                    },
+                },
+            },
             trainingLocation: {
                 select: {
                     name: true,
@@ -213,11 +226,7 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                         title: 'Số SV đã ĐK',
                         align: 'center',
                         width: 100,
-                        render: (record: SubjectClassData) =>
-                            record?.fixedClasses?.reduce(
-                                (acc: number, curr) => acc + (curr?._count?.students ?? 0),
-                                0
-                            ),
+                        render: (record) => record?._count?.subjectClassStudent ?? 0,
                     },
                     {
                         title: 'Lớp QL đã ĐK',

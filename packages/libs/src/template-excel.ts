@@ -390,13 +390,13 @@ function appendSheet(
             const startMatch = startCell?.match(/([A-Z]+)(\d+)/)
             if (!startMatch) return // Bỏ qua nếu không khớp
             const startCol = startMatch[1] // "A"
-            const startRow = parseInt(startMatch[2] ?? '0') // 5
+            const startRow = Number.parseInt(startMatch[2] ?? '0', 10) // 5
 
             // Phân tích ô kết thúc (ví dụ "C6")
             const endMatch = endCell?.match(/([A-Z]+)(\d+)/)
             if (!endMatch) return // Bỏ qua nếu không khớp
             const endCol = endMatch[1] // "C"
-            const endRow = parseInt(endMatch[2] ?? '0') // 6
+            const endRow = Number.parseInt(endMatch[2] ?? '0', 10) // 6
 
             // Tính toán lại tọa độ hàng mới
             const newStartRow = startRow + rowOffset
@@ -437,7 +437,7 @@ async function handleExcelJSMergeSheets(
         const { sheet, data = {}, rows, tableStartCell, hiddenColumns } = sheetOption
 
         // Mỗi sheetOption BẮT BUỘC phải có tên sheet duy nhất
-        const sheetName = String(sheet || new Date().getTime())
+        const sheetName = String(sheet || Date.now())
         const worksheet = cloneWorksheet(workbook, firstSheet, sheetName)
 
         // 1a. Ẩn cột (nếu có)

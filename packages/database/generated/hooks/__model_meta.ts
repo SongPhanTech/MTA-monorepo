@@ -3,9 +3,10 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
-const metadata = {
+import type { ModelMeta } from "@zenstackhq/runtime";
+
+const metadata: ModelMeta = {
     models: {
         config: {
             name: 'Config', fields: {
@@ -1147,6 +1148,12 @@ const metadata = {
                 }, subjectVersionHistory: {
                     name: "subjectVersionHistory",
                     type: "SubjectVersionHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'updatedBy',
+                }, subjectClassHistory: {
+                    name: "subjectClassHistory",
+                    type: "SubjectClassHistory",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'updatedBy',
@@ -7523,12 +7530,14 @@ const metadata = {
                     name: "updatedBy",
                     type: "UserProfile",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'studentSubjectScoreHistory',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "updatedById" },
                 }, updatedById: {
                     name: "updatedById",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'updatedBy',
                 },
@@ -10291,11 +10300,113 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, subjectClassHistory: {
+                    name: "subjectClassHistory",
+                    type: "SubjectClassHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
                 },
             }, uniqueConstraints: {
                 id: {
                     name: "id",
                     fields: ["id"]
+                },
+            },
+        },
+        subjectClassHistory: {
+            name: 'SubjectClassHistory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    backLink: 'subjectClassHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
+                }, scoreDeadLineStart: {
+                    name: "scoreDeadLineStart",
+                    type: "DateTime",
+                    isOptional: true,
+                }, scoreDeadline: {
+                    name: "scoreDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, examScoreDeadline: {
+                    name: "examScoreDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, isLockScore: {
+                    name: "isLockScore",
+                    type: "Boolean",
+                    isOptional: true,
+                }, isLockExamScore: {
+                    name: "isLockExamScore",
+                    type: "Boolean",
+                    isOptional: true,
+                }, scoreSubmitted: {
+                    name: "scoreSubmitted",
+                    type: "Boolean",
+                    isOptional: true,
+                }, scoreChecked: {
+                    name: "scoreChecked",
+                    type: "Boolean",
+                    isOptional: true,
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'subjectClassHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 },
             },
         },
@@ -17802,6 +17913,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'questionBank',
+                }, testStructureRules: {
+                    name: "testStructureRules",
+                    type: "TestStructureRule",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'questionBank',
                 }, exam: {
                     name: "exam",
                     type: "Exam",
@@ -18533,14 +18650,30 @@ const metadata = {
                     name: "exam",
                     type: "Exam",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'testStructureRules',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "examId" },
                 }, examId: {
                     name: "examId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'exam',
+                }, questionBank: {
+                    name: "questionBank",
+                    type: "QuestionBank",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'testStructureRules',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "questionBankId" },
+                }, questionBankId: {
+                    name: "questionBankId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'questionBank',
                 }, knowledgeBlock: {
                     name: "knowledgeBlock",
                     type: "KnowledgeBlock",
@@ -18573,6 +18706,9 @@ const metadata = {
                 }, examId_knowledgeBlockId_questionPoint_questionType: {
                     name: "examId_knowledgeBlockId_questionPoint_questionType",
                     fields: ["examId", "knowledgeBlockId", "questionPoint", "questionType"]
+                }, questionBankId_knowledgeBlockId_questionPoint_questionType: {
+                    name: "questionBankId_knowledgeBlockId_questionPoint_questionType",
+                    fields: ["questionBankId", "knowledgeBlockId", "questionPoint", "questionType"]
                 },
             },
         },

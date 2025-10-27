@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { GraduationSessionStatus } from '../../zenstack/models';
@@ -23,8 +22,23 @@ const baseSchema = z.object({
     status: GraduationSessionStatusSchema,
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    sessionDate: z.coerce.date(),
+    applicationStart: z.coerce.date(),
+    applicationEnd: z.coerce.date(),
+    status: GraduationSessionStatusSchema,
+}
+).strict();
 const relationSchema = z.object({
-    trainingObjectType: z.record(z.unknown()),
+    trainingObjectType: z.record(z.string(), z.unknown()),
     applications: z.array(z.unknown()).optional(),
 }
 );
@@ -49,7 +63,7 @@ export const GraduationSessionSchema = GraduationSessionScalarSchema.merge(fkSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const GraduationSessionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const GraduationSessionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -59,11 +73,11 @@ export const GraduationSessionPrismaCreateSchema = baseSchema.partial().passthro
 export const GraduationSessionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     sessionDate: z.coerce.date(),
     applicationStart: z.coerce.date(),
@@ -75,7 +89,7 @@ export const GraduationSessionPrismaUpdateSchema = z.object({
 /**
  * `GraduationSession` schema for create operations excluding foreign keys and relations.
  */
-export const GraduationSessionCreateScalarSchema = baseSchema.partial({
+export const GraduationSessionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
@@ -89,7 +103,7 @@ export const GraduationSessionCreateSchema = GraduationSessionCreateScalarSchema
 /**
  * `GraduationSession` schema for update operations excluding foreign keys and relations.
  */
-export const GraduationSessionUpdateScalarSchema = baseSchema.partial();
+export const GraduationSessionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

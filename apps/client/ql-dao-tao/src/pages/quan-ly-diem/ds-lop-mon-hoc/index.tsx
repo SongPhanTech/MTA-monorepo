@@ -617,7 +617,7 @@ export default function ClassSubject() {
                         <Col span={6}>
                             <Flex justify="end" gap={4}>
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_QUAN_LY_LOP_MON_HOC,
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
                                     'XEM_TAT_CA'
                                 ) && (
                                     <>

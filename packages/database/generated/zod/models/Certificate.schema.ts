@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,18 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string(),
+    englishName: z.string().nullish(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     englishName: z.string().nullish(),
 }
@@ -40,7 +51,7 @@ export const CertificateSchema = CertificateScalarSchema.merge(relationSchema.pa
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const CertificatePrismaCreateSchema = baseSchema.partial().passthrough();
+export const CertificatePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -50,11 +61,11 @@ export const CertificatePrismaCreateSchema = baseSchema.partial().passthrough();
 export const CertificatePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     englishName: z.string().nullish()
 }).partial().passthrough();
@@ -63,7 +74,7 @@ export const CertificatePrismaUpdateSchema = z.object({
 /**
  * `Certificate` schema for create operations excluding foreign keys and relations.
  */
-export const CertificateCreateScalarSchema = baseSchema.partial({
+export const CertificateCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -71,7 +82,7 @@ export const CertificateCreateScalarSchema = baseSchema.partial({
 /**
  * `Certificate` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const CertificateCreateSchema = baseSchema.partial({
+export const CertificateCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -79,7 +90,7 @@ export const CertificateCreateSchema = baseSchema.partial({
 /**
  * `Certificate` schema for update operations excluding foreign keys and relations.
  */
-export const CertificateUpdateScalarSchema = baseSchema.partial();
+export const CertificateUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

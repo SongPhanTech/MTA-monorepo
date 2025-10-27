@@ -173,7 +173,6 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
 
     const handleSave = async () => {
         if (!subjectClassId) return
-
         try {
             await enrollFixedClassOnSubjectClass({
                 fixedClassIds: selectedRowKeys as string[],

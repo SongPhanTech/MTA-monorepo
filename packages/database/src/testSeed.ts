@@ -2,21 +2,13 @@ import { PrismaClient } from '../generated/prisma-client'
 
 const prisma = new PrismaClient()
 
-const semesters = await prisma.semester.findMany({
-    include: {
-        subjectClasses: {
-            select: {
-                id: true,
-            },
-        },
+const now = new Date().toISOString()
+
+const semesters = await prisma.semester.findFirst({
+    where: {
+        startDate: { lte: now },
+        endDate: { gte: now },
     },
 })
 
-for (const semester of semesters) {
-    await prisma.subjectClass.updateMany({
-        data: {
-            startDate: semester.startDate,
-            endDate: semester.endDate,
-        },
-    })
-}
+console.log(semesters)

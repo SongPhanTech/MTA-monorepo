@@ -6,19 +6,11 @@ export const OpenSubjectClass = z
         trainingMajorId: z.string(),
         managementOrganizationId: z.string(),
         managementOrganizationName: z.string(),
-        trainingCourseId: z.string(),
         subjectVersionId: z.string(),
         subjectVersionName: z.string(),
         subjectVersionCode: z.string(),
         managementOrganizationCode: z.string(),
         subjectVersionCredit: z.number(),
-        curriculumVersion: z.array(
-            z.object({
-                curriculumVersionId: z.string(),
-                curriculumVersionName: z.string(),
-                curriculumVersionCode: z.string(),
-            })
-        ),
         subjectClass: z.array(
             z.object({
                 subjectClassId: z.string(),
@@ -33,6 +25,10 @@ export const OpenSubjectClass = z
                 fixedClassCount: z.number(),
                 fixedClassSemester: z.number(),
                 fixedClassCode: z.string(),
+                trainingCourseId: z.string(),
+                curriculumVersionId: z.string(),
+                curriculumVersionName: z.string(),
+                curriculumVersionCode: z.string(),
             })
         ),
         countStudent: z.number(),

@@ -341,7 +341,7 @@ export default function LopMonHocDaMo({ studentId, hocLai }: StudentCourseByPlan
                 </Form.Item>
             </Col>
             <Col span={4} className="text-right">
-                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_DANG_KY_HOC, 'SUA') && (
+                {can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANG_KY_HOC_DANG_KY_HOC_OFFLINE, 'SUA') && (
                     <Button
                         type="primary"
                         className="h-[32px] px-4"

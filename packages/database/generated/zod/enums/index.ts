@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 export * from './TransactionIsolationLevel.schema';
 export * from './ConfigScalarFieldEnum.schema';
@@ -106,6 +105,7 @@ export * from './ClassRegisterSessionCreditScalarFieldEnum.schema';
 export * from './ClassRegisterSessionScalarFieldEnum.schema';
 export * from './ClassRegisterLogsScalarFieldEnum.schema';
 export * from './SubjectClassScalarFieldEnum.schema';
+export * from './SubjectClassHistoryScalarFieldEnum.schema';
 export * from './SubjectClassTimeScalarFieldEnum.schema';
 export * from './ClassScheduleScalarFieldEnum.schema';
 export * from './TrainingObjectTypeScalarFieldEnum.schema';
@@ -356,6 +356,7 @@ export * from './ClassRegisterSessionCreditOrderByRelevanceFieldEnum.schema';
 export * from './ClassRegisterSessionOrderByRelevanceFieldEnum.schema';
 export * from './ClassRegisterLogsOrderByRelevanceFieldEnum.schema';
 export * from './SubjectClassOrderByRelevanceFieldEnum.schema';
+export * from './SubjectClassHistoryOrderByRelevanceFieldEnum.schema';
 export * from './SubjectClassTimeOrderByRelevanceFieldEnum.schema';
 export * from './ClassScheduleOrderByRelevanceFieldEnum.schema';
 export * from './TrainingObjectTypeOrderByRelevanceFieldEnum.schema';

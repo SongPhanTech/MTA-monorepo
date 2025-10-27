@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,17 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -38,7 +48,7 @@ export const DM_BacLuongSchema = DM_BacLuongScalarSchema.merge(relationSchema.pa
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DM_BacLuongPrismaCreateSchema = baseSchema.partial().passthrough();
+export const DM_BacLuongPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -48,11 +58,11 @@ export const DM_BacLuongPrismaCreateSchema = baseSchema.partial().passthrough();
 export const DM_BacLuongPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string()
 }).partial().passthrough();
 
@@ -60,7 +70,7 @@ export const DM_BacLuongPrismaUpdateSchema = z.object({
 /**
  * `DM_BacLuong` schema for create operations excluding foreign keys and relations.
  */
-export const DM_BacLuongCreateScalarSchema = baseSchema.partial({
+export const DM_BacLuongCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -68,7 +78,7 @@ export const DM_BacLuongCreateScalarSchema = baseSchema.partial({
 /**
  * `DM_BacLuong` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DM_BacLuongCreateSchema = baseSchema.partial({
+export const DM_BacLuongCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -76,7 +86,7 @@ export const DM_BacLuongCreateSchema = baseSchema.partial({
 /**
  * `DM_BacLuong` schema for update operations excluding foreign keys and relations.
  */
-export const DM_BacLuongUpdateScalarSchema = baseSchema.partial();
+export const DM_BacLuongUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
