@@ -314,7 +314,35 @@ export default function StudentFixedClassPage() {
             },
         },
     })
-
+    const handleTest = () => {
+        const testRows: TableRow[] = [
+            {
+                cells: [
+                    { value: 'Test', colSpan: 10, rowSpan: 2, border: true },
+                    { value: 'Test', border: true },
+                    { value: 'Test', border: true },
+                ],
+            },
+            {
+                cells: [
+                    { value: 'Test', border: true },
+                    { value: 'Test', border: true },
+                    { value: 'Test', border: true },
+                ],
+            },
+        ]
+        exportFromTemplate({
+            templateUrl: getMinioUrl('/mta/template/Bangdiemtheolop.xlsx'),
+            sheets: [
+                {
+                    sheet: 'BaoCaoDiem',
+                    rows: testRows,
+                    tableStartCell: { row: 9, col: 1 },
+                },
+            ],
+            fileName: 'Test.xlsx',
+        })
+    }
     const handleExportDiemLop = async () => {
         showSpinner()
         try {
@@ -329,8 +357,6 @@ export default function StudentFixedClassPage() {
             )
 
             const studentRows = data.map((student, index) => {
-                // !!! TODO: LOGIC QUAN TRỌNG NHẤT
-                // Cần map điểm của sinh viên với danh sách môn học ở trên
                 const diem: (string | number | null)[] = (subjectsInOrder || []).map(
                     (subjectInfo) => {
                         const scoreData = (student as any).subjectClassStudent?.find(
@@ -343,7 +369,6 @@ export default function StudentFixedClassPage() {
                         return null
                     }
                 )
-                // !!! TODO: Lấy các trường đã include
                 const ccta = (student as any).englishCertificate || null
                 const tbc = (student as any).gpa || null
 
@@ -2255,6 +2280,11 @@ export default function StudentFixedClassPage() {
                                                 label: 'Bảng điểm theo lớp, kết quả đào tạo toàn khoá',
                                                 key: 'export-bang-diem-theo-lop-ket-qua-dao-tao-toan-khoa',
                                                 onClick: async () => await handleExportDiemLop(),
+                                            },
+                                            {
+                                                label: 'Test',
+                                                key: 'test',
+                                                onClick: async () => await handleTest(),
                                             },
                                         ],
                                     }}
