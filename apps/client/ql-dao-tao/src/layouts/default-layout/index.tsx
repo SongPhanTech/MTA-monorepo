@@ -102,10 +102,10 @@ const DefaultLayout = ({
                         <Divider type="vertical" className="bg-primary h-[30px]" />
                         <SelectTrainingObjectType />
                         <Divider type="vertical" className="bg-primary h-[30px]" />
-                        <div className='mr-2'>Học kỳ đang làm việc</div>
+                        <div className="mr-2">HK đang làm việc</div>
                         <TreeSelectSemester />
                         <Divider type="vertical" className="bg-primary h-[30px]" />
-                        <Breadcrumb items={listBreadcrumb} />
+                        <Breadcrumb className="text-base font-semibold" items={listBreadcrumb} />
                     </div>
                     <HeaderApp />
                 </Header>
