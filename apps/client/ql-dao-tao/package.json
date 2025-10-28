@@ -49,7 +49,6 @@
 		"dayjs": "catalog:",
 		"decimal.js": "catalog:",
 		"easy-peasy": "catalog:",
-		"easy-template-x": "^7.0.1",
 		"exceljs": "catalog:",
 		"file-saver": "catalog:",
 		"katex": "catalog:",
@@ -74,7 +73,6 @@
 		"tailwind-merge": "catalog:",
 		"tippy.js": "catalog:",
 		"xlsx": "catalog:",
-		"xlsx-template": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
