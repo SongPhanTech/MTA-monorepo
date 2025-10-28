@@ -14,9 +14,6 @@ import MinIOApp from './api/minio'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
-import {
-    getCookie,
-} from 'hono/cookie'
 export const prisma = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
 app.use(
@@ -65,7 +62,6 @@ app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 // setupAuth(app)
 app.all('/api/system/:appcode/*', async (c) => {
     const appCode = c.req.param('appcode')
-    const tenantCode = getCookie(c, 'k-tenantcode')
     const pathProxy = c.req.path.replace(`/api/system/${appCode}/`, '')
     const clientId = (() => {
         switch (appCode) {
@@ -104,8 +100,6 @@ app.all('/api/system/:appcode/*', async (c) => {
             // ...c.req.header(), // optional, specify only when forwarding all the request data (including credentials) is necessary.
             'x-clientid': clientId,
             'x-clientsecret': clientSecret,
-            'K-AppCode': appCode,
-            'K-TenantCode': tenantCode || '',
         },
     })
 })
