@@ -946,9 +946,15 @@ export default function DiemQuaTrinh({
                     />
                 </Form>
             </Col>
-                <div className="fixed p-3 z-[10] bottom-[35px] left-0 right-0 w-[100vw] bg-white ">
-                <div>Bấm Tab: Chuyển ô theo hàng ngang, Mũi tên xuống: Chuyển ô theo hàng dọc, và hàng ngang</div>
-                                <div className="text-red-500 font-bold uppercase text-lg">Giáo viên nhập Lý do "Cấm thi", "Ghi chú" với truòng hợp điểm 0 hoặc không cho điểm</div>
+            <div className="fixed p-3 z-[10] bottom-[35px] left-0 right-0 w-[100vw] bg-white ">
+                <div>
+                    Bấm Tab: Chuyển ô theo hàng ngang, Mũi tên xuống: Chuyển ô theo hàng dọc, và
+                    hàng ngang
+                </div>
+                <div className="text-red-500 font-bold uppercase text-lg">
+                    Giáo viên nhập Lý do "Cấm thi", "Ghi chú" với truòng hợp điểm 0 hoặc không cho
+                    điểm
+                </div>
             </div>
         </Row>
     )

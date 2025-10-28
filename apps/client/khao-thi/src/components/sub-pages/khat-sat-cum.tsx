@@ -78,9 +78,7 @@ function TabDotKhaoSatCum() {
                   }
                 : {}),
         }),
-        [
-            filters
-        ]
+        [filters]
     )
 
     const { data = [], refetch } = useFindManyClusterSurvey({
@@ -96,7 +94,7 @@ function TabDotKhaoSatCum() {
 
     const { data: count } = useCountClusterSurvey({ where: { ...where, deletedAt: null } })
 
-    const { onOpen } = useDisclosure<{id: string; type: string}>({
+    const { onOpen } = useDisclosure<{ id: string; type: string }>({
         tag: 'PutSurveyModal',
     })
 
@@ -111,7 +109,7 @@ function TabDotKhaoSatCum() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen({id:'',type:'multiple'})
+        onOpen({ id: '', type: 'multiple' })
     }
 
     const handleModalCreateExam = (value: { id: string; surveyTopicId: string }) => {
@@ -307,7 +305,7 @@ function TabDotKhaoSatCum() {
                                             'SUA'
                                         ) && (
                                             <EditIcon
-                                                onClick={()=>onOpen({id,type:'multiple'})}
+                                                onClick={() => onOpen({ id, type: 'multiple' })}
                                                 className="text-sm text-blue-700 cursor-pointer mr-2"
                                             />
                                         )}
@@ -348,4 +346,3 @@ function TabDotKhaoSatCum() {
 }
 
 export default TabDotKhaoSatCum
-

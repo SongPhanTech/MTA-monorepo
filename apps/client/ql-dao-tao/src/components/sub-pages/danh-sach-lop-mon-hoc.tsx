@@ -21,8 +21,8 @@ import { Search } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import Select from '@components/commons/select'
 
-export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys}: any) {
-    const {  can } = useAbility()
+export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: any) {
+    const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
 

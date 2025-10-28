@@ -1,5 +1,5 @@
 import DefaultLayout from '@layouts/default-layout'
-import { Checkbox, Col,  Form,  Input, Row, Tabs } from 'antd'
+import { Checkbox, Col, Form, Input, Row, Tabs } from 'antd'
 import ClassSubject from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { useFindUniqueSubjectClass } from '@workspace/db/hooks'
@@ -10,7 +10,7 @@ import { useSession } from '@workspace/auth/react'
 import { listUser } from '@workspace/libs/constants'
 import FormItem from '@components/commons/form-item'
 import { useWatch } from 'antd/es/form/Form'
-type SubmitFormType={
+type SubmitFormType = {
     isLockExamScore?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
@@ -19,8 +19,8 @@ export default function SubjectClassScore() {
     const [form] = Form.useForm<SubmitFormType>()
     const [activeKey, setActiveKey] = useState('1')
     const [selectedRowKeys, setSelectedRowKeys] = useState<string>('')
-     const { data: session } = useSession()
-        const profileId = session?.sDM_NhanVienId || ''
+    const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
     const { data, refetch } = useFindUniqueSubjectClass(
         {
             where: {
@@ -58,7 +58,7 @@ export default function SubjectClassScore() {
             refetchOnWindowFocus: false,
         }
     )
-const dataForm = useWatch([], form)
+    const dataForm = useWatch([], form)
     const items = useMemo(() => {
         return [
             {
@@ -87,7 +87,7 @@ const dataForm = useWatch([], form)
                 disabled: !selectedRowKeys,
             },
         ]
-    }, [selectedRowKeys,data,refetch,dataForm])
+    }, [selectedRowKeys, data, refetch, dataForm])
 
     const reasonDate = useCallback(() => {
         if (data?.scoreDeadLineStart || data?.scoreDeadline) {
@@ -113,19 +113,17 @@ const dataForm = useWatch([], form)
     }, [data])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
-        if(data){
+        if (data) {
             form.setFieldsValue({
                 isLockExamScore: data?.isLockExamScore,
                 scoreSubmitted: data?.scoreSubmitted,
-                scoreChecked: data?.scoreChecked
+                scoreChecked: data?.scoreChecked,
             })
         }
-    },[data])
-
+    }, [data])
 
     return (
         <Row gutter={[16, 16]} className="relative">
-            
             <Col span={12}>
                 <div className="flex items-center mb-3 w-full">
                     <div className="min-w-[150px] w-[150px]">Lớp môn học:</div>
@@ -169,40 +167,66 @@ const dataForm = useWatch([], form)
             </Col>
 
             <Col span={12}>
-            <Form form={form} layout="vertical">
-        <div className="flex items-center mb-3 w-full">
-                    <div className="min-w-[150px] w-[150px]">Hạn nhập điểm</div>
-                    <div className="w-full">{reasonDate()}</div>
-                </div>
-                <div className="flex items-center mb-3 w-full">
-                    <div className="flex items-center mr-9 ">
-                        <FormItem form={form} name="isLockExamScore" className="min-w-[200px]" valuePropName="checked">
-                            <Checkbox disabled={profileId !== listUser?.P13 && !!selectedRowKeys} >Khoá điểm thi</Checkbox>
-                        </FormItem>
+                <Form form={form} layout="vertical">
+                    <div className="flex items-center mb-3 w-full">
+                        <div className="min-w-[150px] w-[150px]">Hạn nhập điểm</div>
+                        <div className="w-full">{reasonDate()}</div>
                     </div>
-                    <div className="flex items-center w-full">
-                        <FormItem form={form} name="scoreSubmitted" className="min-w-[200px]" valuePropName="checked">
-                            <Checkbox disabled={profileId !== listUser?.P13&& !!selectedRowKeys}>P13 đã nhận Phiếu điểm</Checkbox>
-                        </FormItem>
-                        <div className="w-full">
-                            <Input disabled />
+                    <div className="flex items-center mb-3 w-full">
+                        <div className="flex items-center mr-9 ">
+                            <FormItem
+                                form={form}
+                                name="isLockExamScore"
+                                className="min-w-[200px]"
+                                valuePropName="checked"
+                            >
+                                <Checkbox
+                                    disabled={profileId !== listUser?.P13 && !!selectedRowKeys}
+                                >
+                                    Khoá điểm thi
+                                </Checkbox>
+                            </FormItem>
+                        </div>
+                        <div className="flex items-center w-full">
+                            <FormItem
+                                form={form}
+                                name="scoreSubmitted"
+                                className="min-w-[200px]"
+                                valuePropName="checked"
+                            >
+                                <Checkbox
+                                    disabled={profileId !== listUser?.P13 && !!selectedRowKeys}
+                                >
+                                    P13 đã nhận Phiếu điểm
+                                </Checkbox>
+                            </FormItem>
+                            <div className="w-full">
+                                <Input disabled />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="flex items-center mb-3 w-full">
-                    <div className="flex items-center w-full">
-                          <FormItem form={form} name="scoreChecked" className="min-w-[250px]" valuePropName="checked">
-                            <Checkbox disabled={profileId !== listUser?.P13&& !!selectedRowKeys}>P2/P7 kiểm tra lại phiếu điểm</Checkbox>
-                        </FormItem>
-                        <div className="w-full">
-                            <Input disabled />
+                    <div className="flex items-center mb-3 w-full">
+                        <div className="flex items-center w-full">
+                            <FormItem
+                                form={form}
+                                name="scoreChecked"
+                                className="min-w-[250px]"
+                                valuePropName="checked"
+                            >
+                                <Checkbox
+                                    disabled={profileId !== listUser?.P13 && !!selectedRowKeys}
+                                >
+                                    P2/P7 kiểm tra lại phiếu điểm
+                                </Checkbox>
+                            </FormItem>
+                            <div className="w-full">
+                                <Input disabled />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Form>
-        
+                </Form>
             </Col>
-                          
+
             <Col span={24}>
                 <Tabs activeKey={activeKey} onChange={(key) => setActiveKey(key)} items={items} />
             </Col>

@@ -114,32 +114,34 @@ export default function ClassSubject() {
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
 
-        // Lấy danh sách FixedClass
-    const { data: fixedClasses = [] } = useFindManyFixedClass({
-        where: {
-            ...(trainingObjectTypeId||semesterId) && {
+    // Lấy danh sách FixedClass
+    const { data: fixedClasses = [] } = useFindManyFixedClass(
+        {
+            where: {
+                ...((trainingObjectTypeId || semesterId) && {
+                    trainingCourse: {
+                        ...(trainingObjectTypeId && { trainingObjectTypeId }),
+                        ...(semesterId && { semesterStartId: semesterId }),
+                    },
+                }),
+            },
+            include: {
                 trainingCourse: {
-                    ...(trainingObjectTypeId && { trainingObjectTypeId }),
-                    ...(semesterId && { semesterStartId: semesterId }),
-                }
-            }
+                    include: {
+                        trainingObjectType: true,
+                        semesterStart: true,
+                    },
+                },
+            },
+            orderBy: { name: 'asc' },
+            // skip: trainingCourses.length ? 0 : 1,
         },
-        include: {
-            trainingCourse: {
-                include:{
-                    trainingObjectType: true,
-                    semesterStart: true
-                }
-            }
-        },
-        orderBy: { name: 'asc' }
-        // skip: trainingCourses.length ? 0 : 1,
-    },{
-        enabled:!!trainingObjectTypeId || !!semesterId
-    })
+        {
+            enabled: !!trainingObjectTypeId || !!semesterId,
+        }
+    )
     //#region Mới
     /* Mới */
-
 
     const where = useMemo(() => {
         return {
@@ -187,14 +189,15 @@ export default function ClassSubject() {
                       },
                   }
                 : {}),
-                ...(filters.fixedClassId
+            ...(filters.fixedClassId
                 ? {
-                    fixedClasses: {
-                        some: {
-                            id: filters.fixedClassId
-                        }
-                    }
-                }:{}),
+                      fixedClasses: {
+                          some: {
+                              id: filters.fixedClassId,
+                          },
+                      },
+                  }
+                : {}),
             ...(filters.mainLecturer
                 ? {
                       mainLecturer: {
@@ -342,50 +345,50 @@ export default function ClassSubject() {
             //     },
             // ])
             // if (res?.status === 200 && res?.data.length > 0) {
-                // const list: any = res?.data[0]
-                let listTransaction: any = []
-                listTransaction = selectedRowKeys.map((i) => {
-                    const result= dataTable.find((item: SubjectClass) => item.id === i)
-                    if (result?.examDate && values?.beforeDays && values?.fromDays) {
-                        const scoreDeadLineStart = dayjs(result?.examDate)
-                            .subtract(values?.fromDays, 'day')
-                            .toDate()
-                        const scoreDeadline = dayjs(scoreDeadLineStart)
-                            .add(values?.beforeDays, 'day')
-                            .toDate()
-                        return {
-                            model: 'SubjectClass',
-                            operation: 'update',
-                            data: {
-                                where: { id: i },
-                                data: {
-                                    scoreDeadLineStart,
-                                    scoreDeadline,
-                                },
-                            },
-                        }
-                    }
+            // const list: any = res?.data[0]
+            let listTransaction: any = []
+            listTransaction = selectedRowKeys.map((i) => {
+                const result = dataTable.find((item: SubjectClass) => item.id === i)
+                if (result?.examDate && values?.beforeDays && values?.fromDays) {
+                    const scoreDeadLineStart = dayjs(result?.examDate)
+                        .subtract(values?.fromDays, 'day')
+                        .toDate()
+                    const scoreDeadline = dayjs(scoreDeadLineStart)
+                        .add(values?.beforeDays, 'day')
+                        .toDate()
                     return {
                         model: 'SubjectClass',
                         operation: 'update',
                         data: {
                             where: { id: i },
                             data: {
-                                scoreDeadLineStart: values?.time[0].toDate(),
-                                scoreDeadline: values?.time[1].toDate(),
+                                scoreDeadLineStart,
+                                scoreDeadline,
                             },
                         },
                     }
-                })
-                if (listTransaction?.length > 0) {
-                    const resUpdate = await sqlTransaction(listTransaction)
-                    if (resUpdate?.status === 200) {
-                        message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
-                        debouncedRefetch()
-                        form.resetFields()
-                        setOpen(false)
-                    }
                 }
+                return {
+                    model: 'SubjectClass',
+                    operation: 'update',
+                    data: {
+                        where: { id: i },
+                        data: {
+                            scoreDeadLineStart: values?.time[0].toDate(),
+                            scoreDeadline: values?.time[1].toDate(),
+                        },
+                    },
+                }
+            })
+            if (listTransaction?.length > 0) {
+                const resUpdate = await sqlTransaction(listTransaction)
+                if (resUpdate?.status === 200) {
+                    message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
+                    debouncedRefetch()
+                    form.resetFields()
+                    setOpen(false)
+                }
+            }
             // }
         } catch (error: any) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
@@ -409,7 +412,7 @@ export default function ClassSubject() {
             if (res?.status === 200 && res?.data.length > 0) {
                 let listTransaction: any = []
                 listTransaction = selectedRowKeys.map((i) => {
-                    const result= dataTable.find((item: SubjectClass) => item.id === i)
+                    const result = dataTable.find((item: SubjectClass) => item.id === i)
                     if (result?.examDate && values?.beforeDays) {
                         const examScoreDeadline = dayjs(result?.examDate)
                             .add(values?.beforeDays, 'day')
@@ -511,7 +514,7 @@ export default function ClassSubject() {
         }
     }
 
-        const rowSelection = {
+    const rowSelection = {
         selectedRowKeys,
         onChange: (newSelectedRowKeys: React.Key[]) => {
             setSelectedRowKeys(newSelectedRowKeys)
@@ -525,25 +528,23 @@ export default function ClassSubject() {
                     <Row align="top" justify="space-between">
                         <Col span={12}>
                             <Flex>
-                                             <Col span={8}>
+                                <Col span={8}>
                                     <Form.Item className="m-0" name="searchText">
                                         <Select
-                                        options={fixedClasses.map(i=>{
-                                            return {
-                                                value: i.id,
-                                                label: `${i?.code} - ${i.name}`
-                                            }
-                                        })}
+                                            options={fixedClasses.map((i) => {
+                                                return {
+                                                    value: i.id,
+                                                    label: `${i?.code} - ${i.name}`,
+                                                }
+                                            })}
                                             id="search"
-                                            onChange={(e) =>
-                                                handleFilterChange('fixedClassId', e)
-                                            }
+                                            onChange={(e) => handleFilterChange('fixedClassId', e)}
                                             placeholder="Chọn lớp quản lý"
                                             style={{ height: 32 }}
                                             allowClear
-                                            
                                         />
-                                    </Form.Item></Col>
+                                    </Form.Item>
+                                </Col>
                                 <Col span={8}>
                                     <Form.Item className="m-0" name="searchText">
                                         <Input
@@ -561,13 +562,11 @@ export default function ClassSubject() {
                                                     }}
                                                 />
                                             }
-                                            className='w-full ml-3'
+                                            className="w-full ml-3"
                                             allowClear
                                         />
                                     </Form.Item>
-                                
                                 </Col>
-                   
                             </Flex>
                         </Col>
                         <Col span={6}>
@@ -752,11 +751,11 @@ export default function ClassSubject() {
                                     record?.subject?.examType === 'OfflineWritten'
                                         ? 'text-blue-500'
                                         : '',
-                                    (dayjs()?.isAfter(record?.scoreDeadline) && !record?.enteredScore)
+                                    dayjs()?.isAfter(record?.scoreDeadline) && !record?.enteredScore
                                         ? 'text-red-500'
                                         : '',
-                                    (dayjs().isAfter(record?.examScoreDeadline) &&
-                                        !record?.enteredExamScore)
+                                    dayjs().isAfter(record?.examScoreDeadline) &&
+                                        !record?.enteredExamScore
                                         ? 'text-red-600'
                                         : ''
                                 ),
@@ -839,7 +838,7 @@ export default function ClassSubject() {
                             //     render: (record: string) =>
                             //         record ? dayjs(record).format('DD/MM/YYYY') : '',
                             // },
-                        
+
                             {
                                 title: 'Ngày NĐQT',
                                 dataIndex: 'scoreDeadLineStart',
@@ -865,14 +864,14 @@ export default function ClassSubject() {
                                     </div>
                                 ),
                             },
-                         {
+                            {
                                 title: 'Hạn ĐQT',
                                 width: 100,
                                 align: 'center',
                                 render: (__, record) => {
                                     const today = dayjs()
                                     const scoreDeadline = dayjs(record?.scoreDeadline)
-                                       if (!scoreDeadline ) {
+                                    if (!scoreDeadline) {
                                         return '-'
                                     }
                                     let daysRemaining: number
@@ -884,13 +883,8 @@ export default function ClassSubject() {
                                     }
 
                                     return (
-                                        <Tooltip
-                                            title={`Còn ${daysRemaining} ngày trước hạn ĐQT`}
-                                        >
-                                            <span
-                                            >
-                                                {daysRemaining}
-                                            </span>
+                                        <Tooltip title={`Còn ${daysRemaining} ngày trước hạn ĐQT`}>
+                                            <span>{daysRemaining}</span>
                                         </Tooltip>
                                     )
                                 },
@@ -924,7 +918,7 @@ export default function ClassSubject() {
                                 },
                             },
 
-                                 {
+                            {
                                 title: 'Hạn ĐQT',
                                 width: 100,
                                 align: 'center',
@@ -938,25 +932,20 @@ export default function ClassSubject() {
 
                                     let daysRemaining: number
 
-                                 if (today?.isBefore(examScoreDeadline)) {
+                                    if (today?.isBefore(examScoreDeadline)) {
                                         daysRemaining = examScoreDeadline?.diff(today, 'day')
                                     } else {
                                         return <div className="text-red-500">Hết hạn</div>
                                     }
 
                                     return (
-                                        <Tooltip
-                                            title={`Còn ${daysRemaining} ngày trước hạn ĐT`}
-                                        >
-                                            <span
-                                            >
-                                                {daysRemaining}
-                                            </span>
+                                        <Tooltip title={`Còn ${daysRemaining} ngày trước hạn ĐT`}>
+                                            <span>{daysRemaining}</span>
                                         </Tooltip>
                                     )
                                 },
                             },
-                 
+
                             {
                                 title: 'Giảng viên 1',
                                 width: 150,
@@ -967,23 +956,19 @@ export default function ClassSubject() {
                                     const mainLecturer = record.mainLecturer
                                         ? `${record.mainLecturer.userProfile.lastName} ${record.mainLecturer.userProfile.firstName}`
                                         : ''
-                                  
-                                    return (
-                                        <ul>
-                                            {mainLecturer && <li>- {mainLecturer}</li>}
-                                        </ul>
-                                    )
+
+                                    return <ul>{mainLecturer && <li>- {mainLecturer}</li>}</ul>
                                 },
                             },
 
-                              {
+                            {
                                 title: 'Giảng viên NĐ',
                                 width: 150,
                                 align: 'center',
                                 type: 'input',
                                 dataIndex: 'mainLecturer',
                                 render: (text, record: any) => {
-                                              const enterGradeLecturer = record.enterGradeLecturer
+                                    const enterGradeLecturer = record.enterGradeLecturer
                                         ? `${record.enterGradeLecturer.userProfile.lastName} ${record.enterGradeLecturer.userProfile.firstName}`
                                         : ''
                                     return (

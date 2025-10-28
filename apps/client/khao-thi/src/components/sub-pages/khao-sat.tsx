@@ -101,7 +101,7 @@ function TabDotKhaoSat() {
 
     const { data: count } = useCountSurvey({ where: { ...where, deletedAt: null } })
 
-    const { onOpen } = useDisclosure<{id:string,type:string}>({
+    const { onOpen } = useDisclosure<{ id: string; type: string }>({
         tag: 'PutSurveyModal',
     })
 
@@ -116,7 +116,7 @@ function TabDotKhaoSat() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const handleModal = () => {
-        onOpen({id:'',type:'one'})
+        onOpen({ id: '', type: 'one' })
     }
 
     const handleModalCreateExam = (value: { id: string; surveyTopicId: string }) => {
@@ -312,7 +312,7 @@ function TabDotKhaoSat() {
                                             'SUA'
                                         ) && (
                                             <EditIcon
-                                                onClick={()=>onOpen({id,type:'one'})}
+                                                onClick={() => onOpen({ id, type: 'one' })}
                                                 className="text-sm text-blue-700 cursor-pointer mr-2"
                                             />
                                         )}
@@ -353,4 +353,3 @@ function TabDotKhaoSat() {
 }
 
 export default TabDotKhaoSat
-

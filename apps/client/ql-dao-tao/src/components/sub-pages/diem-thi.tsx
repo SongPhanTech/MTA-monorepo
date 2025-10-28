@@ -57,7 +57,7 @@ export default function DiemThi({
     dataDetailSubjectClass,
     refetchSubjectClass,
     subjectClassId,
-    dataForm
+    dataForm,
 }: any) {
     const { can } = useAbility()
     const canReadAll = can(
@@ -128,8 +128,8 @@ export default function DiemThi({
         try {
             showSpinner()
             let listSqlTransaction: any = []
-            if(dataForm){
-                listSqlTransaction=[
+            if (dataForm) {
+                listSqlTransaction = [
                     ...listSqlTransaction,
                     {
                         model: 'SubjectClass',
@@ -139,7 +139,8 @@ export default function DiemThi({
                                 id: subjectClassId,
                             },
                             data: dataForm,
-                        }}
+                        },
+                    },
                 ]
             }
             const dataSubmit = form.getFieldsValue()
@@ -155,7 +156,6 @@ export default function DiemThi({
                 message.error('Bạn chưa nhập đúng điểm số')
                 return
             }
-            
 
             const list = dataTable.find(
                 (i: any) => !i.examScore || !dataSubmit.list[i.id].examScore
@@ -668,7 +668,7 @@ export default function DiemThi({
                     <Form form={form}>
                         <Form.Item name="list">
                             <Table
-                            className="table-subject-score"
+                                className="table-subject-score"
                                 rowKey="id"
                                 id="student-subject-score"
                                 filters={filterTable}
@@ -987,8 +987,14 @@ export default function DiemThi({
                 </Col>
             </Row>
             <div className="fixed p-3 z-[10] bottom-[34px] left-0 right-0 w-[100vw] bg-white ">
-                <div>Bấm Tab: Chuyển ô theo hàng ngang, Mũi tên xuống: Chuyển ô theo hàng dọc, và hàng ngang</div>
-                                <div className="text-red-500 font-bold uppercase text-lg">Giáo viên nhập Lý do "Cấm thi", "Ghi chú" với truòng hợp điểm 0 hoặc không cho điểm</div>
+                <div>
+                    Bấm Tab: Chuyển ô theo hàng ngang, Mũi tên xuống: Chuyển ô theo hàng dọc, và
+                    hàng ngang
+                </div>
+                <div className="text-red-500 font-bold uppercase text-lg">
+                    Giáo viên nhập Lý do "Cấm thi", "Ghi chú" với truòng hợp điểm 0 hoặc không cho
+                    điểm
+                </div>
             </div>
         </div>
     )

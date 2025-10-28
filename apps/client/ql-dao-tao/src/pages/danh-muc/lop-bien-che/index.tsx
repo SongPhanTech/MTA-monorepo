@@ -1,615 +1,603 @@
-import { CheckOutlined, DownloadOutlined } from "@ant-design/icons";
-import Table from "@components/commons/table";
-import DeleteIcon from "@components/icons/delete";
-import EditIcon from "@components/icons/edit";
-import { DEFAULT_PAGINATE_SIZE } from "@constants/constants";
-import type { FilterProps } from "@constants/type";
-import useSpinner from "@hooks/spinner";
-import DefaultLayout from "@layouts/default-layout";
-import { buildOrgTree } from "@lib/utils";
-import { useSession } from "@workspace/auth/react";
-import { emptyObjectIf, getMinioUrl } from "@workspace/constant";
-import type { TrainingCourse } from "@workspace/db/client";
+import { CheckOutlined, DownloadOutlined } from '@ant-design/icons'
+import Table from '@components/commons/table'
+import DeleteIcon from '@components/icons/delete'
+import EditIcon from '@components/icons/edit'
+import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import type { FilterProps } from '@constants/type'
+import useSpinner from '@hooks/spinner'
+import DefaultLayout from '@layouts/default-layout'
+import { buildOrgTree } from '@lib/utils'
+import { useSession } from '@workspace/auth/react'
+import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
+import type { TrainingCourse } from '@workspace/db/client'
 import {
-  useCountFixedClass,
-  useFindManyCurriculumVersion,
-  useFindManyDM_DonVi,
-  useFindManyFixedClass,
-  useFindManyTrainingCourse,
-  useFindManyTrainingLevel,
-  useFindManyTrainingMajor,
-  useFindManyTrainingObjectType,
-  useUpdateFixedClass,
-} from "@workspace/db/hooks";
-import { fixedClassStudentCount } from "@workspace/libs/api/training";
-import {
-  exportFromTemplate,
-  type TableRow,
-} from "@workspace/libs/template-excel";
-import { getFilenameFromContentDisposition } from "@workspace/libs/utils";
-import { useAbility } from "@workspace/permissions/hooks";
-import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from "@workspace/router";
-import { useTrainingObjectTypeStore } from "@workspace/ui";
-import { Button, Col, Flex, message, Row, Tooltip } from "antd";
-import { Eye } from "lucide-react";
-import { useRouter } from "next/router";
-import type React from "react";
-import { useMemo, useState } from "react";
-import { useDisclosure } from "react-hook-disclosure-modal";
-export default function FixedClassPage({
-  trainingCourse,
-}: {
-  trainingCourse?: TrainingCourse;
-}) {
-  const { can, canSome } = useAbility();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE);
-  const [_searchText, _setSearchText] = useState<string>("");
-  const [filters, setFilters] = useState<FilterProps>({
-    code: "",
-    name: "",
-    managementOrganization: undefined,
-    trainingCourses: undefined,
-    curriculumVersion: undefined,
-    trainingMajors: undefined,
-    trainingLevel: undefined,
-    startYear: undefined,
-  });
-  const { id: trainingObjectTypeId } = useTrainingObjectTypeStore();
-  const [loading, setLoading] = useState(false);
+    useCountFixedClass,
+    useFindManyCurriculumVersion,
+    useFindManyDM_DonVi,
+    useFindManyFixedClass,
+    useFindManyTrainingCourse,
+    useFindManyTrainingLevel,
+    useFindManyTrainingMajor,
+    useFindManyTrainingObjectType,
+    useUpdateFixedClass,
+} from '@workspace/db/hooks'
+import { fixedClassStudentCount } from '@workspace/libs/api/training'
+import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
+import { getFilenameFromContentDisposition } from '@workspace/libs/utils'
+import { useAbility } from '@workspace/permissions/hooks'
+import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { Eye } from 'lucide-react'
+import { useRouter } from 'next/router'
+import type React from 'react'
+import { useMemo, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+export default function FixedClassPage({ trainingCourse }: { trainingCourse?: TrainingCourse }) {
+    const { can, canSome } = useAbility()
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [_searchText, _setSearchText] = useState<string>('')
+    const [filters, setFilters] = useState<FilterProps>({
+        code: '',
+        name: '',
+        managementOrganization: undefined,
+        trainingCourses: undefined,
+        curriculumVersion: undefined,
+        trainingMajors: undefined,
+        trainingLevel: undefined,
+        startYear: undefined,
+    })
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+    const [loading, setLoading] = useState(false)
 
-  const canReadAll = can(
-    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
-    "XEM_TAT_CA"
-  );
+    const canReadAll = can(
+        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
+        'XEM_TAT_CA'
+    )
 
-  const { data: session } = useSession();
-  const profileId = session?.sDM_NhanVienId || "";
-  const router = useRouter();
+    const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
+    const router = useRouter()
 
-  const where = useMemo(() => {
-    const curriculumVersionFilter = {
-      ...(filters.trainingMajors
-        ? {
-            curriculum: {
-              trainingMajorId: {
-                in: filters.trainingMajors,
-              },
-            },
-          }
-        : {}),
-      ...(filters.trainingLevel
-        ? {
-            trainingLevelId: {
-              in: filters.trainingLevel,
-            },
-          }
-        : {}),
-    };
+    const where = useMemo(() => {
+        const curriculumVersionFilter = {
+            ...(filters.trainingMajors
+                ? {
+                      curriculum: {
+                          trainingMajorId: {
+                              in: filters.trainingMajors,
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingLevel
+                ? {
+                      trainingLevelId: {
+                          in: filters.trainingLevel,
+                      },
+                  }
+                : {}),
+        }
 
-    return {
-      ...(filters.code && filters.code !== ""
-        ? {
-            code: {
-              contains: filters.code,
-              mode: "insensitive" as const,
+        return {
+            ...(filters.code && filters.code !== ''
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.name && filters.name !== ''
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive' as const,
+                      },
+                  }
+                : {}),
+            ...(filters.managementOrganization
+                ? {
+                      managementOrganizationId: {
+                          in: filters.managementOrganization,
+                      },
+                  }
+                : {}),
+            ...(filters.trainingCourses
+                ? {
+                      trainingCourseId: {
+                          in: filters.trainingCourses,
+                      },
+                  }
+                : {}),
+            ...(filters.curriculumVersion
+                ? {
+                      curriculumVersionId: {
+                          in: filters.curriculumVersion,
+                      },
+                  }
+                : {}),
+            ...(Object.keys(curriculumVersionFilter).length > 0 && {
+                curriculumVersion: curriculumVersionFilter,
+            }),
+            trainingCourse: {
+                trainingObjectTypeId,
             },
-          }
-        : {}),
-      ...(filters.name && filters.name !== ""
-        ? {
-            name: {
-              contains: filters.name,
-              mode: "insensitive" as const,
-            },
-          }
-        : {}),
-      ...(filters.managementOrganization
-        ? {
-            managementOrganizationId: {
-              in: filters.managementOrganization,
-            },
-          }
-        : {}),
-      ...(filters.trainingCourses
-        ? {
-            trainingCourseId: {
-              in: filters.trainingCourses,
-            },
-          }
-        : {}),
-      ...(filters.curriculumVersion
-        ? {
-            curriculumVersionId: {
-              in: filters.curriculumVersion,
-            },
-          }
-        : {}),
-      ...(Object.keys(curriculumVersionFilter).length > 0 && {
-        curriculumVersion: curriculumVersionFilter,
-      }),
-      trainingCourse: {
+            active: true,
+            ...(!canReadAll
+                ? {
+                      OR: [
+                          {
+                              lecturerManagement: {
+                                  userProfileId: profileId,
+                              },
+                          },
+                          {
+                              staffManagement: {
+                                  userProfileId: profileId,
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+        }
+    }, [
+        filters.code,
+        filters.name,
+        filters.trainingCourses,
+        filters.managementOrganization,
+        filters.curriculumVersion,
+        filters.trainingMajors,
+        filters.trainingLevel,
         trainingObjectTypeId,
-      },
-      active: true,
-      ...(!canReadAll
-        ? {
-            OR: [
-              {
-                lecturerManagement: {
-                  userProfileId: profileId,
-                },
-              },
-              {
-                staffManagement: {
-                  userProfileId: profileId,
-                },
-              },
-            ],
-          }
-        : {}),
-    };
-  }, [
-    filters.code,
-    filters.name,
-    filters.trainingCourses,
-    filters.managementOrganization,
-    filters.curriculumVersion,
-    filters.trainingMajors,
-    filters.trainingLevel,
-    trainingObjectTypeId,
-    canReadAll,
-    profileId,
-  ]);
+        canReadAll,
+        profileId,
+    ])
 
-  const { data = [] } = useFindManyFixedClass({
-    where: {
-      ...where,
-    },
-    include: {
-      students: {
-        include: {
-          userProfile: true,
-        },
-      },
-      lecturerManagement: {
-        include: {
-          userProfile: true,
-        },
-      },
-      managementOrganization: true,
-      trainingCourse: {
-        include: {
-          trainingObjectType: true,
-        },
-      },
-      curriculumVersion: {
-        include: {
-          curriculum: {
-            include: {
-              trainingMajor: true,
-            },
-          },
-          trainingLevel: true,
-        },
-      },
-    },
-    orderBy: [
-      ...emptyObjectIf(
-        [
-          {
-            startYear: filters.startYear,
-          },
-        ],
-        !!filters.startYear
-      ),
-      { name: "asc" },
-    ],
-    take: numberOfPages,
-    skip: (currentPage - 1) * numberOfPages,
-  });
-  const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType();
-
-  const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-    orderBy: { name: "asc" },
-    where: { trainingObjectTypeId, deletedAt: null, active: true },
-  });
-  const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
-    orderBy: { name: "asc" },
-  });
-
-  const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-    orderBy: { name: "asc" },
-  });
-
-  const { data: trainingLevelData = [] } = useFindManyTrainingLevel({
-    orderBy: { name: "asc" },
-  });
-
-  const { data: count } = useCountFixedClass({
-    where: {
-      ...where,
-      deletedAt: null,
-    },
-  });
-
-  const { data: manageOrgData = [], refetch: refetchManageOrg } =
-    useFindManyDM_DonVi();
-  const treeData = buildOrgTree(manageOrgData);
-
-  const { onOpen } = useDisclosure<string>({
-    tag: "PutFixedClassModal",
-  });
-
-  const { onOpen: onOpenChuyenLop } = useDisclosure({
-    tag: "ModalChuyenLop",
-  });
-
-  const { showSpinner, hideSpinner } = useSpinner();
-
-  const handleModal = () => {
-    onOpen();
-  };
-
-  const handleModalChuyenLop = () => {
-    onOpenChuyenLop();
-  };
-
-  const downloadStatsFile = async () => {
-    if (!trainingObjectTypeId) {
-      message.error("Vui lòng chọn ĐTĐT");
-      return;
-    }
-    if (filters.trainingCourses?.length !== 1) {
-      message.error("Vui lòng chọn 1 khoá đào tạo");
-      return;
-    }
-    try {
-      setLoading(true);
-      // TODO: cho chọn ngày hoặc lấy ngày từ HK đang chọn
-      const { status, headers, data } = await fixedClassStudentCount({
-        trainingObjectTypeId: trainingObjectTypeId,
-        trainingCourseId: filters.trainingCourses[0],
-      });
-      if (status === 200) {
-        const filename = getFilenameFromContentDisposition(
-          headers.get("content-disposition") as string
-        );
-        const blob = new Blob([data], {
-          type: headers.get("content-type") as string,
-        });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = filename || "thong-ke-no.xlsx";
-        link.click();
-        window.URL.revokeObjectURL(url);
-      }
-    } catch (error) {
-      console.error(error);
-      message.error("Lỗi khi tải file");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const { mutateAsync: updateFixedClass } = useUpdateFixedClass();
-  async function handleDelete(id: string) {
-    try {
-      showSpinner();
-      await updateFixedClass({
+    const { data = [] } = useFindManyFixedClass({
         where: {
-          id,
+            ...where,
         },
-        data: {
-          deletedAt: new Date(),
+        include: {
+            students: {
+                include: {
+                    userProfile: true,
+                },
+            },
+            lecturerManagement: {
+                include: {
+                    userProfile: true,
+                },
+            },
+            managementOrganization: true,
+            trainingCourse: {
+                include: {
+                    trainingObjectType: true,
+                },
+            },
+            curriculumVersion: {
+                include: {
+                    curriculum: {
+                        include: {
+                            trainingMajor: true,
+                        },
+                    },
+                    trainingLevel: true,
+                },
+            },
         },
-      });
-    } catch (error: any) {
-      if (error?.info?.message) {
-        message.error(error?.info?.message);
-        return;
-      }
-      message.error("Đã xảy ra lỗi, vui lòng kiểm tra lại");
-    } finally {
-      hideSpinner();
-    }
-  }
-
-  return (
-    <div>
-      <Row gutter={[16, 0]}>
-        <Col span={24}>
-          <Row gutter={[16, 16]} align="top" justify={"end"}>
-            <Col span={4}>
-              <Flex justify="end">
-                <Button
-                  className="mr-3"
-                  type="primary"
-                  onClick={downloadStatsFile}
-                >
-                  <DownloadOutlined />
-                  QS theo khoá
-                </Button>
-                <Button
-                  className="mr-3"
-                  type="primary"
-                  onClick={handleModalChuyenLop}
-                >
-                  Chuyển lớp
-                </Button>
-                {can(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
-                  "THEM"
-                ) && (
-                  <Button onClick={handleModal} type="primary">
-                    Thêm mới
-                  </Button>
-                )}
-              </Flex>
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24}>
-          <Table
-            rowKey="id"
-            id="fixed-class"
-            filters={filters}
-            setFilters={(value) => {
-              setFilters(value);
-              setCurrentPage(1);
-            }}
-            onRowClick={(record) => {
-              if (
-                can(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
-                  "XEM_CHI_TIET"
-                )
-              ) {
-                router.push(
-                  ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
-                    "[id]",
-                    String(record.id)
-                  )
-                );
-              }
-            }}
-            columns={[
-              {
-                title: "STT",
-                width: 50,
-                align: "center",
-                fixed: "left",
-                render: (_, __, index) =>
-                  index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-              },
-              {
-                title: "Mã lớp quản lý",
-                align: "center",
-                width: 150,
-                fixed: "left",
-                dataIndex: "code",
-                type: "input",
-              },
-              {
-                title: "Tên lớp quản lý",
-                align: "center",
-                width: 200,
-                fixed: "left",
-                dataIndex: "name",
-                type: "input",
-              },
-              {
-                title: "Đơn vị quản lý",
-                dataIndex: "managementOrganization",
-                align: "center",
-                width: 200,
-                type: "tree_select",
-                options: treeData,
-                render: (value) => (value?.sTen ? value?.sTen : ""),
-              },
-              {
-                title: "Chuyên ngành",
-                align: "center",
-                width: 200,
-                type: "select",
-                options: trainingMajorData.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })),
-                dataIndex: "trainingMajors",
-                render: (_, record) =>
-                  record?.curriculumVersion?.curriculum?.trainingMajor?.name ||
-                  "",
-              },
-              {
-                title: "Khoá",
-                dataIndex: "trainingCourse",
-                align: "center",
-                width: 150,
-                type: "select",
-                options: trainingCourseData.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })),
-                render: (value) => (value?.name ? value?.name : ""),
-              },
-              {
-                title: "Đối tượng đào tạo",
-                align: "center",
-                dataIndex: "trainingObjectTypes",
-                width: 180,
-                type: "select",
-                options: trainingObjectTypeData.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })),
-                render: (__, record) =>
-                  record?.trainingCourse?.trainingObjectType?.name || "",
-              },
-
-              {
-                title: "Bậc đào tạo",
-                align: "center",
-                width: 150,
-                type: "select",
-                options: trainingLevelData.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })),
-                dataIndex: "trainingLevel",
-                render: (__, record) =>
-                  record?.curriculumVersion?.trainingLevel?.name || "",
-              },
-              {
-                title: "Chương trình đào tạo",
-                dataIndex: "curriculumVersion",
-                align: "center",
-                width: 250,
-                type: "select",
-                options: curriculumVersionData.map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })),
-                render: (value) => (value?.name ? value?.name : ""),
-              },
-
-              {
-                title: "Đã tốt nghiệp",
-                align: "center",
-                width: 150,
-                dataIndex: "graduated",
-                type: "select",
-                options: [
-                  { value: true, label: "Đã tốt nghiệp" },
-                  { value: false, label: "Chưa tốt nghiệp" },
+        orderBy: [
+            ...emptyObjectIf(
+                [
+                    {
+                        startYear: filters.startYear,
+                    },
                 ],
-                render: (value) =>
-                  value ? <CheckOutlined className="text-[#028850]" /> : "",
-              },
-              {
-                title: "Giáo viên chủ nhiệm",
-                dataIndex: "lecturerManagement",
-                align: "center",
-                width: 200,
-                type: "input",
-                render: (value) =>
-                  value?.userProfile?.fullname
-                    ? value?.userProfile?.fullname
-                    : "",
-              },
-              {
-                title: "Cán bộ quản lý",
-                dataIndex: "staffManagement",
-                align: "center",
-                width: 200,
-                type: "input",
-                render: (value) =>
-                  value?.userProfile?.fullname
-                    ? value?.userProfile?.fullname
-                    : "",
-              },
-              {
-                title: "Năm bắt đầu",
-                dataIndex: "startYear",
-                width: 150,
-                type: "order",
-                align: "center",
-              },
-              // {
-              //     title: 'Trạng thái',
-              //     align: 'center',
-              //     fixed: 'right',
-              //     width: 130,
-              //     render: (value, record) => {
-              //         return !record?.active ? (
-              //             <Tag color="error">Không hoạt động</Tag>
-              //         ) : (
-              //             <Tag color="success">Đang hoạt động</Tag>
-              //         )
-              //     },
-              // },
-              {
-                title: "Thao tác",
-                width: 100,
-                fixed: "right",
-                align: "center",
-                hidden: !canSome(
-                  QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
-                  "XEM_CHI_TIET",
-                  "SUA",
-                  "XOA"
-                ),
-                render: (_, { id }) => (
-                  <Row className="justify-center gap-2">
-                    {can(
-                      QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
-                      "XEM_CHI_TIET"
-                    ) && (
-                      <Tooltip title="Xem danh sách học viên" placement="top">
-                        <Eye
-                          size={16}
-                          strokeWidth={1.5}
-                          className="text-base cursor-pointer"
-                        />
-                      </Tooltip>
-                    )}
-                    {can(
-                      QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
-                      "SUA"
-                    ) && (
-                      <EditIcon
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpen(id);
+                !!filters.startYear
+            ),
+            { name: 'asc' },
+        ],
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+    const { data: trainingObjectTypeData = [] } = useFindManyTrainingObjectType()
+
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+        where: { trainingObjectTypeId, deletedAt: null, active: true },
+    })
+    const { data: curriculumVersionData = [] } = useFindManyCurriculumVersion({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: trainingLevelData = [] } = useFindManyTrainingLevel({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: count } = useCountFixedClass({
+        where: {
+            ...where,
+            deletedAt: null,
+        },
+    })
+
+    const { data: manageOrgData = [], refetch: refetchManageOrg } = useFindManyDM_DonVi()
+    const treeData = buildOrgTree(manageOrgData)
+
+    const { onOpen } = useDisclosure<string>({
+        tag: 'PutFixedClassModal',
+    })
+
+    const { onOpen: onOpenChuyenLop } = useDisclosure({
+        tag: 'ModalChuyenLop',
+    })
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const handleModal = () => {
+        onOpen()
+    }
+
+    const handleModalChuyenLop = () => {
+        onOpenChuyenLop()
+    }
+
+    const downloadStatsFile = async () => {
+        if (!trainingObjectTypeId) {
+            message.error('Vui lòng chọn ĐTĐT')
+            return
+        }
+        if (filters.trainingCourses?.length !== 1) {
+            message.error('Vui lòng chọn 1 khoá đào tạo')
+            return
+        }
+        try {
+            setLoading(true)
+            // TODO: cho chọn ngày hoặc lấy ngày từ HK đang chọn
+            const { status, headers, data } = await fixedClassStudentCount({
+                trainingObjectTypeId: trainingObjectTypeId,
+                trainingCourseId: filters.trainingCourses[0],
+            })
+            if (status === 200) {
+                const filename = getFilenameFromContentDisposition(
+                    headers.get('content-disposition') as string
+                )
+                const blob = new Blob([data], {
+                    type: headers.get('content-type') as string,
+                })
+                const url = window.URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.href = url
+                link.download = filename || 'thong-ke-no.xlsx'
+                link.click()
+                window.URL.revokeObjectURL(url)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Lỗi khi tải file')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const { mutateAsync: updateFixedClass } = useUpdateFixedClass()
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateFixedClass({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
+            }
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    return (
+        <div>
+            <Row gutter={[16, 0]}>
+                <Col span={24}>
+                    <Row gutter={[16, 16]} align="top" justify={'end'}>
+                        <Col span={4}>
+                            <Flex justify="end">
+                                <Button className="mr-3" type="primary" onClick={downloadStatsFile}>
+                                    <DownloadOutlined />
+                                    QS theo khoá
+                                </Button>
+                                <Button
+                                    className="mr-3"
+                                    type="primary"
+                                    onClick={handleModalChuyenLop}
+                                >
+                                    Chuyển lớp
+                                </Button>
+                                {can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                    'THEM'
+                                ) && (
+                                    <Button onClick={handleModal} type="primary">
+                                        Thêm mới
+                                    </Button>
+                                )}
+                            </Flex>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col span={24}>
+                    <Table
+                        rowKey="id"
+                        id="fixed-class"
+                        filters={filters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                            setCurrentPage(1)
                         }}
-                        className="text-sm text-blue-700 cursor-pointer"
-                      />
-                    )}
-                    {can(
-                      QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
-                      "XOA"
-                    ) && (
-                      <DeleteIcon
-                        popConfirm={{
-                          onConfirm: (e) => {
-                            handleDelete(id);
-                            e?.stopPropagation();
-                          },
-                          onCancel: (e) => {
-                            e?.stopPropagation();
-                          },
+                        onRowClick={(record) => {
+                            if (
+                                can(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                    'XEM_CHI_TIET'
+                                )
+                            ) {
+                                router.push(
+                                    ROUTER_PATH.QL_DAO_TAO.DANH_MUC_LOP_BIEN_CHE_ID.replace(
+                                        '[id]',
+                                        String(record.id)
+                                    )
+                                )
+                            }
                         }}
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    )}
-                  </Row>
-                ),
-              },
-            ]}
-            data={data}
-            pagination={{
-              current: currentPage,
-              pageSize: numberOfPages,
-              total: count,
-              onChange: (page, pageSize) => {
-                if (numberOfPages === pageSize) {
-                  setCurrentPage(page);
-                } else {
-                  setCurrentPage(1);
-                  setNumberOfPages(pageSize);
-                }
-              },
-              showTotal: (total, range) =>
-                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-            }}
-          />
-        </Col>
-      </Row>
-    </div>
-  );
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 50,
+                                align: 'center',
+                                fixed: 'left',
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            },
+                            {
+                                title: 'Mã lớp quản lý',
+                                align: 'center',
+                                width: 150,
+                                fixed: 'left',
+                                dataIndex: 'code',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Tên lớp quản lý',
+                                align: 'center',
+                                width: 200,
+                                fixed: 'left',
+                                dataIndex: 'name',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Đơn vị quản lý',
+                                dataIndex: 'managementOrganization',
+                                align: 'center',
+                                width: 200,
+                                type: 'tree_select',
+                                options: treeData,
+                                render: (value) => (value?.sTen ? value?.sTen : ''),
+                            },
+                            {
+                                title: 'Chuyên ngành',
+                                align: 'center',
+                                width: 200,
+                                type: 'select',
+                                options: trainingMajorData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                dataIndex: 'trainingMajors',
+                                render: (_, record) =>
+                                    record?.curriculumVersion?.curriculum?.trainingMajor?.name ||
+                                    '',
+                            },
+                            {
+                                title: 'Khoá',
+                                dataIndex: 'trainingCourse',
+                                align: 'center',
+                                width: 150,
+                                type: 'select',
+                                options: trainingCourseData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (value) => (value?.name ? value?.name : ''),
+                            },
+                            {
+                                title: 'Đối tượng đào tạo',
+                                align: 'center',
+                                dataIndex: 'trainingObjectTypes',
+                                width: 180,
+                                type: 'select',
+                                options: trainingObjectTypeData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (__, record) =>
+                                    record?.trainingCourse?.trainingObjectType?.name || '',
+                            },
+
+                            {
+                                title: 'Bậc đào tạo',
+                                align: 'center',
+                                width: 150,
+                                type: 'select',
+                                options: trainingLevelData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                dataIndex: 'trainingLevel',
+                                render: (__, record) =>
+                                    record?.curriculumVersion?.trainingLevel?.name || '',
+                            },
+                            {
+                                title: 'Chương trình đào tạo',
+                                dataIndex: 'curriculumVersion',
+                                align: 'center',
+                                width: 250,
+                                type: 'select',
+                                options: curriculumVersionData.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                })),
+                                render: (value) => (value?.name ? value?.name : ''),
+                            },
+
+                            {
+                                title: 'Đã tốt nghiệp',
+                                align: 'center',
+                                width: 150,
+                                dataIndex: 'graduated',
+                                type: 'select',
+                                options: [
+                                    { value: true, label: 'Đã tốt nghiệp' },
+                                    { value: false, label: 'Chưa tốt nghiệp' },
+                                ],
+                                render: (value) =>
+                                    value ? <CheckOutlined className="text-[#028850]" /> : '',
+                            },
+                            {
+                                title: 'Giáo viên chủ nhiệm',
+                                dataIndex: 'lecturerManagement',
+                                align: 'center',
+                                width: 200,
+                                type: 'input',
+                                render: (value) =>
+                                    value?.userProfile?.fullname
+                                        ? value?.userProfile?.fullname
+                                        : '',
+                            },
+                            {
+                                title: 'Cán bộ quản lý',
+                                dataIndex: 'staffManagement',
+                                align: 'center',
+                                width: 200,
+                                type: 'input',
+                                render: (value) =>
+                                    value?.userProfile?.fullname
+                                        ? value?.userProfile?.fullname
+                                        : '',
+                            },
+                            {
+                                title: 'Năm bắt đầu',
+                                dataIndex: 'startYear',
+                                width: 150,
+                                type: 'order',
+                                align: 'center',
+                            },
+                            // {
+                            //     title: 'Trạng thái',
+                            //     align: 'center',
+                            //     fixed: 'right',
+                            //     width: 130,
+                            //     render: (value, record) => {
+                            //         return !record?.active ? (
+                            //             <Tag color="error">Không hoạt động</Tag>
+                            //         ) : (
+                            //             <Tag color="success">Đang hoạt động</Tag>
+                            //         )
+                            //     },
+                            // },
+                            {
+                                title: 'Thao tác',
+                                width: 100,
+                                fixed: 'right',
+                                align: 'center',
+                                hidden: !canSome(
+                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                    'XEM_CHI_TIET',
+                                    'SUA',
+                                    'XOA'
+                                ),
+                                render: (_, { id }) => (
+                                    <Row className="justify-center gap-2">
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                            'XEM_CHI_TIET'
+                                        ) && (
+                                            <Tooltip title="Xem danh sách học viên" placement="top">
+                                                <Eye
+                                                    size={16}
+                                                    strokeWidth={1.5}
+                                                    className="text-base cursor-pointer"
+                                                />
+                                            </Tooltip>
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                            'SUA'
+                                        ) && (
+                                            <EditIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    onOpen(id)
+                                                }}
+                                                className="text-sm text-blue-700 cursor-pointer"
+                                            />
+                                        )}
+                                        {can(
+                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_DANH_MUC_LOP_BIEN_CHE,
+                                            'XOA'
+                                        ) && (
+                                            <DeleteIcon
+                                                popConfirm={{
+                                                    onConfirm: (e) => {
+                                                        handleDelete(id)
+                                                        e?.stopPropagation()
+                                                    },
+                                                    onCancel: (e) => {
+                                                        e?.stopPropagation()
+                                                    },
+                                                }}
+                                                onClick={(e) => e.stopPropagation()}
+                                            />
+                                        )}
+                                    </Row>
+                                ),
+                            },
+                        ]}
+                        data={data}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
+                    />
+                </Col>
+            </Row>
+        </div>
+    )
 }
 
 FixedClassPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <DefaultLayout>{page}</DefaultLayout>;
-};
+    return <DefaultLayout>{page}</DefaultLayout>
+}

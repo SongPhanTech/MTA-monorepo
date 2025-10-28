@@ -164,7 +164,7 @@ const ModalNhapTKB = () => {
                 queryClient.invalidateQueries({
                     queryKey: ['zenstack', 'SubjectClass'],
                 })
-                   queryClient.invalidateQueries({
+                queryClient.invalidateQueries({
                     queryKey: ['zenstack', 'DM_DonVi'],
                 })
             } else {

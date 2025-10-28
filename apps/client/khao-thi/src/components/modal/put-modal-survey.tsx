@@ -14,10 +14,15 @@ import {
     useFindUniqueSurvey,
     useUpdateSurvey,
 } from '@workspace/db/hooks'
-import { Col, Form, Input, message, Radio,TreeSelect as TreeSelectAnt } from 'antd'
+import { Col, Form, Input, message, Radio, TreeSelect as TreeSelectAnt } from 'antd'
 import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutSurveyType = Survey & { surveyObjectTypes: string[] ,semesterId?:string,lectureId?:string,lectureIds?:string[]}   
+export type PutSurveyType = Survey & {
+    surveyObjectTypes: string[]
+    semesterId?: string
+    lectureId?: string
+    lectureIds?: string[]
+}
 
 export interface TreeNodeType {
     value: string
@@ -34,11 +39,7 @@ interface CustomTreeSelectProps {
 
 const PutSurveyModal = () => {
     const [form] = Form.useForm<PutSurveyType>()
-    const {
-        isOpen,
-        onClose,
-        input,
-    } = useDisclosure<{id:string,type:string}>({
+    const { isOpen, onClose, input } = useDisclosure<{ id: string; type: string }>({
         tag: 'PutSurveyModal',
         onClose: form.resetFields,
     })
@@ -54,54 +55,54 @@ const PutSurveyModal = () => {
         if (!output) return
         try {
             showSpinner()
-            if(input?.type==='multiple'){
-
-            }else {
-            if (input?.id) {
-                await update({
-                    data: {
-                        code: output.code,
-                        name: output.name.trim(),
-                        surveyObjectType: {
-                            set: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
-                        },
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        description: output.description,
-                        additionalSuggestion: output.additionalSuggestion,
-                        isPublic: output.isPublic,
-                        anonymous: output.anonymous,
-                    },
-                    where: {
-                        id:input?.id,
-                    },
-                })
-                message.success('Cập nhật thành công')
+            if (input?.type === 'multiple') {
             } else {
-                await create({
-                    data: {
-                        code: output.code,
-                        name: output.name.trim(),
-                        surveyObjectType: {
-                            connect: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
-                        },
-                        surveyTopic: {
-                            connect: {
-                                id: output.surveyTopicId,
+                if (input?.id) {
+                    await update({
+                        data: {
+                            code: output.code,
+                            name: output.name.trim(),
+                            surveyObjectType: {
+                                set: output.surveyObjectTypes.map((item) => ({ id: item })) || [],
                             },
+                            startDate: output.startDate,
+                            endDate: output.endDate,
+                            description: output.description,
+                            additionalSuggestion: output.additionalSuggestion,
+                            isPublic: output.isPublic,
+                            anonymous: output.anonymous,
                         },
-                        startDate: output.startDate,
-                        endDate: output.endDate,
-                        description: output.description,
-                        isPublic: output.isPublic,
-                        anonymous: output.anonymous,
-                        additionalSuggestion: output.additionalSuggestion,
-                    },
-                })
-                message.success('Thêm mới thành công')
+                        where: {
+                            id: input?.id,
+                        },
+                    })
+                    message.success('Cập nhật thành công')
+                } else {
+                    await create({
+                        data: {
+                            code: output.code,
+                            name: output.name.trim(),
+                            surveyObjectType: {
+                                connect:
+                                    output.surveyObjectTypes.map((item) => ({ id: item })) || [],
+                            },
+                            surveyTopic: {
+                                connect: {
+                                    id: output.surveyTopicId,
+                                },
+                            },
+                            startDate: output.startDate,
+                            endDate: output.endDate,
+                            description: output.description,
+                            isPublic: output.isPublic,
+                            anonymous: output.anonymous,
+                            additionalSuggestion: output.additionalSuggestion,
+                        },
+                    })
+                    message.success('Thêm mới thành công')
+                }
             }
-            }
-        
+
             // refetch() lại danh sách level
             queryClient.invalidateQueries({
                 queryKey: ['Level'],
@@ -129,31 +130,35 @@ const PutSurveyModal = () => {
 
     const semesterId = Form.useWatch('semesterId', form)
 
-   const { data: lecturerData=[] } = useFindManyLecturer({
-        where:{
-            mainSubjectClasses: {
-                some: {
-                    semester: {
-                        id:semesterId
-                    }
-                }
-            }
+    const { data: lecturerData = [] } = useFindManyLecturer(
+        {
+            where: {
+                mainSubjectClasses: {
+                    some: {
+                        semester: {
+                            id: semesterId,
+                        },
+                    },
+                },
+            },
+            orderBy: {
+                userProfile: {
+                    firstName: 'asc',
+                },
+            },
+            include: {
+                userProfile: true,
+                mainSubjectClasses: {
+                    include: {
+                        semester: true,
+                    },
+                },
+            },
         },
-        orderBy: { userProfile:{
-            firstName: 'asc'
-        } },
-        include: {
-            userProfile:true,
-            mainSubjectClasses: {
-                include:{
-                    semester: true
-                }
-            }
-        },
-
-    },{
-        enabled:!!semesterId
-    })
+        {
+            enabled: !!semesterId,
+        }
+    )
     // Tạo treeData từ schoolYears và semesters
     const treeData: TreeNodeType[] = useMemo(() => {
         return (
@@ -172,7 +177,7 @@ const PutSurveyModal = () => {
 
     const { data: survey } = useFindUniqueSurvey(
         {
-            where: { id:input?.id },
+            where: { id: input?.id },
             include: {
                 surveyObjectType: true,
             },
@@ -182,7 +187,7 @@ const PutSurveyModal = () => {
         }
     )
 
-        const filterTreeNode = (input: string, treeNode: any) => {
+    const filterTreeNode = (input: string, treeNode: any) => {
         return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
     }
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
@@ -193,7 +198,6 @@ const PutSurveyModal = () => {
             //     startDate: dayjs(survey.startDate),
             //     endDate: survey.endDate ? dayjs(survey.endDate) : undefined,
             //     surveyObjectTypes: survey.surveyObjectType.map((item) => item.id),
-
             // })
         } else {
             form.setFieldsValue({ isPublic: false, anonymous: true, additionalSuggestion: false })
@@ -259,56 +263,51 @@ const PutSurveyModal = () => {
                 </FormItem>
             </Col>
 
-                  <Col span={12}>
+            <Col span={12}>
                 <FormItem form={form} name="semesterId" label="Kỳ học" required>
-                           <TreeSelectAnt
-                                showSearch
-                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                placeholder={'Chọn kỳ học'}
-                                allowClear
-                                treeDefaultExpandAll
-                                treeData={treeData}
-                                filterTreeNode={filterTreeNode}
-                                treeNodeFilterProp="title"
-                                loading={schoolYearLoading}
-                            />
+                    <TreeSelectAnt
+                        showSearch
+                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                        placeholder={'Chọn kỳ học'}
+                        allowClear
+                        treeDefaultExpandAll
+                        treeData={treeData}
+                        filterTreeNode={filterTreeNode}
+                        treeNodeFilterProp="title"
+                        loading={schoolYearLoading}
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
-            {
-                input?.type==='multiple'?(
-                      <FormItem form={form} name="lectureIds" label="Giảng viên">
-                           <Select
-                        mode="multiple"
-                        maxTagCount={'responsive'}
-                        placeholder="Chọn minh chứng"
-                        options={lecturerData?.map((i) => {
-                            return {
-                                label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim() ,
-                                value: i.id,
-                                key: i.id,
-                            }
-                        })}
-                     
-                    />
-                </FormItem>
-                ):(
-                      <FormItem form={form} name="lectureId" label="Giảng viên">
-                         <Select
-                        placeholder="Chọn minh chứng"
-                        options={lecturerData?.map((i) => {
-                            return {
-                                label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim() ,
-                                value: i.id,
-                                key: i.id,
-                            }
-                        })}
-                     
-                    />
-                </FormItem>
-                )
-            }
-              
+                {input?.type === 'multiple' ? (
+                    <FormItem form={form} name="lectureIds" label="Giảng viên">
+                        <Select
+                            mode="multiple"
+                            maxTagCount={'responsive'}
+                            placeholder="Chọn minh chứng"
+                            options={lecturerData?.map((i) => {
+                                return {
+                                    label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim(),
+                                    value: i.id,
+                                    key: i.id,
+                                }
+                            })}
+                        />
+                    </FormItem>
+                ) : (
+                    <FormItem form={form} name="lectureId" label="Giảng viên">
+                        <Select
+                            placeholder="Chọn minh chứng"
+                            options={lecturerData?.map((i) => {
+                                return {
+                                    label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim(),
+                                    value: i.id,
+                                    key: i.id,
+                                }
+                            })}
+                        />
+                    </FormItem>
+                )}
             </Col>
             <Col span={12}>
                 <FormItem
