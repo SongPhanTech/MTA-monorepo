@@ -51,6 +51,11 @@ const PutSurveyObjectTypeModal = () => {
     const { mutateAsync: create } = useCreateSurveyObjectType()
     const { mutateAsync: update } = useUpdateSurveyObjectType()
     const type = Form.useWatch('type', form) || []
+    const selectedTrainingFields = Form.useWatch('TrainingFields', form) || []
+    const selectedTrainingMajors = Form.useWatch('TrainingMajors', form) || []
+    const selectedTrainingCourses = Form.useWatch('TrainingCourses', form) || []
+    const selectedFixedClasses = Form.useWatch('FixedClasses', form) || []
+
     async function onOk(output?: PutSurveyObjectType) {
         if (!output) return
         try {
@@ -165,35 +170,10 @@ const PutSurveyObjectTypeModal = () => {
             hideSpinner()
         }
     }
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
-    const { data: trainingFieldData = [] } = useFindManyTrainingField({
-        orderBy: { name: 'asc' },
-    })
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
 
-    const { data: trainingCourses = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
-    })
-
-    const { data: fixedClasses = [] } = useFindManyFixedClass({
-        orderBy: { name: 'asc' },
-    })
-
-    const { data: subjectClassData = [] } = useFindManySubjectClass({
-        orderBy: { name: 'asc' },
-        where: {
-            cancelled: false,
-            active: true,
-        },
-    })
-    const treeData = useMemo(() => {
-        return buildOrgTree(manageOrgData)
-    }, [manageOrgData])
     const { data: surveyObjectType } = useFindUniqueSurveyObjectType(
         {
-            where: { id },
+            where: { id: id },
             include: {
                 organizations: true,
                 trainingFields: true,
@@ -205,10 +185,59 @@ const PutSurveyObjectTypeModal = () => {
         },
         { enabled: !!id }
     )
+
+    const { data: manageOrgData = [] } = useFindManyDM_DonVi()
+
+    const { data: trainingFieldData = [] } = useFindManyTrainingField({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
+        orderBy: { name: 'asc' },
+        where:
+            selectedTrainingFields.length > 0
+                ? {
+                      trainingFieldId: { in: selectedTrainingFields },
+                  }
+                : {},
+    })
+
+    const { data: trainingCourses = [] } = useFindManyTrainingCourse({
+        orderBy: { name: 'asc' },
+    })
+
+    const { data: fixedClasses = [] } = useFindManyFixedClass({
+        orderBy: { name: 'asc' },
+        where:
+            selectedTrainingCourses.length > 0
+                ? {
+                      trainingCourseId: { in: selectedTrainingCourses },
+                  }
+                : {},
+    })
+
+    const { data: subjectClassData = [] } = useFindManySubjectClass({
+        orderBy: { name: 'asc' },
+        where:
+            selectedFixedClasses.length > 0
+                ? {
+                      fixedClasses: {
+                          some: {
+                              id: { in: selectedFixedClasses },
+                          },
+                      },
+                  }
+                : {},
+    })
+
+    const treeData = useMemo(() => {
+        return buildOrgTree(manageOrgData)
+    }, [manageOrgData])
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     const items = useMemo(() => {
         const result = []
-        if (type.includes('CIVILIAN_STUDENT') || type.includes('MILITARY_STUDENT')) {
+        if (type.includes('MILITARY_STUDENT') || type.includes('CIVILIAN_STUDENT')) {
             result.push({
                 key: 'STUDENT',
                 label: 'Sinh viên, học viên',
@@ -233,7 +262,7 @@ const PutSurveyObjectTypeModal = () => {
                                 <Select
                                     mode="multiple"
                                     maxTagCount={'responsive'}
-                                    placeholder="Chọn ngành"
+                                    placeholder={'Chọn chuyên ngành'}
                                     options={trainingMajorData.map((i: TrainingMajor) => ({
                                         value: i.id,
                                         label: i.name,
@@ -243,11 +272,11 @@ const PutSurveyObjectTypeModal = () => {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem form={form} name="TrainingCourses" label="Khoá">
+                            <FormItem form={form} name="TrainingCourses" label="Khóa">
                                 <Select
                                     mode="multiple"
                                     maxTagCount={'responsive'}
-                                    placeholder="Chọn ngành"
+                                    placeholder={'Chọn khóa'}
                                     options={trainingCourses.map((i: TrainingCourse) => ({
                                         value: i.id,
                                         label: i.name,
@@ -261,7 +290,7 @@ const PutSurveyObjectTypeModal = () => {
                                 <Select
                                     mode="multiple"
                                     maxTagCount={'responsive'}
-                                    placeholder="Chọn ngành"
+                                    placeholder={'Chọn lớp niên chế'}
                                     options={fixedClasses.map((i: FixedClass) => ({
                                         value: i.id,
                                         label: i.name,
@@ -275,7 +304,7 @@ const PutSurveyObjectTypeModal = () => {
                                 <Select
                                     mode="multiple"
                                     maxTagCount={'responsive'}
-                                    placeholder="Chọn ngành"
+                                    placeholder="Chọn lớp môn học"
                                     options={subjectClassData.map((i: SubjectClass) => ({
                                         value: i.id,
                                         label: i.name,
@@ -313,7 +342,19 @@ const PutSurveyObjectTypeModal = () => {
         }
 
         return result
-    }, [type])
+    }, [
+        type,
+        trainingFieldData,
+        trainingMajorData,
+        trainingCourses,
+        fixedClasses,
+        subjectClassData,
+        selectedTrainingFields,
+        selectedTrainingMajors,
+        selectedTrainingCourses,
+        treeData,
+        form,
+    ])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
