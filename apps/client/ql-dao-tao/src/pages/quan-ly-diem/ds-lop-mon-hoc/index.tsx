@@ -1,13 +1,15 @@
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useSession } from '@workspace/auth/react'
 import { cn } from '@lib/utils'
-import { type Prisma, type SubjectClass, type SubjectVersion } from '@workspace/db/client'
+import { useSession } from '@workspace/auth/react'
+import type { Prisma, SubjectClass, SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManyFixedClass,
@@ -20,6 +22,7 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
+    DatePicker as AntdDatePicker,
     Button,
     Col,
     Flex,
@@ -31,26 +34,26 @@ import {
     Row,
     Switch,
     Tooltip,
-    DatePicker as AntdDatePicker,
 } from 'antd'
+import locale from 'antd/es/date-picker/locale/vi_VN'
 import dayjs, { type Dayjs } from 'dayjs'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import DatePicker from '@components/commons/date-picker'
-import locale from 'antd/es/date-picker/locale/vi_VN'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
+
 type TimeScore = {
     time: [Dayjs, Dayjs]
     beforeDays: number
     fromDays: number
+    overwrite: boolean
 }
 type TimeScoreExam = {
     examScoreDeadline: Dayjs
     beforeDays: number
+    overwrite: boolean
 }
 
 type HoldAnExam = {
@@ -93,7 +96,7 @@ export default function ClassSubject() {
         tag: 'PutDeadlineScoreModal',
     })
 
-    const handleSchudule = (id: string) => {
+    const handleSchedule = (id: string) => {
         onOpen(id)
     }
     const handleFilterChange = (key: string, value: string) => {
@@ -615,46 +618,63 @@ export default function ClassSubject() {
                                         <Popover
                                             content={
                                                 <Form
+                                                    className="max-w-56"
                                                     form={form}
                                                     initialValues={{ isOverride: false }}
                                                     onFinish={handleUpdateTime}
                                                 >
                                                     <FormItem
                                                         form={form}
-                                                        name={'beforeDays'}
-                                                        label="Số ngày"
+                                                        name="beforeDays"
+                                                        label="Ngày thi - Ngày bắt đầu"
                                                         className="mb-2"
                                                     >
                                                         <InputNumber
                                                             className="w-full"
                                                             min={0}
-                                                            step={0}
-                                                            placeholder="Nhập số ngày nhập điểm TX,CC"
+                                                            step={1}
+                                                            placeholder="14"
                                                         />
                                                     </FormItem>
                                                     <FormItem
                                                         form={form}
-                                                        className="mb-2"
-                                                        name={'fromDays'}
-                                                        label="Bắt đầu - Ngày thi"
+                                                        className="mb-2 w-full"
+                                                        name="fromDays"
+                                                        label="Ngày thi - Ngày kết thúc"
                                                     >
                                                         <InputNumber
                                                             className="w-full"
                                                             min={0}
-                                                            step={0}
-                                                            placeholder="Nhập thời gian nhập điểm tính theo ngày thi"
+                                                            step={1}
+                                                            placeholder="7"
                                                         />
                                                     </FormItem>
                                                     <FormItem
+                                                        layout="vertical"
                                                         form={form}
                                                         name={'time'}
-                                                        label="Thời gian nhập điểm quá trình"
+                                                        label=<Tooltip
+                                                            title={
+                                                                'Dành cho những lớp chưa có ngày thi'
+                                                            }
+                                                        >
+                                                            Thời gian nhập điểm quá trình
+                                                        </Tooltip>
+                                                        className="italic"
                                                     >
                                                         <AntdDatePicker.RangePicker
                                                             locale={locale}
                                                             format={'DD/MM/YYYY'}
                                                             placeholder={['Bắt đầu', 'Kết thúc']}
                                                         />
+                                                    </FormItem>
+                                                    <FormItem
+                                                        form={form}
+                                                        className="mb-2"
+                                                        name="overwrite"
+                                                        label="Ghi đè hạn cũ"
+                                                    >
+                                                        <Switch className="mx-auto" />
                                                     </FormItem>
                                                     <Col span={24} className="text-right mt-4">
                                                         <Button type="primary" htmlType="submit">
@@ -669,13 +689,7 @@ export default function ClassSubject() {
                                             open={open}
                                             onOpenChange={setOpen}
                                         >
-                                            <Button
-                                                // onClick={() => handleModal()}
-                                                disabled={selectedRowKeys.length === 0}
-                                                type="primary"
-                                            >
-                                                Đặt hạn nhập điểm TX/CC
-                                            </Button>
+                                            <Button type="primary">Đặt hạn nhập điểm TX/CC</Button>
                                         </Popover>
                                         <Popover
                                             content={
@@ -1006,7 +1020,7 @@ export default function ClassSubject() {
                                                 <Tooltip title="Đặt hạn nhập điểm" placement="top">
                                                     <CalendarPlus
                                                         size={16}
-                                                        onClick={() => handleSchudule(id)}
+                                                        onClick={() => handleSchedule(id)}
                                                         strokeWidth={2}
                                                     />
                                                 </Tooltip>
