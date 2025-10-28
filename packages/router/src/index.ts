@@ -501,6 +501,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
                         description: 'Đợt xét tốt nghiệp',
                     },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_IN_PHU_LUC_VAN_BANG_PHOI_BANG_TOT_NGHIEP,
+                        label: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
+                        path: ROUTER_PATH.QL_DAO_TAO.IN_PHU_LUC_VAN_BANG_PHOI_BANG_TOT_NGHIEP,
+                        description: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
+                    },
                 ],
             },
             {

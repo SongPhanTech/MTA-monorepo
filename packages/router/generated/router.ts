@@ -40,6 +40,7 @@ export default {
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
   },
   "QL_DAO_TAO": {
+
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
     "CHUONG_TRINH_DAO_TAO_DANH_SACH_MON_HOC": "/chuong-trinh-dao-tao/danh-sach-mon-hoc",
@@ -122,7 +123,8 @@ export default {
     "TO_CHUC_THI_DANH_SACH_THI": "/to-chuc-thi/danh-sach-thi",
     "TO_CHUC_THI_KY_THI": "/to-chuc-thi/ky-thi",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP_ID": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep/[id]",
-    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep"
+    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep",
+    "IN_PHU_LUC_VAN_BANG_PHOI_BANG_TOT_NGHIEP": "/xet-tot-nghiep/phu-luc-van-bang"
   },
   "QL_HO_SO": {
     "DANH_MUC_HO_SO_BAC_LUONG": "/danh-muc-ho-so/bac-luong",
