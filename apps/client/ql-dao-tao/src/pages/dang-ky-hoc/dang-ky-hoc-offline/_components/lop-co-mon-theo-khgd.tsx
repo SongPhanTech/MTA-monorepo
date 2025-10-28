@@ -319,12 +319,6 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                         align: 'center',
                         width: 80,
                     },
-                    {
-                        title: 'Số HV, SV',
-                        dataIndex: ['_count', 'students'],
-                        align: 'center',
-                        width: 80,
-                    },
                 ]}
                 pagination={{
                     current: currentPage,

@@ -3,7 +3,7 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Flex, Form, Input, Row } from 'antd'
+import { Col, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useState } from 'react'
@@ -148,29 +148,23 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
         <div>
             <Row align="top" justify="space-between">
                 <Col span={24}>
-                    <Flex>
-                        <Col span={8}>
-                            <Form.Item className="m-0" name="searchText">
-                                <Input
-                                    id="search"
-                                    placeholder="Tìm kiếm..."
-                                    onChange={(e) =>
-                                        handleFilterChange('searchText', e.target.value)
-                                    }
-                                    style={{ height: 32 }}
-                                    prefix={
-                                        <Search
-                                            size={15}
-                                            style={{
-                                                color: 'rgba(0, 0, 0, 0.25)',
-                                            }}
-                                        />
-                                    }
-                                    allowClear
+                    <Form.Item className="m-0" name="searchText">
+                        <Input
+                            id="search"
+                            placeholder="Tìm kiếm..."
+                            onChange={(e) => handleFilterChange('searchText', e.target.value)}
+                            style={{ height: 32 }}
+                            prefix={
+                                <Search
+                                    size={15}
+                                    style={{
+                                        color: 'rgba(0, 0, 0, 0.25)',
+                                    }}
                                 />
-                            </Form.Item>
-                        </Col>
-                    </Flex>
+                            }
+                            allowClear
+                        />
+                    </Form.Item>
                 </Col>
             </Row>
             <Table
@@ -209,13 +203,11 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                         dataIndex: 'name',
                         align: 'center',
                         width: 150,
-                        render: (text: string) => <p className="text-left">{text}</p>,
-                    },
-                    {
-                        title: 'Số TC',
-                        dataIndex: ['subject', 'credit'],
-                        align: 'center',
-                        width: 80,
+                        render: (text: string, record) => (
+                            <p className="text-left">
+                                {text}({record.subject?.credit})
+                            </p>
+                        ),
                     },
                     {
                         title: 'Khu vực',

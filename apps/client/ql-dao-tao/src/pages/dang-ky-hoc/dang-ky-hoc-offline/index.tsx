@@ -7,6 +7,7 @@ import DangKyHocChoLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly'
 import KeQuaDangKyHocLopQuanLy from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
 import LopCoMonTheoKhgd from './_components/lop-co-mon-theo-khgd'
 import LopMonHocDaMo from './_components/lop-mon-hoc-da-mo'
+import CaNhanTrongLopQuanLy from './_components/ca-nhan-trong-lop-quan-ly'
 
 interface TabItem {
     key: string
@@ -30,7 +31,19 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
               {
                   key: '1',
                   label: 'Đăng ký học cho lớp quản lý',
-                  content: <DangKyHocChoLopQuanLy setSubjectClassId={setSubjectClassId} />,
+                  content: (
+                      <Row gutter={[8, 0]}>
+                          <Col span={8}>
+                              <DangKyHocChoLopQuanLy setSubjectClassId={setSubjectClassId} />
+                          </Col>
+                          <Col span={6}>
+                              <LopCoMonTheoKhgd subjectClassId={subjectClassId} />
+                          </Col>
+                          <Col span={10}>
+                              <CaNhanTrongLopQuanLy setStudentId={setStudentId} />
+                          </Col>
+                      </Row>
+                  ),
               },
               {
                   key: '2',
@@ -49,7 +62,7 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
             {
                 key: '1',
                 label: 'Lớp có môn theo KHGD',
-                content: <LopCoMonTheoKhgd subjectClassId={subjectClassId} />,
+                content: <></>,
             },
         ],
         '2': [
@@ -78,7 +91,7 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
 
     return (
         <Row gutter={[8, 0]} className="bg-white">
-            <Col span={activeLeftTab === '3' ? 24 : 14}>
+            <Col span={24}>
                 <div className="rounded-lg shadow-sm">
                     <Tabs
                         activeKey={activeLeftTab}
@@ -96,11 +109,11 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
                     </Tabs>
                 </div>
             </Col>
-            {activeLeftTab !== '3' && (
+            {/* {activeLeftTab !== '3' && (
                 <Col span={10}>
                     <div className="rounded-lg shadow-sm">{renderRightTabs()}</div>
                 </Col>
-            )}
+            )} */}
         </Row>
     )
 }

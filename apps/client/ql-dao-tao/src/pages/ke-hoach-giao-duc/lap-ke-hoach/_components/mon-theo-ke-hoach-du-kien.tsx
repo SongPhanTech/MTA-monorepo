@@ -7,7 +7,13 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
-import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import {
+    useFixedClassStore,
+    useSemesterStore,
+    useTrainingCourseStore,
+    useTrainingMajorStore,
+    useTrainingObjectTypeStore,
+} from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useMemo } from 'react'
@@ -23,11 +29,12 @@ export default function MonTheoKeHoachDuKien() {
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
-    const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: trainingCourseId } = useTrainingCourseStore()
+    const { id: trainingMajorId } = useTrainingMajorStore()
+    const { id: fixedClassId } = useFixedClassStore()
     const { data: subjects, refetch } = useOpenSubjectClass(
         {
             semesterId: semesterId as string,
@@ -36,6 +43,7 @@ export default function MonTheoKeHoachDuKien() {
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             nextSemester: 'false',
+            fixedClassId: fixedClassId,
         },
         { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
     )

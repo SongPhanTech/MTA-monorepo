@@ -1609,7 +1609,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Duyệt',
                                     align: 'center',
-                                    width: 80,
+                                    width: 50,
                                     dataIndex: 'approved',
                                     type: 'select',
                                     options: [
@@ -1642,7 +1642,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'PCGD',
                                     align: 'center',
-                                    width: 80,
+                                    width: 50,
                                     type: 'select',
                                     dataIndex: 'pcgd',
                                     options: [
@@ -1735,7 +1735,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'Mã LMH',
                                     dataIndex: 'code',
-                                    width: 120,
+                                    width: 100,
                                     align: 'center',
                                     type: 'input',
                                 },
@@ -1744,6 +1744,7 @@ export default function PhanCongGiangDay({
                                     dataIndex: 'name',
                                     align: 'center',
                                     type: 'input',
+                                    width: 250,
                                     onCell: (record) => ({
                                         rowSpan: record.rowSpan,
                                     }),
@@ -1752,7 +1753,7 @@ export default function PhanCongGiangDay({
                                 {
                                     title: 'STC',
                                     dataIndex: 'credit',
-                                    width: 70,
+                                    width: 40,
                                     align: 'center',
                                     type: 'order',
                                     distinctFilters: ['maxStudent', 'subjectClassStudent'],
@@ -1760,10 +1761,9 @@ export default function PhanCongGiangDay({
                                         record.subject?.credit ? record.subject?.credit : '',
                                 },
                                 {
-                                    title: 'Kíp học',
+                                    title: 'Kíp',
                                     dataIndex: 'schedule',
                                     align: 'center',
-                                    width: 80,
                                     type: 'select',
                                     options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
                                         ([key, value_]) => {
@@ -1790,7 +1790,7 @@ export default function PhanCongGiangDay({
                                 },
                                 {
                                     title: 'Số SV',
-                                    width: 80,
+                                    width: 50,
                                     align: 'center',
                                     type: 'order',
                                     distinctFilters: ['maxStudent', 'credit'],
@@ -1807,6 +1807,7 @@ export default function PhanCongGiangDay({
                                     title: 'Giảng viên 1',
                                     align: 'center',
                                     type: 'input',
+                                    width: 150,
                                     dataIndex: 'mainLecturer',
                                     render: (__, record) =>
                                         khoaBoMon &&
@@ -1845,6 +1846,7 @@ export default function PhanCongGiangDay({
                                     title: 'Giảng viên 2',
                                     align: 'center',
                                     type: 'input',
+                                    width: 150,
                                     dataIndex: 'extraLecturer',
                                     render: (__, record) =>
                                         khoaBoMon &&
@@ -2024,8 +2026,9 @@ export default function PhanCongGiangDay({
                                     ),
                                 },
                                 {
-                                    title: 'Giảng viên nhập điểm',
+                                    title: 'GV nhập điểm',
                                     align: 'center',
+                                    width: 150,
                                     render: (__, record) =>
                                         khoaBoMon &&
                                         !subjectClassForm?.[record.id]?.cancelled &&
