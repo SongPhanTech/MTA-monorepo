@@ -12,7 +12,7 @@ const fetchSession = async (): Promise<{
 }> => {
     try {
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_MODEL_BASE_URL}/api/auth/get-session`,
+            `${process.env.NEXT_PUBLIC_API_MODEL_BASE_URL}/api/auth/get-session?appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
             {
                 method: 'GET',
                 credentials: 'include',
