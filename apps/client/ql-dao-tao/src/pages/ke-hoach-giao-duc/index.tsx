@@ -1,6 +1,11 @@
 import DefaultLayout from '@layouts/default-layout'
 import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/hooks'
-import { SelectTrainingCourse, useTrainingObjectTypeStore } from '@workspace/ui'
+import {
+    SelectTrainingCourse,
+    useFixedClassStore,
+    useTrainingMajorStore,
+    useTrainingObjectTypeStore,
+} from '@workspace/ui'
 import { Flex, Form, Select, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
@@ -35,8 +40,16 @@ export default function KeHoachDaoTao() {
     ]
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const { id: trainingMajorId, onSelect: onSelectTrainingMajor } = useTrainingMajorStore()
+    const { id: fixedClassId, onSelect: onSelectFixedClass } = useFixedClassStore()
+
     const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
         orderBy: { name: 'asc' },
+        where: {
+            active: true,
+            deletedAt: null,
+        },
     })
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
@@ -46,6 +59,11 @@ export default function KeHoachDaoTao() {
             active: true,
             trainingCourse: {
                 trainingObjectTypeId,
+            },
+            curriculumVersion: {
+                curriculum: {
+                    trainingMajorId,
+                },
             },
         },
     })
@@ -72,6 +90,12 @@ export default function KeHoachDaoTao() {
                             value: i.id,
                             label: i.name,
                         }))}
+                        showSearch
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input?.toLowerCase())
+                        }
+                        value={trainingMajorId}
+                        onChange={onSelectTrainingMajor}
                         dropdownStyle={{
                             minWidth: 350,
                         }}
@@ -90,6 +114,12 @@ export default function KeHoachDaoTao() {
                             value: i.id,
                             label: [i.code, i.name].filter(Boolean).join(' - '),
                         }))}
+                        showSearch
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input?.toLowerCase())
+                        }
+                        value={fixedClassId}
+                        onChange={onSelectFixedClass}
                         dropdownStyle={{
                             minWidth: 600,
                         }}

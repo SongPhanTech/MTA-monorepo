@@ -51,6 +51,9 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
             },
             cancelled: false,
             active: true,
+            approveLecturerAssignmentAt: {
+                not: null,
+            },
         },
         include: {
             subject: true,
@@ -120,8 +123,6 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
             active: true,
         },
     })
-
-    type SubjectClassData = (typeof subjectClassData)[number]
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {

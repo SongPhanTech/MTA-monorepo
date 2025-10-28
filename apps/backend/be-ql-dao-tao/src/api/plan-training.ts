@@ -379,6 +379,7 @@ const importFileGiaoVienCoGioGiay = async (
                                 })),
                             },
                             cancelled: false,
+                            approveLecturerAssignmentAt: new Date(),
                             classSchedules:
                                 scheduleInfo.ngayHoc && scheduleInfo.tietHoc
                                     ? {
@@ -500,6 +501,7 @@ const importFileGiaoVienCoGioGiay = async (
                             extraLecturerId: subjectClass.gvPhu,
                             subjectId: subjectClass.monHoc,
                             roomId: subjectClass.phongHoc,
+                            approveLecturerAssignmentAt: new Date(),
                             type: retake
                                 ? $Enums.SubjectClassType.RETAKE
                                 : $Enums.SubjectClassType.NORMAL,
