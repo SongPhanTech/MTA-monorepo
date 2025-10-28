@@ -119,6 +119,23 @@ export default function EvaluationCouncil() {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
+                        onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    if (
+                                        record?.id &&
+                                        can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
+                                            'XEM_CHI_TIET'
+                                        )
+                                    ) {
+                                        router.push(
+                                            `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA}/${record?.id}`
+                                        )
+                                    }
+                                },
+                            }
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -176,10 +193,11 @@ export default function EvaluationCouncil() {
                                                     <Tooltip title={'Xem chi tiết'} placement="top">
                                                         <EyeOutlined
                                                             style={{ fontSize: '16px' }}
-                                                            onClick={() => {
+                                                            onClick={(e) => {
                                                                 router.push(
                                                                     `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA}/${record?.id}`
                                                                 )
+                                                                e?.stopPropagation()
                                                             }}
                                                         />
                                                     </Tooltip>

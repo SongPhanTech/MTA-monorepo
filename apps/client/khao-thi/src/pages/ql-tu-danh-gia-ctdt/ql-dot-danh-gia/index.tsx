@@ -63,6 +63,14 @@ export default function EvaluationPeriod() {
 
     const { data, refetch } = useFindManyEvaluationPeriod({
         where,
+        include: {
+            councils: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
+        },
         orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -139,6 +147,23 @@ export default function EvaluationPeriod() {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
+                        onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    if (
+                                        record?.id &&
+                                        can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                            'XEM_CHI_TIET'
+                                        )
+                                    ) {
+                                        router.push(
+                                            `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}`
+                                        )
+                                    }
+                                },
+                            }
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -163,6 +188,25 @@ export default function EvaluationPeriod() {
                                     record?.startDate
                                         ? dayjs(record?.startDate).format('DD/MM/YYYY')
                                         : '',
+                            },
+                            {
+                                title: 'Hội đồng đánh giá',
+                                width: 200,
+                                render: (_, record) => {
+                                    if (!record.councils || record.councils.length === 0) return
+
+                                    return (
+                                        <div className="text-left">
+                                            {record.councils.map(
+                                                (council: { id: string; name: string }) => (
+                                                    <div key={council.id} className="py-0.5">
+                                                        - {council.name}
+                                                    </div>
+                                                )
+                                            )}
+                                        </div>
+                                    )
+                                },
                             },
                             {
                                 title: 'Ngày kết thúc',
@@ -208,10 +252,12 @@ export default function EvaluationPeriod() {
                                                 ) && (
                                                     <Tooltip title={'Chi tiết'} placement="top">
                                                         <EyeOutlined
-                                                            onClick={() => {
+                                                            style={{ fontSize: '16px' }}
+                                                            onClick={(e) => {
                                                                 router.push(
                                                                     `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}`
                                                                 )
+                                                                e?.stopPropagation()
                                                             }}
                                                         />
                                                     </Tooltip>

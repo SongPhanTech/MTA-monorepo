@@ -315,21 +315,21 @@ export default function StandardCatalog() {
                                 type: 'input',
                                 width: 400,
                             },
-                            {
-                                title: 'Thang điểm',
-                                dataIndex: 'scoreScalesId',
-                                align: 'center',
-                                type: 'select',
-                                width: 200,
-                                options: scoreScales?.map(({ id, name, passFrom }) => ({
-                                    value: id,
-                                    label: passFrom ? `${name} (${passFrom} điểm để đạt)` : name,
-                                })),
-                                render: (_, record) =>
-                                    record?.scoreScale?.passFrom
-                                        ? `${record?.scoreScale?.name} (${record?.scoreScale?.passFrom} điểm để qua)`
-                                        : record?.scoreScale?.name,
-                            },
+                            // {
+                            //     title: 'Thang điểm',
+                            //     dataIndex: 'scoreScalesId',
+                            //     align: 'center',
+                            //     type: 'select',
+                            //     width: 200,
+                            //     options: scoreScales?.map(({ id, name, passFrom }) => ({
+                            //         value: id,
+                            //         label: passFrom ? `${name} (${passFrom} điểm để đạt)` : name,
+                            //     })),
+                            //     render: (_, record) =>
+                            //         record?.scoreScale?.passFrom
+                            //             ? `${record?.scoreScale?.name} (${record?.scoreScale?.passFrom} điểm để qua)`
+                            //             : record?.scoreScale?.name,
+                            // },
                             {
                                 title: 'Thao tác',
                                 align: 'center',
