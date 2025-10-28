@@ -12,4 +12,5 @@ export type ImportPhanCongGiangDayImportType =
 export const ImportPhanCongGiangDayImportType = {
     TAO_MOI: 'TAO_MOI',
     CAP_NHAT: 'CAP_NHAT',
+    XEM_TRUOC: 'XEM_TRUOC',
 } as const

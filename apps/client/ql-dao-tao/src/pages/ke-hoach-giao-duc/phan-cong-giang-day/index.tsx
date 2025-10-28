@@ -48,6 +48,7 @@ type TeachingAssignmentForm = {
             trainingLocationId: string | null
             submitLecturerAssignmentAt?: boolean | null
             isEdit?: boolean
+            cancelled: boolean
         }
     >
 }
@@ -661,6 +662,7 @@ export default function PhanCongGiangDay({
                             trainingLocationId: curr.trainingLocationId,
                             submitLecturerAssignmentAt: !!curr.submitLecturerAssignmentAt,
                             isEdit: false,
+                            cancelled: !!curr.cancelled,
                         }
                         return acc
                     },
@@ -1378,6 +1380,10 @@ export default function PhanCongGiangDay({
                                 <span>Yêu cầu PCGD</span>
                             </p>
                             <p className="flex gap-1 items-center">
+                                <p className="bg-red-200 h-4 w-4 rounded" />
+                                <span>LMH đã huỷ</span>
+                            </p>
+                            <p className="flex gap-1 items-center">
                                 <p className="bg-yellow-200 h-4 w-4 rounded" />
                                 <span>Chờ duyệt PCGD</span>
                             </p>
@@ -1386,6 +1392,7 @@ export default function PhanCongGiangDay({
                                 <span>Đã duyệt PCGD</span>
                             </p>
                         </Flex>
+                        <FormItem form={form} name={'subjectClass'} hidden />
                         <TableCollapse
                             rowKey="id"
                             filters={filters}
@@ -1403,7 +1410,8 @@ export default function PhanCongGiangDay({
                                         (!subjectClassForm?.[record.id]?.lecturerId ||
                                             !subjectClassForm?.[record.id]?.extraLecturerId ||
                                             !subjectClassForm?.[record.id]?.enterGradeLecturerId) &&
-                                            'bg-slate-200'
+                                            'bg-slate-200',
+                                        subjectClassForm?.[record.id]?.cancelled && 'bg-red-200'
                                     ),
                                 }
                             }}
@@ -1422,11 +1430,6 @@ export default function PhanCongGiangDay({
                                         <>
                                             <FormItem
                                                 form={form}
-                                                name={['subjectClass', record.id, 'isEdit']}
-                                                hidden
-                                            />
-                                            <FormItem
-                                                form={form}
                                                 name={[
                                                     'subjectClass',
                                                     record.id,
@@ -1436,6 +1439,7 @@ export default function PhanCongGiangDay({
                                             >
                                                 <Checkbox
                                                     disabled={
+                                                        subjectClassForm?.[record.id]?.cancelled ||
                                                         khoaBoMon ||
                                                         !subjectClassForm?.[record.id]
                                                             ?.lecturerId ||
@@ -1477,6 +1481,7 @@ export default function PhanCongGiangDay({
                                             >
                                                 <Checkbox
                                                     disabled={
+                                                        subjectClassForm?.[record.id]?.cancelled ||
                                                         !!record?.submitLecturerAssignmentAt ||
                                                         !khoaBoMon ||
                                                         !subjectClassForm?.[record.id]
@@ -1514,6 +1519,9 @@ export default function PhanCongGiangDay({
                                                     suffixIcon={null}
                                                     className="px-1"
                                                     placeholder="Chọn ngày"
+                                                    disabled={
+                                                        subjectClassForm?.[record.id]?.cancelled
+                                                    }
                                                 />
                                             </FormItem>
                                         ) : record.lecturerAssignmentDeadline ? (
@@ -1623,6 +1631,7 @@ export default function PhanCongGiangDay({
                                                             : []
                                                     }
                                                     disabled={
+                                                        subjectClassForm?.[record.id]?.cancelled ||
                                                         !!record?.submitLecturerAssignmentAt ||
                                                         (!!record.lecturerAssignmentDeadline &&
                                                             dayjs(
@@ -1663,6 +1672,7 @@ export default function PhanCongGiangDay({
                                                             : []
                                                     }
                                                     disabled={
+                                                        subjectClassForm?.[record.id]?.cancelled ||
                                                         !!record?.submitLecturerAssignmentAt ||
                                                         (!!record.lecturerAssignmentDeadline &&
                                                             dayjs(
@@ -1695,12 +1705,15 @@ export default function PhanCongGiangDay({
                                                 <Select
                                                     options={options}
                                                     disabled={
-                                                        khoaBoMon &&
-                                                        (!!record?.submitLecturerAssignmentAt ||
-                                                            (!!record.lecturerAssignmentDeadline &&
-                                                                dayjs(
-                                                                    record.lecturerAssignmentDeadline
-                                                                ).isBefore(dayjs().startOf('day'))))
+                                                        subjectClassForm?.[record.id]?.cancelled ||
+                                                        (khoaBoMon &&
+                                                            (!!record?.submitLecturerAssignmentAt ||
+                                                                (!!record.lecturerAssignmentDeadline &&
+                                                                    dayjs(
+                                                                        record.lecturerAssignmentDeadline
+                                                                    ).isBefore(
+                                                                        dayjs().startOf('day')
+                                                                    ))))
                                                     }
                                                 />
                                             </FormItem>
@@ -1790,12 +1803,15 @@ export default function PhanCongGiangDay({
                                                         .includes(input?.toLowerCase())
                                                 }
                                                 disabled={
-                                                    khoaBoMon &&
-                                                    (!!record?.submitLecturerAssignmentAt ||
-                                                        (!!record.lecturerAssignmentDeadline &&
-                                                            dayjs(
-                                                                record.lecturerAssignmentDeadline
-                                                            ).isBefore(dayjs().startOf('day'))))
+                                                    subjectClassForm?.[record.id]?.cancelled ||
+                                                    (khoaBoMon &&
+                                                        (!!record?.submitLecturerAssignmentAt ||
+                                                            (!!record.lecturerAssignmentDeadline &&
+                                                                dayjs(
+                                                                    record.lecturerAssignmentDeadline
+                                                                ).isBefore(
+                                                                    dayjs().startOf('day')
+                                                                ))))
                                                 }
                                                 showSearch
                                                 allowClear
@@ -1829,6 +1845,7 @@ export default function PhanCongGiangDay({
                                                         record?.subject?.managementOrganizationId
                                                     }
                                                     disabled={
+                                                        subjectClassForm?.[record.id]?.cancelled ||
                                                         !!record?.submitLecturerAssignmentAt ||
                                                         (!!record.lecturerAssignmentDeadline &&
                                                             dayjs(

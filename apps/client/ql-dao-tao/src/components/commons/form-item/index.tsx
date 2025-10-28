@@ -1,7 +1,7 @@
 import { cn } from '@workspace/ui/lib/utils'
 import { Form, type FormInstance, type FormItemProps as FormItemAntDrops } from 'antd'
 
-type FormItemProps<T, K> = FormItemAntDrops & {
+type FormItemProps<T = Record<string, unknown>, K = keyof T> = FormItemAntDrops & {
     form: FormInstance<T>
     name: K | (string | number)[]
 }

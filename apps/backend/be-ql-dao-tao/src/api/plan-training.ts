@@ -23,6 +23,12 @@ const importPhanCongGiangDay = createRoute({
                     schema: UploadExcelModel.extend({
                         semesterId: z.string(), // loại thông tin
                         trainingObjectTypeId: z.string(), // loại thông tin
+                        retake: z
+                            .boolean({
+                                coerce: true,
+                            })
+                            .optional()
+                            .default(false), //
                         fileType: z
                             .enum(['THONG_KE_GIAO_VIEN_GIANG_DAY', 'TKB_THEO_LOP_HOC_PHAN'])
                             .default('THONG_KE_GIAO_VIEN_GIANG_DAY'), // loại thông tin
@@ -61,7 +67,8 @@ const importFileGiaoVienCoGioGiay = async (
     semesterId: string,
     trainingObjectTypeId: string,
     danhSachLopMonHoc: Array<SubjectClass>,
-    importType: 'TAO_MOI' | 'CAP_NHAT' | 'XEM_TRUOC'
+    importType: 'TAO_MOI' | 'CAP_NHAT' | 'XEM_TRUOC',
+    retake = false
 ) => {
     const rowData = utils.sheet_to_json<string[]>(sheet, {
         header: 1,
@@ -190,14 +197,17 @@ const importFileGiaoVienCoGioGiay = async (
 
     await prisma.$transaction(
         async (tx) => {
-            if (importType === 'TAO_MOI') {
-                await tx.subjectClass.deleteMany({
-                    where: {
-                        semesterId,
-                        trainingObjectTypeId,
-                    },
-                })
-            }
+            await tx.subjectClass.updateMany({
+                where: {
+                    semesterId,
+                    trainingObjectTypeId,
+                    type: retake ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                },
+                data: {
+                    cancelled: true,
+                    lecturerAssignmentDeadline: null,
+                },
+            })
             await tx.classSchedule.deleteMany({
                 where: {
                     subjectClass: {
@@ -250,6 +260,7 @@ const importFileGiaoVienCoGioGiay = async (
                               ? $Enums.SubjectClassSchedule.AFTERNOON
                               : $Enums.SubjectClassSchedule.EVENING,
                     quanSo: quanSo ? Number(quanSo) : 0,
+                    type: retake ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
                 }
                 const dsTietHoc = String(tietHoc)
                     .trim()
@@ -346,6 +357,9 @@ const importFileGiaoVienCoGioGiay = async (
                         semesterId,
                         code: maLopMonHoc,
                         trainingObjectTypeId,
+                        type: retake
+                            ? $Enums.SubjectClassType.RETAKE
+                            : $Enums.SubjectClassType.NORMAL,
                     },
                 })
                 if (existSubjectClass) {
@@ -364,6 +378,7 @@ const importFileGiaoVienCoGioGiay = async (
                                     id: e,
                                 })),
                             },
+                            cancelled: false,
                             classSchedules:
                                 scheduleInfo.ngayHoc && scheduleInfo.tietHoc
                                     ? {
@@ -398,6 +413,72 @@ const importFileGiaoVienCoGioGiay = async (
                                 },
                             },
                         },
+                        include: {
+                            fixedClasses: {
+                                select: {
+                                    code: true,
+                                    _count: {
+                                        select: {
+                                            students: {
+                                                where: {
+                                                    status: $Enums.StudentStatus.ENROLLED,
+                                                    active: true,
+                                                    deletedAt: null,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            mainLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            extraLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            enterGradeLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            trainingLocation: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            room: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            subjectClassTimes: true,
+                            subject: {
+                                select: {
+                                    managementOrganization: {
+                                        select: {
+                                            sMa: true,
+                                        },
+                                    },
+                                    onePoint: true,
+                                },
+                            },
+                        },
                     })
                     danhSachLopMonHoc.push(res)
                 } else if (
@@ -419,6 +500,9 @@ const importFileGiaoVienCoGioGiay = async (
                             extraLecturerId: subjectClass.gvPhu,
                             subjectId: subjectClass.monHoc,
                             roomId: subjectClass.phongHoc,
+                            type: retake
+                                ? $Enums.SubjectClassType.RETAKE
+                                : $Enums.SubjectClassType.NORMAL,
                             fixedClasses: {
                                 connect: subjectClass.lopNienChe.map((e) => ({
                                     id: e,
@@ -456,6 +540,72 @@ const importFileGiaoVienCoGioGiay = async (
                                     endPeriod: scheduleInfo.tietHoc[1]
                                         ? Number(scheduleInfo.tietHoc[1])
                                         : 1,
+                                },
+                            },
+                        },
+                        include: {
+                            fixedClasses: {
+                                select: {
+                                    code: true,
+                                    _count: {
+                                        select: {
+                                            students: {
+                                                where: {
+                                                    status: $Enums.StudentStatus.ENROLLED,
+                                                    active: true,
+                                                    deletedAt: null,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            mainLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            extraLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            enterGradeLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            trainingLocation: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            room: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            subjectClassTimes: true,
+                            subject: {
+                                select: {
+                                    managementOrganization: {
+                                        select: {
+                                            sMa: true,
+                                        },
+                                    },
+                                    onePoint: true,
                                 },
                             },
                         },
@@ -738,6 +888,72 @@ const importFileTKBTheoLopHocPhan = async (
                                       }
                                     : {},
                         },
+                        include: {
+                            fixedClasses: {
+                                select: {
+                                    code: true,
+                                    _count: {
+                                        select: {
+                                            students: {
+                                                where: {
+                                                    status: $Enums.StudentStatus.ENROLLED,
+                                                    active: true,
+                                                    deletedAt: null,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            mainLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            extraLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            enterGradeLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            trainingLocation: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            room: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            subjectClassTimes: true,
+                            subject: {
+                                select: {
+                                    managementOrganization: {
+                                        select: {
+                                            sMa: true,
+                                        },
+                                    },
+                                    onePoint: true,
+                                },
+                            },
+                        },
                     })
                     danhSachLopMonHoc.push(res)
                 } else if (subjectClass.gvChinh && subjectClass.monHoc) {
@@ -770,6 +986,72 @@ const importFileTKBTheoLopHocPhan = async (
                                       }
                                     : {},
                         },
+                        include: {
+                            fixedClasses: {
+                                select: {
+                                    code: true,
+                                    _count: {
+                                        select: {
+                                            students: {
+                                                where: {
+                                                    status: $Enums.StudentStatus.ENROLLED,
+                                                    active: true,
+                                                    deletedAt: null,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            mainLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            extraLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            enterGradeLecturer: {
+                                select: {
+                                    userProfile: {
+                                        select: {
+                                            fullname: true,
+                                        },
+                                    },
+                                },
+                            },
+                            trainingLocation: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            room: {
+                                select: {
+                                    name: true,
+                                },
+                            },
+                            subjectClassTimes: true,
+                            subject: {
+                                select: {
+                                    managementOrganization: {
+                                        select: {
+                                            sMa: true,
+                                        },
+                                    },
+                                    onePoint: true,
+                                },
+                            },
+                        },
                     })
                     danhSachLopMonHoc.push(res)
                 }
@@ -783,7 +1065,8 @@ const importFileTKBTheoLopHocPhan = async (
 }
 
 app.openapi(importPhanCongGiangDay, async (c) => {
-    const { file, semesterId, trainingObjectTypeId, fileType, importType } = c.req.valid('form')
+    const { file, semesterId, trainingObjectTypeId, fileType, importType, retake } =
+        c.req.valid('form')
 
     const maxFileSize = 50 * 1024 * 1024 // 50MB
     if (file.size > maxFileSize) {
@@ -813,16 +1096,19 @@ app.openapi(importPhanCongGiangDay, async (c) => {
                         semesterId,
                         trainingObjectTypeId,
                         danhSachLopMonHoc,
-                        importType
+                        importType,
+                        retake
                     )
                 } catch (error) {}
+                console.log('danhSachLopMonHoc', danhSachLopMonHoc)
             } else {
                 await importFileGiaoVienCoGioGiay(
                     sheet,
                     semesterId,
                     trainingObjectTypeId,
                     danhSachLopMonHoc,
-                    importType
+                    importType,
+                    retake
                 )
             }
         } else if (fileType === 'TKB_THEO_LOP_HOC_PHAN') {
