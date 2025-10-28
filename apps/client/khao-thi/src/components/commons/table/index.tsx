@@ -46,7 +46,7 @@ type TableProps<T = Record<string, unknown>> = {
     filters?: FilterProps
     setFilters?: (record: FilterProps) => void
     expandable?: TableAntdProps<T>['expandable']
-    rowKey?: string
+    rowKey?: string | any
     id?: string
     selectedRow?: string | null
     scrollable?: boolean

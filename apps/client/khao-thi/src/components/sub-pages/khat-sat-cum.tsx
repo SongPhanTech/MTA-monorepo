@@ -1,11 +1,10 @@
-import { BarChartOutlined, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { BarChartOutlined, EyeOutlined } from '@ant-design/icons'
+import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
-import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { SurveyObjectType } from '@workspace/db'
 import {
     useCountClusterSurvey,
     useFindManyClusterSurvey,
@@ -96,14 +95,7 @@ function TabDotKhaoSatCum() {
 
     const { onOpen } = useDisclosure<{ id: string; type: string }>({
         tag: 'PutSurveyModal',
-    })
-
-    const { onOpen: onOpenSurveyExamModal } = useDisclosure<{ id: string; surveyTopicId: string }>({
-        tag: 'PutSurveyExamModal',
-    })
-
-    const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string }>({
-        tag: 'ThongTinKhaoSatModal',
+        onClose: () => refetch(),
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -112,9 +104,7 @@ function TabDotKhaoSatCum() {
         onOpen({ id: '', type: 'multiple' })
     }
 
-    const handleModalCreateExam = (value: { id: string; surveyTopicId: string }) => {
-        onOpenSurveyExamModal(value)
-    }
+  
     const { mutateAsync: updateSurvey } = useUpdateSurvey()
 
     async function handleDelete(id: string) {
@@ -195,6 +185,15 @@ function TabDotKhaoSatCum() {
                                     record?.surveyTopic ? record?.surveyTopic.name : '',
                             },
                             {
+                                title: 'Đối tượng được khảo sát',
+                                dataIndex: 'surveyObjectTypeId',
+                                render: (_, record) =>{
+                                        return record?.surveyObjectType?.length 
+                                }
+                                    
+                              
+                            },
+                                 {
                                 title: 'Đối tượng khảo sát',
                                 dataIndex: 'surveyObjectTypeId',
                                 type: 'select',
@@ -202,12 +201,22 @@ function TabDotKhaoSatCum() {
                                     value: id,
                                     label: name,
                                 })),
-                                render: (_, record) =>
-                                    record?.surveyObjectType?.length
-                                        ? record?.surveyObjectType
-                                              .map((i: SurveyObjectType) => i.name)
-                                              .join(',')
-                                        : '',
+                                render: (_, record) =>{
+                                        return record?.surveyObjectType?.length ? (
+                                            <HtmlTruncate key="explanation">
+                                                                                 
+                                                                                 <ul>
+                                                                                     {record?.surveyObjectType?.map((i: any) => (
+                                                                                         <li key={i.id}>- {i.name}</li>
+                                                                                     ))}
+                                                                                 </ul>
+                                                                               </HtmlTruncate>
+                                        ) : (
+                                            ''
+                                        )
+                                }
+                                    
+                              
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -229,7 +238,7 @@ function TabDotKhaoSatCum() {
                             },
                             {
                                 title: 'Thao tác',
-                                width: 170,
+                                width: 120,
                                 align: 'center',
                                 hidden: !canSome(
                                     KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -273,34 +282,14 @@ function TabDotKhaoSatCum() {
                                                 >
                                                     <EyeOutlined
                                                         onClick={() => {
-                                                            onOpenKhaoSat({
-                                                                dataTable: surveyObjectType,
-                                                                id: id,
-                                                            })
-                                                            // router.push(`/lam-khao-sat/${id}`)
+                                                            router.push(`/thiet-lap-khao-sat/dot-khao-sat/${id}`)
                                                         }}
                                                         style={{ fontSize: '16px' }}
                                                     />
                                                 </Tooltip>
                                             )}
 
-                                        {can(
-                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                            'THEM'
-                                        ) && (
-                                            <Tooltip
-                                                className="mr-2"
-                                                title={'Tạo đề khảo sát'}
-                                                placement="top"
-                                            >
-                                                <PlusCircleOutlined
-                                                    onClick={() =>
-                                                        handleModalCreateExam({ id, surveyTopicId })
-                                                    }
-                                                />
-                                            </Tooltip>
-                                        )}
-                                        {can(
+                                        {/* {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                             'SUA'
                                         ) && (
@@ -308,7 +297,7 @@ function TabDotKhaoSatCum() {
                                                 onClick={() => onOpen({ id, type: 'multiple' })}
                                                 className="text-sm text-blue-700 cursor-pointer mr-2"
                                             />
-                                        )}
+                                        )} */}
 
                                         {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
