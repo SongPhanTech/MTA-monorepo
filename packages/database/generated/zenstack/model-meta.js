@@ -19497,6 +19497,14 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'questionBank',
+                }, lockExamSessions: {
+                    name: "lockExamSessions",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, createdExamCode: {
+                    name: "createdExamCode",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, lockExamCode: {
                     name: "lockExamCode",
                     type: "Boolean",

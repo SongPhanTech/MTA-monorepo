@@ -154,6 +154,10 @@ import type {
     Room400,
     SaveExamCodesResult,
     SaveExamScore400,
+    SetExamScoreDeadLine200,
+    SetExamScoreDeadLineBody,
+    SetScoreDeadLine200,
+    SetScoreDeadLineBody,
     TrainingField200Item,
     TrainingField400,
     UpdateStudentStatus200,
@@ -1540,6 +1544,213 @@ export const useEnrollFixedClassOnSubjectClass = <TError = void, TContext = unkn
     TContext
 > => {
     const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Đặt hạn nhập điểm
+ * @summary Đặt hạn nhập điểm
+ */
+export type setScoreDeadLineResponse200 = {
+    data: SetScoreDeadLine200
+    status: 200
+}
+
+export type setScoreDeadLineResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type setScoreDeadLineResponseComposite =
+    | setScoreDeadLineResponse200
+    | setScoreDeadLineResponse400
+
+export type setScoreDeadLineResponse = setScoreDeadLineResponseComposite & {
+    headers: Headers
+}
+
+export const getSetScoreDeadLineUrl = () => {
+    return '/api/subject-class/set-score-dead-line'
+}
+
+export const setScoreDeadLine = async (
+    setScoreDeadLineBody: SetScoreDeadLineBody,
+    options?: RequestInit
+): Promise<setScoreDeadLineResponse> => {
+    return customTrainingFetch<setScoreDeadLineResponse>(getSetScoreDeadLineUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(setScoreDeadLineBody),
+    })
+}
+
+export const getSetScoreDeadLineMutationOptions = <TError = void, TContext = unknown>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof setScoreDeadLine>>,
+        TError,
+        { data: SetScoreDeadLineBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof setScoreDeadLine>>,
+    TError,
+    { data: SetScoreDeadLineBody },
+    TContext
+> => {
+    const mutationKey = ['setScoreDeadLine']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof setScoreDeadLine>>,
+        { data: SetScoreDeadLineBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return setScoreDeadLine(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type SetScoreDeadLineMutationResult = NonNullable<
+    Awaited<ReturnType<typeof setScoreDeadLine>>
+>
+export type SetScoreDeadLineMutationBody = SetScoreDeadLineBody
+export type SetScoreDeadLineMutationError = undefined
+
+/**
+ * @summary Đặt hạn nhập điểm
+ */
+export const useSetScoreDeadLine = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof setScoreDeadLine>>,
+            TError,
+            { data: SetScoreDeadLineBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof setScoreDeadLine>>,
+    TError,
+    { data: SetScoreDeadLineBody },
+    TContext
+> => {
+    const mutationOptions = getSetScoreDeadLineMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Đặt hạn nhập điểm thi
+ * @summary Đặt hạn nhập điểm thi
+ */
+export type setExamScoreDeadLineResponse200 = {
+    data: SetExamScoreDeadLine200
+    status: 200
+}
+
+export type setExamScoreDeadLineResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type setExamScoreDeadLineResponseComposite =
+    | setExamScoreDeadLineResponse200
+    | setExamScoreDeadLineResponse400
+
+export type setExamScoreDeadLineResponse = setExamScoreDeadLineResponseComposite & {
+    headers: Headers
+}
+
+export const getSetExamScoreDeadLineUrl = () => {
+    return '/api/subject-class/set-exam-score-dead-line'
+}
+
+export const setExamScoreDeadLine = async (
+    setExamScoreDeadLineBody: SetExamScoreDeadLineBody,
+    options?: RequestInit
+): Promise<setExamScoreDeadLineResponse> => {
+    return customTrainingFetch<setExamScoreDeadLineResponse>(getSetExamScoreDeadLineUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(setExamScoreDeadLineBody),
+    })
+}
+
+export const getSetExamScoreDeadLineMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+        TError,
+        { data: SetExamScoreDeadLineBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+    TError,
+    { data: SetExamScoreDeadLineBody },
+    TContext
+> => {
+    const mutationKey = ['setExamScoreDeadLine']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+        { data: SetExamScoreDeadLineBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return setExamScoreDeadLine(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type SetExamScoreDeadLineMutationResult = NonNullable<
+    Awaited<ReturnType<typeof setExamScoreDeadLine>>
+>
+export type SetExamScoreDeadLineMutationBody = SetExamScoreDeadLineBody
+export type SetExamScoreDeadLineMutationError = undefined
+
+/**
+ * @summary Đặt hạn nhập điểm thi
+ */
+export const useSetExamScoreDeadLine = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+            TError,
+            { data: SetExamScoreDeadLineBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+    TError,
+    { data: SetExamScoreDeadLineBody },
+    TContext
+> => {
+    const mutationOptions = getSetExamScoreDeadLineMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

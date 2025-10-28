@@ -194,6 +194,14 @@ model Exam extends Base {
   questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
   questionBankId      String?
 
+  /// khoá DS thi
+  // giao diện đánh phách, nhập điểm theo phách chỉ query lockExamSessions=true
+  lockExamSessions    Boolean               @default(false)
+
+  /// Đã đánh phách
+  createdExamCode     Boolean               @default(false)
+
+  // khoá phách
   lockExamCode        Boolean               @default(false)
 
   /// thời gian thi

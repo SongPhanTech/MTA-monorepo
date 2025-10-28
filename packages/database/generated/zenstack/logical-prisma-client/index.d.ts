@@ -8853,6 +8853,8 @@ export namespace Prisma {
         updatedAt: 'updatedAt',
         status: 'status',
         questionBankId: 'questionBankId',
+        lockExamSessions: 'lockExamSessions',
+        createdExamCode: 'createdExamCode',
         lockExamCode: 'lockExamCode',
         duration: 'duration'
     };
@@ -84937,6 +84939,8 @@ export namespace Prisma {
         readonly updatedAt: FieldRef<"Exam", 'DateTime'>;
         readonly status: FieldRef<"Exam", 'ExamStatus'>;
         readonly questionBankId: FieldRef<"Exam", 'String'>;
+        readonly lockExamSessions: FieldRef<"Exam", 'Boolean'>;
+        readonly createdExamCode: FieldRef<"Exam", 'Boolean'>;
         readonly lockExamCode: FieldRef<"Exam", 'Boolean'>;
         readonly duration: FieldRef<"Exam", 'Int'>;
     }
@@ -278812,6 +278816,8 @@ export namespace Prisma {
         updatedAt: Date | null
         status: $Enums.ExamStatus | null
         questionBankId: string | null
+        lockExamSessions: boolean | null
+        createdExamCode: boolean | null
         lockExamCode: boolean | null
         duration: number | null
     };
@@ -278825,6 +278831,8 @@ export namespace Prisma {
         updatedAt: Date | null
         status: $Enums.ExamStatus | null
         questionBankId: string | null
+        lockExamSessions: boolean | null
+        createdExamCode: boolean | null
         lockExamCode: boolean | null
         duration: number | null
     };
@@ -278838,6 +278846,8 @@ export namespace Prisma {
         updatedAt: number
         status: number
         questionBankId: number
+        lockExamSessions: number
+        createdExamCode: number
         lockExamCode: number
         duration: number
         _all: number
@@ -278858,6 +278868,8 @@ export namespace Prisma {
         updatedAt?: true
         status?: true
         questionBankId?: true
+        lockExamSessions?: true
+        createdExamCode?: true
         lockExamCode?: true
         duration?: true
     };
@@ -278871,6 +278883,8 @@ export namespace Prisma {
         updatedAt?: true
         status?: true
         questionBankId?: true
+        lockExamSessions?: true
+        createdExamCode?: true
         lockExamCode?: true
         duration?: true
     };
@@ -278884,6 +278898,8 @@ export namespace Prisma {
         updatedAt?: true
         status?: true
         questionBankId?: true
+        lockExamSessions?: true
+        createdExamCode?: true
         lockExamCode?: true
         duration?: true
         _all?: true
@@ -278978,6 +278994,8 @@ export namespace Prisma {
         updatedAt: Date
         status: $Enums.ExamStatus
         questionBankId: string | null
+        lockExamSessions: boolean
+        createdExamCode: boolean
         lockExamCode: boolean
         duration: number | null
         _count: ExamCountAggregateOutputType | null
@@ -279008,6 +279026,8 @@ export namespace Prisma {
         updatedAt?: boolean
         status?: boolean
         questionBankId?: boolean
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: boolean
         questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
@@ -279030,6 +279050,8 @@ export namespace Prisma {
         updatedAt?: boolean
         status?: boolean
         questionBankId?: boolean
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: boolean
         questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
@@ -279044,6 +279066,8 @@ export namespace Prisma {
         updatedAt?: boolean
         status?: boolean
         questionBankId?: boolean
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: boolean
         questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
@@ -279058,10 +279082,12 @@ export namespace Prisma {
         updatedAt?: boolean
         status?: boolean
         questionBankId?: boolean
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: boolean
     };
-    export type ExamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "status" | "questionBankId" | "lockExamCode" | "duration", ExtArgs["result"]["exam"]>;
+    export type ExamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "status" | "questionBankId" | "lockExamSessions" | "createdExamCode" | "lockExamCode" | "duration", ExtArgs["result"]["exam"]>;
     export type ExamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         questionBank?: boolean | Exam$questionBankArgs<ExtArgs>
         subjectClass?: boolean | Exam$subjectClassArgs<ExtArgs>
@@ -279107,6 +279133,14 @@ export namespace Prisma {
             updatedAt: Date
             status: $Enums.ExamStatus
             questionBankId: string | null
+            /**
+             * khoá DS thi
+             */
+            lockExamSessions: boolean
+            /**
+             * Đã đánh phách
+             */
+            createdExamCode: boolean
             lockExamCode: boolean
             /**
              * thời gian thi
@@ -339708,6 +339742,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"Exam"> | Date | string
         status?: EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
         questionBankId?: StringNullableFilter<"Exam"> | string | null
+        lockExamSessions?: BoolFilter<"Exam"> | boolean
+        createdExamCode?: BoolFilter<"Exam"> | boolean
         lockExamCode?: BoolFilter<"Exam"> | boolean
         duration?: IntNullableFilter<"Exam"> | number | null
         questionBank?: XOR<QuestionBankNullableScalarRelationFilter, QuestionBankWhereInput> | null
@@ -339729,6 +339765,8 @@ export namespace Prisma {
         updatedAt?: SortOrder
         status?: SortOrder
         questionBankId?: SortOrderInput | SortOrder
+        lockExamSessions?: SortOrder
+        createdExamCode?: SortOrder
         lockExamCode?: SortOrder
         duration?: SortOrderInput | SortOrder
         questionBank?: QuestionBankOrderByWithRelationInput
@@ -339754,6 +339792,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"Exam"> | Date | string
         status?: EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
         questionBankId?: StringNullableFilter<"Exam"> | string | null
+        lockExamSessions?: BoolFilter<"Exam"> | boolean
+        createdExamCode?: BoolFilter<"Exam"> | boolean
         lockExamCode?: BoolFilter<"Exam"> | boolean
         duration?: IntNullableFilter<"Exam"> | number | null
         questionBank?: XOR<QuestionBankNullableScalarRelationFilter, QuestionBankWhereInput> | null
@@ -339775,6 +339815,8 @@ export namespace Prisma {
         updatedAt?: SortOrder
         status?: SortOrder
         questionBankId?: SortOrderInput | SortOrder
+        lockExamSessions?: SortOrder
+        createdExamCode?: SortOrder
         lockExamCode?: SortOrder
         duration?: SortOrderInput | SortOrder
         _count?: ExamCountOrderByAggregateInput
@@ -339796,6 +339838,8 @@ export namespace Prisma {
         updatedAt?: DateTimeWithAggregatesFilter<"Exam"> | Date | string
         status?: EnumExamStatusWithAggregatesFilter<"Exam"> | $Enums.ExamStatus
         questionBankId?: StringNullableWithAggregatesFilter<"Exam"> | string | null
+        lockExamSessions?: BoolWithAggregatesFilter<"Exam"> | boolean
+        createdExamCode?: BoolWithAggregatesFilter<"Exam"> | boolean
         lockExamCode?: BoolWithAggregatesFilter<"Exam"> | boolean
         duration?: IntNullableWithAggregatesFilter<"Exam"> | number | null
     };
@@ -366801,6 +366845,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         questionBank?: QuestionBankCreateNestedOneWithoutExamInput
@@ -366822,6 +366868,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
         questionBankId?: string | null
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
@@ -366841,6 +366889,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
@@ -366862,6 +366912,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
@@ -366882,6 +366934,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
         questionBankId?: string | null
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
     };
@@ -366894,6 +366948,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
     };
@@ -366907,6 +366963,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
     };
@@ -385853,6 +385911,8 @@ export namespace Prisma {
         updatedAt?: SortOrder
         status?: SortOrder
         questionBankId?: SortOrder
+        lockExamSessions?: SortOrder
+        createdExamCode?: SortOrder
         lockExamCode?: SortOrder
         duration?: SortOrder
     };
@@ -385869,6 +385929,8 @@ export namespace Prisma {
         updatedAt?: SortOrder
         status?: SortOrder
         questionBankId?: SortOrder
+        lockExamSessions?: SortOrder
+        createdExamCode?: SortOrder
         lockExamCode?: SortOrder
         duration?: SortOrder
     };
@@ -385882,6 +385944,8 @@ export namespace Prisma {
         updatedAt?: SortOrder
         status?: SortOrder
         questionBankId?: SortOrder
+        lockExamSessions?: SortOrder
+        createdExamCode?: SortOrder
         lockExamCode?: SortOrder
         duration?: SortOrder
     };
@@ -453979,6 +454043,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         questionBank?: QuestionBankCreateNestedOneWithoutExamInput
@@ -453999,6 +454065,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
         questionBankId?: string | null
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
@@ -454659,6 +454727,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
@@ -454679,6 +454749,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
@@ -468176,6 +468248,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         questionBank?: QuestionBankCreateNestedOneWithoutExamInput
@@ -468196,6 +468270,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
         questionBankId?: string | null
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         studentSubjectScore?: StudentSubjectScoreUncheckedCreateNestedManyWithoutExamInput
@@ -469246,6 +469322,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
@@ -469266,6 +469344,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         studentSubjectScore?: StudentSubjectScoreUncheckedUpdateManyWithoutExamNestedInput
@@ -474397,6 +474477,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         questionBank?: QuestionBankCreateNestedOneWithoutExamInput
@@ -474417,6 +474499,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
         questionBankId?: string | null
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
@@ -474877,6 +474961,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFilter<"Exam"> | Date | string
         status?: EnumExamStatusFilter<"Exam"> | $Enums.ExamStatus
         questionBankId?: StringNullableFilter<"Exam"> | string | null
+        lockExamSessions?: BoolFilter<"Exam"> | boolean
+        createdExamCode?: BoolFilter<"Exam"> | boolean
         lockExamCode?: BoolFilter<"Exam"> | boolean
         duration?: IntNullableFilter<"Exam"> | number | null
     };
@@ -501150,6 +501236,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         subjectClass?: SubjectClassCreateNestedManyWithoutExamInput
@@ -501169,6 +501257,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
@@ -503029,6 +503119,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         questionBank?: QuestionBankCreateNestedOneWithoutExamInput
@@ -503049,6 +503141,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
         questionBankId?: string | null
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
@@ -503288,6 +503382,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
@@ -503308,6 +503404,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
@@ -503530,6 +503628,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         questionBank?: QuestionBankCreateNestedOneWithoutExamInput
@@ -503550,6 +503650,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
         questionBankId?: string | null
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
@@ -503639,6 +503741,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
@@ -503659,6 +503763,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
@@ -503745,6 +503851,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         questionBank?: QuestionBankCreateNestedOneWithoutExamInput
@@ -503765,6 +503873,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
         questionBankId?: string | null
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
@@ -503826,6 +503936,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
@@ -503846,6 +503958,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
@@ -504027,6 +504141,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         questionBank?: QuestionBankCreateNestedOneWithoutExamInput
@@ -504047,6 +504163,8 @@ export namespace Prisma {
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
         questionBankId?: string | null
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
         subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutExamInput
@@ -504188,6 +504306,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
@@ -504208,6 +504328,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
@@ -547922,6 +548044,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         questionBank?: QuestionBankUpdateOneWithoutExamNestedInput
@@ -547942,6 +548066,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
@@ -547961,6 +548087,8 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
         questionBankId?: NullableStringFieldUpdateOperationsInput | string | null
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
     };
@@ -557983,6 +558111,8 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         status?: $Enums.ExamStatus
+        lockExamSessions?: boolean
+        createdExamCode?: boolean
         lockExamCode?: boolean
         duration?: number | null
     };
@@ -558093,6 +558223,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         subjectClass?: SubjectClassUpdateManyWithoutExamNestedInput
@@ -558112,6 +558244,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
         subjectClass?: SubjectClassUncheckedUpdateManyWithoutExamNestedInput
@@ -558131,6 +558265,8 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         status?: EnumExamStatusFieldUpdateOperationsInput | $Enums.ExamStatus
+        lockExamSessions?: BoolFieldUpdateOperationsInput | boolean
+        createdExamCode?: BoolFieldUpdateOperationsInput | boolean
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         duration?: NullableIntFieldUpdateOperationsInput | number | null
     };

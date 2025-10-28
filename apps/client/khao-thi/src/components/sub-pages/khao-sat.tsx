@@ -1,11 +1,11 @@
-import { BarChartOutlined, EyeOutlined, PlusCircleOutlined } from '@ant-design/icons'
+import { BarChartOutlined, EyeOutlined } from '@ant-design/icons'
+import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { SurveyObjectType } from '@workspace/db'
 import {
     useCountSurvey,
     useFindManySurvey,
@@ -105,9 +105,7 @@ function TabDotKhaoSat() {
         tag: 'PutSurveyModal',
     })
 
-    const { onOpen: onOpenSurveyExamModal } = useDisclosure<{ id: string; surveyTopicId: string }>({
-        tag: 'PutSurveyExamModal',
-    })
+  
 
     const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string }>({
         tag: 'ThongTinKhaoSatModal',
@@ -119,9 +117,6 @@ function TabDotKhaoSat() {
         onOpen({ id: '', type: 'one' })
     }
 
-    const handleModalCreateExam = (value: { id: string; surveyTopicId: string }) => {
-        onOpenSurveyExamModal(value)
-    }
     const { mutateAsync: updateSurvey } = useUpdateSurvey()
 
     async function handleDelete(id: string) {
@@ -209,12 +204,20 @@ function TabDotKhaoSat() {
                                     value: id,
                                     label: name,
                                 })),
-                                render: (_, record) =>
-                                    record?.surveyObjectType?.length
-                                        ? record?.surveyObjectType
-                                              .map((i: SurveyObjectType) => i.name)
-                                              .join(',')
-                                        : '',
+                                  render: (_, record) =>{
+                                        return record?.surveyObjectType?.length ? (
+                                            <HtmlTruncate key="explanation">
+                                                                                
+                                                                                <ul>
+                                                                                    {record?.surveyObjectType?.map((i: any) => (
+                                                                                        <li key={i.id}>- {i.name}</li>
+                                                                                    ))}
+                                                                                </ul>
+                                                                                </HtmlTruncate>
+                                        ) : (
+                                            ''
+                                        )
+                                }
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -290,23 +293,6 @@ function TabDotKhaoSat() {
                                                     />
                                                 </Tooltip>
                                             )}
-
-                                        {can(
-                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                            'THEM'
-                                        ) && (
-                                            <Tooltip
-                                                className="mr-2"
-                                                title={'Tạo đề khảo sát'}
-                                                placement="top"
-                                            >
-                                                <PlusCircleOutlined
-                                                    onClick={() =>
-                                                        handleModalCreateExam({ id, surveyTopicId })
-                                                    }
-                                                />
-                                            </Tooltip>
-                                        )}
                                         {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                             'SUA'

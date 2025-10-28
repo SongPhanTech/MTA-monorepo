@@ -1,25 +1,32 @@
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
-import { useSession } from '@workspace/auth/react'
 import { cn } from '@lib/utils'
-import { type Prisma, type SubjectClass, type SubjectVersion } from '@workspace/db/client'
+import { useSession } from '@workspace/auth/react'
+import type { Prisma, SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManyFixedClass,
     useFindManySubjectClass,
 } from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
-import { useCreateExams, useCreateNewReExamList } from '@workspace/libs/api/training'
+import {
+    setExamScoreDeadLine,
+    setScoreDeadLine,
+    useCreateExams,
+    useCreateNewReExamList,
+} from '@workspace/libs/api/training'
 // import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
+    DatePicker as AntdDatePicker,
     Button,
     Col,
     Flex,
@@ -31,26 +38,26 @@ import {
     Row,
     Switch,
     Tooltip,
-    DatePicker as AntdDatePicker,
 } from 'antd'
+import locale from 'antd/es/date-picker/locale/vi_VN'
 import dayjs, { type Dayjs } from 'dayjs'
 import _ from 'lodash'
 import { CalendarPlus, Search } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import DatePicker from '@components/commons/date-picker'
-import locale from 'antd/es/date-picker/locale/vi_VN'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import Select from '@components/commons/select'
+
 type TimeScore = {
     time: [Dayjs, Dayjs]
-    beforeDays: number
-    fromDays: number
+    startPadding: number
+    endPadding: number
+    overwrite: boolean
 }
 type TimeScoreExam = {
-    examScoreDeadline: Dayjs
-    beforeDays: number
+    endDate: Dayjs
+    endPadding: number
+    overwrite: boolean
 }
 
 type HoldAnExam = {
@@ -93,7 +100,7 @@ export default function ClassSubject() {
         tag: 'PutDeadlineScoreModal',
     })
 
-    const handleSchudule = (id: string) => {
+    const handleSchedule = (id: string) => {
         onOpen(id)
     }
     const handleFilterChange = (key: string, value: string) => {
@@ -313,11 +320,11 @@ export default function ClassSubject() {
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
-        form.setFieldsValue({
-            time: [],
-        })
+        // form.setFieldsValue({
+        //     time: [],
+        // })
         formExam.setFieldsValue({
-            examScoreDeadline: '',
+            endDate: undefined,
         })
     }, [filters])
 
@@ -335,62 +342,26 @@ export default function ClassSubject() {
     const handleUpdateTime = async (values: TimeScore) => {
         try {
             showSpinner()
-            // const res = await sqlTransaction([
-            //     {
-            //         model: 'SubjectClass',
-            //         operation: 'findMany',
-            //         data: {
-            //             where,
-            //         },
-            //     },
-            // ])
-            // if (res?.status === 200 && res?.data.length > 0) {
-            // const list: any = res?.data[0]
-            let listTransaction: any = []
-            listTransaction = selectedRowKeys.map((i) => {
-                const result = dataTable.find((item: SubjectClass) => item.id === i)
-                if (result?.examDate && values?.beforeDays && values?.fromDays) {
-                    const scoreDeadLineStart = dayjs(result?.examDate)
-                        .subtract(values?.fromDays, 'day')
-                        .toDate()
-                    const scoreDeadline = dayjs(scoreDeadLineStart)
-                        .add(values?.beforeDays, 'day')
-                        .toDate()
-                    return {
-                        model: 'SubjectClass',
-                        operation: 'update',
-                        data: {
-                            where: { id: i },
-                            data: {
-                                scoreDeadLineStart,
-                                scoreDeadline,
-                            },
-                        },
-                    }
-                }
-                return {
-                    model: 'SubjectClass',
-                    operation: 'update',
-                    data: {
-                        where: { id: i },
-                        data: {
-                            scoreDeadLineStart: values?.time[0].toDate(),
-                            scoreDeadline: values?.time[1].toDate(),
-                        },
-                    },
-                }
+            const { status, data } = await setScoreDeadLine({
+                classIds: selectedRowKeys as string[],
+                startPadding: values.startPadding,
+                endPadding: values.endPadding,
+                startDate: values.time?.[0]?.toISOString(),
+                endDate: values.time?.[1]?.toISOString(),
+                overwrite: values.overwrite,
+                trainingObjectTypeId,
+                semesterId,
             })
-            if (listTransaction?.length > 0) {
-                const resUpdate = await sqlTransaction(listTransaction)
-                if (resUpdate?.status === 200) {
-                    message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
-                    debouncedRefetch()
-                    form.resetFields()
-                    setOpen(false)
-                }
+            if (status === 200) {
+                message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
+                debouncedRefetch()
+                form.resetFields()
+                setOpen(false)
+            } else {
+                console.error(data)
             }
-            // }
         } catch (error: any) {
+            console.error(error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -400,56 +371,24 @@ export default function ClassSubject() {
     const handleUpdateTimeScore = async (values: TimeScoreExam) => {
         try {
             showSpinner()
-            const res = await sqlTransaction([
-                {
-                    model: 'SubjectClass',
-                    operation: 'findMany',
-                    data: {
-                        where,
-                    },
-                },
-            ])
-            if (res?.status === 200 && res?.data.length > 0) {
-                let listTransaction: any = []
-                listTransaction = selectedRowKeys.map((i) => {
-                    const result = dataTable.find((item: SubjectClass) => item.id === i)
-                    if (result?.examDate && values?.beforeDays) {
-                        const examScoreDeadline = dayjs(result?.examDate)
-                            .add(values?.beforeDays, 'day')
-                            .toDate()
-                        return {
-                            model: 'SubjectClass',
-                            operation: 'update',
-                            data: {
-                                where: { id: i },
-                                data: {
-                                    examScoreDeadline,
-                                },
-                            },
-                        }
-                    }
-                    return {
-                        model: 'SubjectClass',
-                        operation: 'update',
-                        data: {
-                            where: { id: i },
-                            data: {
-                                examScoreDeadline: values?.examScoreDeadline,
-                            },
-                        },
-                    }
-                })
-                if (listTransaction?.length > 0) {
-                    const resUpdate = await sqlTransaction(listTransaction)
-                    if (resUpdate?.status === 200) {
-                        message.success('Cập nhật thời gian nhập điểm TX/CC thành công')
-                        debouncedRefetch()
-                        form.resetFields()
-                        setOpen(false)
-                    }
-                }
+            const { status, data } = await setExamScoreDeadLine({
+                classIds: selectedRowKeys as string[],
+                endPadding: values.endPadding,
+                endDate: values.endDate?.toISOString(),
+                overwrite: values.overwrite,
+                trainingObjectTypeId,
+                semesterId,
+            })
+            if (status === 200) {
+                message.success('Cập nhật thời gian nhập điểm thi thành công')
+                debouncedRefetch()
+                form.resetFields()
+                setOpen(false)
+            } else {
+                console.error(data)
             }
         } catch (error: any) {
+            console.error(error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
@@ -615,46 +554,63 @@ export default function ClassSubject() {
                                         <Popover
                                             content={
                                                 <Form
+                                                    className="max-w-56"
                                                     form={form}
                                                     initialValues={{ isOverride: false }}
                                                     onFinish={handleUpdateTime}
                                                 >
                                                     <FormItem
                                                         form={form}
-                                                        name={'beforeDays'}
-                                                        label="Số ngày"
+                                                        name="startPadding"
+                                                        label="Ngày thi - Ngày bắt đầu"
                                                         className="mb-2"
                                                     >
                                                         <InputNumber
                                                             className="w-full"
                                                             min={0}
-                                                            step={0}
-                                                            placeholder="Nhập số ngày nhập điểm TX,CC"
+                                                            step={1}
+                                                            placeholder="14"
                                                         />
                                                     </FormItem>
                                                     <FormItem
                                                         form={form}
-                                                        className="mb-2"
-                                                        name={'fromDays'}
-                                                        label="Bắt đầu - Ngày thi"
+                                                        className="mb-2 w-full"
+                                                        name="endPadding"
+                                                        label="Ngày thi - Ngày kết thúc"
                                                     >
                                                         <InputNumber
                                                             className="w-full"
                                                             min={0}
-                                                            step={0}
-                                                            placeholder="Nhập thời gian nhập điểm tính theo ngày thi"
+                                                            step={1}
+                                                            placeholder="7"
                                                         />
                                                     </FormItem>
                                                     <FormItem
+                                                        layout="vertical"
                                                         form={form}
-                                                        name={'time'}
-                                                        label="Thời gian nhập điểm quá trình"
+                                                        name="time"
+                                                        label=<Tooltip
+                                                            title={
+                                                                'Dành cho những lớp chưa có ngày thi'
+                                                            }
+                                                        >
+                                                            Thời gian nhập điểm quá trình
+                                                        </Tooltip>
+                                                        className="italic"
                                                     >
                                                         <AntdDatePicker.RangePicker
                                                             locale={locale}
-                                                            format={'DD/MM/YYYY'}
+                                                            format="DD/MM/YYYY"
                                                             placeholder={['Bắt đầu', 'Kết thúc']}
                                                         />
+                                                    </FormItem>
+                                                    <FormItem
+                                                        form={form}
+                                                        className="mb-2"
+                                                        name="overwrite"
+                                                        label="Ghi đè hạn cũ"
+                                                    >
+                                                        <Switch className="mx-auto" />
                                                     </FormItem>
                                                     <Col span={24} className="text-right mt-4">
                                                         <Button type="primary" htmlType="submit">
@@ -669,44 +625,55 @@ export default function ClassSubject() {
                                             open={open}
                                             onOpenChange={setOpen}
                                         >
-                                            <Button
-                                                // onClick={() => handleModal()}
-                                                disabled={selectedRowKeys.length === 0}
-                                                type="primary"
-                                            >
-                                                Đặt hạn nhập điểm TX/CC
-                                            </Button>
+                                            <Button type="primary">Đặt hạn nhập điểm TX/CC</Button>
                                         </Popover>
                                         <Popover
                                             content={
                                                 <Form
+                                                    className="max-w-56"
                                                     form={formExam}
                                                     initialValues={{ isOverride: false }}
                                                     onFinish={handleUpdateTimeScore}
                                                 >
                                                     <FormItem
                                                         form={form}
-                                                        name={'beforeDays'}
-                                                        label="Số ngày"
+                                                        name="endPadding"
+                                                        label="Ngày kết thúc - Ngày thi"
                                                         className="mb-2"
                                                     >
                                                         <InputNumber
                                                             className="w-full"
                                                             min={0}
                                                             step={0}
-                                                            placeholder="Nhập số ngày nhập điểm thi"
+                                                            placeholder="7"
                                                         />
                                                     </FormItem>
                                                     <FormItem
+                                                        className="italic"
+                                                        layout="vertical"
                                                         form={formExam}
-                                                        name={'examScoreDeadline'}
-                                                        label="Hạn nhập điểm thi"
+                                                        name="endDate"
+                                                        label=<Tooltip
+                                                            title={
+                                                                'Dành cho những lớp chưa có ngày thi'
+                                                            }
+                                                        >
+                                                            Thời gian nhập điểm thi
+                                                        </Tooltip>
                                                     >
                                                         <DatePicker
-                                                            format={'DD/MM/YYYY'}
-                                                            placeholder={'Hạn nhập điểm thi'}
+                                                            format="DD/MM/YYYY"
+                                                            placeholder="Hạn nhập điểm thi"
                                                             className="w-full"
                                                         />
+                                                    </FormItem>
+                                                    <FormItem
+                                                        form={form}
+                                                        className="mb-2"
+                                                        name="overwrite"
+                                                        label="Ghi đè hạn cũ"
+                                                    >
+                                                        <Switch className="mx-auto" />
                                                     </FormItem>
                                                     <Col span={24} className="text-right mt-4">
                                                         <Button type="primary" htmlType="submit">
@@ -721,13 +688,7 @@ export default function ClassSubject() {
                                             open={openExam}
                                             onOpenChange={setOpenExam}
                                         >
-                                            <Button
-                                                // onClick={() => handleModal()}
-                                                disabled={selectedRowKeys.length === 0}
-                                                type="primary"
-                                            >
-                                                Đặt hạn nhập điểm thi
-                                            </Button>
+                                            <Button type="primary">Đặt hạn nhập điểm thi</Button>
                                         </Popover>
                                     </>
                                 )}
@@ -1006,7 +967,7 @@ export default function ClassSubject() {
                                                 <Tooltip title="Đặt hạn nhập điểm" placement="top">
                                                     <CalendarPlus
                                                         size={16}
-                                                        onClick={() => handleSchudule(id)}
+                                                        onClick={() => handleSchedule(id)}
                                                         strokeWidth={2}
                                                     />
                                                 </Tooltip>

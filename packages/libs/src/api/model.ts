@@ -23,6 +23,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { customModelFetch } from './custom-instance'
 import type {
     BucketItemDto,
+    GetSessionParams,
     ListObjectsParams,
     PresignedGetObjectParams,
     PresignedUrlDto,
@@ -55,34 +56,52 @@ export type getSessionResponse = getSessionResponseComposite & {
     headers: Headers
 }
 
-export const getGetSessionUrl = () => {
-    return '/api/auth/get-session'
+export const getGetSessionUrl = (params: GetSessionParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/auth/get-session?${stringifiedParams}`
+        : '/api/auth/get-session'
 }
 
-export const getSession = async (options?: RequestInit): Promise<getSessionResponse> => {
-    return customModelFetch<getSessionResponse>(getGetSessionUrl(), {
+export const getSession = async (
+    params: GetSessionParams,
+    options?: RequestInit
+): Promise<getSessionResponse> => {
+    return customModelFetch<getSessionResponse>(getGetSessionUrl(params), {
         ...options,
         method: 'GET',
     })
 }
 
-export const getGetSessionQueryKey = () => {
-    return ['/api/auth/get-session'] as const
+export const getGetSessionQueryKey = (params: GetSessionParams) => {
+    return ['/api/auth/get-session', ...(params ? [params] : [])] as const
 }
 
 export const getGetSessionQueryOptions = <
     TData = Awaited<ReturnType<typeof getSession>>,
     TError = Unauthorized,
->(options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
-    request?: SecondParameter<typeof customModelFetch>
-}) => {
+>(
+    params: GetSessionParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
+        request?: SecondParameter<typeof customModelFetch>
+    }
+) => {
     const { query: queryOptions, request: requestOptions } = options ?? {}
 
-    const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey()
+    const queryKey = queryOptions?.queryKey ?? getGetSessionQueryKey(params)
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof getSession>>> = ({ signal }) =>
-        getSession({ signal, ...requestOptions })
+        getSession(params, { signal, ...requestOptions })
 
     return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
         Awaited<ReturnType<typeof getSession>>,
@@ -98,6 +117,7 @@ export function useGetSession<
     TData = Awaited<ReturnType<typeof getSession>>,
     TError = Unauthorized,
 >(
+    params: GetSessionParams,
     options: {
         query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
             Pick<
@@ -116,6 +136,7 @@ export function useGetSession<
     TData = Awaited<ReturnType<typeof getSession>>,
     TError = Unauthorized,
 >(
+    params: GetSessionParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>> &
             Pick<
@@ -134,6 +155,7 @@ export function useGetSession<
     TData = Awaited<ReturnType<typeof getSession>>,
     TError = Unauthorized,
 >(
+    params: GetSessionParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
         request?: SecondParameter<typeof customModelFetch>
@@ -145,13 +167,14 @@ export function useGetSession<
     TData = Awaited<ReturnType<typeof getSession>>,
     TError = Unauthorized,
 >(
+    params: GetSessionParams,
     options?: {
         query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getSession>>, TError, TData>>
         request?: SecondParameter<typeof customModelFetch>
     },
     queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-    const queryOptions = getGetSessionQueryOptions(options)
+    const queryOptions = getGetSessionQueryOptions(params, options)
 
     const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>
