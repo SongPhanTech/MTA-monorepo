@@ -4,7 +4,7 @@ const lightThemeCustom = {
     token: {
         colorPrimary: '#028850',
         fontFamily: '"Noto Serif", serif',
-        fontSize: 13,
+        fontSize: 12,
     },
     components: {
         Table: {
@@ -12,6 +12,9 @@ const lightThemeCustom = {
             padding: 10,
             headerColor: '#26273D',
             headerBorderRadius: 8,
+            rowSelectedBg: '#FFFFFF',
+            rowHoverBg: '#FAFAFA00',
+            rowSelectedHoverBg: '#FAFAFA',
         },
         Menu: {
             itemSelectedColor: '#fff',

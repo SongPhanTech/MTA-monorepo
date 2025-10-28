@@ -28,6 +28,7 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
+    clusterSurvey: z.array(z.unknown()).optional(),
     survey: z.array(z.unknown()).optional(),
     surveyQuestionGroup: z.array(z.unknown()).optional(),
 }

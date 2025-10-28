@@ -518,6 +518,7 @@ export * from './EquivalencySide.schema';
 export * from './SubjectRequirementType.schema';
 export * from './ClassRegisterStatus.schema';
 export * from './SubjectClassSchedule.schema';
+export * from './SubjectClassStatus.schema';
 export * from './PeriodType.schema';
 export * from './TrainingObjectTypes.schema';
 export * from './DiplomaTypeEnum.schema';

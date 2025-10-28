@@ -1923,12 +1923,14 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   schedule: 'schedule',
   maxStudent: 'maxStudent',
   type: 'type',
+  status: 'status',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   cancelled: 'cancelled',
   lecturerAssignmentDeadline: 'lecturerAssignmentDeadline',
   sendLecturerAssignmentAt: 'sendLecturerAssignmentAt',
   submitLecturerAssignmentAt: 'submitLecturerAssignmentAt',
+  approveLecturerAssignmentAt: 'approveLecturerAssignmentAt',
   examDate: 'examDate',
   examType: 'examType',
   examId: 'examId',
@@ -3123,8 +3125,7 @@ exports.Prisma.SurveyQuestionGroupScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  name: 'name',
-  surveyTopicId: 'surveyTopicId'
+  name: 'name'
 };
 
 exports.Prisma.ClusterSurveyScalarFieldEnum = {
@@ -3136,10 +3137,12 @@ exports.Prisma.ClusterSurveyScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   name: 'name',
+  additionalSuggestion: 'additionalSuggestion',
   startDate: 'startDate',
   endDate: 'endDate',
   isPublic: 'isPublic',
-  anonymous: 'anonymous'
+  anonymous: 'anonymous',
+  surveyTopicId: 'surveyTopicId'
 };
 
 exports.Prisma.SurveyScalarFieldEnum = {
@@ -5964,15 +5967,15 @@ exports.Prisma.SurveyQuestionGroupOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name',
-  surveyTopicId: 'surveyTopicId'
+  name: 'name'
 };
 
 exports.Prisma.ClusterSurveyOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name'
+  name: 'name',
+  surveyTopicId: 'surveyTopicId'
 };
 
 exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
@@ -6672,6 +6675,11 @@ exports.SubjectClassSchedule = exports.$Enums.SubjectClassSchedule = {
   MORNING: 'MORNING',
   AFTERNOON: 'AFTERNOON',
   EVENING: 'EVENING'
+};
+
+exports.SubjectClassStatus = exports.$Enums.SubjectClassStatus = {
+  DRAFT: 'DRAFT',
+  OFFICIAL: 'OFFICIAL'
 };
 
 exports.PeriodType = exports.$Enums.PeriodType = {

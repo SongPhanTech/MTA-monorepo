@@ -5,9 +5,10 @@
 /* eslint-disable */
 
 import { z } from 'zod';
-import { SubjectClassType } from '../../zenstack/models';
+import { SubjectClassType, SubjectClassStatus } from '../../zenstack/models';
 import { SubjectClassScheduleSchema } from '../enums/SubjectClassSchedule.schema';
 import { SubjectClassTypeSchema } from '../enums/SubjectClassType.schema';
+import { SubjectClassStatusSchema } from '../enums/SubjectClassStatus.schema';
 import { ExamTypeSchema } from '../enums/ExamType.schema';
 const baseSchema = z.object({
     id: z.string(),
@@ -23,10 +24,12 @@ const baseSchema = z.object({
     schedule: SubjectClassScheduleSchema.nullish(),
     maxStudent: z.number(),
     type: SubjectClassTypeSchema,
+    status: SubjectClassStatusSchema,
     cancelled: z.boolean().default(false),
     lecturerAssignmentDeadline: z.coerce.date().nullish(),
     sendLecturerAssignmentAt: z.coerce.date().nullish(),
     submitLecturerAssignmentAt: z.coerce.date().nullish(),
+    approveLecturerAssignmentAt: z.coerce.date().nullish(),
     examDate: z.coerce.date().nullish(),
     examType: ExamTypeSchema.nullish(),
     scoreDeadLineStart: z.coerce.date().nullish(),
@@ -55,10 +58,12 @@ const baseSchemaWithoutDefaults = z.object({
     schedule: SubjectClassScheduleSchema.nullish(),
     maxStudent: z.number(),
     type: SubjectClassTypeSchema,
+    status: SubjectClassStatusSchema,
     cancelled: z.boolean(),
     lecturerAssignmentDeadline: z.coerce.date().nullish(),
     sendLecturerAssignmentAt: z.coerce.date().nullish(),
     submitLecturerAssignmentAt: z.coerce.date().nullish(),
+    approveLecturerAssignmentAt: z.coerce.date().nullish(),
     examDate: z.coerce.date().nullish(),
     examType: ExamTypeSchema.nullish(),
     scoreDeadLineStart: z.coerce.date().nullish(),
@@ -145,10 +150,12 @@ export const SubjectClassPrismaUpdateSchema = z.object({
     schedule: SubjectClassScheduleSchema.nullish(),
     maxStudent: z.union([z.number(), z.record(z.string(), z.unknown())]),
     type: SubjectClassTypeSchema,
+    status: SubjectClassStatusSchema,
     cancelled: z.boolean(),
     lecturerAssignmentDeadline: z.coerce.date().nullish(),
     sendLecturerAssignmentAt: z.coerce.date().nullish(),
     submitLecturerAssignmentAt: z.coerce.date().nullish(),
+    approveLecturerAssignmentAt: z.coerce.date().nullish(),
     examDate: z.coerce.date().nullish(),
     examType: ExamTypeSchema.nullish(),
     scoreDeadLineStart: z.coerce.date().nullish(),
@@ -168,7 +175,7 @@ export const SubjectClassPrismaUpdateSchema = z.object({
  * `SubjectClass` schema for create operations excluding foreign keys and relations.
  */
 export const SubjectClassCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, type: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, scoreSubmitted: true, scoreChecked: true
+    id: true, active: true, createdAt: true, updatedAt: true, type: true, status: true, cancelled: true, enteredScore: true, enteredExamScore: true, isLockScore: true, isLockExamScore: true, scoreSubmitted: true, scoreChecked: true
 });
 
 

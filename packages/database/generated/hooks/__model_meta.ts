@@ -10071,6 +10071,10 @@ const metadata: ModelMeta = {
                     name: "type",
                     type: "SubjectClassType",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, status: {
+                    name: "status",
+                    type: "SubjectClassStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -10109,6 +10113,10 @@ const metadata: ModelMeta = {
                     isOptional: true,
                 }, submitLecturerAssignmentAt: {
                     name: "submitLecturerAssignmentAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, approveLecturerAssignmentAt: {
+                    name: "approveLecturerAssignmentAt",
                     type: "DateTime",
                     isOptional: true,
                 }, examDate: {
@@ -17175,6 +17183,12 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyTopic',
                 }, survey: {
                     name: "survey",
                     type: "Survey",
@@ -17187,6 +17201,7 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'surveyTopic',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17242,14 +17257,9 @@ const metadata: ModelMeta = {
                     name: "surveyTopic",
                     type: "SurveyTopic",
                     isDataModel: true,
+                    isArray: true,
                     backLink: 'surveyQuestionGroup',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyTopicId" },
-                }, surveyTopicId: {
-                    name: "surveyTopicId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'surveyTopic',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17295,6 +17305,9 @@ const metadata: ModelMeta = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, additionalSuggestion: {
+                    name: "additionalSuggestion",
+                    type: "Boolean",
                 }, startDate: {
                     name: "startDate",
                     type: "DateTime",
@@ -17310,6 +17323,18 @@ const metadata: ModelMeta = {
                     name: "anonymous",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, surveyTopic: {
+                    name: "surveyTopic",
+                    type: "SurveyTopic",
+                    isDataModel: true,
+                    backLink: 'clusterSurvey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyTopicId" },
+                }, surveyTopicId: {
+                    name: "surveyTopicId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyTopic',
                 }, surveyObjectType: {
                     name: "surveyObjectType",
                     type: "SurveyObjectType",

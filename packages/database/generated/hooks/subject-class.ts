@@ -326,9 +326,9 @@ export function useSuspenseCountSubjectClass<TArgs extends Prisma.SubjectClassCo
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SubjectClass', `${endpoint}/subjectClass/count`, args, options, fetch);
 }
-import type { SubjectClassSchedule, SubjectClassType, ExamType } from '../zenstack/models';
+import type { SubjectClassSchedule, SubjectClassType, SubjectClassStatus, ExamType } from '../zenstack/models';
 
-export function useCheckSubjectClass<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; code?: string; name?: string; subjectId?: string; schedule?: SubjectClassSchedule; maxStudent?: number; type?: SubjectClassType; trainingObjectTypeId?: string; semesterId?: string; cancelled?: boolean; examType?: ExamType; examId?: string; enteredScore?: boolean; enteredExamScore?: boolean; isLockScore?: boolean; isLockExamScore?: boolean; scoreSubmitted?: boolean; scoreChecked?: boolean; roomId?: string; trainingLocationId?: string; lecturerId?: string; extraLecturerId?: string; enterGradeLecturerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSubjectClass<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; active?: boolean; description?: string; code?: string; name?: string; subjectId?: string; schedule?: SubjectClassSchedule; maxStudent?: number; type?: SubjectClassType; status?: SubjectClassStatus; trainingObjectTypeId?: string; semesterId?: string; cancelled?: boolean; examType?: ExamType; examId?: string; enteredScore?: boolean; enteredExamScore?: boolean; isLockScore?: boolean; isLockExamScore?: boolean; scoreSubmitted?: boolean; scoreChecked?: boolean; roomId?: string; trainingLocationId?: string; lecturerId?: string; extraLecturerId?: string; enterGradeLecturerId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SubjectClass', `${endpoint}/subjectClass/check`, args, options, fetch);
 }

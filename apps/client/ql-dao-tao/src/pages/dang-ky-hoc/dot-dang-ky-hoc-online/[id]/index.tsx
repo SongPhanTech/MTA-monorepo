@@ -323,7 +323,7 @@ ClassRegisterLogs.getLayout = function getLayout(page: React.ReactElement) {
                 { title: 'Kế hoạch đào tạo' },
                 {
                     title: 'Đợt đăng ký học',
-                    href: ROUTER_PATH.QL_DAO_TAO.KE_HOACH_GIAO_DUC_DOT_DANG_KY_HOC,
+                    href: ROUTER_PATH.QL_DAO_TAO.DANG_KY_HOC_DOT_DANG_KY_HOC_ONLINE,
                 },
                 { title: 'Các lớp môn học' },
             ]}

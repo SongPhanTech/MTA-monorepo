@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const ClusterSurveyOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name"])
+export const ClusterSurveyOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name", "surveyTopicId"])

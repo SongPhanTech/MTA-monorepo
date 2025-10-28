@@ -1,16 +1,12 @@
 import DefaultLayout from '@layouts/default-layout'
+import { useFindManyFixedClass, useFindManyTrainingMajor } from '@workspace/db/hooks'
+import { SelectTrainingCourse, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Flex, Form, Select, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
 import KeHoachMoLopMonHoc from './ke-hoach-mo-lop-mon-hoc'
 import LapKeHoach from './lap-ke-hoach'
 import PhanCongGiangDay from './phan-cong-giang-day'
-import {
-    useFindManyFixedClass,
-    useFindManyTrainingCourse,
-    useFindManyTrainingMajor,
-} from '@workspace/db/hooks'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 
 interface TabItem {
     key: string
@@ -43,11 +39,6 @@ export default function KeHoachDaoTao() {
         orderBy: { name: 'asc' },
     })
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
-        where: { trainingObjectTypeId, deletedAt: null, active: true },
-    })
-
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         orderBy: { name: 'asc' },
         where: {
@@ -67,17 +58,7 @@ export default function KeHoachDaoTao() {
                     label="Khóa đào tạo"
                     labelAlign="left"
                 >
-                    <Select
-                        placeholder="Khoá đào tạo"
-                        options={trainingCourseData.map((i) => ({
-                            value: i.id,
-                            label: i.name,
-                        }))}
-                        dropdownStyle={{
-                            minWidth: 350,
-                        }}
-                        allowClear
-                    />
+                    <SelectTrainingCourse />
                 </Form.Item>
                 <Form.Item
                     className="m-0"

@@ -1,23 +1,19 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
-import TextTruncate from '@components/commons/text-truncate'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
+import type { PlanTraining } from '@workspace/db/client'
 import { $Enums } from '@workspace/db/client'
-import { useFindFirstPlanTraining } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { OpenSubjectClassFixedClassItem } from '@workspace/libs/api/schemas/openSubjectClassFixedClassItem'
+import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import _ from 'lodash'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 
 interface SubjectBySemesterForm {
     searchText?: string
-    trainingCourseId?: string
     trainingMajorId?: string
     subjectSelected?: Array<string>
 }
@@ -25,22 +21,18 @@ interface SubjectBySemesterForm {
 export default function MonTheoKeHoachDuKien() {
     const { canSome } = useAbility()
     const [form] = Form.useForm<SubjectBySemesterForm>()
-    const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(100)
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
-    const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: res, refetch } = useOpenSubjectClass(
+    const { id: trainingCourseId } = useTrainingCourseStore()
+    const { data: subjects, refetch } = useOpenSubjectClass(
         {
-            page: `${currentPage}`,
-            pageSize: `${numberOfPages}`,
             semesterId: semesterId as string,
             search: searchText,
-            trainingCourseId,
+            trainingCourseId: trainingCourseId ?? '',
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             nextSemester: 'false',
@@ -48,50 +40,43 @@ export default function MonTheoKeHoachDuKien() {
         { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
     )
 
-    const { data: planTrainingData } = useFindFirstPlanTraining(
-        {
-            where: {
-                semesterId: semesterId as string,
-                trainingObjectTypeId,
-            },
-            select: {
-                planTrainingSubjects: {
-                    select: {
-                        subjectVersionId: true,
-                    },
-                    where: {
-                        subjectClassType: $Enums.SubjectClassType.NORMAL,
-                    },
-                },
-            },
-        },
-        {
-            enabled: !!semesterId && !!trainingObjectTypeId,
-        }
-    )
-
     const data = useMemo(() => {
-        return res?.status === 200
-            ? res?.data?.data.map((subjectVersion) => ({
-                  id: subjectVersion.subjectVersionId,
-                  ...subjectVersion,
-              }))
-            : []
-    }, [res])
-    console.log('data', data)
-
-    useEffect(() => {
-        if (planTrainingData) {
-            form.setFieldValue(
-                'subjectSelected',
-                planTrainingData.planTrainingSubjects.map((subject) => subject.subjectVersionId)
-            )
-        }
-    }, [planTrainingData, form])
+        if (subjects?.status !== 200) return []
+        const result: Array<
+            Omit<OpenSubjectClass, 'fixedClass'> &
+                OpenSubjectClass['fixedClass'][number] & {
+                    rowSpan: number
+                    groupKey: string
+                }
+        > = []
+        subjects?.data?.data
+            .map((subjectVersion, idx) => ({
+                id: subjectVersion.subjectVersionId,
+                ...subjectVersion,
+                index: idx + 1,
+            }))
+            .forEach((subject) => {
+                const { fixedClass, ...subjectInfo } = subject
+                const length = fixedClass?.length || 0
+                fixedClass.forEach((cls, index) => {
+                    result.push({
+                        ...subjectInfo,
+                        ...cls,
+                        rowSpan: index === 0 ? length : 0,
+                        groupKey:
+                            index === 0
+                                ? subject.subjectVersionId
+                                : `${subject.subjectVersionId}-${cls.fixedClassId}`,
+                    })
+                })
+            })
+        return result
+    }, [subjects])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
+            queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
         }, 500),
@@ -102,14 +87,14 @@ export default function MonTheoKeHoachDuKien() {
 
     const onSubmit = async () => {
         try {
-            if (!semesterId || !trainingObjectTypeId) return
+            if (!semesterId || !trainingObjectTypeId || subjects?.status !== 200) return
             showSpinner()
-            const delaySubject = data.filter(
-                (subject) => !subjectSelected.includes(subject.subjectVersionId)
-            )
-            const subject = data.filter((subject) =>
-                subjectSelected.includes(subject.subjectVersionId)
-            )
+            const subject = subjects?.data?.data
+                .map((subjectVersion) => ({
+                    id: subjectVersion.subjectVersionId,
+                    ...subjectVersion,
+                }))
+                .filter((subject) => subjectSelected.includes(subject.subjectVersionId))
             let planTraining = await sqlTransaction([
                 {
                     model: 'PlanTraining',
@@ -119,16 +104,6 @@ export default function MonTheoKeHoachDuKien() {
                     },
                 },
             ])
-            let planTrainingDelay = await sqlTransaction([
-                {
-                    model: 'PlanTrainingDelay',
-                    operation: 'findFirst',
-                    data: {
-                        where: { trainingObjectTypeId },
-                    },
-                },
-            ])
-
             if (planTraining.status === 200 && !planTraining?.data?.[0]) {
                 planTraining = await sqlTransaction([
                     {
@@ -141,19 +116,7 @@ export default function MonTheoKeHoachDuKien() {
                 ])
             }
 
-            if (planTrainingDelay.status === 200 && !planTrainingDelay?.data?.[0]) {
-                planTrainingDelay = await sqlTransaction([
-                    {
-                        model: 'PlanTrainingDelay',
-                        operation: 'create',
-                        data: {
-                            data: { trainingObjectTypeId },
-                        },
-                    },
-                ])
-            }
-
-            if (planTraining.status !== 200 || planTrainingDelay.status !== 200) {
+            if (planTraining.status !== 200) {
                 throw new Error('Lỗi khi tạo kế hoạch đào tạo')
             }
 
@@ -161,38 +124,7 @@ export default function MonTheoKeHoachDuKien() {
             if (!planTrainingId) {
                 throw new Error('Kế hoạch đào tạo không tồn tại')
             }
-            const planTrainingDelayId = (planTrainingDelay?.data?.[0] as PlanTrainingDelay)?.id
-            if (!planTrainingDelayId) {
-                throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
-            }
-
             const res = await sqlTransaction([
-                {
-                    model: 'PlanTraining',
-                    operation: 'update',
-                    data: {
-                        where: { id: planTrainingId },
-                        data: {
-                            planTrainingSubjects: {
-                                deleteMany: {
-                                    subjectClassType: $Enums.SubjectClassType.NORMAL,
-                                },
-                            },
-                        },
-                    },
-                },
-                {
-                    model: 'PlanTrainingDelay',
-                    operation: 'update',
-                    data: {
-                        where: { id: planTrainingDelayId },
-                        data: {
-                            planTrainingDelaySubjects: {
-                                deleteMany: subjectSelected.map((id) => ({ subjectVersionId: id })),
-                            },
-                        },
-                    },
-                },
                 {
                     model: 'PlanTraining',
                     operation: 'update',
@@ -207,34 +139,7 @@ export default function MonTheoKeHoachDuKien() {
                                             id: fc.fixedClassId,
                                         })),
                                     },
-                                })),
-                            },
-                        },
-                    },
-                },
-                {
-                    model: 'PlanTrainingDelay',
-                    operation: 'update',
-                    data: {
-                        where: { id: planTrainingDelayId },
-                        data: {
-                            planTrainingDelaySubjects: {
-                                upsert: delaySubject.map((subject) => ({
-                                    where: {
-                                        planTrainingDelayId_subjectVersionId: {
-                                            planTrainingDelayId,
-                                            subjectVersionId: subject.subjectVersionId,
-                                        },
-                                    },
-                                    create: {
-                                        subjectVersionId: subject.subjectVersionId,
-                                        fixedClasses: {
-                                            connect: subject.fixedClass.map((fc) => ({
-                                                id: fc.fixedClassId,
-                                            })),
-                                        },
-                                    },
-                                    update: {},
+                                    subjectClassType: $Enums.SubjectClassType.NORMAL,
                                 })),
                             },
                         },
@@ -267,14 +172,17 @@ export default function MonTheoKeHoachDuKien() {
                 <Col span={24}>
                     <Flex justify="space-between" gap={4}>
                         <Col span={8}>
-                            <Form.Item className="mb-0" name="searchText">
+                            <Form.Item className="m-0" name="searchText">
                                 <Input id="search" placeholder="Tìm kiếm" allowClear />
                             </Form.Item>
                         </Col>
                         <Flex gap={8}>
-                            <Button type="primary">Khởi tạo môn</Button>
-                            <Button onClick={onSubmit} type="primary">
-                                Lưu kế hoạch
+                            <Button
+                                onClick={onSubmit}
+                                type="primary"
+                                disabled={subjectSelected.length === 0}
+                            >
+                                Đưa {subjectSelected.length || ''} môn vào KHDG
                             </Button>
                         </Flex>
                     </Flex>
@@ -282,7 +190,8 @@ export default function MonTheoKeHoachDuKien() {
                 <Col span={24}>
                     <Form.Item hidden name="subjectSelected" />
                     <Table
-                        rowKey="subjectVersionId"
+                        className="mt-0"
+                        rowKey="groupKey"
                         data={data}
                         rowSelection={{
                             type: 'checkbox',
@@ -291,6 +200,10 @@ export default function MonTheoKeHoachDuKien() {
                             onChange: (selectedRowKeys) => {
                                 form.setFieldValue('subjectSelected', selectedRowKeys)
                             },
+                            getCheckboxProps: (record) => ({
+                                disabled: record.rowSpan === 0,
+                            }),
+                            onCell: (record) => ({ rowSpan: record.rowSpan }),
                             columnWidth: 15,
                         }}
                         onRow={(record) => {
@@ -319,20 +232,22 @@ export default function MonTheoKeHoachDuKien() {
                             {
                                 title: 'TT',
                                 width: 35,
+                                dataIndex: 'index',
                                 align: 'center',
-                                render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
                             },
                             {
                                 title: 'Mã MH',
                                 dataIndex: 'subjectVersionCode',
                                 align: 'center',
                                 width: 100,
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
                             },
                             {
                                 title: 'Tên môn học',
                                 dataIndex: 'subjectVersionName',
                                 align: 'center',
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
                                 render: (__, record) => {
                                     return (
                                         <div className="text-left">
@@ -343,26 +258,27 @@ export default function MonTheoKeHoachDuKien() {
                                 },
                             },
                             {
-                                title: 'Danh sách lớp quản lý',
-                                dataIndex: 'fixedClass',
+                                title: 'Lớp quản lý',
                                 align: 'center',
-                                width: 250,
+                                width: 120,
                                 render: (__, record) => {
-                                    return record?.fixedClass.length ? (
-                                        <TextTruncate
-                                            arr={record?.fixedClass.map(
-                                                (i: OpenSubjectClassFixedClassItem) => {
-                                                    return {
-                                                        key: i?.fixedClassId,
-                                                        label: `${i.fixedClassCode} (${i.fixedClassCount}) - ${i.curriculumVersionCode} - Kỳ ${i.fixedClassSemester}`,
-                                                    }
-                                                }
-                                            )}
-                                            key="fixedClass"
-                                        />
-                                    ) : (
-                                        ''
-                                    )
+                                    return `${record?.fixedClassCode} (${record?.fixedClassCount})`
+                                },
+                            },
+                            {
+                                title: 'CTĐT',
+                                align: 'center',
+                                width: 180,
+                                render: (__, record) => {
+                                    return `${record?.curriculumVersionName}`
+                                },
+                            },
+                            {
+                                title: 'Kỳ học',
+                                align: 'center',
+                                width: 80,
+                                render: (__, record) => {
+                                    return `Kỳ ${record?.fixedClassSemester}`
                                 },
                             },
                             {
@@ -370,27 +286,17 @@ export default function MonTheoKeHoachDuKien() {
                                 dataIndex: 'countStudent',
                                 width: 80,
                                 align: 'center',
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
                             },
                             {
                                 title: 'Đơn vị phụ trách',
                                 dataIndex: 'managementOrganizationCode',
                                 width: 150,
                                 align: 'center',
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
                             },
                         ]}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: res?.data?.count ?? 0,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
+                        pagination={false}
                     />
                 </Col>
             </Row>

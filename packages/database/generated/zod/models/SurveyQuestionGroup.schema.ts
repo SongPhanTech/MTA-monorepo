@@ -29,11 +29,7 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     surveyQuestion: z.array(z.unknown()).optional(),
-    surveyTopic: z.record(z.string(), z.unknown()),
-}
-);
-const fkSchema = z.object({
-    surveyTopicId: z.string(),
+    surveyTopic: z.array(z.unknown()).optional(),
 }
 );
 
@@ -46,7 +42,7 @@ export const SurveyQuestionGroupScalarSchema = baseSchema;
 /**
  * `SurveyQuestionGroup` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const SurveyQuestionGroupSchema = SurveyQuestionGroupScalarSchema.merge(fkSchema).merge(relationSchema.partial());
+export const SurveyQuestionGroupSchema = SurveyQuestionGroupScalarSchema.merge(relationSchema.partial());
 
 
 /**
@@ -83,7 +79,9 @@ export const SurveyQuestionGroupCreateScalarSchema = baseSchemaWithoutDefaults.p
 /**
  * `SurveyQuestionGroup` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const SurveyQuestionGroupCreateSchema = SurveyQuestionGroupCreateScalarSchema.merge(fkSchema);
+export const SurveyQuestionGroupCreateSchema = baseSchemaWithoutDefaults.partial({
+    id: true, active: true, createdAt: true, updatedAt: true
+});
 
 
 /**
@@ -95,5 +93,5 @@ export const SurveyQuestionGroupUpdateScalarSchema = baseSchemaWithoutDefaults.p
 /**
  * `SurveyQuestionGroup` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const SurveyQuestionGroupUpdateSchema = SurveyQuestionGroupUpdateScalarSchema.merge(fkSchema.partial());
+export const SurveyQuestionGroupUpdateSchema = SurveyQuestionGroupUpdateScalarSchema;
 

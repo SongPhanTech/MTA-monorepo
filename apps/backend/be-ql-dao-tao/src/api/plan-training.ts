@@ -26,7 +26,9 @@ const importPhanCongGiangDay = createRoute({
                         fileType: z
                             .enum(['THONG_KE_GIAO_VIEN_GIANG_DAY', 'TKB_THEO_LOP_HOC_PHAN'])
                             .default('THONG_KE_GIAO_VIEN_GIANG_DAY'), // loại thông tin
-                        importType: z.enum(['TAO_MOI', 'CAP_NHAT']).default('CAP_NHAT'), // loại thông tin
+                        importType: z
+                            .enum(['TAO_MOI', 'CAP_NHAT', 'XEM_TRUOC'])
+                            .default('CAP_NHAT'), // loại thông tin
                     }).openapi('importPhanCongGiangDay'),
                 },
             },
@@ -59,7 +61,7 @@ const importFileGiaoVienCoGioGiay = async (
     semesterId: string,
     trainingObjectTypeId: string,
     danhSachLopMonHoc: Array<SubjectClass>,
-    importType: 'TAO_MOI' | 'CAP_NHAT'
+    importType: 'TAO_MOI' | 'CAP_NHAT' | 'XEM_TRUOC'
 ) => {
     const rowData = utils.sheet_to_json<string[]>(sheet, {
         header: 1,
@@ -461,6 +463,9 @@ const importFileGiaoVienCoGioGiay = async (
                     danhSachLopMonHoc.push(res)
                 }
             }
+            if (importType === 'XEM_TRUOC') {
+                throw new Error('Rollback transaction for preview')
+            }
         },
         {
             maxWait: 200000,
@@ -474,7 +479,7 @@ const importFileTKBTheoLopHocPhan = async (
     semesterId: string,
     trainingObjectTypeId: string,
     danhSachLopMonHoc: Array<SubjectClass>,
-    importType: 'TAO_MOI' | 'CAP_NHAT'
+    importType: 'TAO_MOI' | 'CAP_NHAT' | 'XEM_TRUOC'
 ) => {
     const rowData = utils.sheet_to_json<string[]>(sheet, {
         header: 1,
@@ -801,13 +806,25 @@ app.openapi(importPhanCongGiangDay, async (c) => {
             return c.json({ message: 'Không tìm thấy sheet' }, 400)
         }
         if (fileType === 'THONG_KE_GIAO_VIEN_GIANG_DAY') {
-            await importFileGiaoVienCoGioGiay(
-                sheet,
-                semesterId,
-                trainingObjectTypeId,
-                danhSachLopMonHoc,
-                importType
-            )
+            if (importType === 'XEM_TRUOC') {
+                try {
+                    await importFileGiaoVienCoGioGiay(
+                        sheet,
+                        semesterId,
+                        trainingObjectTypeId,
+                        danhSachLopMonHoc,
+                        importType
+                    )
+                } catch (error) {}
+            } else {
+                await importFileGiaoVienCoGioGiay(
+                    sheet,
+                    semesterId,
+                    trainingObjectTypeId,
+                    danhSachLopMonHoc,
+                    importType
+                )
+            }
         } else if (fileType === 'TKB_THEO_LOP_HOC_PHAN') {
             await importFileTKBTheoLopHocPhan(
                 sheet,

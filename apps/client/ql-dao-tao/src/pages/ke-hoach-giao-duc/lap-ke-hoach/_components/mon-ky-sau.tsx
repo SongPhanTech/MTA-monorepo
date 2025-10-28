@@ -1,22 +1,12 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
-import TextTruncate from '@components/commons/text-truncate'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import useSpinner from '@hooks/spinner'
-import type { PlanTraining, PlanTrainingDelay } from '@workspace/db/client'
 import { $Enums } from '@workspace/db/client'
-import {
-    useFindFirstPlanTraining,
-    useFindManyTrainingCourse,
-    useFindManyTrainingMajor,
-    useFindUniqueSemester,
-} from '@workspace/db/hooks'
-import { sqlTransaction } from '@workspace/libs/api/model'
-import { OpenSubjectClassFixedClassItem } from '@workspace/libs/api/schemas/openSubjectClassFixedClassItem'
+import { useFindFirstPlanTraining, useFindUniqueSemester } from '@workspace/db/hooks'
+import type { OpenSubjectClass } from '@workspace/libs/api/schemas/openSubjectClass'
 import { useOpenSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Flex, Form, Input, message, Row } from 'antd'
+import { useSemesterStore, useTrainingCourseStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -34,10 +24,9 @@ export default function MonKySau() {
     const [numberOfPages, setNumberOfPages] = useState(100)
     const { id: semesterId } = useSemesterStore()
     const searchText = Form.useWatch('searchText', form)
-    const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const subjectSelected = Form.useWatch('subjectSelected', form) || []
-
+    const { id: trainingCourseId } = useTrainingCourseStore()
     const { data: semesterData } = useFindUniqueSemester(
         {
             where: { id: semesterId },
@@ -56,16 +45,14 @@ export default function MonKySau() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: res, refetch } = useOpenSubjectClass(
         {
-            page: `${currentPage}`,
-            pageSize: `${numberOfPages}`,
             semesterId: semesterId as string,
             search: searchText,
-            trainingCourseId,
+            trainingCourseId: trainingCourseId || '',
             trainingMajorId,
             trainingObjectTypeId: trainingObjectTypeId || '',
             nextSemester: 'true',
         },
-        { query: { enabled: !!semesterId && !!trainingObjectTypeId } }
+        { query: { enabled: !!semesterId && !!trainingObjectTypeId && !!trainingCourseId } }
     )
 
     const { data: planTrainingData } = useFindFirstPlanTraining(
@@ -90,16 +77,38 @@ export default function MonKySau() {
         }
     )
 
-    const data = useMemo(
-        () =>
-            res?.status === 200
-                ? res?.data?.data.map((subjectVersion) => ({
-                      id: subjectVersion.subjectVersionId,
-                      ...subjectVersion,
-                  }))
-                : [],
-        [res]
-    )
+    const data = useMemo(() => {
+        if (res?.status !== 200) return []
+        const result: Array<
+            Omit<OpenSubjectClass, 'fixedClass'> &
+                OpenSubjectClass['fixedClass'][number] & {
+                    rowSpan: number
+                    groupKey: string
+                }
+        > = []
+        res?.data?.data
+            .map((subjectVersion, idx) => ({
+                id: subjectVersion.subjectVersionId,
+                ...subjectVersion,
+                index: idx + 1,
+            }))
+            .forEach((subject) => {
+                const { fixedClass, ...subjectInfo } = subject
+                const length = fixedClass?.length || 0
+                fixedClass.forEach((cls, index) => {
+                    result.push({
+                        ...subjectInfo,
+                        ...cls,
+                        rowSpan: index === 0 ? length : 0,
+                        groupKey:
+                            index === 0
+                                ? subject.subjectVersionId
+                                : `${subject.subjectVersionId}-${cls.fixedClassId}`,
+                    })
+                })
+            })
+        return result
+    }, [res])
 
     useEffect(() => {
         if (planTrainingData) {
@@ -119,267 +128,115 @@ export default function MonKySau() {
         []
     )
 
-    const { data: trainingMajorData = [] } = useFindManyTrainingMajor({
-        orderBy: { name: 'asc' },
-    })
-
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: { name: 'asc' },
-        where: { trainingObjectTypeId, deletedAt: null, active: true },
-    })
-
-    const { showSpinner, hideSpinner } = useSpinner()
-
-    const onSubmit = async () => {
-        try {
-            if (!semesterId || !trainingObjectTypeId) return
-            showSpinner()
-            const delaySubject = data.filter(
-                (subject) => !subjectSelected.includes(subject.subjectVersionId)
-            )
-
-            const fixedClasses = data.filter((subject) =>
-                subjectSelected.includes(subject.subjectVersionId)
-            )
-            const fixedClassDelay = delaySubject.flatMap((subject) => subject.fixedClass)
-
-            let planTraining = await sqlTransaction([
-                {
-                    model: 'PlanTraining',
-                    operation: 'findFirst',
-                    data: {
-                        where: { semesterId, trainingObjectTypeId },
-                    },
-                },
-            ])
-            let planTrainingDelay = await sqlTransaction([
-                {
-                    model: 'PlanTrainingDelay',
-                    operation: 'findFirst',
-                    data: {
-                        where: { semesterId, trainingObjectTypeId },
-                    },
-                },
-            ])
-
-            if (planTraining.status === 200 && !planTraining?.data?.[0]) {
-                planTraining = await sqlTransaction([
-                    {
-                        model: 'PlanTraining',
-                        operation: 'create',
-                        data: {
-                            data: { semesterId, trainingObjectTypeId },
-                        },
-                    },
-                ])
-            }
-
-            if (planTrainingDelay.status === 200 && !planTrainingDelay?.data?.[0]) {
-                planTrainingDelay = await sqlTransaction([
-                    {
-                        model: 'PlanTrainingDelay',
-                        operation: 'create',
-                        data: {
-                            data: { semesterId, trainingObjectTypeId },
-                        },
-                    },
-                ])
-            }
-
-            if (planTraining.status !== 200 || planTrainingDelay.status !== 200) {
-                throw new Error('Lỗi khi tạo kế hoạch đào tạo')
-            }
-
-            const planTrainingId = (planTraining?.data?.[0] as PlanTraining)?.id
-            if (!planTrainingId) {
-                throw new Error('Kế hoạch đào tạo không tồn tại')
-            }
-            const planTrainingDelayId = (planTrainingDelay?.data?.[0] as PlanTrainingDelay)?.id
-            if (!planTrainingDelayId) {
-                throw new Error('Kế hoạch đào tạo môn chậm tiến độ không tồn tại')
-            }
-
-            const res = await sqlTransaction([
-                {
-                    model: 'PlanTraining',
-                    operation: 'update',
-                    data: {
-                        where: { id: planTrainingId },
-                        data: {
-                            subjects: {
-                                set: subjectSelected.map((subjectVersionId) => ({
-                                    id: subjectVersionId,
-                                })),
-                            },
-                            fixedClasses: {
-                                set: fixedClasses.flatMap((subject) =>
-                                    subject.fixedClass.map((fc) => ({
-                                        id: fc.fixedClassId,
-                                    }))
-                                ),
-                            },
-                        },
-                    },
-                },
-                {
-                    model: 'PlanTrainingDelay',
-                    operation: 'update',
-                    data: {
-                        where: { id: planTrainingDelayId },
-                        data: {
-                            subjects: {
-                                set: delaySubject.map((subject) => ({
-                                    id: subject.id,
-                                })),
-                            },
-                            fixedClasses: {
-                                set: fixedClassDelay.map((fc) => ({
-                                    id: fc.fixedClassId,
-                                })),
-                            },
-                        },
-                    },
-                },
-            ])
-            if (res.status !== 200) {
-                throw new Error('Lỗi khi lưu kế hoạch đào tạo')
-            }
-            message.success('Thêm môn học vào kế hoạch thành công')
-            form.resetFields()
-            debouncedRefetch()
-        } catch (error) {
-            message.error('Lưu kế hoạch mở lớp thất bại')
-            console.error(error)
-        }
-        hideSpinner()
-    }
-
     return (
         <div>
-            <Row gutter={[0, 0]}>
-                <Form
-                    className="w-full"
-                    form={form}
-                    onValuesChange={(filter: SubjectBySemesterForm) => {
-                        if (!filter.subjectSelected) {
-                            debouncedRefetch()
-                        }
-                    }}
-                >
-                    <Col span={24}>
-                        <Flex gap={4}>
-                            <Col span={8}>
-                                <Form.Item className="mb-0" name="searchText">
-                                    <Input id="search" placeholder="Tìm kiếm" allowClear />
-                                </Form.Item>
-                            </Col>
-                        </Flex>
-                    </Col>
-                    <Col span={24}>
-                        <Table
-                            rowKey="subjectVersionId"
-                            data={data}
-                            onRow={(record) => {
-                                return {
-                                    onClick: () => {
-                                        const isSelected = subjectSelected.includes(
-                                            record.subjectVersionId
-                                        )
-                                        if (isSelected) {
-                                            form.setFieldValue(
-                                                'subjectSelected',
-                                                subjectSelected.filter(
-                                                    (id) => id !== record.subjectVersionId
-                                                )
+            <Row gutter={[0, 8]}>
+                <Col span={24}>
+                    <Flex gap={4}>
+                        <Col span={8}>
+                            <Form.Item className="mb-0" name="searchText">
+                                <Input id="search" placeholder="Tìm kiếm" allowClear />
+                            </Form.Item>
+                        </Col>
+                    </Flex>
+                </Col>
+                <Col span={24}>
+                    <Table
+                        className="mt-0"
+                        data={data}
+                        onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    const isSelected = subjectSelected.includes(
+                                        record.subjectVersionId
+                                    )
+                                    if (isSelected) {
+                                        form.setFieldValue(
+                                            'subjectSelected',
+                                            subjectSelected.filter(
+                                                (id) => id !== record.subjectVersionId
                                             )
-                                        } else {
-                                            form.setFieldValue('subjectSelected', [
-                                                ...subjectSelected,
-                                                record.subjectVersionId,
-                                            ])
-                                        }
-                                    },
-                                }
-                            }}
-                            columns={[
-                                {
-                                    title: 'TT',
-                                    width: 35,
-                                    align: 'center',
-                                    render: (_, __, index) =>
-                                        index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                                },
-                                {
-                                    title: 'Mã MH',
-                                    dataIndex: 'subjectVersionCode',
-                                    align: 'center',
-                                    width: 100,
-                                },
-                                {
-                                    title: 'Tên môn học',
-                                    dataIndex: 'subjectVersionName',
-                                    align: 'center',
-                                    render: (__, record) => {
-                                        return (
-                                            <div className="text-left">
-                                                {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
-                                                    ''}
-                                            </div>
                                         )
-                                    },
-                                },
-                                {
-                                    title: 'Danh sách lớp quản lý',
-                                    dataIndex: 'fixedClass',
-                                    align: 'center',
-                                    width: 250,
-                                    render: (__, record) => {
-                                        return record?.fixedClass.length ? (
-                                            <TextTruncate
-                                                arr={record?.fixedClass.map(
-                                                    (i: OpenSubjectClassFixedClassItem) => {
-                                                        return {
-                                                            key: i?.fixedClassId,
-                                                            label: `${i.fixedClassCode} (${i.fixedClassCount}) - ${i.curriculumVersionCode} - Kỳ ${i.fixedClassSemester}`,
-                                                        }
-                                                    }
-                                                )}
-                                                key="fixedClass"
-                                            />
-                                        ) : (
-                                            ''
-                                        )
-                                    },
-                                },
-                                {
-                                    title: 'Tổng SV',
-                                    dataIndex: 'countStudent',
-                                    width: 80,
-                                    align: 'center',
-                                },
-                                {
-                                    title: 'Đơn vị phụ trách',
-                                    dataIndex: 'managementOrganizationCode',
-                                    width: 150,
-                                    align: 'center',
-                                },
-                            ]}
-                            pagination={{
-                                current: currentPage,
-                                pageSize: numberOfPages,
-                                total: res?.data?.count ?? 0,
-                                onChange: (page, pageSize) => {
-                                    if (numberOfPages === pageSize) {
-                                        setCurrentPage(page)
                                     } else {
-                                        setCurrentPage(1)
-                                        setNumberOfPages(pageSize)
+                                        form.setFieldValue('subjectSelected', [
+                                            ...subjectSelected,
+                                            record.subjectVersionId,
+                                        ])
                                     }
                                 },
-                            }}
-                        />
-                    </Col>
-                </Form>
+                            }
+                        }}
+                        columns={[
+                            {
+                                title: 'TT',
+                                width: 35,
+                                dataIndex: 'index',
+                                align: 'center',
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                            },
+                            {
+                                title: 'Mã MH',
+                                dataIndex: 'subjectVersionCode',
+                                align: 'center',
+                                width: 100,
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                            },
+                            {
+                                title: 'Tên môn học',
+                                dataIndex: 'subjectVersionName',
+                                align: 'center',
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                                render: (__, record) => {
+                                    return (
+                                        <div className="text-left">
+                                            {`${record?.subjectVersionName} (${record?.subjectVersionCredit})` ||
+                                                ''}
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Lớp quản lý',
+                                align: 'center',
+                                width: 120,
+                                render: (__, record) => {
+                                    return `${record?.fixedClassCode} (${record?.fixedClassCount})`
+                                },
+                            },
+                            {
+                                title: 'CTĐT',
+                                align: 'center',
+                                width: 180,
+                                render: (__, record) => {
+                                    return `${record?.curriculumVersionName}`
+                                },
+                            },
+                            {
+                                title: 'Kỳ học',
+                                align: 'center',
+                                width: 80,
+                                render: (__, record) => {
+                                    return `Kỳ ${record?.fixedClassSemester}`
+                                },
+                            },
+                            {
+                                title: 'Tổng SV',
+                                dataIndex: 'countStudent',
+                                width: 80,
+                                align: 'center',
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                            },
+                            {
+                                title: 'Đơn vị phụ trách',
+                                dataIndex: 'managementOrganizationCode',
+                                width: 150,
+                                align: 'center',
+                                onCell: (record) => ({ rowSpan: record.rowSpan }),
+                            },
+                        ]}
+                        pagination={false}
+                    />
+                </Col>
             </Row>
         </div>
     )

@@ -220,3 +220,29 @@ export function diffArraysKey<T>(a: T[], b: T[], keys: (keyof T)[]) {
 
     return { onlyInA, onlyInB, both }
 }
+
+export function getFilenameFromContentDisposition(contentDispositionHeader: string): string | null {
+    if (!contentDispositionHeader) {
+        return null
+    }
+
+    // Regex to match filename or filename*
+    const utf8FilenameRegex = /filename\*=UTF-8''([\w%-.]+)(?:; ?|$)/i
+    const asciiFilenameRegex = /filename=(["]?)(.*?)\1(?:; ?|$)/i
+
+    let filename = null
+
+    // Try to match UTF-8 encoded filename first
+    let match = contentDispositionHeader.match(utf8FilenameRegex)
+    if (match?.[1]) {
+        filename = decodeURIComponent(match[1])
+    } else {
+        // If no UTF-8, try ASCII filename
+        match = contentDispositionHeader.match(asciiFilenameRegex)
+        if (match?.[2]) {
+            filename = match[2].replace(/"/g, '') // Remove quotes
+        }
+    }
+
+    return filename
+}

@@ -1,4 +1,3 @@
-import HeaderApp from '@/components/header'
 import logo_mta from '@assets/images/daotao.svg'
 import SidebarMenuLayout from '@components/layouts/sider'
 import { useMenuList } from '@hooks/menu-list'
@@ -13,6 +12,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { type ReactNode, useMemo } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
+import HeaderApp from '@/components/header'
 
 const { Header, Content, Footer } = Layout
 interface BreadcrumbListProps {
@@ -102,10 +102,10 @@ const DefaultLayout = ({
                         <Divider type="vertical" className="bg-primary h-[30px]" />
                         <SelectTrainingObjectType />
                         <Divider type="vertical" className="bg-primary h-[30px]" />
-                        <div className='mr-2'>Học kỳ đang làm việc</div>
+                        <div className="mr-2 font-bold">Học kỳ</div>
                         <TreeSelectSemester />
                         <Divider type="vertical" className="bg-primary h-[30px]" />
-                        <Breadcrumb items={listBreadcrumb} />
+                        <Breadcrumb className="text-base font-semibold" items={listBreadcrumb} />
                     </div>
                     <HeaderApp />
                 </Header>

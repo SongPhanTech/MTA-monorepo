@@ -198,6 +198,13 @@ enum SubjectClassType {
   @@schema("ql-dao-tao")
 }
 
+enum SubjectClassStatus {
+  DRAFT
+  OFFICIAL
+
+  @@schema("ql-dao-tao")
+}
+
 enum TrainingObjectTypes {
   MILITARY
   CIVILIAN
@@ -3285,66 +3292,68 @@ model ClassRegisterLogs {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model SubjectClass {
-  id                         String                @id() @default(cuid())
-  active                     Boolean               @default(true)
-  description                String?               @db.Text()
-  deletedAt                  DateTime?
-  createdAt                  DateTime              @default(now())
-  updatedAt                  DateTime              @default(now()) @updatedAt()
-  code                       String
-  name                       String
-  startDate                  DateTime?
-  endDate                    DateTime?
-  subject                    SubjectVersion        @relation(fields: [subjectId], references: [id])
-  subjectId                  String
-  schedule                   SubjectClassSchedule?
-  maxStudent                 Int
-  type                       SubjectClassType      @default(NORMAL)
-  trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId       String
-  semester                   Semester              @relation(fields: [semesterId], references: [id])
-  semesterId                 String
-  cancelled                  Boolean               @default(false)
-  lecturerAssignmentDeadline DateTime?
-  sendLecturerAssignmentAt   DateTime?
-  submitLecturerAssignmentAt DateTime?
-  examDate                   DateTime?
-  examType                   ExamType?
-  exam                       Exam?                 @relation(fields: [examId], references: [id])
-  examId                     String?
+  id                          String                @id() @default(cuid())
+  active                      Boolean               @default(true)
+  description                 String?               @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime              @default(now())
+  updatedAt                   DateTime              @default(now()) @updatedAt()
+  code                        String
+  name                        String
+  startDate                   DateTime?
+  endDate                     DateTime?
+  subject                     SubjectVersion        @relation(fields: [subjectId], references: [id])
+  subjectId                   String
+  schedule                    SubjectClassSchedule?
+  maxStudent                  Int
+  type                        SubjectClassType      @default(NORMAL)
+  status                      SubjectClassStatus    @default(DRAFT)
+  trainingObjectType          TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId        String
+  semester                    Semester              @relation(fields: [semesterId], references: [id])
+  semesterId                  String
+  cancelled                   Boolean               @default(false)
+  lecturerAssignmentDeadline  DateTime?
+  sendLecturerAssignmentAt    DateTime?
+  submitLecturerAssignmentAt  DateTime?
+  approveLecturerAssignmentAt DateTime?
+  examDate                    DateTime?
+  examType                    ExamType?
+  exam                        Exam?                 @relation(fields: [examId], references: [id])
+  examId                      String?
   /// ngày bắt đầu nhập điểm CC/TX
-  scoreDeadLineStart         DateTime?
+  scoreDeadLineStart          DateTime?
   /// ngày kết thúc nhập điểm CC/TX
-  scoreDeadline              DateTime?
+  scoreDeadline               DateTime?
   /// hạn nhập điểm thi
-  examScoreDeadline          DateTime?
-  enteredScore               Boolean               @default(false)
-  enteredExamScore           Boolean               @default(false)
-  issuedScoreAt              DateTime?
-  isLockScore                Boolean               @default(false)
-  isLockExamScore            Boolean               @default(true)
-  scoreSubmitted             Boolean               @default(false)
-  scoreChecked               Boolean               @default(false)
-  room                       Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
-  roomId                     String?
-  trainingLocation           TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
-  trainingLocationId         String?
-  mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
-  lecturerId                 String?
-  extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
-  extraLecturerId            String?
-  enterGradeLecturer         Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
-  enterGradeLecturerId       String?
-  subjectClassStudent        StudentSubjectScore[]
-  fixedClasses               FixedClass[]
-  classSchedules             ClassSchedule[]
-  thesisProjects             ThesisProject[]
-  expertProfile              ExpertProfile[]
-  defenseRooms               Room[]                @relation("DefenseRooms")
-  surveyObjectTypes          SurveyObjectType[]
-  classRegisterLogs          ClassRegisterLogs[]
-  subjectClassTimes          SubjectClassTime[]
-  subjectClassHistory        SubjectClassHistory[]
+  examScoreDeadline           DateTime?
+  enteredScore                Boolean               @default(false)
+  enteredExamScore            Boolean               @default(false)
+  issuedScoreAt               DateTime?
+  isLockScore                 Boolean               @default(false)
+  isLockExamScore             Boolean               @default(true)
+  scoreSubmitted              Boolean               @default(false)
+  scoreChecked                Boolean               @default(false)
+  room                        Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
+  roomId                      String?
+  trainingLocation            TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocationId          String?
+  mainLecturer                Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  lecturerId                  String?
+  extraLecturer               Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId             String?
+  enterGradeLecturer          Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
+  enterGradeLecturerId        String?
+  subjectClassStudent         StudentSubjectScore[]
+  fixedClasses                FixedClass[]
+  classSchedules              ClassSchedule[]
+  thesisProjects              ThesisProject[]
+  expertProfile               ExpertProfile[]
+  defenseRooms                Room[]                @relation("DefenseRooms")
+  surveyObjectTypes           SurveyObjectType[]
+  classRegisterLogs           ClassRegisterLogs[]
+  subjectClassTimes           SubjectClassTime[]
+  subjectClassHistory         SubjectClassHistory[]
 
   @@schema("ql-dao-tao")
 }
@@ -5264,6 +5273,7 @@ model SurveyTopic {
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @default(now()) @updatedAt()
   name                String
+  clusterSurvey       ClusterSurvey[]
   survey              Survey[]
   surveyQuestionGroup SurveyQuestionGroup[]
 
@@ -5283,8 +5293,7 @@ model SurveyQuestionGroup {
   updatedAt      DateTime         @default(now()) @updatedAt()
   name           String
   surveyQuestion SurveyQuestion[]
-  surveyTopic    SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId  String
+  surveyTopic    SurveyTopic[]
 
   @@schema("khao-thi")
 }
@@ -5294,23 +5303,26 @@ model SurveyQuestionGroup {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model ClusterSurvey {
-  id               String             @id() @default(cuid())
-  code             String?            @unique()
-  active           Boolean            @default(true)
-  description      String?            @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now()) @updatedAt()
-  name             String
-  startDate        DateTime
-  endDate          DateTime?
-  isPublic         Boolean            @default(false)
-  anonymous        Boolean            @default(true)
-  surveyObjectType SurveyObjectType[]
-  lecturers        Lecturer[]
-  surveyChoice     SurveyChoice[]
-  surveyQuestion   SurveyQuestion[]
-  surveys          Survey[]
+  id                   String             @id() @default(cuid())
+  code                 String?            @unique()
+  active               Boolean            @default(true)
+  description          String?            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now()) @updatedAt()
+  name                 String
+  additionalSuggestion Boolean
+  startDate            DateTime
+  endDate              DateTime?
+  isPublic             Boolean            @default(false)
+  anonymous            Boolean            @default(true)
+  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId        String
+  surveyObjectType     SurveyObjectType[]
+  lecturers            Lecturer[]
+  surveyChoice         SurveyChoice[]
+  surveyQuestion       SurveyQuestion[]
+  surveys              Survey[]
 
   @@schema("khao-thi")
 }

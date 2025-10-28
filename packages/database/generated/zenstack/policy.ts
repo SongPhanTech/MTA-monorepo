@@ -23,6 +23,7 @@ import { ClassRegisterStatus } from "../prisma-client";
 import { SubjectClassSchedule } from "../prisma-client";
 import { PeriodType } from "../prisma-client";
 import { SubjectClassType } from "../prisma-client";
+import { SubjectClassStatus } from "../prisma-client";
 import { TrainingObjectTypes } from "../prisma-client";
 import { DiplomaTypeEnum } from "../prisma-client";
 import { AcademicRankingBaseType } from "../prisma-client";

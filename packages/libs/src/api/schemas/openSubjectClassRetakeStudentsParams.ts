@@ -5,18 +5,11 @@
  * OpenAPI spec version: 1.0.0
  */
 
-import type { Page } from './page'
-import type { PageSize } from './pageSize'
-import type { Search } from './search'
-import type { SubjectVersionId } from './subjectVersionId'
-import type { TrainingCourseId } from './trainingCourseId'
-import type { TrainingObjectTypeId } from './trainingObjectTypeId'
-
 export type OpenSubjectClassRetakeStudentsParams = {
-    subjectVersionId: SubjectVersionId
-    trainingCourseId?: TrainingCourseId & unknown
-    search?: Search
-    trainingObjectTypeId: TrainingObjectTypeId
-    page?: (Page & number) | null
-    pageSize?: (PageSize & number) | null
+    subjectVersionId: string
+    trainingCourseId?: string
+    search?: string
+    trainingObjectTypeId: string
+    page?: number | null
+    pageSize?: number | null
 }

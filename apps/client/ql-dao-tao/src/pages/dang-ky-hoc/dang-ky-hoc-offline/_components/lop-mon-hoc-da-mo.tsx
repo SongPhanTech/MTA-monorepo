@@ -391,8 +391,8 @@ export default function LopMonHocDaMo({ studentId, hocLai }: StudentCourseByPlan
                         getCheckboxProps: (record) => ({
                             disabled:
                                 fixedRowKeys.includes(record.id) ||
-                                (subjectVersionIds.includes(record.subject.id) &&
-                                    !selectedSubjectClassRowKeys.includes(record.id)),
+                                subjectVersionIds.includes(record.subject.id) ||
+                                !selectedSubjectClassRowKeys.includes(record.id),
                         }),
                         columnWidth: 35,
                     }}

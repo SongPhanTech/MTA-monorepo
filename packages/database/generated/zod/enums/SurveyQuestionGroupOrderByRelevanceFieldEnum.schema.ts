@@ -6,4 +6,4 @@
 
 import { z } from 'zod';
 
-export const SurveyQuestionGroupOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name", "surveyTopicId"])
+export const SurveyQuestionGroupOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "name"])
