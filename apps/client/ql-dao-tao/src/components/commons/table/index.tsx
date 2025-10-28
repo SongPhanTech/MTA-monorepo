@@ -1,6 +1,7 @@
 import { FilterFilled } from '@ant-design/icons'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { ColumnTypeProps, FilterProps } from '@constants/type'
+import { cn } from '@workspace/ui/lib/utils'
 import {
     AutoComplete,
     Button,
@@ -823,6 +824,10 @@ const Table = <T extends Record<string, unknown>>({
                 columns.map((column) => ({
                     ...column,
                     key: column.key || (column as unknown as { dataIndex: string }).dataIndex,
+                    onCell: (record: T) => ({
+                        className: cn('px-2 py-[2px]', column.className || ''),
+                        ...(column.onCell ? column.onCell(record) : {}),
+                    }),
                     ...genFilter(column as ColumnTypeProps),
                 })) as ColumnsType<T>
             }
@@ -862,8 +867,9 @@ const Table = <T extends Record<string, unknown>>({
                     }
                 },
                 style: { cursor: 'pointer' },
-                className:
-                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : '',
+                className: cn(
+                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : ''
+                ),
                 ...rest.onRow?.(record),
             })}
         />

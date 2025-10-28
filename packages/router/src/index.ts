@@ -211,12 +211,6 @@ const NAVIGATION: NavigationType = {
                 label: 'Quản lý điểm',
                 icon: BarChart3,
                 children: [
-                    // {
-                    //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_KHOA_NHAP_DIEM,
-                    //     label: 'Mở/Khoá nhập điểm',
-                    //     path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_KHOA_NHAP_DIEM,
-                    //     description: 'Mở/Khoá nhập điểm',
-                    // },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
                         label: 'Hạn nhập điểm',
@@ -224,13 +218,13 @@ const NAVIGATION: NavigationType = {
                         description: 'Hạn nhập điểm',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_PHONG_THI,
                         label: 'QL phòng thi',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_PHONG_THI,
                         description: 'QL phòng thi',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH,
                         label: 'Nhập điểm theo phách',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH,
                         description: 'Nhập điểm theo phách',
@@ -248,7 +242,7 @@ const NAVIGATION: NavigationType = {
                         description: 'Nhập điểm thi',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DIEM_TRUNG_BINH_KY_HOC,
                         label: 'Trung bình học kỳ',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DIEM_TRUNG_BINH_KY_HOC,
                         description: 'Điểm trung bình học kỳ',

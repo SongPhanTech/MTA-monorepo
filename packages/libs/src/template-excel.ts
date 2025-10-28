@@ -574,7 +574,7 @@ async function handleExcelJSMergeSheets(
     workbook.removeWorksheet(firstSheet.id)
 
     // Đổi tên sheet chính (nếu muốn)
-    //@ts-ignore
+    //@ts-expect-error
     masterSheet.name = options.sheetName || 'TongHopDiem'
 
     const outBuffer = await workbook.xlsx.writeBuffer()

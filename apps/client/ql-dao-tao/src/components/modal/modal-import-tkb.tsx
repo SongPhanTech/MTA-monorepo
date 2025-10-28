@@ -164,6 +164,9 @@ const ModalNhapTKB = () => {
                 queryClient.invalidateQueries({
                     queryKey: ['zenstack', 'SubjectClass'],
                 })
+                   queryClient.invalidateQueries({
+                    queryKey: ['zenstack', 'DM_DonVi'],
+                })
             } else {
                 message.error(res?.data?.message || 'Nhập dữ liệu từ file thất bại')
             }

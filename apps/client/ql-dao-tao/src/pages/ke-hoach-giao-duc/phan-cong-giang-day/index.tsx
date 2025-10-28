@@ -13,7 +13,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
-import { $Enums, type Prisma, type SubjectClassSchedule } from '@workspace/db/client'
+import { $Enums, SubjectClass, type Prisma, type SubjectClassSchedule } from '@workspace/db/client'
 import {
     useCountDM_DonVi,
     useDeleteSubjectClass,
@@ -28,7 +28,20 @@ import { useAbility, useOrgPermissions } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
-import { Button, Checkbox, Col, Flex, Form, message, Popover, Row, Switch, TreeSelect } from 'antd'
+import {
+    Affix,
+    Button,
+    Checkbox,
+    Col,
+    Divider,
+    Flex,
+    Form,
+    message,
+    Popover,
+    Row,
+    Switch,
+    TreeSelect,
+} from 'antd'
 import type { Dayjs } from 'dayjs'
 import _ from 'lodash'
 import type React from 'react'
@@ -47,6 +60,7 @@ type TeachingAssignmentForm = {
             roomId: string | null
             trainingLocationId: string | null
             submitLecturerAssignmentAt?: boolean | null
+            approveLecturerAssignmentAt?: boolean | null
             isEdit?: boolean
             cancelled: boolean
         }
@@ -564,7 +578,61 @@ export default function PhanCongGiangDay({
                     extraLecturerId: { not: null },
                     lecturerAssignmentDeadline: { not: null },
                     submitLecturerAssignmentAt: null,
+                    approveLecturerAssignmentAt: null,
                     type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                },
+            })
+            message.success('Gửi PCGD thành công')
+            debouncedRefetch()
+            formBaoDay.resetFields()
+        } catch (error: any) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+    async function handleTuChoiPCGD() {
+        try {
+            showSpinner()
+            await updateManySubjectClass({
+                data: {
+                    submitLecturerAssignmentAt: null,
+                },
+                where: {
+                    trainingObjectTypeId,
+                    semesterId,
+                    id: {
+                        in: Object.entries(subjectClassForm)
+                            .filter(([_, subjectClass]) => subjectClass.approveLecturerAssignmentAt)
+                            .map(([id]) => id),
+                    },
+                },
+            })
+            message.success('Gửi PCGD thành công')
+            debouncedRefetch()
+            formBaoDay.resetFields()
+        } catch (error: any) {
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    async function handleDuyetPCGD() {
+        try {
+            showSpinner()
+            await updateManySubjectClass({
+                data: {
+                    approveLecturerAssignmentAt: new Date(),
+                },
+                where: {
+                    trainingObjectTypeId,
+                    semesterId,
+                    id: {
+                        in: Object.entries(subjectClassForm)
+                            .filter(([_, subjectClass]) => subjectClass.approveLecturerAssignmentAt)
+                            .map(([id]) => id),
+                    },
                 },
             })
             message.success('Gửi PCGD thành công')
@@ -651,16 +719,15 @@ export default function PhanCongGiangDay({
                 .reduce(
                     (acc, curr) => {
                         acc[curr.id] = {
-                            lecturerId: curr.lecturerId,
-                            extraLecturerId: curr.extraLecturerId,
-                            enterGradeLecturerId: curr.enterGradeLecturerId,
+                            lecturerId: curr.lecturerId ?? null,
+                            extraLecturerId: curr.extraLecturerId ?? null,
+                            enterGradeLecturerId: curr.enterGradeLecturerId ?? null,
                             lecturerAssignmentDeadline: curr.lecturerAssignmentDeadline
                                 ? dayjs(curr.lecturerAssignmentDeadline)
                                 : null,
                             examType: curr.examType,
                             roomId: curr.roomId,
-                            trainingLocationId: curr.trainingLocationId,
-                            submitLecturerAssignmentAt: !!curr.submitLecturerAssignmentAt,
+                            trainingLocationId: curr.trainingLocationId ?? null,
                             isEdit: false,
                             cancelled: !!curr.cancelled,
                         }
@@ -681,662 +748,782 @@ export default function PhanCongGiangDay({
         <div>
             <Row gutter={[8, 8]}>
                 <Col span={24}>
-                    <Flex justify="space-between" gap={4}>
-                        <Col span={8}>
-                            <TreeSelectDepartment
-                                className="w-full"
-                                rootId={!khoaBoMon ? '0' : orgId}
-                                onChange={(val) => handleFilterChange('organization', val)}
-                            />
-                        </Col>
-                        <Flex gap={4}>
-                            {!khoaBoMon &&
-                                can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                                    'THEM'
-                                ) && (
-                                    <Button onClick={() => handleModal()} type="default">
-                                        Thêm mới lớp MH
-                                    </Button>
-                                )}
-                            {khoaBoMon &&
-                                can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                                    'SUA'
-                                ) && (
-                                    <Button
-                                        onClick={() => handleSaveKhoaBoMon()}
-                                        type="primary"
-                                        disabled={
-                                            !dmDonViData.length ||
-                                            Object.entries(subjectClassForm).filter(
-                                                ([_, subjectClass]) => subjectClass.isEdit
-                                            ).length === 0
-                                        }
-                                    >
-                                        Lưu
-                                    </Button>
-                                )}
-                            {khoaBoMon &&
-                                can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                                    'SUA'
-                                ) && (
+                    <Affix offsetTop={105} style={{ zIndex: 1000 }}>
+                        <Flex justify="space-between" gap={4} className="bg-white py-1">
+                            <Col span={8}>
+                                <TreeSelectDepartment
+                                    className="w-full"
+                                    rootId={!khoaBoMon ? '0' : orgId}
+                                    onChange={(val) => handleFilterChange('organization', val)}
+                                />
+                            </Col>
+                            <Flex gap={4}>
+                                {!khoaBoMon &&
+                                    can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                        'THEM'
+                                    ) && (
+                                        <Button onClick={() => handleModal()} type="default">
+                                            Thêm mới lớp MH
+                                        </Button>
+                                    )}
+                                {khoaBoMon &&
+                                    can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                        'SUA'
+                                    ) && (
+                                        <Button
+                                            onClick={() => handleSaveKhoaBoMon()}
+                                            type="primary"
+                                            disabled={
+                                                !dmDonViData.length ||
+                                                Object.entries(subjectClassForm).filter(
+                                                    ([_, subjectClass]) => subjectClass.isEdit
+                                                ).length === 0
+                                            }
+                                        >
+                                            Lưu
+                                        </Button>
+                                    )}
+                                {khoaBoMon &&
+                                    can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                        'SUA'
+                                    ) && (
+                                        <Popover
+                                            content={
+                                                <Flex gap={12} className="text-right mt-4">
+                                                    <Button
+                                                        type="primary"
+                                                        className="bg-yellow-400 text-black"
+                                                        onClick={async () => {
+                                                            try {
+                                                                showSpinner()
+                                                                await updateManySubjectClass({
+                                                                    data: {
+                                                                        submitLecturerAssignmentAt:
+                                                                            new Date(),
+                                                                    },
+                                                                    where: {
+                                                                        lecturerId: { not: null },
+                                                                        extraLecturerId: {
+                                                                            not: null,
+                                                                        },
+                                                                        lecturerAssignmentDeadline:
+                                                                            { not: null },
+                                                                        submitLecturerAssignmentAt:
+                                                                            null,
+                                                                        approveLecturerAssignmentAt:
+                                                                            null,
+                                                                        type: hocLai
+                                                                            ? $Enums
+                                                                                  .SubjectClassType
+                                                                                  .RETAKE
+                                                                            : $Enums
+                                                                                  .SubjectClassType
+                                                                                  .NORMAL,
+                                                                        trainingObjectTypeId,
+                                                                        semesterId,
+                                                                        id: {
+                                                                            in: Object.entries(
+                                                                                subjectClassForm
+                                                                            )
+                                                                                .filter(
+                                                                                    ([
+                                                                                        _,
+                                                                                        subjectClass,
+                                                                                    ]) =>
+                                                                                        subjectClass.submitLecturerAssignmentAt
+                                                                                )
+                                                                                .map(([id]) => id),
+                                                                        },
+                                                                    },
+                                                                })
+                                                                message.success(
+                                                                    'Gửi PCGD thành công'
+                                                                )
+                                                                debouncedRefetch()
+                                                                formBaoDay.resetFields()
+                                                            } catch (error: any) {
+                                                                message.error(
+                                                                    'Đã xảy ra lỗi, vui lòng kiểm tra lại'
+                                                                )
+                                                            } finally {
+                                                                hideSpinner()
+                                                            }
+                                                        }}
+                                                        disabled={
+                                                            Object.entries(subjectClassForm).filter(
+                                                                ([_, subjectClass]) =>
+                                                                    subjectClass.submitLecturerAssignmentAt
+                                                            ).length === 0
+                                                        }
+                                                    >
+                                                        Gửi PCGD{' '}
+                                                        {
+                                                            Object.entries(subjectClassForm).filter(
+                                                                ([_, subjectClass]) =>
+                                                                    subjectClass.submitLecturerAssignmentAt
+                                                            ).length
+                                                        }{' '}
+                                                        lớp MH đã chọn
+                                                    </Button>
+                                                    <Button
+                                                        type="primary"
+                                                        onClick={handleGuiPCGD}
+                                                        className="bg-orange-500"
+                                                    >
+                                                        Gửi PCGD lớp MH đã phân công
+                                                    </Button>
+                                                </Flex>
+                                            }
+                                            title="Gửi phân công giảng dạy"
+                                            trigger="click"
+                                            placement="bottomRight"
+                                        >
+                                            <Button type="primary" disabled={!dmDonViData.length}>
+                                                Gửi PCGD
+                                            </Button>
+                                        </Popover>
+                                    )}
+                                {!khoaBoMon && (
                                     <Popover
                                         content={
-                                            <Flex gap={12} className="text-right mt-4">
-                                                <Button
-                                                    type="primary"
-                                                    className="bg-yellow-400 text-black"
-                                                >
-                                                    Gửi PCGD lớp MH đã chọn
-                                                </Button>
-                                                <Button
-                                                    type="primary"
-                                                    onClick={handleGuiPCGD}
-                                                    disabled={
-                                                        Object.entries(subjectClassForm).filter(
-                                                            ([_, subjectClass]) =>
-                                                                subjectClass.submitLecturerAssignmentAt
-                                                        ).length === 0
+                                            <Form
+                                                form={formXepKhuVuc}
+                                                initialValues={{ isOverride: false }}
+                                                onFinish={async (values: XepKhuVucForm) => {
+                                                    try {
+                                                        showSpinner()
+                                                        const res = await sqlTransaction([
+                                                            {
+                                                                model: 'SubjectClass',
+                                                                operation: 'updateMany',
+                                                                data: {
+                                                                    where: {
+                                                                        trainingObjectTypeId,
+                                                                        semesterId,
+                                                                        status: $Enums
+                                                                            .SubjectClassStatus
+                                                                            .DRAFT,
+                                                                        ...(!values.isOverride
+                                                                            ? {
+                                                                                  trainingLocationId:
+                                                                                      null,
+                                                                              }
+                                                                            : {}),
+                                                                    },
+                                                                    data: {
+                                                                        trainingLocationId:
+                                                                            values.trainingLocationId ??
+                                                                            null,
+                                                                    },
+                                                                },
+                                                            },
+                                                        ])
+                                                        if (res.status !== 200) {
+                                                            throw new Error('Lỗi khi xếp khu vực')
+                                                        }
+                                                        debouncedRefetch()
+                                                        message.success('Xếp khu vực thành công')
+                                                    } catch (error: any) {
+                                                        message.error(
+                                                            'Đã xảy ra lỗi, vui lòng kiểm tra lại'
+                                                        )
+                                                    } finally {
+                                                        hideSpinner()
                                                     }
-                                                    className="bg-orange-500"
+                                                }}
+                                            >
+                                                <FormItem
+                                                    form={formXepKhuVuc}
+                                                    name={'trainingLocationId'}
+                                                    required
+                                                    label="Khu vực đào tạo"
                                                 >
-                                                    Gửi PCGD lớp MH đã phân công
-                                                </Button>
-                                            </Flex>
+                                                    <Select
+                                                        options={trainingLocationData.map((e) => ({
+                                                            label: e.name,
+                                                            value: e.id,
+                                                        }))}
+                                                        allowClear
+                                                        showSearch
+                                                        filterOption={(input, option) =>
+                                                            (option?.label ?? '')
+                                                                .toString()
+                                                                .toLowerCase()
+                                                                .includes(input.toLowerCase())
+                                                        }
+                                                        dropdownStyle={{
+                                                            width: 400,
+                                                            maxHeight: 400,
+                                                        }}
+                                                    />
+                                                </FormItem>
+                                                <FormItem
+                                                    form={formXepKhuVuc}
+                                                    name={'isOverride'}
+                                                    label="Ghi đè khu vực đã xếp"
+                                                    className="mt-2"
+                                                >
+                                                    <Switch />
+                                                </FormItem>
+                                                <Col span={24} className="text-right mt-4">
+                                                    <Button type="primary" htmlType="submit">
+                                                        Xếp khu vực
+                                                    </Button>
+                                                </Col>
+                                            </Form>
                                         }
-                                        title="Gửi phân công giảng dạy"
+                                        title="Xếp khu vực nhanh"
                                         trigger="click"
                                         placement="bottomRight"
                                     >
-                                        <Button type="primary" disabled={!dmDonViData.length}>
-                                            Gửi PCGD
+                                        <Button type="dashed">Xếp khu vực (nhanh)</Button>
+                                    </Popover>
+                                )}
+                                {!khoaBoMon && (
+                                    <Button
+                                        onClick={() => handleSaveData()}
+                                        type="default"
+                                        className="text-primary"
+                                    >
+                                        0. Lưu kế hoạch
+                                    </Button>
+                                )}
+                                {!khoaBoMon && (
+                                    <Popover
+                                        content={
+                                            <Form
+                                                form={formBaoDay}
+                                                initialValues={{ isOverride: false }}
+                                                onFinish={guiBaoDay}
+                                            >
+                                                <FormItem
+                                                    form={formBaoDay}
+                                                    name={'deadline'}
+                                                    required
+                                                    label="Hạn phân công giảng dạy"
+                                                >
+                                                    <DatePicker />
+                                                </FormItem>
+                                                <FormItem
+                                                    form={formBaoDay}
+                                                    name={'isOverride'}
+                                                    label="Ghi đè hạn PCGD"
+                                                    className="mt-2"
+                                                >
+                                                    <Switch />
+                                                </FormItem>
+                                                <Col span={24} className="text-right mt-4">
+                                                    <Button type="primary" htmlType="submit">
+                                                        Gửi báo dạy
+                                                    </Button>
+                                                </Col>
+                                            </Form>
+                                        }
+                                        title="Báo dạy cho Khoa/Viện/Bộ môn"
+                                        trigger="click"
+                                        placement="bottomRight"
+                                    >
+                                        <Button type="primary" className="bg-red-500">
+                                            1.Báo dạy
                                         </Button>
                                     </Popover>
                                 )}
-                            {!khoaBoMon && (
-                                <Popover
-                                    content={
-                                        <Form
-                                            form={formXepKhuVuc}
-                                            initialValues={{ isOverride: false }}
-                                            onFinish={async (values: XepKhuVucForm) => {
-                                                try {
-                                                    showSpinner()
-                                                    const res = await sqlTransaction([
+                                {!khoaBoMon &&
+                                    can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                        'DUYET'
+                                    ) && (
+                                        <Popover
+                                            content={
+                                                <Flex gap={12} className="text-right mt-4">
+                                                    <Button
+                                                        type="primary"
+                                                        disabled={
+                                                            Object.entries(subjectClassForm).filter(
+                                                                ([_, subjectClass]) =>
+                                                                    subjectClass.approveLecturerAssignmentAt
+                                                            ).length === 0
+                                                        }
+                                                        danger
+                                                        onClick={handleTuChoiPCGD}
+                                                    >
+                                                        Từ chối duyệt{' '}
                                                         {
-                                                            model: 'SubjectClass',
-                                                            operation: 'updateMany',
-                                                            data: {
-                                                                where: {
-                                                                    trainingObjectTypeId,
-                                                                    semesterId,
-                                                                    status: $Enums
-                                                                        .SubjectClassStatus.DRAFT,
-                                                                    ...(!values.isOverride
-                                                                        ? {
-                                                                              trainingLocationId:
-                                                                                  null,
-                                                                          }
-                                                                        : {}),
-                                                                },
-                                                                data: {
-                                                                    trainingLocationId:
-                                                                        values.trainingLocationId ??
-                                                                        null,
-                                                                },
-                                                            },
-                                                        },
-                                                    ])
-                                                    if (res.status !== 200) {
-                                                        throw new Error('Lỗi khi xếp khu vực')
-                                                    }
-                                                    debouncedRefetch()
-                                                    message.success('Xếp khu vực thành công')
-                                                } catch (error: any) {
-                                                    message.error(
-                                                        'Đã xảy ra lỗi, vui lòng kiểm tra lại'
-                                                    )
-                                                } finally {
-                                                    hideSpinner()
-                                                }
-                                            }}
+                                                            Object.entries(subjectClassForm).filter(
+                                                                ([_, subjectClass]) =>
+                                                                    subjectClass.approveLecturerAssignmentAt
+                                                            ).length
+                                                        }{' '}
+                                                        LMH
+                                                    </Button>
+                                                    <Button
+                                                        type="primary"
+                                                        onClick={handleDuyetPCGD}
+                                                        disabled={
+                                                            Object.entries(subjectClassForm).filter(
+                                                                ([_, subjectClass]) =>
+                                                                    subjectClass.approveLecturerAssignmentAt
+                                                            ).length === 0
+                                                        }
+                                                    >
+                                                        Duyệt{' '}
+                                                        {
+                                                            Object.entries(subjectClassForm).filter(
+                                                                ([_, subjectClass]) =>
+                                                                    subjectClass.approveLecturerAssignmentAt
+                                                            ).length
+                                                        }{' '}
+                                                        LMH
+                                                    </Button>
+                                                </Flex>
+                                            }
+                                            title="Duyệt báo dạy"
+                                            trigger="click"
+                                            placement="bottomRight"
                                         >
-                                            <FormItem
-                                                form={formXepKhuVuc}
-                                                name={'trainingLocationId'}
-                                                required
-                                                label="Khu vực đào tạo"
-                                            >
-                                                <Select
-                                                    options={trainingLocationData.map((e) => ({
-                                                        label: e.name,
-                                                        value: e.id,
-                                                    }))}
-                                                    allowClear
-                                                    showSearch
-                                                    filterOption={(input, option) =>
-                                                        (option?.label ?? '')
-                                                            .toString()
-                                                            .toLowerCase()
-                                                            .includes(input.toLowerCase())
-                                                    }
-                                                    dropdownStyle={{
-                                                        width: 400,
-                                                        maxHeight: 400,
-                                                    }}
-                                                />
-                                            </FormItem>
-                                            <FormItem
-                                                form={formXepKhuVuc}
-                                                name={'isOverride'}
-                                                label="Ghi đè khu vực đã xếp"
-                                                className="mt-2"
-                                            >
-                                                <Switch />
-                                            </FormItem>
-                                            <Col span={24} className="text-right mt-4">
-                                                <Button type="primary" htmlType="submit">
-                                                    Xếp khu vực
-                                                </Button>
-                                            </Col>
-                                        </Form>
-                                    }
-                                    title="Xếp khu vực nhanh"
-                                    trigger="click"
-                                    placement="bottomRight"
-                                >
-                                    <Button type="dashed">Xếp khu vực (nhanh)</Button>
-                                </Popover>
-                            )}
-                            {!khoaBoMon && (
-                                <Button
-                                    onClick={() => handleSaveData()}
-                                    type="default"
-                                    className="text-primary"
-                                >
-                                    0. Lưu kế hoạch
-                                </Button>
-                            )}
-                            {!khoaBoMon && (
-                                <Popover
-                                    content={
-                                        <Form
-                                            form={formBaoDay}
-                                            initialValues={{ isOverride: false }}
-                                            onFinish={guiBaoDay}
-                                        >
-                                            <FormItem
-                                                form={formBaoDay}
-                                                name={'deadline'}
-                                                required
-                                                label="Hạn phân công giảng dạy"
-                                            >
-                                                <DatePicker />
-                                            </FormItem>
-                                            <FormItem
-                                                form={formBaoDay}
-                                                name={'isOverride'}
-                                                label="Ghi đè hạn PCGD"
-                                                className="mt-2"
-                                            >
-                                                <Switch />
-                                            </FormItem>
-                                            <Col span={24} className="text-right mt-4">
-                                                <Button type="primary" htmlType="submit">
-                                                    Gửi báo dạy
-                                                </Button>
-                                            </Col>
-                                        </Form>
-                                    }
-                                    title="Báo dạy cho Khoa/Viện/Bộ môn"
-                                    trigger="click"
-                                    placement="bottomRight"
-                                >
-                                    <Button type="primary" className="bg-red-500">
-                                        1.Báo dạy
-                                    </Button>
-                                </Popover>
-                            )}
-                            {!khoaBoMon &&
-                                can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                                    'DUYET'
-                                ) && <Button type="primary">2. Duyệt báo dạy</Button>}
-                            {!khoaBoMon && (
-                                <Button
-                                    onClick={async () => {
-                                        try {
-                                            const res = await sqlTransaction([
-                                                {
-                                                    model: 'SubjectClass',
-                                                    operation: 'findMany',
-                                                    data: {
-                                                        where,
-                                                        select: {
-                                                            submitLecturerAssignmentAt: true,
-                                                            schedule: true,
-                                                            examType: true,
-                                                            mainLecturer: {
-                                                                select: {
-                                                                    userProfile: {
-                                                                        select: {
-                                                                            fullname: true,
+                                            <Button type="primary">2. Duyệt báo dạy</Button>
+                                        </Popover>
+                                    )}
+                                {!khoaBoMon && (
+                                    <Button
+                                        onClick={async () => {
+                                            try {
+                                                const res = await sqlTransaction([
+                                                    {
+                                                        model: 'SubjectClass',
+                                                        operation: 'findMany',
+                                                        data: {
+                                                            where,
+                                                            select: {
+                                                                submitLecturerAssignmentAt: true,
+                                                                schedule: true,
+                                                                examType: true,
+                                                                mainLecturer: {
+                                                                    select: {
+                                                                        userProfile: {
+                                                                            select: {
+                                                                                fullname: true,
+                                                                            },
                                                                         },
                                                                     },
                                                                 },
-                                                            },
-                                                            subject: {
-                                                                select: {
-                                                                    code: true,
-                                                                    name: true,
-                                                                    credit: true,
-                                                                    period: true,
-                                                                    managementOrganization: {
-                                                                        select: {
-                                                                            sTen: true,
-                                                                            sMa: true,
-                                                                            sParentId: true,
+                                                                subject: {
+                                                                    select: {
+                                                                        code: true,
+                                                                        name: true,
+                                                                        credit: true,
+                                                                        period: true,
+                                                                        managementOrganization: {
+                                                                            select: {
+                                                                                sTen: true,
+                                                                                sMa: true,
+                                                                                sParentId: true,
+                                                                            },
                                                                         },
                                                                     },
                                                                 },
-                                                            },
-                                                            extraLecturer: {
-                                                                select: {
-                                                                    userProfile: {
-                                                                        select: {
-                                                                            fullname: true,
+                                                                extraLecturer: {
+                                                                    select: {
+                                                                        userProfile: {
+                                                                            select: {
+                                                                                fullname: true,
+                                                                            },
                                                                         },
                                                                     },
                                                                 },
-                                                            },
-                                                            fixedClasses: {
-                                                                select: {
-                                                                    code: true,
-                                                                    _count: {
-                                                                        select: {
-                                                                            students: {
-                                                                                where: {
-                                                                                    deletedAt: null,
-                                                                                    active: true,
-                                                                                    status: 'ENROLLED',
+                                                                fixedClasses: {
+                                                                    select: {
+                                                                        code: true,
+                                                                        _count: {
+                                                                            select: {
+                                                                                students: {
+                                                                                    where: {
+                                                                                        deletedAt:
+                                                                                            null,
+                                                                                        active: true,
+                                                                                        status: 'ENROLLED',
+                                                                                    },
                                                                                 },
                                                                             },
                                                                         },
                                                                     },
                                                                 },
-                                                            },
-                                                            room: {
-                                                                select: {
-                                                                    name: true,
+                                                                room: {
+                                                                    select: {
+                                                                        name: true,
+                                                                    },
                                                                 },
-                                                            },
-                                                            trainingLocation: {
-                                                                select: {
-                                                                    name: true,
-                                                                },
-                                                            },
-                                                        },
-                                                    },
-                                                },
-                                                {
-                                                    model: 'Semester',
-                                                    operation: 'findUnique',
-                                                    data: {
-                                                        where: { id: semesterId },
-                                                        select: {
-                                                            semesterType: true,
-                                                            schoolYear: {
-                                                                select: {
-                                                                    startDate: true,
-                                                                    endDate: true,
+                                                                trainingLocation: {
+                                                                    select: {
+                                                                        name: true,
+                                                                    },
                                                                 },
                                                             },
                                                         },
                                                     },
-                                                },
-                                                {
-                                                    model: 'DM_DonVi',
-                                                    operation: 'findMany',
-                                                    data: {
-                                                        where: {
-                                                            bActive: true,
-                                                        },
-                                                        select: {
-                                                            sMa: true,
-                                                            Id: true,
-                                                            sTen: true,
-                                                            sParentId: true,
+                                                    {
+                                                        model: 'Semester',
+                                                        operation: 'findUnique',
+                                                        data: {
+                                                            where: { id: semesterId },
+                                                            select: {
+                                                                semesterType: true,
+                                                                schoolYear: {
+                                                                    select: {
+                                                                        startDate: true,
+                                                                        endDate: true,
+                                                                    },
+                                                                },
+                                                            },
                                                         },
                                                     },
-                                                },
-                                            ])
-
-                                            if (res.status !== 200) {
-                                                throw new Error('Lỗi khi xuất báo dạy')
-                                            }
-
-                                            const payload = res.data[0] as Array<{
-                                                schedule: string
-                                                examType: $Enums.ExamType | null
-                                                mainLecturer: any
-                                                subject: {
-                                                    code: string
-                                                    name: string
-                                                    credit: number
-                                                    period: number
-                                                    managementOrganization: {
-                                                        sTen: string
-                                                        sMa: string
-                                                        sParentId: any
-                                                    }
-                                                }
-                                                submitLecturerAssignmentAt: Date | null
-                                                sendLecturerAssignmentAt: Date | null
-                                                extraLecturer: any
-                                                fixedClasses: Array<{
-                                                    code: string
-                                                    _count: {
-                                                        students: number
-                                                    }
-                                                }>
-                                                room: {
-                                                    name: string
-                                                }
-                                                trainingLocation: {
-                                                    name: string
-                                                }
-                                            }>
-                                            const semesterPayload = res.data[1] as {
-                                                semesterType: $Enums.SemesterType
-                                                schoolYear: {
-                                                    startDate: Date
-                                                    endDate: Date
-                                                }
-                                            }
-
-                                            const orgPayload = res.data[2] as Array<{
-                                                sMa: string
-                                                Id: string
-                                                sTen: string
-                                                sParentId: string
-                                            }>
-
-                                            const hocKy = (() => {
-                                                if (
-                                                    semesterPayload.semesterType ===
-                                                    $Enums.SemesterType.FIRST
-                                                )
-                                                    return '1'
-                                                if (
-                                                    semesterPayload.semesterType ===
-                                                    $Enums.SemesterType.SECOND
-                                                )
-                                                    return '2'
-                                                if (
-                                                    semesterPayload.semesterType ===
-                                                    $Enums.SemesterType.SUMMER
-                                                )
-                                                    return 'Hè'
-                                                if (
-                                                    semesterPayload.semesterType ===
-                                                    $Enums.SemesterType.FIRST_SUPPLEMENTARY
-                                                )
-                                                    return 'Phụ 1'
-                                                if (
-                                                    semesterPayload.semesterType ===
-                                                    $Enums.SemesterType.SECOND_SUPPLEMENTARY
-                                                )
-                                                    return 'Phụ 2'
-                                                return ''
-                                            })()
-
-                                            const namHoc = (() => {
-                                                const startYear = dayjs(
-                                                    semesterPayload.schoolYear.startDate
-                                                ).year()
-                                                const endYear = startYear + 1
-                                                return `${startYear} - ${endYear}`
-                                            })()
-
-                                            const groupedPayload = Object.groupBy(
-                                                payload,
-                                                (item) =>
-                                                    item?.subject?.managementOrganization?.sMa ||
-                                                    'MTA'
-                                            )
-                                            exportFromTemplate({
-                                                templateUrl: getMinioUrl(
-                                                    '/mta/template/ke-hoach-dao-tao/bao-day.xlsx'
-                                                ),
-                                                fileName: `Bao_day_${dayjs().format('DD_MM_YYYY')}.xlsx`,
-                                                fontFamily: 'Tahoma',
-                                                fontSize: 9,
-                                                sheets: Object.entries(groupedPayload).map(
-                                                    ([sMa, items = []]) => {
-                                                        const ngayGui = dayjs.unix(
-                                                            Math.min(
-                                                                ...items.map(
-                                                                    (i) =>
-                                                                        dayjs(
-                                                                            i.sendLecturerAssignmentAt
-                                                                        ).unix() ??
-                                                                        Number.POSITIVE_INFINITY
-                                                                )
-                                                            )
-                                                        )
-                                                        const ngayNhan = dayjs.unix(
-                                                            Math.max(
-                                                                ...items.map(
-                                                                    (i) =>
-                                                                        dayjs(
-                                                                            i.sendLecturerAssignmentAt
-                                                                        ).unix() ??
-                                                                        Number.NEGATIVE_INFINITY
-                                                                )
-                                                            )
-                                                        )
-
-                                                        const boMon = orgPayload.find(
-                                                            (e) => e.sMa === sMa
-                                                        )
-
-                                                        const khoa = orgPayload.find(
-                                                            (e) => e.Id === boMon?.sParentId
-                                                        )
-
-                                                        const itemBySubjectCode = Object.groupBy(
-                                                            items,
-                                                            (item) => item.subject.code
-                                                        )
-
-                                                        return {
-                                                            tableStartCell: {
-                                                                col: 1,
-                                                                row: 10,
+                                                    {
+                                                        model: 'DM_DonVi',
+                                                        operation: 'findMany',
+                                                        data: {
+                                                            where: {
+                                                                bActive: true,
                                                             },
-                                                            data: {
-                                                                khoa: khoa?.sTen || '',
-                                                                bo_mon: boMon?.sTen || '',
-                                                                ngay_gui: `Ngày ${ngayGui.format('DD')} tháng ${ngayGui.format('MM')} năm ${ngayGui.format(
-                                                                    'YYYY'
-                                                                )}`,
-                                                                ngay_nhan: `Ngày ${ngayNhan.format('DD')} tháng ${ngayNhan.format('MM')} năm ${ngayNhan.format(
-                                                                    'YYYY'
-                                                                )}`,
-                                                                hoc_ky: hocKy,
-                                                                nam_hoc: namHoc,
+                                                            select: {
+                                                                sMa: true,
+                                                                Id: true,
+                                                                sTen: true,
+                                                                sParentId: true,
                                                             },
-                                                            rows: Object.entries(
-                                                                itemBySubjectCode
-                                                            ).flatMap(
-                                                                (
-                                                                    [_, subjectItems = []],
-                                                                    idxOfSubject
-                                                                ) => {
-                                                                    return subjectItems.map(
-                                                                        (item, index) => {
-                                                                            const rowSpan =
-                                                                                index === 0
-                                                                                    ? subjectItems.length
-                                                                                    : 1
-                                                                            return {
-                                                                                cells: [
-                                                                                    {
-                                                                                        value:
-                                                                                            idxOfSubject +
-                                                                                            1,
-                                                                                        rowSpan,
-                                                                                        align: 'center',
-                                                                                    },
-                                                                                    {
-                                                                                        value: item
-                                                                                            .subject
-                                                                                            .code,
-                                                                                        rowSpan,
-                                                                                    },
-                                                                                    {
-                                                                                        value: item
-                                                                                            .subject
-                                                                                            .name,
-                                                                                        rowSpan,
-                                                                                    },
-                                                                                    {
-                                                                                        value: item
-                                                                                            .subject
-                                                                                            .credit,
-                                                                                        rowSpan,
-                                                                                        align: 'right',
-                                                                                    },
-                                                                                    {
-                                                                                        value: Math.floor(
-                                                                                            item
-                                                                                                .subject
-                                                                                                .period /
-                                                                                                15
-                                                                                        ), // dvht
-                                                                                        rowSpan,
-                                                                                        align: 'right',
-                                                                                    },
-                                                                                    {
-                                                                                        value: item
-                                                                                            .subject
-                                                                                            .period, //
-                                                                                        rowSpan,
-                                                                                        align: 'right',
-                                                                                    },
-                                                                                    {
-                                                                                        value: subjectItems.length, //
-                                                                                        rowSpan,
-                                                                                        align: 'right',
-                                                                                    },
-                                                                                    {
-                                                                                        value: item.schedule
-                                                                                            ? SUBJECT_CLASS_SCHEDULE_TYPE[
-                                                                                                  item.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
-                                                                                              ]
-                                                                                            : '',
-                                                                                        align: 'center',
-                                                                                    },
-                                                                                    {
-                                                                                        value: item.fixedClasses.reduce(
-                                                                                            (
-                                                                                                acc,
-                                                                                                curr
-                                                                                            ) =>
-                                                                                                acc +
-                                                                                                curr
-                                                                                                    ._count
-                                                                                                    .students,
-                                                                                            0
-                                                                                        ),
-                                                                                    },
-                                                                                    {
-                                                                                        value: item.fixedClasses
-                                                                                            .map(
-                                                                                                (
-                                                                                                    fc
-                                                                                                ) =>
-                                                                                                    fc.code
-                                                                                            )
-                                                                                            .join(
-                                                                                                ', '
-                                                                                            ),
-                                                                                    },
-                                                                                    {
-                                                                                        value:
-                                                                                            item
-                                                                                                .trainingLocation
-                                                                                                ?.name ??
-                                                                                            '',
-                                                                                    },
-                                                                                    {
-                                                                                        value:
-                                                                                            item
-                                                                                                .mainLecturer
-                                                                                                ?.userProfile
-                                                                                                ?.fullname ||
-                                                                                            '',
-                                                                                    },
-                                                                                    {
-                                                                                        value:
-                                                                                            item
-                                                                                                .extraLecturer
-                                                                                                ?.userProfile
-                                                                                                ?.fullname ||
-                                                                                            '',
-                                                                                    },
-                                                                                    {
-                                                                                        value: item.room
-                                                                                            ? item
-                                                                                                  .room
-                                                                                                  .name
-                                                                                            : '',
-                                                                                    },
-                                                                                    {
-                                                                                        value: item.examType
-                                                                                            ? getExamTypeLabel(
-                                                                                                  item.examType
-                                                                                              )
-                                                                                            : '',
-                                                                                    },
-                                                                                ],
-                                                                            }
-                                                                        }
-                                                                    )
-                                                                }
-                                                            ),
-                                                            sheet: sMa,
+                                                        },
+                                                    },
+                                                ])
+
+                                                if (res.status !== 200) {
+                                                    throw new Error('Lỗi khi xuất báo dạy')
+                                                }
+
+                                                const payload = res.data[0] as Array<{
+                                                    schedule: string
+                                                    examType: $Enums.ExamType | null
+                                                    mainLecturer: any
+                                                    subject: {
+                                                        code: string
+                                                        name: string
+                                                        credit: number
+                                                        period: number
+                                                        managementOrganization: {
+                                                            sTen: string
+                                                            sMa: string
+                                                            sParentId: any
                                                         }
                                                     }
-                                                ),
-                                            })
-                                        } catch (error) {
-                                            console.log('error', error)
-                                        }
-                                    }}
-                                    type="primary"
-                                    className="bg-blue-500"
-                                >
-                                    3. Xuất báo dạy
-                                </Button>
-                            )}
-                            {!khoaBoMon &&
-                                can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
-                                    'NHAP_EXCEL'
-                                ) && (
-                                    <Button
+                                                    submitLecturerAssignmentAt: Date | null
+                                                    sendLecturerAssignmentAt: Date | null
+                                                    extraLecturer: any
+                                                    fixedClasses: Array<{
+                                                        code: string
+                                                        _count: {
+                                                            students: number
+                                                        }
+                                                    }>
+                                                    room: {
+                                                        name: string
+                                                    }
+                                                    trainingLocation: {
+                                                        name: string
+                                                    }
+                                                }>
+                                                const semesterPayload = res.data[1] as {
+                                                    semesterType: $Enums.SemesterType
+                                                    schoolYear: {
+                                                        startDate: Date
+                                                        endDate: Date
+                                                    }
+                                                }
+
+                                                const orgPayload = res.data[2] as Array<{
+                                                    sMa: string
+                                                    Id: string
+                                                    sTen: string
+                                                    sParentId: string
+                                                }>
+
+                                                const hocKy = (() => {
+                                                    if (
+                                                        semesterPayload.semesterType ===
+                                                        $Enums.SemesterType.FIRST
+                                                    )
+                                                        return '1'
+                                                    if (
+                                                        semesterPayload.semesterType ===
+                                                        $Enums.SemesterType.SECOND
+                                                    )
+                                                        return '2'
+                                                    if (
+                                                        semesterPayload.semesterType ===
+                                                        $Enums.SemesterType.SUMMER
+                                                    )
+                                                        return 'Hè'
+                                                    if (
+                                                        semesterPayload.semesterType ===
+                                                        $Enums.SemesterType.FIRST_SUPPLEMENTARY
+                                                    )
+                                                        return 'Phụ 1'
+                                                    if (
+                                                        semesterPayload.semesterType ===
+                                                        $Enums.SemesterType.SECOND_SUPPLEMENTARY
+                                                    )
+                                                        return 'Phụ 2'
+                                                    return ''
+                                                })()
+
+                                                const namHoc = (() => {
+                                                    const startYear = dayjs(
+                                                        semesterPayload.schoolYear.startDate
+                                                    ).year()
+                                                    const endYear = startYear + 1
+                                                    return `${startYear} - ${endYear}`
+                                                })()
+
+                                                const groupedPayload = Object.groupBy(
+                                                    payload,
+                                                    (item) =>
+                                                        item?.subject?.managementOrganization
+                                                            ?.sMa || 'MTA'
+                                                )
+                                                exportFromTemplate({
+                                                    templateUrl: getMinioUrl(
+                                                        '/mta/template/ke-hoach-dao-tao/bao-day.xlsx'
+                                                    ),
+                                                    fileName: `Bao_day_${dayjs().format('DD_MM_YYYY')}.xlsx`,
+                                                    fontFamily: 'Tahoma',
+                                                    fontSize: 9,
+                                                    sheets: Object.entries(groupedPayload).map(
+                                                        ([sMa, items = []]) => {
+                                                            const ngayGui = dayjs.unix(
+                                                                Math.min(
+                                                                    ...items.map(
+                                                                        (i) =>
+                                                                            dayjs(
+                                                                                i.sendLecturerAssignmentAt
+                                                                            ).unix() ??
+                                                                            Number.POSITIVE_INFINITY
+                                                                    )
+                                                                )
+                                                            )
+                                                            const ngayNhan = dayjs.unix(
+                                                                Math.max(
+                                                                    ...items.map(
+                                                                        (i) =>
+                                                                            dayjs(
+                                                                                i.sendLecturerAssignmentAt
+                                                                            ).unix() ??
+                                                                            Number.NEGATIVE_INFINITY
+                                                                    )
+                                                                )
+                                                            )
+
+                                                            const boMon = orgPayload.find(
+                                                                (e) => e.sMa === sMa
+                                                            )
+
+                                                            const khoa = orgPayload.find(
+                                                                (e) => e.Id === boMon?.sParentId
+                                                            )
+
+                                                            const itemBySubjectCode =
+                                                                Object.groupBy(
+                                                                    items,
+                                                                    (item) => item.subject.code
+                                                                )
+
+                                                            return {
+                                                                tableStartCell: {
+                                                                    col: 1,
+                                                                    row: 10,
+                                                                },
+                                                                data: {
+                                                                    khoa: khoa?.sTen || '',
+                                                                    bo_mon: boMon?.sTen || '',
+                                                                    ngay_gui: `Ngày ${ngayGui.format('DD')} tháng ${ngayGui.format('MM')} năm ${ngayGui.format(
+                                                                        'YYYY'
+                                                                    )}`,
+                                                                    ngay_nhan: `Ngày ${ngayNhan.format('DD')} tháng ${ngayNhan.format('MM')} năm ${ngayNhan.format(
+                                                                        'YYYY'
+                                                                    )}`,
+                                                                    hoc_ky: hocKy,
+                                                                    nam_hoc: namHoc,
+                                                                },
+                                                                rows: Object.entries(
+                                                                    itemBySubjectCode
+                                                                ).flatMap(
+                                                                    (
+                                                                        [_, subjectItems = []],
+                                                                        idxOfSubject
+                                                                    ) => {
+                                                                        return subjectItems.map(
+                                                                            (item, index) => {
+                                                                                const rowSpan =
+                                                                                    index === 0
+                                                                                        ? subjectItems.length
+                                                                                        : 1
+                                                                                return {
+                                                                                    cells: [
+                                                                                        {
+                                                                                            value:
+                                                                                                idxOfSubject +
+                                                                                                1,
+                                                                                            rowSpan,
+                                                                                            align: 'center',
+                                                                                        },
+                                                                                        {
+                                                                                            value: item
+                                                                                                .subject
+                                                                                                .code,
+                                                                                            rowSpan,
+                                                                                        },
+                                                                                        {
+                                                                                            value: item
+                                                                                                .subject
+                                                                                                .name,
+                                                                                            rowSpan,
+                                                                                        },
+                                                                                        {
+                                                                                            value: item
+                                                                                                .subject
+                                                                                                .credit,
+                                                                                            rowSpan,
+                                                                                            align: 'right',
+                                                                                        },
+                                                                                        {
+                                                                                            value: Math.floor(
+                                                                                                item
+                                                                                                    .subject
+                                                                                                    .period /
+                                                                                                    15
+                                                                                            ), // dvht
+                                                                                            rowSpan,
+                                                                                            align: 'right',
+                                                                                        },
+                                                                                        {
+                                                                                            value: item
+                                                                                                .subject
+                                                                                                .period, //
+                                                                                            rowSpan,
+                                                                                            align: 'right',
+                                                                                        },
+                                                                                        {
+                                                                                            value: subjectItems.length, //
+                                                                                            rowSpan,
+                                                                                            align: 'right',
+                                                                                        },
+                                                                                        {
+                                                                                            value: item.schedule
+                                                                                                ? SUBJECT_CLASS_SCHEDULE_TYPE[
+                                                                                                      item.schedule as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                                                                                  ]
+                                                                                                : '',
+                                                                                            align: 'center',
+                                                                                        },
+                                                                                        {
+                                                                                            value: item.fixedClasses.reduce(
+                                                                                                (
+                                                                                                    acc,
+                                                                                                    curr
+                                                                                                ) =>
+                                                                                                    acc +
+                                                                                                    curr
+                                                                                                        ._count
+                                                                                                        .students,
+                                                                                                0
+                                                                                            ),
+                                                                                        },
+                                                                                        {
+                                                                                            value: item.fixedClasses
+                                                                                                .map(
+                                                                                                    (
+                                                                                                        fc
+                                                                                                    ) =>
+                                                                                                        fc.code
+                                                                                                )
+                                                                                                .join(
+                                                                                                    ', '
+                                                                                                ),
+                                                                                        },
+                                                                                        {
+                                                                                            value:
+                                                                                                item
+                                                                                                    .trainingLocation
+                                                                                                    ?.name ??
+                                                                                                '',
+                                                                                        },
+                                                                                        {
+                                                                                            value:
+                                                                                                item
+                                                                                                    .mainLecturer
+                                                                                                    ?.userProfile
+                                                                                                    ?.fullname ||
+                                                                                                '',
+                                                                                        },
+                                                                                        {
+                                                                                            value:
+                                                                                                item
+                                                                                                    .extraLecturer
+                                                                                                    ?.userProfile
+                                                                                                    ?.fullname ||
+                                                                                                '',
+                                                                                        },
+                                                                                        {
+                                                                                            value: item.room
+                                                                                                ? item
+                                                                                                      .room
+                                                                                                      .name
+                                                                                                : '',
+                                                                                        },
+                                                                                        {
+                                                                                            value: item.examType
+                                                                                                ? getExamTypeLabel(
+                                                                                                      item.examType
+                                                                                                  )
+                                                                                                : '',
+                                                                                        },
+                                                                                    ],
+                                                                                }
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                ),
+                                                                sheet: sMa,
+                                                            }
+                                                        }
+                                                    ),
+                                                })
+                                            } catch (error) {
+                                                console.log('error', error)
+                                            }
+                                        }}
                                         type="primary"
-                                        className="bg-yellow-500 text-black"
-                                        onClick={() => onOpenModalNhapTKB(semesterId || '')}
+                                        className="bg-blue-500"
                                     >
-                                        4. Nhập từ TKB
+                                        3. Xuất báo dạy
                                     </Button>
                                 )}
+                                {!khoaBoMon &&
+                                    can(
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                        'NHAP_EXCEL'
+                                    ) && (
+                                        <Button
+                                            type="primary"
+                                            className="bg-yellow-500 text-black"
+                                            onClick={() => onOpenModalNhapTKB(semesterId || '')}
+                                        >
+                                            4. Nhập từ TKB
+                                        </Button>
+                                    )}
+                            </Flex>
                         </Flex>
-                    </Flex>
+                        <Divider className="m-0" />
+                    </Affix>
                 </Col>
                 <Col span={24}>
                     <Form
@@ -1402,11 +1589,14 @@ export default function PhanCongGiangDay({
                             }}
                             defaultExpandAll
                             onRow={(record) => {
+                                const recordSubjectClass = record as unknown as SubjectClass
                                 return {
                                     className: cn(
-                                        subjectClassForm?.[record.id]?.isEdit && 'bg-yellow-100',
-                                        subjectClassForm?.[record.id]?.submitLecturerAssignmentAt &&
+                                        !!recordSubjectClass?.submitLecturerAssignmentAt &&
                                             'bg-yellow-200',
+                                        !!recordSubjectClass?.approveLecturerAssignmentAt &&
+                                            'bg-green-200',
+                                        subjectClassForm?.[record.id]?.isEdit && 'bg-yellow-100',
                                         (!subjectClassForm?.[record.id]?.lecturerId ||
                                             !subjectClassForm?.[record.id]?.extraLecturerId ||
                                             !subjectClassForm?.[record.id]?.enterGradeLecturerId) &&
@@ -1426,8 +1616,10 @@ export default function PhanCongGiangDay({
                                         { value: true, label: 'Đã duyệt' },
                                         { value: false, label: 'Chưa duyệt' },
                                     ],
-                                    render: (_, record) => (
-                                        <>
+                                    render: (_, record) =>
+                                        record?.approveLecturerAssignmentAt ? (
+                                            <Checkbox checked />
+                                        ) : (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -1441,17 +1633,11 @@ export default function PhanCongGiangDay({
                                                     disabled={
                                                         subjectClassForm?.[record.id]?.cancelled ||
                                                         khoaBoMon ||
-                                                        !subjectClassForm?.[record.id]
-                                                            ?.lecturerId ||
-                                                        !subjectClassForm?.[record.id]
-                                                            ?.extraLecturerId ||
-                                                        !subjectClassForm?.[record.id]
-                                                            ?.enterGradeLecturerId
+                                                        !record?.submitLecturerAssignmentAt
                                                     }
                                                 />
                                             </FormItem>
-                                        </>
-                                    ),
+                                        ),
                                 },
                                 {
                                     title: 'PCGD',
@@ -1463,42 +1649,46 @@ export default function PhanCongGiangDay({
                                         { value: true, label: 'Đã phân công giảng dạy' },
                                         { value: false, label: 'Chưa phân công giảng dạy' },
                                     ],
-                                    render: (_, record) => (
-                                        <>
-                                            <FormItem
-                                                form={form}
-                                                name={['subjectClass', record.id, 'isEdit']}
-                                                hidden
-                                            />
-                                            <FormItem
-                                                form={form}
-                                                name={[
-                                                    'subjectClass',
-                                                    record.id,
-                                                    'submitLecturerAssignmentAt',
-                                                ]}
-                                                valuePropName="checked"
-                                            >
-                                                <Checkbox
-                                                    disabled={
-                                                        subjectClassForm?.[record.id]?.cancelled ||
-                                                        !!record?.submitLecturerAssignmentAt ||
-                                                        !khoaBoMon ||
-                                                        !subjectClassForm?.[record.id]
-                                                            ?.lecturerId ||
-                                                        !subjectClassForm?.[record.id]
-                                                            ?.extraLecturerId ||
-                                                        !subjectClassForm?.[record.id]
-                                                            ?.enterGradeLecturerId ||
-                                                        (!!record.lecturerAssignmentDeadline &&
-                                                            dayjs(
-                                                                record.lecturerAssignmentDeadline
-                                                            ).isBefore(dayjs().startOf('day')))
-                                                    }
+                                    render: (_, record) =>
+                                        !!record?.approveLecturerAssignmentAt ||
+                                        !!record?.submitLecturerAssignmentAt ? (
+                                            <Checkbox checked />
+                                        ) : (
+                                            <>
+                                                <FormItem
+                                                    form={form}
+                                                    name={['subjectClass', record.id, 'isEdit']}
+                                                    hidden
                                                 />
-                                            </FormItem>
-                                        </>
-                                    ),
+                                                <FormItem
+                                                    form={form}
+                                                    name={[
+                                                        'subjectClass',
+                                                        record.id,
+                                                        'submitLecturerAssignmentAt',
+                                                    ]}
+                                                    valuePropName="checked"
+                                                >
+                                                    <Checkbox
+                                                        disabled={
+                                                            subjectClassForm?.[record.id]
+                                                                ?.cancelled ||
+                                                            !khoaBoMon ||
+                                                            !subjectClassForm?.[record.id]
+                                                                ?.lecturerId ||
+                                                            !subjectClassForm?.[record.id]
+                                                                ?.extraLecturerId ||
+                                                            !subjectClassForm?.[record.id]
+                                                                ?.enterGradeLecturerId ||
+                                                            (!!record.lecturerAssignmentDeadline &&
+                                                                dayjs(
+                                                                    record.lecturerAssignmentDeadline
+                                                                ).isBefore(dayjs().startOf('day')))
+                                                        }
+                                                    />
+                                                </FormItem>
+                                            </>
+                                        ),
                                 },
                                 {
                                     title: 'Hạn PCGD',
@@ -1520,7 +1710,8 @@ export default function PhanCongGiangDay({
                                                     className="px-1"
                                                     placeholder="Chọn ngày"
                                                     disabled={
-                                                        subjectClassForm?.[record.id]?.cancelled
+                                                        subjectClassForm?.[record.id]?.cancelled ||
+                                                        !!record?.approveLecturerAssignmentAt
                                                     }
                                                 />
                                             </FormItem>
@@ -1746,6 +1937,9 @@ export default function PhanCongGiangDay({
                                                     }))}
                                                     allowClear
                                                     showSearch
+                                                    disabled={
+                                                        subjectClassForm?.[record.id]?.cancelled
+                                                    }
                                                     filterOption={(input, option) =>
                                                         (option?.label ?? '')
                                                             .toString()
@@ -1982,8 +2176,6 @@ export default function PhanCongGiangDay({
                                 pageSize: numberOfPages,
                                 total: count,
                                 onChange: (page, pageSize) => {
-                                    console.log(page, pageSize)
-
                                     if (numberOfPages === pageSize) {
                                         setCurrentPage(page)
                                     } else {
@@ -1996,6 +2188,19 @@ export default function PhanCongGiangDay({
                     </Form>
                 </Col>
             </Row>
+            <style>
+                {`
+                .readonly-checkbox.ant-checkbox-wrapper-disabled {
+                    opacity: 1;
+                    pointer-events: none; /* không click được */
+                    }
+
+                .readonly-checkbox .ant-checkbox-disabled .ant-checkbox-inner {
+                background-color: #fff;
+                border-color: #d9d9d9;
+                }
+                `}
+            </style>
         </div>
     )
 }

@@ -2911,6 +2911,9 @@ export const importPhanCongGiangDay = async (
     formData.append('file', importPhanCongGiangDay.file)
     formData.append('semesterId', importPhanCongGiangDay.semesterId)
     formData.append('trainingObjectTypeId', importPhanCongGiangDay.trainingObjectTypeId)
+    if (importPhanCongGiangDay.retake !== undefined && importPhanCongGiangDay.retake !== null) {
+        formData.append('retake', importPhanCongGiangDay.retake.toString())
+    }
     if (importPhanCongGiangDay.fileType !== undefined) {
         formData.append('fileType', importPhanCongGiangDay.fileType)
     }
