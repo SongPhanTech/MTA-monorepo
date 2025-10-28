@@ -501,6 +501,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
                         description: 'Đợt xét tốt nghiệp',
                     },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_IN_PHU_LUC_VAN_BANG_PHOI_BANG_TOT_NGHIEP,
+                        label: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
+                        path: ROUTER_PATH.QL_DAO_TAO.IN_PHU_LUC_VAN_BANG_PHOI_BANG_TOT_NGHIEP,
+                        description: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
+                    },
                 ],
             },
             {
@@ -704,16 +710,11 @@ const NAVIGATION: NavigationType = {
                         label: 'Tiêu chuẩn, tiêu chí',
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_TIEU_CHUAN_TIEU_CHI,
                     },
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_THANG_DIEM,
-                        label: 'Danh mục thang điểm',
-                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_THANG_DIEM,
-                    },
-                    {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                        label: 'Quản lý đợt tự đánh giá',
-                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
-                    },
+                    // {
+                    //     id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_THANG_DIEM,
+                    //     label: 'Danh mục thang điểm',
+                    //     path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_THANG_DIEM,
+                    // },
                     {
                         id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG,
                         label: 'Quản lý minh chứng',
@@ -725,10 +726,16 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA,
                     },
                     {
-                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
-                        label: 'Hội đồng thư ký',
-                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
+                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                        label: 'Quản lý đợt tự đánh giá',
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                     },
+
+                    // {
+                    //     id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
+                    //     label: 'Hội đồng thư ký',
+                    //     path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY,
+                    // },
                 ],
             },
         ],
