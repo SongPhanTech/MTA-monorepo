@@ -96,7 +96,7 @@ app.openapi(createClusterSurvey, async (c) => {
     } = c.req.valid('json')
 
     await prisma.$transaction(async (tx) => {
-        await tx.clusterSurvey.create({
+        const cluster = await tx.clusterSurvey.create({
             data: {
                 ...payload,
                 surveyTopic: {
@@ -123,6 +123,7 @@ app.openapi(createClusterSurvey, async (c) => {
         const surveys = await tx.survey.createManyAndReturn({
             data: lecturerIds.map((lectureId) => ({
                 ...payload,
+                clusterSurveyId: cluster.id,
                 lectureId,
                 surveyTopicId,
             })),
