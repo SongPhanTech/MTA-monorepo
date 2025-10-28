@@ -1,8 +1,18 @@
 import { jwtDecode } from 'jwt-decode'
 import type { Session } from '..'
 
-const auth = async (token: string, cookie: string): Promise<Session | null> => {
-    if (!token) {
+const auth = async ({
+    xToken,
+    appCode,
+    tenantCode,
+    cookie,
+}: {
+    xToken: string
+    appCode: string
+    tenantCode: string
+    cookie: string
+}): Promise<Session | null> => {
+    if (!xToken) {
         return null
     }
     const issuer = process.env.AUTH_ISSUER
@@ -10,7 +20,11 @@ const auth = async (token: string, cookie: string): Promise<Session | null> => {
         throw new Error('AUTH_ISSUER environment variable is not set')
     }
     const response = await fetch(`${issuer}/authsso/me`, {
-        headers: { Cookie: cookie },
+        headers: {
+            Cookie: cookie,
+            'K-AppCode': appCode,
+            'K-TenantCode': tenantCode,
+        },
     })
 
     if (!response.ok) {
@@ -23,8 +37,8 @@ const auth = async (token: string, cookie: string): Promise<Session | null> => {
         throw new Error('User is not authenticated')
     }
     return {
-        ...(jwtDecode(token) as Session),
-        access_token: token,
+        ...(jwtDecode(xToken) as Session),
+        access_token: xToken,
     }
 }
 
