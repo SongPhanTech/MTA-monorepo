@@ -3330,6 +3330,8 @@ exports.Prisma.ExamScalarFieldEnum = {
   updatedAt: 'updatedAt',
   status: 'status',
   questionBankId: 'questionBankId',
+  lockExamSessions: 'lockExamSessions',
+  createdExamCode: 'createdExamCode',
   lockExamCode: 'lockExamCode',
   duration: 'duration'
 };

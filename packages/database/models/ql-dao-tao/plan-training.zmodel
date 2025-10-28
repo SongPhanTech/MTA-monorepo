@@ -868,9 +868,12 @@ model SubjectClass extends BaseNoCode {
   // khi xuất phiếu điểm cuối cùng
   issuedScoreAt               DateTime? // ngày xuất phiếu điểm
   
-  // khoá khi xuất phiếu điểm, P13 có thể mở khoá
-  isLockScore                 Boolean               @default(false) // khoá điểm CC/TX
-  isLockExamScore             Boolean               @default(true) // khoá điểm thi
+  // khoá khi xuất phiếu điểm, lên DS thi. (P13 có thể mở khoá)
+  /// khoá điểm CC/TX
+  isLockScore                 Boolean               @default(false)
+  // khoá khi xuất phiếu điểm. (P13 có thể mở khoá)
+  /// khoá điểm thi
+  isLockExamScore             Boolean               @default(true)
 
   // P13 kiểm tra phiếu điểm và gửi
   scoreSubmitted              Boolean               @default(false)
