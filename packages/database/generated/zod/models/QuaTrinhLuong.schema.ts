@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -22,10 +21,26 @@ const baseSchema = z.object({
     phuCapKhac: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    tuNgay: z.coerce.date().nullish(),
+    denNgay: z.coerce.date().nullish(),
+    heSo: z.string().nullish(),
+    maNgach: z.string(),
+    phuCapChucVu: z.string().nullish(),
+    phuCapKhac: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    ngach: z.record(z.unknown()),
-    bacLuong: z.record(z.unknown()),
-    userProfile: z.record(z.unknown()),
+    ngach: z.record(z.string(), z.unknown()),
+    bacLuong: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -51,7 +66,7 @@ export const QuaTrinhLuongSchema = QuaTrinhLuongScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const QuaTrinhLuongPrismaCreateSchema = baseSchema.partial().passthrough();
+export const QuaTrinhLuongPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -61,11 +76,11 @@ export const QuaTrinhLuongPrismaCreateSchema = baseSchema.partial().passthrough(
 export const QuaTrinhLuongPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     tuNgay: z.coerce.date().nullish(),
     denNgay: z.coerce.date().nullish(),
     heSo: z.string().nullish(),
@@ -78,7 +93,7 @@ export const QuaTrinhLuongPrismaUpdateSchema = z.object({
 /**
  * `QuaTrinhLuong` schema for create operations excluding foreign keys and relations.
  */
-export const QuaTrinhLuongCreateScalarSchema = baseSchema.partial({
+export const QuaTrinhLuongCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -92,7 +107,7 @@ export const QuaTrinhLuongCreateSchema = QuaTrinhLuongCreateScalarSchema.merge(f
 /**
  * `QuaTrinhLuong` schema for update operations excluding foreign keys and relations.
  */
-export const QuaTrinhLuongUpdateScalarSchema = baseSchema.partial();
+export const QuaTrinhLuongUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

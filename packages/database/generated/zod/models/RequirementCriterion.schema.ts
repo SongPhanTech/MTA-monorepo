@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -21,8 +20,23 @@ const baseSchema = z.object({
     collectionMethod: z.string().default(""),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    order: z.number(),
+    name: z.string(),
+    questions: z.array(z.string()),
+    evidencePlaces: z.string(),
+    collectionMethod: z.string(),
+}
+).strict();
 const relationSchema = z.object({
-    evaluationCriterion: z.record(z.unknown()),
+    evaluationCriterion: z.record(z.string(), z.unknown()),
     evidences: z.array(z.unknown()).optional(),
 }
 );
@@ -47,7 +61,7 @@ export const RequirementCriterionSchema = RequirementCriterionScalarSchema.merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const RequirementCriterionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const RequirementCriterionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -57,23 +71,23 @@ export const RequirementCriterionPrismaCreateSchema = baseSchema.partial().passt
 export const RequirementCriterionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    order: z.union([z.number(), z.record(z.unknown())]),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    order: z.union([z.number(), z.record(z.string(), z.unknown())]),
     name: z.string(),
     questions: z.array(z.string()),
-    evidencePlaces: z.string().default(""),
-    collectionMethod: z.string().default("")
+    evidencePlaces: z.string(),
+    collectionMethod: z.string()
 }).partial().passthrough();
 
 
 /**
  * `RequirementCriterion` schema for create operations excluding foreign keys and relations.
  */
-export const RequirementCriterionCreateScalarSchema = baseSchema.partial({
+export const RequirementCriterionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, questions: true, evidencePlaces: true, collectionMethod: true
 });
 
@@ -87,7 +101,7 @@ export const RequirementCriterionCreateSchema = RequirementCriterionCreateScalar
 /**
  * `RequirementCriterion` schema for update operations excluding foreign keys and relations.
  */
-export const RequirementCriterionUpdateScalarSchema = baseSchema.partial();
+export const RequirementCriterionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

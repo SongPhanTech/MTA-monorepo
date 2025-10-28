@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,9 +18,22 @@ const baseSchema = z.object({
     ngayNhanQuyetDinh: z.coerce.date().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    noiRaQuyetDinh: z.string().nullish(),
+    capRaQuyetDinh: z.string().nullish(),
+    ngayNhanQuyetDinh: z.coerce.date().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    capBac: z.record(z.unknown()),
-    userProfile: z.record(z.unknown()),
+    capBac: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -46,7 +58,7 @@ export const CapBacSchema = CapBacScalarSchema.merge(fkSchema).merge(relationSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const CapBacPrismaCreateSchema = baseSchema.partial().passthrough();
+export const CapBacPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,11 +68,11 @@ export const CapBacPrismaCreateSchema = baseSchema.partial().passthrough();
 export const CapBacPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     noiRaQuyetDinh: z.string().nullish(),
     capRaQuyetDinh: z.string().nullish(),
     ngayNhanQuyetDinh: z.coerce.date().nullish()
@@ -70,7 +82,7 @@ export const CapBacPrismaUpdateSchema = z.object({
 /**
  * `CapBac` schema for create operations excluding foreign keys and relations.
  */
-export const CapBacCreateScalarSchema = baseSchema.partial({
+export const CapBacCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -84,7 +96,7 @@ export const CapBacCreateSchema = CapBacCreateScalarSchema.merge(fkSchema);
 /**
  * `CapBac` schema for update operations excluding foreign keys and relations.
  */
-export const CapBacUpdateScalarSchema = baseSchema.partial();
+export const CapBacUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

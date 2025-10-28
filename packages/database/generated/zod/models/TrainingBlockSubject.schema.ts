@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { SubjectRequirementType } from '../../zenstack/models';
@@ -22,9 +21,23 @@ const baseSchema = z.object({
     graduation: z.boolean(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    semester: z.number().nullish(),
+    type: SubjectRequirementTypeSchema,
+    useForFinalScore: z.boolean(),
+    graduation: z.boolean(),
+}
+).strict();
 const relationSchema = z.object({
-    subject: z.record(z.unknown()),
-    trainingBlockOnCurriculumVersion: z.record(z.unknown()),
+    subject: z.record(z.string(), z.unknown()),
+    trainingBlockOnCurriculumVersion: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -49,7 +62,7 @@ export const TrainingBlockSubjectSchema = TrainingBlockSubjectScalarSchema.merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingBlockSubjectPrismaCreateSchema = baseSchema.partial().passthrough();
+export const TrainingBlockSubjectPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -59,12 +72,12 @@ export const TrainingBlockSubjectPrismaCreateSchema = baseSchema.partial().passt
 export const TrainingBlockSubjectPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    semester: z.union([z.number().nullish(), z.record(z.unknown())]),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    semester: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     type: SubjectRequirementTypeSchema,
     useForFinalScore: z.boolean(),
     graduation: z.boolean()
@@ -74,7 +87,7 @@ export const TrainingBlockSubjectPrismaUpdateSchema = z.object({
 /**
  * `TrainingBlockSubject` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingBlockSubjectCreateScalarSchema = baseSchema.partial({
+export const TrainingBlockSubjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, type: true
 });
 
@@ -88,7 +101,7 @@ export const TrainingBlockSubjectCreateSchema = TrainingBlockSubjectCreateScalar
 /**
  * `TrainingBlockSubject` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingBlockSubjectUpdateScalarSchema = baseSchema.partial();
+export const TrainingBlockSubjectUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

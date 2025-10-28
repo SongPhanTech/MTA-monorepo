@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,19 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string().nullish(),
+    email: z.string().nullish(),
+    phoneNumber: z.string().nullish(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string().nullish(),
     email: z.string().nullish(),
     phoneNumber: z.string().nullish(),
@@ -40,7 +52,7 @@ export const UserSessionSchema = UserSessionScalarSchema.merge(relationSchema.pa
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const UserSessionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const UserSessionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -50,11 +62,11 @@ export const UserSessionPrismaCreateSchema = baseSchema.partial().passthrough();
 export const UserSessionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string().nullish(),
     email: z.string().nullish(),
     phoneNumber: z.string().nullish()
@@ -64,7 +76,7 @@ export const UserSessionPrismaUpdateSchema = z.object({
 /**
  * `UserSession` schema for create operations excluding foreign keys and relations.
  */
-export const UserSessionCreateScalarSchema = baseSchema.partial({
+export const UserSessionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -72,7 +84,7 @@ export const UserSessionCreateScalarSchema = baseSchema.partial({
 /**
  * `UserSession` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const UserSessionCreateSchema = baseSchema.partial({
+export const UserSessionCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -80,7 +92,7 @@ export const UserSessionCreateSchema = baseSchema.partial({
 /**
  * `UserSession` schema for update operations excluding foreign keys and relations.
  */
-export const UserSessionUpdateScalarSchema = baseSchema.partial();
+export const UserSessionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

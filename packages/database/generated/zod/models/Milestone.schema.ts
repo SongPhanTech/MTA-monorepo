@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -21,8 +20,23 @@ const baseSchema = z.object({
     endDate: z.coerce.date(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    startPeriod: z.number().nullish(),
+    period: z.string().nullish(),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date(),
+}
+).strict();
 const relationSchema = z.object({
-    schoolYear: z.record(z.unknown()),
+    schoolYear: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -46,7 +60,7 @@ export const MilestoneSchema = MilestoneScalarSchema.merge(fkSchema).merge(relat
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const MilestonePrismaCreateSchema = baseSchema.partial().passthrough();
+export const MilestonePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,13 +70,13 @@ export const MilestonePrismaCreateSchema = baseSchema.partial().passthrough();
 export const MilestonePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
-    startPeriod: z.union([z.number().nullish(), z.record(z.unknown())]),
+    startPeriod: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     period: z.string().nullish(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date()
@@ -72,7 +86,7 @@ export const MilestonePrismaUpdateSchema = z.object({
 /**
  * `Milestone` schema for create operations excluding foreign keys and relations.
  */
-export const MilestoneCreateScalarSchema = baseSchema.partial({
+export const MilestoneCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -86,7 +100,7 @@ export const MilestoneCreateSchema = MilestoneCreateScalarSchema.merge(fkSchema)
 /**
  * `Milestone` schema for update operations excluding foreign keys and relations.
  */
-export const MilestoneUpdateScalarSchema = baseSchema.partial();
+export const MilestoneUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

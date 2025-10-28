@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { type QueryContext, type CrudContract, type PermissionCheckerContext } from "@zenstackhq/runtime";
 import { allFieldsEqual } from "@zenstackhq/runtime/validation";

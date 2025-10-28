@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -23,6 +22,25 @@ const baseSchema = z.object({
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
     iLoaiChucDanh: z.number().default(0).nullish(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    Id: z.string().uuid(),
+    sMa: z.string().nullish(),
+    sTen: z.string().nullish(),
+    sGhiChu: z.string().nullish(),
+    iSTT: z.number().nullish(),
+    bActive: z.boolean().nullish(),
+    bDeleted: z.boolean().nullish(),
+    bSystem: z.boolean().nullish(),
+    iDictionaryKey: z.number().nullish(),
+    dNgayTao: z.coerce.date().nullish(),
+    dNgaySua: z.coerce.date().nullish(),
+    sNguoiTao: z.string().nullish(),
+    sNguoiSua: z.string().nullish(),
+    sThietBiTao: z.string().nullish(),
+    sThietBiSua: z.string().nullish(),
+    iLoaiChucDanh: z.number().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -46,7 +64,7 @@ export const DM_ChucDanhSchema = DM_ChucDanhScalarSchema.merge(relationSchema.pa
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DM_ChucDanhPrismaCreateSchema = baseSchema.partial().passthrough();
+export const DM_ChucDanhPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -58,25 +76,25 @@ export const DM_ChucDanhPrismaUpdateSchema = z.object({
     sMa: z.string().nullish(),
     sTen: z.string().nullish(),
     sGhiChu: z.string().nullish(),
-    iSTT: z.union([z.number().default(0).nullish(), z.record(z.unknown())]),
-    bActive: z.boolean().default(true).nullish(),
-    bDeleted: z.boolean().default(false).nullish(),
-    bSystem: z.boolean().default(false).nullish(),
-    iDictionaryKey: z.union([z.number().default(0).nullish(), z.record(z.unknown())]),
+    iSTT: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    bActive: z.boolean().nullish(),
+    bDeleted: z.boolean().nullish(),
+    bSystem: z.boolean().nullish(),
+    iDictionaryKey: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     dNgayTao: z.coerce.date().nullish(),
     dNgaySua: z.coerce.date().nullish(),
     sNguoiTao: z.string().nullish(),
     sNguoiSua: z.string().nullish(),
     sThietBiTao: z.string().nullish(),
     sThietBiSua: z.string().nullish(),
-    iLoaiChucDanh: z.union([z.number().default(0).nullish(), z.record(z.unknown())])
+    iLoaiChucDanh: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `DM_ChucDanh` schema for create operations excluding foreign keys and relations.
  */
-export const DM_ChucDanhCreateScalarSchema = baseSchema.partial({
+export const DM_ChucDanhCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     Id: true, iSTT: true, bActive: true, bDeleted: true, bSystem: true, iDictionaryKey: true, iLoaiChucDanh: true
 });
 
@@ -84,7 +102,7 @@ export const DM_ChucDanhCreateScalarSchema = baseSchema.partial({
 /**
  * `DM_ChucDanh` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const DM_ChucDanhCreateSchema = baseSchema.partial({
+export const DM_ChucDanhCreateSchema = baseSchemaWithoutDefaults.partial({
     Id: true, iSTT: true, bActive: true, bDeleted: true, bSystem: true, iDictionaryKey: true, iLoaiChucDanh: true
 });
 
@@ -92,7 +110,7 @@ export const DM_ChucDanhCreateSchema = baseSchema.partial({
 /**
  * `DM_ChucDanh` schema for update operations excluding foreign keys and relations.
  */
-export const DM_ChucDanhUpdateScalarSchema = baseSchema.partial();
+export const DM_ChucDanhUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

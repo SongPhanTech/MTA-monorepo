@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { TemplateFileTypeSchema } from '../enums/TemplateFileType.schema';
@@ -20,6 +19,21 @@ const baseSchema = z.object({
     fileType: TemplateFileTypeSchema.nullish(),
     extensions: z.string().nullish(),
     numberField: z.number().default(0).nullish(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    path: z.string(),
+    fileType: TemplateFileTypeSchema.nullish(),
+    extensions: z.string().nullish(),
+    numberField: z.number().nullish(),
 }
 ).strict();
 
@@ -39,7 +53,7 @@ export const TemplateFileSchema = TemplateFileScalarSchema;
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TemplateFilePrismaCreateSchema = baseSchema.partial().passthrough();
+export const TemplateFilePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -49,23 +63,23 @@ export const TemplateFilePrismaCreateSchema = baseSchema.partial().passthrough()
 export const TemplateFilePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     path: z.string(),
     fileType: TemplateFileTypeSchema.nullish(),
     extensions: z.string().nullish(),
-    numberField: z.union([z.number().default(0).nullish(), z.record(z.unknown())])
+    numberField: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `TemplateFile` schema for create operations excluding foreign keys and relations.
  */
-export const TemplateFileCreateScalarSchema = baseSchema.partial({
+export const TemplateFileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, numberField: true
 });
 
@@ -73,7 +87,7 @@ export const TemplateFileCreateScalarSchema = baseSchema.partial({
 /**
  * `TemplateFile` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const TemplateFileCreateSchema = baseSchema.partial({
+export const TemplateFileCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, numberField: true
 });
 
@@ -81,7 +95,7 @@ export const TemplateFileCreateSchema = baseSchema.partial({
 /**
  * `TemplateFile` schema for update operations excluding foreign keys and relations.
  */
-export const TemplateFileUpdateScalarSchema = baseSchema.partial();
+export const TemplateFileUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

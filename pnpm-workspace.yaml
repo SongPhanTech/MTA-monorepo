@@ -54,10 +54,10 @@ catalog:
   '@types/react': 18.3.24
   '@types/react-dom': ^18.3
   '@types/react-image-fallback': ^8.0.6
-  '@zenstackhq/openapi': ^2.16.1
-  '@zenstackhq/runtime': ^2.16.1
-  '@zenstackhq/server': ^2.16.1
-  '@zenstackhq/tanstack-query': ^2.16.1
+  '@zenstackhq/openapi': ^2.20.1
+  '@zenstackhq/runtime': ^2.20.1
+  '@zenstackhq/server': ^2.20.1
+  '@zenstackhq/tanstack-query': ^2.20.1
   '@tanstack/react-query': 5.90.5
   antd: ^5.23.1
   autoprefixer: ^10.4.20
@@ -131,7 +131,7 @@ catalog:
   xlsx: https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz
   xlsx-style: ^0.8.13
   xlsx-template: ^1.4.4
-  zenstack: ^2.16.1
+  zenstack: ^2.20.1
   zod: ^3.25.76
 
 ignoredBuiltDependencies:

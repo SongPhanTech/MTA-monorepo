@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -20,8 +19,22 @@ const baseSchema = z.object({
     ghiChu: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    tenDoiTuong: z.string().nullish(),
+    ngayBatDau: z.coerce.date().nullish(),
+    ngayKetThuc: z.coerce.date().nullish(),
+    ghiChu: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    userProfile: z.record(z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -45,7 +58,7 @@ export const DoiTuongChinhSachSchema = DoiTuongChinhSachScalarSchema.merge(fkSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const DoiTuongChinhSachPrismaCreateSchema = baseSchema.partial().passthrough();
+export const DoiTuongChinhSachPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -55,11 +68,11 @@ export const DoiTuongChinhSachPrismaCreateSchema = baseSchema.partial().passthro
 export const DoiTuongChinhSachPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     tenDoiTuong: z.string().nullish(),
     ngayBatDau: z.coerce.date().nullish(),
     ngayKetThuc: z.coerce.date().nullish(),
@@ -70,7 +83,7 @@ export const DoiTuongChinhSachPrismaUpdateSchema = z.object({
 /**
  * `DoiTuongChinhSach` schema for create operations excluding foreign keys and relations.
  */
-export const DoiTuongChinhSachCreateScalarSchema = baseSchema.partial({
+export const DoiTuongChinhSachCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -84,7 +97,7 @@ export const DoiTuongChinhSachCreateSchema = DoiTuongChinhSachCreateScalarSchema
 /**
  * `DoiTuongChinhSach` schema for update operations excluding foreign keys and relations.
  */
-export const DoiTuongChinhSachUpdateScalarSchema = baseSchema.partial();
+export const DoiTuongChinhSachUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

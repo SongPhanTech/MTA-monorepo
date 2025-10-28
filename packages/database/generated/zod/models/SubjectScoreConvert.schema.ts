@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { ScoreConvertStatus } from '../../zenstack/models';
@@ -20,9 +19,21 @@ const baseSchema = z.object({
     score: z.number(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    status: ScoreConvertStatusSchema,
+    score: z.number(),
+}
+).strict();
 const relationSchema = z.object({
-    studentScoreConvert: z.record(z.unknown()),
-    subjectVersion: z.record(z.unknown()),
+    studentScoreConvert: z.record(z.string(), z.unknown()),
+    subjectVersion: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -47,7 +58,7 @@ export const SubjectScoreConvertSchema = SubjectScoreConvertScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SubjectScoreConvertPrismaCreateSchema = baseSchema.partial().passthrough();
+export const SubjectScoreConvertPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -57,20 +68,20 @@ export const SubjectScoreConvertPrismaCreateSchema = baseSchema.partial().passth
 export const SubjectScoreConvertPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     status: ScoreConvertStatusSchema,
-    score: z.union([z.number(), z.record(z.unknown())])
+    score: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `SubjectScoreConvert` schema for create operations excluding foreign keys and relations.
  */
-export const SubjectScoreConvertCreateScalarSchema = baseSchema.partial({
+export const SubjectScoreConvertCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
@@ -84,7 +95,7 @@ export const SubjectScoreConvertCreateSchema = SubjectScoreConvertCreateScalarSc
 /**
  * `SubjectScoreConvert` schema for update operations excluding foreign keys and relations.
  */
-export const SubjectScoreConvertUpdateScalarSchema = baseSchema.partial();
+export const SubjectScoreConvertUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
