@@ -1809,7 +1809,10 @@ export default function PhanCongGiangDay({
                                     type: 'input',
                                     dataIndex: 'mainLecturer',
                                     render: (__, record) =>
-                                        khoaBoMon ? (
+                                        khoaBoMon &&
+                                        !subjectClassForm?.[record.id]?.cancelled &&
+                                        !record?.submitLecturerAssignmentAt &&
+                                        !record?.approveLecturerAssignmentAt ? (
                                             <FormItem
                                                 form={form}
                                                 name={['subjectClass', record.id, 'lecturerId']}
@@ -1822,7 +1825,6 @@ export default function PhanCongGiangDay({
                                                             : []
                                                     }
                                                     disabled={
-                                                        subjectClassForm?.[record.id]?.cancelled ||
                                                         !!record?.submitLecturerAssignmentAt ||
                                                         (!!record.lecturerAssignmentDeadline &&
                                                             dayjs(
@@ -1836,7 +1838,6 @@ export default function PhanCongGiangDay({
                                                 />
                                             </FormItem>
                                         ) : (
-                                            !!record.submitLecturerAssignmentAt &&
                                             (record?.mainLecturer?.userProfile?.fullname ?? '-')
                                         ),
                                 },
@@ -1846,7 +1847,10 @@ export default function PhanCongGiangDay({
                                     type: 'input',
                                     dataIndex: 'extraLecturer',
                                     render: (__, record) =>
-                                        khoaBoMon ? (
+                                        khoaBoMon &&
+                                        !subjectClassForm?.[record.id]?.cancelled &&
+                                        !record?.submitLecturerAssignmentAt &&
+                                        !record?.approveLecturerAssignmentAt ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -1876,7 +1880,6 @@ export default function PhanCongGiangDay({
                                                 />
                                             </FormItem>
                                         ) : (
-                                            !!record.submitLecturerAssignmentAt &&
                                             (record?.extraLecturer?.userProfile?.fullname ?? '-')
                                         ),
                                 },
@@ -2024,7 +2027,10 @@ export default function PhanCongGiangDay({
                                     title: 'Giảng viên nhập điểm',
                                     align: 'center',
                                     render: (__, record) =>
-                                        khoaBoMon ? (
+                                        khoaBoMon &&
+                                        !subjectClassForm?.[record.id]?.cancelled &&
+                                        !record?.submitLecturerAssignmentAt &&
+                                        !record?.approveLecturerAssignmentAt ? (
                                             <FormItem
                                                 form={form}
                                                 name={[
@@ -2049,9 +2055,8 @@ export default function PhanCongGiangDay({
                                                 />
                                             </FormItem>
                                         ) : (
-                                            !!record.submitLecturerAssignmentAt &&
                                             (record?.enterGradeLecturer?.userProfile?.fullname ??
-                                                '-')
+                                            '-')
                                         ),
                                 },
 
