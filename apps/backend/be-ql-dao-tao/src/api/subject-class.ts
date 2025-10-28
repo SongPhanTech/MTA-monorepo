@@ -221,8 +221,8 @@ const setScoreDeadLine = createRoute({
                     schema: z.object({
                         startPadding: z.number().min(0).nullish(),
                         endPadding: z.number().min(0).nullish(),
-                        startDate: z.string().date().nullish(),
-                        endDate: z.string().date().nullish(),
+                        startDate: z.string().nullish(),
+                        endDate: z.string().nullish(),
                         classIds: z.array(z.string()).nullish(),
                         trainingObjectTypeId: z.string().optional(),
                         semesterId: z.string().nullish(),
@@ -909,8 +909,8 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
 app.openapi(setScoreDeadLine, async (c) => {
     const {
         classIds,
-        startPadding,
-        endPadding,
+        startPadding = 0,
+        endPadding = 0,
         startDate,
         endDate,
         trainingObjectTypeId,
@@ -939,12 +939,12 @@ app.openapi(setScoreDeadLine, async (c) => {
         UPDATE "ql-dao-tao"."SubjectClass"
         SET 
             "scoreDeadLineStart" = CASE
-            WHEN "examDate" IS NOT NULL THEN "examDate" - (${startPadding} * INTERVAL '1 day')
+            WHEN "examDate" IS NOT NULL AND ${startPadding ? 'TRUE' : 'FALSE'} THEN "examDate" - (${startPadding} * INTERVAL '1 day')
             WHEN ${startDate ? 'TRUE' : 'FALSE'} THEN DATE '${startDate || placeholder}'
             ELSE NULL
             END,
             "scoreDeadline" = CASE
-            WHEN "examDate" IS NOT NULL THEN "examDate" + (${endPadding} * INTERVAL '1 day')
+            WHEN "examDate" IS NOT NULL AND ${endPadding ? 'TRUE' : 'FALSE'} THEN "examDate" + (${endPadding} * INTERVAL '1 day')
             WHEN ${endDate ? 'TRUE' : 'FALSE'} THEN DATE '${endDate || placeholder}'
             ELSE NULL
             END
@@ -955,8 +955,14 @@ app.openapi(setScoreDeadLine, async (c) => {
 })
 
 app.openapi(setExamScoreDeadLine, async (c) => {
-    const { classIds, endPadding, endDate, trainingObjectTypeId, semesterId, overwrite } =
-        c.req.valid('json')
+    const {
+        classIds,
+        endPadding = 0,
+        endDate,
+        trainingObjectTypeId,
+        semesterId,
+        overwrite,
+    } = c.req.valid('json')
 
     const whereClauses: string[] = []
     whereClauses.push(`"trainingObjectTypeId" = '${trainingObjectTypeId}'`)
@@ -978,7 +984,7 @@ app.openapi(setExamScoreDeadLine, async (c) => {
         UPDATE "ql-dao-tao"."SubjectClass"
         SET 
             "examScoreDeadline" = CASE
-            WHEN "examDate" IS NOT NULL THEN "examDate" + (${endPadding} * INTERVAL '1 day')
+            WHEN "examDate" IS NOT NULL AND ${endPadding ? 'TRUE' : 'FALSE'} THEN "examDate" + (${endPadding} * INTERVAL '1 day')
             WHEN ${endDate ? 'TRUE' : 'FALSE'} THEN DATE '${endDate || placeholder}'
             ELSE NULL
             END
