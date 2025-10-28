@@ -583,8 +583,8 @@ export default function PhanCongGiangDay({
                 },
             })
             message.success('Gửi PCGD thành công')
+            form.resetFields()
             debouncedRefetch()
-            formBaoDay.resetFields()
         } catch (error: any) {
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
@@ -842,8 +842,8 @@ export default function PhanCongGiangDay({
                                                                 message.success(
                                                                     'Gửi PCGD thành công'
                                                                 )
+                                                                form.resetFields()
                                                                 debouncedRefetch()
-                                                                formBaoDay.resetFields()
                                                             } catch (error: any) {
                                                                 message.error(
                                                                     'Đã xảy ra lỗi, vui lòng kiểm tra lại'
