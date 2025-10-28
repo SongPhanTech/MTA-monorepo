@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -17,9 +16,20 @@ const baseSchema = z.object({
     name: z.string(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+}
+).strict();
 const relationSchema = z.object({
-    dM_Tinh: z.record(z.unknown()).optional(),
-    dM_Tinh_New: z.record(z.unknown()).optional(),
+    dM_Tinh: z.record(z.string(), z.unknown()).optional(),
+    dM_Tinh_New: z.record(z.string(), z.unknown()).optional(),
     students: z.array(z.unknown()).optional(),
     buildings: z.array(z.unknown()).optional(),
     subjectClasses: z.array(z.unknown()).optional(),
@@ -47,7 +57,7 @@ export const TrainingLocationSchema = TrainingLocationScalarSchema.merge(fkSchem
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingLocationPrismaCreateSchema = baseSchema.partial().passthrough();
+export const TrainingLocationPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -57,11 +67,11 @@ export const TrainingLocationPrismaCreateSchema = baseSchema.partial().passthrou
 export const TrainingLocationPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string()
 }).partial().passthrough();
 
@@ -69,7 +79,7 @@ export const TrainingLocationPrismaUpdateSchema = z.object({
 /**
  * `TrainingLocation` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingLocationCreateScalarSchema = baseSchema.partial({
+export const TrainingLocationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -83,7 +93,7 @@ export const TrainingLocationCreateSchema = TrainingLocationCreateScalarSchema.m
 /**
  * `TrainingLocation` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingLocationUpdateScalarSchema = baseSchema.partial();
+export const TrainingLocationUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

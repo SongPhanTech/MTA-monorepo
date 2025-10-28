@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,11 +17,23 @@ const baseSchema = z.object({
     to: z.coerce.date().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    from: z.coerce.date().nullish(),
+    to: z.coerce.date().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    userProfile: z.record(z.unknown()),
-    organization: z.record(z.unknown()),
-    staffType: z.record(z.unknown()),
-    staffPosition: z.record(z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
+    organization: z.record(z.string(), z.unknown()),
+    staffType: z.record(z.string(), z.unknown()),
+    staffPosition: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -49,7 +60,7 @@ export const StaffHistorySchema = StaffHistoryScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StaffHistoryPrismaCreateSchema = baseSchema.partial().passthrough();
+export const StaffHistoryPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -59,11 +70,11 @@ export const StaffHistoryPrismaCreateSchema = baseSchema.partial().passthrough()
 export const StaffHistoryPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish()
 }).partial().passthrough();
@@ -72,7 +83,7 @@ export const StaffHistoryPrismaUpdateSchema = z.object({
 /**
  * `StaffHistory` schema for create operations excluding foreign keys and relations.
  */
-export const StaffHistoryCreateScalarSchema = baseSchema.partial({
+export const StaffHistoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -86,7 +97,7 @@ export const StaffHistoryCreateSchema = StaffHistoryCreateScalarSchema.merge(fkS
 /**
  * `StaffHistory` schema for update operations excluding foreign keys and relations.
  */
-export const StaffHistoryUpdateScalarSchema = baseSchema.partial();
+export const StaffHistoryUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

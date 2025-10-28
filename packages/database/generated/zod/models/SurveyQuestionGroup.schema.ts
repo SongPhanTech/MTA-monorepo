@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,17 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
 }
 ).strict();
@@ -39,7 +49,7 @@ export const SurveyQuestionGroupSchema = SurveyQuestionGroupScalarSchema.merge(r
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SurveyQuestionGroupPrismaCreateSchema = baseSchema.partial().passthrough();
+export const SurveyQuestionGroupPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -49,11 +59,11 @@ export const SurveyQuestionGroupPrismaCreateSchema = baseSchema.partial().passth
 export const SurveyQuestionGroupPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string()
 }).partial().passthrough();
 
@@ -61,7 +71,7 @@ export const SurveyQuestionGroupPrismaUpdateSchema = z.object({
 /**
  * `SurveyQuestionGroup` schema for create operations excluding foreign keys and relations.
  */
-export const SurveyQuestionGroupCreateScalarSchema = baseSchema.partial({
+export const SurveyQuestionGroupCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -69,7 +79,7 @@ export const SurveyQuestionGroupCreateScalarSchema = baseSchema.partial({
 /**
  * `SurveyQuestionGroup` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const SurveyQuestionGroupCreateSchema = baseSchema.partial({
+export const SurveyQuestionGroupCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -77,7 +87,7 @@ export const SurveyQuestionGroupCreateSchema = baseSchema.partial({
 /**
  * `SurveyQuestionGroup` schema for update operations excluding foreign keys and relations.
  */
-export const SurveyQuestionGroupUpdateScalarSchema = baseSchema.partial();
+export const SurveyQuestionGroupUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

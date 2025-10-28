@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,9 +17,21 @@ const baseSchema = z.object({
     requireExplanation: z.boolean(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    answer: z.string(),
+    requireExplanation: z.boolean(),
+}
+).strict();
 const relationSchema = z.object({
-    survey: z.record(z.unknown()).optional(),
-    clusterSurvey: z.record(z.unknown()).optional(),
+    survey: z.record(z.string(), z.unknown()).optional(),
+    clusterSurvey: z.record(z.string(), z.unknown()).optional(),
     surveyResponses: z.array(z.unknown()).optional(),
 }
 );
@@ -46,7 +57,7 @@ export const SurveyChoiceSchema = SurveyChoiceScalarSchema.merge(fkSchema).merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SurveyChoicePrismaCreateSchema = baseSchema.partial().passthrough();
+export const SurveyChoicePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,11 +67,11 @@ export const SurveyChoicePrismaCreateSchema = baseSchema.partial().passthrough()
 export const SurveyChoicePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     answer: z.string(),
     requireExplanation: z.boolean()
 }).partial().passthrough();
@@ -69,7 +80,7 @@ export const SurveyChoicePrismaUpdateSchema = z.object({
 /**
  * `SurveyChoice` schema for create operations excluding foreign keys and relations.
  */
-export const SurveyChoiceCreateScalarSchema = baseSchema.partial({
+export const SurveyChoiceCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -83,7 +94,7 @@ export const SurveyChoiceCreateSchema = SurveyChoiceCreateScalarSchema.merge(fkS
 /**
  * `SurveyChoice` schema for update operations excluding foreign keys and relations.
  */
-export const SurveyChoiceUpdateScalarSchema = baseSchema.partial();
+export const SurveyChoiceUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

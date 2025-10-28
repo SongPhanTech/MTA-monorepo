@@ -92,7 +92,7 @@ export default function PhanCongGiangDay({
 
     const [form] = Form.useForm<TeachingAssignmentForm>()
 
-    const subjectClassForm = Form.useWatch('subjectClass', form)
+    const subjectClassForm = Form.useWatch('subjectClass', form) || {}
 
     const [formBaoDay] = Form.useForm<BaoDayForm>()
     const [formXepKhuVuc] = Form.useForm<XepKhuVucForm>()
@@ -166,15 +166,7 @@ export default function PhanCongGiangDay({
                           },
                       }
                     : {}),
-                ...(filters.organization && filters.organization.length > 0
-                    ? {
-                          subject: {
-                              managementOrganizationId: {
-                                  in: filters.organization,
-                              },
-                          },
-                      }
-                    : {}),
+
                 ...(filters.lecturerId?.length === 1
                     ? {
                           ...(filters.lecturerId[0]
@@ -263,6 +255,13 @@ export default function PhanCongGiangDay({
                       }
                     : {}),
                 subject: {
+                    ...(filters.organization && filters.organization.length > 0
+                        ? {
+                              managementOrganizationId: {
+                                  in: filters.organization,
+                              },
+                          }
+                        : {}),
                     planTrainingSubject: {
                         some: {
                             planTraining: {

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { DecimalSchema } from '../common';
@@ -41,9 +40,42 @@ const baseSchema = z.object({
     suspendedReason: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    attendanceScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
+    midtermScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
+    examScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
+    finalScore: DecimalSchema.refine(v => {
+        try {
+            return new Decimal(v.toString()).gte(0);
+        } catch {
+            return false;
+        }
+    }, { message: "Điểm tối thiểu là 0" }).refine(v => {
+        try {
+            return new Decimal(v.toString()).lte(10);
+        } catch {
+            return false;
+        }
+    }, { message: "Điểm tối đa là 10" }).nullish(),
+    manualFinalScore: z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(),
+    examPostponedReason: z.boolean().nullish(),
+    examPostponed: z.string().nullish(),
+    examBanned: z.boolean().nullish(),
+    examBannedReason: z.string().nullish(),
+    suspended: z.boolean().nullish(),
+    suspendedReason: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    studentSubjectScore: z.record(z.unknown()),
-    updatedBy: z.record(z.unknown()).optional(),
+    studentSubjectScore: z.record(z.string(), z.unknown()),
+    updatedBy: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -68,7 +100,7 @@ export const StudentSubjectScoreHistorySchema = StudentSubjectScoreHistoryScalar
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StudentSubjectScoreHistoryPrismaCreateSchema = baseSchema.partial().passthrough();
+export const StudentSubjectScoreHistoryPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -78,14 +110,14 @@ export const StudentSubjectScoreHistoryPrismaCreateSchema = baseSchema.partial()
 export const StudentSubjectScoreHistoryPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    attendanceScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
-    midtermScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
-    examScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    attendanceScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
+    midtermScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
+    examScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
     finalScore: DecimalSchema.refine(v => {
         try {
             return new Decimal(v.toString()).gte(0);
@@ -99,7 +131,7 @@ export const StudentSubjectScoreHistoryPrismaUpdateSchema = z.object({
             return false;
         }
     }, { message: "Điểm tối đa là 10" }).nullish(),
-    manualFinalScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.unknown())]),
+    manualFinalScore: z.union([z.number().gte(0, { message: "Điểm tối thiểu là 0" }).lte(10, { message: "Điểm tối đa là 10" }).nullish(), z.record(z.string(), z.unknown())]),
     examPostponedReason: z.boolean().nullish(),
     examPostponed: z.string().nullish(),
     examBanned: z.boolean().nullish(),
@@ -112,7 +144,7 @@ export const StudentSubjectScoreHistoryPrismaUpdateSchema = z.object({
 /**
  * `StudentSubjectScoreHistory` schema for create operations excluding foreign keys and relations.
  */
-export const StudentSubjectScoreHistoryCreateScalarSchema = baseSchema.partial({
+export const StudentSubjectScoreHistoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -126,7 +158,7 @@ export const StudentSubjectScoreHistoryCreateSchema = StudentSubjectScoreHistory
 /**
  * `StudentSubjectScoreHistory` schema for update operations excluding foreign keys and relations.
  */
-export const StudentSubjectScoreHistoryUpdateScalarSchema = baseSchema.partial();
+export const StudentSubjectScoreHistoryUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

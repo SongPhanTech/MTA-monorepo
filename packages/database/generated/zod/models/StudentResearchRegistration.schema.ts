@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { RegistrationStatus } from '../../zenstack/models';
@@ -24,10 +23,26 @@ const baseSchema = z.object({
     reviewNote: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    registeredAt: z.coerce.date(),
+    motivation: z.string().nullish(),
+    experience: z.string().nullish(),
+    status: RegistrationStatusSchema,
+    reviewedAt: z.coerce.date().nullish(),
+    reviewNote: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    student: z.record(z.unknown()),
-    researchProject: z.record(z.unknown()),
-    reviewedBy: z.record(z.unknown()).optional(),
+    student: z.record(z.string(), z.unknown()),
+    researchProject: z.record(z.string(), z.unknown()),
+    reviewedBy: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -53,7 +68,7 @@ export const StudentResearchRegistrationSchema = StudentResearchRegistrationScal
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StudentResearchRegistrationPrismaCreateSchema = baseSchema.partial().passthrough();
+export const StudentResearchRegistrationPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -63,12 +78,12 @@ export const StudentResearchRegistrationPrismaCreateSchema = baseSchema.partial(
 export const StudentResearchRegistrationPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    registeredAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    registeredAt: z.coerce.date(),
     motivation: z.string().nullish(),
     experience: z.string().nullish(),
     status: RegistrationStatusSchema,
@@ -80,7 +95,7 @@ export const StudentResearchRegistrationPrismaUpdateSchema = z.object({
 /**
  * `StudentResearchRegistration` schema for create operations excluding foreign keys and relations.
  */
-export const StudentResearchRegistrationCreateScalarSchema = baseSchema.partial({
+export const StudentResearchRegistrationCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, registeredAt: true, status: true
 });
 
@@ -94,7 +109,7 @@ export const StudentResearchRegistrationCreateSchema = StudentResearchRegistrati
 /**
  * `StudentResearchRegistration` schema for update operations excluding foreign keys and relations.
  */
-export const StudentResearchRegistrationUpdateScalarSchema = baseSchema.partial();
+export const StudentResearchRegistrationUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

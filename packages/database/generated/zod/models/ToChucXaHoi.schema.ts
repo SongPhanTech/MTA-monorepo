@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,9 +18,22 @@ const baseSchema = z.object({
     congViec: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    tuNgay: z.coerce.date().nullish(),
+    denNgay: z.coerce.date().nullish(),
+    congViec: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    ten: z.record(z.unknown()),
-    userProfile: z.record(z.unknown()),
+    ten: z.record(z.string(), z.unknown()),
+    userProfile: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -46,7 +58,7 @@ export const ToChucXaHoiSchema = ToChucXaHoiScalarSchema.merge(fkSchema).merge(r
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ToChucXaHoiPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ToChucXaHoiPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,11 +68,11 @@ export const ToChucXaHoiPrismaCreateSchema = baseSchema.partial().passthrough();
 export const ToChucXaHoiPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     tuNgay: z.coerce.date().nullish(),
     denNgay: z.coerce.date().nullish(),
     congViec: z.string().nullish()
@@ -70,7 +82,7 @@ export const ToChucXaHoiPrismaUpdateSchema = z.object({
 /**
  * `ToChucXaHoi` schema for create operations excluding foreign keys and relations.
  */
-export const ToChucXaHoiCreateScalarSchema = baseSchema.partial({
+export const ToChucXaHoiCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -84,7 +96,7 @@ export const ToChucXaHoiCreateSchema = ToChucXaHoiCreateScalarSchema.merge(fkSch
 /**
  * `ToChucXaHoi` schema for update operations excluding foreign keys and relations.
  */
-export const ToChucXaHoiUpdateScalarSchema = baseSchema.partial();
+export const ToChucXaHoiUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

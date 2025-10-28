@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -18,10 +17,22 @@ const baseSchema = z.object({
     electiveCreditsRequired: z.number().default(0),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    priority: z.number(),
+    electiveCreditsRequired: z.number(),
+}
+).strict();
 const relationSchema = z.object({
-    trainingBlock: z.record(z.unknown()),
-    curriculumVersion: z.record(z.unknown()).optional(),
-    curriculum: z.record(z.unknown()).optional(),
+    trainingBlock: z.record(z.string(), z.unknown()),
+    curriculumVersion: z.record(z.string(), z.unknown()).optional(),
+    curriculum: z.record(z.string(), z.unknown()).optional(),
     subjects: z.array(z.unknown()).optional(),
 }
 );
@@ -48,7 +59,7 @@ export const TrainingBlockOnCurriculumVersionSchema = TrainingBlockOnCurriculumV
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TrainingBlockOnCurriculumVersionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const TrainingBlockOnCurriculumVersionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -58,20 +69,20 @@ export const TrainingBlockOnCurriculumVersionPrismaCreateSchema = baseSchema.par
 export const TrainingBlockOnCurriculumVersionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    priority: z.union([z.number().default(0), z.record(z.unknown())]),
-    electiveCreditsRequired: z.union([z.number().default(0), z.record(z.unknown())])
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    priority: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    electiveCreditsRequired: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `TrainingBlockOnCurriculumVersion` schema for create operations excluding foreign keys and relations.
  */
-export const TrainingBlockOnCurriculumVersionCreateScalarSchema = baseSchema.partial({
+export const TrainingBlockOnCurriculumVersionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, priority: true, electiveCreditsRequired: true
 });
 
@@ -85,7 +96,7 @@ export const TrainingBlockOnCurriculumVersionCreateSchema = TrainingBlockOnCurri
 /**
  * `TrainingBlockOnCurriculumVersion` schema for update operations excluding foreign keys and relations.
  */
-export const TrainingBlockOnCurriculumVersionUpdateScalarSchema = baseSchema.partial();
+export const TrainingBlockOnCurriculumVersionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

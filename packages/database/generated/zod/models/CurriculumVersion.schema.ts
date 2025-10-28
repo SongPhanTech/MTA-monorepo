@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -36,13 +35,43 @@ const baseSchema = z.object({
     renderPath: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    shortName: z.string().nullish(),
+    englishName: z.string().nullish(),
+    numberOfSemesters: z.number().nullish(),
+    yearCreation: z.number().nullish(),
+    yearApplication: z.number().nullish(),
+    isLock: z.boolean(),
+    requiredCredits: z.number().nullish(),
+    electiveCredits: z.number().nullish(),
+    jobPosition: z.string().nullish(),
+    objectives: z.string().nullish(),
+    learningOutcome: z.string().nullish(),
+    inputStandard: z.string().nullish(),
+    time: z.string().nullish(),
+    structure: z.string().nullish(),
+    matrixLearningOutcome: z.string().nullish(),
+    summary: z.string().nullish(),
+    learningDiagram: z.string().nullish(),
+    guide: z.string().nullish(),
+    renderPath: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    trainingLanguage: z.record(z.unknown()).optional(),
-    curriculum: z.record(z.unknown()),
-    trainingObjectType: z.record(z.unknown()),
-    trainingLevel: z.record(z.unknown()),
-    trainingTime: z.record(z.unknown()),
-    diplomaType: z.record(z.unknown()).optional(),
+    trainingLanguage: z.record(z.string(), z.unknown()).optional(),
+    curriculum: z.record(z.string(), z.unknown()),
+    trainingObjectType: z.record(z.string(), z.unknown()),
+    trainingLevel: z.record(z.string(), z.unknown()),
+    trainingTime: z.record(z.string(), z.unknown()),
+    diplomaType: z.record(z.string(), z.unknown()).optional(),
     documentFiles: z.array(z.unknown()).optional(),
     trainingBlocks: z.array(z.unknown()).optional(),
     fixedClasses: z.array(z.unknown()).optional(),
@@ -76,7 +105,7 @@ export const CurriculumVersionSchema = CurriculumVersionScalarSchema.merge(fkSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const CurriculumVersionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const CurriculumVersionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -86,20 +115,20 @@ export const CurriculumVersionPrismaCreateSchema = baseSchema.partial().passthro
 export const CurriculumVersionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     shortName: z.string().nullish(),
     englishName: z.string().nullish(),
-    numberOfSemesters: z.union([z.number().nullish(), z.record(z.unknown())]),
-    yearCreation: z.union([z.number().nullish(), z.record(z.unknown())]),
-    yearApplication: z.union([z.number().nullish(), z.record(z.unknown())]),
-    isLock: z.boolean().default(false),
-    requiredCredits: z.union([z.number().nullish(), z.record(z.unknown())]),
-    electiveCredits: z.union([z.number().nullish(), z.record(z.unknown())]),
+    numberOfSemesters: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    yearCreation: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    yearApplication: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    isLock: z.boolean(),
+    requiredCredits: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    electiveCredits: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     jobPosition: z.string().nullish(),
     objectives: z.string().nullish(),
     learningOutcome: z.string().nullish(),
@@ -117,7 +146,7 @@ export const CurriculumVersionPrismaUpdateSchema = z.object({
 /**
  * `CurriculumVersion` schema for create operations excluding foreign keys and relations.
  */
-export const CurriculumVersionCreateScalarSchema = baseSchema.partial({
+export const CurriculumVersionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isLock: true
 });
 
@@ -131,7 +160,7 @@ export const CurriculumVersionCreateSchema = CurriculumVersionCreateScalarSchema
 /**
  * `CurriculumVersion` schema for update operations excluding foreign keys and relations.
  */
-export const CurriculumVersionUpdateScalarSchema = baseSchema.partial();
+export const CurriculumVersionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

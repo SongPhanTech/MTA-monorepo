@@ -3292,67 +3292,68 @@ model ClassRegisterLogs {
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
 model SubjectClass {
-  id                         String                @id() @default(cuid())
-  active                     Boolean               @default(true)
-  description                String?               @db.Text()
-  deletedAt                  DateTime?
-  createdAt                  DateTime              @default(now())
-  updatedAt                  DateTime              @default(now()) @updatedAt()
-  code                       String
-  name                       String
-  startDate                  DateTime?
-  endDate                    DateTime?
-  subject                    SubjectVersion        @relation(fields: [subjectId], references: [id])
-  subjectId                  String
-  schedule                   SubjectClassSchedule?
-  maxStudent                 Int
-  type                       SubjectClassType      @default(NORMAL)
-  status                     SubjectClassStatus    @default(DRAFT)
-  trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId       String
-  semester                   Semester              @relation(fields: [semesterId], references: [id])
-  semesterId                 String
-  cancelled                  Boolean               @default(false)
-  lecturerAssignmentDeadline DateTime?
-  sendLecturerAssignmentAt   DateTime?
-  submitLecturerAssignmentAt DateTime?
-  examDate                   DateTime?
-  examType                   ExamType?
-  exam                       Exam?                 @relation(fields: [examId], references: [id])
-  examId                     String?
+  id                          String                @id() @default(cuid())
+  active                      Boolean               @default(true)
+  description                 String?               @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime              @default(now())
+  updatedAt                   DateTime              @default(now()) @updatedAt()
+  code                        String
+  name                        String
+  startDate                   DateTime?
+  endDate                     DateTime?
+  subject                     SubjectVersion        @relation(fields: [subjectId], references: [id])
+  subjectId                   String
+  schedule                    SubjectClassSchedule?
+  maxStudent                  Int
+  type                        SubjectClassType      @default(NORMAL)
+  status                      SubjectClassStatus    @default(DRAFT)
+  trainingObjectType          TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId        String
+  semester                    Semester              @relation(fields: [semesterId], references: [id])
+  semesterId                  String
+  cancelled                   Boolean               @default(false)
+  lecturerAssignmentDeadline  DateTime?
+  sendLecturerAssignmentAt    DateTime?
+  submitLecturerAssignmentAt  DateTime?
+  approveLecturerAssignmentAt DateTime?
+  examDate                    DateTime?
+  examType                    ExamType?
+  exam                        Exam?                 @relation(fields: [examId], references: [id])
+  examId                      String?
   /// ngày bắt đầu nhập điểm CC/TX
-  scoreDeadLineStart         DateTime?
+  scoreDeadLineStart          DateTime?
   /// ngày kết thúc nhập điểm CC/TX
-  scoreDeadline              DateTime?
+  scoreDeadline               DateTime?
   /// hạn nhập điểm thi
-  examScoreDeadline          DateTime?
-  enteredScore               Boolean               @default(false)
-  enteredExamScore           Boolean               @default(false)
-  issuedScoreAt              DateTime?
-  isLockScore                Boolean               @default(false)
-  isLockExamScore            Boolean               @default(true)
-  scoreSubmitted             Boolean               @default(false)
-  scoreChecked               Boolean               @default(false)
-  room                       Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
-  roomId                     String?
-  trainingLocation           TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
-  trainingLocationId         String?
-  mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
-  lecturerId                 String?
-  extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
-  extraLecturerId            String?
-  enterGradeLecturer         Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
-  enterGradeLecturerId       String?
-  subjectClassStudent        StudentSubjectScore[]
-  fixedClasses               FixedClass[]
-  classSchedules             ClassSchedule[]
-  thesisProjects             ThesisProject[]
-  expertProfile              ExpertProfile[]
-  defenseRooms               Room[]                @relation("DefenseRooms")
-  surveyObjectTypes          SurveyObjectType[]
-  classRegisterLogs          ClassRegisterLogs[]
-  subjectClassTimes          SubjectClassTime[]
-  subjectClassHistory        SubjectClassHistory[]
+  examScoreDeadline           DateTime?
+  enteredScore                Boolean               @default(false)
+  enteredExamScore            Boolean               @default(false)
+  issuedScoreAt               DateTime?
+  isLockScore                 Boolean               @default(false)
+  isLockExamScore             Boolean               @default(true)
+  scoreSubmitted              Boolean               @default(false)
+  scoreChecked                Boolean               @default(false)
+  room                        Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
+  roomId                      String?
+  trainingLocation            TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocationId          String?
+  mainLecturer                Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  lecturerId                  String?
+  extraLecturer               Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId             String?
+  enterGradeLecturer          Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
+  enterGradeLecturerId        String?
+  subjectClassStudent         StudentSubjectScore[]
+  fixedClasses                FixedClass[]
+  classSchedules              ClassSchedule[]
+  thesisProjects              ThesisProject[]
+  expertProfile               ExpertProfile[]
+  defenseRooms                Room[]                @relation("DefenseRooms")
+  surveyObjectTypes           SurveyObjectType[]
+  classRegisterLogs           ClassRegisterLogs[]
+  subjectClassTimes           SubjectClassTime[]
+  subjectClassHistory         SubjectClassHistory[]
 
   @@schema("ql-dao-tao")
 }

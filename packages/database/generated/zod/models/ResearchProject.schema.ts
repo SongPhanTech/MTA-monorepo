@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { ResearchProjectStatus } from '../../zenstack/models';
@@ -31,9 +30,32 @@ const baseSchema = z.object({
     status: ResearchProjectStatusSchema,
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    title: z.string(),
+    summary: z.string(),
+    objectives: z.string().nullish(),
+    methodology: z.string().nullish(),
+    expectedResults: z.string().nullish(),
+    requirements: z.string().nullish(),
+    maxStudents: z.number(),
+    currentStudents: z.number(),
+    registrationStart: z.coerce.date(),
+    registrationEnd: z.coerce.date(),
+    projectStart: z.coerce.date().nullish(),
+    projectEnd: z.coerce.date().nullish(),
+    status: ResearchProjectStatusSchema,
+}
+).strict();
 const relationSchema = z.object({
-    supervisor: z.record(z.unknown()),
-    organization: z.record(z.unknown()),
+    supervisor: z.record(z.string(), z.unknown()),
+    organization: z.record(z.string(), z.unknown()),
     registrations: z.array(z.unknown()).optional(),
 }
 );
@@ -59,7 +81,7 @@ export const ResearchProjectSchema = ResearchProjectScalarSchema.merge(fkSchema)
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ResearchProjectPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ResearchProjectPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -69,19 +91,19 @@ export const ResearchProjectPrismaCreateSchema = baseSchema.partial().passthroug
 export const ResearchProjectPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     title: z.string(),
     summary: z.string(),
     objectives: z.string().nullish(),
     methodology: z.string().nullish(),
     expectedResults: z.string().nullish(),
     requirements: z.string().nullish(),
-    maxStudents: z.union([z.number(), z.record(z.unknown())]),
-    currentStudents: z.union([z.number().default(0), z.record(z.unknown())]),
+    maxStudents: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    currentStudents: z.union([z.number(), z.record(z.string(), z.unknown())]),
     registrationStart: z.coerce.date(),
     registrationEnd: z.coerce.date(),
     projectStart: z.coerce.date().nullish(),
@@ -93,7 +115,7 @@ export const ResearchProjectPrismaUpdateSchema = z.object({
 /**
  * `ResearchProject` schema for create operations excluding foreign keys and relations.
  */
-export const ResearchProjectCreateScalarSchema = baseSchema.partial({
+export const ResearchProjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, currentStudents: true, status: true
 });
 
@@ -107,7 +129,7 @@ export const ResearchProjectCreateSchema = ResearchProjectCreateScalarSchema.mer
 /**
  * `ResearchProject` schema for update operations excluding foreign keys and relations.
  */
-export const ResearchProjectUpdateScalarSchema = baseSchema.partial();
+export const ResearchProjectUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -23,9 +22,26 @@ const baseSchema = z.object({
     scoreChecked: z.boolean().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    scoreDeadLineStart: z.coerce.date().nullish(),
+    scoreDeadline: z.coerce.date().nullish(),
+    examScoreDeadline: z.coerce.date().nullish(),
+    isLockScore: z.boolean().nullish(),
+    isLockExamScore: z.boolean().nullish(),
+    scoreSubmitted: z.boolean().nullish(),
+    scoreChecked: z.boolean().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    subjectClass: z.record(z.unknown()),
-    updatedBy: z.record(z.unknown()).optional(),
+    subjectClass: z.record(z.string(), z.unknown()),
+    updatedBy: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -50,7 +66,7 @@ export const SubjectClassHistorySchema = SubjectClassHistoryScalarSchema.merge(f
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SubjectClassHistoryPrismaCreateSchema = baseSchema.partial().passthrough();
+export const SubjectClassHistoryPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -60,11 +76,11 @@ export const SubjectClassHistoryPrismaCreateSchema = baseSchema.partial().passth
 export const SubjectClassHistoryPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     scoreDeadLineStart: z.coerce.date().nullish(),
     scoreDeadline: z.coerce.date().nullish(),
     examScoreDeadline: z.coerce.date().nullish(),
@@ -78,7 +94,7 @@ export const SubjectClassHistoryPrismaUpdateSchema = z.object({
 /**
  * `SubjectClassHistory` schema for create operations excluding foreign keys and relations.
  */
-export const SubjectClassHistoryCreateScalarSchema = baseSchema.partial({
+export const SubjectClassHistoryCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -92,7 +108,7 @@ export const SubjectClassHistoryCreateSchema = SubjectClassHistoryCreateScalarSc
 /**
  * `SubjectClassHistory` schema for update operations excluding foreign keys and relations.
  */
-export const SubjectClassHistoryUpdateScalarSchema = baseSchema.partial();
+export const SubjectClassHistoryUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

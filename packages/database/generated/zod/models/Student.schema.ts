@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { StudentStatus } from '../../zenstack/models';
@@ -48,21 +47,61 @@ const baseSchema = z.object({
     militaryTrainingPass: z.boolean().default(false),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    note: z.string().nullish(),
+    from: z.coerce.date().nullish(),
+    to: z.coerce.date().nullish(),
+    registerNumber: z.string().nullish(),
+    doctoralCode: z.string().nullish(),
+    admissionCombination: z.string().nullish(),
+    entryScore: z.number().nullish(),
+    competencyScore: z.number().nullish(),
+    department: z.string().nullish(),
+    departmentAddress: z.string().nullish(),
+    careerYear: z.number().nullish(),
+    universitySchool: z.string().nullish(),
+    universityTrainingType: z.string().nullish(),
+    universityGraduationYear: z.number().nullish(),
+    universityMajor: z.string().nullish(),
+    universityRank: z.string().nullish(),
+    basic: z.number().nullish(),
+    facility: z.number().nullish(),
+    foreignLanguage: z.string().nullish(),
+    priorityReason: z.string().nullish(),
+    unionLeader: z.string().nullish(),
+    status: StudentStatusSchema,
+    academicWarningLevel: z.number(),
+    disciplinaryWarningLevel: z.number(),
+    suspended: z.boolean(),
+    expelled: z.boolean(),
+    foreignLangPass: z.boolean(),
+    ITCertificationPass: z.boolean(),
+    strengthTrainingPass: z.boolean(),
+    militaryTrainingPass: z.boolean(),
+}
+).strict();
 const relationSchema = z.object({
-    trainingLocation: z.record(z.unknown()).optional(),
+    trainingLocation: z.record(z.string(), z.unknown()).optional(),
     priorityObject: z.array(z.unknown()).optional(),
-    classMonitor: z.record(z.unknown()).optional(),
-    unionLeaderOf: z.record(z.unknown()).optional(),
-    fixedClass: z.record(z.unknown()).optional(),
+    classMonitor: z.record(z.string(), z.unknown()).optional(),
+    unionLeaderOf: z.record(z.string(), z.unknown()).optional(),
+    fixedClass: z.record(z.string(), z.unknown()).optional(),
     subjectClassStudent: z.array(z.unknown()).optional(),
-    userProfile: z.record(z.unknown()),
-    trainingLevel: z.record(z.unknown()).optional(),
-    trainingObjectType: z.record(z.unknown()).optional(),
-    trainingType: z.record(z.unknown()).optional(),
-    trainingForm: z.record(z.unknown()).optional(),
-    registrationArea: z.record(z.unknown()).optional(),
-    curriculumVersion: z.record(z.unknown()).optional(),
-    curriculumVersionParallel: z.record(z.unknown()).optional(),
+    userProfile: z.record(z.string(), z.unknown()),
+    trainingLevel: z.record(z.string(), z.unknown()).optional(),
+    trainingObjectType: z.record(z.string(), z.unknown()).optional(),
+    trainingType: z.record(z.string(), z.unknown()).optional(),
+    trainingForm: z.record(z.string(), z.unknown()).optional(),
+    registrationArea: z.record(z.string(), z.unknown()).optional(),
+    curriculumVersion: z.record(z.string(), z.unknown()).optional(),
+    curriculumVersionParallel: z.record(z.string(), z.unknown()).optional(),
     studentTrainingScore: z.array(z.unknown()).optional(),
     studentSemesterResult: z.array(z.unknown()).optional(),
     studentYearResult: z.array(z.unknown()).optional(),
@@ -73,7 +112,7 @@ const relationSchema = z.object({
     disciplinaryWarning: z.array(z.unknown()).optional(),
     studentAcademicDecision: z.array(z.unknown()).optional(),
     graduationApplications: z.array(z.unknown()).optional(),
-    graduationDecision: z.record(z.unknown()).optional(),
+    graduationDecision: z.record(z.string(), z.unknown()).optional(),
     surveySessions: z.array(z.unknown()).optional(),
     notifications: z.array(z.unknown()).optional(),
     researchRegistrations: z.array(z.unknown()).optional(),
@@ -115,7 +154,7 @@ export const StudentSchema = StudentScalarSchema.merge(fkSchema).merge(relationS
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StudentPrismaCreateSchema = baseSchema.partial().passthrough();
+export const StudentPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -125,48 +164,48 @@ export const StudentPrismaCreateSchema = baseSchema.partial().passthrough();
 export const StudentPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     note: z.string().nullish(),
     from: z.coerce.date().nullish(),
     to: z.coerce.date().nullish(),
     registerNumber: z.string().nullish(),
     doctoralCode: z.string().nullish(),
     admissionCombination: z.string().nullish(),
-    entryScore: z.union([z.number().nullish(), z.record(z.unknown())]),
-    competencyScore: z.union([z.number().nullish(), z.record(z.unknown())]),
+    entryScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    competencyScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     department: z.string().nullish(),
     departmentAddress: z.string().nullish(),
-    careerYear: z.union([z.number().nullish(), z.record(z.unknown())]),
+    careerYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     universitySchool: z.string().nullish(),
     universityTrainingType: z.string().nullish(),
-    universityGraduationYear: z.union([z.number().nullish(), z.record(z.unknown())]),
+    universityGraduationYear: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     universityMajor: z.string().nullish(),
     universityRank: z.string().nullish(),
-    basic: z.union([z.number().nullish(), z.record(z.unknown())]),
-    facility: z.union([z.number().nullish(), z.record(z.unknown())]),
+    basic: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    facility: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     foreignLanguage: z.string().nullish(),
     priorityReason: z.string().nullish(),
     unionLeader: z.string().nullish(),
     status: StudentStatusSchema,
-    academicWarningLevel: z.union([z.number().default(0), z.record(z.unknown())]),
-    disciplinaryWarningLevel: z.union([z.number().default(0), z.record(z.unknown())]),
-    suspended: z.boolean().default(false),
-    expelled: z.boolean().default(false),
-    foreignLangPass: z.boolean().default(false),
-    ITCertificationPass: z.boolean().default(false),
-    strengthTrainingPass: z.boolean().default(false),
-    militaryTrainingPass: z.boolean().default(false)
+    academicWarningLevel: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    disciplinaryWarningLevel: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    suspended: z.boolean(),
+    expelled: z.boolean(),
+    foreignLangPass: z.boolean(),
+    ITCertificationPass: z.boolean(),
+    strengthTrainingPass: z.boolean(),
+    militaryTrainingPass: z.boolean()
 }).partial().passthrough();
 
 
 /**
  * `Student` schema for create operations excluding foreign keys and relations.
  */
-export const StudentCreateScalarSchema = baseSchema.partial({
+export const StudentCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, status: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true, foreignLangPass: true, ITCertificationPass: true, strengthTrainingPass: true, militaryTrainingPass: true
 });
 
@@ -180,7 +219,7 @@ export const StudentCreateSchema = StudentCreateScalarSchema.merge(fkSchema);
 /**
  * `Student` schema for update operations excluding foreign keys and relations.
  */
-export const StudentUpdateScalarSchema = baseSchema.partial();
+export const StudentUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

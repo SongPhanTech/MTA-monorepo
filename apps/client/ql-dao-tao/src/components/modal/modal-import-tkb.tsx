@@ -98,7 +98,7 @@ const ModalNhapTKB = () => {
             onFinish={handleSubmit}
             open={isOpen}
             onCancel={handleCancel}
-            title={'Import danh sách phân công giảng dạy'}
+            title={'Import thời khoá biểu từ file Excel'}
             className="w-[60vw]"
             formProps={{
                 initialValues: {

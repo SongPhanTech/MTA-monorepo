@@ -3,9 +3,10 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
-const metadata = {
+import type { ModelMeta } from "@zenstackhq/runtime";
+
+const metadata: ModelMeta = {
     models: {
         config: {
             name: 'Config', fields: {
@@ -10112,6 +10113,10 @@ const metadata = {
                     isOptional: true,
                 }, submitLecturerAssignmentAt: {
                     name: "submitLecturerAssignmentAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, approveLecturerAssignmentAt: {
+                    name: "approveLecturerAssignmentAt",
                     type: "DateTime",
                     isOptional: true,
                 }, examDate: {

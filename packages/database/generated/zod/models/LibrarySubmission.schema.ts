@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -21,8 +20,23 @@ const baseSchema = z.object({
     confirmedById: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    submissionDate: z.coerce.date(),
+    isHardcopy: z.boolean(),
+    isSoftcopy: z.boolean(),
+    librarianNote: z.string().nullish(),
+    confirmedById: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    thesis: z.record(z.unknown()),
+    thesis: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -46,7 +60,7 @@ export const LibrarySubmissionSchema = LibrarySubmissionScalarSchema.merge(fkSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const LibrarySubmissionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const LibrarySubmissionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,14 +70,14 @@ export const LibrarySubmissionPrismaCreateSchema = baseSchema.partial().passthro
 export const LibrarySubmissionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    submissionDate: z.coerce.date().default(() => new Date()),
-    isHardcopy: z.boolean().default(false),
-    isSoftcopy: z.boolean().default(false),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    submissionDate: z.coerce.date(),
+    isHardcopy: z.boolean(),
+    isSoftcopy: z.boolean(),
     librarianNote: z.string().nullish(),
     confirmedById: z.string().nullish()
 }).partial().passthrough();
@@ -72,7 +86,7 @@ export const LibrarySubmissionPrismaUpdateSchema = z.object({
 /**
  * `LibrarySubmission` schema for create operations excluding foreign keys and relations.
  */
-export const LibrarySubmissionCreateScalarSchema = baseSchema.partial({
+export const LibrarySubmissionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, submissionDate: true, isHardcopy: true, isSoftcopy: true
 });
 
@@ -86,7 +100,7 @@ export const LibrarySubmissionCreateSchema = LibrarySubmissionCreateScalarSchema
 /**
  * `LibrarySubmission` schema for update operations excluding foreign keys and relations.
  */
-export const LibrarySubmissionUpdateScalarSchema = baseSchema.partial();
+export const LibrarySubmissionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

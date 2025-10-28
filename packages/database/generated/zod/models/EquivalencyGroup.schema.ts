@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,16 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
 }
 ).strict();
 const relationSchema = z.object({
@@ -37,7 +46,7 @@ export const EquivalencyGroupSchema = EquivalencyGroupScalarSchema.merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const EquivalencyGroupPrismaCreateSchema = baseSchema.partial().passthrough();
+export const EquivalencyGroupPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -47,18 +56,18 @@ export const EquivalencyGroupPrismaCreateSchema = baseSchema.partial().passthrou
 export const EquivalencyGroupPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date())
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date()
 }).partial().passthrough();
 
 
 /**
  * `EquivalencyGroup` schema for create operations excluding foreign keys and relations.
  */
-export const EquivalencyGroupCreateScalarSchema = baseSchema.partial({
+export const EquivalencyGroupCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -66,7 +75,7 @@ export const EquivalencyGroupCreateScalarSchema = baseSchema.partial({
 /**
  * `EquivalencyGroup` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const EquivalencyGroupCreateSchema = baseSchema.partial({
+export const EquivalencyGroupCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -74,7 +83,7 @@ export const EquivalencyGroupCreateSchema = baseSchema.partial({
 /**
  * `EquivalencyGroup` schema for update operations excluding foreign keys and relations.
  */
-export const EquivalencyGroupUpdateScalarSchema = baseSchema.partial();
+export const EquivalencyGroupUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
