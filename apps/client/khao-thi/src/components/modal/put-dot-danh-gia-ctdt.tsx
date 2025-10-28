@@ -2,9 +2,11 @@ import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import { createId, type EvaluationPeriod } from '@workspace/db'
 import {
+    useFindManyEvaluationCouncil,
     useFindManyStandardCatalog,
     useFindUniqueEvaluationPeriod,
     useUpdateEvaluationPeriod,
@@ -15,7 +17,9 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/vi'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-export type PutEvaluationPeriod = EvaluationPeriod
+export type PutEvaluationPeriod = EvaluationPeriod & {
+    councilIds: string[]
+}
 dayjs.locale('vi')
 
 type TreeNode = {
@@ -63,7 +67,7 @@ const PutEvaluationPeriod = () => {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { data: initialData } = useFindUniqueEvaluationPeriod(
-        { where: { id } },
+        { where: { id }, include: { councils: true } },
         { enabled: !!id }
     )
 
@@ -89,6 +93,11 @@ const PutEvaluationPeriod = () => {
         },
         { enabled: !id }
     )
+
+    const { data: evaluationCouncilData = [] } = useFindManyEvaluationCouncil({
+        select: { id: true, name: true },
+        orderBy: { createdAt: 'desc' },
+    })
 
     const treeData = useMemo(() => {
         return (
@@ -128,6 +137,8 @@ const PutEvaluationPeriod = () => {
 
     const { mutateAsync: updateEvaluationPeriod } = useUpdateEvaluationPeriod()
     async function onOk(output?: PutEvaluationPeriod) {
+        console.log('output', output)
+
         if (!output) return
         try {
             showSpinner()
@@ -138,7 +149,15 @@ const PutEvaluationPeriod = () => {
                 description: output.description,
             }
             if (id) {
-                await updateEvaluationPeriod({ data, where: { id } })
+                await updateEvaluationPeriod({
+                    data: {
+                        ...data,
+                        councils: {
+                            set: output.councilIds.map((councilId) => ({ id: councilId })),
+                        },
+                    },
+                    where: { id },
+                })
                 message.success('Cập nhật thành công')
             } else {
                 const periodId = createId()
@@ -212,6 +231,18 @@ const PutEvaluationPeriod = () => {
                             ),
                         },
                     },
+                    {
+                        model: 'EvaluationCouncil',
+                        operation: 'updateMany',
+                        data: {
+                            where: {
+                                id: { in: output.councilIds },
+                            },
+                            data: {
+                                periodId: periodId,
+                            },
+                        },
+                    },
                 ])
 
                 if (res.status !== 200) {
@@ -241,6 +272,7 @@ const PutEvaluationPeriod = () => {
                 ...initialData,
                 startDate: dayjs(initialData.startDate),
                 endDate: initialData.endDate ? dayjs(initialData.endDate) : undefined,
+                councilIds: initialData.councils.map((council) => council.id),
             })
         } else {
             form.setFieldsValue({
@@ -289,6 +321,20 @@ const PutEvaluationPeriod = () => {
                             if (!startTime) return false
                             return current && current < dayjs(startTime).startOf('day')
                         }}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="councilIds" label="Hội đồng đánh giá" required>
+                    <Select
+                        mode="multiple"
+                        placeholder="Chọn hội đồng đánh giá"
+                        options={evaluationCouncilData.map((council) => ({
+                            label: council.name,
+                            value: council.id,
+                        }))}
+                        allowClear
+                        showSearch
                     />
                 </FormItem>
             </Col>

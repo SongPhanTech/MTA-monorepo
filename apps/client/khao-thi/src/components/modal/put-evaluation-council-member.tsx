@@ -126,7 +126,7 @@ const PutEvaluationCouncilMember = () => {
                 </FormItem>
             </Col>
             <Col span={24}>
-                <FormItem form={form} name="role" label="Chương mục" required>
+                <FormItem form={form} name="role" label="Chức vụ trong hội đồng" required>
                     <Select
                         mode="multiple"
                         maxTagCount={'responsive'}
