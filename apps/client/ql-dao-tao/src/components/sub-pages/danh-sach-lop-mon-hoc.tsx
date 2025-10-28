@@ -320,7 +320,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: an
                     </Row>
                 </Col>
 
-                <Col span={24} className="mt-4">
+                <Col span={24} className="mt-2">
                     <Table
                         filters={filters}
                         setFilters={setFilters}

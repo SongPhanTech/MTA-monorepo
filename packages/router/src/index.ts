@@ -217,12 +217,12 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC,
                         description: 'Hạn nhập điểm',
                     },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_PHONG_THI,
-                        label: 'QL phòng thi',
-                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_PHONG_THI,
-                        description: 'QL phòng thi',
-                    },
+                    // {
+                    //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_PHONG_THI,
+                    //     label: 'Nhập điểm theo phách',
+                    //     path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_PHONG_THI,
+                    //     description: 'Nhập điểm theo phách',
+                    // },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH,
                         label: 'Nhập điểm theo phách',

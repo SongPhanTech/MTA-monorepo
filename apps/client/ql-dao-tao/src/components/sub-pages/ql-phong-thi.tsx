@@ -1,21 +1,18 @@
-import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
-import DefaultLayout from '@layouts/default-layout'
-import { formatDate } from '@lib/utils'
+import { cn, formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
 import { useCountExamRoom, useFindManyExamRoom } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Modal, Row, Col, Tooltip } from 'antd'
+import {Row, Col } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo, useState } from 'react'
 
-export default function SubjectClassScore() {
+export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -36,14 +33,7 @@ export default function SubjectClassScore() {
     //     tag: 'ModalPrintStudentSubjectScore',
     // })
 
-    const handlePrint = async () => {
-        Modal.confirm({
-            title: 'Xác nhận',
-            content: 'Bạn có chắc chắn muốn in phiếu điểm và khoá nhập điểm lại không?',
-            okText: 'Xác nhận',
-            cancelText: 'Hủy',
-        })
-    }
+
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     const where: any = useMemo(() => {
@@ -117,6 +107,18 @@ export default function SubjectClassScore() {
                         id="student-subject-score"
                         filters={filters}
                         setFilters={setFilters}
+                        onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    console.log(record);
+                                    
+                                    setSelectedRowKeys(record.id)
+                                },
+                                className: cn(
+                                    selectedRowKeys === record.id ? 'bg-orange-200' : ''
+                                ),
+                            }
+                        }}
                         columns={[
                             {
                                 title: 'STT',
@@ -183,31 +185,6 @@ export default function SubjectClassScore() {
                                     return record?._count?.examSessions
                                 },
                             },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                render: (_, { id }) => (
-                                    <Row className="justify-center gap-2">
-                                        {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                            'NHAP_DIEM'
-                                        ) && (
-                                            <Tooltip title={'Nhập điểm theo phách'} placement="top">
-                                                <EyeOutlined
-                                                    onClick={() => {
-                                                        router.push(
-                                                            ROUTER_PATH.QL_DAO_TAO
-                                                                .QUAN_LY_DIEM_NHAP_DIEM_THEO_PHACH +
-                                                                `?examRoomId=${id}`
-                                                        )
-                                                    }}
-                                                />
-                                            </Tooltip>
-                                        )}
-                                    </Row>
-                                ),
-                            },
                         ]}
                         data={data}
                         pagination={{
@@ -228,8 +205,4 @@ export default function SubjectClassScore() {
             </Row>
         </div>
     )
-}
-
-SubjectClassScore.getLayout = function getLayout(page: React.ReactElement) {
-    return <DefaultLayout>{page}</DefaultLayout>
 }

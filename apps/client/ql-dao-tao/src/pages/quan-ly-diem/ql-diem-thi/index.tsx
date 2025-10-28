@@ -94,22 +94,23 @@ export default function SubjectClassScore() {
             if (dayjs()?.isAfter(data?.examScoreDeadline) && !data?.enteredExamScore) {
                 return (
                     <Input
-                        className="bg-red-600 text-white"
+                    size="small"
+                        className="bg-red-600 text-white pointer-events-none"
                         placeholder="Hạn nhập điểm"
-                        disabled
                         value={`Ngoài hạn nhập điểm quá trình, ${formatDate(data?.scoreDeadLineStart || '')} đến ${formatDate(data?.scoreDeadline || '')}`}
                     />
                 )
             }
             return (
                 <Input
+                size="small"
+                className='pointer-events-none'
                     placeholder="Hạn nhập điểm"
-                    disabled
                     value={`${data?.scoreDeadLineStart && formatDate(data?.scoreDeadLineStart)} đến ${data?.scoreDeadline && formatDate(data?.scoreDeadline || '')}`}
                 />
             )
         }
-        return <Input placeholder="Hạn nhập điểm" disabled />
+        return <Input placeholder="Hạn nhập điểm" size="small"  className='pointer-events-none' />
     }, [data])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -123,24 +124,24 @@ export default function SubjectClassScore() {
     }, [data])
 
     return (
-        <Row gutter={[16, 16]} className="relative">
+        <Row gutter={[4, 4]} className="relative">
             <Col span={12}>
-                <div className="flex items-center mb-3 w-full">
+                <div className="flex items-center mb-2 w-full">
                     <div className="min-w-[150px] w-[150px]">Lớp môn học:</div>
                     <div className="w-[300px]">
-                        <Input placeholder="Mã lớp MH" disabled value={data?.code} />
+                        <Input size="small" placeholder="Mã lớp MH" className="pointer-events-none" value={data?.code} />
                     </div>
                     <div className="ml-3 w-full">
-                        <Input placeholder="Tên lớp MH" disabled value={data?.name} />
+                        <Input size="small" placeholder="Tên lớp MH" className="pointer-events-none" value={data?.name} />
                     </div>
                 </div>
-                <div className="flex items-center mb-3 w-full">
+                <div className="flex items-center mb-2 w-full">
                     <div className="min-w-[150px] w-[150px]">Giảng viên:</div>
                     <div className="w-full">
                         <Input
-                            className="w-full"
+                            className="w-full pointer-events-none"
                             placeholder="Giảng viên"
-                            disabled
+                            size="small"
                             value={
                                 data?.mainLecturer
                                     ? `${data?.mainLecturer?.userProfile?.lastName} ${data?.mainLecturer?.userProfile?.firstName}`
@@ -153,9 +154,9 @@ export default function SubjectClassScore() {
                     <div className="min-w-[150px] w-[150px]">Đơn vị quản lý</div>
                     <div className="w-full">
                         <Input
-                            className="w-full"
+                            className="w-full pointer-events-none"
                             placeholder="Giảng viên"
-                            disabled
+                            size="small"
                             value={
                                 data?.subject?.managementOrganization
                                     ? `${data?.subject?.managementOrganization?.sMa} - ${data?.subject?.managementOrganization?.sTen}`
@@ -168,16 +169,16 @@ export default function SubjectClassScore() {
 
             <Col span={12}>
                 <Form form={form} layout="vertical">
-                    <div className="flex items-center mb-3 w-full">
+                    <div className="flex items-center mb-2 w-full">
                         <div className="min-w-[150px] w-[150px]">Hạn nhập điểm</div>
                         <div className="w-full">{reasonDate()}</div>
                     </div>
-                    <div className="flex items-center mb-3 w-full">
+                    <div className="flex items-center mb-2 w-full h-6">
                         <div className="flex items-center mr-9 ">
                             <FormItem
                                 form={form}
                                 name="isLockExamScore"
-                                className="min-w-[200px]"
+                                className="min-w-[200px] !mb-0"
                                 valuePropName="checked"
                             >
                                 <Checkbox
@@ -191,7 +192,7 @@ export default function SubjectClassScore() {
                             <FormItem
                                 form={form}
                                 name="scoreSubmitted"
-                                className="min-w-[200px]"
+                                className="min-w-[200px] !mb-0"
                                 valuePropName="checked"
                             >
                                 <Checkbox
@@ -201,11 +202,11 @@ export default function SubjectClassScore() {
                                 </Checkbox>
                             </FormItem>
                             <div className="w-full">
-                                <Input disabled />
+                                <Input size="small" className="pointer-events-none"/>
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center mb-3 w-full">
+                    <div className="flex items-center mb-2 w-full h-6">
                         <div className="flex items-center w-full">
                             <FormItem
                                 form={form}
@@ -220,7 +221,7 @@ export default function SubjectClassScore() {
                                 </Checkbox>
                             </FormItem>
                             <div className="w-full">
-                                <Input disabled />
+                                <Input size="small" className="pointer-events-none"/>
                             </div>
                         </div>
                     </div>

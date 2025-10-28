@@ -1,4 +1,5 @@
 import NhapdiemPhach from '@components/sub-pages/nhap-diem-phach'
+import PhongThi from '@components/sub-pages/ql-phong-thi'
 import SinhPhach from '@components/sub-pages/sinh-phach'
 import DefaultLayout from '@layouts/default-layout'
 import { Col, Row, Tabs } from 'antd'
@@ -7,18 +8,29 @@ import { useMemo, useState } from 'react'
 
 export default function SubjectClassScore() {
     const router = useRouter()
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string>('')
     const [activeKey, setActiveKey] = useState('1')
     const examRoomId = router.query.examRoomId as string
     const items = useMemo(() => {
         return [
             {
-                label: 'QL phách',
+                label: 'QL Phòng thi',
                 key: '1',
+                children: <PhongThi selectedRowKeys={selectedRowKeys}
+                        setSelectedRowKeys={(value: string) => {
+                            setSelectedRowKeys(value)
+                        }}/>,
+            },
+            {
+                label: 'QL phách',
+                key: '2',
+                disabled: !selectedRowKeys,
                 children: <SinhPhach />,
             },
             {
                 label: 'Nhập điểm',
-                key: '2',
+                key: '3',
+                disabled: !selectedRowKeys,
                 children: <NhapdiemPhach />,
             },
         ]
