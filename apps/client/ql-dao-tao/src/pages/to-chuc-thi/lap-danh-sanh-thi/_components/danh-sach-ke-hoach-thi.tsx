@@ -4,25 +4,19 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import { formatDate } from '@lib/utils'
-import type { Prisma, SubjectVersion } from '@workspace/db/client'
-import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
+import type { SubjectVersion } from '@workspace/db/client'
+import { useCountSubjectClass, useFindManyRoom, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Input, Row } from 'antd'
-import type { TableRowSelection } from 'antd/es/table/interface'
+import { Button, Checkbox, Col, Flex, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
 
-type SubjectVersionWithOrg = Prisma.SubjectVersionGetPayload<{
-    include: {
-        managementOrganization: { select: { sTen: true } }
-    }
-}>
-
 interface Props {
     onSelectSubjectClass: (id: string | null) => void
+    setActiveKey: (key: string) => void
 }
 
-export default function DanhSachKeHoachThi({ onSelectSubjectClass }: Props) {
+export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey }: Props) {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
     const { options: examTypeOptions, getExamTypeLabel } = useExamTypeOptions()
@@ -35,7 +29,9 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass }: Props) {
         examType: undefined,
     })
 
-    const { data: subjectVersions = [] } = useFindManySubjectClass(
+    const [form] = Form.useForm()
+
+    const { data: subjectClass = [] } = useFindManySubjectClass(
         {
             where: {
                 trainingObjectTypeId,
@@ -49,15 +45,32 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass }: Props) {
                         mode: 'insensitive',
                     },
                 }),
-                ...(filters.examType && {
-                    subject: {
-                        examType: {
-                            in: filters.examType,
+                ...(filters.examType &&
+                    filters.examType.length > 0 && {
+                        subject: {
+                            examType: {
+                                in: filters.examType,
+                            },
                         },
-                    },
-                }),
+                    }),
             },
             include: {
+                mainLecturer: {
+                    include: {
+                        userProfile: {
+                            select: {
+                                fullname: true,
+                            },
+                        },
+                    },
+                },
+                room: {
+                    select: {
+                        id: true,
+                        name: true,
+                        capacity: true,
+                    },
+                },
                 subject: {
                     include: {
                         managementOrganization: {
@@ -65,6 +78,11 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass }: Props) {
                                 sTen: true,
                             },
                         },
+                    },
+                },
+                _count: {
+                    select: {
+                        subjectClassStudent: true,
                     },
                 },
             },
@@ -90,24 +108,28 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass }: Props) {
                     mode: 'insensitive',
                 },
             }),
-            ...(filters.examType && {
-                subject: {
-                    examType: {
-                        in: filters.examType,
+            ...(filters.examType &&
+                filters.examType.length > 0 && {
+                    subject: {
+                        examType: {
+                            in: filters.examType,
+                        },
                     },
-                },
-            }),
+                }),
         },
     })
 
-    const rowSelection: TableRowSelection = {
-        selectedRowKeys: selectedRowKey ? [selectedRowKey] : [],
-        onChange: (selectedKeys: React.Key[]) => {
-            const newSelectedKey = selectedKeys[0] || null
-            setSelectedRowKey(newSelectedKey)
-            onSelectSubjectClass(newSelectedKey as string | null)
+    const { data: rooms = [] } = useFindManyRoom({
+        where: {
+            deletedAt: null,
+            OR: [{ trainingRoom: true }, { examRoom: true }],
         },
-    }
+        select: {
+            id: true,
+            name: true,
+            capacity: true,
+        },
+    })
 
     const debouncedSearch = useCallback(
         _.debounce((value: string) => {
@@ -126,7 +148,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass }: Props) {
 
         return (
             <>
-                {parts.map((part, index) =>
+                {parts.map((part) =>
                     part.toLowerCase() === searchText.toLocaleLowerCase() ? (
                         <span key={part} className="text-yellow-800 bg-yellow-300 font-semibold">
                             {part}
@@ -137,6 +159,11 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass }: Props) {
                 )}
             </>
         )
+    }
+
+    const handleSubmitExam = () => {
+        const data = form.getFieldsValue()
+        console.log(data)
     }
 
     return (
@@ -167,148 +194,240 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass }: Props) {
                             }
                         />
                     </Flex>
-                    <Button type="primary">Lưu</Button>
+                    <Button type="primary" onClick={handleSubmitExam}>
+                        Lưu
+                    </Button>
                 </Flex>
             </Col>
 
             <Col span={24}>
-                <Table
-                    rowKey="id"
-                    rowSelection={{
-                        type: 'radio',
-                        ...rowSelection,
-                    }}
-                    onRow={(record) => ({
-                        onClick: () => {
-                            const newSelectedKey = selectedRowKey === record.id ? null : record.id
-                            setSelectedRowKey(newSelectedKey)
-                            onSelectSubjectClass(newSelectedKey)
-                        },
-                    })}
-                    columns={[
-                        {
-                            title: 'STT',
-                            align: 'center',
-                            width: 30,
-                            render: (_, __, index) =>
-                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                        },
-                        {
-                            title: 'Mã LMH',
-                            align: 'center',
-                            width: 30,
-                            render: (_, record) => record.code || '',
-                        },
-                        {
-                            title: 'Tên môn học',
-                            align: 'center',
-                            width: 150,
-                            render: (_, record: { subject?: SubjectVersion }) => {
-                                const name = record.subject?.name || ''
-                                return (
-                                    <div className="text-left">
-                                        <HighlightText
-                                            text={name}
-                                            searchText={filters.searchText}
-                                        />
-                                    </div>
-                                )
+                <Form form={form}>
+                    <Table
+                        rowKey="id"
+                        onRow={(record) => ({
+                            onDoubleClick: () => {
+                                const newSelectedKey =
+                                    selectedRowKey === record.id ? null : record.id
+                                setSelectedRowKey(newSelectedKey)
+                                onSelectSubjectClass(newSelectedKey)
+                                setActiveKey?.('2')
                             },
-                        },
-                        {
-                            title: 'Số tín chỉ',
-                            align: 'center',
-                            width: 40,
-                            render: (_, record: { subject?: SubjectVersion }) =>
-                                record.subject?.credit || '',
-                        },
-                        {
-                            title: 'Số sinh viên',
-                            align: 'center',
-                            width: 50,
-                        },
-                        {
-                            title: 'Hình thức thi',
-                            align: 'center',
-                            width: 60,
-                            render: (_, record: { subject?: SubjectVersion }) => {
-                                return record?.subject?.examType ? (
-                                    <div>{getExamTypeLabel(record?.subject?.examType)}</div>
-                                ) : (
-                                    ''
-                                )
+                        })}
+                        columns={[
+                            {
+                                title: 'STT',
+                                align: 'center',
+                                width: 30,
+                                render: (_, __, index) =>
+                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
-                        },
-                        {
-                            title: 'Khóa nhập ĐQT',
-                            align: 'center',
-                            width: 60,
-                            render: (_, record) => {
-                                return <Checkbox checked={record.isLockScore} />
+                            {
+                                title: 'Mã LMH',
+                                align: 'center',
+                                width: 30,
+                                render: (_, record) => record.code || '',
                             },
-                        },
-                        {
-                            title: 'Khóa DTS',
-                            align: 'center',
-                            width: 40,
-                        },
-                        {
-                            title: 'Đánh phách',
-                            align: 'center',
-                            width: 40,
-                        },
-                        {
-                            title: 'Khóa phách',
-                            align: 'center',
-                            width: 40,
-                        },
-                        {
-                            title: 'Danh sách phòng',
-                            align: 'center',
-                            width: 150,
-                        },
-                        {
-                            title: 'Đơn vị',
-                            align: 'center',
-                            width: 200,
-                            render: (_, record: { subject?: SubjectVersionWithOrg }) => {
-                                return (
-                                    <div className="text-left">
-                                        {record.subject?.managementOrganization?.sTen || ''}
-                                    </div>
-                                )
+                            {
+                                title: 'Tên môn học',
+                                align: 'center',
+                                width: 150,
+                                render: (_, record: { subject?: SubjectVersion }) => {
+                                    const name = record.subject?.name || ''
+                                    return (
+                                        <div className="text-left">
+                                            <HighlightText
+                                                text={name}
+                                                searchText={filters.searchText}
+                                            />
+                                        </div>
+                                    )
+                                },
                             },
-                        },
-                        {
-                            title: 'Ngày thi',
-                            align: 'center',
-                            width: 80,
-                            render: (_, record) =>
-                                record.examDate ? formatDate(record.examDate) : undefined,
-                        },
-                        {
-                            title: 'Ghép lớp',
-                            align: 'center',
-                            width: 80,
-                        },
-                    ]}
-                    data={subjectVersions}
-                    pagination={{
-                        current: currentPage,
-                        pageSize: numberOfPages,
-                        total: count,
-                        onChange: (page, pageSize) => {
-                            if (numberOfPages === pageSize) {
-                                setCurrentPage(page)
-                            } else {
-                                setCurrentPage(1)
-                                setNumberOfPages(pageSize)
-                            }
-                        },
-                        showTotal: (total, range) =>
-                            `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
-                    }}
-                />
+                            {
+                                title: 'Số tín chỉ',
+                                align: 'center',
+                                width: 40,
+                                render: (_, record: { subject?: SubjectVersion }) =>
+                                    record.subject?.credit || '',
+                            },
+                            {
+                                title: 'Số sinh viên',
+                                align: 'center',
+                                width: 50,
+                                render: (_, record) => {
+                                    return record._count?.subjectClassStudent || 0
+                                },
+                            },
+                            {
+                                title: 'Hình thức thi',
+                                align: 'center',
+                                width: 60,
+                                render: (_, record: { subject?: SubjectVersion }) => {
+                                    return record?.subject?.examType ? (
+                                        <div>{getExamTypeLabel(record?.subject?.examType)}</div>
+                                    ) : (
+                                        ''
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Khóa nhập ĐQT',
+                                align: 'center',
+                                width: 60,
+                                render: (_, record) => {
+                                    return (
+                                        <Form.Item
+                                            className="mb-0"
+                                            name={[record.id, 'isLockScore']}
+                                            valuePropName="checked"
+                                        >
+                                            <span className="pointer-events-none">
+                                                <Checkbox checked={record.isLockScore} />
+                                            </span>
+                                        </Form.Item>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Khóa DTS',
+                                align: 'center',
+                                width: 40,
+                                render: (_, record) => {
+                                    return (
+                                        <Form.Item
+                                            className="mb-0"
+                                            name={[record.id, 'isLockFinalScore']}
+                                            valuePropName="checked"
+                                        >
+                                            <span className="pointer-events-none">
+                                                <Checkbox checked={false} />
+                                            </span>
+                                        </Form.Item>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Đánh phách',
+                                align: 'center',
+                                width: 40,
+                                render: (_, record) => {
+                                    return (
+                                        <Form.Item
+                                            className="mb-0"
+                                            name={[record.id, 'isAnonymous']}
+                                            valuePropName="checked"
+                                        >
+                                            <span className="pointer-events-none">
+                                                <Checkbox checked={false} />
+                                            </span>
+                                        </Form.Item>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Khóa phách',
+                                align: 'center',
+                                width: 40,
+                                render: (_, record) => {
+                                    return (
+                                        <Form.Item
+                                            className="mb-0"
+                                            name={[record.id, 'isLockAnonymous']}
+                                            valuePropName="checked"
+                                        >
+                                            <span className="pointer-events-none">
+                                                <Checkbox checked={false} />
+                                            </span>
+                                        </Form.Item>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Danh sách phòng',
+                                align: 'center',
+                                width: 170,
+                                render: (_, record) => {
+                                    return (
+                                        <Form.Item
+                                            className="mb-0"
+                                            name={[record.id, 'rooms']}
+                                            initialValue={`${record.room?.name}-${record.room?.capacity}`}
+                                        >
+                                            <Select
+                                                options={rooms.map((room) => ({
+                                                    label: `${room.name}-${room.capacity}`,
+                                                    value: room.id,
+                                                }))}
+                                            />
+                                        </Form.Item>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Giảng viên 1',
+                                align: 'center',
+                                width: 150,
+                                render: (_, record) => {
+                                    return (
+                                        <div className="text-left">
+                                            {record.mainLecturer?.userProfile?.fullname || ''}
+                                        </div>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Ngày thi',
+                                align: 'center',
+                                width: 80,
+                                render: (_, record) =>
+                                    record.examDate ? formatDate(record.examDate) : undefined,
+                            },
+                            {
+                                title: 'Ghép lớp',
+                                align: 'center',
+                                width: 30,
+                                render: (_, record) => {
+                                    return (
+                                        <Form.Item
+                                            className="mb-0 w-full"
+                                            name={[record.id, 'merge']}
+                                            initialValue="rieng"
+                                        >
+                                            <Select
+                                                options={[
+                                                    {
+                                                        label: 'Riêng',
+                                                        value: 'rieng',
+                                                    },
+                                                    {
+                                                        label: 'Ghép',
+                                                        value: 'ghep',
+                                                    },
+                                                ]}
+                                            />
+                                        </Form.Item>
+                                    )
+                                },
+                            },
+                        ]}
+                        data={subjectClass}
+                        pagination={{
+                            current: currentPage,
+                            pageSize: numberOfPages,
+                            total: count,
+                            onChange: (page, pageSize) => {
+                                if (numberOfPages === pageSize) {
+                                    setCurrentPage(page)
+                                } else {
+                                    setCurrentPage(1)
+                                    setNumberOfPages(pageSize)
+                                }
+                            },
+                            showTotal: (total, range) =>
+                                `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
+                        }}
+                    />
+                </Form>
             </Col>
         </Row>
     )
