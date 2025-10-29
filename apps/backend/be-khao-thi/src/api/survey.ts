@@ -850,16 +850,11 @@ app.openapi(getSurveyStatistics, async (c) => {
     const answerCounts = await prisma.surveyResponse.groupBy({
         by: ['surveyQuestionId', 'surveyChoiceId'],
         where: {
-            surveyQuestionId: {
-                in: questionIds,
-            },
-            surveyChoiceId: {
-                not: null,
-            },
+            surveySession: { surveyId: survey.id },
+            surveyQuestionId: { in: questionIds },
+            surveyChoiceId: { not: null },
         },
-        _count: {
-            surveyChoiceId: true,
-        },
+        _count: { surveyChoiceId: true },
     })
 
     const answerCountMap = answerCounts.reduce(
@@ -883,11 +878,7 @@ app.openapi(getSurveyStatistics, async (c) => {
                 count: answerCountMap[key] || 0,
             }
         })
-        return {
-            id: question.id,
-            name: question.name,
-            answers,
-        }
+        return { id: question.id, name: question.name, answers }
     })
 
     const responseData = {

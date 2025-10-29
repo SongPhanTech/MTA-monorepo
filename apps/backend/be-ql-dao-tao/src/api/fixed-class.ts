@@ -3,7 +3,7 @@ import { read, utils } from 'xlsx'
 import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
-import { getTemplateBuffer } from '../utils'
+import { getTemplateBuffer } from '@workspace/libs/server'
 
 const app = new OpenAPIHono({ strict: false })
 
