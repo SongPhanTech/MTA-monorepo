@@ -19,7 +19,6 @@ import {
     setExamScoreDeadLine,
     setScoreDeadLine,
     useCreateExams,
-    useCreateNewReExamList,
 } from '@workspace/libs/api/training'
 // import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
@@ -28,6 +27,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import {
     DatePicker as AntdDatePicker,
     Button,
+    Checkbox,
     Col,
     Flex,
     Form,
@@ -98,6 +98,9 @@ export default function ClassSubject() {
 
     const { onOpen, onClose } = useDisclosure<string>({
         tag: 'PutDeadlineScoreModal',
+        onClose: ()=>{
+            debouncedRefetch()
+        },
     })
 
     const handleSchedule = (id: string) => {
@@ -342,6 +345,7 @@ export default function ClassSubject() {
     const handleUpdateTime = async (values: TimeScore) => {
         try {
             showSpinner()
+            // TODO: Lưu log trong api
             const { status, data } = await setScoreDeadLine({
                 classIds: selectedRowKeys as string[],
                 startPadding: values.startPadding,
@@ -425,33 +429,33 @@ export default function ClassSubject() {
         }
     }
 
-    const { mutateAsync: createReExamList } = useCreateNewReExamList()
+    // const { mutateAsync: createReExamList } = useCreateNewReExamList()
 
-    const handleRexamList = async () => {
-        try {
-            showSpinner()
+    // const handleRexamList = async () => {
+    //     try {
+    //         showSpinner()
 
-            if (semesterId && trainingObjectTypeId) {
-                const res = await createReExamList({
-                    data: {
-                        semesterId,
-                        trainingObjectTypeId,
-                    },
-                })
+    //         if (semesterId && trainingObjectTypeId) {
+    //             const res = await createReExamList({
+    //                 data: {
+    //                     semesterId,
+    //                     trainingObjectTypeId,
+    //                 },
+    //             })
 
-                if (res.status !== 200) {
-                    message.error(res.data.message || 'Lên danh sách thi lại thất bại')
-                }
+    //             if (res.status !== 200) {
+    //                 message.error(res.data.message || 'Lên danh sách thi lại thất bại')
+    //             }
 
-                message.success('Lên danh sách thi lại thành công')
-                router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
-            }
-        } catch (error) {
-            message.error('Đã có lỗi xảy ra khi lên danh sách thi lại')
-        } finally {
-            hideSpinner()
-        }
-    }
+    //             message.success('Lên danh sách thi lại thành công')
+    //             router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
+    //         }
+    //     } catch (error) {
+    //         message.error('Đã có lỗi xảy ra khi lên danh sách thi lại')
+    //     } finally {
+    //         hideSpinner()
+    //     }
+    // }
 
     const rowSelection = {
         selectedRowKeys,
@@ -515,42 +519,6 @@ export default function ClassSubject() {
                                     'XEM_TAT_CA'
                                 ) && (
                                     <>
-                                        <Button onClick={handleRexamList} type="primary">
-                                            Lên danh sách thi lại
-                                        </Button>
-                                        <Popover
-                                            content={
-                                                <Form
-                                                    form={formHoldAnExam}
-                                                    initialValues={{
-                                                        isGroupBySubject: false,
-                                                    }}
-                                                    onFinish={handleUpdateHoldAnExam}
-                                                >
-                                                    <FormItem
-                                                        form={formHoldAnExam}
-                                                        name="isGroupBySubject"
-                                                        label="Gộp theo môn học"
-                                                        className="mb-2"
-                                                        valuePropName="checked"
-                                                    >
-                                                        <Switch />
-                                                    </FormItem>
-                                                    <Col span={24} className="text-right mt-4">
-                                                        <Button type="primary" htmlType="submit">
-                                                            Xác nhận
-                                                        </Button>
-                                                    </Col>
-                                                </Form>
-                                            }
-                                            title="Sửa lên danh sách thi"
-                                            trigger="click"
-                                            placement="bottomRight"
-                                            open={openHoldAnExam}
-                                            onOpenChange={setOpenHoldAnExam}
-                                        >
-                                            <Button type="primary">Lên danh sách thi</Button>
-                                        </Popover>
                                         <Popover
                                             content={
                                                 <Form
@@ -589,13 +557,13 @@ export default function ClassSubject() {
                                                         layout="vertical"
                                                         form={form}
                                                         name="time"
-                                                        label=<Tooltip
+                                                        label={<Tooltip
                                                             title={
                                                                 'Dành cho những lớp chưa có ngày thi'
                                                             }
                                                         >
                                                             Thời gian nhập điểm quá trình
-                                                        </Tooltip>
+                                                        </Tooltip>}
                                                         className="italic"
                                                     >
                                                         <AntdDatePicker.RangePicker
@@ -653,13 +621,13 @@ export default function ClassSubject() {
                                                         layout="vertical"
                                                         form={formExam}
                                                         name="endDate"
-                                                        label=<Tooltip
+                                                        label={<Tooltip
                                                             title={
                                                                 'Dành cho những lớp chưa có ngày thi'
                                                             }
                                                         >
                                                             Thời gian nhập điểm thi
-                                                        </Tooltip>
+                                                        </Tooltip>}
                                                     >
                                                         <DatePicker
                                                             format="DD/MM/YYYY"
@@ -788,6 +756,14 @@ export default function ClassSubject() {
                                     ) : (
                                         <div className="text-red-500">Chưa nhập điểm</div>
                                     )
+                                },
+                            },
+                               {
+                                title: 'Môn 1 ĐĐ',
+                                width: 80,
+                                align: 'center',
+                                render: (__, record) => {
+                                    return <Checkbox checked={record?.subject?.onePoint}/>
                                 },
                             },
                             // {

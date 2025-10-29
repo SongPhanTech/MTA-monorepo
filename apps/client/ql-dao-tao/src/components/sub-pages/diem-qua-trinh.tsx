@@ -58,10 +58,6 @@ export default function DiemQuaTrinh({
     subjectClassId,
 }: any) {
     const { can } = useAbility()
-    const canReadAll = can(
-        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
-        'XEM_TAT_CA'
-    )
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
     const [form] = Form.useForm<SubjectClassScoreForm>()

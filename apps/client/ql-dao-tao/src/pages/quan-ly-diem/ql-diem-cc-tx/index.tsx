@@ -101,7 +101,7 @@ export default function SubjectClassScore() {
     }, [data])
 
     return (
-        <Row gutter={[4, 4]}>
+        <Row gutter={[16, 4]}>
             <Col span={12}>
                 <div className="flex items-center mb-2 w-full">
                     <div className="min-w-[150px] w-[150px]">Lớp môn học:</div>

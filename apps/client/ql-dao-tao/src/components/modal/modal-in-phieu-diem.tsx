@@ -6,6 +6,7 @@ import useScoreToWords from '@hooks/useScoreToWords'
 import { useSession } from '@workspace/auth/react'
 import type { Prisma, SubjectClass } from '@workspace/db/client'
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { getScoreStatistics } from '@workspace/libs/utils'
 import { Button, Col, Modal, message, Row } from 'antd'
 import dayjs from 'dayjs'
@@ -81,6 +82,7 @@ export type DataTable = Prisma.StudentSubjectScoreGetPayload<{
 }>
 
 const ModalPrintStudentSubjectScore = () => {
+     
     const formattedDate = '..., ngày ... tháng ... năm ...'
     const printRef = useRef<HTMLDivElement>(null)
     const { getExamTypeLabel } = useExamTypeOptions()
@@ -92,7 +94,7 @@ const ModalPrintStudentSubjectScore = () => {
 
     const { data: session } = useSession()
     const profileName = session?.preferred_username || ''
-
+   const profileId = session?.sDM_NhanVienId || ''
     const { data } = useFindUniqueSubjectClass(
         {
             where: { id: input?.dataTable?.[0]?.subjectClass?.id || '' },
@@ -159,18 +161,43 @@ const ModalPrintStudentSubjectScore = () => {
 
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
+
+        const lockExam= async () => {
+            let listTransition:any=[]
+           if(data?.id){
+              listTransition = [
+                        ...listTransition,
+                        {
+                            model: 'SubjectClass',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id: data?.id,
+                                },
+                                data: { isLockScore: true,isLockExamScore: true },
+                            },
+                        },
+                           {
+                            model: 'SubjectClassHistory',
+                            operation: 'create',
+                            data: {
+                                data: {subjectClassId: data?.id, isLockScore: true,isLockExamScore: true,updatedById: profileId},
+                            },
+                        },
+                    ]
+                        const res = await sqlTransaction(listTransition)
+                    if (res?.status === 200) {
+                         message.success('Cập nhật thành công')
+                    }
+           }
+        }
+
     async function onOk({ ...rest }: PutSubjectClass) {
         try {
             showSpinner()
             if (input?.type === EnumInPhieuDiem.PHIEU_DIEM_KHOA) {
-                await updateSubjectClass({
-                    data: {
-                        isLockExamScore: true,
-                        isLockScore: true,
-                    },
-                    where: { id: data?.id },
-                })
-                message.success('Cập nhật thành công')
+                lockExam()
+               
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({

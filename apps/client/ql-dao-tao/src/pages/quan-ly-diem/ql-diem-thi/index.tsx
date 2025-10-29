@@ -14,6 +14,9 @@ type SubmitFormType = {
     isLockExamScore?: boolean
     scoreSubmitted?: boolean
     scoreChecked?: boolean
+    isLockExamScoreOld?: boolean
+    scoreSubmittedOld?: boolean
+    scoreCheckedOld?: boolean
 }
 export default function SubjectClassScore() {
     const [form] = Form.useForm<SubmitFormType>()
@@ -81,7 +84,12 @@ export default function SubjectClassScore() {
                         dataDetailSubjectClass={data}
                         refetchSubjectClass={refetch}
                         subjectClassId={selectedRowKeys}
-                        dataForm={dataForm}
+                        dataForm={{
+                            ...dataForm,
+                            isLockExamScoreOld: data?.isLockExamScore,
+                            scoreSubmittedOld: data?.scoreSubmitted,
+                            scoreCheckedOld: data?.scoreChecked,
+                        }}
                     />
                 ),
                 disabled: !selectedRowKeys,
@@ -124,7 +132,7 @@ export default function SubjectClassScore() {
     }, [data])
 
     return (
-        <Row gutter={[4, 4]} className="relative">
+        <Row gutter={[16, 4]} className="relative">
             <Col span={12}>
                 <div className="flex items-center mb-2 w-full">
                     <div className="min-w-[150px] w-[150px]">Lớp môn học:</div>

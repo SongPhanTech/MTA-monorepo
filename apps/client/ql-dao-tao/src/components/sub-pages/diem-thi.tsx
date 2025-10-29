@@ -7,10 +7,10 @@ import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { useSession } from '@workspace/auth/react'
 import type { StudentSubjectScore } from '@workspace/db/client'
-import { useFindManyStudentSubjectScore } from '@workspace/db/hooks'
+import { useFindManyStudentSubjectScore, useUpdateSubjectClass } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { listUser } from '@workspace/libs/constants'
-import { calcFinalScore, getScoreStatistics } from '@workspace/libs/utils'
+import { calcFinalScore } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, message, Modal, Row } from 'antd'
@@ -48,10 +48,7 @@ export default function DiemThi({
     dataForm,
 }: any) {
     const { can } = useAbility()
-    const canReadAll = can(
-        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
-        'XEM_TAT_CA'
-    )
+
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
     const [form] = Form.useForm<SubjectClassScoreForm>()
@@ -93,6 +90,8 @@ export default function DiemThi({
         })
     }
 
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+
     const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
@@ -116,20 +115,77 @@ export default function DiemThi({
         try {
             showSpinner()
             let listSqlTransaction: any = []
-            if (dataForm) {
-                listSqlTransaction = [
-                    ...listSqlTransaction,
-                    {
-                        model: 'SubjectClass',
-                        operation: 'update',
-                        data: {
-                            where: {
-                                id: subjectClassId,
+            if (
+                dataForm?.isLockExamScore !== dataForm?.isLockExamScoreOld ||
+                dataForm?.scoreSubmitted !== dataForm?.scoreSubmittedOld ||
+                dataForm?.scoreChecked !== dataForm?.scoreCheckedOld
+            ) {
+                if (dataForm?.scoreSubmitted === true && dataForm?.scoreSubmittedOld === false) {
+                    listSqlTransaction = [
+                        ...listSqlTransaction,
+                        {
+                            model: 'SubjectClass',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id: subjectClassId,
+                                },
+                                data: {
+                                    isLockExamScore: true,
+                                    scoreSubmitted: true,
+                                    scoreChecked: true,
+                                    isLockScore: true,
+                                },
                             },
-                            data: dataForm,
                         },
-                    },
-                ]
+                         {
+                            model: 'SubjectClassHistory',
+                            operation: 'create',
+                            data: {
+                                data: {
+                                    subjectClassId: subjectClassId,
+                                    isLockExamScore: true,
+                                    scoreSubmitted: true,
+                                    scoreChecked: true,
+                                    isLockScore: true,
+                                    updatedById: profileId
+                                },
+                            },
+                        },
+                    ]
+                }else {
+                     listSqlTransaction = [
+                        ...listSqlTransaction,
+                        {
+                            model: 'SubjectClass',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id: subjectClassId,
+                                },
+                                data: {
+                                    isLockExamScore: dataForm?.isLockExamScore,
+                                    scoreSubmitted: dataForm?.scoreSubmitted,
+                                    scoreChecked: dataForm?.scoreChecked,
+                                },
+                            },
+                        },
+                                {
+                            model: 'SubjectClassHistory',
+                            operation: 'create',
+                            data: {
+                                data: {
+                                    subjectClassId: subjectClassId,
+                                    isLockExamScore: dataForm?.isLockExamScore !==dataForm?.isLockExamScoreOld ? dataForm?.isLockExamScore : undefined,
+                                    scoreSubmitted: dataForm?.scoreSubmitted !== dataForm?.scoreSubmittedOld ? dataForm?.scoreSubmitted : undefined,
+                                    scoreChecked: dataForm?.scoreChecked !== dataForm?.scoreCheckedOld ? dataForm?.scoreChecked : undefined,
+                                    updatedById: profileId
+                                },
+                            },
+                        },
+                    ]
+                }
+                  
             }
             const dataSubmit = form.getFieldsValue()
             const listObject = Object.entries(dataSubmit.list).map(([key, value_]) => {
@@ -424,7 +480,6 @@ export default function DiemThi({
         { refetchOnWindowFocus: false }
     )
 
-    const statistics = getScoreStatistics(dataTable)
     const handleOpenChange = (newOpen: boolean) => {
         setOpen(newOpen)
     }

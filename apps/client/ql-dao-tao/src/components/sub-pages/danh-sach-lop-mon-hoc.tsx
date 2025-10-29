@@ -14,7 +14,7 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Flex, Form, Input, Row, Tooltip } from 'antd'
+import { Checkbox, Col, Flex, Form, Input, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
@@ -288,7 +288,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: an
                                             id="search"
                                             onChange={(e) => handleFilterChange('fixedClassId', e)}
                                             placeholder="Chọn lớp quản lý"
-                                            style={{ height: 32 }}
+                                            style={{ height: 28 }}
                                             allowClear
                                         />
                                     </Form.Item>
@@ -301,7 +301,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: an
                                                 handleFilterChange('searchText', e.target.value)
                                             }
                                             placeholder="Tìm kiếm lớp..."
-                                            style={{ height: 32 }}
+                                            style={{ height: 28 }}
                                             prefix={
                                                 <Search
                                                     size={15}
@@ -415,7 +415,14 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: an
                                     )
                                 },
                             },
-
+       {
+                                title: 'Môn 1 ĐĐ',
+                                width: 80,
+                                align: 'center',
+                                render: (__, record) => {
+                                    return <Checkbox checked={record?.subject?.onePoint}/>
+                                },
+                            },
                             {
                                 title: 'Ngày NĐQT',
                                 dataIndex: 'scoreDeadLineStart',

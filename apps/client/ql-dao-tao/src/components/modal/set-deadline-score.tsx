@@ -1,4 +1,3 @@
-import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
@@ -7,7 +6,8 @@ import type { Dayjs } from 'dayjs'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import DatePicker from '@components/commons/date-picker'
 import locale from 'antd/es/date-picker/locale/vi_VN'
-import { useUpdateSubjectClass } from '@workspace/db/hooks'
+import { useSession } from '@workspace/auth/react'
+import { sqlTransaction } from '@workspace/libs/api/model'
 export type PutUpdateTime = {
     examScoreDeadline: Dayjs
     time: [Dayjs, Dayjs]
@@ -23,14 +23,15 @@ const PutDeadlineScoreModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
-    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+    const { data: session } = useSession()
+    const profileId = session?.sDM_NhanVienId || ''
 
     async function onOk(output?: PutUpdateTime) {
         if (!output) return
         try {
             showSpinner()
             let dataSubmit: any = {}
+            let listSqlTransaction: any = []
             if (output?.time && output?.time.length === 2) {
                 dataSubmit = {
                     scoreDeadline: output?.time[0],
@@ -43,19 +44,35 @@ const PutDeadlineScoreModal = () => {
                     examScoreDeadline: output?.examScoreDeadline,
                 }
             }
-            const res = await updateSubjectClass({
-                data: dataSubmit,
-                where: {
-                    id,
+            listSqlTransaction = [
+                {
+                    model: 'SubjectClass',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id,
+                        },
+                        data: dataSubmit,
+                    },
                 },
-            })
-            if (res) {
-                message.success('Đặt hạn nhập điểm thành công')
+                {
+                    model: 'SubjectClassHistory',
+                    operation: 'create',
+                    data: {
+                        subjectClassId: id,
+                        scoreDeadLineStart: dataSubmit?.time[0] || undefined,
+                        scoreDeadline: dataSubmit?.time[1] || undefined,
+                        examScoreDeadline: dataSubmit?.examScoreDeadline,
+                        updatedById: profileId,
+                    },
+                },
+            ]
+            if (listSqlTransaction) {
+                const res=await sqlTransaction(listSqlTransaction)
+                if (res?.status === 200) {
+                    message.success('Đặt hạn nhập điểm thành công')
+                }
             }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['SubjectClass'],
-            })
             onClose()
         } catch (error: any) {
             console.log(error)
