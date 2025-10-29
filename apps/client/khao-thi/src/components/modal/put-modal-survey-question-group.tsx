@@ -104,7 +104,7 @@ const PutSurveyQuestionGroupModal = () => {
         if (surveyQuestionGroup) {
             form.setFieldsValue({
                 name: surveyQuestionGroup.name,
-                description: surveyQuestionGroup.description,
+                description: surveyQuestionGroup.description || undefined,
                 // Chuyển đổi từ array of objects sang array of strings
                 surveyTopic: surveyQuestionGroup.surveyTopic.map((item) => item.id),
             })

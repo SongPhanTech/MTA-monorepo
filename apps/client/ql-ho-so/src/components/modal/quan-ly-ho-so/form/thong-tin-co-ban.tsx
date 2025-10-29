@@ -39,10 +39,10 @@ export default function ThongTinCoBan({ expland, setExpland }: DomProps) {
     const bLaGiangVien = Form.useWatch('bLaGiangVien', form) || false
     const bLaCanBoNhanVien = Form.useWatch('bLaCanBoNhanVien', form)
     const { data: lecturerTypeData = [] } = useFindManyLecturerType({}, { enabled: bLaGiangVien })
-    const { data: staffTypeData = [] } = useFindManyStaffType({}, { enabled: bLaCanBoNhanVien })
+    const { data: staffTypeData = [] } = useFindManyStaffType({}, { enabled: !!bLaCanBoNhanVien })
     const { data: staffPositionData = [] } = useFindManyStaffPosition(
         {},
-        { enabled: bLaCanBoNhanVien }
+        { enabled: !!bLaCanBoNhanVien }
     )
     const renderContent = () => {
         return (

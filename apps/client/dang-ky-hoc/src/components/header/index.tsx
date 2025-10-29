@@ -7,6 +7,7 @@ import { env } from '@/env'
 declare global {
     interface Window {
         MTAMenuComponents: any
+        tenantCode: string
     }
 }
 
