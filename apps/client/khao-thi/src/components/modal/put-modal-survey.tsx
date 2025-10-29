@@ -56,11 +56,11 @@ export interface TreeNodeType {
 }
 
 interface Choices {
-    id?: string |null
-    answer: string |null
-    description: string 
+    id?: string | null
+    answer: string | null
+    description: string
     surveyResponses?: SurveyResponse[]
-    requireExplanation: boolean |null
+    requireExplanation: boolean | null
 }
 
 const PutSurveyModal = () => {
@@ -70,33 +70,33 @@ const PutSurveyModal = () => {
         onClose: form.resetFields,
     })
     const [current, setCurrent] = useState(0)
-      const [choices, setChoices] = useState<any[]>([
-    {
-      answer: "1",
-      description: "Rất không hài lòng",
-      requireExplanation: false,
-    },
-    {
-      answer: "2",
-      description: "Khong hài lòng",
-      requireExplanation: false,
-    },
-    {
-      answer: "3",
-      description: "Phân vân",
-      requireExplanation: false,
-    },
-    {
-      answer: "4",
-      description: "Hài lòng",
-      requireExplanation: false,
-    },
-    {
-      answer: "5",
-      description: "Rất hài lòng",
-      requireExplanation: false,
-    },
-  ]);
+    const [choices, setChoices] = useState<any[]>([
+        {
+            answer: '1',
+            description: 'Rất không hài lòng',
+            requireExplanation: false,
+        },
+        {
+            answer: '2',
+            description: 'Khong hài lòng',
+            requireExplanation: false,
+        },
+        {
+            answer: '3',
+            description: 'Phân vân',
+            requireExplanation: false,
+        },
+        {
+            answer: '4',
+            description: 'Hài lòng',
+            requireExplanation: false,
+        },
+        {
+            answer: '5',
+            description: 'Rất hài lòng',
+            requireExplanation: false,
+        },
+    ])
 
     const next = async () => {
         try {
@@ -135,12 +135,11 @@ const PutSurveyModal = () => {
                         anonymous: output.anonymous,
                         additionalSuggestion: output.additionalSuggestion,
                         lecturerIds: output.lecturerIds.length ? output.lecturerIds : [],
-                        surveyChoiceIds: output.surveyChoice,
+                        surveyChoices: output.surveyChoice,
                         surveyQuestionIds: output.surveyQuestionIds,
                     },
                 })
-                 message.success('Tạo thành công')
-               
+                message.success('Tạo thành công')
             } else {
                 if (input?.id) {
                     await update({
@@ -157,35 +156,34 @@ const PutSurveyModal = () => {
                             isPublic: output.isPublic,
                             anonymous: output.anonymous,
                             surveyChoice: {
-                                  createMany: {
+                                createMany: {
                                     data: output.surveyChoice.map((item) => ({
                                         answer: item.answer,
                                         description: item.description,
                                         requireExplanation: item.requireExplanation,
                                     })),
-                                skipDuplicates: true,
-                            },
-                            deleteMany: {
-                                id: {
-                                    notIn: output.surveyChoice.map((item) => item.id),
+                                    skipDuplicates: true,
                                 },
-                            },
+                                deleteMany: {
+                                    id: {
+                                        notIn: output.surveyChoice.map((item) => item.id),
+                                    },
+                                },
                             },
                             surveyQuestion: {
                                 set: output.surveyQuestionIds.length
                                     ? output.surveyQuestionIds.map((item) => ({ id: item }))
                                     : [],
                             },
-
                         },
                         where: {
                             id: input?.id,
                         },
                     })
                     message.success('Cập nhật thành công')
-                            queryClient.invalidateQueries({
-                queryKey: ['Level'],
-            })
+                    queryClient.invalidateQueries({
+                        queryKey: ['Level'],
+                    })
                 } else {
                     await create({
                         data: {
@@ -213,7 +211,7 @@ const PutSurveyModal = () => {
                                         description: item.description,
                                         requireExplanation: item.requireExplanation,
                                     })),
-                                }
+                                },
                             },
                             surveyQuestion: {
                                 connect: output.surveyQuestionIds.length
@@ -224,13 +222,13 @@ const PutSurveyModal = () => {
                     })
                     message.success('Thêm mới thành công')
                 }
-                    queryClient.invalidateQueries({
-                queryKey: ['Survey'],
-            })
+                queryClient.invalidateQueries({
+                    queryKey: ['Survey'],
+                })
             }
 
             // refetch() lại danh sách level
-        
+
             onClose()
         } catch (error: any) {
             if (error?.info?.message) {
@@ -396,7 +394,7 @@ const PutSurveyModal = () => {
                         </Col>
 
                         <Col span={12}>
-                            <FormItem form={form} name="semesterId" label="Kỳ học" >
+                            <FormItem form={form} name="semesterId" label="Kỳ học">
                                 <TreeSelectAnt
                                     showSearch
                                     dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -412,7 +410,12 @@ const PutSurveyModal = () => {
                         </Col>
                         <Col span={12}>
                             {input?.type === 'multiple' ? (
-                                <FormItem form={form} name="lecturerIds" label="Giảng viên" required>
+                                <FormItem
+                                    form={form}
+                                    name="lecturerIds"
+                                    label="Giảng viên"
+                                    required
+                                >
                                     <Select
                                         mode="multiple"
                                         maxTagCount={'responsive'}
@@ -427,7 +430,7 @@ const PutSurveyModal = () => {
                                     />
                                 </FormItem>
                             ) : (
-                                <FormItem form={form} name="lecturerId" label="Giảng viên" >
+                                <FormItem form={form} name="lecturerId" label="Giảng viên">
                                     <Select
                                         placeholder="Chọn minh chứng"
                                         options={lecturerData?.map((i) => {
@@ -486,44 +489,56 @@ const PutSurveyModal = () => {
             {
                 title: 'Cấu hình sinh đề',
                 content: (
-                   <ConfigSurveyExam surveyTopicId={surveyTopicId} choices={choices} setChoices={(value:any)=>setChoices(value)} />
+                    <ConfigSurveyExam
+                        surveyTopicId={surveyTopicId}
+                        choices={choices}
+                        setChoices={(value: any) => setChoices(value)}
+                    />
                 ),
             },
         ]
-    }, [
-        input, 
-        lecturerData, 
-        surveyObjectTypesData, 
-        surveyTopics, 
-        treeData,
-        surveyTopicId
-    ])
+    }, [input, lecturerData, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {
-            setChoices(survey?.surveyChoice.length ? survey?.surveyChoice.map((item)=>{return {
-                id: item.id,
-                answer: item.answer,
-                description: item.description,
-                requireExplanation: item.requireExplanation,
-                surveyResponses: item.surveyResponses,
-            }}):choices)
+            setChoices(
+                survey?.surveyChoice.length
+                    ? survey?.surveyChoice.map((item) => {
+                          return {
+                              id: item.id,
+                              answer: item.answer,
+                              description: item.description,
+                              requireExplanation: item.requireExplanation,
+                              surveyResponses: item.surveyResponses,
+                          }
+                      })
+                    : choices
+            )
             form.setFieldsValue({
                 ...survey,
                 startDate: dayjs(survey.startDate),
                 endDate: survey.endDate ? dayjs(survey.endDate) : undefined,
                 surveyObjectTypes: survey.surveyObjectType.map((item) => item.id),
                 surveyQuestionIds: survey?.surveyQuestion.map((item) => item.id),
-                surveyChoice:survey?.surveyChoice.length ? survey?.surveyChoice.map((item)=>{return {
-                    id: item.id,
-                    answer: item.answer,
-                    description: item.description,
-                    requireExplanation: item.requireExplanation,
-                    surveyResponses: item.surveyResponses,
-                }}):choices,
+                surveyChoice: survey?.surveyChoice.length
+                    ? survey?.surveyChoice.map((item) => {
+                          return {
+                              id: item.id,
+                              answer: item.answer,
+                              description: item.description,
+                              requireExplanation: item.requireExplanation,
+                              surveyResponses: item.surveyResponses,
+                          }
+                      })
+                    : choices,
             })
         } else {
-            form.setFieldsValue({ isPublic: false, anonymous: true, additionalSuggestion: false,surveyChoice:choices })
+            form.setFieldsValue({
+                isPublic: false,
+                anonymous: true,
+                additionalSuggestion: false,
+                surveyChoice: choices,
+            })
         }
     }, [survey])
 
@@ -545,13 +560,10 @@ const PutSurveyModal = () => {
             </div>
 
             <Form form={form} layout="vertical" onFinish={onOk}>
-                    {steps.map((step, index) => (
-                        <div
-                            key={step.title}
-                            style={{ display: index === current ? "block" : "none" }}
-                        >
-                            {step.content}
-                        </div>
+                {steps.map((step, index) => (
+                    <div key={step.title} style={{ display: index === current ? 'block' : 'none' }}>
+                        {step.content}
+                    </div>
                 ))}
 
                 <div className="flex justify-end" style={{ marginTop: 24 }}>

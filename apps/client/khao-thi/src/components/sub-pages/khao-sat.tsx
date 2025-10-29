@@ -105,8 +105,6 @@ function TabDotKhaoSat() {
         tag: 'PutSurveyModal',
     })
 
-  
-
     const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string }>({
         tag: 'ThongTinKhaoSatModal',
     })
@@ -204,20 +202,19 @@ function TabDotKhaoSat() {
                                     value: id,
                                     label: name,
                                 })),
-                                  render: (_, record) =>{
-                                        return record?.surveyObjectType?.length ? (
-                                            <HtmlTruncate key="explanation">
-                                                                                
-                                                                                <ul>
-                                                                                    {record?.surveyObjectType?.map((i: any) => (
-                                                                                        <li key={i.id}>- {i.name}</li>
-                                                                                    ))}
-                                                                                </ul>
-                                                                                </HtmlTruncate>
-                                        ) : (
-                                            ''
-                                        )
-                                }
+                                render: (_, record) => {
+                                    return record?.surveyObjectType?.length ? (
+                                        <HtmlTruncate key="explanation">
+                                            <ul>
+                                                {record?.surveyObjectType?.map((i: any) => (
+                                                    <li key={i.id}>- {i.name}</li>
+                                                ))}
+                                            </ul>
+                                        </HtmlTruncate>
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Ngày bắt đầu',

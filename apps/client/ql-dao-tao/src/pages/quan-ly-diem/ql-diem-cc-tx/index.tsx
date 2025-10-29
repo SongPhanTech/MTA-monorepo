@@ -81,7 +81,7 @@ export default function SubjectClassScore() {
             if (dayjs()?.isAfter(data?.scoreDeadline) && !data?.enteredScore) {
                 return (
                     <Input
-                    size="small"
+                        size="small"
                         className="bg-red-600 text-white"
                         placeholder="Hạn nhập điểm pointer-events-none"
                         value={`Ngoài hạn nhập điểm quá trình, ${formatDate(data?.scoreDeadLineStart || '')} đến ${formatDate(data?.scoreDeadline || '')}`}
@@ -97,7 +97,7 @@ export default function SubjectClassScore() {
                 />
             )
         }
-        return <Input placeholder="Hạn nhập điểm" className="pointer-events-none" size="small"  />
+        return <Input placeholder="Hạn nhập điểm" className="pointer-events-none" size="small" />
     }, [data])
 
     return (
@@ -106,10 +106,20 @@ export default function SubjectClassScore() {
                 <div className="flex items-center mb-2 w-full">
                     <div className="min-w-[150px] w-[150px]">Lớp môn học:</div>
                     <div className="w-[300px]">
-                        <Input size="small" placeholder="Mã lớp MH" className="pointer-events-none"  value={data?.code} />
+                        <Input
+                            size="small"
+                            placeholder="Mã lớp MH"
+                            className="pointer-events-none"
+                            value={data?.code}
+                        />
                     </div>
                     <div className="ml-3 w-full">
-                        <Input size="small" placeholder="Tên lớp MH" className="pointer-events-none" value={data?.name} />
+                        <Input
+                            size="small"
+                            placeholder="Tên lớp MH"
+                            className="pointer-events-none"
+                            value={data?.name}
+                        />
                     </div>
                 </div>
                 <div className="flex items-center mb-2 w-full">
@@ -131,7 +141,7 @@ export default function SubjectClassScore() {
                     <div className="min-w-[150px] w-[150px]">Đơn vị quản lý</div>
                     <div className="w-full">
                         <Input
-                        size="small"
+                            size="small"
                             className="w-full pointer-events-none"
                             placeholder="Giảng viên"
                             value={
@@ -158,7 +168,7 @@ export default function SubjectClassScore() {
                         <Checkbox disabled checked={data?.isLockScore} />
                         <span className="ml-2 opacity-[0.5] w-[160px]">P13 đã khoá</span>
                         <div className="w-full">
-                            <Input size="small"  className="pointer-events-none" />
+                            <Input size="small" className="pointer-events-none" />
                         </div>
                     </div>
                 </div>
@@ -169,7 +179,7 @@ export default function SubjectClassScore() {
                             P2/P7 kiểm tra lại phiếu điểm
                         </span>
                         <div className="w-full">
-                            <Input size="small" className="pointer-events-none"  />
+                            <Input size="small" className="pointer-events-none" />
                         </div>
                     </div>
                 </div>

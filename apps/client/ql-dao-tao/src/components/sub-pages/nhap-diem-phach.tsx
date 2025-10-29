@@ -1,14 +1,13 @@
 import Table from '@components/commons/table'
 import { useFindManyExamSession } from '@workspace/db/hooks'
 import { useSaveExamScore } from '@workspace/libs/api/training'
-import { Button, Col, Flex, Form, InputNumber, message, Modal } from 'antd'
+import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
-export default function NhapdiemPhach() {
+export default function NhapdiemPhach({ examRoomId }: { examRoomId: string }) {
     const router = useRouter()
     const [form] = Form.useForm<{ list: { score: number | null }[] }>()
-    const examRoomId = router.query.examRoomId as string
     const { data = [], refetch } = useFindManyExamSession(
         {
             where: {

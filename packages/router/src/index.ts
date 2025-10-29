@@ -273,17 +273,23 @@ const NAVIGATION: NavigationType = {
                 icon: FileOutlined,
                 children: [
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_KY_THI,
-                        label: 'Kỳ thi',
-                        path: ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_KY_THI,
-                        description: 'Quản lý kỳ thi',
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_LAP_DANH_SANH_THI,
+                        label: 'Lập danh sách thi',
+                        path: ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_LAP_DANH_SANH_THI,
+                        description: 'Lập danh sách thi',
                     },
-                    {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_DANH_SACH_THI,
-                        label: 'Danh sách thi',
-                        path: ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI,
-                        description: 'Danh sách thi',
-                    },
+                    // {
+                    //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_KY_THI,
+                    //     label: 'Kỳ thi',
+                    //     path: ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_KY_THI,
+                    //     description: 'Quản lý kỳ thi',
+                    // },
+                    // {
+                    //     id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_TO_CHUC_THI_DANH_SACH_THI,
+                    //     label: 'Danh sách thi',
+                    //     path: ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI,
+                    //     description: 'Danh sách thi',
+                    // },
                 ],
             },
 
@@ -496,9 +502,9 @@ const NAVIGATION: NavigationType = {
                         description: 'Đợt xét tốt nghiệp',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_IN_PHU_LUC_VAN_BANG_PHOI_BANG_TOT_NGHIEP,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
                         label: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
-                        path: ROUTER_PATH.QL_DAO_TAO.IN_PHU_LUC_VAN_BANG_PHOI_BANG_TOT_NGHIEP,
+                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
                         description: 'In phụ lục văn bằng, phôi bằng tốt nghiệp',
                     },
                 ],

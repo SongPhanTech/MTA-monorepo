@@ -1,11 +1,13 @@
-import { DownloadOutlined, FileExcelOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
+import { DownloadOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import ExportStudentInFixedClass from '@components/modal/export-list-student-in-fixedClass'
 import { FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
+import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
+import { getMinioUrl } from '@workspace/constant'
 import type { Student } from '@workspace/db/client'
 import {
     useFindManyCurriculumVersion,
@@ -17,23 +19,20 @@ import {
     useUpdateManyStudent,
     useUpdateStudent,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { Docxtemplater, exportFile, loadFile } from '@workspace/libs/docxjs'
-import { saveAs } from 'file-saver'
+import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 import { ROUTER_PATH } from '@workspace/router'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Divider, Dropdown, Flex, message, Popconfirm, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { saveAs } from 'file-saver'
 import _ from 'lodash'
 import { BookCheckIcon } from 'lucide-react'
 import { useRouter } from 'next/router'
-
 import { useCallback, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
-import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
-import { sqlTransaction } from '@workspace/libs/api/model'
-import type { IMonHoc, IHocKi } from './ket-qua-hoc-tap/[id]'
-import { useScoreConverter } from '@hooks/scoreConverter'
-import { getMinioUrl } from '@workspace/constant'
+import type { IHocKi, IMonHoc } from './ket-qua-hoc-tap/[id]'
 
 dayjs.locale('vi')
 
@@ -813,7 +812,7 @@ export default function StudentFixedClassPage() {
                             },
                         ],
                     }
-                    //@ts-ignore
+                    //@ts-expect-error
                     const monHocRows: TableRow[] =
                         hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
                             cells: [
@@ -1185,7 +1184,7 @@ export default function StudentFixedClassPage() {
                             },
                         ],
                     }
-                    //@ts-ignore
+                    //@ts-expect-error
                     const monHocRows: TableRow[] =
                         hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
                             cells: [
@@ -1547,7 +1546,7 @@ export default function StudentFixedClassPage() {
             let globalCounter = 1
             const allSheetOptions = result.map((sampleStudentData) => {
                 const tableRows = sampleStudentData.hocKis.flatMap((hocKi: IHocKi) => {
-                    //@ts-ignore
+                    //@ts-expect-error
                     const monHocRows: TableRow[] =
                         hocKi?.monHocs?.map((monHoc: IMonHoc) => ({
                             cells: [

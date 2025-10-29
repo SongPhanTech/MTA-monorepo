@@ -7,7 +7,7 @@ import { useSession } from '@workspace/auth/react'
 import { useCountExamRoom, useFindManyExamRoom } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import {Row, Col } from 'antd'
+import { Col, Row } from 'antd'
 import _ from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo, useState } from 'react'
@@ -32,8 +32,6 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
     // }>({
     //     tag: 'ModalPrintStudentSubjectScore',
     // })
-
-
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     const where: any = useMemo(() => {
@@ -110,13 +108,9 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                         onRow={(record) => {
                             return {
                                 onClick: () => {
-                                    console.log(record);
-                                    
                                     setSelectedRowKeys(record.id)
                                 },
-                                className: cn(
-                                    selectedRowKeys === record.id ? 'bg-orange-200' : ''
-                                ),
+                                className: cn(selectedRowKeys === record.id ? 'bg-orange-200' : ''),
                             }
                         }}
                         columns={[
@@ -124,7 +118,6 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 title: 'STT',
                                 width: 60,
                                 align: 'center',
-                                fixed: 'left',
                                 render: (_, __, index) => index + 1,
                             },
                             {

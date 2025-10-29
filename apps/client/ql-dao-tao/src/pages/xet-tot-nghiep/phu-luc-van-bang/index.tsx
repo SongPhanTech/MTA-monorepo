@@ -1,6 +1,6 @@
 import Table from '@components/commons/table'
 import DefaultLayout from '@layouts/default-layout'
-import { Button, Input, Select, SelectProps } from 'antd'
+import { Button, Input, Select, type SelectProps } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
 export default function StudentGradeSystem() {

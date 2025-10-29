@@ -297,7 +297,7 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
     useEffect(() => {
         const id = createId()
         const placeholderContainer = document.getElementById('placeholder-container')
-        // @ts-ignore
+        // @ts-expect-error
         if (window.DocsAPI) {
             while (placeholderContainer?.firstChild) {
                 if (placeholderContainer.lastChild)
@@ -338,7 +338,7 @@ const OnlyOfficeViewer = ({ uri, title = 'Tài liệu', fileType = 'docx', mode 
                     },
                 },
             } satisfies OnlyOfficeFullConfig
-            // @ts-ignore
+            // @ts-expect-error
             window.docEditor = new window.DocsAPI.DocEditor(id, config)
         }
     }, [uri, title, fileType, mode])

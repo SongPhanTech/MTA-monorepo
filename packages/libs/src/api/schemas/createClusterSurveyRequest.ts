@@ -4,7 +4,7 @@
  * My API
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateClusterSurveyRequestSurveyChoiceIdsItem } from './createClusterSurveyRequestSurveyChoiceIdsItem'
+import type { CreateClusterSurveyRequestSurveyChoicesItem } from './createClusterSurveyRequestSurveyChoicesItem'
 
 export interface CreateClusterSurveyRequest {
     name: string
@@ -23,5 +23,5 @@ export interface CreateClusterSurveyRequest {
     /** @minItems 1 */
     surveyQuestionIds: string[]
     /** @minItems 1 */
-    surveyChoiceIds: CreateClusterSurveyRequestSurveyChoiceIdsItem[]
+    surveyChoices: CreateClusterSurveyRequestSurveyChoicesItem[]
 }

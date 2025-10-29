@@ -2,7 +2,7 @@ import { searchVietnamese } from '@lib/utils'
 import { Checkbox, type CheckboxChangeEvent, Input } from 'antd'
 import { Search } from 'lucide-react'
 import { useState } from 'react'
-import { FilterProps } from '../typeFilter'
+import type { FilterProps } from '../typeFilter'
 
 export default function FilterSelect({
     item,

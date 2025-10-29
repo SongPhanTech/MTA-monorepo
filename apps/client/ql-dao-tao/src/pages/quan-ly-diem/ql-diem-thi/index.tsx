@@ -94,7 +94,7 @@ export default function SubjectClassScore() {
             if (dayjs()?.isAfter(data?.examScoreDeadline) && !data?.enteredExamScore) {
                 return (
                     <Input
-                    size="small"
+                        size="small"
                         className="bg-red-600 text-white pointer-events-none"
                         placeholder="Hạn nhập điểm"
                         value={`Ngoài hạn nhập điểm quá trình, ${formatDate(data?.scoreDeadLineStart || '')} đến ${formatDate(data?.scoreDeadline || '')}`}
@@ -103,14 +103,14 @@ export default function SubjectClassScore() {
             }
             return (
                 <Input
-                size="small"
-                className='pointer-events-none'
+                    size="small"
+                    className="pointer-events-none"
                     placeholder="Hạn nhập điểm"
                     value={`${data?.scoreDeadLineStart && formatDate(data?.scoreDeadLineStart)} đến ${data?.scoreDeadline && formatDate(data?.scoreDeadline || '')}`}
                 />
             )
         }
-        return <Input placeholder="Hạn nhập điểm" size="small"  className='pointer-events-none' />
+        return <Input placeholder="Hạn nhập điểm" size="small" className="pointer-events-none" />
     }, [data])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     useEffect(() => {
@@ -129,10 +129,20 @@ export default function SubjectClassScore() {
                 <div className="flex items-center mb-2 w-full">
                     <div className="min-w-[150px] w-[150px]">Lớp môn học:</div>
                     <div className="w-[300px]">
-                        <Input size="small" placeholder="Mã lớp MH" className="pointer-events-none" value={data?.code} />
+                        <Input
+                            size="small"
+                            placeholder="Mã lớp MH"
+                            className="pointer-events-none"
+                            value={data?.code}
+                        />
                     </div>
                     <div className="ml-3 w-full">
-                        <Input size="small" placeholder="Tên lớp MH" className="pointer-events-none" value={data?.name} />
+                        <Input
+                            size="small"
+                            placeholder="Tên lớp MH"
+                            className="pointer-events-none"
+                            value={data?.name}
+                        />
                     </div>
                 </div>
                 <div className="flex items-center mb-2 w-full">
@@ -202,7 +212,7 @@ export default function SubjectClassScore() {
                                 </Checkbox>
                             </FormItem>
                             <div className="w-full">
-                                <Input size="small" className="pointer-events-none"/>
+                                <Input size="small" className="pointer-events-none" />
                             </div>
                         </div>
                     </div>
@@ -221,7 +231,7 @@ export default function SubjectClassScore() {
                                 </Checkbox>
                             </FormItem>
                             <div className="w-full">
-                                <Input size="small" className="pointer-events-none"/>
+                                <Input size="small" className="pointer-events-none" />
                             </div>
                         </div>
                     </div>
