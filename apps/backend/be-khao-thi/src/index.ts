@@ -9,6 +9,7 @@ import { showRoutes } from 'hono/dev'
 import { HTTPException } from 'hono/http-exception'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import { Registry } from 'prom-client'
+import clusterSurveyApp from './api/cluster-survey'
 import examApp from './api/exam'
 import surveyApp from './api/survey'
 import surveyPublicApp from './api/survey-public'
@@ -69,6 +70,7 @@ setupOpenApi(app)
 
 app.route('/api/exam', examApp)
 app.route('/api/survey', surveyApp)
+app.route('/api/cluster-survey', clusterSurveyApp)
 
 const nv = await prisma.userProfile.findFirstOrThrow()
 

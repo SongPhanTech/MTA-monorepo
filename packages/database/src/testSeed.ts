@@ -8,9 +8,17 @@ await prisma.templateFile.createMany({
     skipDuplicates: true,
     data: [
         {
-            name: 'Thống kê quân số học viên theo khoá',
-            code: 'THONG_KE_QUAN_SO_HOC_VIEN_THEO_KHOA',
-            path: 'https://minio.swantech.vn/mta/template/quan_so_hoc_vien_theo_khoa.xlsx',
+            name: 'Thống kê khảo sát đơn',
+            code: 'THONG_KE_KHAO_SAT_DON',
+            path: 'https://minio.swantech.vn/mta/template/thong_ke_khao_sat_don.xlsx',
+            fileType: 'DOWNLOAD',
+            extensions: 'xlsx',
+            numberField: 0,
+        },
+        {
+            name: 'Thống kê khảo sát cụm',
+            code: 'THONG_KE_KHAO_SAT_CUM',
+            path: 'https://minio.swantech.vn/mta/template/thong_ke_khao_sat_cum.xlsx',
             fileType: 'DOWNLOAD',
             extensions: 'xlsx',
             numberField: 0,
