@@ -12,21 +12,20 @@ import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import {
+    Button,
     Checkbox,
     Col,
+    Flex,
     Form,
     Input,
     InputNumber,
-    Modal,
     message,
-    Row,
-    Flex,
-    Popover,
-    Button,
+    Modal,
+    Row
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { Ellipsis, FileUp, Save } from 'lucide-react'
+import { FileUp, Save } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -505,72 +504,50 @@ export default function DiemQuaTrinh({
                 <Flex gap={4}>
                     {can(
                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                        'NHAP_EXCEL',
+                        'NHAP_EXCEL'
+                    ) && (
+                        <>
+                            <Button
+                                onClick={() => setImportModalVisible(true)}
+                                disabled={
+                                    !subjectClassId ||
+                                    disabledForm ||
+                                    dataDetailSubjectClass.enteredScore
+                                }
+                                className="w-full flex justify-start"
+                            >
+                                <FileUp />
+                                Nhập điểm từ file
+                            </Button>
+                            <ImportScoreModal
+                                visible={importModalVisible}
+                                onCancel={() => setImportModalVisible(false)}
+                                onConfirm={handleImportConfirm}
+                                existingStudents={dataTable}
+                            />
+                        </>
+                    )}
+                    {can(
+                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                         'XUAT_EXCEL'
                     ) && (
-                        <Popover
-                            content={
-                                <Flex vertical align="flex-start" gap={4}>
-                                    {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                        'NHAP_EXCEL'
-                                    ) && (
-                                        <>
-                                            {!disabledForm &&
-                                                !dataDetailSubjectClass.enteredScore && (
-                                                    <Button
-                                                        onClick={() => setImportModalVisible(true)}
-                                                        disabled={!subjectClassId}
-                                                        className="w-full flex justify-start"
-                                                    >
-                                                        <FileUp />
-                                                        Nhập điểm từ file
-                                                    </Button>
-                                                )}
-
-                                            <ImportScoreModal
-                                                visible={importModalVisible}
-                                                onCancel={() => setImportModalVisible(false)}
-                                                onConfirm={handleImportConfirm}
-                                                existingStudents={dataTable}
-                                            />
-                                        </>
-                                    )}
-                                    {can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
-                                        'XUAT_EXCEL'
-                                    ) && (
-                                        <ExportScoreTemplate
-                                            selectedFixedClass={subjectClassId}
-                                            dataTable={dataTable}
-                                            type="cc-tx"
-                                        />
-                                    )}
-                                </Flex>
-                            }
-                            trigger="click"
-                            open={open}
-                            onOpenChange={handleOpenChange}
-                            placement="bottomLeft"
-                            arrow={false}
-                        >
-                            <Button disabled={!subjectClassId}>
-                                <Ellipsis />
-                            </Button>
-                        </Popover>
+                        <ExportScoreTemplate
+                            selectedFixedClass={subjectClassId}
+                            dataTable={dataTable}
+                            type="cc-tx"
+                        />
                     )}
                     {can(
                         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                         'IN_DS_THI'
-                    ) &&
-                        !!dataDetailSubjectClass?.enteredScore && (
-                            <ExportTemplateExam
-                                selectedFixedClass={subjectClassId}
-                                dataClass={dataDetailSubjectClass}
-                                dataTable={dataTable}
-                            />
-                        )}
-
+                    ) && (
+                        <ExportTemplateExam
+                            selectedFixedClass={subjectClassId}
+                            dataClass={dataDetailSubjectClass}
+                            dataTable={dataTable}
+                            disabled={!dataDetailSubjectClass?.enteredScore}
+                        />
+                    )}
                     <Button type="primary" onClick={handleSave}>
                         <Save stroke="white" />
                         Lưu
