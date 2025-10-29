@@ -10,17 +10,20 @@ declare global {
         titleCase(): string
         firstCase(): string
     }
-}
+    interface Array<T> {
+        compare(otherArray: T[], cb: (a: T, b: T) => boolean): boolean
+    }
 
-type StudentSubjectScoreRelation = StudentSubjectScore & {
-    finalScore: Decimal | null
-    student?: {
-        fixedClass?: {
-            trainingCourse?: {
-                scoreConverts?: ScoreConvert[] | null
-                scoreToPass?: number | null
+    type StudentSubjectScoreRelation = StudentSubjectScore & {
+        finalScore: Decimal | null
+        student?: {
+            fixedClass?: {
+                trainingCourse?: {
+                    scoreConverts?: ScoreConvert[] | null
+                    scoreToPass?: number | null
+                } | null
             } | null
-        } | null
+        }
     }
 }
 
@@ -43,6 +46,27 @@ String.prototype.titleCase = function (): string {
 }
 String.prototype.firstCase = function (): string {
     return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase()
+}
+
+Array.prototype.compare = function <T>(
+    this: T[],
+    otherArray: T[],
+    cb: (a: T, b: T) => boolean
+): boolean {
+    if (this.length !== otherArray.length) {
+        return false
+    }
+    for (let i = 0; i < this.length; i++) {
+        const otherItem = otherArray[i]
+        const thisItem = this[i]
+        if (!thisItem || !otherItem) {
+            return false
+        }
+        if (!cb(thisItem, otherItem)) {
+            return false
+        }
+    }
+    return true
 }
 
 export function splitFullName(fullName?: string): {
@@ -79,18 +103,18 @@ export const calcFinalScore = (
     const rawFinalScore = !subjectScore.examScore
         ? null
         : subjectScore.examScore < coef?.scoreToPass
-          ? subjectScore.examScore
-          : Math.min(
+            ? subjectScore.examScore
+            : Math.min(
                 (subjectScore.attendanceScore || 0) * coef?.coef_1 +
-                    (subjectScore.midtermScore || 0) * coef?.coef_2 +
-                    subjectScore.examScore * coef?.coef_3,
+                (subjectScore.midtermScore || 0) * coef?.coef_2 +
+                subjectScore.examScore * coef?.coef_3,
                 10
             )
 
     const maxCertFinalScore = subjectScore.certificates?.length
         ? Math.max(
-              ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
-          )
+            ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
+        )
         : null
 
     if (rawFinalScore === null && maxCertFinalScore === null) {

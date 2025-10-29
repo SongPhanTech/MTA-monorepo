@@ -1,16 +1,21 @@
+import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { useStore } from '@tanstack/react-store'
+import type { ScoreConvert } from '@workspace/db/client'
 import {
     useCountStudent,
     useFindManyFixedClass,
     useFindManyStudent,
-    useFindManyTrainingCourse,
+    useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Form, Input, Row, Select } from 'antd'
+import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { type Key, useCallback, useState } from 'react'
+import { type Key, useCallback, useEffect, useState } from 'react'
+import { dangKyHocChoLopQuanLyStore } from '..'
+import useSpinner from '@hooks/spinner'
 
 interface FilterProps {
     searchText: string | null
@@ -19,14 +24,13 @@ interface FilterProps {
 }
 
 interface RegisterClassProps {
-    setStudentId?: (id: string | null) => void
     hocLai?: boolean
 }
 
-export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterClassProps) {
+export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKey, setSelectedRowKey] = useState<Key>('')
+    const [numberOfPages, setNumberOfPages] = useState(50)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
 
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -35,15 +39,8 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
     })
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: {
-            name: 'asc',
-        },
-        where: {
-            active: true,
-            trainingObjectTypeId,
-        },
-    })
+
+    const { subjectClassId, fixedClassesIds } = useStore(dangKyHocChoLopQuanLyStore)
 
     const { data: fixedClassData = [] } = useFindManyFixedClass({
         orderBy: {
@@ -52,6 +49,9 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
         where: {
             active: true,
             trainingCourseId: filters.trainingCourseId,
+            id: {
+                in: fixedClassesIds,
+            },
         },
     })
 
@@ -77,9 +77,13 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
                       ],
                   }
                 : {}),
-            fixedClassId: filters.fixedClassId,
             fixedClass: {
                 trainingCourseId: filters.trainingCourseId,
+                id: filters.fixedClassId
+                    ? filters.fixedClassId
+                    : {
+                          in: fixedClassesIds,
+                      },
             },
             active: true,
             status: 'ENROLLED',
@@ -103,23 +107,101 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
                     },
                 },
             },
+            subjectClassStudent: {
+                select: {
+                    finalScore: true,
+                },
+                orderBy: {
+                    finalScore: 'desc',
+                },
+                where: {
+                    subjectClassId: subjectClassId || undefined,
+                },
+            },
             fixedClass: {
                 select: {
                     code: true,
                     trainingCourse: {
                         select: {
                             name: true,
+                            scoreConverts: true,
                         },
                     },
                 },
             },
         },
-        orderBy: {
-            userProfile: {
-                firstName: 'asc',
+        orderBy: [
+            {
+                fixedClass: {
+                    code: 'asc',
+                },
             },
+            {
+                userProfile: {
+                    firstName: 'asc',
+                },
+            },
+        ],
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: allStudentIds = [] } = useFindManyStudent({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          {
+                              userProfile: {
+                                  fullname: {
+                                      contains: filters.searchText,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            fixedClass: {
+                trainingCourseId: filters.trainingCourseId,
+                id: filters.fixedClassId
+                    ? filters.fixedClassId
+                    : {
+                          in: fixedClassesIds,
+                      },
+            },
+            active: true,
+            status: 'ENROLLED',
+            deletedAt: null,
+            trainingObjectTypeId,
+        },
+        select: {
+            id: true,
         },
     })
+
+    const { data: selectedSubjectClass } = useFindUniqueSubjectClass(
+        {
+            where: {
+                id: subjectClassId as string,
+            },
+            select: {
+                subjectId: true,
+                subjectClassStudent: {
+                    select: {
+                        studentId: true,
+                    },
+                },
+            },
+        },
+        { enabled: !!semesterId && !!subjectClassId }
+    )
 
     const { data: countStudents = 0 } = useCountStudent({
         where: {
@@ -143,9 +225,13 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
                       ],
                   }
                 : {}),
-            fixedClassId: filters.fixedClassId,
             fixedClass: {
                 trainingCourseId: filters.trainingCourseId,
+                id: filters.fixedClassId
+                    ? filters.fixedClassId
+                    : {
+                          in: fixedClassesIds,
+                      },
             },
             active: true,
             status: 'ENROLLED',
@@ -161,6 +247,29 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
         []
     )
 
+    useEffect(() => {
+        if (students && selectedSubjectClass) {
+            const selectedSubjectClassFixedClassIds = selectedSubjectClass?.subjectClassStudent.map(
+                (scs) => scs.studentId
+            )
+            const selectedKeys = students
+                .filter((item) => selectedSubjectClassFixedClassIds?.includes(item.id))
+                .map((item) => item.id)
+            setSelectedRowKeys(selectedKeys)
+            if (
+                !dangKyHocChoLopQuanLyStore.state.studentIds.compare(
+                    selectedKeys,
+                    (a, b) => a === b
+                )
+            ) {
+                dangKyHocChoLopQuanLyStore.setState((prev) => ({
+                    ...prev,
+                    studentIds: selectedKeys as string[],
+                }))
+            }
+        }
+    }, [students, selectedSubjectClass])
+
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
             const newFilters = { ...prev, [key]: value }
@@ -169,9 +278,74 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
         })
     }
 
-    const handleRowSelection = (id: string) => {
-        setStudentId?.(id)
-        setSelectedRowKey(id)
+    const handleRowSelection = (ids: Key[]) => {
+        setSelectedRowKeys(ids)
+    }
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const handleSaveDangKyHoc = async () => {
+        try {
+            showSpinner()
+            const res = await sqlTransaction([
+                {
+                    model: 'SubjectClass',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id: subjectClassId as string,
+                        },
+                        data: {
+                            subjectClassStudent: {
+                                deleteMany: {},
+                            },
+                            fixedClasses: {
+                                set: fixedClassesIds.map((id) => ({ id })),
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'SubjectClass',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id: subjectClassId as string,
+                        },
+                        data: {
+                            subjectClassStudent: {
+                                create: selectedRowKeys.map((studentId) => ({
+                                    student: {
+                                        connect: {
+                                            id: studentId as string,
+                                        },
+                                    },
+                                    subjectVersion: {
+                                        connect: {
+                                            id: selectedSubjectClass?.subjectId as string,
+                                        },
+                                    },
+                                })),
+                            },
+                        },
+                    },
+                },
+            ])
+            if (res.status !== 200) throw new Error('Transaction failed')
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'SubjectClass'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'FixedClass'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'Student'],
+            })
+            message.success('Lưu danh sách đăng ký học thành công')
+        } catch (error) {
+            message.error('Lưu danh sách đăng ký học thất bại')
+        }
+        hideSpinner()
     }
 
     return (
@@ -197,22 +371,6 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
             </Col>
             <Col span={8}>
                 <Select
-                    placeholder="Chọn khoá"
-                    className="w-full"
-                    options={trainingCourseData.map((i) => ({
-                        value: i.id,
-                        label: i.name,
-                    }))}
-                    allowClear
-                    showSearch
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    onChange={(value) => handleFilterChange('trainingCourseId', value)}
-                />
-            </Col>
-            <Col span={8}>
-                <Select
                     placeholder="Chọn lớp"
                     className="w-full"
                     dropdownStyle={{
@@ -230,22 +388,45 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
                     onChange={(value) => handleFilterChange('fixedClassId', value)}
                 />
             </Col>
+            <Col span={8} className="text-right">
+                <Button
+                    type="primary"
+                    onClick={handleSaveDangKyHoc}
+                    disabled={!subjectClassId || fixedClassesIds.length === 0}
+                >
+                    Lưu danh sách ĐKH
+                </Button>
+            </Col>
             <Col span={24}>
                 <Table
                     rowKey="id"
-                    className="mt-0"
+                    className="mt-2"
                     data={students}
                     onRow={(record) => ({
-                        onClick: () => handleRowSelection(record.id),
+                        onClick: () => {
+                            if (!selectedRowKeys.includes(record.id)) {
+                                handleRowSelection([...selectedRowKeys, record.id])
+                            } else {
+                                handleRowSelection(
+                                    selectedRowKeys.filter((key) => key !== record.id)
+                                )
+                            }
+                        },
                         style: { cursor: 'pointer' },
                         columnWidth: 35,
                     })}
                     rowSelection={{
-                        selectedRowKeys: [selectedRowKey],
-                        onChange: (selectedRowKeys) => {
-                            handleRowSelection(selectedRowKeys?.[0] as string)
+                        selectedRowKeys: selectedRowKeys,
+                        onChange: (selectedKeys, _, { type }) => {
+                            if (type === 'all') {
+                                if (selectedRowKeys.length > 0) {
+                                    handleRowSelection([])
+                                } else {
+                                    handleRowSelection(allStudentIds.map((i) => i.id))
+                                }
+                            } else handleRowSelection(selectedKeys)
                         },
-                        type: 'radio',
+                        type: 'checkbox',
                         columnWidth: 35,
                     }}
                     columns={[
@@ -253,8 +434,7 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
                             title: 'TT',
                             width: 35,
                             align: 'center',
-                            render: (_, __, index) =>
-                                index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                         },
                         {
                             title: 'Mã',
@@ -286,6 +466,35 @@ export default function CaNhanTrongLopQuanLy({ setStudentId, hocLai }: RegisterC
                             align: 'center',
                             dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
                             width: 80,
+                        },
+                        {
+                            title: 'Điểm',
+                            align: 'center',
+                            width: 50,
+                            render: (_, record) => record.subjectClassStudent[0]?.finalScore || '-',
+                        },
+                        {
+                            title: 'Cải thiện',
+                            align: 'center',
+                            width: 50,
+                            render: (_, record) => (
+                                <Checkbox
+                                    checked={
+                                        record?.subjectClassStudent.length > 0 &&
+                                        record?.subjectClassStudent[0]?.finalScore !== null
+                                            ? record?.fixedClass?.trainingCourse?.scoreConverts?.some(
+                                                  (sc: ScoreConvert) =>
+                                                      sc?.base10Min <=
+                                                          record.subjectClassStudent[0]
+                                                              ?.finalScore &&
+                                                      record.subjectClassStudent[0]?.finalScore <=
+                                                          sc?.base10Max &&
+                                                      sc?.improvementRegister
+                                              )
+                                            : false
+                                    }
+                                />
+                            ),
                         },
                     ]}
                     pagination={{

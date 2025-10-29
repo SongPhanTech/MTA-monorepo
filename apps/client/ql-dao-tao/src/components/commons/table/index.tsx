@@ -819,7 +819,9 @@ const Table = <T extends Record<string, unknown>>({
             rowKey={rowKey}
             size="small"
             className="mt-2 custom-scrollbar"
-            rowSelection={rowSelection}
+            rowSelection={{
+                ...rowSelection,
+            }}
             columns={
                 columns.map((column) => ({
                     ...column,

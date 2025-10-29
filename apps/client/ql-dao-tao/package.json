@@ -19,6 +19,7 @@
 		"@casl/react": "catalog:",
 		"@t3-oss/env-nextjs": "catalog:",
 		"@tanstack/react-query": "catalog:",
+		"@tanstack/react-store": "catalog:",
 		"@tiptap/extension-color": "catalog:",
 		"@tiptap/extension-highlight": "catalog:",
 		"@tiptap/extension-image": "catalog:",
