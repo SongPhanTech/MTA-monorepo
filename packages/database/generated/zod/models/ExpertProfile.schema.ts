@@ -22,6 +22,8 @@ const baseSchema = z.object({
     workplace: z.string().nullish(),
     phone: z.string().nullish(),
     email: z.string().email().nullish(),
+    bankAccountNumber: z.string().nullish(),
+    bankName: z.string().nullish(),
     eligiblePresident: z.boolean(),
     eligibleSecretary: z.boolean(),
 }
@@ -43,6 +45,8 @@ const baseSchemaWithoutDefaults = z.object({
     workplace: z.string().nullish(),
     phone: z.string().nullish(),
     email: z.string().email().nullish(),
+    bankAccountNumber: z.string().nullish(),
+    bankName: z.string().nullish(),
     eligiblePresident: z.boolean(),
     eligibleSecretary: z.boolean(),
 }
@@ -103,6 +107,8 @@ export const ExpertProfilePrismaUpdateSchema = z.object({
     workplace: z.string().nullish(),
     phone: z.string().nullish(),
     email: z.string().email().nullish(),
+    bankAccountNumber: z.string().nullish(),
+    bankName: z.string().nullish(),
     eligiblePresident: z.boolean(),
     eligibleSecretary: z.boolean()
 }).partial().passthrough();

@@ -1,6 +1,5 @@
 import { PrinterOutlined } from '@ant-design/icons'
 import { useScoreConverter } from '@hooks/scoreConverter'
-import { useTrainingLanguageOptions } from '@hooks/trainingLanguage'
 import { SubjectRequirementType } from '@workspace/db'
 import { useFindUniqueCurriculumVersion } from '@workspace/db/hooks'
 import { useAcademicRankingConverter } from '@workspace/libs/hook/academicRankingConvert'
@@ -100,8 +99,6 @@ const ModalPrintToKQHT = () => {
         }
       `,
     })
-
-    const { getTrainingLanguageLabel } = useTrainingLanguageOptions()
 
     const basicInfoCol1 = [
         {

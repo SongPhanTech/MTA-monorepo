@@ -8307,6 +8307,8 @@ export namespace Prisma {
         workplace: 'workplace',
         phone: 'phone',
         email: 'email',
+        bankAccountNumber: 'bankAccountNumber',
+        bankName: 'bankName',
         eligiblePresident: 'eligiblePresident',
         eligibleSecretary: 'eligibleSecretary'
     };
@@ -11050,7 +11052,9 @@ export namespace Prisma {
         specialization: 'specialization',
         workplace: 'workplace',
         phone: 'phone',
-        email: 'email'
+        email: 'email',
+        bankAccountNumber: 'bankAccountNumber',
+        bankName: 'bankName'
     };
     export const DecisionOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -68776,6 +68780,8 @@ export namespace Prisma {
         readonly workplace: FieldRef<"ExpertProfile", 'String'>;
         readonly phone: FieldRef<"ExpertProfile", 'String'>;
         readonly email: FieldRef<"ExpertProfile", 'String'>;
+        readonly bankAccountNumber: FieldRef<"ExpertProfile", 'String'>;
+        readonly bankName: FieldRef<"ExpertProfile", 'String'>;
         readonly eligiblePresident: FieldRef<"ExpertProfile", 'Boolean'>;
         readonly eligibleSecretary: FieldRef<"ExpertProfile", 'Boolean'>;
     }
@@ -210923,7 +210929,13 @@ export namespace Prisma {
             enteredScore: boolean
             enteredExamScore: boolean
             issuedScoreAt: Date | null
+            /**
+             * khoá điểm CC/TX
+             */
             isLockScore: boolean
+            /**
+             * khoá điểm thi
+             */
             isLockExamScore: boolean
             scoreSubmitted: boolean
             scoreChecked: boolean
@@ -248240,6 +248252,8 @@ export namespace Prisma {
         workplace: string | null
         phone: string | null
         email: string | null
+        bankAccountNumber: string | null
+        bankName: string | null
         eligiblePresident: boolean | null
         eligibleSecretary: boolean | null
     };
@@ -248261,6 +248275,8 @@ export namespace Prisma {
         workplace: string | null
         phone: string | null
         email: string | null
+        bankAccountNumber: string | null
+        bankName: string | null
         eligiblePresident: boolean | null
         eligibleSecretary: boolean | null
     };
@@ -248282,6 +248298,8 @@ export namespace Prisma {
         workplace: number
         phone: number
         email: number
+        bankAccountNumber: number
+        bankName: number
         eligiblePresident: number
         eligibleSecretary: number
         _all: number
@@ -248304,6 +248322,8 @@ export namespace Prisma {
         workplace?: true
         phone?: true
         email?: true
+        bankAccountNumber?: true
+        bankName?: true
         eligiblePresident?: true
         eligibleSecretary?: true
     };
@@ -248325,6 +248345,8 @@ export namespace Prisma {
         workplace?: true
         phone?: true
         email?: true
+        bankAccountNumber?: true
+        bankName?: true
         eligiblePresident?: true
         eligibleSecretary?: true
     };
@@ -248346,6 +248368,8 @@ export namespace Prisma {
         workplace?: true
         phone?: true
         email?: true
+        bankAccountNumber?: true
+        bankName?: true
         eligiblePresident?: true
         eligibleSecretary?: true
         _all?: true
@@ -248434,6 +248458,8 @@ export namespace Prisma {
         workplace: string | null
         phone: string | null
         email: string | null
+        bankAccountNumber: string | null
+        bankName: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         _count: ExpertProfileCountAggregateOutputType | null
@@ -248470,6 +248496,8 @@ export namespace Prisma {
         workplace?: boolean
         phone?: boolean
         email?: boolean
+        bankAccountNumber?: boolean
+        bankName?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
@@ -248500,6 +248528,8 @@ export namespace Prisma {
         workplace?: boolean
         phone?: boolean
         email?: boolean
+        bankAccountNumber?: boolean
+        bankName?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
@@ -248522,6 +248552,8 @@ export namespace Prisma {
         workplace?: boolean
         phone?: boolean
         email?: boolean
+        bankAccountNumber?: boolean
+        bankName?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
@@ -248544,10 +248576,12 @@ export namespace Prisma {
         workplace?: boolean
         phone?: boolean
         email?: boolean
+        bankAccountNumber?: boolean
+        bankName?: boolean
         eligiblePresident?: boolean
         eligibleSecretary?: boolean
     };
-    export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "lecturerId" | "name" | "academicRank" | "academicDegree" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>;
+    export type ExpertProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "lecturerId" | "name" | "academicRank" | "academicDegree" | "organization" | "position" | "specialization" | "workplace" | "phone" | "email" | "bankAccountNumber" | "bankName" | "eligiblePresident" | "eligibleSecretary", ExtArgs["result"]["expertProfile"]>;
     export type ExpertProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         lecturer?: boolean | ExpertProfile$lecturerArgs<ExtArgs>
         major?: boolean | ExpertProfile$majorArgs<ExtArgs>
@@ -248598,6 +248632,8 @@ export namespace Prisma {
              * @email
              */
             email: string | null
+            bankAccountNumber: string | null
+            bankName: string | null
             eligiblePresident: boolean
             eligibleSecretary: boolean
         }, ExtArgs["result"]["expertProfile"]>
@@ -336029,6 +336065,8 @@ export namespace Prisma {
         workplace?: StringNullableFilter<"ExpertProfile"> | string | null
         phone?: StringNullableFilter<"ExpertProfile"> | string | null
         email?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankName?: StringNullableFilter<"ExpertProfile"> | string | null
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -336058,6 +336096,8 @@ export namespace Prisma {
         workplace?: SortOrderInput | SortOrder
         phone?: SortOrderInput | SortOrder
         email?: SortOrderInput | SortOrder
+        bankAccountNumber?: SortOrderInput | SortOrder
+        bankName?: SortOrderInput | SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
         lecturer?: LecturerOrderByWithRelationInput
@@ -336091,6 +336131,8 @@ export namespace Prisma {
         workplace?: StringNullableFilter<"ExpertProfile"> | string | null
         phone?: StringNullableFilter<"ExpertProfile"> | string | null
         email?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankName?: StringNullableFilter<"ExpertProfile"> | string | null
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
         lecturer?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
@@ -336120,6 +336162,8 @@ export namespace Prisma {
         workplace?: SortOrderInput | SortOrder
         phone?: SortOrderInput | SortOrder
         email?: SortOrderInput | SortOrder
+        bankAccountNumber?: SortOrderInput | SortOrder
+        bankName?: SortOrderInput | SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
         _count?: ExpertProfileCountOrderByAggregateInput
@@ -336147,6 +336191,8 @@ export namespace Prisma {
         workplace?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         phone?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         email?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
+        bankAccountNumber?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
+        bankName?: StringNullableWithAggregatesFilter<"ExpertProfile"> | string | null
         eligiblePresident?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolWithAggregatesFilter<"ExpertProfile"> | boolean
     };
@@ -362769,6 +362815,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -362798,6 +362846,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -362825,6 +362875,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -362854,6 +362906,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -362882,6 +362936,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
     };
@@ -362902,6 +362958,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
@@ -362923,6 +362981,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
@@ -383460,6 +383520,8 @@ export namespace Prisma {
         workplace?: SortOrder
         phone?: SortOrder
         email?: SortOrder
+        bankAccountNumber?: SortOrder
+        bankName?: SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
     };
@@ -383481,6 +383543,8 @@ export namespace Prisma {
         workplace?: SortOrder
         phone?: SortOrder
         email?: SortOrder
+        bankAccountNumber?: SortOrder
+        bankName?: SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
     };
@@ -383502,6 +383566,8 @@ export namespace Prisma {
         workplace?: SortOrder
         phone?: SortOrder
         email?: SortOrder
+        bankAccountNumber?: SortOrder
+        bankName?: SortOrder
         eligiblePresident?: SortOrder
         eligibleSecretary?: SortOrder
     };
@@ -468840,6 +468906,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -468868,6 +468936,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -469762,6 +469832,8 @@ export namespace Prisma {
         workplace?: StringNullableFilter<"ExpertProfile"> | string | null
         phone?: StringNullableFilter<"ExpertProfile"> | string | null
         email?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankAccountNumber?: StringNullableFilter<"ExpertProfile"> | string | null
+        bankName?: StringNullableFilter<"ExpertProfile"> | string | null
         eligiblePresident?: BoolFilter<"ExpertProfile"> | boolean
         eligibleSecretary?: BoolFilter<"ExpertProfile"> | boolean
     };
@@ -476058,6 +476130,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -476086,6 +476160,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         supervisedTheses?: ThesisProjectUncheckedCreateNestedManyWithoutSupervisorInput
@@ -487776,6 +487852,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorCreateNestedManyWithoutExpertProfileInput
@@ -487803,6 +487881,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -490638,6 +490718,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -490666,6 +490748,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -490696,6 +490780,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -490724,6 +490810,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -491232,6 +491320,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -491260,6 +491350,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -491295,6 +491387,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -491323,6 +491417,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -493856,6 +493952,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -493884,6 +493982,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -494016,6 +494116,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -494044,6 +494146,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -494541,6 +494645,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -494569,6 +494675,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -494638,6 +494746,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -494666,6 +494776,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -494805,6 +494917,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         lecturer?: LecturerCreateNestedOneWithoutExpertProfileInput
@@ -494833,6 +494947,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
         major?: TrainingMajorUncheckedCreateNestedManyWithoutExpertProfileInput
@@ -494955,6 +495071,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -494983,6 +495101,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -544652,6 +544772,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -544680,6 +544802,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -544707,6 +544831,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
@@ -549092,6 +549218,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         lecturer?: LecturerUpdateOneWithoutExpertProfileNestedInput
@@ -549120,6 +549248,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         supervisedTheses?: ThesisProjectUncheckedUpdateManyWithoutSupervisorNestedInput
@@ -549147,6 +549277,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };
@@ -552892,6 +553024,8 @@ export namespace Prisma {
         workplace?: string | null
         phone?: string | null
         email?: string | null
+        bankAccountNumber?: string | null
+        bankName?: string | null
         eligiblePresident: boolean
         eligibleSecretary: boolean
     };
@@ -553787,6 +553921,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUpdateManyWithoutExpertProfileNestedInput
@@ -553814,6 +553950,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
         major?: TrainingMajorUncheckedUpdateManyWithoutExpertProfileNestedInput
@@ -553841,6 +553979,8 @@ export namespace Prisma {
         workplace?: NullableStringFieldUpdateOperationsInput | string | null
         phone?: NullableStringFieldUpdateOperationsInput | string | null
         email?: NullableStringFieldUpdateOperationsInput | string | null
+        bankAccountNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        bankName?: NullableStringFieldUpdateOperationsInput | string | null
         eligiblePresident?: BoolFieldUpdateOperationsInput | boolean
         eligibleSecretary?: BoolFieldUpdateOperationsInput | boolean
     };

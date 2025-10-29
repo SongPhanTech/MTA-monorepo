@@ -2742,6 +2742,8 @@ exports.Prisma.ExpertProfileScalarFieldEnum = {
   workplace: 'workplace',
   phone: 'phone',
   email: 'email',
+  bankAccountNumber: 'bankAccountNumber',
+  bankName: 'bankName',
   eligiblePresident: 'eligiblePresident',
   eligibleSecretary: 'eligibleSecretary'
 };
@@ -5736,7 +5738,9 @@ exports.Prisma.ExpertProfileOrderByRelevanceFieldEnum = {
   specialization: 'specialization',
   workplace: 'workplace',
   phone: 'phone',
-  email: 'email'
+  email: 'email',
+  bankAccountNumber: 'bankAccountNumber',
+  bankName: 'bankName'
 };
 
 exports.Prisma.DecisionOrderByRelevanceFieldEnum = {

@@ -3012,7 +3012,9 @@ model SubjectClass {
   enteredScore                Boolean               @default(false)
   enteredExamScore            Boolean               @default(false)
   issuedScoreAt               DateTime?
+  /// khoá điểm CC/TX
   isLockScore                 Boolean               @default(false)
+  /// khoá điểm thi
   isLockExamScore             Boolean               @default(true)
   scoreSubmitted              Boolean               @default(false)
   scoreChecked                Boolean               @default(false)
@@ -4203,6 +4205,8 @@ model ExpertProfile {
   workplace               String?
   phone                   String?
   email                   String?
+  bankAccountNumber       String?
+  bankName                String?
   eligiblePresident       Boolean
   eligibleSecretary       Boolean
   supervisedTheses        ThesisProject[]           @relation("SupervisorToThesis")

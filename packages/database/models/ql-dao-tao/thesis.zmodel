@@ -144,6 +144,8 @@ model ExpertProfile extends Base {
   workplace               String?   // Đơn vị công tác
   phone                   String?
   email                   String?                   @email // Dùng email này để liên lạc nếu là chuyên gia ngoài
+  bankAccountNumber       String? // số tài khoản ngân hàng
+  bankName                String? // tên ngân hàng
 
   eligiblePresident       Boolean // có thể làm chủ tịch
   eligibleSecretary       Boolean // có thể làm thư ký

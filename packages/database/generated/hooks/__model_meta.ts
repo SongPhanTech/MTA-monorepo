@@ -15148,6 +15148,14 @@ const metadata: ModelMeta = {
                     name: "email",
                     type: "String",
                     isOptional: true,
+                }, bankAccountNumber: {
+                    name: "bankAccountNumber",
+                    type: "String",
+                    isOptional: true,
+                }, bankName: {
+                    name: "bankName",
+                    type: "String",
+                    isOptional: true,
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",

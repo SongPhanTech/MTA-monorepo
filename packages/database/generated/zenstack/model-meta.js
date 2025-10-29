@@ -15988,6 +15988,14 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@email", "args": [] }],
+                }, bankAccountNumber: {
+                    name: "bankAccountNumber",
+                    type: "String",
+                    isOptional: true,
+                }, bankName: {
+                    name: "bankName",
+                    type: "String",
+                    isOptional: true,
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",
