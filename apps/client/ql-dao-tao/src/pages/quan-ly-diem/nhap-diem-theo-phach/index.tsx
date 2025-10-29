@@ -6,35 +6,40 @@ import { Col, Row, Tabs } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
-export default function SubjectClassScore() {
+export default function SubjectClassScoreTheoPhach() {
     const router = useRouter()
     const [selectedRowKeys, setSelectedRowKeys] = useState<string>('')
     const [activeKey, setActiveKey] = useState('1')
-    const examRoomId = router.query.examRoomId as string
     const items = useMemo(() => {
         return [
             {
                 label: 'QL Phòng thi',
                 key: '1',
-                children: <PhongThi selectedRowKeys={selectedRowKeys}
+                children: (
+                    <PhongThi
+                        selectedRowKeys={selectedRowKeys}
                         setSelectedRowKeys={(value: string) => {
+                            console.log(value,'1');
+                            
                             setSelectedRowKeys(value)
-                        }}/>,
+                        }}
+                    />
+                ),
             },
             {
                 label: 'QL phách',
                 key: '2',
                 disabled: !selectedRowKeys,
-                children: <SinhPhach />,
+                children: <SinhPhach  examRoomId={selectedRowKeys}/>,
             },
             {
                 label: 'Nhập điểm',
                 key: '3',
                 disabled: !selectedRowKeys,
-                children: <NhapdiemPhach />,
+                children: <NhapdiemPhach examRoomId={selectedRowKeys} />,
             },
         ]
-    }, [])
+    }, [selectedRowKeys])
 
     return (
         <div className="bg-white">
@@ -51,6 +56,6 @@ export default function SubjectClassScore() {
     )
 }
 
-SubjectClassScore.getLayout = function getLayout(page: React.ReactElement) {
+SubjectClassScoreTheoPhach.getLayout = function getLayout(page: React.ReactElement) {
     return <DefaultLayout>{page}</DefaultLayout>
 }

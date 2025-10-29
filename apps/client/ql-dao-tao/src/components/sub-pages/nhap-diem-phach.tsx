@@ -5,10 +5,9 @@ import { Button, Col, Flex, Form, InputNumber, message, Modal } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
-export default function NhapdiemPhach() {
+export default function NhapdiemPhach({examRoomId}:{examRoomId:string}) {
     const router = useRouter()
     const [form] = Form.useForm<{ list: { score: number | null }[] }>()
-    const examRoomId = router.query.examRoomId as string
     const { data = [], refetch } = useFindManyExamSession(
         {
             where: {

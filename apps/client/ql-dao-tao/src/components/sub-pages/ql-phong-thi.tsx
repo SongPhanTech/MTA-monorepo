@@ -107,24 +107,21 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                         id="student-subject-score"
                         filters={filters}
                         setFilters={setFilters}
-                        onRow={(record) => {
-                            return {
-                                onClick: () => {
-                                    console.log(record);
-                                    
-                                    setSelectedRowKeys(record.id)
-                                },
-                                className: cn(
-                                    selectedRowKeys === record.id ? 'bg-orange-200' : ''
-                                ),
-                            }
-                        }}
+                      onRow={(record) => {
+                                             return {
+                                                 onClick: () => {
+                                                     setSelectedRowKeys(record.id)
+                                                 },
+                                                 className: cn(
+                                                     selectedRowKeys === record.id ? 'bg-orange-200' : ''
+                                                 ),
+                                             }
+                                         }}
                         columns={[
                             {
                                 title: 'STT',
                                 width: 60,
                                 align: 'center',
-                                fixed: 'left',
                                 render: (_, __, index) => index + 1,
                             },
                             {

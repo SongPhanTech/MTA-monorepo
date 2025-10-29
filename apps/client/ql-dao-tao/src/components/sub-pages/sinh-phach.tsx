@@ -6,10 +6,9 @@ import { Button, Checkbox, Col, Flex, message, Modal } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
-export default function SinhPhach() {
+export default function SinhPhach({examRoomId}:{examRoomId:string}) {
     const router = useRouter()
     const [checked, setChecked] = useState(false)
-    const examRoomId = router.query.examRoomId as string
     const { data = [], refetch } = useFindManyExamSession(
         {
             where: {
