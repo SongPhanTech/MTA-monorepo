@@ -639,7 +639,7 @@ export default function DiemQuaTrinh({
                                 type: 'order',
                                 render: (_, record) => {
                                     const recordForm = listForm?.[record.id]?.attendanceScore
-                                    let currentList = listForm
+                                    const currentList = listForm
                                     return (
                                         <Form.Item
                                             className="w-full mb-0"

@@ -1,7 +1,7 @@
 import NAVIGATION, {
     type DANG_KY_HOC_PERMISSION,
     type KHAO_THI_PERMISSION,
-    MenuItem,
+    type MenuItem,
     type QL_DAO_TAO_PERMISSION,
     type QL_HO_SO_PERMISSION,
     ROUTER_PATH,

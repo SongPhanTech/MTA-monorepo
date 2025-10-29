@@ -4,7 +4,7 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useSession } from '@workspace/auth/react'
 import { cn } from '@lib/utils'
-import { type Prisma, type SubjectVersion } from '@workspace/db/client'
+import type { Prisma, SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useFindManyFixedClass,

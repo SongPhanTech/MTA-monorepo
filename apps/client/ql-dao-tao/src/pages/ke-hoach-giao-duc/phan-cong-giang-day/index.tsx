@@ -13,7 +13,12 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
-import { $Enums, SubjectClass, type Prisma, type SubjectClassSchedule } from '@workspace/db/client'
+import {
+    $Enums,
+    type Prisma,
+    type SubjectClass,
+    type SubjectClassSchedule,
+} from '@workspace/db/client'
 import {
     useCountDM_DonVi,
     useDeleteSubjectClass,

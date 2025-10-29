@@ -6,12 +6,13 @@ import Table from '@components/commons/table'
 import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
-import { Prisma, SubjectClassSchedule, SubjectClassTime } from '@workspace/db/client'
+import type { Prisma, SubjectClassSchedule, SubjectClassTime } from '@workspace/db/client'
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Form, message, Radio, Space, Tag } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+
 type SubjectClassPreviewData = Prisma.SubjectClassGetPayload<{
     include: {
         fixedClasses: {

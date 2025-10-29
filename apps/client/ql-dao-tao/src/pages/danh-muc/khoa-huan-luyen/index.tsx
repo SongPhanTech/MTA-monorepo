@@ -14,7 +14,7 @@ import {
     useUpdateTrainingCourse,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { exportFromTemplate, TableCell, TableRow } from '@workspace/libs/template-excel'
+import { exportFromTemplate } from '@workspace/libs/template-excel'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
@@ -191,7 +191,6 @@ export default function TrainingCoursePage() {
                         khoa: initialData?.name ?? '',
                     },
                     tableStartCell: tableStartCell,
-                    //@ts-ignore
                     rows: [...rows, totalRow],
                 },
             ],
@@ -443,13 +442,16 @@ export default function TrainingCoursePage() {
                                                 )}
                                                 <Tooltip title="Xuất sĩ số">
                                                     <Dropdown overlay={menu} trigger={['click']}>
-                                                        <a onClick={(e) => e.preventDefault()}>
+                                                        <Button
+                                                            type="text"
+                                                            onClick={(e) => e.preventDefault()}
+                                                        >
                                                             <FileDown
                                                                 size={16}
                                                                 strokeWidth={1.5}
                                                                 className="text-base text-blue-700 cursor-pointer"
                                                             />
-                                                        </a>
+                                                        </Button>
                                                     </Dropdown>
                                                 </Tooltip>
                                             </Row>

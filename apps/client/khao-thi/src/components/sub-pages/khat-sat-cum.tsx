@@ -104,7 +104,6 @@ function TabDotKhaoSatCum() {
         onOpen({ id: '', type: 'multiple' })
     }
 
-  
     const { mutateAsync: updateSurvey } = useUpdateSurvey()
 
     async function handleDelete(id: string) {
@@ -187,13 +186,11 @@ function TabDotKhaoSatCum() {
                             {
                                 title: 'Đối tượng được khảo sát',
                                 dataIndex: 'surveyObjectTypeId',
-                                render: (_, record) =>{
-                                        return record?.surveyObjectType?.length 
-                                }
-                                    
-                              
+                                render: (_, record) => {
+                                    return record?.surveyObjectType?.length
+                                },
                             },
-                                 {
+                            {
                                 title: 'Đối tượng khảo sát',
                                 dataIndex: 'surveyObjectTypeId',
                                 type: 'select',
@@ -201,22 +198,19 @@ function TabDotKhaoSatCum() {
                                     value: id,
                                     label: name,
                                 })),
-                                render: (_, record) =>{
-                                        return record?.surveyObjectType?.length ? (
-                                            <HtmlTruncate key="explanation">
-                                                                                 
-                                                                                 <ul>
-                                                                                     {record?.surveyObjectType?.map((i: any) => (
-                                                                                         <li key={i.id}>- {i.name}</li>
-                                                                                     ))}
-                                                                                 </ul>
-                                                                               </HtmlTruncate>
-                                        ) : (
-                                            ''
-                                        )
-                                }
-                                    
-                              
+                                render: (_, record) => {
+                                    return record?.surveyObjectType?.length ? (
+                                        <HtmlTruncate key="explanation">
+                                            <ul>
+                                                {record?.surveyObjectType?.map((i: any) => (
+                                                    <li key={i.id}>- {i.name}</li>
+                                                ))}
+                                            </ul>
+                                        </HtmlTruncate>
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Ngày bắt đầu',
@@ -282,7 +276,9 @@ function TabDotKhaoSatCum() {
                                                 >
                                                     <EyeOutlined
                                                         onClick={() => {
-                                                            router.push(`/thiet-lap-khao-sat/dot-khao-sat/${id}`)
+                                                            router.push(
+                                                                `/thiet-lap-khao-sat/dot-khao-sat/${id}`
+                                                            )
                                                         }}
                                                         style={{ fontSize: '16px' }}
                                                     />

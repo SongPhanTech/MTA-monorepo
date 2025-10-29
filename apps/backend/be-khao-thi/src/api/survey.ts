@@ -39,10 +39,11 @@ const createClusterSurvey = createRoute({
                             surveyObjectTypeIds: z.array(z.string()).nonempty(),
                             lecturerIds: z.array(z.string()).nonempty(),
                             surveyQuestionIds: z.array(z.string()).nonempty(),
-                            surveyChoiceIds: z
+                            surveyChoices: z
                                 .array(
                                     z.object({
                                         answer: z.string(),
+                                        description: z.string(),
                                         requireExplanation: z.boolean(),
                                     })
                                 )
@@ -88,7 +89,7 @@ const createClusterSurvey = createRoute({
 app.openapi(createClusterSurvey, async (c) => {
     const {
         surveyQuestionIds,
-        surveyChoiceIds,
+        surveyChoices,
         surveyObjectTypeIds,
         lecturerIds,
         surveyTopicId,
@@ -106,10 +107,7 @@ app.openapi(createClusterSurvey, async (c) => {
                     connect: surveyQuestionIds.map((id) => ({ id })),
                 },
                 surveyChoice: {
-                    create: surveyChoiceIds.map((choice) => ({
-                        answer: choice.answer,
-                        requireExplanation: choice.requireExplanation,
-                    })),
+                    create: surveyChoices,
                 },
                 surveyObjectType: {
                     connect: surveyObjectTypeIds.map((id) => ({ id })),
@@ -147,9 +145,8 @@ app.openapi(createClusterSurvey, async (c) => {
 
         await tx.surveyChoice.createMany({
             data: surveys.flatMap((survey) =>
-                surveyChoiceIds.map((choice) => ({
-                    answer: choice.answer,
-                    requireExplanation: choice.requireExplanation,
+                surveyChoices.map((choice) => ({
+                    ...choice,
                     surveyId: survey.id,
                 }))
             ),

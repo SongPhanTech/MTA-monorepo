@@ -2,11 +2,11 @@ import Table from '@components/commons/table'
 import ExportPhach from '@components/modal/export-exam-session'
 import { useFindManyExamSession, useUpdateExamRoom } from '@workspace/db/hooks'
 import { useGenExamRoomCode } from '@workspace/libs/api/training'
-import { Button, Checkbox, Col, Flex, message, Modal } from 'antd'
+import { Button, Checkbox, Col, Flex, Modal, message } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
-export default function SinhPhach({examRoomId}:{examRoomId:string}) {
+export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
     const router = useRouter()
     const [checked, setChecked] = useState(false)
     const { data = [], refetch } = useFindManyExamSession(

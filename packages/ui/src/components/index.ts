@@ -36,4 +36,3 @@ export * from './select-training-object-type'
 export * from './select-training-course'
 export * from './select-training-major'
 export * from './select-fixed-class'
-

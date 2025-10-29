@@ -10,7 +10,7 @@ import {
     useFindManyStudentSubjectScore,
     useFindUniqueStudent,
 } from '@workspace/db/hooks'
-import { exportFromTemplate, TableRow } from '@workspace/libs/template-excel'
+import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Divider, Flex, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
@@ -125,11 +125,11 @@ export default function StudentScoreClassPage() {
                     tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe10 / tongSoTinChi
                 const diemTBHe4_Raw = tongSoTinChi === 0 ? 0 : tongDiemNhanTinChiHe4 / tongSoTinChi
 
-                const diemTBHe10 = parseFloat(diemTBHe10_Raw.toFixed(1))
-                const diemTBHe4 = parseFloat(diemTBHe4_Raw.toFixed(1))
+                const diemTBHe10 = Number.parseFloat(diemTBHe10_Raw.toFixed(1))
+                const diemTBHe4 = Number.parseFloat(diemTBHe4_Raw.toFixed(1))
 
                 hocKis.push({
-                    TenHocKi: item.code + '-' + item.name + '-' + item.schoolYear?.name,
+                    TenHocKi: `${item.code}-${item.name}-${item.schoolYear?.name}`,
                     SoTinChiKy: tongSoTinChi,
                     DiemTBKyHe10: diemTBHe10,
                     DiemTBKyHe4: diemTBHe4,
@@ -159,7 +159,7 @@ export default function StudentScoreClassPage() {
                     },
                 ],
             }
-            //@ts-ignore
+            //@ts-expect-error
             const monHocRows: TableRow[] =
                 hocKi?.monHocs?.map((monHoc: IMonHoc, index: number) => ({
                     cells: [
@@ -222,9 +222,13 @@ export default function StudentScoreClassPage() {
         )
 
         const tongdiemhe10 =
-            tongtinchi === 0 ? 0 : parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
+            tongtinchi === 0
+                ? 0
+                : Number.parseFloat((tongDiemNhanTinChiHe10 / tongtinchi).toFixed(1))
         const tongdiemhe4 =
-            tongtinchi === 0 ? 0 : parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
+            tongtinchi === 0
+                ? 0
+                : Number.parseFloat((tongDiemNhanTinChiHe4 / tongtinchi).toFixed(1))
         const totalRow: TableRow = {
             cells: [{ value: `Tổng tín chỉ: ${tongtinchi}`, colSpan: 18, border: false }],
         }

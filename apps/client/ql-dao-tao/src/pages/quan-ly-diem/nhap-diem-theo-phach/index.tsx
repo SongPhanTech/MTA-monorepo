@@ -19,8 +19,6 @@ export default function SubjectClassScoreTheoPhach() {
                     <PhongThi
                         selectedRowKeys={selectedRowKeys}
                         setSelectedRowKeys={(value: string) => {
-                            console.log(value,'1');
-                            
                             setSelectedRowKeys(value)
                         }}
                     />
@@ -30,7 +28,7 @@ export default function SubjectClassScoreTheoPhach() {
                 label: 'QL phách',
                 key: '2',
                 disabled: !selectedRowKeys,
-                children: <SinhPhach  examRoomId={selectedRowKeys}/>,
+                children: <SinhPhach examRoomId={selectedRowKeys} />,
             },
             {
                 label: 'Nhập điểm',
