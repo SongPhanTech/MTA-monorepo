@@ -1,13 +1,16 @@
 import DefaultLayout from '@layouts/default-layout'
+import { Store } from '@tanstack/react-store'
+import { useFindManyTrainingCourse } from '@workspace/db/hooks'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
 import { useState } from 'react'
+import CaNhanTrongLopQuanLy from './_components/ca-nhan-trong-lop-quan-ly'
 import DangKyHocChoCaNhan from './_components/dang-ky-hoc-cho-lop-ca-nhan'
 import DangKyHocChoLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly'
 import KeQuaDangKyHocLopQuanLy from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
-import LopCoMonTheoKhgd from './_components/lop-co-mon-theo-khgd'
 import LopMonHocDaMo from './_components/lop-mon-hoc-da-mo'
-import CaNhanTrongLopQuanLy from './_components/ca-nhan-trong-lop-quan-ly'
+import LopQuanLyDaGhep from './_components/lop-quan-ly-da-ghep'
 
 interface TabItem {
     key: string
@@ -15,10 +18,31 @@ interface TabItem {
     content: React.ReactNode
 }
 
+type DangKyHocChoLopQuanLyStore = {
+    subjectClassId?: string
+    fixedClassesIds: string[]
+    studentIds: string[]
+}
+
+export const dangKyHocChoLopQuanLyStore = new Store<DangKyHocChoLopQuanLyStore>({
+    subjectClassId: undefined,
+    fixedClassesIds: [],
+    studentIds: [],
+})
+
 export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
-    const [activeLeftTab, setActiveLeftTab] = useState(hocLai ? '2' : '1')
-    const [subjectClassId, setSubjectClassId] = useState<string | null>(null)
     const [studentId, setStudentId] = useState<string | null>(null)
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: {
+            name: 'asc',
+        },
+        where: {
+            active: true,
+            trainingObjectTypeId,
+        },
+    })
     const leftTabs: TabItem[] = hocLai
         ? [
               {
@@ -32,15 +56,15 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
                   key: '1',
                   label: 'Đăng ký học cho lớp quản lý',
                   content: (
-                      <Row gutter={[8, 0]}>
+                      <Row gutter={[8, 8]}>
                           <Col span={8}>
-                              <DangKyHocChoLopQuanLy setSubjectClassId={setSubjectClassId} />
+                              <DangKyHocChoLopQuanLy />
                           </Col>
                           <Col span={6}>
-                              <LopCoMonTheoKhgd subjectClassId={subjectClassId} />
+                              <LopQuanLyDaGhep />
                           </Col>
                           <Col span={10}>
-                              <CaNhanTrongLopQuanLy setStudentId={setStudentId} />
+                              <CaNhanTrongLopQuanLy />
                           </Col>
                       </Row>
                   ),
@@ -74,33 +98,11 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
         ],
     }
 
-    const renderRightTabs = () => {
-        const rightTabs = rightTabsMap[activeLeftTab]
-        if (!rightTabs) return null
-
-        return (
-            <Tabs defaultActiveKey={'1'}>
-                {rightTabs.map((tab) => (
-                    <Tabs.TabPane tab={tab.label} key={tab.key}>
-                        {tab.content}
-                    </Tabs.TabPane>
-                ))}
-            </Tabs>
-        )
-    }
-
     return (
         <Row gutter={[8, 0]} className="bg-white">
             <Col span={24}>
                 <div className="rounded-lg shadow-sm">
-                    <Tabs
-                        activeKey={activeLeftTab}
-                        onChange={(activeKey) => {
-                            setSubjectClassId(null)
-                            setActiveLeftTab(activeKey)
-                        }}
-                        className="m-0 p-0"
-                    >
+                    <Tabs className="m-0 p-0">
                         {leftTabs.map((tab) => (
                             <Tabs.TabPane className="m-0 p-0" tab={tab.label} key={tab.key}>
                                 {tab.content}
@@ -109,11 +111,6 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
                     </Tabs>
                 </div>
             </Col>
-            {/* {activeLeftTab !== '3' && (
-                <Col span={10}>
-                    <div className="rounded-lg shadow-sm">{renderRightTabs()}</div>
-                </Col>
-            )} */}
         </Row>
     )
 }

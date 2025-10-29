@@ -1,39 +1,34 @@
-import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
-import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { useScheduleOptions } from '@hooks/subjectClassSchedule'
+import { useStore } from '@tanstack/react-store'
 import {
     useCountFixedClass,
     useFindManyFixedClass,
     useFindUniqueSubjectClass,
 } from '@workspace/db/hooks'
-import { enrollFixedClassOnSubjectClass } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Col, Form, Input, Row } from 'antd'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
+import { dangKyHocChoLopQuanLyStore } from '..'
 
 interface FilterProps {
     searchText: string | null
 }
 
-interface FixedClassProps {
-    subjectClassId?: string | null
-}
-
-export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
+export default function LopQuanLyDaGhep() {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [numberOfPages, setNumberOfPages] = useState(20)
     const { id: semesterId } = useSemesterStore()
-    const { getScheduleLabel } = useScheduleOptions()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
+
+    const { subjectClassId } = useStore(dangKyHocChoLopQuanLyStore)
+
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: selectedSubjectClass } = useFindUniqueSubjectClass(
@@ -41,26 +36,8 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
             where: {
                 id: subjectClassId as string,
             },
-            include: {
-                mainLecturer: {
-                    select: {
-                        userProfile: {
-                            select: {
-                                fullname: true,
-                            },
-                        },
-                    },
-                },
-                extraLecturer: {
-                    select: {
-                        userProfile: {
-                            select: {
-                                fullname: true,
-                            },
-                        },
-                    },
-                },
-                subject: true,
+            select: {
+                subjectId: true,
                 fixedClasses: {
                     select: {
                         id: true,
@@ -74,24 +51,23 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
     const { data: fixedClasses = [] } = useFindManyFixedClass(
         {
             where: {
-                planTrainingSubject: {
-                    some: {
-                        planTraining: {
-                            semesterId: semesterId as string,
-                            trainingObjectTypeId: trainingObjectTypeId as string,
-                        },
-                        subjectVersion: {
-                            subjectClass: {
+                name: {
+                    contains: filters.searchText || undefined,
+                    mode: 'insensitive',
+                },
+                curriculumVersion: {
+                    trainingBlocks: {
+                        some: {
+                            subjects: {
                                 some: {
-                                    id: subjectClassId as string,
+                                    subjectId: selectedSubjectClass?.subjectId,
                                 },
                             },
                         },
                     },
                 },
-                name: {
-                    contains: filters.searchText || undefined,
-                    mode: 'insensitive',
+                trainingCourse: {
+                    trainingObjectTypeId,
                 },
             },
             orderBy: {
@@ -126,12 +102,18 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                         semesterId: semesterId as string,
                         trainingObjectTypeId: trainingObjectTypeId as string,
                         subjectId: selectedSubjectClass?.subjectId,
+                        cancelled: false,
+                        active: true,
+                        deletedAt: null,
+                    },
+                    select: {
+                        id: true,
                     },
                 },
             },
         },
         {
-            enabled: !!semesterId && !!subjectClassId,
+            enabled: !!semesterId && !!subjectClassId && !!trainingObjectTypeId,
         }
     )
 
@@ -142,6 +124,13 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                     planTraining: {
                         semesterId: semesterId as string,
                         trainingObjectTypeId: trainingObjectTypeId as string,
+                    },
+                    subjectVersion: {
+                        subjectClass: {
+                            some: {
+                                id: subjectClassId as string,
+                            },
+                        },
                     },
                 },
             },
@@ -161,6 +150,17 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                 .filter((item) => selectedSubjectClassFixedClassIds?.includes(item.id))
                 .map((item) => item.id)
             setSelectedRowKeys(selectedKeys)
+            if (
+                !dangKyHocChoLopQuanLyStore.state.fixedClassesIds.compare(
+                    selectedKeys,
+                    (a, b) => a === b
+                )
+            ) {
+                dangKyHocChoLopQuanLyStore.setState((prev) => ({
+                    ...prev,
+                    fixedClassesIds: selectedKeys as string[],
+                }))
+            }
         }
     }, [fixedClasses, selectedSubjectClass])
 
@@ -171,90 +171,41 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
         })
     }
 
-    const handleSave = async () => {
-        if (!subjectClassId) return
-        try {
-            await enrollFixedClassOnSubjectClass({
-                fixedClassIds: selectedRowKeys as string[],
-                subjectClassId,
-            })
-            message.success('Gán lớp cố định thành công!')
-            queryClient.invalidateQueries({
-                queryKey: ['zenstack', 'SubjectClass'],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ['zenstack', 'FixedClass'],
-            })
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Có lỗi xảy ra khi gán lớp!')
-        }
-    }
-
     return (
         <div>
-            {/* <Divider orientation="left" orientationMargin={0} className='m-0 my-0'>
-                {[
-                    selectedSubjectClass?.code,
-                    selectedSubjectClass?.name,
-                    selectedSubjectClass?.schedule &&
-                        getScheduleLabel(selectedSubjectClass.schedule),
-                    selectedSubjectClass?.mainLecturer?.userProfile?.fullname,
-                    selectedSubjectClass?.extraLecturer?.userProfile?.fullname,
-                ]
-                    .filter(Boolean)
-                    .join(' - ')}
-            </Divider> */}
             <Row align="top" justify="space-between">
                 <Col span={24}>
-                    <Flex>
-                        <Col span={20}>
-                            <Form.Item className="m-0" name="searchText">
-                                <Input
-                                    id="search"
-                                    placeholder="Tìm kiếm..."
-                                    onChange={(e) =>
-                                        handleFilterChange('searchText', e.target.value)
-                                    }
-                                    style={{ height: 32 }}
-                                    prefix={
-                                        <Search
-                                            size={15}
-                                            style={{
-                                                color: 'rgba(0, 0, 0, 0.25)',
-                                            }}
-                                        />
-                                    }
-                                    allowClear
+                    <Form.Item className="m-0" name="searchText">
+                        <Input
+                            id="search"
+                            placeholder="Tìm kiếm..."
+                            onChange={(e) => handleFilterChange('searchText', e.target.value)}
+                            style={{ height: 32 }}
+                            prefix={
+                                <Search
+                                    size={15}
+                                    style={{
+                                        color: 'rgba(0, 0, 0, 0.25)',
+                                    }}
                                 />
-                            </Form.Item>
-                        </Col>
-                        <Col span={4} className="text-right">
-                            {can(
-                                QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_KE_HOACH_MO_LOP_MON_HOC,
-                                'THEM'
-                            ) && (
-                                <Button
-                                    type="primary"
-                                    className="h-[32px] px-4"
-                                    onClick={handleSave}
-                                    disabled={!subjectClassId}
-                                >
-                                    Lưu
-                                </Button>
-                            )}
-                        </Col>
-                    </Flex>
+                            }
+                            allowClear
+                        />
+                    </Form.Item>
                 </Col>
             </Row>
+            <p className="mt-2">Lớp có môn theo KHGD</p>
             <Table
                 rowKey="id"
                 rowSelection={{
                     selectedRowKeys,
-                    onChange: setSelectedRowKeys,
+                    onChange: (selectedKeys) => {
+                        setSelectedRowKeys(selectedKeys)
+                        dangKyHocChoLopQuanLyStore.setState((prev) => ({
+                            ...prev,
+                            fixedClassesIds: selectedKeys as string[],
+                        }))
+                    },
                     getCheckboxProps: (record) => ({
                         disabled:
                             record.subjectClasses.length > 0 &&
@@ -283,6 +234,10 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                             selectedKeys.push(record?.id)
                         }
                         setSelectedRowKeys(selectedKeys)
+                        dangKyHocChoLopQuanLyStore.setState((prev) => ({
+                            ...prev,
+                            fixedClassesIds: selectedKeys as string[],
+                        }))
                     },
                 })}
                 data={fixedClasses}
@@ -291,8 +246,7 @@ export default function LopCoMonTheoKhgd({ subjectClassId }: FixedClassProps) {
                         title: 'TT',
                         width: 35,
                         align: 'center',
-                        render: (_, __, index) =>
-                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                        render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                     },
                     {
                         title: 'Lớp QL',

@@ -3,20 +3,18 @@ import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { cn } from '@workspace/ui/lib/utils'
 import { Col, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useState } from 'react'
+import { dangKyHocChoLopQuanLyStore } from '..'
 
 interface FilterProps {
     searchText: string | null
 }
 
-interface RegisterClassProps {
-    setSubjectClassId?: (id: string | null) => void
-}
-
-export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterClassProps) {
+export default function DangKyHocChoLopQuanLy() {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKey, setSelectedRowKey] = useState<Key>('')
@@ -58,7 +56,7 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
         include: {
             subject: true,
             fixedClasses: {
-                include: {
+                select: {
                     _count: {
                         select: {
                             students: {
@@ -70,6 +68,7 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                             },
                         },
                     },
+                    code: true,
                 },
             },
             _count: {
@@ -140,8 +139,8 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
     }
 
     const handleRowSelection = (id: string) => {
-        setSubjectClassId?.(id)
         setSelectedRowKey(id)
+        dangKyHocChoLopQuanLyStore.setState((prev) => ({ ...prev, subjectClassId: id }))
     }
 
     return (
@@ -173,7 +172,6 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                 onRow={(record) => ({
                     onClick: () => handleRowSelection(record.id),
                     style: { cursor: 'pointer' },
-                    // columnWidth: 35,
                 })}
                 rowSelection={{
                     selectedRowKeys: [selectedRowKey],
@@ -181,7 +179,7 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                         handleRowSelection(selectedRowKeys?.[0] as string)
                     },
                     type: 'radio',
-                    // columnWidth: 35,
+                    columnWidth: 35,
                 }}
                 columns={[
                     {
@@ -190,13 +188,13 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                         width: 35,
                         align: 'center',
                         render: (_, __, index) =>
-                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
+                            index + 1 + (currentPage - 1) * numberOfPages,
                     },
                     {
                         title: 'Mã LMH',
                         dataIndex: 'code',
                         align: 'center',
-                        width: 150,
+                        width: 120,
                     },
                     {
                         title: 'Tên môn',
@@ -219,6 +217,11 @@ export default function DangKyHocChoLopQuanLy({ setSubjectClassId }: RegisterCla
                         title: 'Số SV đã ĐK',
                         align: 'center',
                         width: 100,
+                        onCell: (record) => ({
+                            className: cn(
+                                record?._count?.subjectClassStudent === 0 ? 'text-red-500' : 'text-primary'
+                            ),
+                        }),
                         render: (record) => record?._count?.subjectClassStudent ?? 0,
                     },
                     {

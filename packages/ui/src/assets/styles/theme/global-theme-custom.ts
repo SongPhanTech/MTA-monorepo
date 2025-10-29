@@ -12,9 +12,9 @@ const lightThemeCustom = {
             padding: 10,
             headerColor: '#26273D',
             headerBorderRadius: 8,
-            rowSelectedBg: '#FFFFFF',
+            // rowSelectedBg: '#FFFFFF',
             rowHoverBg: '#FAFAFA00',
-            rowSelectedHoverBg: '#FAFAFA',
+            rowSelectedHoverBg: '#02885022',
         },
         Menu: {
             itemSelectedColor: '#fff',
