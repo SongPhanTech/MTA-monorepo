@@ -1,9 +1,11 @@
 import TableCollapse from '@components/commons/tableCollapse'
+import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import type { Prisma } from '@workspace/db/client'
 import { useFindManyStudentSubjectScore } from '@workspace/db/hooks'
-import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, Row } from 'antd'
-import { useMemo } from 'react'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { Button, Checkbox, Col, Flex, Form, Input, message, Row } from 'antd'
+import { useEffect, useMemo } from 'react'
 
 interface Props {
     subjectClassId: string | null
@@ -19,8 +21,21 @@ type StudentType = Prisma.StudentGetPayload<{
     }
 }>
 
+interface StudentSubjectScoreFormType {
+    list: Record<
+        string,
+        {
+            examBanned?: boolean
+            examBannedReason?: string
+            examPostponed?: boolean
+            examPostponedReason?: string
+            description?: string
+        }
+    >
+}
+
 export default function DanhSachSinhVien({ subjectClassId }: Props) {
-    const [form] = Form.useForm()
+    const [form] = Form.useForm<StudentSubjectScoreFormType>()
 
     const { data = [], isLoading } = useFindManyStudentSubjectScore(
         {
@@ -34,7 +49,7 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                             select: {
                                 fullname: true,
                                 code: true,
-                                placeOfBirth: true,
+                                dateOfBirth: true,
                             },
                         },
                         fixedClass: {
@@ -71,6 +86,8 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
         { enabled: !!subjectClassId }
     )
 
+    const { showSpinner, hideSpinner } = useSpinner()
+
     const listForm = Form.useWatch('list', form) || []
 
     const groupedData = useMemo(() => {
@@ -105,11 +122,74 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
         return Object.values(grouped)
     }, [data])
 
-    const handleExamBanned = () => {
-        const values = form.getFieldsValue()
+    const handleSaveExamDecision = async () => {
+        try {
+            showSpinner()
+            const values = form.getFieldsValue()
+            const valueListObject = Object.entries(values.list).map(([key, value_]) => {
+                return {
+                    id: key,
+                    ...value_,
+                }
+            })
 
-        console.log(values)
+            const filteredValues = valueListObject.filter(
+                (item) =>
+                    item.examPostponed ||
+                    item.examPostponedReason ||
+                    item.examBanned ||
+                    item.examBannedReason
+            )
+
+            const updateTransactions: any[] = filteredValues.map((i) => ({
+                model: 'StudentSubjectScore',
+                operation: 'update',
+                data: {
+                    where: {
+                        id: i.id,
+                    },
+                    data: {
+                        examPostponed: i.examPostponed ?? false,
+                        examPostponedReason: i.examPostponed ? i.examPostponedReason || null : null,
+                        examBanned: i.examBanned ?? false,
+                        examBannedReason: i.examBanned ? i.examBannedReason || null : null,
+                    },
+                },
+            }))
+
+            const res = await sqlTransaction(updateTransactions)
+
+            if (res.status === 200) {
+                message.success('Cập nhật thành công')
+            }
+
+            console.log(valueListObject)
+        } catch (error: any) {
+            message.error(error.message || 'Có lỗi xảy ra, vui lòng thử lại sau!')
+        } finally {
+            hideSpinner()
+        }
     }
+
+    useEffect(() => {
+        if (subjectClassId && data.length > 0) {
+            form.setFieldsValue({
+                list: data.reduce(
+                    (acc, cur) => {
+                        acc[cur.id] = {
+                            examBanned: cur.examBanned ?? false,
+                            examBannedReason: cur.examBannedReason ?? undefined,
+                            examPostponed: cur.examPostponed ?? false,
+                            examPostponedReason: cur.examPostponedReason ?? undefined,
+                            description: cur.description ?? undefined,
+                        }
+                        return acc
+                    },
+                    {} as StudentSubjectScoreFormType['list']
+                ),
+            })
+        }
+    }, [subjectClassId, data, form])
 
     return (
         <Row gutter={16}>
@@ -136,7 +216,10 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                         <Flex justify="end" align="center" gap={12}>
                             <Checkbox>Khóa nhập ĐQT</Checkbox>
                             <Checkbox>Khóa danh sách thi</Checkbox>
-                            <Button type="primary" onClick={handleExamBanned}>
+                            <Button type="primary" onClick={handleSaveExamDecision}>
+                                Lưu cấm thi
+                            </Button>
+                            <Button type="primary" onClick={handleSaveExamDecision}>
                                 Lưu hoãn thi
                             </Button>
                             <Button type="primary">Phân phòng thi</Button>
@@ -159,12 +242,6 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                         loading={isLoading}
                         columns={[
                             {
-                                title: 'STT',
-                                width: 40,
-                                align: 'center',
-                                render: (_, __, index) => index + 1,
-                            },
-                            {
                                 title: 'Mã sinh viên',
                                 align: 'center',
                                 width: 100,
@@ -184,7 +261,7 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                             },
                             {
                                 title: 'Ngày sinh',
-                                width: 140,
+                                width: 80,
                                 align: 'center',
                                 render: (_, record) => {
                                     const dob = record.student?.userProfile?.dateOfBirth
@@ -193,7 +270,7 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                             },
                             {
                                 title: 'Tên lớp',
-                                width: 230,
+                                width: 280,
                                 render: (_, record) =>
                                     `${record.student?.fixedClass?.name || ''}-${
                                         record.student?.fixedClass?.trainingCourse?.name || ''
@@ -201,31 +278,21 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                             },
                             {
                                 title: 'Điểm CC',
-                                width: 80,
+                                width: 70,
                                 align: 'center',
                                 render: (_, record) => record.attendanceScore || '',
                             },
                             {
                                 title: 'Điểm TX',
                                 align: 'center',
-                                width: 80,
+                                width: 70,
                                 render: (_, record) => record.midtermScore || '',
                             },
                             {
                                 title: 'Điểm thi',
                                 align: 'center',
-                                width: 120,
-                                render: (_, record) => {
-                                    return (
-                                        <Form.Item
-                                            className="mb-0 w-full"
-                                            name={[record.id, 'examScore']}
-                                            initialValue={record.examScore || ''}
-                                        >
-                                            <InputNumber step={0.5} min={1} max={10} />
-                                        </Form.Item>
-                                    )
-                                },
+                                width: 70,
+                                render: (_, record) => record.examScore || '',
                             },
                             {
                                 title: 'Lý do cấm thi',
@@ -267,7 +334,7 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                                     const examPostponed = listForm[record.id]?.examPostponed
                                     return (
                                         <Form.Item
-                                            name={[record.id, 'examPostponedReason']}
+                                            name={['list', record.id, 'examPostponedReason']}
                                             className="m-0"
                                         >
                                             <Input
@@ -301,7 +368,7 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                                     return (
                                         <Form.Item
                                             className="w-full mb-0"
-                                            name={[record.id, 'description']}
+                                            name={['list', record.id, 'description']}
                                             label=""
                                         >
                                             <Input placeholder="Nhập ghi chú" />

@@ -1,4 +1,5 @@
 import Select from '@components/commons/select'
+import RoomSelector from '@components/commons/select-room-table'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
@@ -8,6 +9,7 @@ import type { SubjectVersion } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManyRoom, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, Input, Row } from 'antd'
+import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
 
@@ -15,6 +17,22 @@ interface Props {
     onSelectSubjectClass: (id: string | null) => void
     setActiveKey: (key: string) => void
 }
+
+interface SubjectClassFormType {
+    list: Record<
+        string,
+        {
+            isLockScore?: boolean
+            isLockFinalScore?: boolean
+            isAnonymous?: boolean
+            isLockAnonymous?: boolean
+            rooms?: string[]
+            merge?: string
+        }
+    >
+}
+
+// Component hiển thị bảng chọn phòng
 
 export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey }: Props) {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -29,7 +47,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
         examType: undefined,
     })
 
-    const [form] = Form.useForm()
+    const [form] = Form.useForm<SubjectClassFormType>()
 
     const { data: subjectClass = [] } = useFindManySubjectClass(
         {
@@ -131,6 +149,13 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
         },
     })
 
+    const rowSelection: TableRowSelection = {
+        selectedRowKeys: selectedRowKey ? [selectedRowKey] : [],
+        onChange: (selectedKeys: React.Key[]) => {
+            setSelectedRowKey(selectedKeys[0])
+        },
+    }
+
     const debouncedSearch = useCallback(
         _.debounce((value: string) => {
             setFilters((prev) => ({
@@ -194,9 +219,12 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                             }
                         />
                     </Flex>
-                    <Button type="primary" onClick={handleSubmitExam}>
-                        Lưu
-                    </Button>
+                    <Flex justify="end" gap={8}>
+                        <Button type="primary" onClick={handleSubmitExam}>
+                            Lưu
+                        </Button>
+                        <Button type="primary">Hủy</Button>
+                    </Flex>
                 </Flex>
             </Col>
 
@@ -204,13 +232,21 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                 <Form form={form}>
                     <Table
                         rowKey="id"
+                        rowSelection={{
+                            type: 'radio',
+                            ...rowSelection,
+                        }}
                         onRow={(record) => ({
-                            onDoubleClick: () => {
-                                const newSelectedKey =
-                                    selectedRowKey === record.id ? null : record.id
-                                setSelectedRowKey(newSelectedKey)
-                                onSelectSubjectClass(newSelectedKey)
-                                setActiveKey?.('2')
+                            onClick: () => {
+                                setSelectedRowKey(record?.id)
+                            },
+                            onDoubleClick: (e) => {
+                                const target = e.target as HTMLElement
+                                if (!target.closest('.ant-select')) {
+                                    onSelectSubjectClass(record?.id)
+                                    setSelectedRowKey(record?.id)
+                                    setActiveKey?.('2')
+                                }
                             },
                         })}
                         columns={[
@@ -246,14 +282,14 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                             {
                                 title: 'Số tín chỉ',
                                 align: 'center',
-                                width: 40,
+                                width: 50,
                                 render: (_, record: { subject?: SubjectVersion }) =>
                                     record.subject?.credit || '',
                             },
                             {
                                 title: 'Số sinh viên',
                                 align: 'center',
-                                width: 50,
+                                width: 60,
                                 render: (_, record) => {
                                     return record._count?.subjectClassStudent || 0
                                 },
@@ -278,7 +314,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                     return (
                                         <Form.Item
                                             className="mb-0"
-                                            name={[record.id, 'isLockScore']}
+                                            name={['list', record.id, 'isLockScore']}
                                             valuePropName="checked"
                                         >
                                             <span className="pointer-events-none">
@@ -296,7 +332,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                     return (
                                         <Form.Item
                                             className="mb-0"
-                                            name={[record.id, 'isLockFinalScore']}
+                                            name={['list', record.id, 'isLockFinalScore']}
                                             valuePropName="checked"
                                         >
                                             <span className="pointer-events-none">
@@ -314,7 +350,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                     return (
                                         <Form.Item
                                             className="mb-0"
-                                            name={[record.id, 'isAnonymous']}
+                                            name={['list', record.id, 'isAnonymous']}
                                             valuePropName="checked"
                                         >
                                             <span className="pointer-events-none">
@@ -332,7 +368,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                     return (
                                         <Form.Item
                                             className="mb-0"
-                                            name={[record.id, 'isLockAnonymous']}
+                                            name={['list', record.id, 'isLockAnonymous']}
                                             valuePropName="checked"
                                         >
                                             <span className="pointer-events-none">
@@ -350,15 +386,20 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                     return (
                                         <Form.Item
                                             className="mb-0"
-                                            name={[record.id, 'rooms']}
-                                            initialValue={`${record.room?.name}-${record.room?.capacity}`}
+                                            name={['list', record.id, 'rooms']}
+                                            initialValue={
+                                                record.room
+                                                    ? [
+                                                          {
+                                                              name: record.room.name,
+                                                              roomId: record.room.id,
+                                                              quantity: record.room.capacity,
+                                                          },
+                                                      ]
+                                                    : []
+                                            }
                                         >
-                                            <Select
-                                                options={rooms.map((room) => ({
-                                                    label: `${room.name}-${room.capacity}`,
-                                                    value: room.id,
-                                                }))}
-                                            />
+                                            <RoomSelector rooms={rooms} />
                                         </Form.Item>
                                     )
                                 },
@@ -366,7 +407,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                             {
                                 title: 'Giảng viên 1',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 render: (_, record) => {
                                     return (
                                         <div className="text-left">
@@ -378,19 +419,19 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                             {
                                 title: 'Ngày thi',
                                 align: 'center',
-                                width: 80,
+                                width: 20,
                                 render: (_, record) =>
                                     record.examDate ? formatDate(record.examDate) : undefined,
                             },
                             {
                                 title: 'Ghép lớp',
                                 align: 'center',
-                                width: 30,
+                                width: 10,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
                                             className="mb-0 w-full"
-                                            name={[record.id, 'merge']}
+                                            name={['list', record.id, 'merge']}
                                             initialValue="rieng"
                                         >
                                             <Select
