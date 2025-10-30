@@ -127,6 +127,15 @@ app.openapi(genExamCode, async (c) => {
             WHERE
                 "id" IN (${Prisma.join(ids)})
             `
+        await tx.exam.update({
+            where: { id: examId },
+            data: { lockExamCode: true },
+        })
+
+        await tx.examRoom.updateMany({
+            where: { examId },
+            data: { lockExamCode: true },
+        })
     })
 
     return c.json({ success: true, message: 'Success' }, 200)
@@ -247,6 +256,11 @@ app.openapi(genExamRoomCode, async (c) => {
             WHERE
                 "id" IN (${Prisma.join(ids)})
             `
+
+        await tx.examRoom.update({
+            where: { id: examRoomId },
+            data: { lockExamCode: true },
+        })
     })
 
     return c.json({ success: true, message: 'Success' }, 200)

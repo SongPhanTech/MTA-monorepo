@@ -11,7 +11,6 @@ export default function SubjectClassScoreTheoPhach() {
     const [selectedRowKeys, setSelectedRowKeys] = useState<string>('')
     const [activeKey, setActiveKey] = useState('1')
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip>
     const items = useMemo(() => {
         return [
             {
@@ -39,7 +38,7 @@ export default function SubjectClassScoreTheoPhach() {
                 children: <NhapdiemPhach examRoomId={selectedRowKeys} />,
             },
         ]
-    }, [])
+    }, [selectedRowKeys])
 
     return (
         <div className="bg-white">
