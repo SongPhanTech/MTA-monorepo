@@ -125,7 +125,7 @@ function Page() {
     }
 
     return (
-        <div className="flex flex-col h-full bg-white overflow-hidden text-gray-900">
+        <div className="flex flex-col h-full bg-gray-50 overflow-hidden text-gray-900">
             <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
                 <div className="px-4 py-4">
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-2xl mx-auto">
