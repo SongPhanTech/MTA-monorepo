@@ -116,7 +116,7 @@ const fixedClassStudentCount = createRoute({
         200: {
             description: 'Export quân số học viên theo khoá',
             content: {
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
                     schema: z.any().openapi({ type: 'string', format: 'binary' }),
                 },
             },
@@ -190,7 +190,7 @@ app.openapi(fixedClassStudentCount, async (c) => {
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(result, 200, {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': disposition,
     })
 })

@@ -18,6 +18,7 @@ import ExamScoreApp from './api/exam-score'
 import FixedClassApp from './api/fixed-class'
 import GraduationApp from './api/graduation'
 import ImportApp from './api/import'
+import LecturerApp from './api/lecturer'
 import PlanTraining from './api/plan-training'
 import RoomApp from './api/room'
 import Stats from './api/stats'
@@ -84,6 +85,7 @@ app.route('/api/user-profile', UserProfileApp)
 app.route('/api/fixed-class', FixedClassApp)
 app.route('/api/subject-class', SubjectClassApp)
 app.route('/api/student', StudentApp)
+app.route('/api/lecturer', LecturerApp)
 app.route('/api/training-score', TrainingScoreApp)
 app.route('/api/curriculum', CurriculumApp)
 app.route('/api/curriculum-subject', CurriculumSubjectApp)

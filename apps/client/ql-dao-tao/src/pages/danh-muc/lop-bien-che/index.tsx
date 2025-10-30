@@ -8,7 +8,7 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
+import { emptyObjectIf } from '@workspace/constant'
 import type { TrainingCourse } from '@workspace/db/client'
 import {
     useCountFixedClass,
@@ -22,7 +22,6 @@ import {
     useUpdateFixedClass,
 } from '@workspace/db/hooks'
 import { fixedClassStudentCount } from '@workspace/libs/api/training'
-import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
 import { getFilenameFromContentDisposition } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'

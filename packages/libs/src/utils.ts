@@ -103,18 +103,18 @@ export const calcFinalScore = (
     const rawFinalScore = !subjectScore.examScore
         ? null
         : subjectScore.examScore < coef?.scoreToPass
-            ? subjectScore.examScore
-            : Math.min(
+          ? subjectScore.examScore
+          : Math.min(
                 (subjectScore.attendanceScore || 0) * coef?.coef_1 +
-                (subjectScore.midtermScore || 0) * coef?.coef_2 +
-                subjectScore.examScore * coef?.coef_3,
+                    (subjectScore.midtermScore || 0) * coef?.coef_2 +
+                    subjectScore.examScore * coef?.coef_3,
                 10
             )
 
     const maxCertFinalScore = subjectScore.certificates?.length
         ? Math.max(
-            ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
-        )
+              ...subjectScore.certificates.map((cert) => cert?.archivedCertificate?.finalScore)
+          )
         : null
 
     if (rawFinalScore === null && maxCertFinalScore === null) {

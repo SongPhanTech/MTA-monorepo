@@ -837,7 +837,7 @@ const debtStatistics = createRoute({
         200: {
             description: 'Export thống kê nợ',
             content: {
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
                     schema: z.any().openapi({ type: 'string', format: 'binary' }),
                 },
             },
@@ -1087,7 +1087,7 @@ app.openapi(debtStatistics, async (c) => {
     const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
 
     return c.body(result, 200, {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': disposition,
     })
 })

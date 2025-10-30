@@ -42,6 +42,8 @@ import type {
     DebtStatisticsParams,
     EnrollFixedClassOnSubjectClassBody,
     ExamCodes,
+    ExportLecturerProfile400,
+    ExportLecturerProfileBody,
     ExportStudentResultSemesterJson200Item,
     ExportStudentResultSemesterJson404,
     ExportStudentResultSemesterJsonParams,
@@ -2643,6 +2645,104 @@ export function useDebtStatistics<
     query.queryKey = queryOptions.queryKey
 
     return query
+}
+
+export type exportLecturerProfileResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportLecturerProfileResponse400 = {
+    data: ExportLecturerProfile400
+    status: 400
+}
+
+export type exportLecturerProfileResponseComposite =
+    | exportLecturerProfileResponse200
+    | exportLecturerProfileResponse400
+
+export type exportLecturerProfileResponse = exportLecturerProfileResponseComposite & {
+    headers: Headers
+}
+
+export const getExportLecturerProfileUrl = () => {
+    return '/api/lecturer/export-lecturer-profile'
+}
+
+export const exportLecturerProfile = async (
+    exportLecturerProfileBody: ExportLecturerProfileBody,
+    options?: RequestInit
+): Promise<exportLecturerProfileResponse> => {
+    return customTrainingFetch<exportLecturerProfileResponse>(getExportLecturerProfileUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(exportLecturerProfileBody),
+    })
+}
+
+export const getExportLecturerProfileMutationOptions = <
+    TError = ExportLecturerProfile400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportLecturerProfile>>,
+        TError,
+        { data: ExportLecturerProfileBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportLecturerProfile>>,
+    TError,
+    { data: ExportLecturerProfileBody },
+    TContext
+> => {
+    const mutationKey = ['exportLecturerProfile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportLecturerProfile>>,
+        { data: ExportLecturerProfileBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportLecturerProfile(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportLecturerProfileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportLecturerProfile>>
+>
+export type ExportLecturerProfileMutationBody = ExportLecturerProfileBody
+export type ExportLecturerProfileMutationError = ExportLecturerProfile400
+
+export const useExportLecturerProfile = <TError = ExportLecturerProfile400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportLecturerProfile>>,
+            TError,
+            { data: ExportLecturerProfileBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportLecturerProfile>>,
+    TError,
+    { data: ExportLecturerProfileBody },
+    TContext
+> => {
+    const mutationOptions = getExportLecturerProfileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
 }
 
 /**
@@ -6940,7 +7040,7 @@ export type genExamCodeResponse = genExamCodeResponseComposite & {
 }
 
 export const getGenExamCodeUrl = () => {
-    return '/api/exam-score/gex-exam-code'
+    return '/api/exam-score/gen-exam-code'
 }
 
 export const genExamCode = async (
@@ -7049,7 +7149,7 @@ export type genExamRoomCodeResponse = genExamRoomCodeResponseComposite & {
 }
 
 export const getGenExamRoomCodeUrl = () => {
-    return '/api/exam-score/gex-exam-room-code'
+    return '/api/exam-score/gen-exam-room-code'
 }
 
 export const genExamRoomCode = async (
