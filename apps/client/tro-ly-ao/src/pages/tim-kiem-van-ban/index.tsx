@@ -34,12 +34,12 @@ export default function Page() {
             },
         },
     })
-    
+
     // Sắp xếp documents theo thứ tự của results từ API
-    const documents = results.map(id => 
-        documentsData.find(doc => doc.id === id)
-    ).filter((doc): doc is NonNullable<typeof doc> => Boolean(doc))
-    
+    const documents = results
+        .map((id) => documentsData.find((doc) => doc.id === id))
+        .filter((doc): doc is NonNullable<typeof doc> => Boolean(doc))
+
     const [selectedDocument, setSelectedDocument] = useState<(typeof documents)[0] | undefined>()
     const onDownload = async (url: string, fileName: string) => {
         const response = await fetch(url)
