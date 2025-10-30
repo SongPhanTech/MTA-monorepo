@@ -112,8 +112,6 @@ const PutTopic = () => {
     })
 
     const onFinish = async (values: TopicFormType) => {
-        const defaultPrompt = getDefaultPromptTemplate(values.name)
-
         try {
             if (id) {
                 await update({
@@ -127,13 +125,16 @@ const PutTopic = () => {
                     },
                 })
 
+                // Tạo lại prompt template dựa trên tên mới
+                const updatedPrompt = getDefaultPromptTemplate(values.name)
+
                 if (existingPrompt) {
                     await updatePrompt({
                         where: {
                             topicId: id,
                         },
                         data: {
-                            prompt: defaultPrompt,
+                            prompt: updatedPrompt,
                         },
                     })
                 }
@@ -149,6 +150,7 @@ const PutTopic = () => {
                 })
 
                 if (newTopic) {
+                    const defaultPrompt = getDefaultPromptTemplate(values.name)
                     await createPrompt({
                         data: {
                             prompt: defaultPrompt,
