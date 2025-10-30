@@ -3,11 +3,11 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import ConfigSurveyExam from '@components/sub-pages/config-survey-exam'
+import SelectLecturer from '@components/sub-pages/select-lecturer'
 import useSpinner from '@hooks/spinner'
 import type { Survey, SurveyObjectType, SurveyResponse, SurveyTopic } from '@workspace/db'
 import {
     useCreateSurvey,
-    useFindManyLecturer,
     useFindManySchoolYear,
     useFindManySurveyObjectType,
     useFindManySurveyTopic,
@@ -36,7 +36,6 @@ const { Step } = Steps
 export type PutSurveyType = Survey & {
     surveyObjectTypes: string[]
     semesterId?: string
-    lecturerId: string
     lecturerIds: string[]
     surveyQuestionIds: string[]
     surveyChoice: any[]
@@ -252,35 +251,7 @@ const PutSurveyModal = () => {
 
     const semesterId = Form.useWatch('semesterId', form)
 
-    const { data: lecturerData = [] } = useFindManyLecturer(
-        {
-            where: {
-                mainSubjectClasses: {
-                    some: {
-                        semester: {
-                            id: semesterId,
-                        },
-                    },
-                },
-            },
-            orderBy: {
-                userProfile: {
-                    firstName: 'asc',
-                },
-            },
-            include: {
-                userProfile: true,
-                mainSubjectClasses: {
-                    include: {
-                        semester: true,
-                    },
-                },
-            },
-        },
-        {
-            enabled: !!semesterId,
-        }
-    )
+
     // Tạo treeData từ schoolYears và semesters
     const treeData: TreeNodeType[] = useMemo(() => {
         return (
@@ -392,58 +363,46 @@ const PutSurveyModal = () => {
                                 <DatePicker format="DD/MM/YYYY" className="w-full" />
                             </FormItem>
                         </Col>
-
-                        <Col span={12}>
-                            <FormItem form={form} name="semesterId" label="Kỳ học">
-                                <TreeSelectAnt
-                                    showSearch
-                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                    placeholder={'Chọn kỳ học'}
-                                    allowClear
-                                    treeDefaultExpandAll
-                                    treeData={treeData}
-                                    filterTreeNode={filterTreeNode}
-                                    treeNodeFilterProp="title"
-                                    loading={schoolYearLoading}
-                                />
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            {input?.type === 'multiple' ? (
-                                <FormItem
-                                    form={form}
-                                    name="lecturerIds"
-                                    label="Giảng viên"
-                                    required
-                                >
-                                    <Select
-                                        mode="multiple"
-                                        maxTagCount={'responsive'}
-                                        placeholder="Chọn minh chứng"
-                                        options={lecturerData?.map((i) => {
-                                            return {
-                                                label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim(),
-                                                value: i.id,
-                                                key: i.id,
-                                            }
-                                        })}
-                                    />
-                                </FormItem>
-                            ) : (
-                                <FormItem form={form} name="lecturerId" label="Giảng viên">
-                                    <Select
-                                        placeholder="Chọn minh chứng"
-                                        options={lecturerData?.map((i) => {
-                                            return {
-                                                label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim(),
-                                                value: i.id,
-                                                key: i.id,
-                                            }
-                                        })}
-                                    />
-                                </FormItem>
-                            )}
-                        </Col>
+                            {
+                                input?.type==='multiple'&&(<>
+                                    <Col span={12}>
+                                            <FormItem form={form} name="semesterId" label="Kỳ học">
+                                                <TreeSelectAnt
+                                                    showSearch
+                                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                                    placeholder={'Chọn kỳ học'}
+                                                    allowClear
+                                                    treeDefaultExpandAll
+                                                    treeData={treeData}
+                                                    filterTreeNode={filterTreeNode}
+                                                    treeNodeFilterProp="title"
+                                                    loading={schoolYearLoading}
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                                    {/* <Col span={12}>
+                                                            <FormItem
+                                                                form={form}
+                                                                name="lecturerIds"
+                                                                label="Giảng viên"
+                                                                required
+                                                            >
+                                                                <Select
+                                                                    mode="multiple"
+                                                                    maxTagCount={'responsive'}
+                                                                    placeholder="Chọn minh chứng"
+                                                                    options={lecturerData?.map((i) => {
+                                                                        return {
+                                                                            label: `${i.userProfile?.lastName ?? ''} ${i.userProfile?.firstName ?? ''}`.trim(),
+                                                                            value: i.id,
+                                                                            key: i.id,
+                                                                        }
+                                                                    })}
+                                                                />
+                                                            </FormItem>
+                                                    </Col> */}
+                                </>)
+                            }
                         <Col span={12}>
                             <FormItem
                                 form={form}
@@ -486,6 +445,18 @@ const PutSurveyModal = () => {
                     </Row>
                 ),
             },
+            ...(input?.type === 'multiple'
+                ? [
+               {
+                   title: 'Đối tượng được khảo sát',
+                   content: (
+                       <SelectLecturer
+                           surveyTopicId={surveyTopicId}
+                           semesterId={semesterId}
+                       />
+                   ),
+               } 
+            ]:[]),
             {
                 title: 'Cấu hình sinh đề',
                 content: (
@@ -497,7 +468,7 @@ const PutSurveyModal = () => {
                 ),
             },
         ]
-    }, [input, lecturerData, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId])
+    }, [input, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId,semesterId])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {
@@ -551,7 +522,7 @@ const PutSurveyModal = () => {
             footer={null}
             onCancel={onClose}
         >
-            <div className="w-full max-w-[500px] mx-auto mt-6">
+            <div className="w-full max-w-[650px] mx-auto mt-6">
                 <Steps current={current} style={{ marginBottom: 24 }}>
                     {steps.map((item) => (
                         <Step key={item.title} title={item.title} />
