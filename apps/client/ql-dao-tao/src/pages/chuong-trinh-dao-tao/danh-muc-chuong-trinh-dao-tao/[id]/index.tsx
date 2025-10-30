@@ -8,7 +8,7 @@ import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
-import { emptyObjectIf } from '@workspace/constant'
+import { emptyObjectIf, getMinioUrl } from '@workspace/constant'
 import type {
     CurriculumVersion,
     DocumentFile,
@@ -34,7 +34,6 @@ import { useRouter } from 'next/router'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { env } from '@/env'
 import CreateIcon from '../../../../components/icons/create'
 export default function TrainingProgramSubjects() {
     const { can, canSome } = useAbility()
@@ -389,7 +388,7 @@ export default function TrainingProgramSubjects() {
                                 ) && (
                                     <>
                                         <Button
-                                            href={`${env.NEXT_PUBLIC_BASE_PATH}/templates/Mẫu nhập CTĐT.xlsx`}
+                                            href={getMinioUrl('mta/template/MAU-NHAP_CTDT.xlsx')}
                                             className="text-primary border-primary mr-2"
                                         >
                                             <FileDown />

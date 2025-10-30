@@ -13,7 +13,7 @@ import { listUser } from '@workspace/libs/constants'
 import { calcFinalScore } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, message, Modal, Row } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, Modal, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FileUp, Printer, Save } from 'lucide-react'
@@ -138,23 +138,9 @@ export default function DiemThi({
                                 },
                             },
                         },
-                         {
-                            model: 'SubjectClassHistory',
-                            operation: 'create',
-                            data: {
-                                data: {
-                                    subjectClassId: subjectClassId,
-                                    isLockExamScore: true,
-                                    scoreSubmitted: true,
-                                    scoreChecked: true,
-                                    isLockScore: true,
-                                    updatedById: profileId
-                                },
-                            },
-                        },
                     ]
-                }else {
-                     listSqlTransaction = [
+                } else {
+                    listSqlTransaction = [
                         ...listSqlTransaction,
                         {
                             model: 'SubjectClass',
@@ -170,22 +156,8 @@ export default function DiemThi({
                                 },
                             },
                         },
-                                {
-                            model: 'SubjectClassHistory',
-                            operation: 'create',
-                            data: {
-                                data: {
-                                    subjectClassId: subjectClassId,
-                                    isLockExamScore: dataForm?.isLockExamScore !==dataForm?.isLockExamScoreOld ? dataForm?.isLockExamScore : undefined,
-                                    scoreSubmitted: dataForm?.scoreSubmitted !== dataForm?.scoreSubmittedOld ? dataForm?.scoreSubmitted : undefined,
-                                    scoreChecked: dataForm?.scoreChecked !== dataForm?.scoreCheckedOld ? dataForm?.scoreChecked : undefined,
-                                    updatedById: profileId
-                                },
-                            },
-                        },
                     ]
                 }
-                  
             }
             const dataSubmit = form.getFieldsValue()
             const listObject = Object.entries(dataSubmit.list).map(([key, value_]) => {
