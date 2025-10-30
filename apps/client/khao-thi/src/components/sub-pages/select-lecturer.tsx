@@ -2,9 +2,8 @@ import FormItem from '@components/commons/form-item'
 import Table from '@components/commons/table'
 import type { PutSurveyType } from '@components/modal/put-modal-survey'
 import { useFindManyLecturer } from '@workspace/db/hooks'
-import { Form, Input,type TreeProps } from 'antd'
+import { Form, Input, type TreeProps } from 'antd'
 import { useState } from 'react'
-
 
 interface MyTreeNode {
     title: string
@@ -15,7 +14,7 @@ interface MyTreeNode {
 
 function SelectLecturer({
     surveyTopicId,
-    semesterId
+    semesterId,
 }: {
     surveyTopicId?: string
     semesterId?: string
@@ -64,15 +63,13 @@ function SelectLecturer({
     }
     const listForm = Form.useWatch('surveyChoice', form) ?? []
 
-
-
     return (
         <div className="w-full px-3 mt-3">
             <div className="mb-4 text-[14px] font-[500]">Lựa chọn của câu hỏi khảo sát</div>
             <div>
                 <FormItem form={form} name="surveyChoice">
                     <Table
-                        rowKey={"id"}
+                        rowKey={'id'}
                         columns={[
                             {
                                 title: 'Giá trị',
@@ -94,8 +91,6 @@ function SelectLecturer({
                                     </Form.Item>
                                 ),
                             },
-
-                          
                         ]}
                         bordered
                         data={listForm}

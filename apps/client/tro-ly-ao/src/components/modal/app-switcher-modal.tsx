@@ -6,9 +6,9 @@ import {
     QuestionCircleOutlined,
     SearchOutlined,
 } from '@ant-design/icons'
-import { Button, Modal } from 'antd'
+import { Modal } from 'antd'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import APPS_TYPES from '@/navigations/header-content/app_types'
@@ -23,18 +23,9 @@ const APP_ICONS: Record<string, React.ComponentType<{ style?: React.CSSPropertie
 
 const AppSwitcherModal = () => {
     const pathname = usePathname()
-    const router = useRouter()
     const { isOpen, onClose } = useDisclosure({
         tag: 'AppSwitcherModal',
     })
-
-    const handleAppClick = (item: (typeof APPS_TYPES)[number]) => {
-        const paths = item.matchPaths || [item.path]
-        if (pathname && !paths.some((path) => pathname.startsWith(path))) {
-            router.push(item.path)
-            onClose()
-        }
-    }
 
     const visibleApps = APPS_TYPES.filter((item) => item.isShow)
 
@@ -54,22 +45,22 @@ const AppSwitcherModal = () => {
                     const isActive = pathname && paths.some((path) => pathname.startsWith(path))
 
                     return (
-                        <Button
+                        <Link
                             key={app.key}
-                            size="large"
-                            className={`h-14 flex items-center justify-start gap-3 text-left transition-all duration-200 ${
+                            href={app.path}
+                            onClick={onClose}
+                            className={`h-14 flex items-center justify-start gap-3 px-4 rounded-lg border transition-all duration-200 no-underline ${
                                 isActive
-                                    ? 'bg-primary/15 text-primary border-primary/30'
-                                    : 'hover:bg-primary/10 hover:text-primary border-gray-200 hover:border-primary/25'
+                                    ? 'bg-primary/15 text-primary border-primary/30 cursor-default'
+                                    : 'hover:bg-primary/10 hover:text-primary border-gray-200 hover:border-primary/25 text-gray-700'
                             }`}
-                            onClick={() => handleAppClick(app)}
-                            disabled={!!isActive}
+                            style={{ pointerEvents: isActive ? 'none' : 'auto' }}
                         >
                             {React.createElement(APP_ICONS[app.key] || AppstoreOutlined, {
                                 style: { fontSize: '20px' },
                             })}
                             <span className="text-sm font-medium">{app.label}</span>
-                        </Button>
+                        </Link>
                     )
                 })}
             </div>

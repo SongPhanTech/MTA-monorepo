@@ -251,7 +251,6 @@ const PutSurveyModal = () => {
 
     const semesterId = Form.useWatch('semesterId', form)
 
-
     // Tạo treeData từ schoolYears và semesters
     const treeData: TreeNodeType[] = useMemo(() => {
         return (
@@ -363,24 +362,24 @@ const PutSurveyModal = () => {
                                 <DatePicker format="DD/MM/YYYY" className="w-full" />
                             </FormItem>
                         </Col>
-                            {
-                                input?.type==='multiple'&&(<>
-                                    <Col span={12}>
-                                            <FormItem form={form} name="semesterId" label="Kỳ học">
-                                                <TreeSelectAnt
-                                                    showSearch
-                                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                                    placeholder={'Chọn kỳ học'}
-                                                    allowClear
-                                                    treeDefaultExpandAll
-                                                    treeData={treeData}
-                                                    filterTreeNode={filterTreeNode}
-                                                    treeNodeFilterProp="title"
-                                                    loading={schoolYearLoading}
-                                                />
-                                            </FormItem>
-                                        </Col>
-                                                    {/* <Col span={12}>
+                        {input?.type === 'multiple' && (
+                            <>
+                                <Col span={12}>
+                                    <FormItem form={form} name="semesterId" label="Kỳ học">
+                                        <TreeSelectAnt
+                                            showSearch
+                                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                            placeholder={'Chọn kỳ học'}
+                                            allowClear
+                                            treeDefaultExpandAll
+                                            treeData={treeData}
+                                            filterTreeNode={filterTreeNode}
+                                            treeNodeFilterProp="title"
+                                            loading={schoolYearLoading}
+                                        />
+                                    </FormItem>
+                                </Col>
+                                {/* <Col span={12}>
                                                             <FormItem
                                                                 form={form}
                                                                 name="lecturerIds"
@@ -401,8 +400,8 @@ const PutSurveyModal = () => {
                                                                 />
                                                             </FormItem>
                                                     </Col> */}
-                                </>)
-                            }
+                            </>
+                        )}
                         <Col span={12}>
                             <FormItem
                                 form={form}
@@ -447,16 +446,17 @@ const PutSurveyModal = () => {
             },
             ...(input?.type === 'multiple'
                 ? [
-               {
-                   title: 'Đối tượng được khảo sát',
-                   content: (
-                       <SelectLecturer
-                           surveyTopicId={surveyTopicId}
-                           semesterId={semesterId}
-                       />
-                   ),
-               } 
-            ]:[]),
+                      {
+                          title: 'Đối tượng được khảo sát',
+                          content: (
+                              <SelectLecturer
+                                  surveyTopicId={surveyTopicId}
+                                  semesterId={semesterId}
+                              />
+                          ),
+                      },
+                  ]
+                : []),
             {
                 title: 'Cấu hình sinh đề',
                 content: (
@@ -468,7 +468,7 @@ const PutSurveyModal = () => {
                 ),
             },
         ]
-    }, [input, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId,semesterId])
+    }, [input, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId, semesterId])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {

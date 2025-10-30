@@ -187,8 +187,7 @@ export default function DangKyHocChoLopQuanLy() {
                         dataIndex: '',
                         width: 35,
                         align: 'center',
-                        render: (_, __, index) =>
-                            index + 1 + (currentPage - 1) * numberOfPages,
+                        render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                     },
                     {
                         title: 'Mã LMH',
@@ -219,7 +218,9 @@ export default function DangKyHocChoLopQuanLy() {
                         width: 100,
                         onCell: (record) => ({
                             className: cn(
-                                record?._count?.subjectClassStudent === 0 ? 'text-red-500' : 'text-primary'
+                                record?._count?.subjectClassStudent === 0
+                                    ? 'text-red-500'
+                                    : 'text-primary'
                             ),
                         }),
                         render: (record) => record?._count?.subjectClassStudent ?? 0,
