@@ -202,9 +202,6 @@ function Page() {
                                 maxHeight={9999}
                             />
                         </div>
-                        <div className="px-4 py-2 text-xs text-gray-500 border-t border-gray-100 bg-gray-50 flex-shrink-0 rounded-b-xl">
-                            {inputText.length} ký tự
-                        </div>
                     </div>
 
                     <div className="bg-white rounded-xl shadow-sm border border-gray-200 output-panel flex flex-col">
@@ -245,9 +242,6 @@ function Page() {
                                     />
                                 </div>
                             )}
-                        </div>
-                        <div className="px-2 sm:px-4 py-2 text-xs text-gray-500 border-t border-gray-100 bg-gray-50 output-footer flex-shrink-0 rounded-b-xl">
-                            {outputText.length} ký tự
                         </div>
                     </div>
                 </div>

@@ -77,7 +77,7 @@ const AutoResizeTextArea = ({
                 w-full px-3 py-3 text-base border-0 rounded-none
                 focus:outline-none resize-none
                 disabled:text-gray-500
-                transition-all duration-200 bg-transparent
+                bg-transparent
                 ${readOnly ? 'bg-transparent' : 'bg-transparent'}
                 ${className}
             `}
