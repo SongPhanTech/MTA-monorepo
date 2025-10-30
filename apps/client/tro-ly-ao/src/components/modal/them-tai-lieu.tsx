@@ -29,6 +29,7 @@ type DocumentFormType = {
             timeLeft?: number
             similar?: number
             id: string
+            customName?: string
         }
     >
 }
@@ -172,12 +173,12 @@ const ThemTaiLieu = () => {
 
             // Tạo document trước, sau đó tạo DocumentTopic
             await Promise.all(
-                Object.values(values.files).map(async ({ body, file, url }) => {
+                Object.values(values.files).map(async ({ body, file, url, customName }) => {
                     // Tạo document
                     const newDocument = await createDocument({
                         data: {
                             uri: url,
-                            title: file.name,
+                            title: customName || file.name,
                             fileType: file.type,
                             body,
                             fileSize: file.size,
@@ -310,10 +311,30 @@ const ThemTaiLieu = () => {
                                     </span>
                                 )}
                                 <FileUploadIcon fileType={file.file.type} width={40} height={40} />
-                                <div className="flex flex-col flex-1">
-                                    <div className="max-w-[400px] truncate">
-                                        <span className="font-semibold ">{file.file.name}</span>
-                                    </div>
+                                <div className="flex flex-col flex-1 gap-1">
+                                    {file.progress === 100 ? (
+                                        <Input
+                                            size="small"
+                                            placeholder="Nhập tên tài liệu"
+                                            defaultValue={file.customName || file.file.name}
+                                            onChange={(e) => {
+                                                form.setFieldsValue({
+                                                    files: {
+                                                        ...form.getFieldValue('files'),
+                                                        [key]: {
+                                                            ...file,
+                                                            customName: e.target.value,
+                                                        },
+                                                    },
+                                                })
+                                            }}
+                                            onClick={(e) => e.stopPropagation()}
+                                        />
+                                    ) : (
+                                        <div className="max-w-[400px] truncate">
+                                            <span className="font-semibold ">{file.file.name}</span>
+                                        </div>
+                                    )}
                                     <span className="text-gray-400 text-sm">
                                         {formatNiceBytes(`${file.file.size}`)}
 
