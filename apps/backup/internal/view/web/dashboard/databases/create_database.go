@@ -1,8 +1,6 @@
 package databases
 
 import (
-	"database/sql"
-
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
 	"github.com/eduardolat/pgbackweb/internal/validate"
 	"github.com/eduardolat/pgbackweb/internal/view/web/component"
@@ -14,8 +12,8 @@ import (
 )
 
 type createDatabaseDTO struct {
-	Name             string `form:"name" validate:"required"`
-	Version          string `form:"version" validate:"required"`
+	Name string `form:"name" validate:"required"`
+	// Version          string `form:"version" validate:"required"`
 	ConnectionString string `form:"connection_string" validate:"required"`
 }
 
@@ -33,7 +31,7 @@ func (h *handlers) createDatabaseHandler(c echo.Context) error {
 	_, err := h.servs.DatabasesService.CreateDatabase(
 		ctx, dbgen.DatabasesServiceCreateDatabaseParams{
 			Name:             formData.Name,
-			PgVersion:        formData.Version,
+			PgVersion:        "17",
 			ConnectionString: formData.ConnectionString,
 		},
 	)
@@ -72,16 +70,16 @@ func createDatabaseButton() nodx.Node {
 					HelpText:    "Tên để dễ dàng nhận diện cơ sở dữ liệu",
 				}),
 
-				component.SelectControl(component.SelectControlParams{
-					Name:        "version",
-					Label:       "Phiên bản",
-					Placeholder: "Chọn phiên bản",
-					Required:    true,
-					HelpText:    "Phiên bản PostgreSQL mà bạn muốn sử dụng",
-					Children: []nodx.Node{
-						component.PGVersionSelectOptions(sql.NullString{}),
-					},
-				}),
+				// component.SelectControl(component.SelectControlParams{
+				// 	Name:        "version",
+				// 	Label:       "Phiên bản",
+				// 	Placeholder: "Chọn phiên bản",
+				// 	Required:    true,
+				// 	HelpText:    "Phiên bản PostgreSQL mà bạn muốn sử dụng",
+				// 	Children: []nodx.Node{
+				// 		component.PGVersionSelectOptions(postgres.PG17),
+				// 	},
+				// }),
 
 				component.InputControl(component.InputControlParams{
 					Name:        "connection_string",

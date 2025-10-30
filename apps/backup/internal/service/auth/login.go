@@ -1,16 +1,19 @@
 package auth
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
-	"github.com/eduardolat/pgbackweb/internal/util/cryptoutil"
 	"github.com/google/uuid"
 )
 
 func (s *Service) Login(
-	ctx context.Context, email, password, ip, userAgent string,
+	ctx context.Context, username, password, ip, userAgent string,
 ) (dbgen.AuthServiceLoginCreateSessionRow, error) {
 	user, err := s.dbgen.AuthServiceLoginGetUserByEmail(ctx, email)
 	if err != nil {
@@ -23,7 +26,7 @@ func (s *Service) Login(
 
 	session, err := s.dbgen.AuthServiceLoginCreateSession(
 		ctx, dbgen.AuthServiceLoginCreateSessionParams{
-			UserID:        user.ID,
+			UserID:        result.User.ID,
 			Ip:            ip,
 			UserAgent:     userAgent,
 			Token:         uuid.NewString(),

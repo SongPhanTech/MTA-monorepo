@@ -31,11 +31,11 @@ func New(
 	cr *cron.Cron, ints *integration.Integration,
 ) *Service {
 	webhooksService := webhooks.New(dbgen)
-	authService := auth.New(env, dbgen)
 	databasesService := databases.New(env, dbgen, ints, webhooksService)
 	destinationsService := destinations.New(env, dbgen, ints, webhooksService)
 	executionsService := executions.New(env, dbgen, ints, webhooksService)
 	usersService := users.New(dbgen)
+	authService := auth.New(env, dbgen, usersService)
 	backupsService := backups.New(dbgen, cr, executionsService)
 	restorationsService := restorations.New(
 		dbgen, ints, executionsService, databasesService, destinationsService,

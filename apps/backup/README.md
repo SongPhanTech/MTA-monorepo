@@ -1,9 +1,59 @@
-# Docker cho database
+## Why PG Back Web?
 
-Cơ sơ dữ liệu cho con backup
+PG Back Web isn't just another backup tool. It's your trusted ally in ensuring
+the security and availability of your PostgreSQL data:
+
+- 🎯 **Designed for everyone**: From individual developers to teams.
+- ⏱️ **Save time**: Automate your backups and forget about manual tasks.
+- ⚡ **Plug and play**: Don't waste time with complex configurations.
+
+## Features
+
+- 📦 **Intuitive web interface**: Manage your backups with ease, no database
+  expertise required.
+- 📅 **Scheduled backups**: Set it and forget it. PG Back Web takes care of the
+  rest.
+- 📈 **Backup monitoring**: Visualize the status of your backups with execution
+  logs.
+- 📤 **Instant download & restore**: Restore and download your backups when you
+  need them, directly from the web interface.
+- 🖥 **Multi-version support**: Compatible with PostgreSQL 13, 14, 15, 16,
+  and 17.
+- 📁 **Local & S3 storage**: Store backups locally or add as many S3 buckets as
+  you want for greater flexibility.
+- ❤️‍🩹 **Health checks**: Automatically check the health of your databases and
+  destinations.
+- 🔔 **Webhooks**: Get notified when a backup finishes, failed, health check
+  fails, or other events.
+- 🔒 **Security first**: PGP encryption to protect your sensitive information.
+- 🛡️ **Open-source trust**: Open-source code under MIT license, backed by the
+  robust pg_dump tool.
+- 🌚 **Dark mode**: Because we all love dark mode.
+
+## Installation
+
+PG Back Web is available as a Docker image. You just need to set 3 environment
+variables and you're good to go!
+
+Here's an example of how you can run PG Back Web with Docker Compose, feel free
+to adapt it to your needs:
 
 ```yaml
 services:
+  pgbackweb:
+    image: eduardolat/pgbackweb:latest
+    ports:
+      - "8085:8085" # Access the web interface at http://localhost:8085
+    volumes:
+      - ./backups:/backups # If you only use S3 destinations, you don't need this volume
+    environment:
+      PBW_ENCRYPTION_KEY: "my_secret_key" # Change this to a strong key
+      PBW_POSTGRES_CONN_STRING: "postgresql://postgres:password@postgres:5432/pgbackweb?sslmode=disable"
+      TZ: "America/Guatemala" # Set your timezone, optional
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   postgres:
     image: postgres:17
     environment:
@@ -20,66 +70,39 @@ services:
       timeout: 5s
       retries: 5
 ```
-# Phát triển
 
-```.env
+## Configuration
 
-# Key mã hoá dữ liệu backup
-PBW_ENCRYPTION_KEY="encryption-key"
+You only need to configure the following environment variables:
 
-# Kết nối cơ sở dữ liệu bên trên
-PBW_POSTGRES_CONN_STRING="postgresql://postgres:postgres@localhost:5432/pgbackweb?sslmode=disable"
-# Đường dẫn để lấy session của ql-nguoi-dung đã login
-PBW_AUTH_URL="http://localhost:3000/api/auth/session"
+- `PBW_ENCRYPTION_KEY`: Your encryption key. Generate a strong one and store it
+  in a safe place, as PG Back Web uses it to encrypt sensitive data.
+
+- `PBW_POSTGRES_CONN_STRING`: The connection string for the PostgreSQL database
+  that will store PG Back Web data.
+
+- `PBW_LISTEN_HOST`: Host for the server to listen on, default 0.0.0.0
+  (optional)
+
+- `PBW_LISTEN_PORT`: Port for the server to listen on, default 8085 (optional)
+
+- `TZ`: Your
+  [timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
+  (optional). Default is `UTC`. This impacts logging, backup filenames and
+  default timezone in the web interface.
+
+## Screenshot
+
+<img src="https://raw.githubusercontent.com/eduardolat/pgbackweb/main/assets/screenshot.png" />
+
+## Reset password
+
+You can reset your PG Back Web password by running the following command in the
+server where PG Back Web is running:
+
+```bash
+docker exec -it <container_name_or_id> sh -c change-password
 ```
 
-## Cài đặt
-
-- Golang `https://go.dev/doc/install`
-- Deno `https://docs.deno.com/runtime/getting_started/installation/`
-- Task `https://taskfile.dev/installation/`
-
-apps/backup/internal/integration/postgres/postgres.go
-
-Cài đặt postgresql để backup nhận đc tool `pg_dump` và `psql` theo đường dẫn đã khai báo
-```go
-var (
-	PG13 = PGVersion{version{
-		Version: "13",
-		PGDump:  "/usr/lib/postgresql/13/bin/pg_dump",
-		PSQL:    "/usr/lib/postgresql/13/bin/psql",
-	}}
-	PG14 = PGVersion{version{
-		Version: "14",
-		PGDump:  "/usr/lib/postgresql/14/bin/pg_dump",
-		PSQL:    "/usr/lib/postgresql/14/bin/psql",
-	}}
-	PG15 = PGVersion{version{
-		Version: "15",
-		PGDump:  "/usr/lib/postgresql/15/bin/pg_dump",
-		PSQL:    "/usr/lib/postgresql/15/bin/psql",
-	}}
-	PG16 = PGVersion{version{
-		Version: "16",
-		PGDump:  "/usr/lib/postgresql/16/bin/pg_dump",
-		PSQL:    "/usr/lib/postgresql/16/bin/psql",
-	}}
-	PG17 = PGVersion{version{
-		Version: "17",
-		PGDump:  "/usr/lib/postgresql/17/bin/pg_dump",
-		PSQL:    "/usr/lib/postgresql/17/bin/psql",
-	}}
-
-	PGVersions = []PGVersion{PG13, PG14, PG15, PG16, PG17}
-)
-```
-
-
-## Khởi chạy
-Chạy `task dev`
-
-Các lệnh khác tham khảo file `taskfile.yaml`
-
-## Lưu ý
-
-Phải chạy ql-nguoi-dung ở localhost:3000, sau đó truy cập vào localhost:3000/home để sử dụng  
+You should replace `<container_name_or_id>` with the name or ID of the PG Back
+Web container, then just follow the instructions.

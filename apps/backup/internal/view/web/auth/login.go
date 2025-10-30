@@ -44,12 +44,12 @@ func loginPage() nodx.Node {
 			nodx.Class("mt-4 space-y-2"),
 
 			component.InputControl(component.InputControlParams{
-				Name:         "email",
-				Label:        "Email",
-				Placeholder:  "john@example.com",
+				Name:         "username",
+				Label:        "Tên đăng nhập",
+				Placeholder:  "Nhập tên đăng nhập",
 				Required:     true,
-				Type:         component.InputTypeEmail,
-				AutoComplete: "email",
+				Type:         component.InputTypeText,
+				AutoComplete: "username",
 			}),
 
 			component.InputControl(component.InputControlParams{
@@ -84,7 +84,7 @@ func (h *handlers) loginHandler(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	var formData struct {
-		Email    string `form:"email" validate:"required,email"`
+		Username string `form:"username" validate:"required"`
 		Password string `form:"password" validate:"required,max=50"`
 	}
 	if err := c.Bind(&formData); err != nil {
@@ -95,16 +95,16 @@ func (h *handlers) loginHandler(c echo.Context) error {
 	}
 
 	session, err := h.servs.AuthService.Login(
-		ctx, formData.Email, formData.Password, c.RealIP(), c.Request().UserAgent(),
+		ctx, formData.Username, formData.Password, c.RealIP(), c.Request().UserAgent(),
 	)
 	if err != nil {
 		logger.Error("login failed", logger.KV{
-			"email": formData.Email,
-			"ip":    c.RealIP(),
-			"ua":    c.Request().UserAgent(),
-			"err":   err,
+			"username": formData.Username,
+			"ip":       c.RealIP(),
+			"ua":       c.Request().UserAgent(),
+			"err":      err,
 		})
-		return respondhtmx.ToastError(c, "Login failed")
+		return respondhtmx.ToastError(c, "Đăng nhập thất bại")
 	}
 
 	h.servs.AuthService.SetSessionCookie(c, session.DecryptedToken)

@@ -1,8 +1,10 @@
 package layout
 
 import (
+	"github.com/eduardolat/pgbackweb/internal/view/web/component"
 	nodx "github.com/nodxdev/nodxgo"
 	htmx "github.com/nodxdev/nodxgo-htmx"
+	lucide "github.com/nodxdev/nodxgo-lucide"
 )
 
 func dashboardHeader() nodx.Node {
@@ -24,6 +26,13 @@ func dashboardHeader() nodx.Node {
 				htmx.HxSwap("outerHTML"),
 				htmx.HxTrigger("load once"),
 			),
+		),
+		nodx.Button(
+			htmx.HxPost("/auth/logout"),
+			htmx.HxDisabledELT("this"),
+			nodx.Class("btn btn-ghost btn-neutral"),
+			component.SpanText("Đăng xuất"),
+			lucide.LogOut(),
 		),
 	)
 }

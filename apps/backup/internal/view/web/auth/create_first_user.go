@@ -47,25 +47,15 @@ func createFirstUserPage() nodx.Node {
 			nodx.Div(
 				component.InputControl(component.InputControlParams{
 					Name:         "name",
-					Label:        "Full name",
+					Label:        "Tên đầy đủ",
 					Placeholder:  "John Doe",
 					Required:     true,
 					Type:         component.InputTypeText,
 					AutoComplete: "name",
 				}),
-
-				component.InputControl(component.InputControlParams{
-					Name:         "email",
-					Label:        "Email",
-					Placeholder:  "john@example.com",
-					Required:     true,
-					Type:         component.InputTypeEmail,
-					AutoComplete: "email",
-				}),
-
 				component.InputControl(component.InputControlParams{
 					Name:         "password",
-					Label:        "Password",
+					Label:        "Mật khẩu",
 					Placeholder:  "******",
 					Required:     true,
 					Type:         component.InputTypePassword,
@@ -75,10 +65,9 @@ func createFirstUserPage() nodx.Node {
 						nodx.Maxlength("50"),
 					},
 				}),
-
 				component.InputControl(component.InputControlParams{
 					Name:        "password_confirmation",
-					Label:       "Confirm password",
+					Label:       "Xác nhận mật khẩu",
 					Placeholder: "******",
 					Required:    true,
 					Type:        component.InputTypePassword,
@@ -95,7 +84,7 @@ func createFirstUserPage() nodx.Node {
 						nodx.Id("create-first-user-button"),
 						nodx.Class("btn btn-primary"),
 						nodx.Type("submit"),
-						component.SpanText("Create user and continue"),
+						component.SpanText("Tạo người dùng và tiếp tục"),
 						lucide.UserPlus(),
 					),
 				),
@@ -104,7 +93,7 @@ func createFirstUserPage() nodx.Node {
 	}
 
 	return layout.Auth(layout.AuthParams{
-		Title: "Create first user",
+		Title: "Tạo người dùng đầu tiên",
 		Body:  content,
 	})
 }
@@ -114,7 +103,6 @@ func (h *handlers) createFirstUserHandler(c echo.Context) error {
 
 	var formData struct {
 		Name                 string `form:"name" validate:"required"`
-		Email                string `form:"email" validate:"required,email"`
 		Password             string `form:"password" validate:"required,min=6,max=50"`
 		PasswordConfirmation string `form:"password_confirmation" validate:"required,eqfield=Password"`
 	}
@@ -127,7 +115,7 @@ func (h *handlers) createFirstUserHandler(c echo.Context) error {
 
 	_, err := h.servs.UsersService.CreateUser(ctx, dbgen.UsersServiceCreateUserParams{
 		Name:     formData.Name,
-		Email:    formData.Email,
+		Email:    '',
 		Password: formData.Password,
 	})
 	if err != nil {

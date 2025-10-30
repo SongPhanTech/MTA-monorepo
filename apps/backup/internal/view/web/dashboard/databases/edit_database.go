@@ -34,7 +34,7 @@ func (h *handlers) editDatabaseHandler(c echo.Context) error {
 		ctx, dbgen.DatabasesServiceUpdateDatabaseParams{
 			ID:               databaseID,
 			Name:             sql.NullString{String: formData.Name, Valid: true},
-			PgVersion:        sql.NullString{String: formData.Version, Valid: true},
+			PgVersion:        sql.NullString{String: "17", Valid: true},
 			ConnectionString: sql.NullString{String: formData.ConnectionString, Valid: true},
 		},
 	)
@@ -83,18 +83,18 @@ func editDatabaseButton(
 					},
 				}),
 
-				component.SelectControl(component.SelectControlParams{
-					Name:        "version",
-					Placeholder: "Chọn phiên bản",
-					Required:    true,
-					HelpText:    "Phiên bản PostgreSQL mà bạn muốn sử dụng",
-					Children: []nodx.Node{
-						component.PGVersionSelectOptions(sql.NullString{
-							Valid:  true,
-							String: database.PgVersion,
-						}),
-					},
-				}),
+				// component.SelectControl(component.SelectControlParams{
+				// 	Name:        "version",
+				// 	Placeholder: "Chọn phiên bản",
+				// 	Required:    true,
+				// 	HelpText:    "Phiên bản PostgreSQL mà bạn muốn sử dụng",
+				// 	Children: []nodx.Node{
+				// 		component.PGVersionSelectOptions(sql.NullString{
+				// 			Valid:  true,
+				// 			String: database.PgVersion,
+				// 		}),
+				// 	},
+				// }),
 
 				component.InputControl(component.InputControlParams{
 					Name:        "connection_string",
