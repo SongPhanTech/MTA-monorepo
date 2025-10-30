@@ -1,13 +1,14 @@
 import { useStoreActions, useStoreState } from '@redux/hook'
 import ability from '@workspace/permissions/ability'
-import { PERMISSIONS, usePermissions } from '@workspace/permissions/hooks'
-import NAVIGATION from '@workspace/router'
+import { useAbility, usePermissions } from '@workspace/permissions/hooks'
+import NAVIGATION, { type QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useEffect, useMemo } from 'react'
 
 const useMenuList = () => {
     const isUpdateAbility = useStoreState((actions) => actions.appState.isUpdateAbility)
     const setIsUpdateAbility = useStoreActions((actions) => actions.appState.setIsUpdateAbility)
     const permissions = usePermissions()
+    const { can } = useAbility()
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -28,10 +29,7 @@ const useMenuList = () => {
                 .map((menu) => {
                     if (menu.children) {
                         const filteredChildren = menu.children.filter((child) => {
-                            return (
-                                (Number(ability.actionsFor(child.id).pop()) & PERMISSIONS.XEM) ===
-                                PERMISSIONS.XEM
-                            )
+                            return can(child.id as QL_DAO_TAO_PERMISSION, 'XEM')
                         })
                         return filteredChildren.length > 0
                             ? {
@@ -40,16 +38,13 @@ const useMenuList = () => {
                               }
                             : null
                     }
-                    return (Number(ability.actionsFor(menu.id).pop()) & PERMISSIONS.XEM) ===
-                        PERMISSIONS.XEM
-                        ? menu
-                        : null
+                    return can(menu.id as QL_DAO_TAO_PERMISSION, 'XEM') ? menu : null
                 })
                 .filter((menu) => menu !== null),
         [isUpdateAbility, permissions, ability]
     )
 
-    return process.env.NODE_ENV === 'development' ? NAVIGATION.QL_DAO_TAO.menus : menus
+    return process?.env?.NODE_ENV === 'development' ? NAVIGATION.QL_DAO_TAO.menus : menus
 }
 
 export { useMenuList }
