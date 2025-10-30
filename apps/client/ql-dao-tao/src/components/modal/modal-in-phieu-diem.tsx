@@ -165,7 +165,7 @@ const ModalPrintStudentSubjectScore = () => {
             await updateSubjectClass({
                 where: { id: data.id },
                 data: { isLockScore: true, isLockExamScore: true },
-                select: {},
+                select: { id: true },
             })
             message.success('Cập nhật thành công')
         }

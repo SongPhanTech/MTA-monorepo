@@ -2,16 +2,17 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { useSession } from '@workspace/auth/react'
-import { useUpdateSubjectClass } from '@workspace/db/hooks'
+import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
 import { DatePicker as AntdDatePicker, Col, Form, message } from 'antd'
 import locale from 'antd/es/date-picker/locale/vi_VN'
 import type { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
+import { useEffect } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 export type PutUpdateTime = {
-    time: [Dayjs, Dayjs]
-    examScoreDeadline: Dayjs
+    time: (Dayjs | null | undefined)[]
+    examScoreDeadline?: Dayjs | null
 }
 const PutDeadlineScoreModal = () => {
     const [form] = Form.useForm<PutUpdateTime>()
@@ -24,22 +25,30 @@ const PutDeadlineScoreModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-    const { data: session } = useSession()
-    const profileId = session?.sDM_NhanVienId || ''
+    const { data } = useFindUniqueSubjectClass({
+        where: { id },
+        select: {
+            scoreDeadLineStart: true,
+            scoreDeadline: true,
+            examScoreDeadline: true,
+        },
+    })
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
     async function onOk(output?: PutUpdateTime) {
         if (!output) return
+        console.log(111, output.time)
+
         try {
             showSpinner()
             await updateSubjectClass({
                 where: { id },
                 data: {
-                    scoreDeadLineStart: output?.time[0].toISOString(),
-                    scoreDeadline: output?.time[1].toISOString(),
-                    examScoreDeadline: output?.examScoreDeadline.toISOString(),
+                    scoreDeadLineStart: output?.time[0]?.toISOString(),
+                    scoreDeadline: output?.time[1]?.toISOString(),
+                    examScoreDeadline: output?.examScoreDeadline?.toISOString(),
                 },
-                select: {},
+                select: { id: true },
             })
 
             message.success('Đặt hạn nhập điểm thành công')
@@ -51,6 +60,20 @@ const PutDeadlineScoreModal = () => {
             hideSpinner()
         }
     }
+
+    useEffect(() => {
+        if (data) {
+            form.setFieldsValue({
+                time: [
+                    data.scoreDeadLineStart ? dayjs(data.scoreDeadLineStart) : undefined,
+                    data.scoreDeadline ? dayjs(data.scoreDeadline) : undefined,
+                ],
+                examScoreDeadline: data.examScoreDeadline
+                    ? dayjs(data.examScoreDeadline)
+                    : undefined,
+            })
+        }
+    }, [data, form.setFieldsValue])
 
     return (
         <PutFormModal

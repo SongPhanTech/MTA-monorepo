@@ -1,11 +1,11 @@
-import DefaultLayout from '@layouts/default-layout'
-import { Checkbox, Col, Input, Row, Tabs } from 'antd'
-import ClassSubject from '@/components/sub-pages/danh-sach-lop-mon-hoc'
-import { useState, useMemo, useCallback } from 'react'
-import { useFindUniqueSubjectClass } from '@workspace/db/hooks'
-import { formatDate } from '@lib/utils'
-import dayjs from 'dayjs'
 import DiemQuaTrinh from '@components/sub-pages/diem-qua-trinh'
+import DefaultLayout from '@layouts/default-layout'
+import { formatDate } from '@lib/utils'
+import { useFindUniqueSubjectClass } from '@workspace/db/hooks'
+import { Checkbox, Col, Input, Row, Tabs } from 'antd'
+import dayjs from 'dayjs'
+import { useCallback, useMemo, useState } from 'react'
+import ClassSubject from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 
 export default function SubjectClassScore() {
     const [activeKey, setActiveKey] = useState('1')
@@ -55,9 +55,7 @@ export default function SubjectClassScore() {
                 children: (
                     <ClassSubject
                         selectedRowKeys={selectedRowKeys}
-                        setSelectedRowKeys={(value: string) => {
-                            setSelectedRowKeys(value)
-                        }}
+                        setSelectedRowKeys={setSelectedRowKeys}
                     />
                 ),
             },
@@ -74,7 +72,7 @@ export default function SubjectClassScore() {
                 disabled: !selectedRowKeys,
             },
         ]
-    }, [selectedRowKeys])
+    }, [selectedRowKeys, refetch, data])
 
     const reasonDate = useCallback(() => {
         if (data?.scoreDeadLineStart || data?.scoreDeadline) {
