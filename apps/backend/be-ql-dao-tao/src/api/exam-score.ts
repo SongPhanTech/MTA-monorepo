@@ -6,7 +6,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const genExamCode = createRoute({
     operationId: 'gen-exam-code',
-    path: '/gex-exam-code',
+    path: '/gen-exam-code',
     tags: ['Exam'],
     summary: 'Sinh phách cho kỳ thi',
     description: 'Sinh phách cho kỳ thi',
@@ -143,7 +143,7 @@ app.openapi(genExamCode, async (c) => {
 
 const genExamRoomCode = createRoute({
     operationId: 'gen-exam-room-code',
-    path: '/gex-exam-room-code',
+    path: '/gen-exam-room-code',
     tags: ['Exam'],
     summary: 'Sinh phách cho phòng thi',
     description: 'Sinh phách cho phòng thi',
