@@ -16,9 +16,8 @@ export default function Page() {
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
     const [results, setResults] = useState<string[]>([])
-    const [selectedDocument, setSelectedDocument] = useState<(typeof documents)[0]>()
 
-    const { data: documents = [] } = useFindManyDocument({
+    const { data: documentsData = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
             topics: {
@@ -35,6 +34,13 @@ export default function Page() {
             },
         },
     })
+    
+    // Sắp xếp documents theo thứ tự của results từ API
+    const documents = results.map(id => 
+        documentsData.find(doc => doc.id === id)
+    ).filter((doc): doc is NonNullable<typeof doc> => Boolean(doc))
+    
+    const [selectedDocument, setSelectedDocument] = useState<(typeof documents)[0] | undefined>()
     const onDownload = async (url: string, fileName: string) => {
         const response = await fetch(url)
         if (!response.ok) return message.error('Lỗi khi tải file')
