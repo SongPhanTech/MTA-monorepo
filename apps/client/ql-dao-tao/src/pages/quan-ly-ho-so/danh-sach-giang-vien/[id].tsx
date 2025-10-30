@@ -221,7 +221,8 @@ export default function StudentDetailPage() {
                                     dataIndex: 'semester',
                                     width: 100,
                                     align: 'center',
-                                    render: (value) =>value ? `${value?.name} - ${value?.schoolYear?.name}` : '',
+                                    render: (value) =>
+                                        value ? `${value?.name} - ${value?.schoolYear?.name}` : '',
                                 },
                                 {
                                     title: 'Trợ giảng',

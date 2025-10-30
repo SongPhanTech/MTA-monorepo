@@ -32,6 +32,7 @@ type DocumentFormType = {
             id: string
             customName?: string
             isProcessingOCR?: boolean
+            ocrStatus?: 'processing' | 'success' | 'failed'
         }
     >
 }
@@ -68,9 +69,22 @@ const ThemTaiLieu = () => {
         return file.type === 'application/pdf'
     }
 
-    const processWithOCR = async (file: File) => {
+    const processWithOCR = async (file: File, fileId: string) => {
         try {
             console.log('[OCR] Bắt đầu xử lý OCR cho file:', file.name)
+
+            // Bắt đầu OCR
+            form.setFieldsValue({
+                files: {
+                    ...form.getFieldValue('files'),
+                    [fileId]: {
+                        ...form.getFieldValue('files')[fileId],
+                        isProcessingOCR: true,
+                        ocrStatus: 'processing',
+                    },
+                },
+            })
+
             const ocrResult = await fetchOCR(file)
             console.log('[OCR] Kết quả OCR:', JSON.stringify(ocrResult, null, 2))
 
@@ -87,10 +101,39 @@ const ThemTaiLieu = () => {
                 textResult = ocrResult.result
             }
 
-            console.log(`[OCR] Text trích xuất được (length: ${textResult.length}):`, textResult.substring(0, 500))
+            // Kiểm tra kết quả OCR
+            const ocrStatus = textResult.trim().length === 0 ? 'failed' : 'success'
+
+            form.setFieldsValue({
+                files: {
+                    ...form.getFieldValue('files'),
+                    [fileId]: {
+                        ...form.getFieldValue('files')[fileId],
+                        isProcessingOCR: false,
+                        ocrStatus: ocrStatus,
+                    },
+                },
+            })
+
+            console.log(
+                `[OCR] Text trích xuất được (length: ${textResult.length}):`,
+                textResult.substring(0, 500)
+            )
             return textResult
         } catch (error) {
             console.error('[OCR] Lỗi xử lý OCR:', error)
+
+            // Set OCR failed state on error
+            form.setFieldsValue({
+                files: {
+                    ...form.getFieldValue('files'),
+                    [fileId]: {
+                        ...form.getFieldValue('files')[fileId],
+                        isProcessingOCR: false,
+                        ocrStatus: 'failed',
+                    },
+                },
+            })
             return ''
         }
     }
@@ -145,12 +188,12 @@ const ThemTaiLieu = () => {
                                 ...form.getFieldValue('files'),
                                 [file.id]: {
                                     ...file,
-                                    progress: 50,
+                                    progress: 0,
                                     isProcessingOCR: true,
                                 },
                             },
                         })
-                        documentBody = await processWithOCR(file.file)
+                        documentBody = await processWithOCR(file.file, file.id)
                         console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
                     }
 
@@ -162,17 +205,22 @@ const ThemTaiLieu = () => {
                         onUploadProgress: (progressEvent) => {
                             const { loaded, total = 1, estimated = 0 } = progressEvent
                             const percent = Math.floor((loaded * 100) / total)
+                            const currentFiles = form.getFieldValue('files')
+                            const currentFile = currentFiles[file.id]
+
+                            // Nếu đang OCR thì không update upload progress
+                            if (currentFile?.isProcessingOCR) {
+                                return
+                            }
+
                             form.setFieldsValue({
                                 files: {
-                                    ...form.getFieldValue('files'),
+                                    ...currentFiles,
                                     [file.id]: {
-                                        ...file,
+                                        ...currentFile,
                                         url: resPresignedUrl.fileName,
-                                        progress: needOCR
-                                            ? 50 + Math.min(percent, 90) / 2
-                                            : Math.min(percent, 90),
+                                        progress: Math.min(percent, 90),
                                         timeLeft: estimated,
-                                        isProcessingOCR: needOCR && percent < 100,
                                     },
                                 },
                             })
@@ -195,19 +243,22 @@ const ThemTaiLieu = () => {
                                 ? resReaderDocument.document_simmilar[0].score
                                 : 0
 
-                        if (isPDFFile(file.file) && (!documentBody || documentBody.trim().length < 50)) {
+                        if (
+                            isPDFFile(file.file) &&
+                            (!documentBody || documentBody.trim().length < 50)
+                        ) {
                             console.log('[OCR] PDF không có text, chuyển sang OCR')
                             form.setFieldsValue({
                                 files: {
                                     ...form.getFieldValue('files'),
                                     [file.id]: {
                                         ...file,
-                                        progress: 50,
+                                        progress: 90,
                                         isProcessingOCR: true,
                                     },
                                 },
                             })
-                            documentBody = await processWithOCR(file.file)
+                            documentBody = await processWithOCR(file.file, file.id)
                             needOCR = true
                         }
                     }
@@ -306,7 +357,9 @@ const ThemTaiLieu = () => {
             okButtonProps={{
                 disabled:
                     Object.keys(files).length === 0 ||
-                    Object.values(files).some((file) => file.progress !== 100),
+                    Object.values(files).some(
+                        (file) => file.progress !== 100 || file.isProcessingOCR
+                    ),
             }}
             onOk={form.submit}
         >
@@ -426,24 +479,33 @@ const ThemTaiLieu = () => {
                                             <span className="font-semibold ">{file.file.name}</span>
                                         </div>
                                     )}
-                                    {file.isProcessingOCR ? (
-                                        <span className="text-primary text-sm font-medium">
-                                            Đang chuyển PDF scan sang văn bản...
-                                        </span>
-                                    ) : (
-                                        <span className="text-gray-400 text-sm">
-                                            {formatNiceBytes(`${file.file.size}`)}
-
-                                            {!!file.timeLeft && !!file.progress && (
-                                                <span className="text-gray-400 text-sm">
-                                                    {` - ${Math.floor(file.timeLeft)} giây`}
-                                                </span>
-                                            )}
-                                        </span>
-                                    )}
+                                    <span className="text-gray-400 text-sm">
+                                        {file.isProcessingOCR ? (
+                                            <span className="text-orange-500 text-sm font-medium">
+                                                Đang chuyển đổi hình ảnh sang văn bản...
+                                            </span>
+                                        ) : file.ocrStatus === 'failed' ? (
+                                            <span className="text-red-500 text-sm font-medium">
+                                                Chuyển đổi văn bản thất bại
+                                            </span>
+                                        ) : file.ocrStatus === 'success' ? (
+                                            <span className="text-primary text-sm font-medium">
+                                                Chuyển đổi văn bản thành công
+                                            </span>
+                                        ) : (
+                                            <>
+                                                {formatNiceBytes(`${file.file.size}`)}
+                                                {!!file.timeLeft && !!file.progress && (
+                                                    <span className="text-gray-400 text-sm">
+                                                        {` - ${Math.floor(file.timeLeft)} giây`}
+                                                    </span>
+                                                )}
+                                            </>
+                                        )}
+                                    </span>
 
                                     {file.progress !== 0 && file.progress !== 100 && (
-                                        <Progress percent={file.progress} />
+                                        <Progress percent={file.progress} status="active" />
                                     )}
                                 </div>
                                 <CloseCircleOutlined
