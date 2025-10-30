@@ -70,14 +70,27 @@ const ThemTaiLieu = () => {
 
     const processWithOCR = async (file: File) => {
         try {
-            console.log('🔍 [OCR] Bắt đầu xử lý OCR cho file:', file.name)
+            console.log('[OCR] Bắt đầu xử lý OCR cho file:', file.name)
             const ocrResult = await fetchOCR(file)
-            console.log('✅ [OCR] Kết quả OCR nhận được:', ocrResult)
-            const textResult = ocrResult.text || ''
-            console.log(`📝 [OCR] Text trích xuất được: ${textResult.substring(0, 200)}...`)
+            console.log('[OCR] Kết quả OCR:', JSON.stringify(ocrResult, null, 2))
+
+            let textResult = ''
+            if (typeof ocrResult === 'string') {
+                textResult = ocrResult
+            } else if (ocrResult.text) {
+                textResult = ocrResult.text
+            } else if (ocrResult.body) {
+                textResult = ocrResult.body
+            } else if (ocrResult.data) {
+                textResult = ocrResult.data
+            } else if (ocrResult.result) {
+                textResult = ocrResult.result
+            }
+
+            console.log(`[OCR] Text trích xuất được (length: ${textResult.length}):`, textResult.substring(0, 500))
             return textResult
         } catch (error) {
-            console.error('❌ [OCR] Lỗi xử lý OCR:', error)
+            console.error('[OCR] Lỗi xử lý OCR:', error)
             return ''
         }
     }
@@ -138,6 +151,7 @@ const ThemTaiLieu = () => {
                             },
                         })
                         documentBody = await processWithOCR(file.file)
+                        console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
                     }
 
                     const { data: resPresignedUrl } = await generatePresignedUrl({
@@ -182,7 +196,7 @@ const ThemTaiLieu = () => {
                                 : 0
 
                         if (isPDFFile(file.file) && (!documentBody || documentBody.trim().length < 50)) {
-                            console.log('🔍 [OCR] PDF không có text, chuyển sang OCR')
+                            console.log('[OCR] PDF không có text, chuyển sang OCR')
                             form.setFieldsValue({
                                 files: {
                                     ...form.getFieldValue('files'),
@@ -244,7 +258,7 @@ const ThemTaiLieu = () => {
             // Tạo document trước, sau đó tạo DocumentTopic
             await Promise.all(
                 Object.values(values.files).map(async ({ body, file, url, customName }) => {
-                    console.log('💾 [Database] Lưu tài liệu:', {
+                    console.log('[Database] Lưu tài liệu:', {
                         fileName: customName || file.name,
                         fileType: file.type,
                         bodyLength: body.length,
@@ -261,7 +275,7 @@ const ThemTaiLieu = () => {
                             classificationId: values.classificationId || null,
                         },
                     })
-                    console.log('✅ [Database] Đã lưu document ID:', newDocument?.id)
+                    console.log('[Database] Đã lưu document ID:', newDocument?.id)
 
                     // Tạo DocumentTopic cho tất cả topicIds
                     if (newDocument && values.topicIds.length > 0) {
@@ -413,7 +427,7 @@ const ThemTaiLieu = () => {
                                         </div>
                                     )}
                                     {file.isProcessingOCR ? (
-                                        <span className="text-blue-600 text-sm font-medium">
+                                        <span className="text-primary text-sm font-medium">
                                             Đang chuyển PDF scan sang văn bản...
                                         </span>
                                     ) : (
