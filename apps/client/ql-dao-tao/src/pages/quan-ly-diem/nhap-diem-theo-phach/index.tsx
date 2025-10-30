@@ -10,6 +10,7 @@ export default function SubjectClassScoreTheoPhach() {
     const router = useRouter()
     const [selectedRowKeys, setSelectedRowKeys] = useState<string>('')
     const [activeKey, setActiveKey] = useState('1')
+
     const items = useMemo(() => {
         return [
             {

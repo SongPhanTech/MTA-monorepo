@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { context, SpanKind, trace } from '@opentelemetry/api'
+import { jwtAuth } from '@workspace/auth/hono'
 import { enhance, Prisma, PrismaClient } from '@workspace/db'
 import { createHonoHandler } from '@workspace/db/hono'
 import type { Context } from 'hono'
@@ -74,8 +75,8 @@ const jwksUri = `${issuer}/protocol/openid-connect/certs`
 const audience = config.keycloak.clientId
 app.route('/api/training-field', TrainingFieldApp)
 app.route('/api/room', RoomApp)
-// TODO!: uncomment
-// app.use('/api/*', jwtAuth(jwksUri, audience, issuer, prisma))
+// TODO!: remove `/check`
+app.use('/api/check/*', jwtAuth(jwksUri, audience, issuer, prisma))
 
 setupOpenApi(app)
 

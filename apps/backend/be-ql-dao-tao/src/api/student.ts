@@ -2,6 +2,7 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { AcademicActionType, type Prisma, StudentStatus } from '@workspace/db'
 import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetHeQuanSu, parseSheetStudent, zParseSheetError } from '@workspace/libs/parseExcel'
+import { getTemplateBuffer } from '@workspace/libs/server'
 import { splitFullName } from '@workspace/libs/utils'
 import dayjs from 'dayjs'
 import XlsxTemplate from 'xlsx-template'
@@ -23,7 +24,6 @@ import {
     buildPositionMapOrThrow,
     buildProvinceMapOrThrow,
     buildRankMapOrThrow,
-    getTemplateBuffer,
 } from '../utils'
 
 const app = new OpenAPIHono({ strict: false })

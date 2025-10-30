@@ -98,7 +98,7 @@ export default function ClassSubject() {
 
     const { onOpen, onClose } = useDisclosure<string>({
         tag: 'PutDeadlineScoreModal',
-        onClose: ()=>{
+        onClose: () => {
             debouncedRefetch()
         },
     })
@@ -345,7 +345,6 @@ export default function ClassSubject() {
     const handleUpdateTime = async (values: TimeScore) => {
         try {
             showSpinner()
-            // TODO: Lưu log trong api
             const { status, data } = await setScoreDeadLine({
                 classIds: selectedRowKeys as string[],
                 startPadding: values.startPadding,
@@ -429,34 +428,6 @@ export default function ClassSubject() {
         }
     }
 
-    // const { mutateAsync: createReExamList } = useCreateNewReExamList()
-
-    // const handleRexamList = async () => {
-    //     try {
-    //         showSpinner()
-
-    //         if (semesterId && trainingObjectTypeId) {
-    //             const res = await createReExamList({
-    //                 data: {
-    //                     semesterId,
-    //                     trainingObjectTypeId,
-    //                 },
-    //             })
-
-    //             if (res.status !== 200) {
-    //                 message.error(res.data.message || 'Lên danh sách thi lại thất bại')
-    //             }
-
-    //             message.success('Lên danh sách thi lại thành công')
-    //             router.push(ROUTER_PATH.QL_DAO_TAO.TO_CHUC_THI_DANH_SACH_THI)
-    //         }
-    //     } catch (error) {
-    //         message.error('Đã có lỗi xảy ra khi lên danh sách thi lại')
-    //     } finally {
-    //         hideSpinner()
-    //     }
-    // }
-
     const rowSelection = {
         selectedRowKeys,
         onChange: (newSelectedRowKeys: React.Key[]) => {
@@ -513,12 +484,15 @@ export default function ClassSubject() {
                             </Flex>
                         </Col>
                         <Col span={6}>
-                            <Flex justify="end" gap={4}>
+                            <Flex justify="end" align="center" gap={4}>
                                 {can(
                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
                                     'XEM_TAT_CA'
                                 ) && (
                                     <>
+                                        {selectedRowKeys.length > 0 && (
+                                            <p>(Đang chọn {selectedRowKeys.length} lớp)</p>
+                                        )}
                                         <Popover
                                             content={
                                                 <Form
@@ -557,13 +531,15 @@ export default function ClassSubject() {
                                                         layout="vertical"
                                                         form={form}
                                                         name="time"
-                                                        label={<Tooltip
-                                                            title={
-                                                                'Dành cho những lớp chưa có ngày thi'
-                                                            }
-                                                        >
-                                                            Thời gian nhập điểm quá trình
-                                                        </Tooltip>}
+                                                        label={
+                                                            <Tooltip
+                                                                title={
+                                                                    'Dành cho những lớp chưa có ngày thi'
+                                                                }
+                                                            >
+                                                                Thời gian nhập điểm quá trình
+                                                            </Tooltip>
+                                                        }
                                                         className="italic"
                                                     >
                                                         <AntdDatePicker.RangePicker
@@ -621,13 +597,15 @@ export default function ClassSubject() {
                                                         layout="vertical"
                                                         form={formExam}
                                                         name="endDate"
-                                                        label={<Tooltip
-                                                            title={
-                                                                'Dành cho những lớp chưa có ngày thi'
-                                                            }
-                                                        >
-                                                            Thời gian nhập điểm thi
-                                                        </Tooltip>}
+                                                        label={
+                                                            <Tooltip
+                                                                title={
+                                                                    'Dành cho những lớp chưa có ngày thi'
+                                                                }
+                                                            >
+                                                                Thời gian nhập điểm thi
+                                                            </Tooltip>
+                                                        }
                                                     >
                                                         <DatePicker
                                                             format="DD/MM/YYYY"
@@ -758,12 +736,12 @@ export default function ClassSubject() {
                                     )
                                 },
                             },
-                               {
+                            {
                                 title: 'Môn 1 ĐĐ',
                                 width: 80,
                                 align: 'center',
                                 render: (__, record) => {
-                                    return <Checkbox checked={record?.subject?.onePoint}/>
+                                    return <Checkbox checked={record?.subject?.onePoint} />
                                 },
                             },
                             // {

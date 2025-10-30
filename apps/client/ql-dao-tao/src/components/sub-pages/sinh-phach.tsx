@@ -1,51 +1,44 @@
 import Table from '@components/commons/table'
 import ExportPhach from '@components/modal/export-exam-session'
-import { useFindManyExamSession, useUpdateExamRoom } from '@workspace/db/hooks'
+import { useFindUniqueExamRoom, useUpdateExamRoom } from '@workspace/db/hooks'
 import { useGenExamRoomCode } from '@workspace/libs/api/training'
 import { Button, Checkbox, Col, Flex, Modal, message } from 'antd'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
 
 export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
     const router = useRouter()
-    const [checked, setChecked] = useState(false)
-    const { data = [], refetch } = useFindManyExamSession(
+    const { data: examRoom, refetch } = useFindUniqueExamRoom(
         {
-            where: {
-                examRoomId,
-            },
+            where: { id: examRoomId },
             include: {
-                exam: true,
-                studentSubjectScore: {
+                examSessions: {
                     include: {
-                        student: {
+                        studentSubjectScore: {
                             include: {
-                                userProfile: true,
-                                fixedClass: true,
-                            },
-                        },
-                        subjectClass: {
-                            include: {
-                                fixedClasses: {
+                                student: {
                                     include: {
-                                        trainingCourse: true,
+                                        userProfile: true,
+                                        fixedClass: true,
                                     },
                                 },
+                                subjectClass: {
+                                    include: {
+                                        fixedClasses: {
+                                            include: {
+                                                trainingCourse: true,
+                                            },
+                                        },
+                                    },
+                                },
+                                subjectVersion: true,
                             },
                         },
-                        subjectVersion: true,
                     },
                 },
             },
         },
-        {
-            enabled: !!examRoomId,
-        }
+        { enabled: !!examRoomId }
     )
-    const disabled = useMemo(() => {
-        const item = data[0]
-        return !(item?.exam?.lockExamCode || true)
-    }, [data])
     const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
@@ -53,13 +46,13 @@ export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                hanldeGenCode()
+                handleGenCode()
             },
         })
     }
     const { mutateAsync: genCode } = useGenExamRoomCode()
     const { mutateAsync: updateExamRoom } = useUpdateExamRoom()
-    const hanldeGenCode = async () => {
+    const handleGenCode = async () => {
         const res = await genCode({
             data: {
                 examRoomId,
@@ -69,38 +62,21 @@ export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
             message.success('Sinh phách thành công')
             refetch()
         }
-        if (checked !== data[0]?.exam?.lockExamCode) {
-            await updateExamRoom({
-                where: {
-                    id: examRoomId,
-                },
-                data: {
-                    lockExamCode: checked,
-                },
-            })
-        }
     }
     return (
         <>
             <Col span={24}>
                 <Flex justify="space-between" align="center">
-                    <Checkbox
-                        defaultChecked={checked}
-                        onChange={(value) => {
-                            setChecked(value.target.checked)
-                        }}
-                    >
-                        Khoá sinh phách
-                    </Checkbox>
+                    <Checkbox checked={examRoom?.lockExamCode}>Khoá sinh phách</Checkbox>
                     <Flex justify="end" align="center">
-                        <ExportPhach data={data} />
+                        <ExportPhach data={examRoom?.examSessions || []} />
                         <Button
                             type="primary"
                             className="ml-3"
                             onClick={() => {
                                 handleSave()
                             }}
-                            disabled={disabled}
+                            disabled={examRoom?.lockExamCode}
                         >
                             Tạo phách
                         </Button>
@@ -139,7 +115,7 @@ export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
                             render: (_, record: any) => record?.examCode || '',
                         },
                     ]}
-                    data={data}
+                    data={examRoom?.examSessions || []}
                     pagination={false}
                 />
             </Col>

@@ -897,13 +897,7 @@ app.openapi(enrollFixedClassOnSubjectClass, async (c) => {
         })
     })
 
-    return c.json(
-        {
-            data: res,
-            success: true,
-        },
-        200
-    )
+    return c.json({ data: res, success: true }, 200)
 })
 
 app.openapi(setScoreDeadLine, async (c) => {
@@ -917,6 +911,9 @@ app.openapi(setScoreDeadLine, async (c) => {
         semesterId,
         overwrite,
     } = c.req.valid('json')
+
+    const user = c.get('user')
+    const updatedById = user?.id
 
     // Build WHERE clause dynamically
     const whereClauses: string[] = []
@@ -935,7 +932,18 @@ app.openapi(setScoreDeadLine, async (c) => {
 
     const placeholder = new Date().toISOString()
 
-    await prisma.$executeRawUnsafe(`
+    await prisma.$transaction(async (tx) => {
+        if (updatedById) {
+            await tx.$executeRawUnsafe(`
+                SELECT set_config('app.updated_by_id', '${updatedById}', true);
+                `)
+        } else {
+            await tx.$executeRawUnsafe(`
+                SELECT set_config('app.updated_by_id', NULL, true);
+                `)
+        }
+
+        await tx.$executeRawUnsafe(`
         UPDATE "ql-dao-tao"."SubjectClass"
         SET 
             "scoreDeadLineStart" = CASE
@@ -950,6 +958,7 @@ app.openapi(setScoreDeadLine, async (c) => {
             END
         ${whereSQL};
         `)
+    })
 
     return c.json({ message: 'Success' })
 })

@@ -1,9 +1,10 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
-import { useSession } from '@workspace/auth/react'
 import { cn } from '@lib/utils'
+import { useSession } from '@workspace/auth/react'
 import type { Prisma, SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
@@ -19,9 +20,13 @@ import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
-import Select from '@components/commons/select'
 
-export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: any) {
+type Props = {
+    selectedRowKeys: string
+    setSelectedRowKeys: (key: string) => void
+}
+
+export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Props) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -61,15 +66,14 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: an
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
 
-    // Lấy danh sách FixedClass
     const { data: fixedClasses = [] } = useFindManyFixedClass(
         {
             where: {
                 ...((trainingObjectTypeId || semesterId) && {
                     trainingCourse: {
-                        ...(trainingObjectTypeId && { trainingObjectTypeId }),
-                        ...(semesterId && { semesterStartId: semesterId }),
+                        ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
                     },
+                    subjectClasses: { some: { semesterId } },
                 }),
             },
             include: {
@@ -81,14 +85,12 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: an
                 },
             },
             orderBy: { name: 'asc' },
-            // skip: trainingCourses.length ? 0 : 1,
+            take: 30,
         },
         {
             enabled: !!trainingObjectTypeId || !!semesterId,
         }
     )
-    //#region Mới
-    /* Mới */
 
     const where = useMemo(() => {
         return {
@@ -265,9 +267,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: an
         []
     )
 
-    const { data: count } = useCountSubjectClass({
-        where,
-    })
+    const { data: count } = useCountSubjectClass({ where })
 
     return (
         <div>
@@ -415,12 +415,12 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: an
                                     )
                                 },
                             },
-       {
+                            {
                                 title: 'Môn 1 ĐĐ',
                                 width: 80,
                                 align: 'center',
                                 render: (__, record) => {
-                                    return <Checkbox checked={record?.subject?.onePoint}/>
+                                    return <Checkbox checked={record?.subject?.onePoint} />
                                 },
                             },
                             {
