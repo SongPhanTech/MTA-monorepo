@@ -383,6 +383,14 @@ async function main() {
                 extensions: 'xlsx',
                 numberField: 0,
             },
+            {
+                name: 'Danh sách giảng viên',
+                code: 'DANH_SACH_GV',
+                path: 'https://minio.swantech.vn/mta/template/danh_sach_GV.xlsx',
+                fileType: 'DOWNLOAD',
+                extensions: 'xlsx',
+                numberField: 0,
+            },
         ],
     })
 

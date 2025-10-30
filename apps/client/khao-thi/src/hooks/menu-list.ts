@@ -1,7 +1,7 @@
 import { useStoreActions, useStoreState } from '@redux/hook'
 import ability from '@workspace/permissions/ability'
-import { PERMISSIONS, usePermissions } from '@workspace/permissions/hooks'
-import NAVIGATION from '@workspace/router'
+import { useAbility, usePermissions } from '@workspace/permissions/hooks'
+import NAVIGATION, { KHAO_THI_PERMISSION } from '@workspace/router'
 import { useEffect, useMemo } from 'react'
 
 const useMenuList = () => {
@@ -21,6 +21,8 @@ const useMenuList = () => {
         setIsUpdateAbility(true)
     }, [permissions])
 
+    const { can } = useAbility()
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <needed>
     const menus = useMemo(
         () =>
@@ -28,10 +30,9 @@ const useMenuList = () => {
                 .map((menu) => {
                     if (menu.children) {
                         const filteredChildren = menu.children.filter((child) => {
-                            return (
-                                (Number(ability.actionsFor(child.id).pop()) & PERMISSIONS.XEM) ===
-                                PERMISSIONS.XEM
-                            )
+                            return can(child.id as KHAO_THI_PERMISSION, 'XEM')
+                            // (Number(ability.actionsFor(child.id).pop()) & PERMISSIONS.XEM) ===
+                            // PERMISSIONS.XEM
                         })
                         return filteredChildren.length > 0
                             ? {
@@ -40,10 +41,7 @@ const useMenuList = () => {
                               }
                             : null
                     }
-                    return (Number(ability.actionsFor(menu.id).pop()) & PERMISSIONS.XEM) ===
-                        PERMISSIONS.XEM
-                        ? menu
-                        : null
+                    return can(menu.id as KHAO_THI_PERMISSION, 'XEM') ? menu : null
                 })
                 .filter((menu) => menu !== null),
         [isUpdateAbility, permissions, ability]

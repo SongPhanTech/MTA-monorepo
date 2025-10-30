@@ -1,4 +1,4 @@
-import { UploadOutlined } from '@ant-design/icons'
+import { TableOutlined, UploadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import ExportTemplateLecturer from '@components/modal/export-template-lecturer'
@@ -14,10 +14,12 @@ import {
     useFindManyLecturer,
     useFindManyLecturerType,
 } from '@workspace/db/hooks'
+import { exportLecturerProfile } from '@workspace/libs/api/training'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, Row, Tooltip } from 'antd'
+import { Button, Col, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
+import { saveAs } from 'file-saver'
 import { Eye } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -27,6 +29,7 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 dayjs.locale('vi')
 
 export default function UserProfilePageLecture() {
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [importModalVisible, setImportModalVisible] = useState(false)
@@ -209,6 +212,16 @@ export default function UserProfilePageLecture() {
         onOpenModalAdd()
     }
 
+    const handleExportLecturers = async () => {
+        const { status, data } = await exportLecturerProfile({
+            lecturerIds: selectedRowKeys as string[],
+        })
+
+        if (status === 200) {
+            saveAs(data, 'danh_sach_GV.xlsx')
+        }
+    }
+
     const handleRowClick = (record: { id?: string }) => {
         if (record?.id) {
             router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN}/${record.id}`)
@@ -220,44 +233,43 @@ export default function UserProfilePageLecture() {
             <Row gutter={[16, 16]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
-                    <Row gutter={[16, 16]} align="top" justify="end">
-                        <Col span={24}>
-                            <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
-                                <Button
-                                    type="primary"
-                                    onClick={() => setImportModalVisible(true)}
-                                    icon={<UploadOutlined />}
-                                >
-                                    Nhập dữ liêu Excel
-                                </Button>
-                                <ImportLecturerModal
-                                    visible={importModalVisible}
-                                    onCancel={() => setImportModalVisible(false)}
-                                />
-                                <ExportTemplateLecturer />
-                                {/* <Button onClick={handleModal} type="primary">
+                    <Row gutter={[16, 16]} align="middle" justify="end" className="gap-1">
+                        {selectedRowKeys.length > 0 && (
+                            <p>(Đang chọn {selectedRowKeys.length} GV)</p>
+                        )}
+                        <Button
+                            type="primary"
+                            onClick={handleExportLecturers}
+                            icon={<TableOutlined />}
+                        >
+                            Xuất DS GV
+                        </Button>
+                        <Button
+                            type="primary"
+                            onClick={() => setImportModalVisible(true)}
+                            icon={<UploadOutlined />}
+                        >
+                            Nhập dữ liêu Excel
+                        </Button>
+                        <ImportLecturerModal
+                            visible={importModalVisible}
+                            onCancel={() => setImportModalVisible(false)}
+                        />
+                        <ExportTemplateLecturer />
+                        {/* <Button onClick={handleModal} type="primary">
                                     Thêm mới
                                 </Button> */}
-                            </Flex>
-                        </Col>
                     </Row>
                 </Col>
                 <Col span={24}>
                     <Table
-                        filters={filters}
-                        onRowClick={(record) => {
-                            if (
-                                can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN,
-                                    'XEM_CHI_TIET'
-                                ) &&
-                                record?.id
-                            ) {
-                                router.push(
-                                    `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_HO_SO_DANH_SACH_GIANG_VIEN}/${record.id}`
-                                )
-                            }
+                        rowSelection={{
+                            selectedRowKeys,
+                            onChange: (keys) => {
+                                setSelectedRowKeys(keys)
+                            },
                         }}
+                        filters={filters}
                         setFilters={(value) => {
                             setFilters(value)
                             setCurrentPage(1)
