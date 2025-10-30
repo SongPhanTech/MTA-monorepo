@@ -18,6 +18,7 @@ declare global {
     interface Window {
         contextData: {
             userId: string
+            userName: string
         }
     }
 }
@@ -56,7 +57,8 @@ const useAbility = () => {
         ) => {
             if (
                 process?.env?.NODE_ENV === 'development' ||
-                window?.location.host?.startsWith('localhost')
+                window?.location.host?.startsWith('localhost') ||
+                window?.contextData?.userName === 'superadmin'
             )
                 return true
             const perm = ability.actionsFor(subject)
@@ -76,7 +78,8 @@ const useAbility = () => {
         ) => {
             if (
                 process?.env?.NODE_ENV === 'development' ||
-                window?.location.host?.startsWith('localhost')
+                window?.location.host?.startsWith('localhost') ||
+                window?.contextData?.userName === 'superadmin'
             )
                 return true
             const perm = ability.actionsFor(subject)
