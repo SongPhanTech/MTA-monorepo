@@ -192,6 +192,7 @@ export * from './multiple-choice-option';
 export * from './fill-in-blank-slot';
 export * from './ordering-item';
 export * from './exam';
+export * from './exam-room-slot';
 export * from './exam-room';
 export * from './test-structure-rule';
 export * from './exam-bank';

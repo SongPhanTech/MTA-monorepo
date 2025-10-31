@@ -39,6 +39,7 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     surveyObjectType: z.array(z.unknown()).optional(),
+    subjectClasses: z.array(z.unknown()).optional(),
     lecture: z.record(z.string(), z.unknown()).optional(),
     surveyTopic: z.record(z.string(), z.unknown()),
     surveyChoice: z.array(z.unknown()).optional(),

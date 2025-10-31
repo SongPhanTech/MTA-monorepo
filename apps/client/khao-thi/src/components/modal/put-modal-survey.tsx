@@ -122,6 +122,8 @@ const PutSurveyModal = () => {
         if (!output) return
         try {
             showSpinner()
+            // console.log(output,'2');
+            // return
             if (input?.type === 'multiple') {
                 const res = await createMultiple({
                     data: {
@@ -513,16 +515,18 @@ const PutSurveyModal = () => {
         }
     }, [survey])
 
+    
+
     return (
         <Modal
             open={isOpen}
-            width={800}
+            width={1100}
             maskClosable={false}
             title={input?.id ? 'Chỉnh sửa khảo sát' : 'Thêm mới khảo sát'}
             footer={null}
             onCancel={onClose}
         >
-            <div className="w-full max-w-[650px] mx-auto mt-6">
+            <div className="w-full max-w-[700px] mx-auto mt-6">
                 <Steps current={current} style={{ marginBottom: 24 }}>
                     {steps.map((item) => (
                         <Step key={item.title} title={item.title} />

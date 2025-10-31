@@ -83,6 +83,9 @@ import type {
     ListOfOpenSubjectClassRetakeResponse,
     ListOfOpenSubjectClassRetakeStudentsResponse,
     ListOfundefined,
+    MergeExamBadResponse,
+    MergeExamRequest,
+    MergeExamResponse,
     OpenSubjectClassParams,
     OpenSubjectClassRetakeParams,
     OpenSubjectClassRetakeStudentsParams,
@@ -162,6 +165,9 @@ import type {
     SetScoreDeadLineBody,
     TrainingField200Item,
     TrainingField400,
+    UnmergeExamBadResponse,
+    UnmergeExamRequest,
+    UnmergeExamResponse,
     UpdateStudentStatus200,
     UpdateStudentStatus400,
     UpdateStudentStatusBody,
@@ -7007,6 +7013,194 @@ export const useCreateNewReExamList = <TError = CreateExamsBadResponse, TContext
     TContext
 > => {
     const mutationOptions = getCreateNewReExamListMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type mergeExamResponse200 = {
+    data: MergeExamResponse
+    status: 200
+}
+
+export type mergeExamResponse400 = {
+    data: MergeExamBadResponse
+    status: 400
+}
+
+export type mergeExamResponseComposite = mergeExamResponse200 | mergeExamResponse400
+
+export type mergeExamResponse = mergeExamResponseComposite & {
+    headers: Headers
+}
+
+export const getMergeExamUrl = () => {
+    return '/api/exam/merge'
+}
+
+export const mergeExam = async (
+    mergeExamRequest: MergeExamRequest,
+    options?: RequestInit
+): Promise<mergeExamResponse> => {
+    return customTrainingFetch<mergeExamResponse>(getMergeExamUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(mergeExamRequest),
+    })
+}
+
+export const getMergeExamMutationOptions = <
+    TError = MergeExamBadResponse,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof mergeExam>>,
+        TError,
+        { data: MergeExamRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof mergeExam>>,
+    TError,
+    { data: MergeExamRequest },
+    TContext
+> => {
+    const mutationKey = ['mergeExam']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof mergeExam>>,
+        { data: MergeExamRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return mergeExam(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type MergeExamMutationResult = NonNullable<Awaited<ReturnType<typeof mergeExam>>>
+export type MergeExamMutationBody = MergeExamRequest
+export type MergeExamMutationError = MergeExamBadResponse
+
+export const useMergeExam = <TError = MergeExamBadResponse, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof mergeExam>>,
+            TError,
+            { data: MergeExamRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof mergeExam>>,
+    TError,
+    { data: MergeExamRequest },
+    TContext
+> => {
+    const mutationOptions = getMergeExamMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type unmergeExamResponse200 = {
+    data: UnmergeExamResponse
+    status: 200
+}
+
+export type unmergeExamResponse400 = {
+    data: UnmergeExamBadResponse
+    status: 400
+}
+
+export type unmergeExamResponseComposite = unmergeExamResponse200 | unmergeExamResponse400
+
+export type unmergeExamResponse = unmergeExamResponseComposite & {
+    headers: Headers
+}
+
+export const getUnmergeExamUrl = () => {
+    return '/api/exam/unmerge'
+}
+
+export const unmergeExam = async (
+    unmergeExamRequest: UnmergeExamRequest,
+    options?: RequestInit
+): Promise<unmergeExamResponse> => {
+    return customTrainingFetch<unmergeExamResponse>(getUnmergeExamUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(unmergeExamRequest),
+    })
+}
+
+export const getUnmergeExamMutationOptions = <
+    TError = UnmergeExamBadResponse,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof unmergeExam>>,
+        TError,
+        { data: UnmergeExamRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof unmergeExam>>,
+    TError,
+    { data: UnmergeExamRequest },
+    TContext
+> => {
+    const mutationKey = ['unmergeExam']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof unmergeExam>>,
+        { data: UnmergeExamRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return unmergeExam(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UnmergeExamMutationResult = NonNullable<Awaited<ReturnType<typeof unmergeExam>>>
+export type UnmergeExamMutationBody = UnmergeExamRequest
+export type UnmergeExamMutationError = UnmergeExamBadResponse
+
+export const useUnmergeExam = <TError = UnmergeExamBadResponse, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof unmergeExam>>,
+            TError,
+            { data: UnmergeExamRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof unmergeExam>>,
+    TError,
+    { data: UnmergeExamRequest },
+    TContext
+> => {
+    const mutationOptions = getUnmergeExamMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

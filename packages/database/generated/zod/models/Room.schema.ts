@@ -41,12 +41,12 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     building: z.record(z.string(), z.unknown()).optional(),
-    exam: z.array(z.unknown()).optional(),
     subjectClasses: z.array(z.unknown()).optional(),
     defenseRooms: z.array(z.unknown()).optional(),
     thesisProject: z.array(z.unknown()).optional(),
     classSchedules: z.array(z.unknown()).optional(),
     examRooms: z.array(z.unknown()).optional(),
+    examRoomSlot: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

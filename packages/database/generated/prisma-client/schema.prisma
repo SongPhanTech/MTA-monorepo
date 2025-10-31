@@ -2352,10 +2352,13 @@ model StudentSubjectScoreHistory {
   finalScore            Decimal?            @db.Decimal(5, 1)
   /// điểm tổng kết chuyển trường
   manualFinalScore      Float?
+  /// hoãn thi
   examPostponedReason   Boolean?
   examPostponed         String?
+  /// cấm thi
   examBanned            Boolean?
   examBannedReason      String?
+  /// đình chỉ
   suspended             Boolean?
   suspendedReason       String?
   updatedBy             UserProfile?        @relation(fields: [updatedById], references: [id])
@@ -3039,6 +3042,7 @@ model SubjectClass {
   classRegisterLogs           ClassRegisterLogs[]
   subjectClassTimes           SubjectClassTime[]
   subjectClassHistory         SubjectClassHistory[]
+  survey                      Survey[]
 
   @@schema("ql-dao-tao")
 }
@@ -3262,12 +3266,12 @@ model Room {
   examCapacity   Int?
   building       Building?       @relation(fields: [buildingId], references: [id])
   buildingId     String?
-  exam           Exam[]
   subjectClasses SubjectClass[]  @relation("ClassRoom")
   defenseRooms   SubjectClass[]  @relation("DefenseRooms")
   thesisProject  ThesisProject[]
   classSchedules ClassSchedule[]
   examRooms      ExamRoom[]
+  examRoomSlot   ExamRoomSlot[]
 
   @@schema("ql-dao-tao")
 }
@@ -4800,6 +4804,7 @@ model Survey {
   isPublic             Boolean            @default(false)
   anonymous            Boolean            @default(true)
   surveyObjectType     SurveyObjectType[]
+  subjectClasses       SubjectClass[]
   lectureId            String?
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
@@ -5063,12 +5068,30 @@ model Exam {
   subjectClass        SubjectClass[]
   /// thí sinh
   studentSubjectScore StudentSubjectScore[]
-  room                Room[]
+  examRoomSlots       ExamRoomSlot[]
   examBank            ExamBank[]
   testStructureRules  TestStructureRule[]
   examSessions        ExamSession[]
   examRooms           ExamRoom[]
 
+  @@schema("khao-thi")
+}
+
+model ExamRoomSlot {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  exam        Exam      @relation(fields: [examId], references: [id])
+  examId      String
+  room        Room      @relation(fields: [roomId], references: [id])
+  roomId      String
+  cap         Int
+
+  @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 
