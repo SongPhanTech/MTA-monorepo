@@ -123,27 +123,25 @@ app.openapi(createClusterSurvey, async (c) => {
             where: {
                 id: {
                     in: lecturerIds,
-                    
                 },
-               mainSubjectClasses: {
-                some: {
-                    semester: {
-                        id: semesterId
-                    }
-                }
-               }
+                mainSubjectClasses: {
+                    some: {
+                        semester: {
+                            id: semesterId,
+                        },
+                    },
+                },
             },
-        include:{
-            mainSubjectClasses: {
-                where:{
-                    semester: {
-                        id: semesterId
-                    }
-                }
-            }
-        }
+            include: {
+                mainSubjectClasses: {
+                    where: {
+                        semester: {
+                            id: semesterId,
+                        },
+                    },
+                },
+            },
         })
-
 
         const surveys = await tx.survey.createManyAndReturn({
             data: lecturerIds.map((lectureId) => ({
@@ -152,8 +150,10 @@ app.openapi(createClusterSurvey, async (c) => {
                 lectureId,
                 surveyTopicId,
                 subjectClasses: {
-                    connect: lecturers.find((lecturer) => lecturer.id === lectureId)?.mainSubjectClasses.map((subjectClass) => ({ id: subjectClass.id }))
-                }
+                    connect: lecturers
+                        .find((lecturer) => lecturer.id === lectureId)
+                        ?.mainSubjectClasses.map((subjectClass) => ({ id: subjectClass.id })),
+                },
             })),
         })
 
