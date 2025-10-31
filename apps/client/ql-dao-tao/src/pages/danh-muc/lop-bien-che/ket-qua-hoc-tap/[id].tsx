@@ -1,6 +1,7 @@
 import { SafetyCertificateOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
+import type { FilterProps } from '@constants/type'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import { getMinioUrl } from '@workspace/constant'
@@ -8,6 +9,7 @@ import type { ArchivedAward, ArchivedCertificate, StudentSubjectScore } from '@w
 import {
     useFindManySemester,
     useFindManyStudentSubjectScore,
+    useFindManySubjectVersion,
     useFindUniqueStudent,
 } from '@workspace/db/hooks'
 import { exportFromTemplate, type TableRow } from '@workspace/libs/template-excel'
@@ -44,8 +46,8 @@ export interface IHocKi {
 export default function StudentScoreClassPage() {
     const router = useRouter()
     const studentId = router.query.id as string
-    const [_filters, _setFilters] = useState({
-        searchText: '',
+    const [filters, setFilters] = useState<FilterProps>({
+        name: '',
     })
 
     const { onOpen } = useDisclosure<{
@@ -365,7 +367,7 @@ export default function StudentScoreClassPage() {
         }
     )
 
-    const { data: studentSubjectScoreData = [] } = useFindManyStudentSubjectScore(
+    const { data: manualScoreData = [] } = useFindManyStudentSubjectScore(
         {
             where: {
                 studentId: studentId,
@@ -381,10 +383,37 @@ export default function StudentScoreClassPage() {
             enabled: !!studentId,
         }
     )
+
+    const { data: trainingSubjectVersions = [] } = useFindManySubjectVersion(
+        {
+            where: {
+                studentSubjectScore: {
+                    some: {
+                        studentId: studentId,
+                        subjectClass: { cancelled: false },
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!studentId,
+        }
+    )
+
     const { data = [], refetch } = useFindManySemester({
         where: {
             subjectClasses: {
                 some: {
+                    subject: {
+                        ...(filters.name
+                            ? {
+                                  name: {
+                                      contains: filters.name,
+                                      mode: 'insensitive',
+                                  },
+                              }
+                            : {}),
+                    },
                     subjectClassStudent: {
                         some: {
                             studentId,
@@ -399,6 +428,64 @@ export default function StudentScoreClassPage() {
                     subjectClassStudent: {
                         some: {
                             studentId,
+                            ...(filters.attendanceScoreCmp
+                                ? {
+                                      attendanceScore: {
+                                          ...(filters.attendanceScoreCmp.gte
+                                              ? {
+                                                    gte: Number(filters.attendanceScoreCmp.gte),
+                                                }
+                                              : {}),
+                                          ...(filters.attendanceScoreCmp.lte
+                                              ? {
+                                                    lte: Number(filters.attendanceScoreCmp.lte),
+                                                }
+                                              : {}),
+                                      },
+                                  }
+                                : {}),
+                            ...(filters.midtermScoreCmp
+                                ? {
+                                      attendanceScore: {
+                                          ...(filters.midtermScoreCmp.gte
+                                              ? {
+                                                    gte: Number(filters.midtermScoreCmp.gte),
+                                                }
+                                              : {}),
+                                          ...(filters.midtermScoreCmp.lte
+                                              ? {
+                                                    lte: Number(filters.midtermScoreCmp.lte),
+                                                }
+                                              : {}),
+                                      },
+                                  }
+                                : {}),
+                            ...(filters.examScoreCmp
+                                ? {
+                                      attendanceScore: {
+                                          ...(filters.examScoreCmp.gte
+                                              ? {
+                                                    gte: Number(filters.examScoreCmp.gte),
+                                                }
+                                              : {}),
+                                          ...(filters.examScoreCmp.lte
+                                              ? {
+                                                    lte: Number(filters.examScoreCmp.lte),
+                                                }
+                                              : {}),
+                                      },
+                                  }
+                                : {}),
+                            subjectVersion: {
+                                ...(filters.name
+                                    ? {
+                                          name: {
+                                              contains: filters.name,
+                                              mode: 'insensitive',
+                                          },
+                                      }
+                                    : {}),
+                            },
                         },
                     },
                 },
@@ -406,6 +493,64 @@ export default function StudentScoreClassPage() {
                     subjectClassStudent: {
                         where: {
                             studentId,
+                            ...(filters.attendanceScoreCmp
+                                ? {
+                                      attendanceScore: {
+                                          ...(filters.attendanceScoreCmp.gte
+                                              ? {
+                                                    gte: Number(filters.attendanceScoreCmp.gte),
+                                                }
+                                              : {}),
+                                          ...(filters.attendanceScoreCmp.lte
+                                              ? {
+                                                    lte: Number(filters.attendanceScoreCmp.lte),
+                                                }
+                                              : {}),
+                                      },
+                                  }
+                                : {}),
+                            ...(filters.midtermScoreCmp
+                                ? {
+                                      attendanceScore: {
+                                          ...(filters.midtermScoreCmp.gte
+                                              ? {
+                                                    gte: Number(filters.midtermScoreCmp.gte),
+                                                }
+                                              : {}),
+                                          ...(filters.midtermScoreCmp.lte
+                                              ? {
+                                                    lte: Number(filters.midtermScoreCmp.lte),
+                                                }
+                                              : {}),
+                                      },
+                                  }
+                                : {}),
+                            ...(filters.examScoreCmp
+                                ? {
+                                      attendanceScore: {
+                                          ...(filters.examScoreCmp.gte
+                                              ? {
+                                                    gte: Number(filters.examScoreCmp.gte),
+                                                }
+                                              : {}),
+                                          ...(filters.examScoreCmp.lte
+                                              ? {
+                                                    lte: Number(filters.examScoreCmp.lte),
+                                                }
+                                              : {}),
+                                      },
+                                  }
+                                : {}),
+                            subjectVersion: {
+                                ...(filters.name
+                                    ? {
+                                          name: {
+                                              contains: filters.name,
+                                              mode: 'insensitive',
+                                          },
+                                      }
+                                    : {}),
+                            },
                         },
                         include: {
                             subjectVersion: true,
@@ -455,7 +600,7 @@ export default function StudentScoreClassPage() {
                     .filter(Boolean)
                     .join(' - ')}
             </Divider>
-            <Row gutter={[16, 0]}>
+            <Row gutter={[16, 16]}>
                 <Col span={24}>
                     {/* Row nút thêm */}
                     <Row gutter={[8, 8]} align="top" justify="space-between">
@@ -492,48 +637,19 @@ export default function StudentScoreClassPage() {
                         </Col>
                     </Row>
                 </Col>
-                <Col className="text-lg font-bold">Danh sách điểm thủ công</Col>
+
                 <Col span={24}>
-                    <Table
-                        // filters={filters}
-                        // setFilters={setFilters}
-                        columns={[
-                            {
-                                title: 'STT',
-                                width: 50,
-                                align: 'center',
-                                render: (_, __, index) => index + 1,
-                            },
-                            {
-                                title: 'Mã môn học',
-                                width: 150,
-                                align: 'center',
-                                render: (_, record) => record?.subjectVersion?.code,
-                            },
-                            {
-                                title: 'Tên môn học',
-                                align: 'center',
-                                render: (_, record) => record?.subjectVersion?.name,
-                            },
-                            {
-                                title: 'Điểm thủ công',
-                                dataIndex: 'manualFinalScore',
-                                align: 'center',
-                                width: 200,
-                            },
-                        ]}
-                        data={studentSubjectScoreData}
-                        pagination={false}
-                    />
-                </Col>
-                <Col className="text-lg font-bold mt-9">Danh sách điểm theo kỳ</Col>
-                <Col span={24}>
+                    <h3 className="text-lg font-bold">Danh sách điểm theo kỳ</h3>
                     <TableCollapse
                         rowKey="key"
                         currentPage={1}
                         headerTitleKey={({ code, name, schoolYear }) =>
                             `${[code, name, schoolYear?.name].filter(Boolean).join(' - ')}`
                         }
+                        filters={filters}
+                        setFilters={(value) => {
+                            setFilters(value)
+                        }}
                         childrenFieldName="subjectClasses"
                         defaultExpandAll
                         columns={[
@@ -547,27 +663,42 @@ export default function StudentScoreClassPage() {
                             {
                                 title: 'Tên môn học',
                                 align: 'center',
-                                dataIndex: ['subjectClassStudent', '0', 'subjectVersion', 'name'],
+                                dataIndex: 'name',
                                 fixed: 'left',
+                                type: 'input_search',
+                                options: trainingSubjectVersions.map((item) => ({
+                                    label: item.name,
+                                    value: item.name,
+                                })),
                                 width: 200,
+                                render: (_, record) =>
+                                    record?.subjectClassStudent?.[0]?.subjectVersion.name,
                             },
                             {
-                                title: 'Điểm chuyên cần',
+                                title: 'Điểm CC',
                                 align: 'center',
-                                dataIndex: ['subjectClassStudent', '0', 'attendanceScore'],
-                                width: 130,
+                                dataIndex: 'attendanceScoreCmp',
+                                type: 'cmp',
+                                width: 100,
+                                render: (_, record) =>
+                                    record?.subjectClassStudent?.[0]?.attendanceScore,
                             },
                             {
-                                title: 'Điểm thường xuyên',
+                                title: 'Điểm TX',
                                 align: 'center',
-                                dataIndex: ['subjectClassStudent', '0', 'midtermScore'],
-                                width: 150,
+                                dataIndex: 'midtermScoreCmp',
+                                type: 'cmp',
+                                width: 100,
+                                render: (_, record) =>
+                                    record?.subjectClassStudent?.[0]?.midtermScore,
                             },
                             {
                                 title: 'Điểm thi',
                                 align: 'center',
-                                dataIndex: ['subjectClassStudent', '0', 'examScore'],
+                                dataIndex: 'examScoreCmp',
+                                type: 'cmp',
                                 width: 100,
+                                render: (_, record) => record?.subjectClassStudent?.[0]?.examScore,
                             },
                             {
                                 title: 'Điểm cộng',
@@ -749,6 +880,40 @@ export default function StudentScoreClassPage() {
                         pagination={{
                             hideOnSinglePage: true,
                         }}
+                    />
+                </Col>
+                <Col span={24}>
+                    <h3 className="text-lg font-bold">Danh sách điểm thủ công</h3>
+                    <Table
+                        // filters={filters}
+                        // setFilters={setFilters}
+                        columns={[
+                            {
+                                title: 'STT',
+                                width: 50,
+                                align: 'center',
+                                render: (_, __, index) => index + 1,
+                            },
+                            {
+                                title: 'Mã môn học',
+                                width: 150,
+                                align: 'center',
+                                render: (_, record) => record?.subjectVersion?.code,
+                            },
+                            {
+                                title: 'Tên môn học',
+                                align: 'center',
+                                render: (_, record) => record?.subjectVersion?.name,
+                            },
+                            {
+                                title: 'Điểm thủ công',
+                                dataIndex: 'manualFinalScore',
+                                align: 'center',
+                                width: 200,
+                            },
+                        ]}
+                        data={manualScoreData}
+                        pagination={false}
                     />
                 </Col>
             </Row>

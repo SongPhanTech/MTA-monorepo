@@ -1,4 +1,4 @@
-import { CheckOutlined, DownloadOutlined } from '@ant-design/icons'
+import { DownloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -141,18 +141,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                   }
                 : {}),
         }
-    }, [
-        filters.code,
-        filters.name,
-        filters.trainingCourses,
-        filters.managementOrganization,
-        filters.curriculumVersion,
-        filters.trainingMajors,
-        filters.trainingLevel,
-        trainingObjectTypeId,
-        canReadAll,
-        profileId,
-    ])
+    }, [filters, filters.trainingCourses, trainingObjectTypeId, profileId, canReadAll])
 
     const { data = [] } = useFindManyFixedClass({
         where: {
@@ -371,15 +360,15 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                     index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
                             },
                             {
-                                title: 'Mã lớp quản lý',
+                                title: 'Mã lớp',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 fixed: 'left',
                                 dataIndex: 'code',
                                 type: 'input',
                             },
                             {
-                                title: 'Tên lớp quản lý',
+                                title: 'Tên lớp',
                                 align: 'center',
                                 width: 200,
                                 fixed: 'left',
@@ -411,26 +400,22 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                             },
                             {
                                 title: 'Khoá',
-                                dataIndex: 'trainingCourse',
+                                dataIndex: 'trainingCourses',
                                 align: 'center',
-                                width: 150,
+                                width: 120,
                                 type: 'select',
                                 options: trainingCourseData.map((item) => ({
                                     label: item.name,
                                     value: item.id,
                                 })),
-                                render: (value) => (value?.name ? value?.name : ''),
+                                render: (_, record) =>
+                                    record.trainingCourse?.name ? record.trainingCourse?.name : '',
                             },
                             {
                                 title: 'Đối tượng đào tạo',
                                 align: 'center',
                                 dataIndex: 'trainingObjectTypes',
                                 width: 180,
-                                type: 'select',
-                                options: trainingObjectTypeData.map((item) => ({
-                                    label: item.name,
-                                    value: item.id,
-                                })),
                                 render: (__, record) =>
                                     record?.trainingCourse?.trainingObjectType?.name || '',
                             },
@@ -438,7 +423,7 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                             {
                                 title: 'Bậc đào tạo',
                                 align: 'center',
-                                width: 150,
+                                width: 120,
                                 type: 'select',
                                 options: trainingLevelData.map((item) => ({
                                     label: item.name,
@@ -461,24 +446,24 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 render: (value) => (value?.name ? value?.name : ''),
                             },
 
-                            {
-                                title: 'Đã tốt nghiệp',
-                                align: 'center',
-                                width: 150,
-                                dataIndex: 'graduated',
-                                type: 'select',
-                                options: [
-                                    { value: true, label: 'Đã tốt nghiệp' },
-                                    { value: false, label: 'Chưa tốt nghiệp' },
-                                ],
-                                render: (value) =>
-                                    value ? <CheckOutlined className="text-[#028850]" /> : '',
-                            },
+                            // {
+                            //     title: 'Đã tốt nghiệp',
+                            //     align: 'center',
+                            //     width: 150,
+                            //     dataIndex: 'graduated',
+                            //     type: 'select',
+                            //     options: [
+                            //         { value: true, label: 'Đã tốt nghiệp' },
+                            //         { value: false, label: 'Chưa tốt nghiệp' },
+                            //     ],
+                            //     render: (value) =>
+                            //         value ? <CheckOutlined className="text-[#028850]" /> : '',
+                            // },
                             {
                                 title: 'Giáo viên chủ nhiệm',
                                 dataIndex: 'lecturerManagement',
                                 align: 'center',
-                                width: 200,
+                                width: 180,
                                 type: 'input',
                                 render: (value) =>
                                     value?.userProfile?.fullname
@@ -489,20 +474,20 @@ export default function FixedClassPage({ trainingCourse }: { trainingCourse?: Tr
                                 title: 'Cán bộ quản lý',
                                 dataIndex: 'staffManagement',
                                 align: 'center',
-                                width: 200,
+                                width: 180,
                                 type: 'input',
                                 render: (value) =>
                                     value?.userProfile?.fullname
                                         ? value?.userProfile?.fullname
                                         : '',
                             },
-                            {
-                                title: 'Năm bắt đầu',
-                                dataIndex: 'startYear',
-                                width: 150,
-                                type: 'order',
-                                align: 'center',
-                            },
+                            // {
+                            //     title: 'Năm bắt đầu',
+                            //     dataIndex: 'startYear',
+                            //     width: 150,
+                            //     type: 'order',
+                            //     align: 'center',
+                            // },
                             // {
                             //     title: 'Trạng thái',
                             //     align: 'center',
