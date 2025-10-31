@@ -591,6 +591,7 @@ enum SubjectVersionType {
   Internship // Thực tập
   Research // Chuyên đề nghiên cứu
   Project // Luận văn/Đồ án
+  Practice // Thí nghiệm/Thực hành
 
   @@schema("ql-dao-tao")
 }

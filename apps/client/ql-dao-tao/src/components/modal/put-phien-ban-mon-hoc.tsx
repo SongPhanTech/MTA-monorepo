@@ -48,6 +48,7 @@ export enum HistorySubjectVersionType {
 
 const subjectVersionTypeOptions = [
     { label: 'Môn thường', value: SubjectVersionType.Normal },
+    { label: 'Thí nghiệm/Thực hành', value: SubjectVersionType.Practice },
     { label: 'Thực tập', value: SubjectVersionType.Internship },
     { label: 'Chuyên đề nghiên cứu', value: SubjectVersionType.Research },
     { label: 'Đồ án tốt nghiệp', value: SubjectVersionType.Project },
