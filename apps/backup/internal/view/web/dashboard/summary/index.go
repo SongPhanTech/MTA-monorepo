@@ -162,13 +162,13 @@ func indexPage(
 
 			countCard("Cơ sở dữ liệu", databasesQty.All, ChartData{
 				Label:    "Số lượng",
-				Labels:   []string{"Healthy", "Unhealthy"},
+				Labels:   []string{"Hoạt động", "Không hoạt động"},
 				Data:     []int32{databasesQty.Healthy, databasesQty.Unhealthy},
 				BgColors: []string{greenColor, redColor},
 			}),
 			countCard("Đích đến lưu trữ", destinationsQty.All, ChartData{
 				Label:    "Số lượng",
-				Labels:   []string{"Healthy", "Unhealthy"},
+				Labels:   []string{"Hoạt động", "Không hoạt động"},
 				Data:     []int32{destinationsQty.Healthy, destinationsQty.Unhealthy},
 				BgColors: []string{greenColor, redColor},
 			}),

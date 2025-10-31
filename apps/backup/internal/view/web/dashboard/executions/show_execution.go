@@ -138,7 +138,7 @@ func showExecutionButton(
 		component.OptionsDropdownButton(
 			mo.OpenerAttr,
 			lucide.Eye(),
-			component.SpanText("Show details"),
+			component.SpanText("Xem chi tiết"),
 		),
 	)
 }

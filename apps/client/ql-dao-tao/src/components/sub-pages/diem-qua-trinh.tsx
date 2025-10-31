@@ -11,7 +11,7 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, message, Modal, Row } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, Modal, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FileUp, Save } from 'lucide-react'
@@ -53,7 +53,7 @@ export default function DiemQuaTrinh({
     const [isChanged, setIsChanged] = useState(false)
 
     const { data: session } = useSession()
-    const profileId = session?.sDM_NhanVienId || ''
+    const profileId = session?.sDM_NhanVienId
     const [open, setOpen] = useState(false)
     const [importModalVisible, setImportModalVisible] = useState(false)
     const [filterTable, setFilterTable] = useState<FilterTable>({
@@ -88,10 +88,10 @@ export default function DiemQuaTrinh({
         try {
             showSpinner()
             const dataTableSubmit = form.getFieldsValue()
-            const listObject = Object.entries(dataTableSubmit.list).map(([key, value_]) => {
+            const listObject = Object.entries(dataTableSubmit.list).map(([key, value]) => {
                 return {
                     id: key,
-                    ...value_,
+                    ...value,
                 }
             })
 
@@ -118,7 +118,7 @@ export default function DiemQuaTrinh({
                 ]
             }
             const listChange = listObject.filter(
-                (i: any) =>
+                (i) =>
                     i.attendanceScore ||
                     i.midtermScore ||
                     i.description ||
@@ -131,7 +131,7 @@ export default function DiemQuaTrinh({
             if (listChange.length > 0) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
-                    ...listChange.map((item: any) => {
+                    ...listChange.map((item) => {
                         const { id } = item
                         const newData = dataTableSubmit.list[id]
 
@@ -145,7 +145,8 @@ export default function DiemQuaTrinh({
                                     attendanceScore:
                                         newData?.attendanceScore ?? item.attendanceScore,
                                     midtermScore: newData?.midtermScore ?? item.midtermScore,
-                                    examScore: item?.examScore,
+                                    // examScore: item?.examScore,
+                                    finalScore: item?.finalScore,
                                     description: newData?.description ?? item?.description,
                                     examPostponed: newData?.examPostponed ?? item?.examPostponed,
                                     examPostponedReason:
@@ -157,20 +158,19 @@ export default function DiemQuaTrinh({
                             },
                         }
                     }),
-                    ...listChange.map((item: any) => {
-                        const { id } = item
-                        const newData = dataTableSubmit.list[id]
+                    {
+                        model: 'StudentSubjectScoreHistory',
+                        operation: 'createMany',
+                        data: {
+                            data: listChange.map((item) => {
+                                const { id } = item
+                                const newData = dataTableSubmit.list[id]
 
-                        return {
-                            model: 'StudentSubjectScoreHistory',
-                            operation: 'create',
-                            data: {
-                                data: {
+                                return {
                                     studentSubjectScoreId: id,
                                     attendanceScore:
                                         newData?.attendanceScore ?? item.attendanceScore,
                                     midtermScore: newData?.midtermScore ?? item.midtermScore,
-                                    examScore: item?.examScore,
                                     description: newData?.description ?? item?.description,
                                     examPostponed: newData?.examPostponed ?? item?.examPostponed,
                                     examPostponedReason:
@@ -179,12 +179,12 @@ export default function DiemQuaTrinh({
                                     examBannedReason:
                                         newData?.examBannedReason ?? item?.examBannedReason,
                                     finalScore: item?.finalScore,
-                                    manualFinalScore: item?.manualFinalScore,
+                                    // manualFinalScore: item?.manualFinalScore,
                                     updatedById: profileId,
-                                },
-                            },
-                        }
-                    }),
+                                }
+                            }),
+                        },
+                    },
                 ]
             }
 
@@ -497,7 +497,7 @@ export default function DiemQuaTrinh({
                                 disabled={
                                     !subjectClassId ||
                                     disabledForm ||
-                                    dataDetailSubjectClass.enteredScore
+                                    dataDetailSubjectClass?.enteredScore
                                 }
                                 className="w-full flex justify-start"
                             >

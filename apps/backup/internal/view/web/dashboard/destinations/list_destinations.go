@@ -67,7 +67,7 @@ func listDestinations(
 					),
 					nodx.Target("_blank"),
 					lucide.List(),
-					component.SpanText("Show executions"),
+					component.SpanText("Xem lịch sử thực thi"),
 				),
 				editDestinationButton(destination),
 				component.OptionsDropdownButton(

@@ -91,6 +91,7 @@ model Survey extends Base {
   anonymous            Boolean            @default(true)
 
   surveyObjectType     SurveyObjectType[]
+  subjectClasses       SubjectClass[]
 
   lectureId            String?            // khảo sát cho GV nào
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])

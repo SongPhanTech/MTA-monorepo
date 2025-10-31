@@ -276,7 +276,7 @@ func webhookExecutionsButton(webhookID uuid.UUID) nodx.Node {
 		component.OptionsDropdownButton(
 			mo.OpenerAttr,
 			lucide.List(),
-			component.SpanText("Show executions"),
+			component.SpanText("Xem lịch sử thực thi"),
 		),
 	)
 }

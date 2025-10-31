@@ -6,11 +6,12 @@ import {
     useFindManyStudent,
     useFindManyTrainingCourse,
 } from '@workspace/db/hooks'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Form, Input, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useState } from 'react'
+import { dangKyHocChoCaNhanStore } from '..'
 
 interface FilterProps {
     searchText: string | null
@@ -19,11 +20,10 @@ interface FilterProps {
 }
 
 interface RegisterClassProps {
-    setStudentId?: (id: string | null) => void
     hocLai?: boolean
 }
 
-export default function DangKyHocChoCaNhan({ setStudentId, hocLai }: RegisterClassProps) {
+export default function DangKyHocChoCaNhan({ hocLai }: RegisterClassProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKey, setSelectedRowKey] = useState<Key>('')
@@ -33,7 +33,6 @@ export default function DangKyHocChoCaNhan({ setStudentId, hocLai }: RegisterCla
         trainingCourseId: undefined,
         fixedClassId: undefined,
     })
-    const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: {
@@ -170,8 +169,11 @@ export default function DangKyHocChoCaNhan({ setStudentId, hocLai }: RegisterCla
     }
 
     const handleRowSelection = (id: string) => {
-        setStudentId?.(id)
         setSelectedRowKey(id)
+        dangKyHocChoCaNhanStore.setState((prev) => ({
+            ...prev,
+            studentId: id,
+        }))
     }
 
     return (

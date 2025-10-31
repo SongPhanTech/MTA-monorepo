@@ -1,16 +1,46 @@
 import FormItem from '@components/commons/form-item'
-import Table from '@components/commons/table'
 import type { PutSurveyType } from '@components/modal/put-modal-survey'
-import { useFindManyLecturer } from '@workspace/db/hooks'
-import { Form, Input, type TreeProps } from 'antd'
-import { useState } from 'react'
-
+import { useFindManyDM_DonVi, useFindManyLecturer } from '@workspace/db/hooks'
+import { Form,  Table } from 'antd'
+import { useMemo, useState,useEffect } from 'react'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 interface MyTreeNode {
     title: string
     key: string
     value?: string // nếu bạn muốn gán giá trị riêng
     children?: MyTreeNode[]
 }
+
+function buildOrgAndLectureTree(
+    list: Array<{ id: string; name: string | null; parentId: string | null }>,
+    lecturers: Array<{
+        id: string
+        userProfile: { fullName: string }
+        organizationId: string
+        selectable: boolean
+    }>,
+    parentId: string | null = null
+): Array<TreeNodeType> {
+    return list
+        .filter((item) => (item.parentId ?? null) === parentId)
+        .map((item) => ({
+            title: item.name || 'Đơn vị không tên',
+            value: item.id,
+            selectable: false,
+            children: [
+                ...lecturers
+                    .filter((lecturer) => lecturer.organizationId === item.id)
+                    .map((lecturer) => ({
+                        ...lecturer,
+                        title: lecturer.userProfile?.fullName || 'Giảng viên không tên',
+                        value: `${lecturer.id}`,
+                        children: [],
+                    })),
+                ...buildOrgAndLectureTree(list, lecturers, item.id),
+            ],
+        }))
+}
+
 
 function SelectLecturer({
     surveyTopicId,
@@ -19,20 +49,23 @@ function SelectLecturer({
     surveyTopicId?: string
     semesterId?: string
 }) {
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const form = Form.useFormInstance<PutSurveyType>()
     const [initValue, setInitValue] = useState<string[]>([])
-
-    const { data: lecturerData = [] } = useFindManyLecturer(
-        {
-            where: {
-                mainSubjectClasses: {
-                    some: {
-                        semester: {
-                            id: semesterId,
-                        },
-                    },
+const where=useMemo(()=>{
+    return  {
+        mainSubjectClasses: {
+            some: {
+                semester: {
+                    id: semesterId,
                 },
             },
+        },
+    }
+},[semesterId])
+    const { data: lecturerData = [] } = useFindManyLecturer(
+        {
+            where,
             orderBy: {
                 userProfile: {
                     firstName: 'asc',
@@ -45,6 +78,7 @@ function SelectLecturer({
                         semester: true,
                     },
                 },
+                organization:true
             },
         },
         {
@@ -52,50 +86,117 @@ function SelectLecturer({
         }
     )
 
-    const onCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
-        // info.checkedNodes: (DataNode & { children?: DataNode[] })[]
-        const onlyLeafValues = (info.checkedNodes as MyTreeNode[])
-            .filter((node) => !node.children?.length) // chỉ lấy node không có children
-            .map((node) => node.value ?? node.key) // lấy value nếu có, không thì lấy key
+    const {
+        data: organizations = [],
+        isLoading: organizationsLoading,
+        error: organizationsError,
+    } = useFindManyDM_DonVi({
+        where: {},
+    })
 
-        form.setFieldValue('surveyQuestionIds', onlyLeafValues)
-        setInitValue(onlyLeafValues)
+    // Tạo treeData từ organizations và lecturers
+    const treeData: TreeNodeType[] = useMemo(() => {
+        if (!organizations.length || !lecturerData.length) return []
+
+        return buildOrgAndLectureTree(
+            organizations.map((org) => ({
+                id: org.Id,
+                name: org.sTen,
+                parentId: org.sParentId,
+            })),
+            lecturerData.map((lec) => ({
+                id: lec.id,
+                userProfile: {
+                    fullName:
+                        `${lec.userProfile?.lastName ?? ''} ${lec.userProfile?.firstName ?? ''}`.trim() ||
+                        'Giảng viên không tên',
+                },
+                selectable: true,
+                organizationId: lec.organizationId,
+            })),
+            null
+        )
+    }, [organizations, lecturerData])
+
+    const listForm = Form.useWatch('lecturerIds', form) ?? []
+
+    const rowSelection = {
+        selectedRowKeys,
+        checkStrictly: false, 
+        onChange: (newSelectedRowKeys: React.Key[]) => {
+            setSelectedRowKeys(newSelectedRowKeys)
+            form.setFieldsValue({
+                lecturerIds: newSelectedRowKeys,})
+        },
+         getCheckboxProps: (record: any) => ({
+         disabled: !record.selectable, // ❌ disable nếu selectable = false
+    }),
     }
-    const listForm = Form.useWatch('surveyChoice', form) ?? []
+
+       const filterTreeNode = (input: string, treeNode: any) => {
+        return treeNode?.title?.toLowerCase()?.includes(input?.toLowerCase())
+    }
+      useEffect(() => {
+            if (lecturerData.length) {
+                const list= lecturerData.map((lec) => lec.id);
+                setSelectedRowKeys(list)
+                form.setFieldsValue({
+                    lecturerIds: list,
+                })
+            }
+        }, [lecturerData])
+
 
     return (
         <div className="w-full px-3 mt-3">
-            <div className="mb-4 text-[14px] font-[500]">Lựa chọn của câu hỏi khảo sát</div>
+            <div className="mb-4 text-[14px] font-[500]">Chọn giảng viên</div>
             <div>
-                <FormItem form={form} name="surveyChoice">
+                <FormItem form={form} name="lecturerIds" className="max-h-[500px] overflow-y-scroll">
                     <Table
-                        rowKey={'id'}
+                    expandable={{
+                        expandedRowKeys: initValue,
+                        onExpandedRowsChange: (expandedRows) => {
+                            console.log(expandedRows);
+                            setInitValue(expandedRows)
+                        },
+                          rowExpandable: (record) => {
+                        const children = record[childrenFieldName]
+                        return Array.isArray(children) && children.length > 0
+                    },
+                    expandRowByClick: true,
+                    }}
+                        rowKey={'value'}
+                        rowSelection={rowSelection}
                         columns={[
                             {
-                                title: 'Giá trị',
-                                dataIndex: 'answer',
-                                width: 100,
-                                render: (__, record, index) => (
-                                    <Form.Item
-                                        className="w-full mb-0"
-                                        name={['surveyChoice', index, 'answer']}
-                                        label=""
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Vui lòng nhập giá trị',
-                                            },
-                                        ]}
-                                    >
-                                        <Input className="w-full" placeholder="Nhập giá trị" />
-                                    </Form.Item>
+                                title: 'Giảng viên',
+                                dataIndex: 'name',
+                                render: (__, record:any) => (
+                                    <span>{record?.title}</span>
                                 ),
                             },
+                            {
+                                title: 'Cấp bậc',
+                                dataIndex: 'organization',
+                                width:100,
+                                render: (__, record:any) => (
+                                    <>{record?.organization?.sMa}</>
+                                ),
+                            },
+
                         ]}
                         bordered
-                        data={listForm}
-                        pagination={false}
+                        dataSource={treeData}
+                            pagination={false}
                     />
+                         {/* <Tree
+                        style={{ width: '100%' }}
+                         autoExpandParent={true}
+                                checkable={true}
+                                defaultExpandAll={true}
+                                multiple={true}
+                        treeData={treeData}
+        /> */}
                 </FormItem>
             </div>
         </div>

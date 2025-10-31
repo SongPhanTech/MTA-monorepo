@@ -193,12 +193,15 @@ model StudentSubjectScoreHistory extends Base {
   /// điểm tổng kết chuyển trường
   manualFinalScore      Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
 
+  /// hoãn thi
   examPostponedReason   Boolean?
   examPostponed         String?
 
+  /// cấm thi
   examBanned            Boolean?
   examBannedReason      String?
 
+  /// đình chỉ
   suspended             Boolean?
   suspendedReason       String?
 
@@ -591,6 +594,7 @@ enum SubjectVersionType {
   Internship // Thực tập
   Research // Chuyên đề nghiên cứu
   Project // Luận văn/Đồ án
+  Practice // Thí nghiệm/Thực hành
 
   @@schema("ql-dao-tao")
 }
@@ -910,7 +914,9 @@ model SubjectClass extends BaseNoCode {
   subjectClassTimes           SubjectClassTime[]  // Thứ trong tuần và tiết học
 
   subjectClassHistory         SubjectClassHistory[]
+	survey                      Survey []// Đợt khảo sát cho giảng viên
   @@schema("ql-dao-tao")
+
 }
 
 model SubjectClassHistory extends Base {

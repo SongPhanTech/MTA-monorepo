@@ -1,5 +1,6 @@
 import { DownloadOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
+import TextTruncate from '@components/commons/text-truncate'
 import DeleteIcon from '@components/icons/delete'
 import ExportStudentInFixedClass from '@components/modal/export-list-student-in-fixedClass'
 import { FIXED_CLASS_STUDENT_STATUS } from '@constants/constants'
@@ -8,6 +9,7 @@ import { useScoreConverter } from '@hooks/scoreConverter'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { getMinioUrl } from '@workspace/constant'
+import type { Semester, StudentSemesterResult } from '@workspace/db'
 import type { Student } from '@workspace/db/client'
 import {
     useFindManyCurriculumVersion,
@@ -305,6 +307,10 @@ export default function StudentFixedClassPage() {
                         },
                     },
                 },
+            },
+            studentSemesterResult: {
+                orderBy: { semester: { startDate: 'desc' } },
+                include: { semester: true },
             },
         },
         orderBy: {
@@ -2327,10 +2333,10 @@ export default function StudentFixedClassPage() {
                                 render: (_, __, index) => index + 1,
                             },
                             {
-                                title: 'Mã sinh viên',
+                                title: 'Mã SV',
                                 dataIndex: 'code',
                                 fixed: 'left',
-                                width: 150,
+                                width: 100,
                                 align: 'center',
                                 type: 'input',
                             },
@@ -2338,7 +2344,7 @@ export default function StudentFixedClassPage() {
                                 title: 'Họ và tên',
                                 width: 150,
                                 fixed: 'left',
-                                align: 'center',
+                                align: 'left',
                                 type: 'input',
                                 dataIndex: 'name',
                                 render: (__, record) =>
@@ -2349,7 +2355,7 @@ export default function StudentFixedClassPage() {
                             {
                                 title: 'Ngày sinh',
                                 align: 'center',
-                                width: 150,
+                                width: 100,
                                 dataIndex: 'dateOfBirth',
                                 type: 'date',
                                 render: (__, record) =>
@@ -2360,7 +2366,7 @@ export default function StudentFixedClassPage() {
                             {
                                 title: 'Giới tính',
                                 align: 'center',
-                                width: 120,
+                                width: 100,
                                 type: 'select',
                                 dataIndex: 'gender',
                                 // options: [
@@ -2461,6 +2467,33 @@ export default function StudentFixedClassPage() {
                                 render: (__, record) => {
                                     const curriculum = record.curriculumVersionParallel
                                     return curriculum ? curriculum.name : ''
+                                },
+                            },
+                            {
+                                title: 'KQHT (TBHK - TBTL)',
+                                width: 140,
+                                align: 'center',
+                                dataIndex: 'studentSemesterResult',
+                                render: (__, record) => {
+                                    return record.studentSemesterResult?.length ? (
+                                        <TextTruncate
+                                            arr={record.studentSemesterResult.map(
+                                                (
+                                                    r: StudentSemesterResult & {
+                                                        semester: Semester
+                                                    }
+                                                ) => {
+                                                    return {
+                                                        key: r?.id,
+                                                        label: `${r.semester.code}: ${r.gpaBase10} - ${r.cumulativeGpaBase10}`,
+                                                    }
+                                                }
+                                            )}
+                                            key="studentSemesterResult"
+                                        />
+                                    ) : (
+                                        ''
+                                    )
                                 },
                             },
                             {
