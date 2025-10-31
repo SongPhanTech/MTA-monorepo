@@ -1,9 +1,11 @@
+import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { useCountSurvey, useFindManySurvey } from '@workspace/db/hooks'
 import { Col, Row } from 'antd'
+import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
@@ -61,6 +63,16 @@ export default function DetailSurveyPage() {
                         userProfile: true,
                     },
                 },
+                subjectClasses: {
+                    include: {
+                        subjectClassStudent: {
+                            include: {
+                                student: true,
+                            },
+                        },
+                        subject:true
+                    },
+                },
             },
             orderBy: { createdAt: 'desc' },
             take: numberOfPages,
@@ -101,7 +113,42 @@ export default function DetailSurveyPage() {
                             title: 'Đối tượng được khảo sát',
                             dataIndex: 'name',
                             type: 'input',
+                            render:(__,record)=>{
+                                return `${record?.lecture?.code} - ${record?.lecture?.userProfile?.lastName} ${record?.lecture?.userProfile?.firstName}`
+                            }
                         },
+                        {
+                            title: 'Lớp môn học',
+                            dataIndex: 'name',
+                            type: 'input',
+                              render: (__,record) => (
+                                    <HtmlTruncate key="explanation">
+                                        <ul>
+                                            {record?.subjectClasses?.map((i: any) => (
+                                                <li key={i.id}>- {i.name}</li>
+                                            ))}
+                                        </ul>
+                                    </HtmlTruncate>
+                                            ),
+                        },
+                         {
+                                                        title: 'Ngày bắt đầu',
+                                                        dataIndex: 'startDate',
+                                                        type: 'date',
+                                                        render: (_, record) =>
+                                                            record?.startDate
+                                                                ? dayjs(record?.startDate).format('DD/MM/YYYY')
+                                                                : '',
+                                                    },
+                                                    {
+                                                        title: 'Ngày kết thúc',
+                                                        dataIndex: 'endDate',
+                                                        type: 'date',
+                                                        render: (_, record) =>
+                                                            record?.endDate
+                                                                ? dayjs(record?.endDate).format('DD/MM/YYYY')
+                                                                : '',
+                                                    },
 
                         {
                             title: 'Thao tác',
