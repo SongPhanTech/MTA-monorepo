@@ -14,7 +14,7 @@ import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useEffect, useState } from 'react'
-import { dangKyHocChoLopQuanLyStore } from '..'
+import { dangKyHocChoLopQuanLyStore } from '../..'
 import useSpinner from '@hooks/spinner'
 
 interface FilterProps {

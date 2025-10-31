@@ -75,7 +75,7 @@ func listBackups(
 					),
 					nodx.Target("_blank"),
 					lucide.List(),
-					component.SpanText("Show executions"),
+					component.SpanText("Xem lịch sử thực thi"),
 				),
 				manualRunbutton(backup.ID),
 				editBackupButton(backup),

@@ -8,7 +8,7 @@ import { Col, Form, Input, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { type Key, useCallback, useState } from 'react'
-import { dangKyHocChoLopQuanLyStore } from '..'
+import { dangKyHocChoLopQuanLyStore } from '../..'
 
 interface FilterProps {
     searchText: string | null

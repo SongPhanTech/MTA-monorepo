@@ -1,16 +1,16 @@
 import DefaultLayout from '@layouts/default-layout'
 import { Store } from '@tanstack/react-store'
-import { useFindManyTrainingCourse } from '@workspace/db/hooks'
-import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row, Tabs } from 'antd'
 import type React from 'react'
-import { useState } from 'react'
-import CaNhanTrongLopQuanLy from './_components/ca-nhan-trong-lop-quan-ly'
+import CaNhanTrongLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly/ca-nhan-trong-lop-quan-ly'
 import DangKyHocChoCaNhan from './_components/dang-ky-hoc-cho-lop-ca-nhan'
-import DangKyHocChoLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly'
 import KeQuaDangKyHocLopQuanLy from './_components/ket-qua-dang-ky-hoc-lop-quan-ly'
-import LopMonHocDaMo from './_components/lop-mon-hoc-da-mo'
-import LopQuanLyDaGhep from './_components/lop-quan-ly-da-ghep'
+import DangKyHocChoLopQuanLy from './_components/dang-ky-hoc-cho-lop-quan-ly/dang-ky-hoc-cho-lop-quan-ly'
+import LopQuanLyDaGhep from './_components/dang-ky-hoc-cho-lop-quan-ly/lop-quan-ly-da-ghep'
+import KetQuaDangKyHoc from './_components/dang-ky-hoc-cho-ca-nhan/ket-qua-dang-ky-hoc'
+import MonToanTruong from './_components/dang-ky-hoc-cho-ca-nhan/mon-toan-truong'
+import MonTrongCTDT from './_components/dang-ky-hoc-cho-ca-nhan/mon-trong-ctdt'
+import MonTuongDuong from './_components/dang-ky-hoc-cho-ca-nhan/mon-tuong-duong'
 
 interface TabItem {
     key: string
@@ -23,6 +23,10 @@ type DangKyHocChoLopQuanLyStore = {
     fixedClassesIds: string[]
     studentIds: string[]
 }
+type DangKyHocChoCaNhanStore = {
+    subjectClassIds: string[]
+    studentId?: string
+}
 
 export const dangKyHocChoLopQuanLyStore = new Store<DangKyHocChoLopQuanLyStore>({
     subjectClassId: undefined,
@@ -30,25 +34,18 @@ export const dangKyHocChoLopQuanLyStore = new Store<DangKyHocChoLopQuanLyStore>(
     studentIds: [],
 })
 
-export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
-    const [studentId, setStudentId] = useState<string | null>(null)
-    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+export const dangKyHocChoCaNhanStore = new Store<DangKyHocChoCaNhanStore>({
+    studentId: undefined,
+    subjectClassIds: [],
+})
 
-    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
-        orderBy: {
-            name: 'asc',
-        },
-        where: {
-            active: true,
-            trainingObjectTypeId,
-        },
-    })
+export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
     const leftTabs: TabItem[] = hocLai
         ? [
               {
                   key: '2',
                   label: 'Đăng ký học cho cá nhân',
-                  content: <DangKyHocChoCaNhan hocLai={hocLai} setStudentId={setStudentId} />,
+                  content: <DangKyHocChoCaNhan hocLai={hocLai} />,
               },
           ]
         : [
@@ -72,7 +69,45 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
               {
                   key: '2',
                   label: 'Đăng ký học cho cá nhân',
-                  content: <DangKyHocChoCaNhan setStudentId={setStudentId} />,
+                  content: (
+                      <Row gutter={[8, 8]}>
+                          <Col span={12}>
+                              <DangKyHocChoCaNhan />
+                          </Col>
+                          <Col span={12}>
+                              <Tabs className="m-0 p-0">
+                                  <Tabs.TabPane
+                                      className="m-0 p-0"
+                                      tab={'Kết quả ĐKH'}
+                                      key={'ket-qua-dang-ky-hoc'}
+                                  >
+                                      <KetQuaDangKyHoc />
+                                  </Tabs.TabPane>
+                                  <Tabs.TabPane
+                                      className="m-0 p-0"
+                                      tab={'Môn toàn trường'}
+                                      key={'mon-toan-truong'}
+                                  >
+                                      <MonToanTruong />
+                                  </Tabs.TabPane>
+                                  <Tabs.TabPane
+                                      className="m-0 p-0"
+                                      tab={'Môn trong CTDT'}
+                                      key={'mon-trong-ctdt'}
+                                  >
+                                      <MonTrongCTDT />
+                                  </Tabs.TabPane>
+                                  <Tabs.TabPane
+                                      className="m-0 p-0"
+                                      tab={'Môn tương đương'}
+                                      key={'mon-tuong-duong'}
+                                  >
+                                      <MonTuongDuong />
+                                  </Tabs.TabPane>
+                              </Tabs>
+                          </Col>
+                      </Row>
+                  ),
               },
               {
                   key: '3',
@@ -80,23 +115,6 @@ export default function DangKyHoc({ hocLai = false }: { hocLai?: boolean }) {
                   content: <KeQuaDangKyHocLopQuanLy />,
               },
           ]
-
-    const rightTabsMap: Record<string, TabItem[]> = {
-        '1': [
-            {
-                key: '1',
-                label: 'Lớp có môn theo KHGD',
-                content: <></>,
-            },
-        ],
-        '2': [
-            {
-                key: '1',
-                label: 'Lớp môn học đã mở',
-                content: <LopMonHocDaMo hocLai={hocLai} studentId={studentId} />,
-            },
-        ],
-    }
 
     return (
         <Row gutter={[8, 0]} className="bg-white">

@@ -22,7 +22,7 @@ func (h *handlers) manualRunHandler(c echo.Context) error {
 		_ = h.servs.ExecutionsService.RunExecution(context.Background(), backupID)
 	}()
 
-	return respondhtmx.ToastSuccess(c, "Backup started, check the backup executions for more details")
+	return respondhtmx.ToastSuccess(c, "Sao lưu đã được khởi động, kiểm tra lịch sử thực thi sao lưu để biết thêm chi tiết")
 }
 
 func manualRunbutton(backupID uuid.UUID) nodx.Node {
@@ -30,6 +30,6 @@ func manualRunbutton(backupID uuid.UUID) nodx.Node {
 		htmx.HxPost("/dashboard/backups/"+backupID.String()+"/run"),
 		htmx.HxDisabledELT("this"),
 		lucide.Zap(),
-		component.SpanText("Run backup now"),
+		component.SpanText("Chạy sao lưu ngay"),
 	)
 }

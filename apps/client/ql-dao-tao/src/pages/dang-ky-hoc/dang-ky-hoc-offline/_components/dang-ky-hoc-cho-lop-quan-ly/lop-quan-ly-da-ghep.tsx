@@ -11,7 +11,7 @@ import { Col, Form, Input, Row } from 'antd'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { dangKyHocChoLopQuanLyStore } from '..'
+import { dangKyHocChoLopQuanLyStore } from '../..'
 
 interface FilterProps {
     searchText: string | null

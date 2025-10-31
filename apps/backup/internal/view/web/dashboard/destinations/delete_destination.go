@@ -29,8 +29,8 @@ func (h *handlers) deleteDestinationHandler(c echo.Context) error {
 func deleteDestinationButton(destinationID uuid.UUID) nodx.Node {
 	return component.OptionsDropdownButton(
 		htmx.HxDelete("/dashboard/destinations/"+destinationID.String()),
-		htmx.HxConfirm("Are you sure you want to delete this destination?"),
+		htmx.HxConfirm("Bạn có chắc chắn muốn xóa đích đến lưu trữ này không?"),
 		lucide.Trash(),
-		component.SpanText("Delete destination"),
+		component.SpanText("Xóa đích đến lưu trữ"),
 	)
 }
