@@ -11,7 +11,6 @@ import {
     useFindManyFixedClass,
     useFindManySubjectClass,
 } from '@workspace/db/hooks'
-// import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -96,7 +95,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
         return {
             ...(semesterId ? { semesterId } : {}),
             ...(trainingObjectTypeId ? { trainingObjectTypeId } : {}),
-            ...(filters.searchText && filters.searchText !== ''
+            ...(filters.searchText
                 ? {
                       OR: [
                           {
@@ -252,6 +251,9 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                     student: { include: { userProfile: true } },
                 },
             },
+            _count: {
+                select: { subjectClassStudent: true },
+            },
         },
         orderBy: {
             code: 'asc',
@@ -334,15 +336,14 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                                 },
                                 className: cn(
                                     record?.subject?.examType === 'OfflineWritten'
-                                        ? 'text-blue-500'
-                                        : '',
-                                    dayjs()?.isAfter(record?.scoreDeadline) && !record?.enteredScore
                                         ? 'text-red-500'
                                         : '',
-                                    dayjs().isAfter(record?.examScoreDeadline) &&
-                                        !record?.enteredExamScore
-                                        ? 'text-red-600'
-                                        : '',
+                                    dayjs()?.isAfter(record?.scoreDeadline) && !record?.enteredScore
+                                        ? 'bg-yellow-200'
+                                        : dayjs().isAfter(record?.examScoreDeadline) &&
+                                            !record?.enteredExamScore
+                                          ? 'bg-yellow-100'
+                                          : '',
                                     selectedRowKeys === record.id ? 'bg-orange-200' : ''
                                 ),
                             }
@@ -363,6 +364,12 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                                 type: 'input',
                             },
                             {
+                                title: 'Sĩ số',
+                                dataIndex: ['_count', 'subjectClassStudent'],
+                                align: 'center',
+                                width: 50,
+                            },
+                            {
                                 title: 'Môn học',
                                 dataIndex: 'name',
                                 width: 175,
@@ -371,15 +378,15 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                                 render: (text, record: { subject?: SubjectVersion }) =>
                                     record.subject?.name || text,
                             },
-                            // {
-                            //     title: 'Số TC',
-                            //     dataIndex: 'credit',
-                            //     width: 80,
-                            //     align: 'center',
-                            //     type: 'order',
-                            //     render: (text, record: { subject?: SubjectVersion }) =>
-                            //         record.subject?.credit || text,
-                            // },
+                            {
+                                title: 'Số TC',
+                                dataIndex: 'credit',
+                                width: 80,
+                                align: 'center',
+                                type: 'order',
+                                render: (text, record: { subject?: SubjectVersion }) =>
+                                    record.subject?.credit || text,
+                            },
                             {
                                 title: 'Thi',
                                 dataIndex: 'examType',
@@ -389,11 +396,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                                 options: options,
                                 render: (__, record: { subject?: SubjectVersion }) => {
                                     return record?.subject?.examType ? (
-                                        <div
-                                        // className={`${record?.subject?.examType === 'OfflineWritten' ? 'text-red-500' : ''}`}
-                                        >
-                                            {getExamTypeLabel(record?.subject?.examType)}
-                                        </div>
+                                        <div>{getExamTypeLabel(record?.subject?.examType)}</div>
                                     ) : (
                                         ''
                                     )
