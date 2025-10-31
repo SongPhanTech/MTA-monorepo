@@ -56,7 +56,7 @@ export default function DiemThi({
     const [isChanged, setIsChanged] = useState(false)
     const { data: session } = useSession()
     const [mesasge, setMesasge] = useState<string>('')
-    const profileId = session?.sDM_NhanVienId || ''
+    const profileId = session?.sDM_NhanVienId
     const [open, setOpen] = useState(false)
     const [importModalVisible, setImportModalVisible] = useState(false)
     const [filterTable, setFilterTable] = useState<FilterTable>({
@@ -70,7 +70,7 @@ export default function DiemThi({
 
     const { onOpen } = useDisclosure<{
         dataTable: DataTable[]
-        type: number // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
+        type: number // 1: In phiếu điểm và khoá, 0: In phiếu điểm nháp
     }>({
         tag: 'ModalPrintStudentSubjectScore',
     })
@@ -160,10 +160,10 @@ export default function DiemThi({
                 }
             }
             const dataSubmit = form.getFieldsValue()
-            const listObject = Object.entries(dataSubmit.list).map(([key, value_]) => {
+            const listObject = Object.entries(dataSubmit.list).map(([key, value]) => {
                 return {
                     id: key,
-                    ...value_,
+                    ...value,
                 }
             })
 
@@ -232,41 +232,27 @@ export default function DiemThi({
                         }
                     }),
 
-                    ...listChange.map((item: any) => {
-                        const { id } = item
-                        const newData = dataSubmit.list[id]
+                    {
+                        model: 'StudentSubjectScoreHistory',
+                        operation: 'createMany',
+                        data: {
+                            data: listChange.map((item) => {
+                                const { id } = item
+                                const newData = dataSubmit.list[id]
 
-                        return {
-                            model: 'StudentSubjectScoreHistory',
-                            operation: 'create',
-                            data: {
-                                data: {
+                                return {
                                     studentSubjectScoreId: id,
-                                    attendanceScore: item?.subjectVersion?.onePoint
-                                        ? item.examScore
-                                            ? item.examScore
-                                            : newData?.examScore
-                                        : item?.attendanceScore,
-                                    midtermScore: item?.subjectVersion?.onePoint
-                                        ? item.examScore
-                                            ? item.examScore
-                                            : newData?.examScore
-                                        : item?.midtermScore,
-                                    examScore: item.examScore ? item.examScore : newData?.examScore,
+                                    examScore: item?.examScore,
+                                    description: newData?.description ?? item?.description,
+                                    suspended: newData?.suspended ?? item?.suspended,
+                                    suspendedReason:
+                                        newData?.suspendedReason ?? item?.suspendedReason,
                                     finalScore: item?.finalScore,
-                                    manualFinalScore: item?.manualFinalScore,
-                                    description: item.description
-                                        ? item.description
-                                        : newData?.description,
-                                    suspended: item.suspended ? item.suspended : newData?.suspended,
-                                    suspendedReason: item.suspendedReason
-                                        ? item.suspendedReason
-                                        : newData?.suspendedReason,
                                     updatedById: profileId,
-                                },
-                            },
-                        }
-                    }),
+                                }
+                            }),
+                        },
+                    },
                 ]
             }
             if (listSqlTransaction?.length > 0) {

@@ -47,7 +47,7 @@ export default function SubjectClassScore() {
             refetchOnWindowFocus: false,
         }
     )
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <skip>
+
     const items = useMemo(() => {
         return [
             {
@@ -72,10 +72,10 @@ export default function SubjectClassScore() {
                         subjectClassId={selectedRowKeys}
                     />
                 ),
-                disabled: !selectedRowKeys,
+                disabled: !data,
             },
         ]
-    }, [selectedRowKeys])
+    }, [selectedRowKeys, data, refetch])
 
     const reasonDate = useCallback(() => {
         if (data?.scoreDeadLineStart || data?.scoreDeadline) {
