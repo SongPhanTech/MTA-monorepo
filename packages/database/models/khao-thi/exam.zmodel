@@ -217,12 +217,26 @@ model Exam extends Base {
   subjectClass        SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
   /// thí sinh
   studentSubjectScore StudentSubjectScore[]
-  room                Room[]
+
+  examRoomSlots       ExamRoomSlot[]
   examBank            ExamBank[]
   testStructureRules  TestStructureRule[]
   examSessions        ExamSession[]
   examRooms           ExamRoom[]
 
+  @@schema("khao-thi")
+}
+
+model ExamRoomSlot extends Base {
+  exam   Exam   @relation(fields: [examId], references: [id])
+  examId String
+
+  room   Room   @relation(fields: [roomId], references: [id])
+  roomId String
+
+  cap    Int
+
+  @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 

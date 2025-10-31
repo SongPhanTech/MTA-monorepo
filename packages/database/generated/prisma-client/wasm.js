@@ -3338,6 +3338,19 @@ exports.Prisma.ExamScalarFieldEnum = {
   duration: 'duration'
 };
 
+exports.Prisma.ExamRoomSlotScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  examId: 'examId',
+  roomId: 'roomId',
+  cap: 'cap'
+};
+
 exports.Prisma.ExamRoomScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6099,6 +6112,14 @@ exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   questionBankId: 'questionBankId'
 };
 
+exports.Prisma.ExamRoomSlotOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  examId: 'examId',
+  roomId: 'roomId'
+};
+
 exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -7149,6 +7170,7 @@ exports.Prisma.ModelName = {
   FillInBlankSlot: 'FillInBlankSlot',
   OrderingItem: 'OrderingItem',
   Exam: 'Exam',
+  ExamRoomSlot: 'ExamRoomSlot',
   ExamRoom: 'ExamRoom',
   TestStructureRule: 'TestStructureRule',
   ExamBank: 'ExamBank',

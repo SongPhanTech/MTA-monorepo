@@ -192,6 +192,7 @@ export * from './MultipleChoiceOption.schema';
 export * from './FillInBlankSlot.schema';
 export * from './OrderingItem.schema';
 export * from './Exam.schema';
+export * from './ExamRoomSlot.schema';
 export * from './ExamRoom.schema';
 export * from './TestStructureRule.schema';
 export * from './ExamBank.schema';
