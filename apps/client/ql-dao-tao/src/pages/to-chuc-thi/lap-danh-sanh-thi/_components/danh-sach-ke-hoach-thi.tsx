@@ -8,9 +8,9 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-import type { SubjectClass } from '@workspace/db/client'
+import type { Room, SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam, useFindManyRoom } from '@workspace/db/hooks'
-import { useCreateExams } from '@workspace/libs/api/training'
+import { useCreateExams, useMergeExam, useUnmergeExam } from '@workspace/libs/api/training'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, Input, message, Popover, Row, Switch } from 'antd'
 import type { TableRowSelection } from 'antd/lib/table/interface'
@@ -57,14 +57,26 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
     const [form] = Form.useForm<SubjectClassFormType>()
     const [formButton] = Form.useForm<ButtonFormType>()
 
-    console.log(selectedRowKeys)
-
     const { data: exams = [], refetch: refetchExams } = useFindManyExam({
         where: {
             subjectClass: {
                 some: {
                     trainingObjectTypeId,
                     semesterId,
+                    ...(filters.searchText && {
+                        name: {
+                            contains: filters.searchText,
+                            mode: 'insensitive',
+                        },
+                    }),
+                    ...(filters.examType &&
+                        filters.examType.length > 0 && {
+                            subject: {
+                                examType: {
+                                    in: filters.examType,
+                                },
+                            },
+                        }),
                 },
             },
         },
@@ -101,9 +113,16 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    console.log('exams', exams)
-
-    const { data: count } = useCountExam()
+    const { data: count } = useCountExam({
+        where: {
+            subjectClass: {
+                some: {
+                    trainingObjectTypeId,
+                    semesterId,
+                },
+            },
+        },
+    })
 
     const { data: rooms = [] } = useFindManyRoom({
         where: {
@@ -117,7 +136,11 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
         },
     })
 
+    console.log(exams)
+
     const { mutateAsync: createExam } = useCreateExams()
+    const { mutateAsync: mergeExam } = useMergeExam()
+    const { mutateAsync: unmergeExam } = useUnmergeExam()
 
     const rowSelection: TableRowSelection = {
         selectedRowKeys: selectedRowKeys,
@@ -191,6 +214,62 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
         }
     }
 
+    const handleMergeExam = async () => {
+        try {
+            showSpinner()
+
+            if (selectedRowKeys.length < 2) {
+                message.error('Vui lòng chọn ít nhất 2 kỳ thi để ghép')
+                return
+            }
+
+            const res = await mergeExam({
+                data: {
+                    examIds: selectedRowKeys as string[],
+                },
+            })
+
+            if (res.status !== 200) {
+                message.error(res.data.message)
+                return
+            }
+
+            message.success(res.data.message)
+            refetchExams()
+            setSelectedRowKeys([])
+        } catch (error: any) {
+            message.error(error?.message || 'Ghép lớp không thành công')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleUnmergeExam = async () => {
+        try {
+            showSpinner()
+
+            if (selectedRowKeys) {
+                const res = await unmergeExam({
+                    data: {
+                        examId: selectedRowKeys[0] as string,
+                    },
+                })
+
+                if (res.status !== 200) {
+                    message.error(res.data.message)
+                }
+
+                message.success(res.data.message)
+                refetchExams()
+                setSelectedRowKeys([])
+            }
+        } catch (error: any) {
+            message.error(error?.message || 'Tách lớp không thành công')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <Row gutter={[8, 0]}>
             <Col span={24}>
@@ -254,8 +333,20 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                             open={open}
                             onOpenChange={setOpen}
                         >
-                            <Button type="primary">Tạo kế hoạch thi</Button>
+                            {!exams && <Button type="primary">Tạo kế hoạch thi</Button>}
                         </Popover>
+
+                        {exams.length > 0 && (
+                            <Button type="primary" onClick={handleMergeExam}>
+                                Ghép lớp
+                            </Button>
+                        )}
+
+                        {exams.length > 0 && (
+                            <Button type="primary" onClick={handleUnmergeExam}>
+                                Tách lớp
+                            </Button>
+                        )}
 
                         <Button type="primary" onClick={handleSubmitExam}>
                             Lưu
@@ -350,7 +441,15 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                 align: 'center',
                                 width: 60,
                                 render: (_, record) =>
-                                    record.subjectClass?.[0]?._count.subjectClassStudent || 0,
+                                    record.subjectClass?.reduce(
+                                        (
+                                            total: number,
+                                            sc: SubjectClass & {
+                                                _count?: { subjectClassStudent?: number }
+                                            }
+                                        ) => total + (sc._count?.subjectClassStudent || 0),
+                                        0
+                                    ) || 0,
                             },
                             {
                                 title: 'Hình thức thi',
@@ -442,25 +541,28 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                 align: 'center',
                                 width: 170,
                                 render: (_, record) => {
+                                    const uniqueRooms = Array.from(
+                                        new Map(
+                                            record.subjectClass
+                                                ?.filter(
+                                                    (sc: SubjectClass & { room: Room }) => sc.room
+                                                )
+                                                .map((sc: SubjectClass & { room: Room }) => [
+                                                    sc.room.id,
+                                                    {
+                                                        name: sc.room.name,
+                                                        roomId: sc.room.id,
+                                                        quantity: sc.room.capacity,
+                                                    },
+                                                ]) ?? []
+                                        ).values()
+                                    )
+
                                     return (
                                         <Form.Item
                                             className="mb-0"
                                             name={['list', record.id, 'rooms']}
-                                            initialValue={
-                                                record.subjectClass?.[0]?.room
-                                                    ? [
-                                                          {
-                                                              name: record.subjectClass?.[0]?.room
-                                                                  .name,
-                                                              roomId: record.subjectClass?.[0]?.room
-                                                                  .id,
-                                                              quantity:
-                                                                  record.subjectClass?.[0]?.room
-                                                                      .capacity,
-                                                          },
-                                                      ]
-                                                    : []
-                                            }
+                                            initialValue={uniqueRooms}
                                         >
                                             <RoomSelector rooms={rooms} />
                                         </Form.Item>
