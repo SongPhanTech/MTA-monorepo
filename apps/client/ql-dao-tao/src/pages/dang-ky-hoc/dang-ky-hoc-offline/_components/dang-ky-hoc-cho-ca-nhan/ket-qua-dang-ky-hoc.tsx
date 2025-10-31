@@ -13,6 +13,7 @@ import { dangKyHocChoCaNhanStore } from '../..'
 
 interface FilterProps {
     searchText: string | null
+    trainingCourseId: string | null
 }
 
 interface StudentCourseByPlanProps {
@@ -25,6 +26,7 @@ export default function KetQuaDangKyHoc({ hocLai }: StudentCourseByPlanProps) {
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
+        trainingCourseId: null,
     })
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()

@@ -1,27 +1,34 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { useExamTypeOptions } from '@hooks/examType'
 import { useScheduleOptions } from '@hooks/subjectClassSchedule'
 import type { ExamType, SubjectClassSchedule } from '@workspace/db/client'
-import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
+import {
+    useCountFixedClass,
+    useFindManyFixedClass,
+    useFindManySubjectClass,
+    useFindManyTrainingCourse,
+} from '@workspace/db/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Flex, Form, Input, Row } from 'antd'
+import { Col, Form, Input, Row } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { Key, useCallback, useState } from 'react'
 
 interface FilterProps {
     searchText: string | null
+    trainingCourseId: string | null
 }
 
 export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: boolean }) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKey, setSelectedRowKey] = useState<string | null>(null)
+    const [selectedRowKey, setSelectedRowKey] = useState<Key>('')
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
+        trainingCourseId: null,
     })
     const { id: semesterId } = useSemesterStore()
 
@@ -29,6 +36,74 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
     const { getExamTypeLabel } = useExamTypeOptions()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
+    const { data: fixedClasses = [] } = useFindManyFixedClass(
+        {
+            where: {
+                name: {
+                    contains: filters.searchText || undefined,
+                    mode: 'insensitive',
+                },
+                trainingCourse: {
+                    id: filters.trainingCourseId || undefined,
+                    trainingObjectTypeId,
+                },
+            },
+            orderBy: {
+                code: 'asc',
+            },
+            take: numberOfPages,
+            skip: (currentPage - 1) * numberOfPages,
+            include: {
+                trainingCourse: true,
+                _count: {
+                    select: {
+                        students: {
+                            where: {
+                                active: true,
+                                status: 'ENROLLED',
+                                deletedAt: null,
+                            },
+                        },
+                        subjectClasses: {
+                            where: {
+                                active: true,
+                                cancelled: false,
+                                status: 'OFFICIAL',
+                            },
+                        },
+                    },
+                },
+                curriculumVersion: {
+                    select: {
+                        curriculum: {
+                            select: {
+                                trainingMajor: {
+                                    select: {
+                                        name: true,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!semesterId && !!trainingObjectTypeId,
+        }
+    )
+    const { data: countFixedClassAll = 0 } = useCountFixedClass({
+        where: {
+            name: {
+                contains: filters.searchText || undefined,
+                mode: 'insensitive',
+            },
+            trainingCourse: {
+                id: filters.trainingCourseId || undefined,
+                trainingObjectTypeId,
+            },
+        },
+    })
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass({
         where: {
             ...(filters.searchText && filters.searchText !== ''
@@ -45,6 +120,11 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
                   }
                 : {}),
             trainingObjectTypeId,
+            fixedClasses: {
+                some: {
+                    id: selectedRowKey as string,
+                },
+            },
         },
         include: {
             mainLecturer: {
@@ -86,24 +166,7 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
             createdAt: 'desc',
         },
     })
-    const { data: countSubjectClass = 0 } = useCountSubjectClass({
-        where: {
-            ...(filters.searchText && filters.searchText !== ''
-                ? {
-                      name: {
-                          contains: filters.searchText,
-                          mode: 'insensitive',
-                      },
-                  }
-                : {}),
-            ...(semesterId
-                ? {
-                      semesterId,
-                  }
-                : {}),
-            trainingObjectTypeId,
-        },
-    })
+
     type SubjectClassData = (typeof subjectClassData)[number]
 
     const debouncedRefetch = useCallback(
@@ -112,6 +175,16 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
         }, 500),
         []
     )
+
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
+        orderBy: {
+            name: 'asc',
+        },
+        where: {
+            active: true,
+            trainingObjectTypeId,
+        },
+    })
 
     const handleFilterChange = (key: string, value: string) => {
         setFilters((prev) => {
@@ -122,163 +195,202 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
     }
 
     return (
-        <div>
-            <Row gutter={[16, 16]} align="top" justify="space-between">
-                <Col span={24}>
-                    <Flex>
-                        <Col span={8}>
-                            <Form.Item name="searchText">
-                                <Input
-                                    id="search"
-                                    placeholder="Nhập tên lớp..."
-                                    onChange={(e) =>
-                                        handleFilterChange('searchText', e.target.value)
-                                    }
-                                    style={{ height: 32 }}
-                                    prefix={
-                                        <Search
-                                            size={15}
-                                            style={{
-                                                color: 'rgba(0, 0, 0, 0.25)',
-                                            }}
-                                        />
-                                    }
-                                    allowClear
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Flex>
-                </Col>
-            </Row>
-            <Table
-                rowKey="id"
-                data={subjectClassData}
-                // onRow={(record) => ({
-                //     onClick: () => {
-                //         setSubjectClassId?.(record.id)
-                //         setSelectedRowKey(record.id)
-                //     },
-                //     style: { cursor: 'pointer' },
-                //     className:
-                //         record.id === selectedRowKey
-                //             ? '!bg-[#b3c7bb] !hover:bg-[#b3c7bb]'
-                //             : '',
-                // })}
-                selectedRow={selectedRowKey}
-                columns={[
-                    {
-                        title: 'TT',
-                        dataIndex: '',
-                        width: 35,
-                        align: 'center',
-                        render: (_, __, index) =>
-                            index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                    },
-                    {
-                        title: 'Lớp môn học',
-                        dataIndex: 'name',
-                        align: 'center',
-                        width: 200,
-                    },
-                    {
-                        title: 'Thời gian học',
-                        dataIndex: 'startDate',
-                        width: 120,
-                        align: 'center',
-                        render: (value: string) => dayjs(value).format('DD/MM/YYYY'),
-                    },
-                    {
-                        title: 'Kíp học',
-                        dataIndex: 'schedule',
-                        width: 150,
-                        align: 'center',
-                        // filters: scheduleOptions.map((opt) => ({
-                        //     text: opt.label,
-                        //     value: opt.value,
-                        // })),
-                        filterSearch: true,
-                        render: (value: SubjectClassSchedule) => getScheduleLabel(value),
-                    },
-                    {
-                        title: 'Giảng viên 1',
-                        dataIndex: ['mainLecturer', 'userProfile'],
-                        width: 150,
-                        render: (record) => record && `${record.fullname}`,
-                    },
-                    {
-                        title: 'Giảng viên 2',
-                        dataIndex: ['extraLecturer', 'userProfile'],
-                        width: 150,
-                        render: (record) => record && `${record.fullname}`,
-                    },
-                    {
-                        title: 'Số tín chỉ',
-                        dataIndex: ['subject', 'credit'],
-                        align: 'center',
-                        width: 100,
-                    },
-                    {
-                        title: 'Hình thức thi',
-                        dataIndex: ['subject', 'examType'],
-                        align: 'center',
-                        width: 180,
-                        render: (value: ExamType) => getExamTypeLabel(value),
-                    },
-                    {
-                        title: 'Địa điểm',
-                        dataIndex: ['trainingLocation', 'name'],
-                        align: 'center',
-                        width: 180,
-                    },
-                    {
-                        title: 'Số SV max',
-                        dataIndex: 'maxStudent',
-                        align: 'center',
-                        width: 120,
-                    },
-                    {
-                        title: 'Số SV đã ĐK',
-                        align: 'center',
-                        fixed: 'right',
-                        width: 120,
-                        render: (record: SubjectClassData) =>
-                            record?.fixedClasses?.reduce(
-                                (acc: number, curr) => acc + (curr?._count?.students ?? 0),
-                                0
-                            ),
-                    },
-                    {
-                        title: 'Lớp QL đã ĐK',
-                        align: 'center',
-                        width: 150,
-                        render: (__, record: any) => {
-                            return record?.fixedClasses.length ? (
-                                <TextTruncate
-                                    arr={record?.fixedClasses.map((i: any) => {
-                                        return { key: i?.id, label: i?.name }
-                                    })}
-                                    key="fixedClasses"
-                                />
-                            ) : (
-                                ''
-                            )
+        <Row gutter={[8, 8]}>
+            <Col span={8}>
+                <Row gutter={[8, 8]}>
+                    <Col span={8}>
+                        <Form.Item name="searchText">
+                            <Input
+                                id="search"
+                                placeholder="Nhập tên lớp..."
+                                onChange={(e) => handleFilterChange('searchText', e.target.value)}
+                                style={{ height: 32 }}
+                                prefix={
+                                    <Search
+                                        size={15}
+                                        style={{
+                                            color: 'rgba(0, 0, 0, 0.25)',
+                                        }}
+                                    />
+                                }
+                                allowClear
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Select
+                            placeholder="Chọn khoá"
+                            className="w-full"
+                            options={trainingCourseData.map((i) => ({
+                                value: i.id,
+                                label: i.name,
+                            }))}
+                            allowClear
+                            showSearch
+                            onChange={(value) => handleFilterChange('trainingCourseId', value)}
+                        />
+                    </Col>
+                </Row>
+                <Table
+                    rowKey="id"
+                    rowClassName={(record) =>
+                        record?._count?.subjectClasses === 0 ? 'bg-yellow-100' : ''
+                    }
+                    rowSelection={{
+                        type: 'radio',
+                        selectedRowKeys: [selectedRowKey],
+                        onChange: (selectedRowKeys) => {
+                            setSelectedRowKey(selectedRowKeys?.[0] as string)
                         },
-                    },
-                ]}
-                pagination={{
-                    current: currentPage,
-                    pageSize: numberOfPages,
-                    total: countSubjectClass,
-                    onChange: (page, pageSize) => {
-                        if (numberOfPages === pageSize) {
-                            setCurrentPage(page)
-                        } else {
-                            setCurrentPage(1)
-                            setNumberOfPages(pageSize)
+                    }}
+                    onRow={(record) => {
+                        return {
+                            onClick: () => setSelectedRowKey(record.id),
                         }
-                    },
-                }}
-            />
-        </div>
+                    }}
+                    data={fixedClasses}
+                    columns={[
+                        {
+                            title: 'TT',
+                            width: 35,
+                            align: 'center',
+                            render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
+                        },
+                        {
+                            title: 'Lớp QL',
+                            dataIndex: 'code',
+                            align: 'center',
+                            width: 100,
+                        },
+                        {
+                            title: 'Khoá học',
+                            dataIndex: 'trainingCourse',
+                            width: 100,
+                            align: 'center',
+                            render: (record) => (record.name ? record.name : ''),
+                        },
+                        {
+                            title: 'Chuyên ngành',
+                            dataIndex: ['curriculumVersion', 'curriculum', 'trainingMajor', 'name'],
+                            width: 160,
+                            align: 'center',
+                        },
+                        {
+                            title: 'Số HV, SV',
+                            dataIndex: ['_count', 'students'],
+                            align: 'center',
+                            width: 80,
+                        },
+                    ]}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: countFixedClassAll,
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
+                        },
+                    }}
+                />
+            </Col>
+            <Col span={16}>
+                <Table
+                    rowKey="id"
+                    data={subjectClassData}
+                    columns={[
+                        {
+                            title: 'TT',
+                            dataIndex: '',
+                            width: 35,
+                            align: 'center',
+                            render: (_, __, index) => index + 1,
+                        },
+                        {
+                            title: 'Mã',
+                            dataIndex: 'code',
+                            width: 80,
+                        },
+                        {
+                            title: 'Lớp môn học',
+                            dataIndex: 'name',
+                            width: 200,
+                        },
+                        {
+                            title: 'Thời gian học',
+                            dataIndex: 'startDate',
+                            width: 120,
+                            align: 'center',
+                            render: (value: string) =>
+                                value ? dayjs(value).format('DD/MM/YYYY') : '',
+                        },
+                        {
+                            title: 'Kíp học',
+                            dataIndex: 'schedule',
+                            width: 150,
+                            align: 'center',
+                            // filters: scheduleOptions.map((opt) => ({
+                            //     text: opt.label,
+                            //     value: opt.value,
+                            // })),
+                            filterSearch: true,
+                            render: (value: SubjectClassSchedule) => getScheduleLabel(value),
+                        },
+                        {
+                            title: 'Giảng viên 1',
+                            dataIndex: ['mainLecturer', 'userProfile'],
+                            width: 150,
+                            render: (record) => record && `${record.fullname}`,
+                        },
+                        {
+                            title: 'Giảng viên 2',
+                            dataIndex: ['extraLecturer', 'userProfile'],
+                            width: 150,
+                            render: (record) => record && `${record.fullname}`,
+                        },
+                        {
+                            title: 'Số tín chỉ',
+                            dataIndex: ['subject', 'credit'],
+                            align: 'center',
+                            width: 100,
+                        },
+                        {
+                            title: 'Hình thức thi',
+                            dataIndex: ['subject', 'examType'],
+                            align: 'center',
+                            width: 180,
+                            render: (value: ExamType) => getExamTypeLabel(value),
+                        },
+                        {
+                            title: 'Địa điểm',
+                            dataIndex: ['trainingLocation', 'name'],
+                            align: 'center',
+                            width: 180,
+                        },
+                        {
+                            title: 'Số SV max',
+                            dataIndex: 'maxStudent',
+                            align: 'center',
+                            width: 120,
+                        },
+                        {
+                            title: 'Số SV đã ĐK',
+                            align: 'center',
+                            fixed: 'right',
+                            width: 120,
+                            render: (record: SubjectClassData) =>
+                                record?.fixedClasses?.reduce(
+                                    (acc: number, curr) => acc + (curr?._count?.students ?? 0),
+                                    0
+                                ),
+                        },
+                    ]}
+                    pagination={false}
+                />
+            </Col>
+        </Row>
     )
 }
