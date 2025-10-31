@@ -20,7 +20,6 @@ func (h *handlers) updateUserHandler(c echo.Context) error {
 
 	var formData struct {
 		Name                 string `form:"name" validate:"required"`
-		Email                string `form:"email" validate:"required,email"`
 		Password             string `form:"password" validate:"omitempty,min=6,max=50"`
 		PasswordConfirmation string `form:"password_confirmation" validate:"omitempty,eqfield=Password"`
 	}
@@ -34,7 +33,7 @@ func (h *handlers) updateUserHandler(c echo.Context) error {
 	_, err := h.servs.UsersService.UpdateUser(ctx, dbgen.UsersServiceUpdateUserParams{
 		ID:       reqCtx.User.ID,
 		Name:     sql.NullString{String: formData.Name, Valid: true},
-		Email:    sql.NullString{String: formData.Email, Valid: true},
+		Email:    sql.NullString{String: formData.Name, Valid: true},
 		Password: sql.NullString{String: formData.Password, Valid: formData.Password != ""},
 	})
 	if err != nil {
@@ -52,12 +51,12 @@ func updateUserForm(user dbgen.User) nodx.Node {
 				htmx.HxDisabledELT("find button"),
 				nodx.Class("space-y-2"),
 
-				component.H2Text("Update profile"),
+				component.H2Text("Cập nhật hồ sơ"),
 
 				component.InputControl(component.InputControlParams{
 					Name:         "name",
-					Label:        "Full name",
-					Placeholder:  "Your full name",
+					Label:        "Tên đăng nhập",
+					Placeholder:  "Nhập tên đăng nhập",
 					Required:     true,
 					Type:         component.InputTypeText,
 					AutoComplete: "name",
@@ -67,30 +66,18 @@ func updateUserForm(user dbgen.User) nodx.Node {
 				}),
 
 				component.InputControl(component.InputControlParams{
-					Name:         "email",
-					Label:        "Email",
-					Placeholder:  "Your email",
-					Required:     true,
-					AutoComplete: "email",
-					Type:         component.InputTypeEmail,
-					Children: []nodx.Node{
-						nodx.Value(user.Email),
-					},
-				}),
-
-				component.InputControl(component.InputControlParams{
 					Name:         "password",
-					Label:        "Change password",
-					Placeholder:  "New password",
+					Label:        "Thay đổi mật khẩu",
+					Placeholder:  "Mật khẩu mới",
 					AutoComplete: "new-password",
 					Type:         component.InputTypePassword,
-					HelpText:     "Leave empty to keep your current password",
+					HelpText:     "Để trống nếu bạn không muốn thay đổi mật khẩu",
 				}),
 
 				component.InputControl(component.InputControlParams{
 					Name:         "password_confirmation",
-					Label:        "Confirm password",
-					Placeholder:  "Confirm new password",
+					Label:        "Xác nhận mật khẩu mới",
+					Placeholder:  "Xác nhận mật khẩu mới",
 					AutoComplete: "new-password",
 					Type:         component.InputTypePassword,
 				}),
@@ -101,7 +88,7 @@ func updateUserForm(user dbgen.User) nodx.Node {
 					nodx.Button(
 						nodx.Class("btn btn-primary"),
 						nodx.Type("submit"),
-						component.SpanText("Save changes"),
+						component.SpanText("Lưu thay đổi"),
 						lucide.Save(),
 					),
 				),

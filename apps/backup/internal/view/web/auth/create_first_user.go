@@ -37,7 +37,7 @@ func (h *handlers) createFirstUserPageHandler(c echo.Context) error {
 
 func createFirstUserPage() nodx.Node {
 	content := []nodx.Node{
-		component.H1Text("Create first user"),
+		component.H1Text("Tạo người dùng đầu tiên"),
 
 		nodx.FormEl(
 			htmx.HxPost("/auth/create-first-user"),
@@ -47,8 +47,8 @@ func createFirstUserPage() nodx.Node {
 			nodx.Div(
 				component.InputControl(component.InputControlParams{
 					Name:         "name",
-					Label:        "Tên đầy đủ",
-					Placeholder:  "John Doe",
+					Label:        "Tên đăng nhập",
+					Placeholder:  "admin",
 					Required:     true,
 					Type:         component.InputTypeText,
 					AutoComplete: "name",
@@ -115,7 +115,7 @@ func (h *handlers) createFirstUserHandler(c echo.Context) error {
 
 	_, err := h.servs.UsersService.CreateUser(ctx, dbgen.UsersServiceCreateUserParams{
 		Name:     formData.Name,
-		Email:    '',
+		Email:    formData.Name,
 		Password: formData.Password,
 	})
 	if err != nil {

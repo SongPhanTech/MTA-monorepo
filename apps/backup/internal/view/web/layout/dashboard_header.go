@@ -17,7 +17,7 @@ func dashboardHeader() nodx.Node {
 		},
 		nodx.Div(
 			nodx.Class("flex justify-start items-center space-x-2"),
-			dashboardHeaderUpdates(),
+			// dashboardHeaderUpdates(),
 		),
 		nodx.Div(
 			nodx.Class("flex justify-end items-center space-x-2"),

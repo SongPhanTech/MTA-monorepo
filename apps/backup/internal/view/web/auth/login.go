@@ -17,7 +17,6 @@ import (
 
 func (h *handlers) loginPageHandler(c echo.Context) error {
 	ctx := c.Request().Context()
-
 	usersQty, err := h.servs.UsersService.GetUsersQty(ctx)
 	if err != nil {
 		logger.Error("failed to get users qty", logger.KV{
@@ -42,7 +41,6 @@ func loginPage() nodx.Node {
 			htmx.HxPost("/auth/login"),
 			htmx.HxDisabledELT("find button"),
 			nodx.Class("mt-4 space-y-2"),
-
 			component.InputControl(component.InputControlParams{
 				Name:         "username",
 				Label:        "Tên đăng nhập",
@@ -51,7 +49,6 @@ func loginPage() nodx.Node {
 				Type:         component.InputTypeText,
 				AutoComplete: "username",
 			}),
-
 			component.InputControl(component.InputControlParams{
 				Name:         "password",
 				Label:        "Mật khẩu",
@@ -60,7 +57,6 @@ func loginPage() nodx.Node {
 				Type:         component.InputTypePassword,
 				AutoComplete: "current-password",
 			}),
-
 			nodx.Div(
 				nodx.Class("pt-2 flex justify-end items-center space-x-2"),
 				component.HxLoadingMd(),
