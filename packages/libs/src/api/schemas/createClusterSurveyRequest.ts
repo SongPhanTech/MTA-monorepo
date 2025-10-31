@@ -22,6 +22,7 @@ export interface CreateClusterSurveyRequest {
     lecturerIds: string[]
     /** @minItems 1 */
     surveyQuestionIds: string[]
+    semesterId: string
     /** @minItems 1 */
     surveyChoices: CreateClusterSurveyRequestSurveyChoicesItem[]
 }

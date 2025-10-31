@@ -138,6 +138,7 @@ const PutSurveyModal = () => {
                         lecturerIds: output.lecturerIds.length ? output.lecturerIds : [],
                         surveyChoices: output.surveyChoice,
                         surveyQuestionIds: output.surveyQuestionIds,
+                        semesterId: output.semesterId,
                     },
                 })
                 message.success('Tạo thành công')
@@ -334,7 +335,8 @@ const PutSurveyModal = () => {
                                 form={form}
                                 name="surveyObjectTypes"
                                 label="Đối tượng khảo sát"
-                                required
+                                  required={input?.type !== 'multiple'}
+                                
                             >
                                 <Select
                                     mode="multiple"

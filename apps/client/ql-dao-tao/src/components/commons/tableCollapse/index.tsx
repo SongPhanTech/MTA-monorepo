@@ -24,7 +24,7 @@ export type Data<T, ChildKey extends keyof T> = T &
 type TableProps<T, ChildKey extends keyof T> = {
     data?: Data<T, ChildKey>[]
     columns?: (ColumnType<Data<T, ChildKey>[ChildKey][number]> & {
-        type?: 'input' | 'input_search' | 'select' | 'tree_select' | 'order' | 'date'
+        type?: 'input' | 'input_search' | 'select' | 'tree_select' | 'order' | 'date' | 'cmp'
         distinctFilters?: string[]
         options?: ColumnOption[]
     })[]
@@ -52,7 +52,7 @@ type TableProps<T, ChildKey extends keyof T> = {
     defaultExpandAll?: boolean
 } & Omit<
     TableAntdProps,
-    'columns' | 'data' | 'pagination' | 'headerTitleKey' | 'onRow' | 'childrenFieldName'
+    'columns' | 'data' | 'pagination' | 'headerTitleKey' | 'onRow' | 'childrenFieldName' | 'number'
 >
 
 const TableCollapse = <

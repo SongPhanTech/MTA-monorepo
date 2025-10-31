@@ -62,6 +62,9 @@ export type FilterProps = {
     lecturerType?: string[]
     staffType?: string[]
     bonusScore?: 'asc' | 'desc'
+    attendanceScoreCmp?: { lte?: number | null; gte?: number | null }
+    midtermScoreCmp?: { lte?: number | null; gte?: number | null }
+    finalScoreCmp?: { lte?: number | null; gte?: number | null }
     finalScore?: 'asc' | 'desc'
     count?: 'asc' | 'desc'
     publishDate?: Date[]

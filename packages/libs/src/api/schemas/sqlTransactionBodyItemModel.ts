@@ -198,6 +198,7 @@ export const SqlTransactionBodyItemModel = {
     FillInBlankSlot: 'FillInBlankSlot',
     OrderingItem: 'OrderingItem',
     Exam: 'Exam',
+    ExamRoomSlot: 'ExamRoomSlot',
     ExamRoom: 'ExamRoom',
     TestStructureRule: 'TestStructureRule',
     ExamBank: 'ExamBank',

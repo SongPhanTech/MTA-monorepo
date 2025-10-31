@@ -808,6 +808,99 @@ const Table = <T extends Record<string, unknown>>({
                 },
             }
         }
+        if (item?.type === 'cmp') {
+            return {
+                filterDropdown: (props: FilterDropdownProps) => (
+                    <div className="p-4 flex flex-col w-full min-w-[200px] max-w-[300px]">
+                        <div>
+                            <div className="mb-2">Tìm kiếm</div>
+                            Lớn hơn
+                            <Input
+                                placeholder="0"
+                                type="number"
+                                value={
+                                    // @ts-expect-error
+                                    filtersTable[item.dataIndex as keyof FilterProps]?.gte as string
+                                }
+                                onChange={(e) => {
+                                    setFiltersTable({
+                                        ...filters,
+                                        [item.dataIndex as keyof FilterProps]: {
+                                            // @ts-expect-error
+                                            ...filtersTable[item.dataIndex as keyof FilterProps],
+                                            gte: e.target.value,
+                                        },
+                                    })
+                                }}
+                                className="mb-3"
+                            />
+                            Nhỏ hơn
+                            <Input
+                                placeholder="10"
+                                type="number"
+                                value={
+                                    // @ts-expect-error
+                                    filtersTable[item.dataIndex as keyof FilterProps]?.lte as string
+                                }
+                                onChange={(e) => {
+                                    setFiltersTable({
+                                        ...filters,
+                                        [item.dataIndex as keyof FilterProps]: {
+                                            // @ts-expect-error
+                                            ...filtersTable[item.dataIndex as keyof FilterProps],
+                                            lte: e.target.value,
+                                        },
+                                    })
+                                }}
+                                className="mb-3"
+                            />
+                        </div>
+                        <ListButton
+                            clear={() => {
+                                setFiltersTable({
+                                    ...filtersTable,
+                                    [item.dataIndex as keyof FilterProps]: null,
+                                })
+                                setFilters?.({
+                                    ...filters,
+                                    [item.dataIndex as keyof FilterProps]: null,
+                                })
+                                props.confirm()
+                            }}
+                            click={() => {
+                                if (item.distinctFilters) {
+                                    const result = {
+                                        ...updateObjectExcept(filtersTable, item.distinctFilters),
+                                    }
+                                    setFilters?.(result)
+                                    props.confirm()
+                                    return
+                                }
+                                const result = {
+                                    ...filtersTable,
+                                    [item.dataIndex as keyof FilterProps]:
+                                        filtersTable[item.dataIndex as keyof FilterProps],
+                                }
+                                setFilters?.(result)
+                                props.confirm()
+                            }}
+                        />
+                    </div>
+                ),
+                filterIcon: () => {
+                    return (
+                        <FilterFilled
+                            style={{
+                                color: filters?.[item.dataIndex as keyof FilterProps]
+                                    ? '#005f37'
+                                    : undefined,
+                            }}
+                        />
+                    )
+                },
+            }
+        }
+
         if (item.slot) {
             return item.slot
         }

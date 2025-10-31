@@ -110,6 +110,10 @@ export type FilterProps = {
     examDate?: Date[]
     endDate?: Date[]
     englishName?: string | ''
+    attendanceScoreCmp?: { lte?: number | null; gte?: number | null }
+    midtermScoreCmp?: { lte?: number | null; gte?: number | null }
+    examScoreCmp?: { lte?: number | null; gte?: number | null }
+    finalScoreCmp?: { lte?: number | null; gte?: number | null }
     finalGpa?: 'asc' | 'desc'
     diplomaNumber?: string
     diplomaIssueDate?: Date[]

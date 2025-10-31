@@ -373,18 +373,18 @@ const Table = <T extends Record<string, unknown>>({
                 filterDropdown: (props: FilterDropdownProps) => {
                     if (!item.options) return
                     const [input, setInput] = useState('')
-                    const [optionsSerch, setOptionsSerch] = useState(item?.options || [])
+                    const [optionsSearch, setOptionsSearch] = useState(item?.options || [])
                     const handleSearch = async (value: string) => {
                         if (!value.trim()) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                             return
                         }
 
                         try {
                             const response = searchVietnamese(item?.options || [], value.trim())
-                            setOptionsSerch(response)
+                            setOptionsSearch(response)
                         } catch (_error: unknown) {
-                            setOptionsSerch(item?.options || [])
+                            setOptionsSearch(item?.options || [])
                         }
                     }
                     return (
@@ -410,7 +410,7 @@ const Table = <T extends Record<string, unknown>>({
                                         }}
                                         style={{ height: 36, width: '100%', marginBottom: 16 }}
                                     />
-                                    {!input && optionsSerch.length > 0 && (
+                                    {!input && optionsSearch.length > 0 && (
                                         <Checkbox
                                             onChange={(e: CheckboxChangeEvent) =>
                                                 onCheckAllChange(item, e)
@@ -436,7 +436,7 @@ const Table = <T extends Record<string, unknown>>({
                                             ] as string[]
                                         }
                                         onChange={(e: string[]) => onCheckChange(item, e)}
-                                        options={optionsSerch}
+                                        options={optionsSearch}
                                     />
                                 </div>
                             )}
@@ -810,6 +810,98 @@ const Table = <T extends Record<string, unknown>>({
                 },
             }
         }
+
+        if (item?.type === 'cmp') {
+            return {
+                filterDropdown: (props: FilterDropdownProps) => (
+                    <div className="p-4 flex flex-col w-full min-w-[200px] max-w-[300px]">
+                        <div>
+                            <div className="mb-2">Tìm kiếm</div>
+                            <Input
+                                placeholder="Lớn hơn"
+                                type="number"
+                                value={
+                                    // @ts-expect-error
+                                    filtersTable[item.dataIndex as keyof FilterProps]?.gte as string
+                                }
+                                onChange={(e) => {
+                                    setFiltersTable({
+                                        ...filters,
+                                        [item.dataIndex as keyof FilterProps]: {
+                                            // @ts-expect-error
+                                            ...filtersTable[item.dataIndex as keyof FilterProps],
+                                            gte: e.target.value,
+                                        },
+                                    })
+                                }}
+                                className="mb-3"
+                            />
+                            <Input
+                                placeholder="Nhỏ hơn"
+                                type="number"
+                                value={
+                                    // @ts-expect-error
+                                    filtersTable[item.dataIndex as keyof FilterProps]?.lte as string
+                                }
+                                onChange={(e) => {
+                                    setFiltersTable({
+                                        ...filters,
+                                        [item.dataIndex as keyof FilterProps]: {
+                                            // @ts-expect-error
+                                            ...filtersTable[item.dataIndex as keyof FilterProps],
+                                            lte: e.target.value,
+                                        },
+                                    })
+                                }}
+                                className="mb-3"
+                            />
+                        </div>
+                        <ListButton
+                            clear={() => {
+                                setFiltersTable({
+                                    ...filtersTable,
+                                    [item.dataIndex as keyof FilterProps]: null,
+                                })
+                                setFilters?.({
+                                    ...filters,
+                                    [item.dataIndex as keyof FilterProps]: null,
+                                })
+                                props.confirm()
+                            }}
+                            click={() => {
+                                if (item.distinctFilters) {
+                                    const result = {
+                                        ...updateObjectExcept(filtersTable, item.distinctFilters),
+                                    }
+                                    setFilters?.(result)
+                                    props.confirm()
+                                    return
+                                }
+                                const result = {
+                                    ...filtersTable,
+                                    [item.dataIndex as keyof FilterProps]:
+                                        filtersTable[item.dataIndex as keyof FilterProps],
+                                }
+                                setFilters?.(result)
+                                props.confirm()
+                            }}
+                        />
+                    </div>
+                ),
+                filterIcon: () => {
+                    return (
+                        <FilterFilled
+                            style={{
+                                color: filters?.[item.dataIndex as keyof FilterProps]
+                                    ? '#005f37'
+                                    : undefined,
+                            }}
+                        />
+                    )
+                },
+            }
+        }
+
         if (item.slot) {
             return item.slot
         }
