@@ -140,6 +140,7 @@ enum SubjectVersionType {
   Internship
   Research
   Project
+  Practice
 
   @@schema("ql-dao-tao")
 }

@@ -5111,7 +5111,8 @@ export namespace $Enums {
         Normal: 'Normal',
         Internship: 'Internship',
         Research: 'Research',
-        Project: 'Project'
+        Project: 'Project',
+        Practice: 'Practice'
     };
     export type SubjectVersionType = (typeof SubjectVersionType)[keyof typeof SubjectVersionType];
     export const EquivalencySide: {

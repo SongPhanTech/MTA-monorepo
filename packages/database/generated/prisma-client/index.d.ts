@@ -1381,7 +1381,8 @@ export const SubjectVersionType: {
   Normal: 'Normal',
   Internship: 'Internship',
   Research: 'Research',
-  Project: 'Project'
+  Project: 'Project',
+  Practice: 'Practice'
 };
 
 export type SubjectVersionType = (typeof SubjectVersionType)[keyof typeof SubjectVersionType]

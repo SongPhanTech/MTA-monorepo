@@ -6656,7 +6656,8 @@ exports.SubjectVersionType = exports.$Enums.SubjectVersionType = {
   Normal: 'Normal',
   Internship: 'Internship',
   Research: 'Research',
-  Project: 'Project'
+  Project: 'Project',
+  Practice: 'Practice'
 };
 
 exports.EquivalencySide = exports.$Enums.EquivalencySide = {
