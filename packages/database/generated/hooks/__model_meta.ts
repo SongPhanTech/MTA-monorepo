@@ -11252,13 +11252,6 @@ const metadata: ModelMeta = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'building',
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'room',
-                    isRelationOwner: true,
                 }, subjectClasses: {
                     name: "subjectClasses",
                     type: "SubjectClass",
@@ -11286,6 +11279,12 @@ const metadata: ModelMeta = {
                 }, examRooms: {
                     name: "examRooms",
                     type: "ExamRoom",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'room',
+                }, examRoomSlot: {
+                    name: "examRoomSlot",
+                    type: "ExamRoomSlot",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'room',
@@ -18514,13 +18513,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'exam',
-                }, room: {
-                    name: "room",
-                    type: "Room",
+                }, examRoomSlots: {
+                    name: "examRoomSlots",
+                    type: "ExamRoomSlot",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'exam',
-                    isRelationOwner: true,
                 }, examBank: {
                     name: "examBank",
                     type: "ExamBank",
@@ -18553,6 +18551,78 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
+                },
+            },
+        },
+        examRoomSlot: {
+            name: 'ExamRoomSlot', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, exam: {
+                    name: "exam",
+                    type: "Exam",
+                    isDataModel: true,
+                    backLink: 'examRoomSlots',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examId" },
+                }, examId: {
+                    name: "examId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'exam',
+                }, room: {
+                    name: "room",
+                    type: "Room",
+                    isDataModel: true,
+                    backLink: 'examRoomSlot',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "roomId" },
+                }, roomId: {
+                    name: "roomId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'room',
+                }, cap: {
+                    name: "cap",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, examId_roomId: {
+                    name: "examId_roomId",
+                    fields: ["examId", "roomId"]
                 },
             },
         },

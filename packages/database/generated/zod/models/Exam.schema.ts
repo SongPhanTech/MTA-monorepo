@@ -41,7 +41,7 @@ const relationSchema = z.object({
     questionBank: z.record(z.string(), z.unknown()).optional(),
     subjectClass: z.array(z.unknown()).optional(),
     studentSubjectScore: z.array(z.unknown()).optional(),
-    room: z.array(z.unknown()).optional(),
+    examRoomSlots: z.array(z.unknown()).optional(),
     examBank: z.array(z.unknown()).optional(),
     testStructureRules: z.array(z.unknown()).optional(),
     examSessions: z.array(z.unknown()).optional(),
