@@ -2,7 +2,11 @@ import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import { $Enums, type ScoreConvert } from '@workspace/db/client'
-import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
+import {
+    useCountSubjectClass,
+    useFindManySubjectClass,
+    useFindUniqueStudent,
+} from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -13,33 +17,58 @@ import _ from 'lodash'
 import { Search } from 'lucide-react'
 import type React from 'react'
 import { useCallback, useEffect, useState } from 'react'
+import { dangKyHocChoCaNhanStore } from '../..'
+import { useStore } from '@tanstack/react-store'
 
 interface FilterProps {
     searchText: string | null
 }
 
 interface StudentCourseByPlanProps {
-    studentId?: string | null
     hocLai?: boolean
 }
 
-export default function MonTrongCTDT({ studentId, hocLai }: StudentCourseByPlanProps) {
+export default function MonTrongCTDT({ hocLai }: StudentCourseByPlanProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [numberOfPages, setNumberOfPages] = useState(20)
     const [selectedSubjectClassRowKeys, setSelectedSubjectClassRowKeys] = useState<React.Key[]>([])
-    const [fixedRowKeys, setFixedRowKeys] = useState<React.Key[]>([])
     const [subjectVersionIds, setSubjectVersionIds] = useState<string[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
     })
+    const { studentId } = useStore(dangKyHocChoCaNhanStore)
+
+    const { data: student } = useFindUniqueStudent(
+        {
+            where: {
+                id: studentId as string,
+            },
+            include: {
+                curriculumVersion: {
+                    select: {
+                        trainingBlocks: {
+                            select: {
+                                subjects: true,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            enabled: !!studentId,
+        }
+    )
+    const studentSubjects = student?.curriculumVersion?.trainingBlocks.flatMap((tb) => tb.subjects)
+
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass(
         {
             where: {
-                ...(filters.searchText && filters.searchText !== ''
+                ...(filters.searchText
                     ? {
                           name: {
                               contains: filters.searchText,
@@ -49,22 +78,12 @@ export default function MonTrongCTDT({ studentId, hocLai }: StudentCourseByPlanP
                     : {}),
                 semesterId,
                 trainingObjectTypeId,
-                subject: {
-                    planTrainingSubject: {
-                        some: {
-                            planTraining: {
-                                semesterId,
-                                trainingObjectTypeId,
-                            },
-                            subjectClassType: hocLai
-                                ? $Enums.SubjectClassType.RETAKE
-                                : $Enums.SubjectClassType.NORMAL,
-                        },
-                    },
-                },
                 cancelled: false,
                 active: true,
                 type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                subjectId: {
+                    in: studentSubjects?.map((ss) => ss.subjectId),
+                },
             },
             include: {
                 subject: {
@@ -104,25 +123,15 @@ export default function MonTrongCTDT({ studentId, hocLai }: StudentCourseByPlanP
                         id: true,
                     },
                 },
-                fixedClasses: {
+                _count: {
                     select: {
-                        _count: {
-                            select: {
-                                students: {
-                                    where: {
-                                        active: true,
-                                        deletedAt: null,
-                                        status: 'ENROLLED',
-                                    },
-                                },
-                            },
-                        },
-                        students: {
+                        subjectClassStudent: {
                             where: {
-                                id: studentId as string,
-                            },
-                            select: {
-                                id: true,
+                                student: {
+                                    status: 'ENROLLED',
+                                    active: true,
+                                    deletedAt: null,
+                                },
                             },
                         },
                     },
@@ -135,7 +144,7 @@ export default function MonTrongCTDT({ studentId, hocLai }: StudentCourseByPlanP
             },
         },
         {
-            enabled: !!studentId && !!semesterId,
+            enabled: !!studentSubjects && !!semesterId,
         }
     )
     const { data: countSubjectClass = 0 } = useCountSubjectClass(
@@ -151,22 +160,15 @@ export default function MonTrongCTDT({ studentId, hocLai }: StudentCourseByPlanP
                     : {}),
                 semesterId,
                 trainingObjectTypeId,
-                subject: {
-                    planTrainingSubject: {
-                        some: {
-                            planTraining: {
-                                semesterId,
-                                trainingObjectTypeId,
-                            },
-                        },
-                    },
-                },
                 cancelled: false,
                 active: true,
+                subjectId: {
+                    in: studentSubjects?.map((ss) => ss.subjectId),
+                },
             },
         },
         {
-            enabled: !!studentId && !!semesterId,
+            enabled: !!studentSubjects && !!semesterId,
         }
     )
 
@@ -289,35 +291,18 @@ export default function MonTrongCTDT({ studentId, hocLai }: StudentCourseByPlanP
 
     useEffect(() => {
         if (subjectClassData && studentId) {
-            const checkedSubjectClassByFixedClassIds = [
-                ...new Set(
-                    subjectClassData
-                        .filter((item) =>
-                            item.fixedClasses.some((fc) =>
-                                fc.students.some((s) => s.id === studentId)
-                            )
-                        )
-                        .map((item) => item.id)
-                ),
-            ]
             setSubjectVersionIds([
-                ...subjectClassData
-                    .filter((item) =>
-                        item.fixedClasses.some((fc) => fc.students.some((s) => s.id === studentId))
-                    )
-                    .map((item) => item.subject.id),
                 ...subjectClassData
                     .filter((item) => item.subjectClassStudent.length > 0)
                     .map((item) => item.subject.id),
             ])
-            setFixedRowKeys(checkedSubjectClassByFixedClassIds)
             setSelectedSubjectClassRowKeys(
                 subjectClassData
                     .filter((item) => item.subjectClassStudent.length > 0)
                     .map((item) => item.id)
             )
         }
-    }, [subjectClassData])
+    }, [subjectClassData, studentId])
 
     return (
         <Row>
@@ -357,41 +342,38 @@ export default function MonTrongCTDT({ studentId, hocLai }: StudentCourseByPlanP
                     className="m-0"
                     rowKey="id"
                     data={subjectClassData}
-                    onRow={(record) => ({
-                        onClick: () => {
-                            if (fixedRowKeys.includes(record.id)) return
-                            if (
-                                subjectVersionIds.includes(record.subject.id) &&
-                                !selectedSubjectClassRowKeys.includes(record.id)
-                            )
-                                return
-                            if (selectedSubjectClassRowKeys.includes(record.id)) {
-                                setSelectedSubjectClassRowKeys((prev) =>
-                                    prev.filter((key) => key !== record.id)
-                                )
-                                setSubjectVersionIds((prev) =>
-                                    prev.filter((id) => id !== record.subject.id)
-                                )
-                                return
-                            }
-                            setSelectedSubjectClassRowKeys((prev) => [...prev, record.id])
-                            setSubjectVersionIds((prev) => [...prev, record.subject.id])
-                        },
-                        className: cn(
+                    onRow={(record) => {
+                        const notAllowSelect =
                             subjectVersionIds.includes(record.subject.id) &&
-                                'bg-yellow-100 cursor-not-allowed'
-                        ),
-                        columnWidth: 35,
-                    })}
+                            !selectedSubjectClassRowKeys.includes(record.id)
+
+                        return {
+                            onClick: () => {
+                                if (notAllowSelect) return
+                                if (selectedSubjectClassRowKeys.includes(record.id)) {
+                                    setSelectedSubjectClassRowKeys((prev) =>
+                                        prev.filter((key) => key !== record.id)
+                                    )
+                                    setSubjectVersionIds((prev) =>
+                                        prev.filter((id) => id !== record.subject.id)
+                                    )
+                                    return
+                                }
+                                setSelectedSubjectClassRowKeys((prev) => [...prev, record.id])
+                                setSubjectVersionIds((prev) => [...prev, record.subject.id])
+                            },
+                            className: cn(notAllowSelect && 'bg-yellow-100 cursor-not-allowed'),
+                            columnWidth: 35,
+                        }
+                    }}
                     rowSelection={{
-                        selectedRowKeys: [...selectedSubjectClassRowKeys, ...fixedRowKeys],
+                        selectedRowKeys: selectedSubjectClassRowKeys,
                         onChange: (selectedRowKeys) => {
                             setSelectedSubjectClassRowKeys(selectedRowKeys)
                         },
                         getCheckboxProps: (record) => ({
                             disabled:
-                                fixedRowKeys.includes(record.id) ||
-                                subjectVersionIds.includes(record.subject.id) ||
+                                subjectVersionIds.includes(record.subject.id) &&
                                 !selectedSubjectClassRowKeys.includes(record.id),
                         }),
                         columnWidth: 35,
@@ -427,11 +409,7 @@ export default function MonTrongCTDT({ studentId, hocLai }: StudentCourseByPlanP
                             title: 'Sĩ số',
                             align: 'center',
                             width: 100,
-                            render: (record) =>
-                                record?.fixedClasses?.reduce(
-                                    (acc: number, curr: any) => acc + (curr?._count?.students ?? 0),
-                                    0
-                                ),
+                            render: (record) => record?._count?.subjectClassStudent ?? 0,
                         },
                         {
                             title: 'Điểm',

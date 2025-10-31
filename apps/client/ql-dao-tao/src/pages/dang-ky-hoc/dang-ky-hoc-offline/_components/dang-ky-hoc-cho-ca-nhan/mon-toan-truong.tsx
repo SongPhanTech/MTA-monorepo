@@ -27,9 +27,8 @@ interface StudentCourseByPlanProps {
 export default function MonToanTruong({ hocLai }: StudentCourseByPlanProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [numberOfPages, setNumberOfPages] = useState(20)
     const [selectedSubjectClassRowKeys, setSelectedSubjectClassRowKeys] = useState<React.Key[]>([])
-    const [fixedRowKeys, setFixedRowKeys] = useState<React.Key[]>([])
     const [subjectVersionIds, setSubjectVersionIds] = useState<string[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
@@ -41,7 +40,7 @@ export default function MonToanTruong({ hocLai }: StudentCourseByPlanProps) {
     const { data: subjectClassData = [], refetch } = useFindManySubjectClass(
         {
             where: {
-                ...(filters.searchText && filters.searchText !== ''
+                ...(filters.searchText
                     ? {
                           name: {
                               contains: filters.searchText,
@@ -93,25 +92,15 @@ export default function MonToanTruong({ hocLai }: StudentCourseByPlanProps) {
                         id: true,
                     },
                 },
-                fixedClasses: {
+                _count: {
                     select: {
-                        _count: {
-                            select: {
-                                students: {
-                                    where: {
-                                        active: true,
-                                        deletedAt: null,
-                                        status: 'ENROLLED',
-                                    },
-                                },
-                            },
-                        },
-                        students: {
+                        subjectClassStudent: {
                             where: {
-                                id: studentId as string,
-                            },
-                            select: {
-                                id: true,
+                                student: {
+                                    status: 'ENROLLED',
+                                    active: true,
+                                    deletedAt: null,
+                                },
                             },
                         },
                     },
@@ -268,35 +257,18 @@ export default function MonToanTruong({ hocLai }: StudentCourseByPlanProps) {
 
     useEffect(() => {
         if (subjectClassData && studentId) {
-            const checkedSubjectClassByFixedClassIds = [
-                ...new Set(
-                    subjectClassData
-                        .filter((item) =>
-                            item.fixedClasses.some((fc) =>
-                                fc.students.some((s) => s.id === studentId)
-                            )
-                        )
-                        .map((item) => item.id)
-                ),
-            ]
             setSubjectVersionIds([
-                ...subjectClassData
-                    .filter((item) =>
-                        item.fixedClasses.some((fc) => fc.students.some((s) => s.id === studentId))
-                    )
-                    .map((item) => item.subject.id),
                 ...subjectClassData
                     .filter((item) => item.subjectClassStudent.length > 0)
                     .map((item) => item.subject.id),
             ])
-            setFixedRowKeys(checkedSubjectClassByFixedClassIds)
             setSelectedSubjectClassRowKeys(
                 subjectClassData
                     .filter((item) => item.subjectClassStudent.length > 0)
                     .map((item) => item.id)
             )
         }
-    }, [subjectClassData])
+    }, [subjectClassData, studentId])
 
     return (
         <Row>
@@ -338,9 +310,8 @@ export default function MonToanTruong({ hocLai }: StudentCourseByPlanProps) {
                     data={subjectClassData}
                     onRow={(record) => {
                         const notAllowSelect =
-                            fixedRowKeys.includes(record.id) ||
-                            (subjectVersionIds.includes(record.subject.id) &&
-                                !selectedSubjectClassRowKeys.includes(record.id))
+                            subjectVersionIds.includes(record.subject.id) &&
+                            !selectedSubjectClassRowKeys.includes(record.id)
 
                         return {
                             onClick: () => {
@@ -362,15 +333,14 @@ export default function MonToanTruong({ hocLai }: StudentCourseByPlanProps) {
                         }
                     }}
                     rowSelection={{
-                        selectedRowKeys: [...selectedSubjectClassRowKeys, ...fixedRowKeys],
+                        selectedRowKeys: selectedSubjectClassRowKeys,
                         onChange: (selectedRowKeys) => {
                             setSelectedSubjectClassRowKeys(selectedRowKeys)
                         },
                         getCheckboxProps: (record) => ({
                             disabled:
-                                fixedRowKeys.includes(record.id) ||
-                                (subjectVersionIds.includes(record.subject.id) &&
-                                    !selectedSubjectClassRowKeys.includes(record.id)),
+                                subjectVersionIds.includes(record.subject.id) &&
+                                !selectedSubjectClassRowKeys.includes(record.id),
                         }),
                         columnWidth: 35,
                     }}
@@ -405,11 +375,7 @@ export default function MonToanTruong({ hocLai }: StudentCourseByPlanProps) {
                             title: 'Sĩ số',
                             align: 'center',
                             width: 100,
-                            render: (record) =>
-                                record?.fixedClasses?.reduce(
-                                    (acc: number, curr: any) => acc + (curr?._count?.students ?? 0),
-                                    0
-                                ),
+                            render: (record) => record?._count?.subjectClassStudent ?? 0,
                         },
                         {
                             title: 'Điểm',
