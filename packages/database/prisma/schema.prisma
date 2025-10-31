@@ -2352,10 +2352,13 @@ model StudentSubjectScoreHistory {
   finalScore            Decimal?            @db.Decimal(5, 1)
   /// điểm tổng kết chuyển trường
   manualFinalScore      Float?
+  /// hoãn thi
   examPostponedReason   Boolean?
   examPostponed         String?
+  /// cấm thi
   examBanned            Boolean?
   examBannedReason      String?
+  /// đình chỉ
   suspended             Boolean?
   suspendedReason       String?
   updatedBy             UserProfile?        @relation(fields: [updatedById], references: [id])
@@ -3039,6 +3042,7 @@ model SubjectClass {
   classRegisterLogs           ClassRegisterLogs[]
   subjectClassTimes           SubjectClassTime[]
   subjectClassHistory         SubjectClassHistory[]
+  survey                      Survey[]
 
   @@schema("ql-dao-tao")
 }
@@ -4800,6 +4804,7 @@ model Survey {
   isPublic             Boolean            @default(false)
   anonymous            Boolean            @default(true)
   surveyObjectType     SurveyObjectType[]
+  subjectClasses       SubjectClass[]
   lectureId            String?
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])

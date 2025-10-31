@@ -10840,6 +10840,13 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClasses',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18410,6 +18417,13 @@ const metadata = {
                 }, surveyObjectType: {
                     name: "surveyObjectType",
                     type: "SurveyObjectType",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
+                }, subjectClasses: {
+                    name: "subjectClasses",
+                    type: "SubjectClass",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'survey',

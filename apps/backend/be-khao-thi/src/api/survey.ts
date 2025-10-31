@@ -39,6 +39,7 @@ const createClusterSurvey = createRoute({
                             surveyObjectTypeIds: z.array(z.string()).nonempty(),
                             lecturerIds: z.array(z.string()).nonempty(),
                             surveyQuestionIds: z.array(z.string()).nonempty(),
+                            semesterId: z.string(),
                             surveyChoices: z
                                 .array(
                                     z.object({
@@ -93,6 +94,7 @@ app.openapi(createClusterSurvey, async (c) => {
         surveyObjectTypeIds,
         lecturerIds,
         surveyTopicId,
+        semesterId,
         ...payload
     } = c.req.valid('json')
 
@@ -117,6 +119,31 @@ app.openapi(createClusterSurvey, async (c) => {
                 },
             },
         })
+        const lecturers = await tx.lecturer.findMany({
+            where: {
+                id: {
+                    in: lecturerIds,
+                    
+                },
+               mainSubjectClasses: {
+                some: {
+                    semester: {
+                        id: semesterId
+                    }
+                }
+               }
+            },
+        include:{
+            mainSubjectClasses: {
+                where:{
+                    semester: {
+                        id: semesterId
+                    }
+                }
+            }
+        }
+        })
+
 
         const surveys = await tx.survey.createManyAndReturn({
             data: lecturerIds.map((lectureId) => ({
@@ -124,6 +151,9 @@ app.openapi(createClusterSurvey, async (c) => {
                 clusterSurveyId: cluster.id,
                 lectureId,
                 surveyTopicId,
+                subjectClasses: {
+                    connect: lecturers.find((lecturer) => lecturer.id === lectureId)?.mainSubjectClasses.map((subjectClass) => ({ id: subjectClass.id }))
+                }
             })),
         })
 
