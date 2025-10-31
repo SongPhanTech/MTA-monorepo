@@ -242,11 +242,19 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                             },
                             onDoubleClick: (e) => {
                                 const target = e.target as HTMLElement
-                                if (!target.closest('.ant-select')) {
-                                    onSelectSubjectClass(record?.id)
-                                    setSelectedRowKey(record?.id)
-                                    setActiveKey?.('2')
+                                // Kiểm tra xem có click vào Select, Popover hoặc các component con của RoomSelector không
+                                if (
+                                    target.closest('.ant-select') ||
+                                    target.closest('.ant-popover') ||
+                                    target.closest('.ant-input') ||
+                                    target.closest('.ant-table-row-selection')
+                                ) {
+                                    e.stopPropagation()
+                                    return
                                 }
+                                onSelectSubjectClass(record?.id)
+                                setSelectedRowKey(record?.id)
+                                setActiveKey?.('2')
                             },
                         })}
                         columns={[
