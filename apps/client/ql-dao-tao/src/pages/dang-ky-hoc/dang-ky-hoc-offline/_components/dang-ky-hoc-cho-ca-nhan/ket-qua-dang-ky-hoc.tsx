@@ -54,6 +54,7 @@ export default function KetQuaDangKyHoc({ hocLai }: StudentCourseByPlanProps) {
                 cancelled: false,
                 active: true,
                 type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+                status: 'OFFICIAL',
             },
             include: {
                 subject: {

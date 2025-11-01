@@ -49,9 +49,7 @@ export default function DangKyHocChoLopQuanLy() {
             },
             cancelled: false,
             active: true,
-            approveLecturerAssignmentAt: {
-                not: null,
-            },
+            status: 'OFFICIAL',
         },
         include: {
             subject: true,
@@ -120,6 +118,7 @@ export default function DangKyHocChoLopQuanLy() {
             },
             cancelled: false,
             active: true,
+            status: 'OFFICIAL',
         },
     })
 

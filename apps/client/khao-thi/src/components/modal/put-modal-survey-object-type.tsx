@@ -218,8 +218,8 @@ const PutSurveyObjectTypeModal = () => {
 
     const { data: subjectClassData = [] } = useFindManySubjectClass({
         orderBy: { name: 'asc' },
-        where:
-            selectedFixedClasses.length > 0
+        where: {
+            ...(selectedFixedClasses.length > 0
                 ? {
                       fixedClasses: {
                           some: {
@@ -227,7 +227,11 @@ const PutSurveyObjectTypeModal = () => {
                           },
                       },
                   }
-                : {},
+                : {}),
+            cancelled: false,
+            active: true,
+            status: 'OFFICIAL',
+        },
     })
 
     const treeData = useMemo(() => {

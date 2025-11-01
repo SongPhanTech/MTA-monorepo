@@ -306,8 +306,9 @@ export default function SubjectClassScore() {
                 //       } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
                 //     : {}),
                 deletedAt: null,
-                active: true,
                 cancelled: false,
+                active: true,
+                status: 'OFFICIAL',
             },
             include: {
                 subject: {

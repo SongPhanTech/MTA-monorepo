@@ -226,6 +226,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
             active: true,
             deletedAt: null,
             cancelled: false,
+            status: 'OFFICIAL',
         } satisfies Prisma.SubjectClassWhereInput
     }, [filters, semesterId, trainingObjectTypeId, profileId, canReadAll])
 

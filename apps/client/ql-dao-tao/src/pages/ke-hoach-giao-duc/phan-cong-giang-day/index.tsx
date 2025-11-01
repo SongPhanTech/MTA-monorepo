@@ -1,3 +1,4 @@
+import { queryClient } from '@api/index'
 import DatePicker from '@components/commons/date-picker'
 import TreeSelectDepartment from '@components/commons/department-select/TreeSelectDepartment'
 import FormItem from '@components/commons/form-item'
@@ -21,6 +22,7 @@ import {
 } from '@workspace/db/client'
 import {
     useCountDM_DonVi,
+    useCountSubjectClass,
     useDeleteSubjectClass,
     useFindManyBuilding,
     useFindManyDM_DonVi,
@@ -108,6 +110,7 @@ export default function PhanCongGiangDay({
         organization: undefined,
         room: undefined,
         pcgd: undefined,
+        approved: undefined,
     })
 
     const [form] = Form.useForm<TeachingAssignmentForm>()
@@ -274,6 +277,16 @@ export default function PhanCongGiangDay({
                           ],
                       }
                     : {}),
+                ...(filters.approved && filters.approved.length === 1 && filters.approved[0]
+                    ? {
+                          approveLecturerAssignmentAt: { not: null },
+                      }
+                    : {}),
+                ...(filters.approved && filters.approved.length === 1 && !filters.approved[0]
+                    ? {
+                          approveLecturerAssignmentAt: null,
+                      }
+                    : {}),
                 subject: {
                     ...(filters.organization && filters.organization.length > 0
                         ? {
@@ -415,6 +428,29 @@ export default function PhanCongGiangDay({
             refetchOnWindowFocus: false,
         }
     )
+
+    const { data: countSubjectClassOfficial = 0 } = useCountSubjectClass({
+        where: {
+            status: 'OFFICIAL',
+            trainingObjectTypeId,
+            semesterId,
+            active: true,
+            deletedAt: null,
+            cancelled: false,
+            type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+        },
+    })
+
+    const { data: countSubjectClass = 0 } = useCountSubjectClass({
+        where: {
+            trainingObjectTypeId,
+            semesterId,
+            active: true,
+            deletedAt: null,
+            cancelled: false,
+            type: hocLai ? $Enums.SubjectClassType.RETAKE : $Enums.SubjectClassType.NORMAL,
+        },
+    })
 
     const { data: count } = useCountDM_DonVi({
         where: {
@@ -1583,6 +1619,48 @@ export default function PhanCongGiangDay({
                                 <p className="bg-green-200 h-4 w-4 rounded" />
                                 <span>Đã duyệt PCGD</span>
                             </p>
+                            <p className="flex gap-1 items-center">
+                                <Checkbox
+                                    checked={countSubjectClassOfficial === countSubjectClass}
+                                    onChange={async (e) => {
+                                        try {
+                                            await sqlTransaction([
+                                                {
+                                                    model: 'SubjectClass',
+                                                    operation: 'updateMany',
+                                                    data: {
+                                                        where: {
+                                                            semesterId,
+                                                            approveLecturerAssignmentAt: {
+                                                                not: null,
+                                                            },
+                                                            trainingObjectTypeId,
+                                                            lecturerId: {
+                                                                not: null,
+                                                            },
+                                                            extraLecturerId: {
+                                                                not: null,
+                                                            },
+                                                            cancelled: false,
+                                                            active: true,
+                                                            deletedAt: null,
+                                                        },
+                                                        data: {
+                                                            status: e.target.checked
+                                                                ? $Enums.SubjectClassStatus.OFFICIAL
+                                                                : $Enums.SubjectClassStatus.DRAFT,
+                                                        },
+                                                    },
+                                                },
+                                            ])
+                                            queryClient.invalidateQueries({
+                                                queryKey: ['zenstack', 'SubjectClass'],
+                                            })
+                                        } catch (error) {}
+                                    }}
+                                />
+                                <span>Đưa LMH vào giảng dạy</span>
+                            </p>
                         </Flex>
                         <FormItem form={form} name={'subjectClass'} hidden />
                         <TableCollapse
@@ -1599,13 +1677,13 @@ export default function PhanCongGiangDay({
                                     className: cn(
                                         !!recordSubjectClass?.submitLecturerAssignmentAt &&
                                             'bg-yellow-200',
-                                        !!recordSubjectClass?.approveLecturerAssignmentAt &&
-                                            'bg-green-200',
-                                        subjectClassForm?.[record.id]?.isEdit && 'bg-yellow-100',
                                         (!subjectClassForm?.[record.id]?.lecturerId ||
                                             !subjectClassForm?.[record.id]?.extraLecturerId ||
                                             !subjectClassForm?.[record.id]?.enterGradeLecturerId) &&
                                             'bg-slate-200',
+                                        !!recordSubjectClass?.approveLecturerAssignmentAt &&
+                                            'bg-green-200',
+                                        subjectClassForm?.[record.id]?.isEdit && 'bg-yellow-100',
                                         subjectClassForm?.[record.id]?.cancelled && 'bg-red-200'
                                     ),
                                 }

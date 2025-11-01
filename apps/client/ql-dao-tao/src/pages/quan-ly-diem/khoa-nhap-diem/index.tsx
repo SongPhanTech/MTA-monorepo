@@ -4,6 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
+import { Prisma } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
@@ -52,79 +53,81 @@ export default function SubjectClassScore() {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
 
     const where = useMemo(
-        () => ({
-            ...(filters.code && filters.code !== ''
-                ? {
-                      code: {
-                          contains: filters.code,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-            ...(filters.name && filters.name !== ''
-                ? {
-                      name: {
-                          contains: filters.name,
-                          mode: 'insensitive' as const,
-                      },
-                  }
-                : {}),
-            ...(semesterId ? { semesterId } : {}),
-            trainingObjectTypeId,
-            ...(filters.subjectName && filters.subjectName !== ''
-                ? {
-                      subject: {
-                          name: {
-                              contains: filters.subjectName,
+        () =>
+            ({
+                ...(filters.code && filters.code !== ''
+                    ? {
+                          code: {
+                              contains: filters.code,
                               mode: 'insensitive' as const,
                           },
-                      },
-                  }
-                : {}),
-            ...(filters.scoreDeadline?.length === 2
-                ? {
-                      scoreDeadline: {
-                          gte: dayjs(filters.scoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.scoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.examScoreDeadline?.length === 2
-                ? {
-                      examScoreDeadline: {
-                          gte: dayjs(filters.examScoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.examScoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.startDate?.length === 2
-                ? {
-                      startDate: {
-                          gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.examDate?.length === 2
-                ? {
-                      examDate: {
-                          gte: dayjs(filters.examDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.examDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            ...(filters.endDate?.length === 2
-                ? {
-                      endDate: {
-                          gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
-                          lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
-                      },
-                  }
-                : {}),
-            deletedAt: null,
-            cancelled: false,
-            active: true,
-        }),
+                      }
+                    : {}),
+                ...(filters.name && filters.name !== ''
+                    ? {
+                          name: {
+                              contains: filters.name,
+                              mode: 'insensitive' as const,
+                          },
+                      }
+                    : {}),
+                ...(semesterId ? { semesterId } : {}),
+                trainingObjectTypeId,
+                ...(filters.subjectName && filters.subjectName !== ''
+                    ? {
+                          subject: {
+                              name: {
+                                  contains: filters.subjectName,
+                                  mode: 'insensitive' as const,
+                              },
+                          },
+                      }
+                    : {}),
+                ...(filters.scoreDeadline?.length === 2
+                    ? {
+                          scoreDeadline: {
+                              gte: dayjs(filters.scoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.scoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+                ...(filters.examScoreDeadline?.length === 2
+                    ? {
+                          examScoreDeadline: {
+                              gte: dayjs(filters.examScoreDeadline?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.examScoreDeadline?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+                ...(filters.startDate?.length === 2
+                    ? {
+                          startDate: {
+                              gte: dayjs(filters.startDate?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.startDate?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+                ...(filters.examDate?.length === 2
+                    ? {
+                          examDate: {
+                              gte: dayjs(filters.examDate?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.examDate?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+                ...(filters.endDate?.length === 2
+                    ? {
+                          endDate: {
+                              gte: dayjs(filters.endDate?.[0], 'DD/MM/YYYY').toDate(),
+                              lte: dayjs(filters.endDate?.[1], 'DD/MM/YYYY').toDate(),
+                          },
+                      }
+                    : {}),
+                deletedAt: null,
+                cancelled: false,
+                active: true,
+                status: 'OFFICIAL',
+            }) satisfies Prisma.SubjectClassWhereInput,
         [
             filters.code,
             filters.name,

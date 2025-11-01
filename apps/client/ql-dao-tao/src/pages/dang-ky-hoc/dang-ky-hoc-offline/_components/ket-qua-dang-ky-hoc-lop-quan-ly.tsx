@@ -125,6 +125,7 @@ export default function KeQuaDangKyHocLopQuanLy({ hocLai = false }: { hocLai?: b
                     id: selectedRowKey as string,
                 },
             },
+            status: 'OFFICIAL',
         },
         include: {
             mainLecturer: {

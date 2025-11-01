@@ -285,9 +285,10 @@ export default function ClassSubject() {
                       },
                   } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
                 : {}),
-            active: true,
             deletedAt: null,
             cancelled: false,
+            active: true,
+            status: 'OFFICIAL',
         } satisfies Prisma.SubjectClassWhereInput
     }, [filters, semesterId, trainingObjectTypeId, profileId, canReadAll])
 

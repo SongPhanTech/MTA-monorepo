@@ -93,12 +93,14 @@ export default function ClassRegisterLogs() {
             where: {
                 ...where,
                 deletedAt: null,
-                active: true,
                 classRegisterLogs: {
                     some: {
                         classRegisterSessionId: id,
                     },
                 },
+                cancelled: false,
+                active: true,
+                status: 'OFFICIAL',
             },
             include: {
                 classRegisterLogs: {

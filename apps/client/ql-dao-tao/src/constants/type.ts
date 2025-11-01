@@ -22,6 +22,7 @@ export type FilterProps = {
     searchText?: string
     trainingObjectTypes?: string[]
     pcgd?: boolean[]
+    approved?: boolean[]
     name?: string | ''
     code?: string | ''
     sort?: string
