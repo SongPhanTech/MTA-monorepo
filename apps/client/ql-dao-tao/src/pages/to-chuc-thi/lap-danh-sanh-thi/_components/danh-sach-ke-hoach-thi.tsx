@@ -333,7 +333,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                             open={open}
                             onOpenChange={setOpen}
                         >
-                            {!exams && <Button type="primary">Tạo kế hoạch thi</Button>}
+                            <Button type="primary">Tạo kế hoạch thi</Button>
                         </Popover>
 
                         {exams.length > 0 && (
