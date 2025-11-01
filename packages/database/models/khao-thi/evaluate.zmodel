@@ -175,6 +175,7 @@ enum EvaluationMemberRole {
   HEAD_SECRETARY // Truỏng ban thư ký
   SECRETARY // Thư ký
   MEMBER // Uỷ viên
+  ADVISORY_BOARD // Ban tư vấn
 
   @@schema("khao-thi")
 }

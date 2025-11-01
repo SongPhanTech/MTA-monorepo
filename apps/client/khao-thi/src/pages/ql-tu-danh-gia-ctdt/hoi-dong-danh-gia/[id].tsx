@@ -36,7 +36,20 @@ export default function EvaluationCouncil() {
                     include: {
                         lecturer: {
                             include: {
-                                userProfile: true,
+                                userProfile: {
+                                    include: {
+                                        academicDegreeType: {
+                                            select: {
+                                                sTen: true,
+                                            },
+                                        },
+                                        academicRankType: {
+                                            select: {
+                                                sTen: true,
+                                            },
+                                        },
+                                    },
+                                },
                                 organization: true,
                             },
                         },
@@ -73,7 +86,6 @@ export default function EvaluationCouncil() {
         }
     }
 
-    // Transform data for TableCollapse
     const tableData = useMemo(() => {
         if (!data?.members) return []
 
@@ -94,9 +106,12 @@ export default function EvaluationCouncil() {
                 )
         )
 
+        const advisoryBoardMembers = data.members.filter((member) =>
+            member.role?.some((r) => r === $Enums.EvaluationMemberRole.CHAIRMAN)
+        )
+
         const result: any[] = []
 
-        // Add other members first as individual rows (without children array to avoid collapse)
         for (const member of otherMembers) {
             result.push({
                 ...member,
@@ -109,9 +124,23 @@ export default function EvaluationCouncil() {
             result.push({
                 id: 'secretary-group',
                 key: 'secretary-group',
-                name: 'Hội đồng thư ký',
+                name: 'Ban thư ký',
                 $type: 'parent',
-                secretaryMembers: secretaryMembers.map((member) => ({
+                children: secretaryMembers.map((member) => ({
+                    ...member,
+                    key: member.id,
+                    $type: 'child',
+                })),
+            })
+        }
+
+        if (advisoryBoardMembers.length > 0) {
+            result.push({
+                id: 'advisory-board-group',
+                key: 'advisory-board-group',
+                name: 'Ban tư vấn',
+                $type: 'parent',
+                children: advisoryBoardMembers.map((member) => ({
                     ...member,
                     key: member.id,
                     $type: 'child',
@@ -150,7 +179,8 @@ export default function EvaluationCouncil() {
                         filters={filters}
                         setFilters={setFilters}
                         headerTitleKey="name"
-                        childrenFieldName="secretaryMembers"
+                        childrenFieldName="children"
+                        defaultExpandAll
                         columns={[
                             {
                                 title: 'Tên đồng chí',
@@ -158,12 +188,23 @@ export default function EvaluationCouncil() {
                                 width: 200,
                                 align: 'center',
                                 render: (__, record) => {
-                                    if (record?.id === 'secretary-group') return ''
+                                    if (record.$type === 'parent') return ''
 
-                                    return (
-                                        record?.lecturer?.userProfile?.fullname ||
-                                        `${record?.lecturer?.userProfile?.lastName} ${record?.lecturer?.userProfile?.firstName}`
-                                    )
+                                    const academicRank =
+                                        record?.lecturer?.userProfile?.academicRankType?.sTen || ''
+                                    const degree =
+                                        record?.lecturer?.userProfile?.academicDegreeType?.sTen ||
+                                        ''
+
+                                    const fullName = record?.lecturer?.userProfile?.fullname
+                                        ? record?.lecturer?.userProfile?.fullname
+                                        : `${record?.lecturer?.userProfile?.lastName} ${record?.lecturer?.userProfile?.firstName}`
+
+                                    const academicTitle = [academicRank, degree]
+                                        .filter(Boolean)
+                                        .join('.')
+
+                                    return academicTitle ? `${academicTitle} ${fullName}` : fullName
                                 },
                             },
                             {
@@ -172,7 +213,7 @@ export default function EvaluationCouncil() {
                                 width: 200,
                                 align: 'center',
                                 render: (__, record) => {
-                                    if (record?.id === 'secretary-group') return ''
+                                    if (record.$type === 'parent') return ''
 
                                     return record?.lecturer?.organization?.sTen || ''
                                 },
@@ -183,7 +224,7 @@ export default function EvaluationCouncil() {
                                 width: 200,
                                 align: 'center',
                                 render: (__, record) => {
-                                    if (record?.id === 'secretary-group') return ''
+                                    if (record.$type === 'parent') return ''
 
                                     return (
                                         <ul
@@ -215,7 +256,7 @@ export default function EvaluationCouncil() {
                                 align: 'center',
                                 fixed: 'right',
                                 render: (_, record) => {
-                                    if (record?.id && record?.id !== 'secretary-group') {
+                                    if (record?.id && record?.$type !== 'parent') {
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <EditIcon
