@@ -3176,9 +3176,7 @@ exports.Prisma.SurveyQuestionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   name: 'name',
   type: 'type',
-  surveyQuestionGroupId: 'surveyQuestionGroupId',
-  surveyId: 'surveyId',
-  clusterSurveyId: 'clusterSurveyId'
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
 
 exports.Prisma.SurveyChoiceScalarFieldEnum = {
@@ -6012,9 +6010,7 @@ exports.Prisma.SurveyQuestionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   name: 'name',
-  surveyQuestionGroupId: 'surveyQuestionGroupId',
-  surveyId: 'surveyId',
-  clusterSurveyId: 'clusterSurveyId'
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
 
 exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {

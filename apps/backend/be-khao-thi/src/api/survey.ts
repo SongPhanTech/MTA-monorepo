@@ -149,29 +149,29 @@ app.openapi(createClusterSurvey, async (c) => {
                 clusterSurveyId: cluster.id,
                 lectureId,
                 surveyTopicId,
-                subjectClasses: {
-                    connect: lecturers
-                        .find((lecturer) => lecturer.id === lectureId)
-                        ?.mainSubjectClasses.map((subjectClass) => ({ id: subjectClass.id })),
-                },
             })),
         })
 
-        await Promise.all(
-            surveys.map((survey) =>
-                tx.survey.update({
-                    where: { id: survey.id },
-                    data: {
-                        surveyQuestion: {
-                            connect: surveyQuestionIds.map((id) => ({ id })),
-                        },
-                        surveyObjectType: {
-                            connect: surveyObjectTypeIds.map((id) => ({ id })),
-                        },
+        for (const survey of surveys) {
+            await tx.survey.update({
+                where: { id: survey.id },
+                data: {
+                    surveyQuestion: {
+                        connect: surveyQuestionIds.map((id) => ({ id })),
                     },
-                })
-            )
-        )
+                    surveyObjectType: {
+                        connect: surveyObjectTypeIds.map((id) => ({ id })),
+                    },
+                    subjectClasses: {
+                        connect: lecturers
+                            .find((lecturer) => lecturer.id === survey.lectureId)
+                            ?.mainSubjectClasses.map((subjectClass) => ({
+                                id: subjectClass.id,
+                            })),
+                    },
+                },
+            })
+        }
 
         await tx.surveyChoice.createMany({
             data: surveys.flatMap((survey) =>

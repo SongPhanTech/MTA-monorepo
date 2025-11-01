@@ -31,16 +31,14 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    surveyQuestionGroup: z.record(z.string(), z.unknown()).optional(),
-    survey: z.record(z.string(), z.unknown()).optional(),
-    clusterSurvey: z.record(z.string(), z.unknown()).optional(),
+    surveyQuestionGroup: z.record(z.string(), z.unknown()),
+    survey: z.array(z.unknown()).optional(),
+    clusterSurvey: z.array(z.unknown()).optional(),
     surveyResponses: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
-    surveyQuestionGroupId: z.string().nullish(),
-    surveyId: z.string().nullish(),
-    clusterSurveyId: z.string().nullish(),
+    surveyQuestionGroupId: z.string(),
 }
 );
 
