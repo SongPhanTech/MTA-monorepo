@@ -3922,8 +3922,8 @@ model StudentTrainingScore {
   trainingScoreSessionId String
   student                Student              @relation(fields: [studentId], references: [id])
   studentId              String
-  score                  Float                @default(0)
-  studentTrainingType    StudentTrainingType?
+  score                  Float?
+  studentTrainingType    StudentTrainingType? @default(GOOD)
 
   @@unique([trainingScoreSessionId, studentId])
   @@schema("ql-dao-tao")

@@ -14690,11 +14690,12 @@ const metadata = {
                 }, score: {
                     name: "score",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    isOptional: true,
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
                     isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {

@@ -203748,7 +203748,7 @@ export namespace Prisma {
     updatedAt: Date
     trainingScoreSessionId: string
     studentId: string
-    score: number
+    score: number | null
     studentTrainingType: $Enums.StudentTrainingType | null
     _count: StudentTrainingScoreCountAggregateOutputType | null
     _avg: StudentTrainingScoreAvgAggregateOutputType | null
@@ -203863,7 +203863,7 @@ export namespace Prisma {
       updatedAt: Date
       trainingScoreSessionId: string
       studentId: string
-      score: number
+      score: number | null
       studentTrainingType: $Enums.StudentTrainingType | null
     }, ExtArgs["result"]["studentTrainingScore"]>
     composites: {}
@@ -361946,7 +361946,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StudentTrainingScore"> | Date | string
     trainingScoreSessionId?: StringFilter<"StudentTrainingScore"> | string
     studentId?: StringFilter<"StudentTrainingScore"> | string
-    score?: FloatFilter<"StudentTrainingScore"> | number
+    score?: FloatNullableFilter<"StudentTrainingScore"> | number | null
     studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentTrainingScore"> | $Enums.StudentTrainingType | null
     trainingScoreSession?: XOR<TrainingScoreSessionScalarRelationFilter, TrainingScoreSessionWhereInput>
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -361962,7 +361962,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     trainingScoreSessionId?: SortOrder
     studentId?: SortOrder
-    score?: SortOrder
+    score?: SortOrderInput | SortOrder
     studentTrainingType?: SortOrderInput | SortOrder
     trainingScoreSession?: TrainingScoreSessionOrderByWithRelationInput
     student?: StudentOrderByWithRelationInput
@@ -361983,7 +361983,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StudentTrainingScore"> | Date | string
     trainingScoreSessionId?: StringFilter<"StudentTrainingScore"> | string
     studentId?: StringFilter<"StudentTrainingScore"> | string
-    score?: FloatFilter<"StudentTrainingScore"> | number
+    score?: FloatNullableFilter<"StudentTrainingScore"> | number | null
     studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentTrainingScore"> | $Enums.StudentTrainingType | null
     trainingScoreSession?: XOR<TrainingScoreSessionScalarRelationFilter, TrainingScoreSessionWhereInput>
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -361999,7 +361999,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     trainingScoreSessionId?: SortOrder
     studentId?: SortOrder
-    score?: SortOrder
+    score?: SortOrderInput | SortOrder
     studentTrainingType?: SortOrderInput | SortOrder
     _count?: StudentTrainingScoreCountOrderByAggregateInput
     _avg?: StudentTrainingScoreAvgOrderByAggregateInput
@@ -362021,7 +362021,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"StudentTrainingScore"> | Date | string
     trainingScoreSessionId?: StringWithAggregatesFilter<"StudentTrainingScore"> | string
     studentId?: StringWithAggregatesFilter<"StudentTrainingScore"> | string
-    score?: FloatWithAggregatesFilter<"StudentTrainingScore"> | number
+    score?: FloatNullableWithAggregatesFilter<"StudentTrainingScore"> | number | null
     studentTrainingType?: EnumStudentTrainingTypeNullableWithAggregatesFilter<"StudentTrainingScore"> | $Enums.StudentTrainingType | null
   }
 
@@ -390147,7 +390147,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    score?: number
+    score?: number | null
     studentTrainingType?: $Enums.StudentTrainingType | null
     trainingScoreSession: TrainingScoreSessionCreateNestedOneWithoutStudentTrainingScoreInput
     student: StudentCreateNestedOneWithoutStudentTrainingScoreInput
@@ -390163,7 +390163,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     trainingScoreSessionId: string
     studentId: string
-    score?: number
+    score?: number | null
     studentTrainingType?: $Enums.StudentTrainingType | null
   }
 
@@ -390175,7 +390175,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     trainingScoreSession?: TrainingScoreSessionUpdateOneRequiredWithoutStudentTrainingScoreNestedInput
     student?: StudentUpdateOneRequiredWithoutStudentTrainingScoreNestedInput
@@ -390191,7 +390191,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingScoreSessionId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
   }
 
@@ -390205,7 +390205,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     trainingScoreSessionId: string
     studentId: string
-    score?: number
+    score?: number | null
     studentTrainingType?: $Enums.StudentTrainingType | null
   }
 
@@ -390217,7 +390217,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
   }
 
@@ -390231,7 +390231,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingScoreSessionId?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
   }
 
@@ -517235,7 +517235,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    score?: number
+    score?: number | null
     studentTrainingType?: $Enums.StudentTrainingType | null
     trainingScoreSession: TrainingScoreSessionCreateNestedOneWithoutStudentTrainingScoreInput
   }
@@ -517249,7 +517249,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingScoreSessionId: string
-    score?: number
+    score?: number | null
     studentTrainingType?: $Enums.StudentTrainingType | null
   }
 
@@ -519224,7 +519224,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StudentTrainingScore"> | Date | string
     trainingScoreSessionId?: StringFilter<"StudentTrainingScore"> | string
     studentId?: StringFilter<"StudentTrainingScore"> | string
-    score?: FloatFilter<"StudentTrainingScore"> | number
+    score?: FloatNullableFilter<"StudentTrainingScore"> | number | null
     studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentTrainingScore"> | $Enums.StudentTrainingType | null
   }
 
@@ -524478,7 +524478,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    score?: number
+    score?: number | null
     studentTrainingType?: $Enums.StudentTrainingType | null
     student: StudentCreateNestedOneWithoutStudentTrainingScoreInput
   }
@@ -524492,7 +524492,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     studentId: string
-    score?: number
+    score?: number | null
     studentTrainingType?: $Enums.StudentTrainingType | null
   }
 
@@ -592762,7 +592762,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     trainingScoreSessionId: string
-    score?: number
+    score?: number | null
     studentTrainingType?: $Enums.StudentTrainingType | null
   }
 
@@ -593214,7 +593214,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     trainingScoreSession?: TrainingScoreSessionUpdateOneRequiredWithoutStudentTrainingScoreNestedInput
   }
@@ -593228,7 +593228,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingScoreSessionId?: StringFieldUpdateOperationsInput | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
   }
 
@@ -593241,7 +593241,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     trainingScoreSessionId?: StringFieldUpdateOperationsInput | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
   }
 
@@ -595117,7 +595117,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     studentId: string
-    score?: number
+    score?: number | null
     studentTrainingType?: $Enums.StudentTrainingType | null
   }
 
@@ -595129,7 +595129,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
     student?: StudentUpdateOneRequiredWithoutStudentTrainingScoreNestedInput
   }
@@ -595143,7 +595143,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     studentId?: StringFieldUpdateOperationsInput | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
   }
 
@@ -595156,7 +595156,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     studentId?: StringFieldUpdateOperationsInput | string
-    score?: FloatFieldUpdateOperationsInput | number
+    score?: NullableFloatFieldUpdateOperationsInput | number | null
     studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
   }
 
