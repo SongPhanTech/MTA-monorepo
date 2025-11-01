@@ -35,6 +35,7 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     survey: z.record(z.string(), z.unknown()),
+    profile: z.record(z.string(), z.unknown()).optional(),
     student: z.record(z.string(), z.unknown()).optional(),
     surveyObjectType: z.record(z.string(), z.unknown()).optional(),
     responses: z.array(z.unknown()).optional(),
@@ -42,6 +43,7 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     surveyId: z.string(),
+    profileId: z.string().nullish(),
     studentId: z.string().nullish(),
     surveyObjectTypeId: z.string().nullish(),
 }

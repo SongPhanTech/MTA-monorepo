@@ -3203,6 +3203,7 @@ exports.Prisma.SurveySessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
+  profileId: 'profileId',
   studentId: 'studentId',
   startedAt: 'startedAt',
   completedAt: 'completedAt',
@@ -6028,6 +6029,7 @@ exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
   description: 'description',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
+  profileId: 'profileId',
   studentId: 'studentId',
   surveyObjectTypeId: 'surveyObjectTypeId'
 };

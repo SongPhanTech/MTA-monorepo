@@ -249,6 +249,7 @@ model UserProfile extends Base {
   subjectVersionHistory         SubjectVersionHistory[]
   subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
+  surveySession                 SurveySession[]
 
   @@auth()
   @@schema("ql-nguoi-dung")
