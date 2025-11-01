@@ -94,6 +94,7 @@ function TabDotKhaoSat() {
             surveyObjectType: true,
             surveyTopic: true,
             surveyQuestion: true,
+                surveySessions: true,
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -247,7 +248,7 @@ function TabDotKhaoSat() {
                                 ),
                                 render: (
                                     _,
-                                    { id, surveyTopicId, surveyQuestion, surveyObjectType }
+                                    { id, surveyTopicId, surveyQuestion, surveyObjectType,surveySessions }
                                 ) => (
                                     <Row className="justify-end gap-2">
                                         {can(
@@ -295,6 +296,7 @@ function TabDotKhaoSat() {
                                             'SUA'
                                         ) && (
                                             <EditIcon
+                                            disabled={surveySessions.length > 0}
                                                 onClick={() => onOpen({ id, type: 'one' })}
                                                 className="text-sm text-blue-700 cursor-pointer mr-2"
                                             />
@@ -305,6 +307,7 @@ function TabDotKhaoSat() {
                                             'XOA'
                                         ) && (
                                             <DeleteIcon
+                                            disabled={surveySessions.length > 0}
                                                 popConfirm={{
                                                     onConfirm: () => handleDelete(id),
                                                 }}

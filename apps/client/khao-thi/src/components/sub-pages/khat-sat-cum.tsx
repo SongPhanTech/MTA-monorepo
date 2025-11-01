@@ -87,6 +87,7 @@ function TabDotKhaoSatCum() {
             surveyTopic: true,
             surveyQuestion: true,
         },
+        orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
