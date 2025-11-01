@@ -2,6 +2,7 @@ import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Table from '@components/commons/table'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
+import { examBanReason, examPostponeReason } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { useSession } from '@workspace/auth/react'
@@ -11,7 +12,19 @@ import { sqlTransaction } from '@workspace/libs/api/model'
 import { listUser } from '@workspace/libs/constants'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, Modal, message, Row } from 'antd'
+import {
+    AutoComplete,
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    message,
+    Row,
+} from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FileUp, Save } from 'lucide-react'
@@ -648,11 +661,15 @@ export default function DiemQuaTrinh({
                                                 }}
                                                 step={0.5}
                                                 controls={false}
-                                                onChange={(value) => {
+                                                onBlur={(e) => {
+                                                    const score = e.currentTarget.value
+                                                        ? Number(e.currentTarget.value)
+                                                        : 0
                                                     if (
-                                                        Number(value) <=
-                                                        record?.student?.fixedClass?.trainingCourse
-                                                            ?.scoreToTakeExam
+                                                        score &&
+                                                        score <=
+                                                            record?.student?.fixedClass
+                                                                ?.trainingCourse?.scoreToTakeExam
                                                     ) {
                                                         const currentList = {
                                                             ...listForm,
@@ -732,11 +749,15 @@ export default function DiemQuaTrinh({
                                                 }}
                                                 step={0.5}
                                                 controls={false}
-                                                onChange={(value) => {
+                                                onBlur={(e) => {
+                                                    const score = e.currentTarget.value
+                                                        ? Number(e.currentTarget.value)
+                                                        : 0
                                                     if (
-                                                        Number(value) <=
-                                                        record?.student?.fixedClass?.trainingCourse
-                                                            ?.scoreToTakeExam
+                                                        score &&
+                                                        score <=
+                                                            record?.student?.fixedClass
+                                                                ?.trainingCourse?.scoreToTakeExam
                                                     ) {
                                                         const currentList = {
                                                             ...listForm,
@@ -800,10 +821,16 @@ export default function DiemQuaTrinh({
                                         <Form.Item
                                             name={['list', record.id, 'examBannedReason']}
                                             style={{ margin: 0 }}
+                                            required={!!examBanned}
                                         >
-                                            <Input
-                                                placeholder="Nhập lý do đình chỉ"
-                                                disabled={!examBanned && profileId !== listUser.P13}
+                                            <AutoComplete
+                                                placeholder="Nhập lý do cấm thi"
+                                                options={examBanReason.map((s) => ({
+                                                    label: s,
+                                                    value: s,
+                                                }))}
+                                                styles={{ popup: { root: { width: 'fit' } } }}
+                                                disabled={!examBanned}
                                             />
                                         </Form.Item>
                                     )
@@ -823,7 +850,7 @@ export default function DiemQuaTrinh({
                                             label=""
                                             valuePropName="checked"
                                         >
-                                            <Checkbox disabled={profileId !== listUser.P13} />
+                                            <Checkbox disabled />
                                         </Form.Item>
                                     )
                                 },
@@ -835,16 +862,21 @@ export default function DiemQuaTrinh({
                                 width: 200,
                                 render: (_, record) => {
                                     const examPostponed = listForm[record.id]?.examPostponed
+
                                     return (
                                         <Form.Item
                                             name={[record.id, 'examPostponedReason']}
                                             style={{ margin: 0 }}
+                                            required={!!examPostponed}
                                         >
-                                            <Input
+                                            <AutoComplete
                                                 placeholder="Nhập lý do hoãn thi"
-                                                disabled={
-                                                    !(examPostponed && profileId !== listUser.P13)
-                                                }
+                                                options={examPostponeReason.map((s) => ({
+                                                    label: s,
+                                                    value: s,
+                                                }))}
+                                                styles={{ popup: { root: { width: 'fit' } } }}
+                                                disabled={!examPostponed}
                                             />
                                         </Form.Item>
                                     )

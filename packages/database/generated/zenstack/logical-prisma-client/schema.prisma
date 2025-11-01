@@ -2600,8 +2600,8 @@ model StudentSubjectScoreHistory {
   /// @lte(10, 'Điểm tối đa là 10')
   manualFinalScore      Float?
   /// hoãn thi
-  examPostponedReason   Boolean?
-  examPostponed         String?
+  examPostponed         Boolean?
+  examPostponedReason   String?
   /// cấm thi
   examBanned            Boolean?
   examBannedReason      String?

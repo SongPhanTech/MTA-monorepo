@@ -1497,8 +1497,8 @@ exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
   examScore: 'examScore',
   finalScore: 'finalScore',
   manualFinalScore: 'manualFinalScore',
-  examPostponedReason: 'examPostponedReason',
   examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   examBanned: 'examBanned',
   examBannedReason: 'examBannedReason',
   suspended: 'suspended',
@@ -5038,7 +5038,7 @@ exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   studentSubjectScoreId: 'studentSubjectScoreId',
-  examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
   suspendedReason: 'suspendedReason',
   updatedById: 'updatedById'
