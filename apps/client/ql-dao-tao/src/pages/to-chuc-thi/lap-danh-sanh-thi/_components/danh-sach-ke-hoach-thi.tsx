@@ -1,14 +1,18 @@
+import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import RoomSelector from '@components/commons/select-room-table'
 import Table from '@components/commons/table'
+import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
+import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-import type { SubjectVersion } from '@workspace/db/client'
-import { useCountSubjectClass, useFindManyRoom, useFindManySubjectClass } from '@workspace/db/hooks'
+import type { Room, SubjectClass } from '@workspace/db/client'
+import { useCountExam, useFindManyExam, useFindManyRoom } from '@workspace/db/hooks'
+import { useCreateExams, useMergeExam, useUnmergeExam } from '@workspace/libs/api/training'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, Input, Row } from 'antd'
+import { Button, Checkbox, Col, Flex, Form, Input, message, Popover, Row, Switch } from 'antd'
 import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
@@ -18,21 +22,22 @@ interface Props {
     setActiveKey: (key: string) => void
 }
 
-interface SubjectClassFormType {
+type SubjectClassFormType = {
     list: Record<
         string,
         {
             isLockScore?: boolean
-            isLockFinalScore?: boolean
-            isAnonymous?: boolean
-            isLockAnonymous?: boolean
+            lockExamSessions?: boolean
+            createdExamCode?: boolean
+            lockExamCode?: boolean
             rooms?: string[]
-            merge?: string
         }
     >
 }
 
-// Component hiển thị bảng chọn phòng
+type ButtonFormType = {
+    mergeClasses: boolean
+}
 
 export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey }: Props) {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
@@ -41,99 +46,81 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
 
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const [selectedRowKey, setSelectedRowKey] = useState<React.Key | null>(null)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         examType: undefined,
     })
+    const [open, setOpen] = useState(false)
+    const { showSpinner, hideSpinner } = useSpinner()
 
     const [form] = Form.useForm<SubjectClassFormType>()
+    const [formButton] = Form.useForm<ButtonFormType>()
 
-    const { data: subjectClass = [] } = useFindManySubjectClass(
-        {
-            where: {
-                trainingObjectTypeId,
-                semesterId,
-                deletedAt: null,
-                cancelled: false,
-                active: true,
-                ...(filters.searchText && {
-                    name: {
-                        contains: filters.searchText,
-                        mode: 'insensitive',
-                    },
-                }),
-                ...(filters.examType &&
-                    filters.examType.length > 0 && {
-                        subject: {
-                            examType: {
-                                in: filters.examType,
-                            },
+    const { data: exams = [], refetch: refetchExams } = useFindManyExam({
+        where: {
+            subjectClass: {
+                some: {
+                    trainingObjectTypeId,
+                    semesterId,
+                    ...(filters.searchText && {
+                        name: {
+                            contains: filters.searchText,
+                            mode: 'insensitive',
                         },
                     }),
-            },
-            include: {
-                mainLecturer: {
-                    include: {
-                        userProfile: {
-                            select: {
-                                fullname: true,
+                    ...(filters.examType &&
+                        filters.examType.length > 0 && {
+                            subject: {
+                                examType: {
+                                    in: filters.examType,
+                                },
                             },
-                        },
-                    },
+                        }),
                 },
-                room: {
-                    select: {
-                        id: true,
-                        name: true,
-                        capacity: true,
-                    },
-                },
-                subject: {
-                    include: {
-                        managementOrganization: {
-                            select: {
-                                sTen: true,
-                            },
-                        },
-                    },
-                },
-                _count: {
-                    select: {
-                        subjectClassStudent: true,
-                    },
-                },
-            },
-            take: numberOfPages,
-            skip: (currentPage - 1) * numberOfPages,
-            orderBy: {
-                code: 'asc',
             },
         },
-        { enabled: !!trainingObjectTypeId && !!semesterId }
-    )
-
-    const { data: count } = useCountSubjectClass({
-        where: {
-            trainingObjectTypeId,
-            semesterId,
-            deletedAt: null,
-            cancelled: false,
-            active: true,
-            ...(filters.searchText && {
-                name: {
-                    contains: filters.searchText,
-                    mode: 'insensitive',
-                },
-            }),
-            ...(filters.examType &&
-                filters.examType.length > 0 && {
-                    subject: {
-                        examType: {
-                            in: filters.examType,
+        include: {
+            subjectClass: {
+                include: {
+                    mainLecturer: {
+                        include: {
+                            userProfile: {
+                                select: {
+                                    fullname: true,
+                                },
+                            },
                         },
                     },
-                }),
+                    room: {
+                        select: {
+                            id: true,
+                            name: true,
+                            capacity: true,
+                        },
+                    },
+                    subject: true,
+                    _count: {
+                        select: {
+                            subjectClassStudent: true,
+                        },
+                    },
+                },
+            },
+            studentSubjectScore: true,
+        },
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: count } = useCountExam({
+        where: {
+            subjectClass: {
+                some: {
+                    trainingObjectTypeId,
+                    semesterId,
+                },
+            },
         },
     })
 
@@ -149,10 +136,16 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
         },
     })
 
+    console.log(exams)
+
+    const { mutateAsync: createExam } = useCreateExams()
+    const { mutateAsync: mergeExam } = useMergeExam()
+    const { mutateAsync: unmergeExam } = useUnmergeExam()
+
     const rowSelection: TableRowSelection = {
-        selectedRowKeys: selectedRowKey ? [selectedRowKey] : [],
+        selectedRowKeys: selectedRowKeys,
         onChange: (selectedKeys: React.Key[]) => {
-            setSelectedRowKey(selectedKeys[0])
+            setSelectedRowKeys(selectedKeys)
         },
     }
 
@@ -191,6 +184,92 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
         console.log(data)
     }
 
+    const handleCreateExam = async () => {
+        try {
+            showSpinner()
+            const dataSubmit = formButton.getFieldsValue()
+            if (trainingObjectTypeId && semesterId) {
+                const res = await createExam({
+                    data: {
+                        isGroupBySubject: dataSubmit.mergeClasses,
+                        semesterId: semesterId,
+                        trainingObjectTypeId: trainingObjectTypeId,
+                    },
+                })
+
+                if (res.status !== 200) {
+                    message.error(res.data.message)
+                    return
+                }
+
+                message.success('Tạo kế hoạch thi thành công')
+                refetchExams()
+                formButton.resetFields()
+                setOpen(false)
+            }
+        } catch (error: any) {
+            message.error(error?.message || 'Tạo kế hoạch thi thất bại')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleMergeExam = async () => {
+        try {
+            showSpinner()
+
+            if (selectedRowKeys.length < 2) {
+                message.error('Vui lòng chọn ít nhất 2 kỳ thi để ghép')
+                return
+            }
+
+            const res = await mergeExam({
+                data: {
+                    examIds: selectedRowKeys as string[],
+                },
+            })
+
+            if (res.status !== 200) {
+                message.error(res.data.message)
+                return
+            }
+
+            message.success(res.data.message)
+            refetchExams()
+            setSelectedRowKeys([])
+        } catch (error: any) {
+            message.error(error?.message || 'Ghép lớp không thành công')
+        } finally {
+            hideSpinner()
+        }
+    }
+
+    const handleUnmergeExam = async () => {
+        try {
+            showSpinner()
+
+            if (selectedRowKeys) {
+                const res = await unmergeExam({
+                    data: {
+                        examId: selectedRowKeys[0] as string,
+                    },
+                })
+
+                if (res.status !== 200) {
+                    message.error(res.data.message)
+                }
+
+                message.success(res.data.message)
+                refetchExams()
+                setSelectedRowKeys([])
+            }
+        } catch (error: any) {
+            message.error(error?.message || 'Tách lớp không thành công')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     return (
         <Row gutter={[8, 0]}>
             <Col span={24}>
@@ -220,6 +299,55 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                         />
                     </Flex>
                     <Flex justify="end" gap={8}>
+                        <Popover
+                            content={
+                                <Form
+                                    form={formButton}
+                                    className="max-w-56"
+                                    initialValues={{
+                                        mergeClasses: false,
+                                    }}
+                                    onFinish={handleCreateExam}
+                                >
+                                    <FormItem
+                                        form={formButton}
+                                        name="mergeClasses"
+                                        label="Ghép lớp"
+                                        valuePropName="checked"
+                                    >
+                                        <Switch
+                                            checkedChildren="Ghép lớp"
+                                            unCheckedChildren="Riêng"
+                                        />
+                                    </FormItem>
+                                    <Col span={24} className="text-right mt-4">
+                                        <Button type="primary" htmlType="submit">
+                                            Xác nhận
+                                        </Button>
+                                    </Col>
+                                </Form>
+                            }
+                            title="Ghép lớp kỳ thi"
+                            trigger="click"
+                            placement="bottomRight"
+                            open={open}
+                            onOpenChange={setOpen}
+                        >
+                            <Button type="primary">Tạo kế hoạch thi</Button>
+                        </Popover>
+
+                        {exams.length > 0 && (
+                            <Button type="primary" onClick={handleMergeExam}>
+                                Ghép lớp
+                            </Button>
+                        )}
+
+                        {exams.length > 0 && (
+                            <Button type="primary" onClick={handleUnmergeExam}>
+                                Tách lớp
+                            </Button>
+                        )}
+
                         <Button type="primary" onClick={handleSubmitExam}>
                             Lưu
                         </Button>
@@ -233,50 +361,45 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                     <Table
                         rowKey="id"
                         rowSelection={{
-                            type: 'radio',
+                            type: 'checkbox',
                             ...rowSelection,
                         }}
-                        onRow={(record) => ({
-                            onClick: () => {
-                                setSelectedRowKey(record?.id)
-                            },
-                            onDoubleClick: (e) => {
-                                const target = e.target as HTMLElement
-                                // Kiểm tra xem có click vào Select, Popover hoặc các component con của RoomSelector không
-                                if (
-                                    target.closest('.ant-select') ||
-                                    target.closest('.ant-popover') ||
-                                    target.closest('.ant-input') ||
-                                    target.closest('.ant-table-row-selection')
-                                ) {
-                                    e.stopPropagation()
-                                    return
-                                }
-                                onSelectSubjectClass(record?.id)
-                                setSelectedRowKey(record?.id)
-                                setActiveKey?.('2')
-                            },
-                        })}
+                        // onRow={(record) => ({
+                        //     // onClick: () => {
+                        //     //     setSelectedRowKey(record?.id)
+                        //     //     onSelectSubjectClass(record?.id)
+                        //     // },
+                        //     onDoubleClick: (e) => {
+                        //         const target = e.target as HTMLElement
+                        //         if (
+                        //             target.closest('.ant-select') ||
+                        //             target.closest('.ant-popover') ||
+                        //             target.closest('.ant-input') ||
+                        //             target.closest('.ant-table-row-selection')
+                        //         ) {
+                        //             e.stopPropagation()
+                        //             return
+                        //         }
+                        //         onSelectSubjectClass(record?.id)
+                        //         setSelectedRowKey(record?.id)
+                        //         setActiveKey?.('2')
+                        //     },
+                        // })}
+                        data={exams}
                         columns={[
                             {
                                 title: 'STT',
                                 align: 'center',
                                 width: 30,
                                 render: (_, __, index) =>
-                                    index + 1 + (currentPage - 1) * DEFAULT_PAGINATE_SIZE,
-                            },
-                            {
-                                title: 'Mã LMH',
-                                align: 'center',
-                                width: 30,
-                                render: (_, record) => record.code || '',
+                                    index + 1 + (currentPage - 1) * numberOfPages,
                             },
                             {
                                 title: 'Tên môn học',
                                 align: 'center',
                                 width: 150,
-                                render: (_, record: { subject?: SubjectVersion }) => {
-                                    const name = record.subject?.name || ''
+                                render: (_, record) => {
+                                    const name = record.subjectClass?.[0]?.subject?.name || ''
                                     return (
                                         <div className="text-left">
                                             <HighlightText
@@ -288,30 +411,53 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                 },
                             },
                             {
+                                title: 'Mã LMH',
+                                align: 'center',
+                                width: 30,
+                                render: (_, record) => {
+                                    return record.subjectClass.length ? (
+                                        <TextTruncate
+                                            arr={record.subjectClass.map((item: SubjectClass) => {
+                                                return {
+                                                    key: item.id,
+                                                    label: item.code,
+                                                }
+                                            })}
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
+                            },
+                            {
                                 title: 'Số tín chỉ',
                                 align: 'center',
                                 width: 50,
-                                render: (_, record: { subject?: SubjectVersion }) =>
-                                    record.subject?.credit || '',
+                                render: (_, record) =>
+                                    record.subjectClass?.[0]?.subject?.credit || '',
                             },
                             {
                                 title: 'Số sinh viên',
                                 align: 'center',
                                 width: 60,
-                                render: (_, record) => {
-                                    return record._count?.subjectClassStudent || 0
-                                },
+                                render: (_, record) =>
+                                    record.subjectClass?.reduce(
+                                        (
+                                            total: number,
+                                            sc: SubjectClass & {
+                                                _count?: { subjectClassStudent?: number }
+                                            }
+                                        ) => total + (sc._count?.subjectClassStudent || 0),
+                                        0
+                                    ) || 0,
                             },
                             {
                                 title: 'Hình thức thi',
                                 align: 'center',
                                 width: 60,
-                                render: (_, record: { subject?: SubjectVersion }) => {
-                                    return record?.subject?.examType ? (
-                                        <div>{getExamTypeLabel(record?.subject?.examType)}</div>
-                                    ) : (
-                                        ''
-                                    )
+                                render: (_, record) => {
+                                    const examType = record.subjectClass?.[0]?.subject?.examType
+                                    return examType ? getExamTypeLabel(examType) : ''
                                 },
                             },
                             {
@@ -319,6 +465,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                 align: 'center',
                                 width: 60,
                                 render: (_, record) => {
+                                    const isLockScore = record.subjectClass?.[0]?.isLockScore
                                     return (
                                         <Form.Item
                                             className="mb-0"
@@ -326,7 +473,7 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                             valuePropName="checked"
                                         >
                                             <span className="pointer-events-none">
-                                                <Checkbox checked={record.isLockScore} />
+                                                <Checkbox checked={isLockScore} />
                                             </span>
                                         </Form.Item>
                                     )
@@ -337,14 +484,15 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                 align: 'center',
                                 width: 40,
                                 render: (_, record) => {
+                                    const lockExamSessions = record.lockExamSessions
                                     return (
                                         <Form.Item
                                             className="mb-0"
-                                            name={['list', record.id, 'isLockFinalScore']}
+                                            name={['list', record.id, 'lockExamSessions']}
                                             valuePropName="checked"
                                         >
                                             <span className="pointer-events-none">
-                                                <Checkbox checked={false} />
+                                                <Checkbox checked={lockExamSessions} />
                                             </span>
                                         </Form.Item>
                                     )
@@ -355,14 +503,15 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                 align: 'center',
                                 width: 40,
                                 render: (_, record) => {
+                                    const createdExamCode = record.createdExamCode
                                     return (
                                         <Form.Item
                                             className="mb-0"
-                                            name={['list', record.id, 'isAnonymous']}
+                                            name={['list', record.id, 'createdExamCode']}
                                             valuePropName="checked"
                                         >
                                             <span className="pointer-events-none">
-                                                <Checkbox checked={false} />
+                                                <Checkbox checked={createdExamCode} />
                                             </span>
                                         </Form.Item>
                                     )
@@ -373,14 +522,15 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                 align: 'center',
                                 width: 40,
                                 render: (_, record) => {
+                                    const lockExamCode = record.lockExamCode
                                     return (
                                         <Form.Item
                                             className="mb-0"
-                                            name={['list', record.id, 'isLockAnonymous']}
+                                            name={['list', record.id, 'lockExamCode']}
                                             valuePropName="checked"
                                         >
                                             <span className="pointer-events-none">
-                                                <Checkbox checked={false} />
+                                                <Checkbox checked={lockExamCode} />
                                             </span>
                                         </Form.Item>
                                     )
@@ -391,21 +541,28 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                 align: 'center',
                                 width: 170,
                                 render: (_, record) => {
+                                    const uniqueRooms = Array.from(
+                                        new Map(
+                                            record.subjectClass
+                                                ?.filter(
+                                                    (sc: SubjectClass & { room: Room }) => sc.room
+                                                )
+                                                .map((sc: SubjectClass & { room: Room }) => [
+                                                    sc.room.id,
+                                                    {
+                                                        name: sc.room.name,
+                                                        roomId: sc.room.id,
+                                                        quantity: sc.room.capacity,
+                                                    },
+                                                ]) ?? []
+                                        ).values()
+                                    )
+
                                     return (
                                         <Form.Item
                                             className="mb-0"
                                             name={['list', record.id, 'rooms']}
-                                            initialValue={
-                                                record.room
-                                                    ? [
-                                                          {
-                                                              name: record.room.name,
-                                                              roomId: record.room.id,
-                                                              quantity: record.room.capacity,
-                                                          },
-                                                      ]
-                                                    : []
-                                            }
+                                            initialValue={uniqueRooms}
                                         >
                                             <RoomSelector rooms={rooms} />
                                         </Form.Item>
@@ -417,49 +574,22 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                                 align: 'center',
                                 width: 100,
                                 render: (_, record) => {
-                                    return (
-                                        <div className="text-left">
-                                            {record.mainLecturer?.userProfile?.fullname || ''}
-                                        </div>
-                                    )
+                                    const lecturerName =
+                                        record.subjectClass?.[0]?.mainLecturer?.userProfile
+                                            ?.fullname
+                                    return <div className="text-left">{lecturerName || ''}</div>
                                 },
                             },
                             {
                                 title: 'Ngày thi',
                                 align: 'center',
                                 width: 20,
-                                render: (_, record) =>
-                                    record.examDate ? formatDate(record.examDate) : undefined,
-                            },
-                            {
-                                title: 'Ghép lớp',
-                                align: 'center',
-                                width: 10,
                                 render: (_, record) => {
-                                    return (
-                                        <Form.Item
-                                            className="mb-0 w-full"
-                                            name={['list', record.id, 'merge']}
-                                            initialValue="rieng"
-                                        >
-                                            <Select
-                                                options={[
-                                                    {
-                                                        label: 'Riêng',
-                                                        value: 'rieng',
-                                                    },
-                                                    {
-                                                        label: 'Ghép',
-                                                        value: 'ghep',
-                                                    },
-                                                ]}
-                                            />
-                                        </Form.Item>
-                                    )
+                                    const examDate = record.subjectClass?.[0]?.examDate
+                                    return examDate ? formatDate(examDate) : undefined
                                 },
                             },
                         ]}
-                        data={subjectClass}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

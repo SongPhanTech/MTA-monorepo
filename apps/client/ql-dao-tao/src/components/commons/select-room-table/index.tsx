@@ -1,6 +1,6 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { Button, Flex, Input, Popover, Select } from 'antd'
+import { Input, Popover, Select } from 'antd'
 import { useState } from 'react'
 
 interface RoomSelectorProps {
@@ -19,37 +19,25 @@ interface RoomTableData {
 
 const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
     const [visible, setVisible] = useState(false)
-    const [tempValue, setTempValue] =
-        useState<Array<{ roomId: string; quantity: number; name: string }>>(value)
-
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [searchText, setSearchText] = useState('')
 
     const handleQuantityChange = (roomId: string, quantity: number) => {
-        setTempValue((prev) => {
-            const existing = prev.find((v) => v.roomId === roomId)
-            if (existing) {
-                return prev.map((v) =>
-                    v.roomId === roomId ? { roomId, quantity, name: existing.name } : v
-                )
-            }
-            const room = rooms.find((r) => r.id === roomId)
-            return [...prev, { roomId, quantity, name: room?.name || '' }]
-        })
+        const newValue = value.map((v) =>
+            v.roomId === roomId ? { roomId, quantity, name: v.name } : v
+        )
+        onChange?.(newValue)
     }
 
-    const handleConfirm = () => {
-        onChange?.(tempValue)
-        setVisible(false)
-    }
-
-    const handleCancel = () => {
-        setTempValue(value)
-        setVisible(false)
+    const handleDeselect = (tagValue: string) => {
+        const roomName = tagValue.split('-').slice(0, -1).join('-')
+        const newValue = value.filter((v) => v.name !== roomName)
+        onChange?.(newValue)
     }
 
     const tableData: RoomTableData[] = rooms.map((room) => {
-        const selectedValue = tempValue.find((v) => v.roomId === room.id)
+        const selectedValue = value.find((v) => v.roomId === room.id)
         return {
             id: room.id,
             name: room.name,
@@ -59,11 +47,16 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
         }
     })
 
+    // Lọc dữ liệu theo search text
+    const filteredData = tableData.filter((room) =>
+        room.name.toLowerCase().includes(searchText.toLowerCase())
+    )
+
     const rowSelection = {
-        selectedRowKeys: tempValue.map((v) => v.roomId),
+        selectedRowKeys: value.map((v) => v.roomId),
         onChange: (selectedRowKeys: React.Key[]) => {
-            const newTempValue = selectedRowKeys.map((roomId) => {
-                const existing = tempValue.find((v) => v.roomId === roomId)
+            const newValue = selectedRowKeys.map((roomId) => {
+                const existing = value.find((v) => v.roomId === roomId)
                 const room = rooms.find((r) => r.id === roomId)
                 return {
                     roomId: roomId as string,
@@ -71,12 +64,25 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
                     name: existing?.name || room?.name || '',
                 }
             })
-            setTempValue(newTempValue)
+            onChange?.(newValue)
         },
     }
 
     const content = (
         <div className="w-[600px]">
+            <div className="mb-3">
+                <Input
+                    className="w-80"
+                    placeholder="Tìm kiếm phòng..."
+                    value={searchText}
+                    onChange={(e) => {
+                        setSearchText(e.target.value)
+                        setCurrentPage(1)
+                    }}
+                    allowClear
+                    onClear={() => setSearchText('')}
+                />
+            </div>
             <Table
                 rowKey="id"
                 columns={[
@@ -84,7 +90,7 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
                         title: 'STT',
                         width: 60,
                         align: 'center',
-                        render: (_, __, index) => index + 1,
+                        render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
                     },
                     {
                         title: 'Tên phòng',
@@ -118,12 +124,12 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
                         ),
                     },
                 ]}
-                dataSource={tableData}
+                dataSource={filteredData}
                 rowSelection={rowSelection}
                 pagination={{
                     current: currentPage,
                     pageSize: numberOfPages,
-                    total: tableData.length,
+                    total: filteredData.length,
                     onChange: (page, pageSize) => {
                         if (numberOfPages === pageSize) {
                             setCurrentPage(page)
@@ -136,12 +142,6 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
                         `${range[0]} - ${range[1]} trong tổng số ${total} bản ghi`,
                 }}
             />
-            <Flex justify="flex-end" gap={8} className="mt-3">
-                <Button onClick={handleCancel}>Hủy</Button>
-                <Button type="primary" onClick={handleConfirm}>
-                    Xác nhận
-                </Button>
-            </Flex>
         </div>
     )
 
@@ -159,6 +159,7 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
                 placeholder="Chọn phòng thi"
                 maxTagCount="responsive"
                 open={false}
+                onDeselect={handleDeselect}
             />
         </Popover>
     )
