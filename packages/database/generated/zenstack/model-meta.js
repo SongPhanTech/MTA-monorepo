@@ -7892,12 +7892,12 @@ const metadata = {
                     type: "Float",
                     isOptional: true,
                     attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
-                }, examPostponedReason: {
-                    name: "examPostponedReason",
-                    type: "Boolean",
-                    isOptional: true,
                 }, examPostponed: {
                     name: "examPostponed",
+                    type: "Boolean",
+                    isOptional: true,
+                }, examPostponedReason: {
+                    name: "examPostponedReason",
                     type: "String",
                     isOptional: true,
                 }, examBanned: {

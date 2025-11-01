@@ -194,8 +194,8 @@ model StudentSubjectScoreHistory extends Base {
   manualFinalScore      Float?              @gte(0, 'Điểm tối thiểu là 0') @lte(10, 'Điểm tối đa là 10')
 
   /// hoãn thi
-  examPostponedReason   Boolean?
-  examPostponed         String?
+  examPostponed         Boolean?
+  examPostponedReason   String?
 
   /// cấm thi
   examBanned            Boolean?
@@ -914,9 +914,8 @@ model SubjectClass extends BaseNoCode {
   subjectClassTimes           SubjectClassTime[]  // Thứ trong tuần và tiết học
 
   subjectClassHistory         SubjectClassHistory[]
-	survey                      Survey []// Đợt khảo sát cho giảng viên
+  survey                      Survey []// Đợt khảo sát cho giảng viên
   @@schema("ql-dao-tao")
-
 }
 
 model SubjectClassHistory extends Base {

@@ -7508,12 +7508,12 @@ const metadata: ModelMeta = {
                     name: "manualFinalScore",
                     type: "Float",
                     isOptional: true,
-                }, examPostponedReason: {
-                    name: "examPostponedReason",
-                    type: "Boolean",
-                    isOptional: true,
                 }, examPostponed: {
                     name: "examPostponed",
+                    type: "Boolean",
+                    isOptional: true,
+                }, examPostponedReason: {
+                    name: "examPostponedReason",
                     type: "String",
                     isOptional: true,
                 }, examBanned: {
