@@ -35,7 +35,7 @@ const { Step } = Steps
 
 export type PutSurveyType = Survey & {
     surveyObjectTypes: string[]
-    semesterId?: string
+    semesterId: string
     lecturerIds: string[]
     surveyQuestionIds: string[]
     surveyChoice: any[]
@@ -369,7 +369,7 @@ const PutSurveyModal = () => {
                         {input?.type === 'multiple' && (
                             <>
                                 <Col span={12}>
-                                    <FormItem form={form} name="semesterId" label="Kỳ học">
+                                    <FormItem form={form} name="semesterId" label="Kỳ học" required>
                                         <TreeSelectAnt
                                             showSearch
                                             dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}

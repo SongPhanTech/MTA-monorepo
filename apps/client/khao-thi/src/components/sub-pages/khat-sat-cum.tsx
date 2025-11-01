@@ -91,11 +91,14 @@ function TabDotKhaoSatCum() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountClusterSurvey({ where: { ...where, deletedAt: null } })
+    const { data: count, refetch: refetchCount } = useCountClusterSurvey({ where: { ...where, deletedAt: null } })
 
     const { onOpen } = useDisclosure<{ id: string; type: string }>({
         tag: 'PutSurveyModal',
-        onClose: () => refetch(),
+        onClose: () => {
+            refetch()
+            refetchCount()
+        },
     })
 
     const { showSpinner, hideSpinner } = useSpinner()
