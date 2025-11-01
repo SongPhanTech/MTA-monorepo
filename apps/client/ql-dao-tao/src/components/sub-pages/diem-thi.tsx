@@ -977,7 +977,7 @@ export default function DiemThi({
                     </Form>
                 </Col>
             </Row>
-            <div className="fixed p-3 z-[10] bottom-[34px] left-0 right-0 w-[100vw] bg-white ">
+            <div className="fixed p-3 z-[10] bottom-[30px] left-0 right-0 w-[100vw] bg-white ">
                 <div>
                     Bấm Tab: Chuyển ô theo hàng ngang, Mũi tên xuống: Chuyển ô theo hàng dọc, và
                     hàng ngang

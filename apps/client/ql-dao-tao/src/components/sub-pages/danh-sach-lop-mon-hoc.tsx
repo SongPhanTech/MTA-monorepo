@@ -487,7 +487,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
-                                title: 'Hạn ĐT',
+                                title: 'Hạn NĐT',
                                 width: 120,
                                 align: 'center',
                                 type: 'date',
@@ -505,21 +505,17 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                                     )
                                 },
                             },
-
                             {
-                                title: 'Hạn ĐQT',
+                                title: 'Hạn ĐT',
                                 width: 100,
                                 align: 'center',
                                 render: (__, record) => {
                                     const today = dayjs()
-                                    const examScoreDeadline = dayjs(record?.examScoreDeadline)
-
-                                    if (!examScoreDeadline) {
+                                    if (!record?.examScoreDeadline) {
                                         return '-'
                                     }
-
+                                    const examScoreDeadline = dayjs(record?.examScoreDeadline)
                                     let daysRemaining: number
-
                                     if (today?.isBefore(examScoreDeadline)) {
                                         daysRemaining = examScoreDeadline?.diff(today, 'day')
                                     } else {

@@ -51,6 +51,7 @@ interface SubjectClassScoreForm {
             examPostponedReason?: string | null
             attendanceScoreOld?: number | null
             midtermScoreOld?: number | null
+            isChanged?: boolean
         }
     >
 }
@@ -61,13 +62,10 @@ export default function DiemQuaTrinh({
 }: any) {
     const { can } = useAbility()
     const { showSpinner, hideSpinner } = useSpinner()
-    const router = useRouter()
     const [form] = Form.useForm<SubjectClassScoreForm>()
-    const [isChanged, setIsChanged] = useState(false)
 
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId
-    const [open, setOpen] = useState(false)
     const [importModalVisible, setImportModalVisible] = useState(false)
     const [filterTable, setFilterTable] = useState<FilterTable>({
         fullname: '',
@@ -206,7 +204,6 @@ export default function DiemQuaTrinh({
                 if (res?.status === 200) {
                     message.success('Đã cập nhật điểm thi thành công!')
                     debouncedRefetch()
-                    setIsChanged(false)
                 }
             }
         } catch (error: any) {
@@ -220,7 +217,6 @@ export default function DiemQuaTrinh({
 
     const handleImportConfirm = (importedData: any[]) => {
         showSpinner()
-
         try {
             message.success('Nhập điểm từ file thành công!')
         } catch (error: any) {
@@ -379,11 +375,6 @@ export default function DiemQuaTrinh({
         { refetchOnWindowFocus: false }
     )
 
-    // const statistics = getScoreStatistics(dataTable)
-    const handleOpenChange = (newOpen: boolean) => {
-        setOpen(newOpen)
-    }
-
     const handleScoreInputKeyDown = (
         e: React.KeyboardEvent<HTMLInputElement>,
         recordId: string,
@@ -432,8 +423,7 @@ export default function DiemQuaTrinh({
             dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&
             dataDetailSubjectClass?.scoreDeadline &&
             dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
-            !dataDetailSubjectClass?.isLockScore &&
-            profileId !== listUser.P13
+            !dataDetailSubjectClass?.isLockScore
         )
     }, [dataDetailSubjectClass, subjectClassId])
 
@@ -497,7 +487,7 @@ export default function DiemQuaTrinh({
     // }, [isChanged, router.events.emit, router.events.off, router.events.on, router.pathname])
 
     return (
-        <Row gutter={[16, 16]}>
+        <Row gutter={[8, 8]}>
             <Col span={24} className="flex justify-end">
                 <Flex gap={4}>
                     {can(
@@ -556,6 +546,7 @@ export default function DiemQuaTrinh({
                 <Form form={form}>
                     <Table
                         rowKey="id"
+                        className='m-0'
                         id="student-subject-score"
                         filters={filterTable}
                         setFilters={setFilterTable}
@@ -614,7 +605,6 @@ export default function DiemQuaTrinh({
                                 type: 'order',
                                 render: (_, record) => {
                                     const recordForm = listForm?.[record.id]?.attendanceScore
-                                    const currentList = listForm
                                     return (
                                         <Form.Item
                                             className="w-full mb-0"
@@ -940,7 +930,7 @@ export default function DiemQuaTrinh({
                     />
                 </Form>
             </Col>
-            <div className="fixed p-3 z-[10] bottom-[35px] left-0 right-0 w-[100vw] bg-white ">
+            <div className="fixed p-3 z-[10] bottom-[30px] left-0 right-0 w-[100vw] bg-white ">
                 <div>
                     Bấm Tab: Chuyển ô theo hàng ngang, Mũi tên xuống: Chuyển ô theo hàng dọc, và
                     hàng ngang
