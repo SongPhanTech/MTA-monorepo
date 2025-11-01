@@ -1163,6 +1163,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'userProfile',
+                }, surveySession: {
+                    name: "surveySession",
+                    type: "SurveySession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'profile',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -17738,6 +17744,20 @@ const metadata: ModelMeta = {
                     name: "additionalSuggestion",
                     type: "String",
                     isOptional: true,
+                }, profile: {
+                    name: "profile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'surveySession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "profileId" },
+                }, profileId: {
+                    name: "profileId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'profile',
                 }, student: {
                     name: "student",
                     type: "Student",

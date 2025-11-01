@@ -775,6 +775,7 @@ model UserProfile {
   subjectVersionHistory         SubjectVersionHistory[]
   subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
+  surveySession                 SurveySession[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -4870,6 +4871,8 @@ model SurveySession {
   survey               Survey            @relation(fields: [surveyId], references: [id])
   surveyId             String
   additionalSuggestion String?
+  profile              UserProfile?      @relation(fields: [profileId], references: [id])
+  profileId            String?
   student              Student?          @relation(fields: [studentId], references: [id])
   studentId            String?
   startedAt            DateTime          @default(now())

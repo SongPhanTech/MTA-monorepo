@@ -159,6 +159,9 @@ model SurveySession extends Base {
 
   additionalSuggestion String?
 
+  profile              UserProfile?      @relation(fields: [profileId], references: [id])
+  profileId            String?
+
   student              Student?          @relation(fields: [studentId], references: [id])
   studentId            String?
 
