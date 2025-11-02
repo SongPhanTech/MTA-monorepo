@@ -7,24 +7,24 @@ import { Printer } from 'lucide-react'
 import { useMemo } from 'react'
 
 interface ExportTemplateExamProps {
-    selectedFixedClass: string | undefined
+    selectedSubjectClass: string | undefined
     dataTable: any[]
     dataClass: any
     disabled?: boolean
 }
 
 const ExportTemplateExam = ({
-    selectedFixedClass,
+    selectedSubjectClass,
     dataTable,
     dataClass,
     disabled,
 }: ExportTemplateExamProps) => {
     const { getExamTypeLabel } = useExamTypeOptions()
-    const firstTrainingCourse = useMemo(() => {
-        return dataClass?.subjectClassStudent.find(({ student }: any) =>
-            Boolean(student.fixedClass?.trainingCourse)
-        )?.student?.fixedClass?.trainingCourse
-    }, [dataClass?.subjectClassStudent])
+    // const firstTrainingCourse = useMemo(() => {
+    //     return dataClass?.subjectClassStudent?.find(({ student }: any) =>
+    //         Boolean(student.fixedClass?.trainingCourse)
+    //     )?.student?.fixedClass?.trainingCourse
+    // }, [dataClass?.subjectClassStudent])
     const trainingCourseSame = useMemo(() => {
         if (!dataClass?.subjectClassStudent) return null
 
@@ -224,10 +224,10 @@ const ExportTemplateExam = ({
         worksheet.getCell('C8').style = headerSubtitleStyleLeft
 
         worksheet.mergeCells('A9:B9')
-        worksheet.getCell('A9').value = 'Hệ số điểm chuyên cần: '
+        // worksheet.getCell('A9').value = 'Hệ số điểm chuyên cần: '
         worksheet.getCell('A9').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('C9').value = `${firstTrainingCourse?.coef_1 || ''}`
+        // worksheet.getCell('C9').value = `${firstTrainingCourse?.coef_1 || ''}`
         worksheet.getCell('C9').style = headerSubtitleStyleLeft
 
         worksheet.getCell('E6').value = 'Khoá: '
@@ -267,16 +267,16 @@ const ExportTemplateExam = ({
         worksheet.getCell('J8').style = headerSubtitleStyleLeft
 
         worksheet.mergeCells('E9:F9')
-        worksheet.getCell('E9').value = 'Hệ số điểm thường xuyên: '
+        // worksheet.getCell('E9').value = 'Hệ số điểm thường xuyên: '
         worksheet.getCell('E9').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('G9').value = `${firstTrainingCourse?.coef_2 || ''}`
+        // worksheet.getCell('G9').value = `${firstTrainingCourse?.coef_2 || ''}`
         worksheet.getCell('G9').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('I9').value = 'Hệ số điểm thi: '
+        // worksheet.getCell('I9').value = 'Hệ số điểm thi: '
         worksheet.getCell('I9').style = headerSubtitleStyleLeft
 
-        worksheet.getCell('J9').value = `${firstTrainingCourse?.coef_3 || ''}`
+        // worksheet.getCell('J9').value = `${firstTrainingCourse?.coef_3 || ''}`
         worksheet.getCell('J9').style = headerSubtitleStyleLeft
 
         // Thêm tiêu đề bảng
@@ -391,7 +391,7 @@ const ExportTemplateExam = ({
     }
 
     return (
-        <Button onClick={exportTemplate} disabled={!selectedFixedClass || disabled}>
+        <Button onClick={exportTemplate} disabled={!selectedSubjectClass || disabled}>
             <Printer />
             Xuất phiếu danh sách thi
         </Button>

@@ -1,7 +1,6 @@
 import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 import FormItem from '@components/commons/form-item'
-import DiemQuaTrinh from '@components/sub-pages/diem-qua-trinh'
-import DiemThi from '@components/sub-pages/diem-thi'
+import NhapDiem from '@components/sub-pages/nhap-diem'
 import NhapdiemPhach from '@components/sub-pages/nhap-diem-phach'
 import PhongThi from '@components/sub-pages/ql-phong-thi'
 import SinhPhach from '@components/sub-pages/sinh-phach'
@@ -108,12 +107,7 @@ export default function QuanLyDiemLopMonHoc({
                     {
                         label: 'Nhập điểm quá trình',
                         key: '2',
-                        children: (
-                            <DiemQuaTrinh
-                                dataDetailSubjectClass={data}
-                                loadData={activeKey !== '1'}
-                            />
-                        ),
+                        children: <NhapDiem loadData={activeKey !== '1'} score={'CC/TX'} />,
                         disabled: !data,
                     },
                 ]
@@ -125,9 +119,7 @@ export default function QuanLyDiemLopMonHoc({
                     {
                         label: 'Nhập điểm thi',
                         key: '2',
-                        children: (
-                            <DiemThi dataDetailSubjectClass={data} loadData={activeKey !== '1'} />
-                        ),
+                        children: <NhapDiem score="THI" loadData={activeKey !== '1'} />,
                         disabled: !data,
                     },
                 ]
@@ -140,9 +132,7 @@ export default function QuanLyDiemLopMonHoc({
                 {
                     label: 'Điểm',
                     key: '2',
-                    children: (
-                        <DiemQuaTrinh dataDetailSubjectClass={data} loadData={activeKey !== '1'} />
-                    ),
+                    children: <NhapDiem loadData={activeKey !== '1'} />,
                     disabled: !data,
                 },
             ]

@@ -82,7 +82,7 @@ export function splitFullName(fullName?: string): {
     return { firstName, lastName }
 }
 
-export const calcFinalScore = (
+export const  calcFinalScore = (
     coef: Prisma.TrainingCourseGetPayload<{
         select: {
             coef_1: true
@@ -92,9 +92,28 @@ export const calcFinalScore = (
         }
     }>,
     subjectScore: Prisma.StudentSubjectScoreGetPayload<{
-        include: {
-            certificates: { include: { archivedCertificate: true } }
-            awards: { include: { archivedAward: true } }
+        select: {
+            certificates: {
+                select: {
+                    archivedCertificate: {
+                        select: {
+                            finalScore: true
+                        }
+                    }
+                }
+            }
+            awards: {
+                select: {
+                    archivedAward: {
+                        select: {
+                            bonusScore: true
+                        }
+                    }
+                }
+            }
+            attendanceScore: true
+            midtermScore: true
+            examScore: true
         }
     }>
 ): Decimal | null => {
@@ -268,6 +287,5 @@ export function getFilenameFromContentDisposition(contentDispositionHeader: stri
 
     return filename
 }
-
 
 export { fastIsEqual } from './fast-is-equal'

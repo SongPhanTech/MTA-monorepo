@@ -1,17 +1,22 @@
+import type { DiemLopMonHocProps } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
 import { Button } from 'antd'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { FileDown } from 'lucide-react'
 
 interface ExportScoreTemplateProps {
-    selectedFixedClass: string | undefined
+    selectedSubjectClass: string | undefined
     dataTable: any[]
-    type: string
+    type: DiemLopMonHocProps['score']
 }
 
-const ExportScoreTemplate = ({ selectedFixedClass, dataTable, type }: ExportScoreTemplateProps) => {
+const ExportScoreTemplate = ({
+    selectedSubjectClass,
+    dataTable,
+    type,
+}: ExportScoreTemplateProps) => {
     const exportTemplate = async () => {
-        if (!selectedFixedClass || dataTable.length === 0) return
+        if (!selectedSubjectClass || dataTable.length === 0) return
 
         const firstRecord = dataTable[0]
         const subjectClass = firstRecord.subjectClass
@@ -281,7 +286,7 @@ const ExportScoreTemplate = ({ selectedFixedClass, dataTable, type }: ExportScor
             { width: 15 }, // Điểm TX
             { width: 15 }, // Điểm Thi
         ]
-        if (type !== 'thi') {
+        if (type !== 'THI') {
             worksheet.eachRow((row, rowNumber) => {
                 row.eachCell((cell, colNumber) => {
                     // Nếu là cột "Điểm thi" → khóa, ngược lại thì cho sửa
@@ -303,7 +308,7 @@ const ExportScoreTemplate = ({ selectedFixedClass, dataTable, type }: ExportScor
     }
 
     return (
-        <Button onClick={exportTemplate} disabled={!selectedFixedClass}>
+        <Button onClick={exportTemplate} disabled={!selectedSubjectClass}>
             <FileDown />
             Xuất mẫu nhập điểm
         </Button>
