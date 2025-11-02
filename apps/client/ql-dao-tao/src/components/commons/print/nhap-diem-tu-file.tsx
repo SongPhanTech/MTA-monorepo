@@ -3,10 +3,21 @@ import { Button, Modal, message, Space, Table, Tag } from 'antd'
 import { useState } from 'react'
 import * as XLSX from 'xlsx'
 
+export type ImportScoreData = {
+    key: any
+    studentCode: any
+    studentName: any
+    dobStudent: any
+    className: any
+    attendanceScore: number
+    midtermScore: number
+    examScore: number
+}
+
 interface ImportScoreModalProps {
     visible: boolean
     onCancel: () => void
-    onConfirm: (data: any[]) => void
+    onConfirm: (data: ImportScoreData[]) => void
     existingStudents: any[]
 }
 
@@ -16,7 +27,7 @@ const ImportScoreModal = ({
     onConfirm,
     existingStudents,
 }: ImportScoreModalProps) => {
-    const [previewData, setPreviewData] = useState<any[]>([])
+    const [previewData, setPreviewData] = useState<ImportScoreData[]>([])
     const [_file, setFile] = useState<File | null>(null)
     const [fileName, setFileName] = useState<string>('')
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
@@ -240,7 +251,6 @@ const ImportScoreModal = ({
                 <Button onClick={() => document.getElementById('file-upload')?.click()}>
                     Chọn file
                 </Button>
-
                 {fileName && (
                     <Space style={{ marginLeft: 16 }}>
                         <Tag
@@ -252,7 +262,6 @@ const ImportScoreModal = ({
                         </Tag>
                     </Space>
                 )}
-
                 <p style={{ marginTop: 8 }}>Chọn file Excel mẫu đã xuất từ hệ thống</p>
             </div>
 
