@@ -380,6 +380,7 @@ enum EvaluationMemberRole {
   HEAD_SECRETARY
   SECRETARY
   MEMBER
+  ADVISORY_BOARD
 
   @@schema("khao-thi")
 }
@@ -4010,6 +4011,7 @@ model Lecturer {
   clusterSurvey               ClusterSurvey[]
   examRoomsMain               ExamRoom[]                    @relation("FirstSupervisor")
   examRoomsExtra              ExamRoom[]                    @relation("SecondSupervisor")
+  criterionAssignments        CriterionAssignment[]
 
   @@schema("ql-dao-tao")
 }
@@ -4451,6 +4453,23 @@ model CriterionCatalog {
   @@schema("khao-thi")
 }
 
+model CriterionAssignment {
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt()
+  evaluationCriterion   EvaluationCriterion @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
+  evaluationCriterionId String
+  lecturer              Lecturer            @relation(fields: [lecturerId], references: [id])
+  lecturerId            String
+  deadline              DateTime
+
+  @@schema("khao-thi")
+}
+
 /// Danh mục yêu cầu
 model RequirementCriterionCatalog {
   id                 String           @id() @default(cuid())
@@ -4532,6 +4551,7 @@ model EvaluationCriterion {
   evaluationCouncilId   String?
   /// Yêu cầu trong phiếu phân tích
   requirementCriterions RequirementCriterion[]
+  criterionAssignments  CriterionAssignment[]
   /// 1. Mô tả hiện trạng
   currentSituation      String                 @default("")
   /// 2. Điểm mạnh

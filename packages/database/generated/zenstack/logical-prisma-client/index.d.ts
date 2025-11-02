@@ -1644,6 +1644,16 @@ export type StandardCatalog = $Result.DefaultSelection<Prisma.$StandardCatalogPa
  */
 export type CriterionCatalog = $Result.DefaultSelection<Prisma.$CriterionCatalogPayload>;
 /**
+ * Model CriterionAssignment
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type CriterionAssignment = $Result.DefaultSelection<Prisma.$CriterionAssignmentPayload>;
+/**
  * Model RequirementCriterionCatalog
  * Danh mục yêu cầu
  * @
@@ -4091,6 +4101,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get criterionCatalog(): Prisma.CriterionCatalogDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.criterionAssignment`: Exposes CRUD operations for the **CriterionAssignment** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more CriterionAssignments
+     * const criterionAssignments = await prisma.criterionAssignment.findMany()
+     * ```
+     */
+    get criterionAssignment(): Prisma.CriterionAssignmentDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.requirementCriterionCatalog`: Exposes CRUD operations for the **RequirementCriterionCatalog** model.
      * Example usage:
      * ```ts
@@ -5314,7 +5333,8 @@ export namespace $Enums {
         VICE_PRESIDENT: 'VICE_PRESIDENT',
         HEAD_SECRETARY: 'HEAD_SECRETARY',
         SECRETARY: 'SECRETARY',
-        MEMBER: 'MEMBER'
+        MEMBER: 'MEMBER',
+        ADVISORY_BOARD: 'ADVISORY_BOARD'
     };
     export type EvaluationMemberRole = (typeof EvaluationMemberRole)[keyof typeof EvaluationMemberRole];
     export const EvaluationSecretaryMemberRole: {
@@ -5751,6 +5771,7 @@ export namespace Prisma {
         EvaluationPeriod: 'EvaluationPeriod',
         StandardCatalog: 'StandardCatalog',
         CriterionCatalog: 'CriterionCatalog',
+        CriterionAssignment: 'CriterionAssignment',
         RequirementCriterionCatalog: 'RequirementCriterionCatalog',
         ScoreScaleCatalog: 'ScoreScaleCatalog',
         EvaluationStandard: 'EvaluationStandard',
@@ -8486,6 +8507,18 @@ export namespace Prisma {
         name: 'name',
         scoreScaleId: 'scoreScaleId'
     };
+    export const CriterionAssignmentScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        evaluationCriterionId: 'evaluationCriterionId',
+        lecturerId: 'lecturerId',
+        deadline: 'deadline'
+    };
     export const RequirementCriterionCatalogScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -11168,6 +11201,13 @@ export namespace Prisma {
         standardId: 'standardId',
         name: 'name',
         scoreScaleId: 'scoreScaleId'
+    };
+    export const CriterionAssignmentOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        evaluationCriterionId: 'evaluationCriterionId',
+        lecturerId: 'lecturerId'
     };
     export const RequirementCriterionCatalogOrderByRelevanceFieldEnum: {
         id: 'id',
@@ -66022,6 +66062,7 @@ export namespace Prisma {
         clusterSurvey<T extends Lecturer$clusterSurveyArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$clusterSurveyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClusterSurveyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         examRoomsMain<T extends Lecturer$examRoomsMainArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$examRoomsMainArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         examRoomsExtra<T extends Lecturer$examRoomsExtraArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$examRoomsExtraArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExamRoomPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        criterionAssignments<T extends Lecturer$criterionAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Lecturer$criterionAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -73431,6 +73472,389 @@ export namespace Prisma {
         readonly scoreScaleId: FieldRef<"CriterionCatalog", 'String'>;
     }
 
+    export interface CriterionAssignmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CriterionAssignment'], meta: { name: 'CriterionAssignment' } };
+        /**
+         * Fields of the CriterionAssignment model
+         */
+        readonly fields: CriterionAssignmentFieldRefs;
+        /**
+         * Find zero or one CriterionAssignment that matches the filter.
+         * @param {CriterionAssignmentFindUniqueArgs} args - Arguments to find a CriterionAssignment
+         * @example
+         * // Get one CriterionAssignment
+         * const criterionAssignment = await prisma.criterionAssignment.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends CriterionAssignmentFindUniqueArgs>(args: SelectSubset<T, CriterionAssignmentFindUniqueArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one CriterionAssignment that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {CriterionAssignmentFindUniqueOrThrowArgs} args - Arguments to find a CriterionAssignment
+         * @example
+         * // Get one CriterionAssignment
+         * const criterionAssignment = await prisma.criterionAssignment.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends CriterionAssignmentFindUniqueOrThrowArgs>(args: SelectSubset<T, CriterionAssignmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first CriterionAssignment that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentFindFirstArgs} args - Arguments to find a CriterionAssignment
+         * @example
+         * // Get one CriterionAssignment
+         * const criterionAssignment = await prisma.criterionAssignment.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends CriterionAssignmentFindFirstArgs>(args?: SelectSubset<T, CriterionAssignmentFindFirstArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first CriterionAssignment that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentFindFirstOrThrowArgs} args - Arguments to find a CriterionAssignment
+         * @example
+         * // Get one CriterionAssignment
+         * const criterionAssignment = await prisma.criterionAssignment.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends CriterionAssignmentFindFirstOrThrowArgs>(args?: SelectSubset<T, CriterionAssignmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more CriterionAssignments that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all CriterionAssignments
+         * const criterionAssignments = await prisma.criterionAssignment.findMany()
+         *
+         * // Get first 10 CriterionAssignments
+         * const criterionAssignments = await prisma.criterionAssignment.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const criterionAssignmentWithIdOnly = await prisma.criterionAssignment.findMany({ select: { id: true } })
+         */
+        findMany<T extends CriterionAssignmentFindManyArgs>(args?: SelectSubset<T, CriterionAssignmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a CriterionAssignment.
+         * @param {CriterionAssignmentCreateArgs} args - Arguments to create a CriterionAssignment.
+         * @example
+         * // Create one CriterionAssignment
+         * const CriterionAssignment = await prisma.criterionAssignment.create({
+         *   data: {
+         *     // ... data to create a CriterionAssignment
+         *   }
+         * })
+         */
+        create<T extends CriterionAssignmentCreateArgs>(args: SelectSubset<T, CriterionAssignmentCreateArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many CriterionAssignments.
+         * @param {CriterionAssignmentCreateManyArgs} args - Arguments to create many CriterionAssignments.
+         * @example
+         * // Create many CriterionAssignments
+         * const criterionAssignment = await prisma.criterionAssignment.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends CriterionAssignmentCreateManyArgs>(args?: SelectSubset<T, CriterionAssignmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many CriterionAssignments and returns the data saved in the database.
+         * @param {CriterionAssignmentCreateManyAndReturnArgs} args - Arguments to create many CriterionAssignments.
+         * @example
+         * // Create many CriterionAssignments
+         * const criterionAssignment = await prisma.criterionAssignment.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many CriterionAssignments and only return the `id`
+         * const criterionAssignmentWithIdOnly = await prisma.criterionAssignment.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends CriterionAssignmentCreateManyAndReturnArgs>(args?: SelectSubset<T, CriterionAssignmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a CriterionAssignment.
+         * @param {CriterionAssignmentDeleteArgs} args - Arguments to delete one CriterionAssignment.
+         * @example
+         * // Delete one CriterionAssignment
+         * const CriterionAssignment = await prisma.criterionAssignment.delete({
+         *   where: {
+         *     // ... filter to delete one CriterionAssignment
+         *   }
+         * })
+         */
+        delete<T extends CriterionAssignmentDeleteArgs>(args: SelectSubset<T, CriterionAssignmentDeleteArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one CriterionAssignment.
+         * @param {CriterionAssignmentUpdateArgs} args - Arguments to update one CriterionAssignment.
+         * @example
+         * // Update one CriterionAssignment
+         * const criterionAssignment = await prisma.criterionAssignment.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends CriterionAssignmentUpdateArgs>(args: SelectSubset<T, CriterionAssignmentUpdateArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more CriterionAssignments.
+         * @param {CriterionAssignmentDeleteManyArgs} args - Arguments to filter CriterionAssignments to delete.
+         * @example
+         * // Delete a few CriterionAssignments
+         * const { count } = await prisma.criterionAssignment.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends CriterionAssignmentDeleteManyArgs>(args?: SelectSubset<T, CriterionAssignmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more CriterionAssignments.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many CriterionAssignments
+         * const criterionAssignment = await prisma.criterionAssignment.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends CriterionAssignmentUpdateManyArgs>(args: SelectSubset<T, CriterionAssignmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more CriterionAssignments and returns the data updated in the database.
+         * @param {CriterionAssignmentUpdateManyAndReturnArgs} args - Arguments to update many CriterionAssignments.
+         * @example
+         * // Update many CriterionAssignments
+         * const criterionAssignment = await prisma.criterionAssignment.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more CriterionAssignments and only return the `id`
+         * const criterionAssignmentWithIdOnly = await prisma.criterionAssignment.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends CriterionAssignmentUpdateManyAndReturnArgs>(args: SelectSubset<T, CriterionAssignmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one CriterionAssignment.
+         * @param {CriterionAssignmentUpsertArgs} args - Arguments to update or create a CriterionAssignment.
+         * @example
+         * // Update or create a CriterionAssignment
+         * const criterionAssignment = await prisma.criterionAssignment.upsert({
+         *   create: {
+         *     // ... data to create a CriterionAssignment
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the CriterionAssignment we want to update
+         *   }
+         * })
+         */
+        upsert<T extends CriterionAssignmentUpsertArgs>(args: SelectSubset<T, CriterionAssignmentUpsertArgs<ExtArgs>>): Prisma__CriterionAssignmentClient<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of CriterionAssignments.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentCountArgs} args - Arguments to filter CriterionAssignments to count.
+         * @example
+         * // Count the number of CriterionAssignments
+         * const count = await prisma.criterionAssignment.count({
+         *   where: {
+         *     // ... the filter for the CriterionAssignments we want to count
+         *   }
+         * })
+         */
+        count<T extends CriterionAssignmentCountArgs>(args?: Subset<T, CriterionAssignmentCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], CriterionAssignmentCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a CriterionAssignment.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends CriterionAssignmentAggregateArgs>(args: Subset<T, CriterionAssignmentAggregateArgs>): Prisma.PrismaPromise<GetCriterionAssignmentAggregateType<T>>;
+        /**
+         * Group by CriterionAssignment.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {CriterionAssignmentGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends CriterionAssignmentGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CriterionAssignmentGroupByArgs['orderBy'] }
+        : { orderBy?: CriterionAssignmentGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, CriterionAssignmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCriterionAssignmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for CriterionAssignment.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__CriterionAssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        evaluationCriterion<T extends EvaluationCriterionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterionDefaultArgs<ExtArgs>>): Prisma__EvaluationCriterionClient<$Result.GetResult<Prisma.$EvaluationCriterionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        lecturer<T extends LecturerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LecturerDefaultArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the CriterionAssignment model
+     */
+    interface CriterionAssignmentFieldRefs {
+        readonly id: FieldRef<"CriterionAssignment", 'String'>;
+        readonly code: FieldRef<"CriterionAssignment", 'String'>;
+        readonly active: FieldRef<"CriterionAssignment", 'Boolean'>;
+        readonly description: FieldRef<"CriterionAssignment", 'String'>;
+        readonly deletedAt: FieldRef<"CriterionAssignment", 'DateTime'>;
+        readonly createdAt: FieldRef<"CriterionAssignment", 'DateTime'>;
+        readonly updatedAt: FieldRef<"CriterionAssignment", 'DateTime'>;
+        readonly evaluationCriterionId: FieldRef<"CriterionAssignment", 'String'>;
+        readonly lecturerId: FieldRef<"CriterionAssignment", 'String'>;
+        readonly deadline: FieldRef<"CriterionAssignment", 'DateTime'>;
+    }
+
     export interface RequirementCriterionCatalogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RequirementCriterionCatalog'], meta: { name: 'RequirementCriterionCatalog' } };
         /**
@@ -74930,6 +75354,7 @@ export namespace Prisma {
         scoreScale<T extends ScoreScaleCatalogDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ScoreScaleCatalogDefaultArgs<ExtArgs>>): Prisma__ScoreScaleCatalogClient<$Result.GetResult<Prisma.$ScoreScaleCatalogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         evaluationCouncil<T extends EvaluationCriterion$evaluationCouncilArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterion$evaluationCouncilArgs<ExtArgs>>): Prisma__EvaluationCouncilClient<$Result.GetResult<Prisma.$EvaluationCouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         requirementCriterions<T extends EvaluationCriterion$requirementCriterionsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterion$requirementCriterionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RequirementCriterionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        criterionAssignments<T extends EvaluationCriterion$criterionAssignmentsArgs<ExtArgs> = {}>(args?: Subset<T, EvaluationCriterion$criterionAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CriterionAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -107836,7 +108261,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoomSlot" | "examRoom" | "testStructureRule" | "examBank" | "examBankQuestion" | "examSession" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "criterionAssignment" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoomSlot" | "examRoom" | "testStructureRule" | "examBank" | "examBankQuestion" | "examSession" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -119532,6 +119957,80 @@ export namespace Prisma {
                     }
                 }
             }
+            CriterionAssignment: {
+                payload: Prisma.$CriterionAssignmentPayload<ExtArgs>
+                fields: Prisma.CriterionAssignmentFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.CriterionAssignmentFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.CriterionAssignmentFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.CriterionAssignmentFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.CriterionAssignmentFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload>
+                    }
+                    findMany: {
+                        args: Prisma.CriterionAssignmentFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload>[]
+                    }
+                    create: {
+                        args: Prisma.CriterionAssignmentCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload>
+                    }
+                    createMany: {
+                        args: Prisma.CriterionAssignmentCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.CriterionAssignmentCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.CriterionAssignmentDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload>
+                    }
+                    update: {
+                        args: Prisma.CriterionAssignmentUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.CriterionAssignmentDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.CriterionAssignmentUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.CriterionAssignmentUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.CriterionAssignmentUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$CriterionAssignmentPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.CriterionAssignmentAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateCriterionAssignment>
+                    }
+                    groupBy: {
+                        args: Prisma.CriterionAssignmentGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<CriterionAssignmentGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.CriterionAssignmentCountArgs<ExtArgs>
+                        result: $Utils.Optional<CriterionAssignmentCountAggregateOutputType> | number
+                    }
+                }
+            }
             RequirementCriterionCatalog: {
                 payload: Prisma.$RequirementCriterionCatalogPayload<ExtArgs>
                 fields: Prisma.RequirementCriterionCatalogFieldRefs
@@ -126307,6 +126806,7 @@ export namespace Prisma {
         evaluationPeriod?: EvaluationPeriodOmit
         standardCatalog?: StandardCatalogOmit
         criterionCatalog?: CriterionCatalogOmit
+        criterionAssignment?: CriterionAssignmentOmit
         requirementCriterionCatalog?: RequirementCriterionCatalogOmit
         scoreScaleCatalog?: ScoreScaleCatalogOmit
         evaluationStandard?: EvaluationStandardOmit
@@ -130006,6 +130506,7 @@ export namespace Prisma {
         clusterSurvey: number
         examRoomsMain: number
         examRoomsExtra: number
+        criterionAssignments: number
     };
     export type LecturerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         mainSubjectClasses?: boolean | LecturerCountOutputTypeCountMainSubjectClassesArgs
@@ -130024,6 +130525,7 @@ export namespace Prisma {
         clusterSurvey?: boolean | LecturerCountOutputTypeCountClusterSurveyArgs
         examRoomsMain?: boolean | LecturerCountOutputTypeCountExamRoomsMainArgs
         examRoomsExtra?: boolean | LecturerCountOutputTypeCountExamRoomsExtraArgs
+        criterionAssignments?: boolean | LecturerCountOutputTypeCountCriterionAssignmentsArgs
     };
     /**
      * LecturerCountOutputType without action
@@ -130129,6 +130631,12 @@ export namespace Prisma {
      */
     export type LecturerCountOutputTypeCountExamRoomsExtraArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: ExamRoomWhereInput
+    };
+    /**
+     * LecturerCountOutputType without action
+     */
+    export type LecturerCountOutputTypeCountCriterionAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CriterionAssignmentWhereInput
     };
     /**
      * Count Type ResearchProjectCountOutputType
@@ -130511,9 +131019,11 @@ export namespace Prisma {
      */
     export type EvaluationCriterionCountOutputType = {
         requirementCriterions: number
+        criterionAssignments: number
     };
     export type EvaluationCriterionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         requirementCriterions?: boolean | EvaluationCriterionCountOutputTypeCountRequirementCriterionsArgs
+        criterionAssignments?: boolean | EvaluationCriterionCountOutputTypeCountCriterionAssignmentsArgs
     };
     /**
      * EvaluationCriterionCountOutputType without action
@@ -130529,6 +131039,12 @@ export namespace Prisma {
      */
     export type EvaluationCriterionCountOutputTypeCountRequirementCriterionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: RequirementCriterionWhereInput
+    };
+    /**
+     * EvaluationCriterionCountOutputType without action
+     */
+    export type EvaluationCriterionCountOutputTypeCountCriterionAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CriterionAssignmentWhereInput
     };
     /**
      * Count Type EvidenceCategoryCountOutputType
@@ -242924,6 +243440,7 @@ export namespace Prisma {
         clusterSurvey?: boolean | Lecturer$clusterSurveyArgs<ExtArgs>
         examRoomsMain?: boolean | Lecturer$examRoomsMainArgs<ExtArgs>
         examRoomsExtra?: boolean | Lecturer$examRoomsExtraArgs<ExtArgs>
+        criterionAssignments?: boolean | Lecturer$criterionAssignmentsArgs<ExtArgs>
         _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["lecturer"]>;
     export type LecturerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -242998,6 +243515,7 @@ export namespace Prisma {
         clusterSurvey?: boolean | Lecturer$clusterSurveyArgs<ExtArgs>
         examRoomsMain?: boolean | Lecturer$examRoomsMainArgs<ExtArgs>
         examRoomsExtra?: boolean | Lecturer$examRoomsExtraArgs<ExtArgs>
+        criterionAssignments?: boolean | Lecturer$criterionAssignmentsArgs<ExtArgs>
         _count?: boolean | LecturerCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type LecturerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -243032,6 +243550,7 @@ export namespace Prisma {
             clusterSurvey: Prisma.$ClusterSurveyPayload<ExtArgs>[]
             examRoomsMain: Prisma.$ExamRoomPayload<ExtArgs>[]
             examRoomsExtra: Prisma.$ExamRoomPayload<ExtArgs>[]
+            criterionAssignments: Prisma.$CriterionAssignmentPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -243798,6 +244317,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: ExamRoomScalarFieldEnum | ExamRoomScalarFieldEnum[]
+    };
+    /**
+     * Lecturer.criterionAssignments
+     */
+    export type Lecturer$criterionAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        where?: CriterionAssignmentWhereInput
+        orderBy?: CriterionAssignmentOrderByWithRelationInput | CriterionAssignmentOrderByWithRelationInput[]
+        cursor?: CriterionAssignmentWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: CriterionAssignmentScalarFieldEnum | CriterionAssignmentScalarFieldEnum[]
     };
     /**
      * Lecturer without action
@@ -258192,6 +258734,666 @@ export namespace Prisma {
         include?: CriterionCatalogInclude<ExtArgs> | null
     };
     /**
+     * Model CriterionAssignment
+     */
+    export type AggregateCriterionAssignment = {
+        _count: CriterionAssignmentCountAggregateOutputType | null
+        _min: CriterionAssignmentMinAggregateOutputType | null
+        _max: CriterionAssignmentMaxAggregateOutputType | null
+    };
+    export type CriterionAssignmentMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        evaluationCriterionId: string | null
+        lecturerId: string | null
+        deadline: Date | null
+    };
+    export type CriterionAssignmentMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        evaluationCriterionId: string | null
+        lecturerId: string | null
+        deadline: Date | null
+    };
+    export type CriterionAssignmentCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        evaluationCriterionId: number
+        lecturerId: number
+        deadline: number
+        _all: number
+    };
+    export type CriterionAssignmentMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        evaluationCriterionId?: true
+        lecturerId?: true
+        deadline?: true
+    };
+    export type CriterionAssignmentMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        evaluationCriterionId?: true
+        lecturerId?: true
+        deadline?: true
+    };
+    export type CriterionAssignmentCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        evaluationCriterionId?: true
+        lecturerId?: true
+        deadline?: true
+        _all?: true
+    };
+    export type CriterionAssignmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which CriterionAssignment to aggregate.
+         */
+        where?: CriterionAssignmentWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriterionAssignments to fetch.
+         */
+        orderBy?: CriterionAssignmentOrderByWithRelationInput | CriterionAssignmentOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: CriterionAssignmentWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriterionAssignments from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriterionAssignments.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned CriterionAssignments
+        **/
+        _count?: true | CriterionAssignmentCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: CriterionAssignmentMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: CriterionAssignmentMaxAggregateInputType
+    };
+    export type GetCriterionAssignmentAggregateType<T extends CriterionAssignmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateCriterionAssignment]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCriterionAssignment[P]>
+        : GetScalarType<T[P], AggregateCriterionAssignment[P]>
+    };
+    export type CriterionAssignmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: CriterionAssignmentWhereInput
+        orderBy?: CriterionAssignmentOrderByWithAggregationInput | CriterionAssignmentOrderByWithAggregationInput[]
+        by: CriterionAssignmentScalarFieldEnum[] | CriterionAssignmentScalarFieldEnum
+        having?: CriterionAssignmentScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: CriterionAssignmentCountAggregateInputType | true
+        _min?: CriterionAssignmentMinAggregateInputType
+        _max?: CriterionAssignmentMaxAggregateInputType
+    };
+    export type CriterionAssignmentGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        evaluationCriterionId: string
+        lecturerId: string
+        deadline: Date
+        _count: CriterionAssignmentCountAggregateOutputType | null
+        _min: CriterionAssignmentMinAggregateOutputType | null
+        _max: CriterionAssignmentMaxAggregateOutputType | null
+    };
+    type GetCriterionAssignmentGroupByPayload<T extends CriterionAssignmentGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<CriterionAssignmentGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof CriterionAssignmentGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], CriterionAssignmentGroupByOutputType[P]>
+                : GetScalarType<T[P], CriterionAssignmentGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type CriterionAssignmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        evaluationCriterionId?: boolean
+        lecturerId?: boolean
+        deadline?: boolean
+        evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+        lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["criterionAssignment"]>;
+    export type CriterionAssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        evaluationCriterionId?: boolean
+        lecturerId?: boolean
+        deadline?: boolean
+        evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+        lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["criterionAssignment"]>;
+    export type CriterionAssignmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        evaluationCriterionId?: boolean
+        lecturerId?: boolean
+        deadline?: boolean
+        evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+        lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["criterionAssignment"]>;
+    export type CriterionAssignmentSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        evaluationCriterionId?: boolean
+        lecturerId?: boolean
+        deadline?: boolean
+    };
+    export type CriterionAssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "evaluationCriterionId" | "lecturerId" | "deadline", ExtArgs["result"]["criterionAssignment"]>;
+    export type CriterionAssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+        lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    };
+    export type CriterionAssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+        lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    };
+    export type CriterionAssignmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        evaluationCriterion?: boolean | EvaluationCriterionDefaultArgs<ExtArgs>
+        lecturer?: boolean | LecturerDefaultArgs<ExtArgs>
+    };
+    export type $CriterionAssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "CriterionAssignment"
+        objects: {
+            evaluationCriterion: Prisma.$EvaluationCriterionPayload<ExtArgs>
+            lecturer: Prisma.$LecturerPayload<ExtArgs>
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            evaluationCriterionId: string
+            lecturerId: string
+            deadline: Date
+        }, ExtArgs["result"]["criterionAssignment"]>
+        composites: {}
+    };
+    type CriterionAssignmentGetPayload<S extends boolean | null | undefined | CriterionAssignmentDefaultArgs> = $Result.GetResult<Prisma.$CriterionAssignmentPayload, S>;
+    type CriterionAssignmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<CriterionAssignmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: CriterionAssignmentCountAggregateInputType | true
+    };
+    /**
+     * CriterionAssignment findUnique
+     */
+    export type CriterionAssignmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignment to fetch.
+         */
+        where: CriterionAssignmentWhereUniqueInput
+    };
+    /**
+     * CriterionAssignment findUniqueOrThrow
+     */
+    export type CriterionAssignmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignment to fetch.
+         */
+        where: CriterionAssignmentWhereUniqueInput
+    };
+    /**
+     * CriterionAssignment findFirst
+     */
+    export type CriterionAssignmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignment to fetch.
+         */
+        where?: CriterionAssignmentWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriterionAssignments to fetch.
+         */
+        orderBy?: CriterionAssignmentOrderByWithRelationInput | CriterionAssignmentOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for CriterionAssignments.
+         */
+        cursor?: CriterionAssignmentWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriterionAssignments from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriterionAssignments.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of CriterionAssignments.
+         */
+        distinct?: CriterionAssignmentScalarFieldEnum | CriterionAssignmentScalarFieldEnum[]
+    };
+    /**
+     * CriterionAssignment findFirstOrThrow
+     */
+    export type CriterionAssignmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignment to fetch.
+         */
+        where?: CriterionAssignmentWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriterionAssignments to fetch.
+         */
+        orderBy?: CriterionAssignmentOrderByWithRelationInput | CriterionAssignmentOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for CriterionAssignments.
+         */
+        cursor?: CriterionAssignmentWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriterionAssignments from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriterionAssignments.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of CriterionAssignments.
+         */
+        distinct?: CriterionAssignmentScalarFieldEnum | CriterionAssignmentScalarFieldEnum[]
+    };
+    /**
+     * CriterionAssignment findMany
+     */
+    export type CriterionAssignmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        /**
+         * Filter, which CriterionAssignments to fetch.
+         */
+        where?: CriterionAssignmentWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of CriterionAssignments to fetch.
+         */
+        orderBy?: CriterionAssignmentOrderByWithRelationInput | CriterionAssignmentOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing CriterionAssignments.
+         */
+        cursor?: CriterionAssignmentWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` CriterionAssignments from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` CriterionAssignments.
+         */
+        skip?: number
+        distinct?: CriterionAssignmentScalarFieldEnum | CriterionAssignmentScalarFieldEnum[]
+    };
+    /**
+     * CriterionAssignment create
+     */
+    export type CriterionAssignmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        /**
+         * The data needed to create a CriterionAssignment.
+         */
+        data: XOR<CriterionAssignmentCreateInput, CriterionAssignmentUncheckedCreateInput>
+    };
+    /**
+     * CriterionAssignment createMany
+     */
+    export type CriterionAssignmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many CriterionAssignments.
+         */
+        data: CriterionAssignmentCreateManyInput | CriterionAssignmentCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * CriterionAssignment createManyAndReturn
+     */
+    export type CriterionAssignmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * The data used to create many CriterionAssignments.
+         */
+        data: CriterionAssignmentCreateManyInput | CriterionAssignmentCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * CriterionAssignment update
+     */
+    export type CriterionAssignmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        /**
+         * The data needed to update a CriterionAssignment.
+         */
+        data: XOR<CriterionAssignmentUpdateInput, CriterionAssignmentUncheckedUpdateInput>
+        /**
+         * Choose, which CriterionAssignment to update.
+         */
+        where: CriterionAssignmentWhereUniqueInput
+    };
+    /**
+     * CriterionAssignment updateMany
+     */
+    export type CriterionAssignmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update CriterionAssignments.
+         */
+        data: XOR<CriterionAssignmentUpdateManyMutationInput, CriterionAssignmentUncheckedUpdateManyInput>
+        /**
+         * Filter which CriterionAssignments to update
+         */
+        where?: CriterionAssignmentWhereInput
+        /**
+         * Limit how many CriterionAssignments to update.
+         */
+        limit?: number
+    };
+    /**
+     * CriterionAssignment updateManyAndReturn
+     */
+    export type CriterionAssignmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * The data used to update CriterionAssignments.
+         */
+        data: XOR<CriterionAssignmentUpdateManyMutationInput, CriterionAssignmentUncheckedUpdateManyInput>
+        /**
+         * Filter which CriterionAssignments to update
+         */
+        where?: CriterionAssignmentWhereInput
+        /**
+         * Limit how many CriterionAssignments to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * CriterionAssignment upsert
+     */
+    export type CriterionAssignmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        /**
+         * The filter to search for the CriterionAssignment to update in case it exists.
+         */
+        where: CriterionAssignmentWhereUniqueInput
+        /**
+         * In case the CriterionAssignment found by the `where` argument doesn't exist, create a new CriterionAssignment with this data.
+         */
+        create: XOR<CriterionAssignmentCreateInput, CriterionAssignmentUncheckedCreateInput>
+        /**
+         * In case the CriterionAssignment was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<CriterionAssignmentUpdateInput, CriterionAssignmentUncheckedUpdateInput>
+    };
+    /**
+     * CriterionAssignment delete
+     */
+    export type CriterionAssignmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        /**
+         * Filter which CriterionAssignment to delete.
+         */
+        where: CriterionAssignmentWhereUniqueInput
+    };
+    /**
+     * CriterionAssignment deleteMany
+     */
+    export type CriterionAssignmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which CriterionAssignments to delete
+         */
+        where?: CriterionAssignmentWhereInput
+        /**
+         * Limit how many CriterionAssignments to delete.
+         */
+        limit?: number
+    };
+    /**
+     * CriterionAssignment without action
+     */
+    export type CriterionAssignmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+    };
+    /**
      * Model RequirementCriterionCatalog
      */
     export type AggregateRequirementCriterionCatalog = {
@@ -260643,6 +261845,7 @@ export namespace Prisma {
         scoreScale?: boolean | ScoreScaleCatalogDefaultArgs<ExtArgs>
         evaluationCouncil?: boolean | EvaluationCriterion$evaluationCouncilArgs<ExtArgs>
         requirementCriterions?: boolean | EvaluationCriterion$requirementCriterionsArgs<ExtArgs>
+        criterionAssignments?: boolean | EvaluationCriterion$criterionAssignmentsArgs<ExtArgs>
         _count?: boolean | EvaluationCriterionCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["evaluationCriterion"]>;
     export type EvaluationCriterionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -260714,6 +261917,7 @@ export namespace Prisma {
         scoreScale?: boolean | ScoreScaleCatalogDefaultArgs<ExtArgs>
         evaluationCouncil?: boolean | EvaluationCriterion$evaluationCouncilArgs<ExtArgs>
         requirementCriterions?: boolean | EvaluationCriterion$requirementCriterionsArgs<ExtArgs>
+        criterionAssignments?: boolean | EvaluationCriterion$criterionAssignmentsArgs<ExtArgs>
         _count?: boolean | EvaluationCriterionCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type EvaluationCriterionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -260739,6 +261943,7 @@ export namespace Prisma {
              * Yêu cầu trong phiếu phân tích
              */
             requirementCriterions: Prisma.$RequirementCriterionPayload<ExtArgs>[]
+            criterionAssignments: Prisma.$CriterionAssignmentPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -261197,6 +262402,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: RequirementCriterionScalarFieldEnum | RequirementCriterionScalarFieldEnum[]
+    };
+    /**
+     * EvaluationCriterion.criterionAssignments
+     */
+    export type EvaluationCriterion$criterionAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the CriterionAssignment
+         */
+        select?: CriterionAssignmentSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the CriterionAssignment
+         */
+        omit?: CriterionAssignmentOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: CriterionAssignmentInclude<ExtArgs> | null
+        where?: CriterionAssignmentWhereInput
+        orderBy?: CriterionAssignmentOrderByWithRelationInput | CriterionAssignmentOrderByWithRelationInput[]
+        cursor?: CriterionAssignmentWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: CriterionAssignmentScalarFieldEnum | CriterionAssignmentScalarFieldEnum[]
     };
     /**
      * EvaluationCriterion without action
@@ -320474,6 +321702,7 @@ export namespace Prisma {
     export type EvaluationPeriodScalarFieldEnum = (typeof EvaluationPeriodScalarFieldEnum)[keyof typeof EvaluationPeriodScalarFieldEnum];
     export type StandardCatalogScalarFieldEnum = (typeof StandardCatalogScalarFieldEnum)[keyof typeof StandardCatalogScalarFieldEnum];
     export type CriterionCatalogScalarFieldEnum = (typeof CriterionCatalogScalarFieldEnum)[keyof typeof CriterionCatalogScalarFieldEnum];
+    export type CriterionAssignmentScalarFieldEnum = (typeof CriterionAssignmentScalarFieldEnum)[keyof typeof CriterionAssignmentScalarFieldEnum];
     export type RequirementCriterionCatalogScalarFieldEnum = (typeof RequirementCriterionCatalogScalarFieldEnum)[keyof typeof RequirementCriterionCatalogScalarFieldEnum];
     export type ScoreScaleCatalogScalarFieldEnum = (typeof ScoreScaleCatalogScalarFieldEnum)[keyof typeof ScoreScaleCatalogScalarFieldEnum];
     export type EvaluationStandardScalarFieldEnum = (typeof EvaluationStandardScalarFieldEnum)[keyof typeof EvaluationStandardScalarFieldEnum];
@@ -320726,6 +321955,7 @@ export namespace Prisma {
     export type EvaluationPeriodOrderByRelevanceFieldEnum = (typeof EvaluationPeriodOrderByRelevanceFieldEnum)[keyof typeof EvaluationPeriodOrderByRelevanceFieldEnum];
     export type StandardCatalogOrderByRelevanceFieldEnum = (typeof StandardCatalogOrderByRelevanceFieldEnum)[keyof typeof StandardCatalogOrderByRelevanceFieldEnum];
     export type CriterionCatalogOrderByRelevanceFieldEnum = (typeof CriterionCatalogOrderByRelevanceFieldEnum)[keyof typeof CriterionCatalogOrderByRelevanceFieldEnum];
+    export type CriterionAssignmentOrderByRelevanceFieldEnum = (typeof CriterionAssignmentOrderByRelevanceFieldEnum)[keyof typeof CriterionAssignmentOrderByRelevanceFieldEnum];
     export type RequirementCriterionCatalogOrderByRelevanceFieldEnum = (typeof RequirementCriterionCatalogOrderByRelevanceFieldEnum)[keyof typeof RequirementCriterionCatalogOrderByRelevanceFieldEnum];
     export type ScoreScaleCatalogOrderByRelevanceFieldEnum = (typeof ScoreScaleCatalogOrderByRelevanceFieldEnum)[keyof typeof ScoreScaleCatalogOrderByRelevanceFieldEnum];
     export type EvaluationStandardOrderByRelevanceFieldEnum = (typeof EvaluationStandardOrderByRelevanceFieldEnum)[keyof typeof EvaluationStandardOrderByRelevanceFieldEnum];
@@ -336481,6 +337711,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyListRelationFilter
         examRoomsMain?: ExamRoomListRelationFilter
         examRoomsExtra?: ExamRoomListRelationFilter
+        criterionAssignments?: CriterionAssignmentListRelationFilter
     };
     export type LecturerOrderByWithRelationInput = {
         id?: SortOrder
@@ -336515,6 +337746,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyOrderByRelationAggregateInput
         examRoomsMain?: ExamRoomOrderByRelationAggregateInput
         examRoomsExtra?: ExamRoomOrderByRelationAggregateInput
+        criterionAssignments?: CriterionAssignmentOrderByRelationAggregateInput
         _relevance?: LecturerOrderByRelevanceInput
     };
     export type LecturerWhereUniqueInput = Prisma.AtLeast<{
@@ -336553,6 +337785,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyListRelationFilter
         examRoomsMain?: ExamRoomListRelationFilter
         examRoomsExtra?: ExamRoomListRelationFilter
+        criterionAssignments?: CriterionAssignmentListRelationFilter
     }, "id" | "code" | "lectureID" | "userProfileId">;
     export type LecturerOrderByWithAggregationInput = {
         id?: SortOrder
@@ -338524,6 +339757,85 @@ export namespace Prisma {
         name?: StringWithAggregatesFilter<"CriterionCatalog"> | string
         scoreScaleId?: StringWithAggregatesFilter<"CriterionCatalog"> | string
     };
+    export type CriterionAssignmentWhereInput = {
+        AND?: CriterionAssignmentWhereInput | CriterionAssignmentWhereInput[]
+        OR?: CriterionAssignmentWhereInput[]
+        NOT?: CriterionAssignmentWhereInput | CriterionAssignmentWhereInput[]
+        id?: StringFilter<"CriterionAssignment"> | string
+        code?: StringNullableFilter<"CriterionAssignment"> | string | null
+        active?: BoolFilter<"CriterionAssignment"> | boolean
+        description?: StringNullableFilter<"CriterionAssignment"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CriterionAssignment"> | Date | string | null
+        createdAt?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        updatedAt?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        evaluationCriterionId?: StringFilter<"CriterionAssignment"> | string
+        lecturerId?: StringFilter<"CriterionAssignment"> | string
+        deadline?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        evaluationCriterion?: XOR<EvaluationCriterionScalarRelationFilter, EvaluationCriterionWhereInput>
+        lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    };
+    export type CriterionAssignmentOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        evaluationCriterionId?: SortOrder
+        lecturerId?: SortOrder
+        deadline?: SortOrder
+        evaluationCriterion?: EvaluationCriterionOrderByWithRelationInput
+        lecturer?: LecturerOrderByWithRelationInput
+        _relevance?: CriterionAssignmentOrderByRelevanceInput
+    };
+    export type CriterionAssignmentWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: CriterionAssignmentWhereInput | CriterionAssignmentWhereInput[]
+        OR?: CriterionAssignmentWhereInput[]
+        NOT?: CriterionAssignmentWhereInput | CriterionAssignmentWhereInput[]
+        active?: BoolFilter<"CriterionAssignment"> | boolean
+        description?: StringNullableFilter<"CriterionAssignment"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CriterionAssignment"> | Date | string | null
+        createdAt?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        updatedAt?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        evaluationCriterionId?: StringFilter<"CriterionAssignment"> | string
+        lecturerId?: StringFilter<"CriterionAssignment"> | string
+        deadline?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        evaluationCriterion?: XOR<EvaluationCriterionScalarRelationFilter, EvaluationCriterionWhereInput>
+        lecturer?: XOR<LecturerScalarRelationFilter, LecturerWhereInput>
+    }, "id" | "code">;
+    export type CriterionAssignmentOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        evaluationCriterionId?: SortOrder
+        lecturerId?: SortOrder
+        deadline?: SortOrder
+        _count?: CriterionAssignmentCountOrderByAggregateInput
+        _max?: CriterionAssignmentMaxOrderByAggregateInput
+        _min?: CriterionAssignmentMinOrderByAggregateInput
+    };
+    export type CriterionAssignmentScalarWhereWithAggregatesInput = {
+        AND?: CriterionAssignmentScalarWhereWithAggregatesInput | CriterionAssignmentScalarWhereWithAggregatesInput[]
+        OR?: CriterionAssignmentScalarWhereWithAggregatesInput[]
+        NOT?: CriterionAssignmentScalarWhereWithAggregatesInput | CriterionAssignmentScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"CriterionAssignment"> | string
+        code?: StringNullableWithAggregatesFilter<"CriterionAssignment"> | string | null
+        active?: BoolWithAggregatesFilter<"CriterionAssignment"> | boolean
+        description?: StringNullableWithAggregatesFilter<"CriterionAssignment"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"CriterionAssignment"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"CriterionAssignment"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"CriterionAssignment"> | Date | string
+        evaluationCriterionId?: StringWithAggregatesFilter<"CriterionAssignment"> | string
+        lecturerId?: StringWithAggregatesFilter<"CriterionAssignment"> | string
+        deadline?: DateTimeWithAggregatesFilter<"CriterionAssignment"> | Date | string
+    };
     export type RequirementCriterionCatalogWhereInput = {
         AND?: RequirementCriterionCatalogWhereInput | RequirementCriterionCatalogWhereInput[]
         OR?: RequirementCriterionCatalogWhereInput[]
@@ -338811,6 +340123,7 @@ export namespace Prisma {
         scoreScale?: XOR<ScoreScaleCatalogScalarRelationFilter, ScoreScaleCatalogWhereInput>
         evaluationCouncil?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
         requirementCriterions?: RequirementCriterionListRelationFilter
+        criterionAssignments?: CriterionAssignmentListRelationFilter
     };
     export type EvaluationCriterionOrderByWithRelationInput = {
         id?: SortOrder
@@ -338834,6 +340147,7 @@ export namespace Prisma {
         scoreScale?: ScoreScaleCatalogOrderByWithRelationInput
         evaluationCouncil?: EvaluationCouncilOrderByWithRelationInput
         requirementCriterions?: RequirementCriterionOrderByRelationAggregateInput
+        criterionAssignments?: CriterionAssignmentOrderByRelationAggregateInput
         _relevance?: EvaluationCriterionOrderByRelevanceInput
     };
     export type EvaluationCriterionWhereUniqueInput = Prisma.AtLeast<{
@@ -338862,6 +340176,7 @@ export namespace Prisma {
         scoreScale?: XOR<ScoreScaleCatalogScalarRelationFilter, ScoreScaleCatalogWhereInput>
         evaluationCouncil?: XOR<EvaluationCouncilNullableScalarRelationFilter, EvaluationCouncilWhereInput> | null
         requirementCriterions?: RequirementCriterionListRelationFilter
+        criterionAssignments?: CriterionAssignmentListRelationFilter
     }, "id" | "code" | "standardId_name">;
     export type EvaluationCriterionOrderByWithAggregationInput = {
         id?: SortOrder
@@ -363207,6 +364522,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateInput = {
         id?: string
@@ -363238,6 +364554,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -363269,6 +364586,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -363300,6 +364618,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerCreateManyInput = {
         id?: string
@@ -365500,6 +366819,88 @@ export namespace Prisma {
         name?: StringFieldUpdateOperationsInput | string
         scoreScaleId?: StringFieldUpdateOperationsInput | string
     };
+    export type CriterionAssignmentCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        deadline: Date | string
+        evaluationCriterion: EvaluationCriterionCreateNestedOneWithoutCriterionAssignmentsInput
+        lecturer: LecturerCreateNestedOneWithoutCriterionAssignmentsInput
+    };
+    export type CriterionAssignmentUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        evaluationCriterionId: string
+        lecturerId: string
+        deadline: Date | string
+    };
+    export type CriterionAssignmentUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        evaluationCriterion?: EvaluationCriterionUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+        lecturer?: LecturerUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+    };
+    export type CriterionAssignmentUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        evaluationCriterionId?: StringFieldUpdateOperationsInput | string
+        lecturerId?: StringFieldUpdateOperationsInput | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type CriterionAssignmentCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        evaluationCriterionId: string
+        lecturerId: string
+        deadline: Date | string
+    };
+    export type CriterionAssignmentUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type CriterionAssignmentUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        evaluationCriterionId?: StringFieldUpdateOperationsInput | string
+        lecturerId?: StringFieldUpdateOperationsInput | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
     export type RequirementCriterionCatalogCreateInput = {
         id?: string
         code?: string | null
@@ -365809,6 +367210,7 @@ export namespace Prisma {
         scoreScale: ScoreScaleCatalogCreateNestedOneWithoutEvaluationCriterionInput
         evaluationCouncil?: EvaluationCouncilCreateNestedOneWithoutEvaluationCriterionInput
         requirementCriterions?: RequirementCriterionCreateNestedManyWithoutEvaluationCriterionInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionUncheckedCreateInput = {
         id?: string
@@ -365829,6 +367231,7 @@ export namespace Prisma {
         actionPlan?: string
         score?: number | null
         requirementCriterions?: RequirementCriterionUncheckedCreateNestedManyWithoutEvaluationCriterionInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365849,6 +367252,7 @@ export namespace Prisma {
         scoreScale?: ScoreScaleCatalogUpdateOneRequiredWithoutEvaluationCriterionNestedInput
         evaluationCouncil?: EvaluationCouncilUpdateOneWithoutEvaluationCriterionNestedInput
         requirementCriterions?: RequirementCriterionUpdateManyWithoutEvaluationCriterionNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type EvaluationCriterionUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365869,6 +367273,7 @@ export namespace Prisma {
         actionPlan?: StringFieldUpdateOperationsInput | string
         score?: NullableIntFieldUpdateOperationsInput | number | null
         requirementCriterions?: RequirementCriterionUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type EvaluationCriterionCreateManyInput = {
         id?: string
@@ -384394,6 +385799,11 @@ export namespace Prisma {
         some?: ClusterSurveyWhereInput
         none?: ClusterSurveyWhereInput
     };
+    export type CriterionAssignmentListRelationFilter = {
+        every?: CriterionAssignmentWhereInput
+        some?: CriterionAssignmentWhereInput
+        none?: CriterionAssignmentWhereInput
+    };
     export type EvaluationCouncilMemberOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -384401,6 +385811,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type ClusterSurveyOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type CriterionAssignmentOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type LecturerOrderByRelevanceInput = {
@@ -385762,6 +387175,51 @@ export namespace Prisma {
     export type CriterionCatalogSumOrderByAggregateInput = {
         order?: SortOrder
     };
+    export type EvaluationCriterionScalarRelationFilter = {
+        is?: EvaluationCriterionWhereInput
+        isNot?: EvaluationCriterionWhereInput
+    };
+    export type CriterionAssignmentOrderByRelevanceInput = {
+        fields: CriterionAssignmentOrderByRelevanceFieldEnum | CriterionAssignmentOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type CriterionAssignmentCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        evaluationCriterionId?: SortOrder
+        lecturerId?: SortOrder
+        deadline?: SortOrder
+    };
+    export type CriterionAssignmentMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        evaluationCriterionId?: SortOrder
+        lecturerId?: SortOrder
+        deadline?: SortOrder
+    };
+    export type CriterionAssignmentMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        evaluationCriterionId?: SortOrder
+        lecturerId?: SortOrder
+        deadline?: SortOrder
+    };
     export type CriterionCatalogScalarRelationFilter = {
         is?: CriterionCatalogWhereInput
         isNot?: CriterionCatalogWhereInput
@@ -386129,10 +387587,6 @@ export namespace Prisma {
         name?: SortOrder
         information?: SortOrder
         issuer?: SortOrder
-    };
-    export type EvaluationCriterionScalarRelationFilter = {
-        is?: EvaluationCriterionWhereInput
-        isNot?: EvaluationCriterionWhereInput
     };
     export type RequirementCriterionOrderByRelevanceInput = {
         fields: RequirementCriterionOrderByRelevanceFieldEnum | RequirementCriterionOrderByRelevanceFieldEnum[]
@@ -404892,6 +406346,12 @@ export namespace Prisma {
         createMany?: ExamRoomCreateManySecondSupervisorInputEnvelope
         connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
     };
+    export type CriterionAssignmentCreateNestedManyWithoutLecturerInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutLecturerInput, CriterionAssignmentUncheckedCreateWithoutLecturerInput> | CriterionAssignmentCreateWithoutLecturerInput[] | CriterionAssignmentUncheckedCreateWithoutLecturerInput[]
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutLecturerInput | CriterionAssignmentCreateOrConnectWithoutLecturerInput[]
+        createMany?: CriterionAssignmentCreateManyLecturerInputEnvelope
+        connect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+    };
     export type SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput = {
         create?: XOR<SubjectClassCreateWithoutMainLecturerInput, SubjectClassUncheckedCreateWithoutMainLecturerInput> | SubjectClassCreateWithoutMainLecturerInput[] | SubjectClassUncheckedCreateWithoutMainLecturerInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutMainLecturerInput | SubjectClassCreateOrConnectWithoutMainLecturerInput[]
@@ -404986,6 +406446,12 @@ export namespace Prisma {
         connectOrCreate?: ExamRoomCreateOrConnectWithoutSecondSupervisorInput | ExamRoomCreateOrConnectWithoutSecondSupervisorInput[]
         createMany?: ExamRoomCreateManySecondSupervisorInputEnvelope
         connect?: ExamRoomWhereUniqueInput | ExamRoomWhereUniqueInput[]
+    };
+    export type CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutLecturerInput, CriterionAssignmentUncheckedCreateWithoutLecturerInput> | CriterionAssignmentCreateWithoutLecturerInput[] | CriterionAssignmentUncheckedCreateWithoutLecturerInput[]
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutLecturerInput | CriterionAssignmentCreateOrConnectWithoutLecturerInput[]
+        createMany?: CriterionAssignmentCreateManyLecturerInputEnvelope
+        connect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
     };
     export type UserProfileUpdateOneRequiredWithoutLecturerNestedInput = {
         create?: XOR<UserProfileCreateWithoutLecturerInput, UserProfileUncheckedCreateWithoutLecturerInput>
@@ -405215,6 +406681,19 @@ export namespace Prisma {
         updateMany?: ExamRoomUpdateManyWithWhereWithoutSecondSupervisorInput | ExamRoomUpdateManyWithWhereWithoutSecondSupervisorInput[]
         deleteMany?: ExamRoomScalarWhereInput | ExamRoomScalarWhereInput[]
     };
+    export type CriterionAssignmentUpdateManyWithoutLecturerNestedInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutLecturerInput, CriterionAssignmentUncheckedCreateWithoutLecturerInput> | CriterionAssignmentCreateWithoutLecturerInput[] | CriterionAssignmentUncheckedCreateWithoutLecturerInput[]
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutLecturerInput | CriterionAssignmentCreateOrConnectWithoutLecturerInput[]
+        upsert?: CriterionAssignmentUpsertWithWhereUniqueWithoutLecturerInput | CriterionAssignmentUpsertWithWhereUniqueWithoutLecturerInput[]
+        createMany?: CriterionAssignmentCreateManyLecturerInputEnvelope
+        set?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        disconnect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        delete?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        connect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        update?: CriterionAssignmentUpdateWithWhereUniqueWithoutLecturerInput | CriterionAssignmentUpdateWithWhereUniqueWithoutLecturerInput[]
+        updateMany?: CriterionAssignmentUpdateManyWithWhereWithoutLecturerInput | CriterionAssignmentUpdateManyWithWhereWithoutLecturerInput[]
+        deleteMany?: CriterionAssignmentScalarWhereInput | CriterionAssignmentScalarWhereInput[]
+    };
     export type SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput = {
         create?: XOR<SubjectClassCreateWithoutMainLecturerInput, SubjectClassUncheckedCreateWithoutMainLecturerInput> | SubjectClassCreateWithoutMainLecturerInput[] | SubjectClassUncheckedCreateWithoutMainLecturerInput[]
         connectOrCreate?: SubjectClassCreateOrConnectWithoutMainLecturerInput | SubjectClassCreateOrConnectWithoutMainLecturerInput[]
@@ -405421,6 +406900,19 @@ export namespace Prisma {
         update?: ExamRoomUpdateWithWhereUniqueWithoutSecondSupervisorInput | ExamRoomUpdateWithWhereUniqueWithoutSecondSupervisorInput[]
         updateMany?: ExamRoomUpdateManyWithWhereWithoutSecondSupervisorInput | ExamRoomUpdateManyWithWhereWithoutSecondSupervisorInput[]
         deleteMany?: ExamRoomScalarWhereInput | ExamRoomScalarWhereInput[]
+    };
+    export type CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutLecturerInput, CriterionAssignmentUncheckedCreateWithoutLecturerInput> | CriterionAssignmentCreateWithoutLecturerInput[] | CriterionAssignmentUncheckedCreateWithoutLecturerInput[]
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutLecturerInput | CriterionAssignmentCreateOrConnectWithoutLecturerInput[]
+        upsert?: CriterionAssignmentUpsertWithWhereUniqueWithoutLecturerInput | CriterionAssignmentUpsertWithWhereUniqueWithoutLecturerInput[]
+        createMany?: CriterionAssignmentCreateManyLecturerInputEnvelope
+        set?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        disconnect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        delete?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        connect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        update?: CriterionAssignmentUpdateWithWhereUniqueWithoutLecturerInput | CriterionAssignmentUpdateWithWhereUniqueWithoutLecturerInput[]
+        updateMany?: CriterionAssignmentUpdateManyWithWhereWithoutLecturerInput | CriterionAssignmentUpdateManyWithWhereWithoutLecturerInput[]
+        deleteMany?: CriterionAssignmentScalarWhereInput | CriterionAssignmentScalarWhereInput[]
     };
     export type UserProfileCreateNestedOneWithoutLecturerHistoryInput = {
         create?: XOR<UserProfileCreateWithoutLecturerHistoryInput, UserProfileUncheckedCreateWithoutLecturerHistoryInput>
@@ -406782,6 +408274,30 @@ export namespace Prisma {
         updateMany?: RequirementCriterionCatalogUpdateManyWithWhereWithoutCriterionCatalogInput | RequirementCriterionCatalogUpdateManyWithWhereWithoutCriterionCatalogInput[]
         deleteMany?: RequirementCriterionCatalogScalarWhereInput | RequirementCriterionCatalogScalarWhereInput[]
     };
+    export type EvaluationCriterionCreateNestedOneWithoutCriterionAssignmentsInput = {
+        create?: XOR<EvaluationCriterionCreateWithoutCriterionAssignmentsInput, EvaluationCriterionUncheckedCreateWithoutCriterionAssignmentsInput>
+        connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutCriterionAssignmentsInput
+        connect?: EvaluationCriterionWhereUniqueInput
+    };
+    export type LecturerCreateNestedOneWithoutCriterionAssignmentsInput = {
+        create?: XOR<LecturerCreateWithoutCriterionAssignmentsInput, LecturerUncheckedCreateWithoutCriterionAssignmentsInput>
+        connectOrCreate?: LecturerCreateOrConnectWithoutCriterionAssignmentsInput
+        connect?: LecturerWhereUniqueInput
+    };
+    export type EvaluationCriterionUpdateOneRequiredWithoutCriterionAssignmentsNestedInput = {
+        create?: XOR<EvaluationCriterionCreateWithoutCriterionAssignmentsInput, EvaluationCriterionUncheckedCreateWithoutCriterionAssignmentsInput>
+        connectOrCreate?: EvaluationCriterionCreateOrConnectWithoutCriterionAssignmentsInput
+        upsert?: EvaluationCriterionUpsertWithoutCriterionAssignmentsInput
+        connect?: EvaluationCriterionWhereUniqueInput
+        update?: XOR<XOR<EvaluationCriterionUpdateToOneWithWhereWithoutCriterionAssignmentsInput, EvaluationCriterionUpdateWithoutCriterionAssignmentsInput>, EvaluationCriterionUncheckedUpdateWithoutCriterionAssignmentsInput>
+    };
+    export type LecturerUpdateOneRequiredWithoutCriterionAssignmentsNestedInput = {
+        create?: XOR<LecturerCreateWithoutCriterionAssignmentsInput, LecturerUncheckedCreateWithoutCriterionAssignmentsInput>
+        connectOrCreate?: LecturerCreateOrConnectWithoutCriterionAssignmentsInput
+        upsert?: LecturerUpsertWithoutCriterionAssignmentsInput
+        connect?: LecturerWhereUniqueInput
+        update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutCriterionAssignmentsInput, LecturerUpdateWithoutCriterionAssignmentsInput>, LecturerUncheckedUpdateWithoutCriterionAssignmentsInput>
+    };
     export type RequirementCriterionCatalogCreatequestionsInput = {
         set: string[]
     };
@@ -406948,11 +408464,23 @@ export namespace Prisma {
         createMany?: RequirementCriterionCreateManyEvaluationCriterionInputEnvelope
         connect?: RequirementCriterionWhereUniqueInput | RequirementCriterionWhereUniqueInput[]
     };
+    export type CriterionAssignmentCreateNestedManyWithoutEvaluationCriterionInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutEvaluationCriterionInput, CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput> | CriterionAssignmentCreateWithoutEvaluationCriterionInput[] | CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput[]
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput | CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput[]
+        createMany?: CriterionAssignmentCreateManyEvaluationCriterionInputEnvelope
+        connect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+    };
     export type RequirementCriterionUncheckedCreateNestedManyWithoutEvaluationCriterionInput = {
         create?: XOR<RequirementCriterionCreateWithoutEvaluationCriterionInput, RequirementCriterionUncheckedCreateWithoutEvaluationCriterionInput> | RequirementCriterionCreateWithoutEvaluationCriterionInput[] | RequirementCriterionUncheckedCreateWithoutEvaluationCriterionInput[]
         connectOrCreate?: RequirementCriterionCreateOrConnectWithoutEvaluationCriterionInput | RequirementCriterionCreateOrConnectWithoutEvaluationCriterionInput[]
         createMany?: RequirementCriterionCreateManyEvaluationCriterionInputEnvelope
         connect?: RequirementCriterionWhereUniqueInput | RequirementCriterionWhereUniqueInput[]
+    };
+    export type CriterionAssignmentUncheckedCreateNestedManyWithoutEvaluationCriterionInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutEvaluationCriterionInput, CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput> | CriterionAssignmentCreateWithoutEvaluationCriterionInput[] | CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput[]
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput | CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput[]
+        createMany?: CriterionAssignmentCreateManyEvaluationCriterionInputEnvelope
+        connect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
     };
     export type EvaluationStandardUpdateOneRequiredWithoutCriteriaNestedInput = {
         create?: XOR<EvaluationStandardCreateWithoutCriteriaInput, EvaluationStandardUncheckedCreateWithoutCriteriaInput>
@@ -406990,6 +408518,19 @@ export namespace Prisma {
         updateMany?: RequirementCriterionUpdateManyWithWhereWithoutEvaluationCriterionInput | RequirementCriterionUpdateManyWithWhereWithoutEvaluationCriterionInput[]
         deleteMany?: RequirementCriterionScalarWhereInput | RequirementCriterionScalarWhereInput[]
     };
+    export type CriterionAssignmentUpdateManyWithoutEvaluationCriterionNestedInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutEvaluationCriterionInput, CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput> | CriterionAssignmentCreateWithoutEvaluationCriterionInput[] | CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput[]
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput | CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput[]
+        upsert?: CriterionAssignmentUpsertWithWhereUniqueWithoutEvaluationCriterionInput | CriterionAssignmentUpsertWithWhereUniqueWithoutEvaluationCriterionInput[]
+        createMany?: CriterionAssignmentCreateManyEvaluationCriterionInputEnvelope
+        set?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        disconnect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        delete?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        connect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        update?: CriterionAssignmentUpdateWithWhereUniqueWithoutEvaluationCriterionInput | CriterionAssignmentUpdateWithWhereUniqueWithoutEvaluationCriterionInput[]
+        updateMany?: CriterionAssignmentUpdateManyWithWhereWithoutEvaluationCriterionInput | CriterionAssignmentUpdateManyWithWhereWithoutEvaluationCriterionInput[]
+        deleteMany?: CriterionAssignmentScalarWhereInput | CriterionAssignmentScalarWhereInput[]
+    };
     export type RequirementCriterionUncheckedUpdateManyWithoutEvaluationCriterionNestedInput = {
         create?: XOR<RequirementCriterionCreateWithoutEvaluationCriterionInput, RequirementCriterionUncheckedCreateWithoutEvaluationCriterionInput> | RequirementCriterionCreateWithoutEvaluationCriterionInput[] | RequirementCriterionUncheckedCreateWithoutEvaluationCriterionInput[]
         connectOrCreate?: RequirementCriterionCreateOrConnectWithoutEvaluationCriterionInput | RequirementCriterionCreateOrConnectWithoutEvaluationCriterionInput[]
@@ -407002,6 +408543,19 @@ export namespace Prisma {
         update?: RequirementCriterionUpdateWithWhereUniqueWithoutEvaluationCriterionInput | RequirementCriterionUpdateWithWhereUniqueWithoutEvaluationCriterionInput[]
         updateMany?: RequirementCriterionUpdateManyWithWhereWithoutEvaluationCriterionInput | RequirementCriterionUpdateManyWithWhereWithoutEvaluationCriterionInput[]
         deleteMany?: RequirementCriterionScalarWhereInput | RequirementCriterionScalarWhereInput[]
+    };
+    export type CriterionAssignmentUncheckedUpdateManyWithoutEvaluationCriterionNestedInput = {
+        create?: XOR<CriterionAssignmentCreateWithoutEvaluationCriterionInput, CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput> | CriterionAssignmentCreateWithoutEvaluationCriterionInput[] | CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput[]
+        connectOrCreate?: CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput | CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput[]
+        upsert?: CriterionAssignmentUpsertWithWhereUniqueWithoutEvaluationCriterionInput | CriterionAssignmentUpsertWithWhereUniqueWithoutEvaluationCriterionInput[]
+        createMany?: CriterionAssignmentCreateManyEvaluationCriterionInputEnvelope
+        set?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        disconnect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        delete?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        connect?: CriterionAssignmentWhereUniqueInput | CriterionAssignmentWhereUniqueInput[]
+        update?: CriterionAssignmentUpdateWithWhereUniqueWithoutEvaluationCriterionInput | CriterionAssignmentUpdateWithWhereUniqueWithoutEvaluationCriterionInput[]
+        updateMany?: CriterionAssignmentUpdateManyWithWhereWithoutEvaluationCriterionInput | CriterionAssignmentUpdateManyWithWhereWithoutEvaluationCriterionInput[]
+        deleteMany?: CriterionAssignmentScalarWhereInput | CriterionAssignmentScalarWhereInput[]
     };
     export type EvidenceCreateNestedManyWithoutCategoryInput = {
         create?: XOR<EvidenceCreateWithoutCategoryInput, EvidenceUncheckedCreateWithoutCategoryInput> | EvidenceCreateWithoutCategoryInput[] | EvidenceUncheckedCreateWithoutCategoryInput[]
@@ -416204,6 +417758,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutUserProfileInput = {
         id?: string
@@ -416234,6 +417789,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutUserProfileInput = {
         where: LecturerWhereUniqueInput
@@ -419341,6 +420897,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutUserProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -419371,6 +420928,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerHistoryUpsertWithWhereUniqueWithoutUserProfileInput = {
         where: LecturerHistoryWhereUniqueInput
@@ -444209,6 +445767,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutOrganizationInput = {
         id?: string
@@ -444239,6 +445798,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutOrganizationInput = {
         where: LecturerWhereUniqueInput
@@ -462597,6 +464157,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutManageFixedClassInput = {
         id?: string
@@ -462627,6 +464188,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutManageFixedClassInput = {
         where: LecturerWhereUniqueInput
@@ -463670,6 +465232,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutManageFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463700,6 +465263,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type StaffUpsertWithoutFixedClassInput = {
         update: XOR<StaffUpdateWithoutFixedClassInput, StaffUncheckedUpdateWithoutFixedClassInput>
@@ -470479,6 +472043,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutMainSubjectClassesInput = {
         id?: string
@@ -470509,6 +472074,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutMainSubjectClassesInput = {
         where: LecturerWhereUniqueInput
@@ -470543,6 +472109,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutExtraSubjectClassesInput = {
         id?: string
@@ -470573,6 +472140,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutExtraSubjectClassesInput = {
         where: LecturerWhereUniqueInput
@@ -470607,6 +472175,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutEnterGradeClassesInput = {
         id?: string
@@ -470637,6 +472206,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutEnterGradeClassesInput = {
         where: LecturerWhereUniqueInput
@@ -471620,6 +473190,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutMainSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -471650,6 +473221,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUpsertWithoutExtraSubjectClassesInput = {
         update: XOR<LecturerUpdateWithoutExtraSubjectClassesInput, LecturerUncheckedUpdateWithoutExtraSubjectClassesInput>
@@ -471689,6 +473261,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExtraSubjectClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -471719,6 +473292,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUpsertWithoutEnterGradeClassesInput = {
         update: XOR<LecturerUpdateWithoutEnterGradeClassesInput, LecturerUncheckedUpdateWithoutEnterGradeClassesInput>
@@ -471758,6 +473332,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutEnterGradeClassesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -471788,6 +473363,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type StudentSubjectScoreUpsertWithWhereUniqueWithoutSubjectClassInput = {
         where: StudentSubjectScoreWhereUniqueInput
@@ -473307,6 +474883,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutClassSchedulesInput = {
         id?: string
@@ -473337,6 +474914,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutClassSchedulesInput = {
         where: LecturerWhereUniqueInput
@@ -473371,6 +474949,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutExtraClassSchedulesInput = {
         id?: string
@@ -473401,6 +474980,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutExtraClassSchedulesInput = {
         where: LecturerWhereUniqueInput
@@ -473702,6 +475282,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -473732,6 +475313,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUpsertWithoutExtraClassSchedulesInput = {
         update: XOR<LecturerUpdateWithoutExtraClassSchedulesInput, LecturerUncheckedUpdateWithoutExtraClassSchedulesInput>
@@ -473771,6 +475353,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExtraClassSchedulesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -473801,6 +475384,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type ClassScheduleUpsertWithoutReplacementScheduleInput = {
         update: XOR<ClassScheduleUpdateWithoutReplacementScheduleInput, ClassScheduleUncheckedUpdateWithoutReplacementScheduleInput>
@@ -488571,6 +490155,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutLecturerTypeInput = {
         id?: string
@@ -488601,6 +490186,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutLecturerTypeInput = {
         where: LecturerWhereUniqueInput
@@ -490238,6 +491824,36 @@ export namespace Prisma {
         data: ExamRoomCreateManySecondSupervisorInput | ExamRoomCreateManySecondSupervisorInput[]
         skipDuplicates?: boolean
     };
+    export type CriterionAssignmentCreateWithoutLecturerInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        deadline: Date | string
+        evaluationCriterion: EvaluationCriterionCreateNestedOneWithoutCriterionAssignmentsInput
+    };
+    export type CriterionAssignmentUncheckedCreateWithoutLecturerInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        evaluationCriterionId: string
+        deadline: Date | string
+    };
+    export type CriterionAssignmentCreateOrConnectWithoutLecturerInput = {
+        where: CriterionAssignmentWhereUniqueInput
+        create: XOR<CriterionAssignmentCreateWithoutLecturerInput, CriterionAssignmentUncheckedCreateWithoutLecturerInput>
+    };
+    export type CriterionAssignmentCreateManyLecturerInputEnvelope = {
+        data: CriterionAssignmentCreateManyLecturerInput | CriterionAssignmentCreateManyLecturerInput[]
+        skipDuplicates?: boolean
+    };
     export type UserProfileUpsertWithoutLecturerInput = {
         update: XOR<UserProfileUpdateWithoutLecturerInput, UserProfileUncheckedUpdateWithoutLecturerInput>
         create: XOR<UserProfileCreateWithoutLecturerInput, UserProfileUncheckedCreateWithoutLecturerInput>
@@ -490931,6 +492547,34 @@ export namespace Prisma {
     export type ExamRoomUpdateManyWithWhereWithoutSecondSupervisorInput = {
         where: ExamRoomScalarWhereInput
         data: XOR<ExamRoomUpdateManyMutationInput, ExamRoomUncheckedUpdateManyWithoutSecondSupervisorInput>
+    };
+    export type CriterionAssignmentUpsertWithWhereUniqueWithoutLecturerInput = {
+        where: CriterionAssignmentWhereUniqueInput
+        update: XOR<CriterionAssignmentUpdateWithoutLecturerInput, CriterionAssignmentUncheckedUpdateWithoutLecturerInput>
+        create: XOR<CriterionAssignmentCreateWithoutLecturerInput, CriterionAssignmentUncheckedCreateWithoutLecturerInput>
+    };
+    export type CriterionAssignmentUpdateWithWhereUniqueWithoutLecturerInput = {
+        where: CriterionAssignmentWhereUniqueInput
+        data: XOR<CriterionAssignmentUpdateWithoutLecturerInput, CriterionAssignmentUncheckedUpdateWithoutLecturerInput>
+    };
+    export type CriterionAssignmentUpdateManyWithWhereWithoutLecturerInput = {
+        where: CriterionAssignmentScalarWhereInput
+        data: XOR<CriterionAssignmentUpdateManyMutationInput, CriterionAssignmentUncheckedUpdateManyWithoutLecturerInput>
+    };
+    export type CriterionAssignmentScalarWhereInput = {
+        AND?: CriterionAssignmentScalarWhereInput | CriterionAssignmentScalarWhereInput[]
+        OR?: CriterionAssignmentScalarWhereInput[]
+        NOT?: CriterionAssignmentScalarWhereInput | CriterionAssignmentScalarWhereInput[]
+        id?: StringFilter<"CriterionAssignment"> | string
+        code?: StringNullableFilter<"CriterionAssignment"> | string | null
+        active?: BoolFilter<"CriterionAssignment"> | boolean
+        description?: StringNullableFilter<"CriterionAssignment"> | string | null
+        deletedAt?: DateTimeNullableFilter<"CriterionAssignment"> | Date | string | null
+        createdAt?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        updatedAt?: DateTimeFilter<"CriterionAssignment"> | Date | string
+        evaluationCriterionId?: StringFilter<"CriterionAssignment"> | string
+        lecturerId?: StringFilter<"CriterionAssignment"> | string
+        deadline?: DateTimeFilter<"CriterionAssignment"> | Date | string
     };
     export type UserProfileCreateWithoutLecturerHistoryInput = {
         id?: string
@@ -491820,6 +493464,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutResearchProjectsInput = {
         id?: string
@@ -491850,6 +493495,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutResearchProjectsInput = {
         where: LecturerWhereUniqueInput
@@ -492013,6 +493659,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutResearchProjectsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -492043,6 +493690,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type DM_DonViUpsertWithoutResearchProjectsInput = {
         update: XOR<DM_DonViUpdateWithoutResearchProjectsInput, DM_DonViUncheckedUpdateWithoutResearchProjectsInput>
@@ -492369,6 +494017,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutReviewedRegistrationsInput = {
         id?: string
@@ -492399,6 +494048,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutReviewedRegistrationsInput = {
         where: LecturerWhereUniqueInput
@@ -492652,6 +494302,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutReviewedRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -492682,6 +494333,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type SubjectClassCreateWithoutThesisProjectsInput = {
         id?: string
@@ -494288,6 +495940,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutReviewedThesisRegistrationsInput = {
         id?: string
@@ -494318,6 +495971,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutReviewedThesisRegistrationsInput = {
         where: LecturerWhereUniqueInput
@@ -494706,6 +496360,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutReviewedThesisRegistrationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -494736,6 +496391,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type CouncilUpsertWithoutStudentThesisRegistrationInput = {
         update: XOR<CouncilUpdateWithoutStudentThesisRegistrationInput, CouncilUncheckedUpdateWithoutStudentThesisRegistrationInput>
@@ -494801,6 +496457,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutExpertProfileInput = {
         id?: string
@@ -494831,6 +496488,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutExpertProfileInput = {
         where: LecturerWhereUniqueInput
@@ -495302,6 +496960,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExpertProfileInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -495332,6 +496991,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type TrainingMajorUpsertWithWhereUniqueWithoutExpertProfileInput = {
         where: TrainingMajorWhereUniqueInput
@@ -497638,6 +499298,236 @@ export namespace Prisma {
         name?: StringFilter<"RequirementCriterionCatalog"> | string
         questions?: StringNullableListFilter<"RequirementCriterionCatalog">
     };
+    export type EvaluationCriterionCreateWithoutCriterionAssignmentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        order: number
+        currentSituation?: string
+        strengths?: string
+        weakness?: string
+        actionPlan?: string
+        score?: number | null
+        standard: EvaluationStandardCreateNestedOneWithoutCriteriaInput
+        scoreScale: ScoreScaleCatalogCreateNestedOneWithoutEvaluationCriterionInput
+        evaluationCouncil?: EvaluationCouncilCreateNestedOneWithoutEvaluationCriterionInput
+        requirementCriterions?: RequirementCriterionCreateNestedManyWithoutEvaluationCriterionInput
+    };
+    export type EvaluationCriterionUncheckedCreateWithoutCriterionAssignmentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        standardId: string
+        name: string
+        order: number
+        scoreScaleId: string
+        evaluationCouncilId?: string | null
+        currentSituation?: string
+        strengths?: string
+        weakness?: string
+        actionPlan?: string
+        score?: number | null
+        requirementCriterions?: RequirementCriterionUncheckedCreateNestedManyWithoutEvaluationCriterionInput
+    };
+    export type EvaluationCriterionCreateOrConnectWithoutCriterionAssignmentsInput = {
+        where: EvaluationCriterionWhereUniqueInput
+        create: XOR<EvaluationCriterionCreateWithoutCriterionAssignmentsInput, EvaluationCriterionUncheckedCreateWithoutCriterionAssignmentsInput>
+    };
+    export type LecturerCreateWithoutCriterionAssignmentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        from?: Date | string | null
+        lectureID?: string | null
+        serviceDate?: Date | string | null
+        userProfile: UserProfileCreateNestedOneWithoutLecturerInput
+        organization: DM_DonViCreateNestedOneWithoutLecturersInput
+        lecturerType: LecturerTypeCreateNestedOneWithoutLecturersInput
+        mainSubjectClasses?: SubjectClassCreateNestedManyWithoutMainLecturerInput
+        extraSubjectClasses?: SubjectClassCreateNestedManyWithoutExtraLecturerInput
+        enterGradeClasses?: SubjectClassCreateNestedManyWithoutEnterGradeLecturerInput
+        manageFixedClass?: FixedClassCreateNestedManyWithoutLecturerManagementInput
+        classSchedules?: ClassScheduleCreateNestedManyWithoutLecturerInput
+        extraClassSchedules?: ClassScheduleCreateNestedManyWithoutExtraLecturerInput
+        researchProjects?: ResearchProjectCreateNestedManyWithoutSupervisorInput
+        reviewedRegistrations?: StudentResearchRegistrationCreateNestedManyWithoutReviewedByInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationCreateNestedManyWithoutReviewedByInput
+        expertProfile?: ExpertProfileCreateNestedManyWithoutLecturerInput
+        evaluationCouncilMember?: EvaluationCouncilMemberCreateNestedManyWithoutLecturerInput
+        evaluationSecretaryMember?: EvaluationSecretaryMemberCreateNestedManyWithoutLecturerInput
+        survey?: SurveyCreateNestedManyWithoutLectureInput
+        clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
+        examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
+        examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+    };
+    export type LecturerUncheckedCreateWithoutCriterionAssignmentsInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        from?: Date | string | null
+        lectureID?: string | null
+        serviceDate?: Date | string | null
+        userProfileId: string
+        organizationId: string
+        lecturerTypeId: string
+        mainSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutMainLecturerInput
+        extraSubjectClasses?: SubjectClassUncheckedCreateNestedManyWithoutExtraLecturerInput
+        enterGradeClasses?: SubjectClassUncheckedCreateNestedManyWithoutEnterGradeLecturerInput
+        manageFixedClass?: FixedClassUncheckedCreateNestedManyWithoutLecturerManagementInput
+        classSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutLecturerInput
+        extraClassSchedules?: ClassScheduleUncheckedCreateNestedManyWithoutExtraLecturerInput
+        researchProjects?: ResearchProjectUncheckedCreateNestedManyWithoutSupervisorInput
+        reviewedRegistrations?: StudentResearchRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutReviewedByInput
+        expertProfile?: ExpertProfileUncheckedCreateNestedManyWithoutLecturerInput
+        evaluationCouncilMember?: EvaluationCouncilMemberUncheckedCreateNestedManyWithoutLecturerInput
+        evaluationSecretaryMember?: EvaluationSecretaryMemberUncheckedCreateNestedManyWithoutLecturerInput
+        survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
+        clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
+        examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
+        examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+    };
+    export type LecturerCreateOrConnectWithoutCriterionAssignmentsInput = {
+        where: LecturerWhereUniqueInput
+        create: XOR<LecturerCreateWithoutCriterionAssignmentsInput, LecturerUncheckedCreateWithoutCriterionAssignmentsInput>
+    };
+    export type EvaluationCriterionUpsertWithoutCriterionAssignmentsInput = {
+        update: XOR<EvaluationCriterionUpdateWithoutCriterionAssignmentsInput, EvaluationCriterionUncheckedUpdateWithoutCriterionAssignmentsInput>
+        create: XOR<EvaluationCriterionCreateWithoutCriterionAssignmentsInput, EvaluationCriterionUncheckedCreateWithoutCriterionAssignmentsInput>
+        where?: EvaluationCriterionWhereInput
+    };
+    export type EvaluationCriterionUpdateToOneWithWhereWithoutCriterionAssignmentsInput = {
+        where?: EvaluationCriterionWhereInput
+        data: XOR<EvaluationCriterionUpdateWithoutCriterionAssignmentsInput, EvaluationCriterionUncheckedUpdateWithoutCriterionAssignmentsInput>
+    };
+    export type EvaluationCriterionUpdateWithoutCriterionAssignmentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        order?: IntFieldUpdateOperationsInput | number
+        currentSituation?: StringFieldUpdateOperationsInput | string
+        strengths?: StringFieldUpdateOperationsInput | string
+        weakness?: StringFieldUpdateOperationsInput | string
+        actionPlan?: StringFieldUpdateOperationsInput | string
+        score?: NullableIntFieldUpdateOperationsInput | number | null
+        standard?: EvaluationStandardUpdateOneRequiredWithoutCriteriaNestedInput
+        scoreScale?: ScoreScaleCatalogUpdateOneRequiredWithoutEvaluationCriterionNestedInput
+        evaluationCouncil?: EvaluationCouncilUpdateOneWithoutEvaluationCriterionNestedInput
+        requirementCriterions?: RequirementCriterionUpdateManyWithoutEvaluationCriterionNestedInput
+    };
+    export type EvaluationCriterionUncheckedUpdateWithoutCriterionAssignmentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        standardId?: StringFieldUpdateOperationsInput | string
+        name?: StringFieldUpdateOperationsInput | string
+        order?: IntFieldUpdateOperationsInput | number
+        scoreScaleId?: StringFieldUpdateOperationsInput | string
+        evaluationCouncilId?: NullableStringFieldUpdateOperationsInput | string | null
+        currentSituation?: StringFieldUpdateOperationsInput | string
+        strengths?: StringFieldUpdateOperationsInput | string
+        weakness?: StringFieldUpdateOperationsInput | string
+        actionPlan?: StringFieldUpdateOperationsInput | string
+        score?: NullableIntFieldUpdateOperationsInput | number | null
+        requirementCriterions?: RequirementCriterionUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
+    };
+    export type LecturerUpsertWithoutCriterionAssignmentsInput = {
+        update: XOR<LecturerUpdateWithoutCriterionAssignmentsInput, LecturerUncheckedUpdateWithoutCriterionAssignmentsInput>
+        create: XOR<LecturerCreateWithoutCriterionAssignmentsInput, LecturerUncheckedCreateWithoutCriterionAssignmentsInput>
+        where?: LecturerWhereInput
+    };
+    export type LecturerUpdateToOneWithWhereWithoutCriterionAssignmentsInput = {
+        where?: LecturerWhereInput
+        data: XOR<LecturerUpdateWithoutCriterionAssignmentsInput, LecturerUncheckedUpdateWithoutCriterionAssignmentsInput>
+    };
+    export type LecturerUpdateWithoutCriterionAssignmentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        userProfile?: UserProfileUpdateOneRequiredWithoutLecturerNestedInput
+        organization?: DM_DonViUpdateOneRequiredWithoutLecturersNestedInput
+        lecturerType?: LecturerTypeUpdateOneRequiredWithoutLecturersNestedInput
+        mainSubjectClasses?: SubjectClassUpdateManyWithoutMainLecturerNestedInput
+        extraSubjectClasses?: SubjectClassUpdateManyWithoutExtraLecturerNestedInput
+        enterGradeClasses?: SubjectClassUpdateManyWithoutEnterGradeLecturerNestedInput
+        manageFixedClass?: FixedClassUpdateManyWithoutLecturerManagementNestedInput
+        classSchedules?: ClassScheduleUpdateManyWithoutLecturerNestedInput
+        extraClassSchedules?: ClassScheduleUpdateManyWithoutExtraLecturerNestedInput
+        researchProjects?: ResearchProjectUpdateManyWithoutSupervisorNestedInput
+        reviewedRegistrations?: StudentResearchRegistrationUpdateManyWithoutReviewedByNestedInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationUpdateManyWithoutReviewedByNestedInput
+        expertProfile?: ExpertProfileUpdateManyWithoutLecturerNestedInput
+        evaluationCouncilMember?: EvaluationCouncilMemberUpdateManyWithoutLecturerNestedInput
+        evaluationSecretaryMember?: EvaluationSecretaryMemberUpdateManyWithoutLecturerNestedInput
+        survey?: SurveyUpdateManyWithoutLectureNestedInput
+        clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
+        examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
+        examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+    };
+    export type LecturerUncheckedUpdateWithoutCriterionAssignmentsInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        from?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        lectureID?: NullableStringFieldUpdateOperationsInput | string | null
+        serviceDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        userProfileId?: StringFieldUpdateOperationsInput | string
+        organizationId?: StringFieldUpdateOperationsInput | string
+        lecturerTypeId?: StringFieldUpdateOperationsInput | string
+        mainSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutMainLecturerNestedInput
+        extraSubjectClasses?: SubjectClassUncheckedUpdateManyWithoutExtraLecturerNestedInput
+        enterGradeClasses?: SubjectClassUncheckedUpdateManyWithoutEnterGradeLecturerNestedInput
+        manageFixedClass?: FixedClassUncheckedUpdateManyWithoutLecturerManagementNestedInput
+        classSchedules?: ClassScheduleUncheckedUpdateManyWithoutLecturerNestedInput
+        extraClassSchedules?: ClassScheduleUncheckedUpdateManyWithoutExtraLecturerNestedInput
+        researchProjects?: ResearchProjectUncheckedUpdateManyWithoutSupervisorNestedInput
+        reviewedRegistrations?: StudentResearchRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+        reviewedThesisRegistrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutReviewedByNestedInput
+        expertProfile?: ExpertProfileUncheckedUpdateManyWithoutLecturerNestedInput
+        evaluationCouncilMember?: EvaluationCouncilMemberUncheckedUpdateManyWithoutLecturerNestedInput
+        evaluationSecretaryMember?: EvaluationSecretaryMemberUncheckedUpdateManyWithoutLecturerNestedInput
+        survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
+        clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
+        examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
+        examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+    };
     export type CriterionCatalogCreateWithoutRequirementCriterionCatalogInput = {
         id?: string
         code?: string | null
@@ -497755,6 +499645,7 @@ export namespace Prisma {
         standard: EvaluationStandardCreateNestedOneWithoutCriteriaInput
         evaluationCouncil?: EvaluationCouncilCreateNestedOneWithoutEvaluationCriterionInput
         requirementCriterions?: RequirementCriterionCreateNestedManyWithoutEvaluationCriterionInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionUncheckedCreateWithoutScoreScaleInput = {
         id?: string
@@ -497774,6 +499665,7 @@ export namespace Prisma {
         actionPlan?: string
         score?: number | null
         requirementCriterions?: RequirementCriterionUncheckedCreateNestedManyWithoutEvaluationCriterionInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionCreateOrConnectWithoutScoreScaleInput = {
         where: EvaluationCriterionWhereUniqueInput
@@ -497881,6 +499773,7 @@ export namespace Prisma {
         scoreScale: ScoreScaleCatalogCreateNestedOneWithoutEvaluationCriterionInput
         evaluationCouncil?: EvaluationCouncilCreateNestedOneWithoutEvaluationCriterionInput
         requirementCriterions?: RequirementCriterionCreateNestedManyWithoutEvaluationCriterionInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionUncheckedCreateWithoutStandardInput = {
         id?: string
@@ -497900,6 +499793,7 @@ export namespace Prisma {
         actionPlan?: string
         score?: number | null
         requirementCriterions?: RequirementCriterionUncheckedCreateNestedManyWithoutEvaluationCriterionInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionCreateOrConnectWithoutStandardInput = {
         where: EvaluationCriterionWhereUniqueInput
@@ -498089,6 +499983,36 @@ export namespace Prisma {
         data: RequirementCriterionCreateManyEvaluationCriterionInput | RequirementCriterionCreateManyEvaluationCriterionInput[]
         skipDuplicates?: boolean
     };
+    export type CriterionAssignmentCreateWithoutEvaluationCriterionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        deadline: Date | string
+        lecturer: LecturerCreateNestedOneWithoutCriterionAssignmentsInput
+    };
+    export type CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        lecturerId: string
+        deadline: Date | string
+    };
+    export type CriterionAssignmentCreateOrConnectWithoutEvaluationCriterionInput = {
+        where: CriterionAssignmentWhereUniqueInput
+        create: XOR<CriterionAssignmentCreateWithoutEvaluationCriterionInput, CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput>
+    };
+    export type CriterionAssignmentCreateManyEvaluationCriterionInputEnvelope = {
+        data: CriterionAssignmentCreateManyEvaluationCriterionInput | CriterionAssignmentCreateManyEvaluationCriterionInput[]
+        skipDuplicates?: boolean
+    };
     export type EvaluationStandardUpsertWithoutCriteriaInput = {
         update: XOR<EvaluationStandardUpdateWithoutCriteriaInput, EvaluationStandardUncheckedUpdateWithoutCriteriaInput>
         create: XOR<EvaluationStandardCreateWithoutCriteriaInput, EvaluationStandardUncheckedCreateWithoutCriteriaInput>
@@ -498226,6 +500150,19 @@ export namespace Prisma {
         questions?: StringNullableListFilter<"RequirementCriterion">
         evidencePlaces?: StringFilter<"RequirementCriterion"> | string
         collectionMethod?: StringFilter<"RequirementCriterion"> | string
+    };
+    export type CriterionAssignmentUpsertWithWhereUniqueWithoutEvaluationCriterionInput = {
+        where: CriterionAssignmentWhereUniqueInput
+        update: XOR<CriterionAssignmentUpdateWithoutEvaluationCriterionInput, CriterionAssignmentUncheckedUpdateWithoutEvaluationCriterionInput>
+        create: XOR<CriterionAssignmentCreateWithoutEvaluationCriterionInput, CriterionAssignmentUncheckedCreateWithoutEvaluationCriterionInput>
+    };
+    export type CriterionAssignmentUpdateWithWhereUniqueWithoutEvaluationCriterionInput = {
+        where: CriterionAssignmentWhereUniqueInput
+        data: XOR<CriterionAssignmentUpdateWithoutEvaluationCriterionInput, CriterionAssignmentUncheckedUpdateWithoutEvaluationCriterionInput>
+    };
+    export type CriterionAssignmentUpdateManyWithWhereWithoutEvaluationCriterionInput = {
+        where: CriterionAssignmentScalarWhereInput
+        data: XOR<CriterionAssignmentUpdateManyMutationInput, CriterionAssignmentUncheckedUpdateManyWithoutEvaluationCriterionInput>
     };
     export type EvidenceCreateWithoutCategoryInput = {
         id?: string
@@ -498470,6 +500407,7 @@ export namespace Prisma {
         standard: EvaluationStandardCreateNestedOneWithoutCriteriaInput
         scoreScale: ScoreScaleCatalogCreateNestedOneWithoutEvaluationCriterionInput
         evaluationCouncil?: EvaluationCouncilCreateNestedOneWithoutEvaluationCriterionInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionUncheckedCreateWithoutRequirementCriterionsInput = {
         id?: string
@@ -498489,6 +500427,7 @@ export namespace Prisma {
         weakness?: string
         actionPlan?: string
         score?: number | null
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionCreateOrConnectWithoutRequirementCriterionsInput = {
         where: EvaluationCriterionWhereUniqueInput
@@ -498551,6 +500490,7 @@ export namespace Prisma {
         standard?: EvaluationStandardUpdateOneRequiredWithoutCriteriaNestedInput
         scoreScale?: ScoreScaleCatalogUpdateOneRequiredWithoutEvaluationCriterionNestedInput
         evaluationCouncil?: EvaluationCouncilUpdateOneWithoutEvaluationCriterionNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type EvaluationCriterionUncheckedUpdateWithoutRequirementCriterionsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -498570,6 +500510,7 @@ export namespace Prisma {
         weakness?: StringFieldUpdateOperationsInput | string
         actionPlan?: StringFieldUpdateOperationsInput | string
         score?: NullableIntFieldUpdateOperationsInput | number | null
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type AnalysisFormEvidenceUpsertWithWhereUniqueWithoutRequirementCriterionInput = {
         where: AnalysisFormEvidenceWhereUniqueInput
@@ -498806,6 +500747,7 @@ export namespace Prisma {
         standard: EvaluationStandardCreateNestedOneWithoutCriteriaInput
         scoreScale: ScoreScaleCatalogCreateNestedOneWithoutEvaluationCriterionInput
         requirementCriterions?: RequirementCriterionCreateNestedManyWithoutEvaluationCriterionInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionUncheckedCreateWithoutEvaluationCouncilInput = {
         id?: string
@@ -498825,6 +500767,7 @@ export namespace Prisma {
         actionPlan?: string
         score?: number | null
         requirementCriterions?: RequirementCriterionUncheckedCreateNestedManyWithoutEvaluationCriterionInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutEvaluationCriterionInput
     };
     export type EvaluationCriterionCreateOrConnectWithoutEvaluationCouncilInput = {
         where: EvaluationCriterionWhereUniqueInput
@@ -498954,6 +500897,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutEvaluationCouncilMemberInput = {
         id?: string
@@ -498984,6 +500928,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutEvaluationCouncilMemberInput = {
         where: LecturerWhereUniqueInput
@@ -499060,6 +501005,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutEvaluationCouncilMemberInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -499090,6 +501036,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type EvaluationPeriodCreateWithoutEvaluationSecretarYCouncilInput = {
         id?: string
@@ -499232,6 +501179,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutEvaluationSecretaryMemberInput = {
         id?: string
@@ -499262,6 +501210,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutEvaluationSecretaryMemberInput = {
         where: LecturerWhereUniqueInput
@@ -499331,6 +501280,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutEvaluationSecretaryMemberInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -499361,6 +501311,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type EvaluationSecretarYCouncilUpsertWithoutMembersInput = {
         update: XOR<EvaluationSecretarYCouncilUpdateWithoutMembersInput, EvaluationSecretarYCouncilUncheckedUpdateWithoutMembersInput>
@@ -501201,6 +503152,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutLectureInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutClusterSurveyInput = {
         id?: string
@@ -501231,6 +503183,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutClusterSurveyInput = {
         where: LecturerWhereUniqueInput
@@ -501647,6 +503600,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutSurveyInput = {
         id?: string
@@ -501677,6 +503631,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutSurveyInput = {
         where: LecturerWhereUniqueInput
@@ -501926,6 +503881,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -501956,6 +503912,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type SurveyTopicUpsertWithoutSurveyInput = {
         update: XOR<SurveyTopicUpdateWithoutSurveyInput, SurveyTopicUncheckedUpdateWithoutSurveyInput>
@@ -506355,6 +508312,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutLectureInput
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsExtra?: ExamRoomCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutExamRoomsMainInput = {
         id?: string
@@ -506385,6 +508343,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsExtra?: ExamRoomUncheckedCreateNestedManyWithoutSecondSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutExamRoomsMainInput = {
         where: LecturerWhereUniqueInput
@@ -506419,6 +508378,7 @@ export namespace Prisma {
         survey?: SurveyCreateNestedManyWithoutLectureInput
         clusterSurvey?: ClusterSurveyCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomCreateNestedManyWithoutFirstSupervisorInput
+        criterionAssignments?: CriterionAssignmentCreateNestedManyWithoutLecturerInput
     };
     export type LecturerUncheckedCreateWithoutExamRoomsExtraInput = {
         id?: string
@@ -506449,6 +508409,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedCreateNestedManyWithoutLectureInput
         clusterSurvey?: ClusterSurveyUncheckedCreateNestedManyWithoutLecturersInput
         examRoomsMain?: ExamRoomUncheckedCreateNestedManyWithoutFirstSupervisorInput
+        criterionAssignments?: CriterionAssignmentUncheckedCreateNestedManyWithoutLecturerInput
     };
     export type LecturerCreateOrConnectWithoutExamRoomsExtraInput = {
         where: LecturerWhereUniqueInput
@@ -506628,6 +508589,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutLectureNestedInput
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExamRoomsMainInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -506658,6 +508620,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUpsertWithoutExamRoomsExtraInput = {
         update: XOR<LecturerUpdateWithoutExamRoomsExtraInput, LecturerUncheckedUpdateWithoutExamRoomsExtraInput>
@@ -506697,6 +508660,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutLectureNestedInput
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutExamRoomsExtraInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -506727,6 +508691,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type ExamSessionUpsertWithWhereUniqueWithoutExamRoomInput = {
         where: ExamSessionWhereUniqueInput
@@ -526173,6 +528138,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -526203,6 +528169,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateManyWithoutOrganizationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -555665,6 +557632,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutLecturerTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -555695,6 +557663,7 @@ export namespace Prisma {
         clusterSurvey?: ClusterSurveyUncheckedUpdateManyWithoutLecturersNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateManyWithoutLecturerTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -556310,6 +558279,17 @@ export namespace Prisma {
         lockExamCode?: boolean
         start?: number | null
         end?: number | null
+    };
+    export type CriterionAssignmentCreateManyLecturerInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        evaluationCriterionId: string
+        deadline: Date | string
     };
     export type SubjectClassUpdateWithoutMainLecturerInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -557479,6 +559459,39 @@ export namespace Prisma {
         lockExamCode?: BoolFieldUpdateOperationsInput | boolean
         start?: NullableIntFieldUpdateOperationsInput | number | null
         end?: NullableIntFieldUpdateOperationsInput | number | null
+    };
+    export type CriterionAssignmentUpdateWithoutLecturerInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        evaluationCriterion?: EvaluationCriterionUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+    };
+    export type CriterionAssignmentUncheckedUpdateWithoutLecturerInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        evaluationCriterionId?: StringFieldUpdateOperationsInput | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type CriterionAssignmentUncheckedUpdateManyWithoutLecturerInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        evaluationCriterionId?: StringFieldUpdateOperationsInput | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
     };
     export type StudentResearchRegistrationCreateManyResearchProjectInput = {
         id?: string
@@ -559221,6 +561234,7 @@ export namespace Prisma {
         standard?: EvaluationStandardUpdateOneRequiredWithoutCriteriaNestedInput
         evaluationCouncil?: EvaluationCouncilUpdateOneWithoutEvaluationCriterionNestedInput
         requirementCriterions?: RequirementCriterionUpdateManyWithoutEvaluationCriterionNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type EvaluationCriterionUncheckedUpdateWithoutScoreScaleInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559240,6 +561254,7 @@ export namespace Prisma {
         actionPlan?: StringFieldUpdateOperationsInput | string
         score?: NullableIntFieldUpdateOperationsInput | number | null
         requirementCriterions?: RequirementCriterionUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type EvaluationCriterionUncheckedUpdateManyWithoutScoreScaleInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559295,6 +561310,7 @@ export namespace Prisma {
         scoreScale?: ScoreScaleCatalogUpdateOneRequiredWithoutEvaluationCriterionNestedInput
         evaluationCouncil?: EvaluationCouncilUpdateOneWithoutEvaluationCriterionNestedInput
         requirementCriterions?: RequirementCriterionUpdateManyWithoutEvaluationCriterionNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type EvaluationCriterionUncheckedUpdateWithoutStandardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559314,6 +561330,7 @@ export namespace Prisma {
         actionPlan?: StringFieldUpdateOperationsInput | string
         score?: NullableIntFieldUpdateOperationsInput | number | null
         requirementCriterions?: RequirementCriterionUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type EvaluationCriterionUncheckedUpdateManyWithoutStandardInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559346,6 +561363,17 @@ export namespace Prisma {
         questions?: RequirementCriterionCreatequestionsInput | string[]
         evidencePlaces?: string
         collectionMethod?: string
+    };
+    export type CriterionAssignmentCreateManyEvaluationCriterionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        lecturerId: string
+        deadline: Date | string
     };
     export type RequirementCriterionUpdateWithoutEvaluationCriterionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559390,6 +561418,39 @@ export namespace Prisma {
         questions?: RequirementCriterionUpdatequestionsInput | string[]
         evidencePlaces?: StringFieldUpdateOperationsInput | string
         collectionMethod?: StringFieldUpdateOperationsInput | string
+    };
+    export type CriterionAssignmentUpdateWithoutEvaluationCriterionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+        lecturer?: LecturerUpdateOneRequiredWithoutCriterionAssignmentsNestedInput
+    };
+    export type CriterionAssignmentUncheckedUpdateWithoutEvaluationCriterionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        lecturerId?: StringFieldUpdateOperationsInput | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
+    };
+    export type CriterionAssignmentUncheckedUpdateManyWithoutEvaluationCriterionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        lecturerId?: StringFieldUpdateOperationsInput | string
+        deadline?: DateTimeFieldUpdateOperationsInput | Date | string
     };
     export type EvidenceCreateManyCategoryInput = {
         id?: string
@@ -559667,6 +561728,7 @@ export namespace Prisma {
         standard?: EvaluationStandardUpdateOneRequiredWithoutCriteriaNestedInput
         scoreScale?: ScoreScaleCatalogUpdateOneRequiredWithoutEvaluationCriterionNestedInput
         requirementCriterions?: RequirementCriterionUpdateManyWithoutEvaluationCriterionNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type EvaluationCriterionUncheckedUpdateWithoutEvaluationCouncilInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559686,6 +561748,7 @@ export namespace Prisma {
         actionPlan?: StringFieldUpdateOperationsInput | string
         score?: NullableIntFieldUpdateOperationsInput | number | null
         requirementCriterions?: RequirementCriterionUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutEvaluationCriterionNestedInput
     };
     export type EvaluationCriterionUncheckedUpdateManyWithoutEvaluationCouncilInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -560861,6 +562924,7 @@ export namespace Prisma {
         survey?: SurveyUpdateManyWithoutLectureNestedInput
         examRoomsMain?: ExamRoomUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -560891,6 +562955,7 @@ export namespace Prisma {
         survey?: SurveyUncheckedUpdateManyWithoutLectureNestedInput
         examRoomsMain?: ExamRoomUncheckedUpdateManyWithoutFirstSupervisorNestedInput
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
+        criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
     export type LecturerUncheckedUpdateManyWithoutClusterSurveyInput = {
         id?: StringFieldUpdateOperationsInput | string
