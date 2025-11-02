@@ -11,7 +11,7 @@ import {
 } from '@ant-design/icons'
 import { useFindUniqueDocument } from '@workspace/db/hooks'
 import { useEffect, useRef, useState } from 'react'
-import { Drawer, Input, Tooltip } from 'antd'
+import { Button, Drawer, Input, Tooltip } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface DocumentSidebarProps {
@@ -244,10 +244,10 @@ export default function DocumentSidebar({
     return (
         <Drawer
             title={
-                <div className="flex items-center justify-between pr-8">
+                <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <FileTextOutlined className="text-primary" />
-                        <span className="font-semibold">Tài liệu nguồn</span>
+                        <span className="font-semibold">Tài liệu</span>
                     </div>
                     {documentId && (
                         <Tooltip title="Xem thông tin chi tiết" placement="left">
