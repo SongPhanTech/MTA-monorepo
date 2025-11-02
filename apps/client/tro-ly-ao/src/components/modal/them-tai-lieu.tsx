@@ -466,12 +466,17 @@ const ThemTaiLieu = () => {
                                 key={file.url}
                                 onClick={setSelectedFile.bind(null, file)}
                                 className={cn(
-                                    'flex items-center gap-2 mt-2 border border-gray-300 rounded-lg p-2 justify-between cursor-pointer hover:bg-gray-100',
+                                    'flex items-start gap-2 mt-2 border border-gray-300 rounded-lg p-2 cursor-pointer hover:bg-gray-100',
                                     selectedFile?.url === file.url && 'bg-gray-100 border-primary'
                                 )}
                             >
-                                <FileUploadIcon fileType={file.file.type} width={40} height={40} />
-                                <div className="flex flex-col flex-1 gap-1">
+                                <FileUploadIcon
+                                    fileType={file.file.type}
+                                    width={40}
+                                    height={40}
+                                    className="flex-shrink-0"
+                                />
+                                <div className="flex flex-col flex-1 gap-1 min-w-0">
                                     {file.progress === 100 ? (
                                         <Input
                                             size="small"
@@ -522,7 +527,7 @@ const ThemTaiLieu = () => {
 
                                     {file.similarDocumentId && file.similar && (
                                         <div
-                                            className="flex items-center gap-2 mt-1 cursor-pointer hover:underline"
+                                            className="flex items-center gap-2 mt-1 cursor-pointer hover:underline min-w-0"
                                             onClick={(e) => {
                                                 e.stopPropagation()
                                                 setViewingSimilarDocId(
@@ -538,11 +543,11 @@ const ThemTaiLieu = () => {
                                                           ? 'orange'
                                                           : 'green'
                                                 }
-                                                className="m-0"
+                                                className="m-0 flex-shrink-0"
                                             >
                                                 {Math.floor(file.similar * 100)}% tương đồng
                                             </Tag>
-                                            <span className="text-xs text-gray-600">
+                                            <span className="text-xs text-gray-600 truncate">
                                                 với:{' '}
                                                 <span className="font-medium text-primary">
                                                     {getSimilarDocumentTitle(
@@ -568,7 +573,7 @@ const ThemTaiLieu = () => {
                                             files,
                                         })
                                     }}
-                                    className="text-lg cursor-pointer"
+                                    className="text-lg cursor-pointer flex-shrink-0 self-start"
                                 />
                             </div>
                         ))}
