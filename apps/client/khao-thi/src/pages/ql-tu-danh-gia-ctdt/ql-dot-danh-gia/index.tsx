@@ -264,6 +264,22 @@ export default function EvaluationPeriod() {
                                                 )}
                                                 {can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip title={'Chi tiết'} placement="top">
+                                                        <EyeOutlined
+                                                            style={{ fontSize: '16px' }}
+                                                            onClick={(e) => {
+                                                                router.push(
+                                                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}/phancong`
+                                                                )
+                                                                e?.stopPropagation()
+                                                            }}
+                                                        />
+                                                    </Tooltip>
+                                                )}
+                                                {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                                                     'SUA'
                                                 ) && (
                                                     <EditIcon

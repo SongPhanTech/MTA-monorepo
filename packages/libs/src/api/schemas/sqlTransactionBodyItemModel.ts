@@ -168,6 +168,7 @@ export const SqlTransactionBodyItemModel = {
     EvaluationPeriod: 'EvaluationPeriod',
     StandardCatalog: 'StandardCatalog',
     CriterionCatalog: 'CriterionCatalog',
+    CriterionAssignment: 'CriterionAssignment',
     RequirementCriterionCatalog: 'RequirementCriterionCatalog',
     ScoreScaleCatalog: 'ScoreScaleCatalog',
     EvaluationStandard: 'EvaluationStandard',
