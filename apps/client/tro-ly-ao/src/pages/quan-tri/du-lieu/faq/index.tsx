@@ -2,13 +2,14 @@ import { AuditOutlined, EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
-import { cn, formatDateReadable } from '@lib/utils'
+import { formatDateReadable } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import { useCountFAQ, useDeleteFAQ, useFindManyFAQ } from '@workspace/db/hooks'
-import { Button, Input, message, Tag, Tooltip } from 'antd'
+import { Button, Input, message, Select, Tabs, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { deleteVectorRecordFAQ } from '@/api/chunking_and_vectorize'
+import { useTopics } from '@/hooks/useTopics'
 
 function Page() {
     const [faqParams, setFaqParams] = useState({
@@ -17,6 +18,7 @@ function Page() {
     const [faqFilter, setFaqFilter] = useState<{
         question: string
         status: $Enums.DocumentStatus
+        topicId?: string
     }>({
         question: '',
         status: $Enums.DocumentStatus.APPROVE,
@@ -30,22 +32,38 @@ function Page() {
         tag: 'PutCauHoi',
     })
 
-    const { data: totalCountFAQ = 0 } = useCountFAQ()
+    const { selectableTopicOptions } = useTopics()
+
     const { data: totalPendingFAQ = 0 } = useCountFAQ({
         where: { status: $Enums.DocumentStatus.PENDING },
     })
-    const { data: faqs = [] } = useFindManyFAQ({
-        include: {
-            uploadedBy: true,
-            topic: true,
-        },
-        where: {
+
+    const buildWhereClause = () => {
+        const where: any = {
             status: faqFilter.status,
             question: {
                 contains: faqFilter.question,
                 mode: 'insensitive',
             },
+        }
+
+        if (faqFilter.topicId) {
+            where.topicId = faqFilter.topicId
+        }
+
+        return where
+    }
+
+    const { data: totalCountFAQ = 0 } = useCountFAQ({
+        where: buildWhereClause(),
+    })
+
+    const { data: faqs = [] } = useFindManyFAQ({
+        include: {
+            uploadedBy: true,
+            topic: true,
         },
+        where: buildWhereClause(),
         skip: (faqParams.pagination.current - 1) * faqParams.pagination.pageSize,
         take: faqParams.pagination.pageSize,
     })
@@ -90,7 +108,30 @@ function Page() {
                             Thêm mới
                         </Button>
                     </div>
-                    <div className="flex items-center gap-2 mb-4">
+                    <Tabs
+                        activeKey={faqFilter.status}
+                        onChange={(key) =>
+                            setFaqFilter((prev) => ({
+                                ...prev,
+                                status: key as $Enums.DocumentStatus,
+                            }))
+                        }
+                        items={[
+                            {
+                                key: $Enums.DocumentStatus.APPROVE,
+                                label: 'Đã duyệt',
+                            },
+                            {
+                                key: $Enums.DocumentStatus.PENDING,
+                                label: `Chờ duyệt (${totalPendingFAQ})`,
+                            },
+                            {
+                                key: $Enums.DocumentStatus.DENY,
+                                label: 'Từ chối',
+                            },
+                        ]}
+                    />
+                    <div className="flex items-center gap-2 mb-4 flex-wrap">
                         <Input
                             placeholder="Tìm theo nội dung câu hỏi"
                             allowClear
@@ -102,54 +143,22 @@ function Page() {
                             }
                             style={{ width: 300 }}
                         />
-                        <Button
-                            className={cn(
-                                'border rounded px-4 py-1 font-medium',
-                                faqFilter.status === $Enums.DocumentStatus.APPROVE
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'text-primary border-primary'
-                            )}
-                            onClick={() =>
+                        <Select
+                            placeholder="Loại câu hỏi"
+                            allowClear
+                            style={{ width: 200 }}
+                            value={faqFilter.topicId}
+                            onChange={(value) =>
                                 setFaqFilter((prev) => ({
                                     ...prev,
-                                    status: $Enums.DocumentStatus.APPROVE,
+                                    topicId: value,
                                 }))
                             }
-                        >
-                            Đã duyệt
-                        </Button>
-                        <Button
-                            className={cn(
-                                'border rounded px-4 py-1 font-medium',
-                                faqFilter.status === $Enums.DocumentStatus.PENDING
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'text-primary border-primary'
-                            )}
-                            onClick={() =>
-                                setFaqFilter((prev) => ({
-                                    ...prev,
-                                    status: $Enums.DocumentStatus.PENDING,
-                                }))
-                            }
-                        >
-                            Chờ duyệt ({totalPendingFAQ})
-                        </Button>
-                        <Button
-                            className={cn(
-                                'border rounded px-4 py-1 font-medium',
-                                faqFilter.status === $Enums.DocumentStatus.DENY
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'text-primary border-primary'
-                            )}
-                            onClick={() =>
-                                setFaqFilter((prev) => ({
-                                    ...prev,
-                                    status: $Enums.DocumentStatus.DENY,
-                                }))
-                            }
-                        >
-                            Từ chối
-                        </Button>
+                            options={selectableTopicOptions.map((topic) => ({
+                                label: topic.name,
+                                value: topic.id,
+                            }))}
+                        />
                     </div>
                     <Table
                         scroll={{ x: 1200 }}

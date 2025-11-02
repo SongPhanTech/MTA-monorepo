@@ -3,23 +3,27 @@ import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
-import { cn, formatDateReadable, formatNiceBytes } from '@lib/utils'
+import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
 import {
     useCountDocument,
     useDeleteDocument,
     useDeleteManyDocumentTopic,
     useFindManyDocument,
+    useFindManyDocumentClassification,
 } from '@workspace/db/hooks'
-import { Button, Input, message, Tag, Tooltip } from 'antd'
+import { Button, Input, message, Select, Tabs, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import { deleteVectorRecordHoiDap, reloadBM25 } from '@/api/chunking_and_vectorize'
+import { useTopics } from '@/hooks/useTopics'
 
 function Page() {
     const [filters, setFilters] = useState<{
         title: string
         status: $Enums.DocumentStatus
+        topicId?: string
+        classificationId?: string
     }>({
         title: '',
         status: $Enums.DocumentStatus.APPROVE,
@@ -49,15 +53,37 @@ function Page() {
         where: { status: $Enums.DocumentStatus.PENDING },
     })
 
-    const { data: totalFilteredDocument = 0 } = useCountDocument({
-        where: {
+    const { selectableTopicOptions } = useTopics()
+    const { data: classifications = [] } = useFindManyDocumentClassification({})
+
+    const buildWhereClause = () => {
+        const where: any = {
             status: filters.status,
             title: {
                 contains: filters.title,
                 mode: 'insensitive',
             },
-        },
+        }
+
+        if (filters.topicId) {
+            where.topics = {
+                some: {
+                    topicId: filters.topicId,
+                },
+            }
+        }
+
+        if (filters.classificationId) {
+            where.classificationId = filters.classificationId
+        }
+
+        return where
+    }
+
+    const { data: totalFilteredDocument = 0 } = useCountDocument({
+        where: buildWhereClause(),
     })
+
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
@@ -68,13 +94,7 @@ function Page() {
             },
             classification: true,
         },
-        where: {
-            status: filters.status,
-            title: {
-                contains: filters.title,
-                mode: 'insensitive',
-            },
-        },
+        where: buildWhereClause(),
         skip: (tableParams.pagination.current - 1) * tableParams.pagination.pageSize,
         take: tableParams.pagination.pageSize,
     })
@@ -97,7 +117,7 @@ function Page() {
             },
         }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filters.status, filters.title])
+    }, [filters.status, filters.title, filters.topicId, filters.classificationId])
 
     const { mutateAsync: deleteDocument } = useDeleteDocument()
     const { mutateAsync: deleteManyDocumentTopic } = useDeleteManyDocumentTopic()
@@ -165,7 +185,30 @@ function Page() {
                             </Button>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 mb-4">
+                    <Tabs
+                        activeKey={filters.status}
+                        onChange={(key) =>
+                            setFilters((prev) => ({
+                                ...prev,
+                                status: key as $Enums.DocumentStatus,
+                            }))
+                        }
+                        items={[
+                            {
+                                key: $Enums.DocumentStatus.APPROVE,
+                                label: 'Đã duyệt',
+                            },
+                            {
+                                key: $Enums.DocumentStatus.PENDING,
+                                label: `Chờ duyệt (${totalPendingDocument})`,
+                            },
+                            {
+                                key: $Enums.DocumentStatus.DENY,
+                                label: 'Từ chối',
+                            },
+                        ]}
+                    />
+                    <div className="flex items-center gap-2 mb-4 flex-wrap">
                         <Input
                             placeholder="Tìm theo tên tài liệu"
                             allowClear
@@ -177,54 +220,38 @@ function Page() {
                             }
                             style={{ width: 300 }}
                         />
-                        <Button
-                            className={cn(
-                                'border rounded px-4 py-1 font-medium',
-                                filters.status === $Enums.DocumentStatus.APPROVE
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'text-primary border-primary'
-                            )}
-                            onClick={() =>
+                        <Select
+                            placeholder="Loại tài liệu"
+                            allowClear
+                            style={{ width: 200 }}
+                            value={filters.topicId}
+                            onChange={(value) =>
                                 setFilters((prev) => ({
                                     ...prev,
-                                    status: $Enums.DocumentStatus.APPROVE,
+                                    topicId: value,
                                 }))
                             }
-                        >
-                            Đã duyệt
-                        </Button>
-                        <Button
-                            className={cn(
-                                'border rounded px-4 py-1 font-medium',
-                                filters.status === $Enums.DocumentStatus.PENDING
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'text-primary border-primary'
-                            )}
-                            onClick={() =>
+                            options={selectableTopicOptions.map((topic) => ({
+                                label: topic.name,
+                                value: topic.id,
+                            }))}
+                        />
+                        <Select
+                            placeholder="Phân loại"
+                            allowClear
+                            style={{ width: 200 }}
+                            value={filters.classificationId}
+                            onChange={(value) =>
                                 setFilters((prev) => ({
                                     ...prev,
-                                    status: $Enums.DocumentStatus.PENDING,
+                                    classificationId: value,
                                 }))
                             }
-                        >
-                            Chờ duyệt ({totalPendingDocument})
-                        </Button>
-                        <Button
-                            className={cn(
-                                'border rounded px-4 py-1 font-medium',
-                                filters.status === $Enums.DocumentStatus.DENY
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'text-primary border-primary'
-                            )}
-                            onClick={() =>
-                                setFilters((prev) => ({
-                                    ...prev,
-                                    status: $Enums.DocumentStatus.DENY,
-                                }))
-                            }
-                        >
-                            Từ chối
-                        </Button>
+                            options={classifications.map((classification) => ({
+                                label: classification.name,
+                                value: classification.id,
+                            }))}
+                        />
                     </div>
                     <Table
                         rowKey="id"
