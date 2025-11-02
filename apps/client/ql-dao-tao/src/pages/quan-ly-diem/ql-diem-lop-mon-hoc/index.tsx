@@ -7,7 +7,7 @@ import SinhPhach from '@components/sub-pages/sinh-phach'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { Store, useStore } from '@tanstack/react-store'
-import { useFindUniqueSubjectClass } from '@workspace/db/hooks'
+import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
 import { Checkbox, Col, Form, Input, Row, Tabs, TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -107,7 +107,9 @@ export default function QuanLyDiemLopMonHoc({
                     {
                         label: 'Nhập điểm quá trình',
                         key: '2',
-                        children: <NhapDiem loadData={activeKey !== '1'} score={'CC/TX'} />,
+                        children: (
+                            <NhapDiem role={role} loadData={activeKey !== '1'} score={'CC/TX'} />
+                        ),
                         disabled: !data,
                     },
                 ]
@@ -119,7 +121,7 @@ export default function QuanLyDiemLopMonHoc({
                     {
                         label: 'Nhập điểm thi',
                         key: '2',
-                        children: <NhapDiem score="THI" loadData={activeKey !== '1'} />,
+                        children: <NhapDiem role={role} score="THI" loadData={activeKey !== '1'} />,
                         disabled: !data,
                     },
                 ]
@@ -132,7 +134,7 @@ export default function QuanLyDiemLopMonHoc({
                 {
                     label: 'Điểm',
                     key: '2',
-                    children: <NhapDiem loadData={activeKey !== '1'} />,
+                    children: <NhapDiem role={role} loadData={activeKey !== '1'} />,
                     disabled: !data,
                 },
             ]
@@ -204,6 +206,8 @@ export default function QuanLyDiemLopMonHoc({
         return <Input placeholder="Hạn nhập điểm" className="pointer-events-none" size="small" />
     }, [data, score])
 
+    const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
+
     useEffect(() => {
         if (data) {
             form.setFieldsValue({
@@ -268,7 +272,18 @@ export default function QuanLyDiemLopMonHoc({
             </Col>
 
             <Col span={12}>
-                <Form form={form} layout="vertical">
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onValuesChange={(changedValue) => {
+                        updateSubjectClass({
+                            where: { id: selectedSubjectClassId || '' },
+                            data: {
+                                ...changedValue,
+                            },
+                        })
+                    }}
+                >
                     <div className="flex items-center mb-2 w-full">
                         <div className="min-w-[150px] w-[150px]">Hạn nhập điểm</div>
                         <div className="w-full">{reasonDate()}</div>

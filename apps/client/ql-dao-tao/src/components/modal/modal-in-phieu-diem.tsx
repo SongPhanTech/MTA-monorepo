@@ -92,7 +92,6 @@ const ModalPrintStudentSubjectScore = () => {
 
     const { data: session } = useSession()
     const profileName = session?.preferred_username || ''
-    const profileId = session?.sDM_NhanVienId || ''
     const { data } = useFindUniqueSubjectClass(
         {
             where: { id: input?.dataTable?.[0]?.subjectClass?.id || '' },
@@ -160,12 +159,10 @@ const ModalPrintStudentSubjectScore = () => {
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
     const lockExam = async () => {
-        const listTransition: any = []
         if (data?.id) {
             await updateSubjectClass({
                 where: { id: data.id },
                 data: { isLockScore: true, isLockExamScore: true },
-                select: { id: true },
             })
             message.success('Cập nhật thành công')
         }
@@ -175,7 +172,7 @@ const ModalPrintStudentSubjectScore = () => {
         try {
             showSpinner()
             if (input?.type === EnumInPhieuDiem.PHIEU_DIEM_KHOA) {
-                lockExam()
+                await lockExam()
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({

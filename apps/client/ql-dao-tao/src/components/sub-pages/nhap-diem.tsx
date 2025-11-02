@@ -429,15 +429,27 @@ export default function NhapDiem({
     }
 
     const disabledForm: boolean = useMemo(() => {
+        if (score === 'CC/TX') {
+            return !(
+                can(
+                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
+                    'NHAP_DIEM'
+                ) &&
+                dataDetailSubjectClass?.scoreDeadLineStart &&
+                dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&
+                dataDetailSubjectClass?.scoreDeadline &&
+                dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
+                !dataDetailSubjectClass?.isLockScore &&
+                !dataDetailSubjectClass?.isLockExamScore
+            )
+        }
         return !(
             can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
-            dataDetailSubjectClass?.scoreDeadLineStart &&
-            dayjs().isAfter(dataDetailSubjectClass?.scoreDeadLineStart) &&
-            dataDetailSubjectClass?.scoreDeadline &&
-            dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
-            !dataDetailSubjectClass?.isLockScore
+            dataDetailSubjectClass?.examScoreDeadline &&
+            dayjs().isBefore(dataDetailSubjectClass?.examScoreDeadline) &&
+            !dataDetailSubjectClass?.isLockExamScore
         )
-    }, [dataDetailSubjectClass, can])
+    }, [dataDetailSubjectClass, can, score])
 
     const { onOpen: openStudentSubjectScore } = useDisclosure<{
         dataTable: DataTable[]
@@ -710,7 +722,7 @@ export default function NhapDiem({
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
-                                    if (score === 'THI' && role !== 'GV') {
+                                    if (role !== 'GV' || score === 'THI') {
                                         return record.attendanceScore || ''
                                     }
                                     return (
@@ -771,7 +783,7 @@ export default function NhapDiem({
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
-                                    if (score === 'THI' && role !== 'GV') {
+                                    if (role !== 'GV' || score === 'THI') {
                                         return record.midtermScore || ''
                                     }
                                     return (
@@ -832,7 +844,7 @@ export default function NhapDiem({
                                 type: 'order',
                                 align: 'center',
                                 render: (_, record) => {
-                                    if (score === 'CC/TX' && role !== 'GV') {
+                                    if (role !== 'GV' || score === 'CC/TX') {
                                         return record.examScore || ''
                                     }
                                     return (
