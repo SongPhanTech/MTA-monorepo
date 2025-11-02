@@ -1,4 +1,4 @@
-import { fetchOCR, pollOCRResult } from '@/api/ocr'
+import { cancelOCRTask, fetchOCR, pollOCRResult, stopOCRPolling } from '@/api/ocr'
 import { useTopics } from '@/hooks/useTopics'
 import { CloseCircleOutlined, InboxOutlined } from '@ant-design/icons'
 import { fetchReadDocumentContentDocumentDocumentReaderPost } from '@api/qa/qaComponents'
@@ -16,7 +16,7 @@ import {
 import { generatePresignedUrl } from '@workspace/libs/api/model'
 import { Col, Form, Input, message, Modal, Progress, Tag } from 'antd'
 import axios from 'axios'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 let pdfjsLibPromise: Promise<typeof import('pdfjs-dist/legacy/build/pdf')> | null = null
@@ -55,6 +55,7 @@ type DocumentFormType = {
             customName?: string
             isProcessingOCR?: boolean
             ocrStatus?: 'processing' | 'success' | 'failed'
+            taskId?: string
         }
     >
 }
@@ -78,8 +79,36 @@ const ThemTaiLieu = () => {
     const [viewingSimilarDocId, setViewingSimilarDocId] = useState<string | null>(null)
 
     const [form] = Form.useForm<DocumentFormType>()
+    const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
     const files = Form.useWatch('files', form) || {}
+    const pendingAPICallsRef = useRef<number>(0)
+
+    const hasActiveWork = () => {
+        const filesArray = Object.values(files)
+        const hasFileWork = filesArray.some(
+            (file) =>
+                (file.isProcessingOCR && file.taskId) || // OCR đang chạy
+                (file.progress !== undefined && file.progress < 100) // Upload đang chạy
+        )
+        // Có task: api đang chạy
+        return hasFileWork || pendingAPICallsRef.current > 0
+    }
+
+    // cảnh báo khi cố đóng tab/reload nếu có task đang chạy
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (hasActiveWork()) {
+                e.preventDefault()
+                return ''
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
+    }, [files, pendingAPICallsRef])
 
     // Lấy danh sách ID tài liệu tương đồng từ files
     const similarDocumentIds = useMemo(() => {
@@ -88,7 +117,7 @@ const ThemTaiLieu = () => {
             .filter((id): id is string => Boolean(id))
     }, [files])
 
-    // Fetch thông tin tài liệu tương đồng
+    // Kiểm tra thông tin tài liệu tương đồng
     const { data: similarDocuments = [] } = useFindManyDocument(
         {
             where: {
@@ -106,7 +135,6 @@ const ThemTaiLieu = () => {
         }
     )
     const selectedTopicIds = Form.useWatch('topicIds', form)
-    const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
     const isImageFile = (file: File) => {
         const imageTypes = ['image/png', 'image/jpeg', 'image/jpg']
@@ -175,6 +203,34 @@ const ThemTaiLieu = () => {
                     try {
                         const ocrResult = await fetchOCR(file)
                         console.log('[OCR] Upload file thành công, task_id:', ocrResult.task_id)
+
+                        // Check taskId hợp lệ
+                        if (!ocrResult.task_id) {
+                            console.error('[OCR] Không nhận được task_id từ server')
+                            form.setFieldsValue({
+                                files: {
+                                    ...form.getFieldValue('files'),
+                                    [fileId]: {
+                                        ...form.getFieldValue('files')[fileId],
+                                        isProcessingOCR: false,
+                                        ocrStatus: 'failed',
+                                    },
+                                },
+                            })
+                            resolve('')
+                            return
+                        }
+
+                        // Lưu task_id vào state
+                        form.setFieldsValue({
+                            files: {
+                                ...form.getFieldValue('files'),
+                                [fileId]: {
+                                    ...form.getFieldValue('files')[fileId],
+                                    taskId: ocrResult.task_id,
+                                },
+                            },
+                        })
 
                         // Bắt đầu polling
                         pollOCRResult(
@@ -341,7 +397,7 @@ const ThemTaiLieu = () => {
                             const currentFiles = form.getFieldValue('files')
                             const currentFile = currentFiles[file.id]
 
-                            // Nếu đang OCR thì không update upload progress
+                            // Nếu đang OCR => không update upload progress
                             if (currentFile?.isProcessingOCR) {
                                 return
                             }
@@ -363,18 +419,25 @@ const ThemTaiLieu = () => {
 
                     let similarDocId: string | undefined
                     if (!needOCR) {
-                        const resReaderDocument =
-                            await fetchReadDocumentContentDocumentDocumentReaderPost({
-                                body: {
-                                    uri_file: resPresignedUrl.fileName,
-                                    topic_ids: currentTopicIds,
-                                },
-                            } as any)
-                        documentBody = resReaderDocument.body || ''
-                        const similarDocs = resReaderDocument.document_simmilar || []
-                        const hasSimilarDocument = similarDocs.length > 0
-                        similarScore = hasSimilarDocument ? similarDocs[0].score : 0
-                        similarDocId = hasSimilarDocument ? similarDocs[0].id : undefined
+                        try {
+                            pendingAPICallsRef.current++
+                            const resReaderDocument =
+                                await fetchReadDocumentContentDocumentDocumentReaderPost({
+                                    body: {
+                                        uri_file: resPresignedUrl.fileName,
+                                        topic_ids: currentTopicIds,
+                                    },
+                                } as any)
+                            documentBody = resReaderDocument.body || ''
+                            const similarDocs = resReaderDocument.document_simmilar || []
+                            const hasSimilarDocument = similarDocs.length > 0
+                            similarScore = hasSimilarDocument ? similarDocs[0].score : 0
+                            similarDocId = hasSimilarDocument ? similarDocs[0].id : undefined
+                        } catch (error) {
+                            console.error('[Document Reader] Lỗi khi đọc tài liệu:', error)
+                        } finally {
+                            pendingAPICallsRef.current--
+                        }
 
                         if (
                             isPDFFile(file.file) &&
@@ -422,6 +485,58 @@ const ThemTaiLieu = () => {
         if (!similarDocumentId) return null
         const doc = similarDocuments.find((d) => d.id === similarDocumentId)
         return doc?.title || null
+    }
+
+    const handleModalClose = async () => {
+        if (hasActiveWork()) {
+            const filesArray = Object.values(files)
+            const hasOCR = filesArray.some((file) => file.isProcessingOCR && file.taskId)
+            const hasUpload = filesArray.some(
+                (file) => file.progress !== undefined && file.progress < 100
+            )
+
+            let confirmMessage = ''
+            if (hasOCR && hasUpload) {
+                confirmMessage =
+                    'Có tài liệu đang được tải lên và chuyển đổi hình ảnh sang văn bản. Bạn có muốn hủy tất cả và đóng không?'
+            } else if (hasOCR) {
+                confirmMessage =
+                    'Có tài liệu đang được chuyển đổi hình ảnh sang văn bản. Bạn có muốn hủy và đóng không?'
+            } else {
+                confirmMessage = 'Có tài liệu đang được tải lên. Bạn có muốn hủy và đóng không?'
+            }
+
+            const confirmed = await modalThemTaiLieu.confirm({
+                title: 'Tài liệu đang xử lý',
+                content: confirmMessage,
+                okText: 'Hủy tất cả & Đóng',
+                cancelText: 'Tiếp tục',
+                okButtonProps: { danger: true },
+            })
+
+            if (confirmed) {
+                // Cancel tất cả OCR tasks
+                const cancelledFiles: string[] = []
+                await Promise.all(
+                    filesArray
+                        .filter((file) => file.isProcessingOCR && file.taskId)
+                        .map(async (file) => {
+                            if (file.taskId) {
+                                console.log('[OCR] Hủy task OCR', file.file.name)
+                                await cancelOCRTask(file.taskId)
+                                stopOCRPolling(file.taskId)
+                                cancelledFiles.push(file.file.name)
+                            }
+                        })
+                )
+                if (cancelledFiles.length > 0) {
+                    message.info(`Đã hủy OCR cho: ${cancelledFiles.join(', ')}`)
+                }
+                onClose()
+            }
+        } else {
+            onClose()
+        }
     }
 
     const onFinish = async (values: DocumentFormType) => {
@@ -485,7 +600,7 @@ const ThemTaiLieu = () => {
             className={cn(selectedFile ? 'min-w-[70vw]' : 'min-w-[30vw]')}
             okText="Đồng ý"
             cancelText="Hủy"
-            onCancel={onClose}
+            onCancel={handleModalClose}
             okButtonProps={{
                 disabled:
                     Object.keys(files).length === 0 ||
@@ -669,8 +784,19 @@ const ThemTaiLieu = () => {
                                     )}
                                 </div>
                                 <CloseCircleOutlined
-                                    onClick={(e) => {
+                                    onClick={async (e) => {
                                         e.stopPropagation()
+
+                                        // Nếu file đang OCR thì cancel task trước
+                                        if (file.isProcessingOCR && file.taskId) {
+                                            console.log(
+                                                '[OCR] Hủy task OCR cho file:',
+                                                file.file.name
+                                            )
+                                            await cancelOCRTask(file.taskId)
+                                            stopOCRPolling(file.taskId)
+                                        }
+
                                         if (key === selectedFile?.id) {
                                             setSelectedFile(undefined)
                                         }

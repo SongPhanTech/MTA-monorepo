@@ -39,6 +39,26 @@ export const getOCRResult = async (taskId: string): Promise<OCRResult> => {
     }
 }
 
+export const cancelOCRTask = async (taskId: string): Promise<void> => {
+    try {
+        await axios.post(`${env.NEXT_PUBLIC_CHAT_BOT_URL}/cancel/${taskId}`)
+        console.log('[OCR Cancel] Đã hủy task OCR với task_id:', taskId)
+    } catch (_error: any) {
+        console.error('[OCR Cancel] Lỗi hủy task OCR:', _error)
+    }
+}
+
+let pollTimeouts: Map<string, NodeJS.Timeout> = new Map()
+
+export const stopOCRPolling = (taskId: string): void => {
+    const timeoutId = pollTimeouts.get(taskId)
+    if (timeoutId) {
+        clearTimeout(timeoutId)
+        pollTimeouts.delete(taskId)
+        console.log('[OCR Polling] Dừng polling với task_id:', taskId)
+    }
+}
+
 export const pollOCRResult = async (
     taskId: string,
     onSuccess: (result: OCRResult) => void,
@@ -46,6 +66,12 @@ export const pollOCRResult = async (
     maxRetries = 120,
     intervalMs = 3000
 ): Promise<void> => {
+    if (!taskId) {
+        console.error('[OCR Polling] taskId không hợp lệ')
+        if (onError) onError(new Error('taskId is required'))
+        return
+    }
+
     let retries = 0
 
     const poll = async () => {
@@ -54,9 +80,11 @@ export const pollOCRResult = async (
 
             if (result.status === 'done') {
                 console.log('[OCR Polling] Hoàn thành xử lý OCR với task_id:', taskId)
+                pollTimeouts.delete(taskId)
                 onSuccess(result)
             } else if (result.status === 'error' || result.status === 'failed') {
                 console.error('[OCR Polling] Xử lý OCR thất bại với task_id:', taskId)
+                pollTimeouts.delete(taskId)
                 if (onError) onError(result)
             } else if (result.status === 'processing') {
                 retries++
@@ -64,14 +92,17 @@ export const pollOCRResult = async (
                     `[OCR Polling] Đang xử lý OCR (lần ${retries}/${maxRetries}), task_id: ${taskId}`
                 )
                 if (retries < maxRetries) {
-                    setTimeout(poll, intervalMs)
+                    const timeoutId = setTimeout(poll, intervalMs)
+                    pollTimeouts.set(taskId, timeoutId)
                 } else {
                     console.error('[OCR Polling] Timeout: Vượt quá số lần thử tối đa')
+                    pollTimeouts.delete(taskId)
                     if (onError) onError(new Error('OCR processing timeout'))
                 }
             }
         } catch (error) {
             console.error('[OCR Polling] Lỗi khi polling OCR result:', error)
+            pollTimeouts.delete(taskId)
             if (onError) onError(error)
         }
     }
