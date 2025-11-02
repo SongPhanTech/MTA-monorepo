@@ -1,4 +1,4 @@
-import { fetchOCR } from '@/api/ocr'
+import { fetchOCR, pollOCRResult } from '@/api/ocr'
 import { useTopics } from '@/hooks/useTopics'
 import { CloseCircleOutlined, InboxOutlined } from '@ant-design/icons'
 import { fetchReadDocumentContentDocumentDocumentReaderPost } from '@api/qa/qaComponents'
@@ -155,72 +155,101 @@ const ThemTaiLieu = () => {
     }
 
     const processWithOCR = async (file: File, fileId: string) => {
-        try {
-            console.log('[OCR] Bắt đầu xử lý OCR cho file:', file.name)
+        return new Promise<string>((resolve) => {
+            try {
+                console.log('[OCR] Bắt đầu xử lý OCR cho file:', file.name)
 
-            // Bắt đầu OCR
-            form.setFieldsValue({
-                files: {
-                    ...form.getFieldValue('files'),
-                    [fileId]: {
-                        ...form.getFieldValue('files')[fileId],
-                        isProcessingOCR: true,
-                        ocrStatus: 'processing',
+                // Bắt đầu OCR
+                form.setFieldsValue({
+                    files: {
+                        ...form.getFieldValue('files'),
+                        [fileId]: {
+                            ...form.getFieldValue('files')[fileId],
+                            isProcessingOCR: true,
+                            ocrStatus: 'processing',
+                        },
                     },
-                },
-            })
+                })
 
-            const ocrResult = await fetchOCR(file)
-            console.log('[OCR] Kết quả OCR:', JSON.stringify(ocrResult, null, 2))
+                ;(async () => {
+                    try {
+                        const ocrResult = await fetchOCR(file)
+                        console.log('[OCR] Upload file thành công, task_id:', ocrResult.task_id)
 
-            let textResult = ''
-            if (typeof ocrResult === 'string') {
-                textResult = ocrResult
-            } else if (ocrResult.text) {
-                textResult = ocrResult.text
-            } else if (ocrResult.body) {
-                textResult = ocrResult.body
-            } else if (ocrResult.data) {
-                textResult = ocrResult.data
-            } else if (ocrResult.result) {
-                textResult = ocrResult.result
+                        // Bắt đầu polling
+                        pollOCRResult(
+                            ocrResult.task_id,
+                            (result) => {
+                                const textResult = result.output || result.text || ''
+                                console.log(
+                                    `[OCR] Text trích xuất được (length: ${textResult.length}):`,
+                                    textResult.substring(0, 500)
+                                )
+
+                                form.setFieldsValue({
+                                    files: {
+                                        ...form.getFieldValue('files'),
+                                        [fileId]: {
+                                            ...form.getFieldValue('files')[fileId],
+                                            isProcessingOCR: false,
+                                            ocrStatus: 'success',
+                                        },
+                                    },
+                                })
+
+                                resolve(textResult)
+                            },
+                            (error) => {
+                                console.error('[OCR] Lỗi xử lý OCR:', error)
+
+                                form.setFieldsValue({
+                                    files: {
+                                        ...form.getFieldValue('files'),
+                                        [fileId]: {
+                                            ...form.getFieldValue('files')[fileId],
+                                            isProcessingOCR: false,
+                                            ocrStatus: 'failed',
+                                        },
+                                    },
+                                })
+
+                                resolve('')
+                            }
+                        )
+                    } catch (error) {
+                        console.error('[OCR] Lỗi upload file:', error)
+
+                        form.setFieldsValue({
+                            files: {
+                                ...form.getFieldValue('files'),
+                                [fileId]: {
+                                    ...form.getFieldValue('files')[fileId],
+                                    isProcessingOCR: false,
+                                    ocrStatus: 'failed',
+                                },
+                            },
+                        })
+
+                        resolve('')
+                    }
+                })()
+            } catch (error) {
+                console.error('[OCR] Lỗi xử lý OCR:', error)
+
+                form.setFieldsValue({
+                    files: {
+                        ...form.getFieldValue('files'),
+                        [fileId]: {
+                            ...form.getFieldValue('files')[fileId],
+                            isProcessingOCR: false,
+                            ocrStatus: 'failed',
+                        },
+                    },
+                })
+
+                resolve('')
             }
-
-            // Kiểm tra kết quả OCR
-            const ocrStatus = textResult.trim().length === 0 ? 'failed' : 'success'
-
-            form.setFieldsValue({
-                files: {
-                    ...form.getFieldValue('files'),
-                    [fileId]: {
-                        ...form.getFieldValue('files')[fileId],
-                        isProcessingOCR: false,
-                        ocrStatus: ocrStatus,
-                    },
-                },
-            })
-
-            console.log(
-                `[OCR] Text trích xuất được (length: ${textResult.length}):`,
-                textResult.substring(0, 500)
-            )
-            return textResult
-        } catch (error) {
-            console.error('[OCR] Lỗi xử lý OCR:', error)
-
-            // Set OCR failed state on error
-            form.setFieldsValue({
-                files: {
-                    ...form.getFieldValue('files'),
-                    [fileId]: {
-                        ...form.getFieldValue('files')[fileId],
-                        isProcessingOCR: false,
-                        ocrStatus: 'failed',
-                    },
-                },
-            })
-            return ''
-        }
+        })
     }
 
     const onUpload = async (
