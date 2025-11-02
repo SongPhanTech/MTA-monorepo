@@ -15094,6 +15094,12 @@ const metadata: ModelMeta = {
                     isArray: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "SecondSupervisor" }] }],
                     backLink: 'secondSupervisor',
+                }, criterionAssignments: {
+                    name: "criterionAssignments",
+                    type: "CriterionAssignment",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'lecturer',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -16999,6 +17005,81 @@ const metadata: ModelMeta = {
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
+        criterionAssignment: {
+            name: 'CriterionAssignment', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, evaluationCriterion: {
+                    name: "evaluationCriterion",
+                    type: "EvaluationCriterion",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }, { "name": "onDelete" }] }],
+                    backLink: 'criterionAssignments',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "evaluationCriterionId" },
+                }, evaluationCriterionId: {
+                    name: "evaluationCriterionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'evaluationCriterion',
+                }, lecturer: {
+                    name: "lecturer",
+                    type: "Lecturer",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'criterionAssignments',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "lecturerId" },
+                }, lecturerId: {
+                    name: "lecturerId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'lecturer',
+                }, deadline: {
+                    name: "deadline",
+                    type: "DateTime",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
         requirementCriterionCatalog: {
             name: 'RequirementCriterionCatalog', fields: {
                 id: {
@@ -17306,6 +17387,12 @@ const metadata: ModelMeta = {
                 }, requirementCriterions: {
                     name: "requirementCriterions",
                     type: "RequirementCriterion",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'evaluationCriterion',
+                }, criterionAssignments: {
+                    name: "criterionAssignments",
+                    type: "CriterionAssignment",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'evaluationCriterion',
@@ -23992,7 +24079,7 @@ const metadata: ModelMeta = {
         equivalencyGroup: ['SubjectInGroup'],
         evaluationPeriod: ['EvaluationStandard', 'EvaluationCouncil', 'EvaluationSecretarYCouncil'],
         evaluationStandard: ['EvaluationCriterion'],
-        evaluationCriterion: ['RequirementCriterion'],
+        evaluationCriterion: ['CriterionAssignment', 'RequirementCriterion'],
         evidence: ['AnalysisFormEvidence'],
         evaluationCouncil: ['EvaluationCouncilMember'],
         question: ['MultipleChoiceOption', 'FillInBlankSlot', 'OrderingItem'],

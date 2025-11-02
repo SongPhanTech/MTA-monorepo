@@ -2913,6 +2913,19 @@ exports.Prisma.CriterionCatalogScalarFieldEnum = {
   scoreScaleId: 'scoreScaleId'
 };
 
+exports.Prisma.CriterionAssignmentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  evaluationCriterionId: 'evaluationCriterionId',
+  lecturerId: 'lecturerId',
+  deadline: 'deadline'
+};
+
 exports.Prisma.RequirementCriterionCatalogScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5848,6 +5861,14 @@ exports.Prisma.CriterionCatalogOrderByRelevanceFieldEnum = {
   scoreScaleId: 'scoreScaleId'
 };
 
+exports.Prisma.CriterionAssignmentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  evaluationCriterionId: 'evaluationCriterionId',
+  lecturerId: 'lecturerId'
+};
+
 exports.Prisma.RequirementCriterionCatalogOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6886,7 +6907,8 @@ exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
   VICE_PRESIDENT: 'VICE_PRESIDENT',
   HEAD_SECRETARY: 'HEAD_SECRETARY',
   SECRETARY: 'SECRETARY',
-  MEMBER: 'MEMBER'
+  MEMBER: 'MEMBER',
+  ADVISORY_BOARD: 'ADVISORY_BOARD'
 };
 
 exports.EvaluationSecretaryMemberRole = exports.$Enums.EvaluationSecretaryMemberRole = {
@@ -7138,6 +7160,7 @@ exports.Prisma.ModelName = {
   EvaluationPeriod: 'EvaluationPeriod',
   StandardCatalog: 'StandardCatalog',
   CriterionCatalog: 'CriterionCatalog',
+  CriterionAssignment: 'CriterionAssignment',
   RequirementCriterionCatalog: 'RequirementCriterionCatalog',
   ScoreScaleCatalog: 'ScoreScaleCatalog',
   EvaluationStandard: 'EvaluationStandard',
