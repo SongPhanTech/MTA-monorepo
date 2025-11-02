@@ -19,7 +19,10 @@ export default {
     "QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA": "/ql-tu-danh-gia-ctdt/hoi-dong-danh-gia",
     "QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY_ID": "/ql-tu-danh-gia-ctdt/hoi-dong-thu-ky/[id]",
     "QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY": "/ql-tu-danh-gia-ctdt/hoi-dong-thu-ky",
+    "QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI": "/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi",
+    "QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI": "/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA_ID": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]",
+    "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA_ID_PHANCONG": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]/phancong",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia",
     "QL_TU_DANH_GIA_CTDT_QUAN_LY_MINH_CHUNG": "/ql-tu-danh-gia-ctdt/quan-ly-minh-chung",
     "QL_TU_DANH_GIA_CTDT_THANG_DIEM": "/ql-tu-danh-gia-ctdt/thang-diem",
@@ -42,6 +45,7 @@ export default {
     "THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT_ID": "/thiet-lap-khao-sat/nhom-cau-hoi-khao-sat/[id]",
     "THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG": "/thiet-lap-khao-sat/thiet-lap-chung"
   },
+  "QL_DANH_MUC": {},
   "QL_DAO_TAO": {
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO_ID": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao/[id]",
     "CHUONG_TRINH_DAO_TAO_DANH_MUC_CHUONG_TRINH_DAO_TAO": "/chuong-trinh-dao-tao/danh-muc-chuong-trinh-dao-tao",
@@ -165,6 +169,7 @@ export default {
     "QUAN_LY_HO_SO": "/quan-ly-ho-so",
     "QUAN_LY_HO_SO_TAO_MOI": "/quan-ly-ho-so/tao-moi"
   },
+  "QL_NGUOI_DUNG": {},
   "TRO_LY_AO": {
     "CAU_HOI_THUONG_GAP": "/cau-hoi-thuong-gap",
     "HOI_THOAI_ID": "/hoi-thoai/[id]",
