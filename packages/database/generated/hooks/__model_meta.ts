@@ -8452,6 +8452,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingCourse',
+                }, thesisSession: {
+                    name: "thesisSession",
+                    type: "ThesisSession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingCourse',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -10772,6 +10778,12 @@ const metadata: ModelMeta = {
                 }, planTrainingDelay: {
                     name: "planTrainingDelay",
                     type: "PlanTrainingDelay",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingObjectType',
+                }, thesisSession: {
+                    name: "thesisSession",
+                    type: "ThesisSession",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'trainingObjectType',
@@ -14670,6 +14682,115 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        thesisSession: {
+            name: 'ThesisSession', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, name: {
+                    name: "name",
+                    type: "String",
+                }, startDate: {
+                    name: "startDate",
+                    type: "DateTime",
+                }, endDate: {
+                    name: "endDate",
+                    type: "DateTime",
+                }, trainingObjectType: {
+                    name: "trainingObjectType",
+                    type: "TrainingObjectType",
+                    isDataModel: true,
+                    backLink: 'thesisSession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingObjectTypeId" },
+                }, trainingObjectTypeId: {
+                    name: "trainingObjectTypeId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingObjectType',
+                }, trainingCourse: {
+                    name: "trainingCourse",
+                    type: "TrainingCourse",
+                    isDataModel: true,
+                    backLink: 'thesisSession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingCourseId" },
+                }, trainingCourseId: {
+                    name: "trainingCourseId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'trainingCourse',
+                }, decisionNumber: {
+                    name: "decisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, decisionMaker: {
+                    name: "decisionMaker",
+                    type: "String",
+                    isOptional: true,
+                }, decisionDate: {
+                    name: "decisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, defenseDecisionNumber: {
+                    name: "defenseDecisionNumber",
+                    type: "String",
+                    isOptional: true,
+                }, defenseDecisionMaker: {
+                    name: "defenseDecisionMaker",
+                    type: "String",
+                    isOptional: true,
+                }, defenseDecisionDate: {
+                    name: "defenseDecisionDate",
+                    type: "DateTime",
+                    isOptional: true,
+                }, chief: {
+                    name: "chief",
+                    type: "String",
+                    isOptional: true,
+                }, thesisProject: {
+                    name: "thesisProject",
+                    type: "ThesisProject",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'thesisSession',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                },
+            },
+        },
         thesisProject: {
             name: 'ThesisProject', fields: {
                 id: {
@@ -14743,14 +14864,30 @@ const metadata: ModelMeta = {
                     name: "subjectClass",
                     type: "SubjectClass",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'thesisProjects',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "subjectClassId" },
                 }, subjectClassId: {
                     name: "subjectClassId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'subjectClass',
+                }, thesisSession: {
+                    name: "thesisSession",
+                    type: "ThesisSession",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'thesisProject',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "thesisSessionId" },
+                }, thesisSessionId: {
+                    name: "thesisSessionId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'thesisSession',
                 }, supervisor: {
                     name: "supervisor",
                     type: "ExpertProfile",

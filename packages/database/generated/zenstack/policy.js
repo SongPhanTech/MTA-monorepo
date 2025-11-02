@@ -1851,6 +1851,19 @@ const policy = {
                 update: {},
             },
         },
+        thesisSession: {
+            modelLevel: {
+                read: { guard: ThesisSession_read, },
+                create: { guard: ThesisSession_create, inputChecker: ThesisSession_create_input, },
+                update: { guard: ThesisSession_update, },
+                postUpdate: { guard: ThesisSession_postUpdate, },
+                delete: { guard: ThesisSession_delete, }
+            },
+            fieldLevel: {
+                read: {},
+                update: {},
+            },
+        },
         thesisProject: {
             modelLevel: {
                 read: { guard: ThesisProject_read, },
@@ -3373,6 +3386,7 @@ const policy = {
         lecturerHistory: { hasValidation: false },
         researchProject: { hasValidation: false },
         studentResearchRegistration: { hasValidation: false },
+        thesisSession: { hasValidation: false },
         thesisProject: { hasValidation: false },
         defenseSession: { hasValidation: false },
         studentThesisRegistration: { hasValidation: false },
@@ -14505,6 +14519,84 @@ function StudentResearchRegistration_delete(context, db) {
     return { OR: [] };
 }
 function $check_StudentResearchRegistration_delete(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ThesisSession_read(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+function $check_ThesisSession_read(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if (((input === null || input === void 0 ? void 0 : input.deletedAt) != null)) {
+        return false;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ThesisSession_create(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ThesisSession_create(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ThesisSession_create_input(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    return (user != null);
+}
+function ThesisSession_update(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ThesisSession_update(input, context) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return true;
+    }
+    return false;
+}
+function ThesisSession_postUpdate(context, db) {
+    return { AND: [] };
+}
+function $check_ThesisSession_postUpdate(input, context) {
+    return true;
+}
+function ThesisSession_delete(context, db) {
+    var _a;
+    const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
+    if ((user != null)) {
+        return { AND: [] };
+    }
+    return { OR: [] };
+}
+function $check_ThesisSession_delete(input, context) {
     var _a;
     const user = (_a = context.user) !== null && _a !== void 0 ? _a : null;
     if ((user != null)) {

@@ -146,6 +146,7 @@ export * from './lecturer';
 export * from './lecturer-history';
 export * from './research-project';
 export * from './student-research-registration';
+export * from './thesis-session';
 export * from './thesis-project';
 export * from './defense-session';
 export * from './student-thesis-registration';

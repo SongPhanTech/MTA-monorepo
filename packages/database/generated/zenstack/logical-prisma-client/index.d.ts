@@ -1471,6 +1471,16 @@ export type ResearchProject = $Result.DefaultSelection<Prisma.$ResearchProjectPa
  */
 export type StudentResearchRegistration = $Result.DefaultSelection<Prisma.$StudentResearchRegistrationPayload>;
 /**
+ * Model ThesisSession
+ * @
+ * @allow ('all', auth() != null)
+ * @
+ * @deny ('read', deletedAt != null)
+ * @
+ * @allow ('read', auth() != null)
+ */
+export type ThesisSession = $Result.DefaultSelection<Prisma.$ThesisSessionPayload>;
+/**
  * Model ThesisProject
  * @
  * @allow ('all', auth() != null)
@@ -3957,6 +3967,15 @@ export class PrismaClient<ClientOptions extends Prisma.PrismaClientOptions = Pri
      */
     get studentResearchRegistration(): Prisma.StudentResearchRegistrationDelegate<ExtArgs, ClientOptions>;
     /**
+     * `prisma.thesisSession`: Exposes CRUD operations for the **ThesisSession** model.
+     * Example usage:
+     * ```ts
+     * // Fetch zero or more ThesisSessions
+     * const thesisSessions = await prisma.thesisSession.findMany()
+     * ```
+     */
+    get thesisSession(): Prisma.ThesisSessionDelegate<ExtArgs, ClientOptions>;
+    /**
      * `prisma.thesisProject`: Exposes CRUD operations for the **ThesisProject** model.
      * Example usage:
      * ```ts
@@ -5755,6 +5774,7 @@ export namespace Prisma {
         LecturerHistory: 'LecturerHistory',
         ResearchProject: 'ResearchProject',
         StudentResearchRegistration: 'StudentResearchRegistration',
+        ThesisSession: 'ThesisSession',
         ThesisProject: 'ThesisProject',
         DefenseSession: 'DefenseSession',
         StudentThesisRegistration: 'StudentThesisRegistration',
@@ -8268,6 +8288,27 @@ export namespace Prisma {
         reviewedById: 'reviewedById',
         reviewNote: 'reviewNote'
     };
+    export const ThesisSessionScalarFieldEnum: {
+        id: 'id',
+        code: 'code',
+        active: 'active',
+        description: 'description',
+        deletedAt: 'deletedAt',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        name: 'name',
+        startDate: 'startDate',
+        endDate: 'endDate',
+        trainingObjectTypeId: 'trainingObjectTypeId',
+        trainingCourseId: 'trainingCourseId',
+        decisionNumber: 'decisionNumber',
+        decisionMaker: 'decisionMaker',
+        decisionDate: 'decisionDate',
+        defenseDecisionNumber: 'defenseDecisionNumber',
+        defenseDecisionMaker: 'defenseDecisionMaker',
+        defenseDecisionDate: 'defenseDecisionDate',
+        chief: 'chief'
+    };
     export const ThesisProjectScalarFieldEnum: {
         id: 'id',
         code: 'code',
@@ -8287,6 +8328,7 @@ export namespace Prisma {
         technologies: 'technologies',
         status: 'status',
         subjectClassId: 'subjectClassId',
+        thesisSessionId: 'thesisSessionId',
         supervisorId: 'supervisorId',
         coSupervisorId: 'coSupervisorId',
         organizationId: 'organizationId',
@@ -11065,6 +11107,19 @@ export namespace Prisma {
         reviewedById: 'reviewedById',
         reviewNote: 'reviewNote'
     };
+    export const ThesisSessionOrderByRelevanceFieldEnum: {
+        id: 'id',
+        code: 'code',
+        description: 'description',
+        name: 'name',
+        trainingObjectTypeId: 'trainingObjectTypeId',
+        trainingCourseId: 'trainingCourseId',
+        decisionNumber: 'decisionNumber',
+        decisionMaker: 'decisionMaker',
+        defenseDecisionNumber: 'defenseDecisionNumber',
+        defenseDecisionMaker: 'defenseDecisionMaker',
+        chief: 'chief'
+    };
     export const ThesisProjectOrderByRelevanceFieldEnum: {
         id: 'id',
         code: 'code',
@@ -11079,6 +11134,7 @@ export namespace Prisma {
         requirements: 'requirements',
         technologies: 'technologies',
         subjectClassId: 'subjectClassId',
+        thesisSessionId: 'thesisSessionId',
         supervisorId: 'supervisorId',
         coSupervisorId: 'coSupervisorId',
         organizationId: 'organizationId',
@@ -44958,6 +45014,7 @@ export namespace Prisma {
         surveyObjectTypes<T extends TrainingCourse$surveyObjectTypesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$surveyObjectTypesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SurveyObjectTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         classRegisterSession<T extends TrainingCourse$classRegisterSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$classRegisterSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClassRegisterSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         documentFiles<T extends TrainingCourse$documentFilesArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$documentFilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DocumentFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        thesisSession<T extends TrainingCourse$thesisSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourse$thesisSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -52450,6 +52507,7 @@ export namespace Prisma {
         subjectVersion<T extends TrainingObjectType$subjectVersionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$subjectVersionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubjectVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         planTraining<T extends TrainingObjectType$planTrainingArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$planTrainingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         planTrainingDelay<T extends TrainingObjectType$planTrainingDelayArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$planTrainingDelayArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlanTrainingDelayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        thesisSession<T extends TrainingObjectType$thesisSessionArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectType$thesisSessionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
         /**
          * Attaches callbacks for the resolution and/or rejection of the Promise.
          * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -67279,6 +67337,399 @@ export namespace Prisma {
         readonly reviewNote: FieldRef<"StudentResearchRegistration", 'String'>;
     }
 
+    export interface ThesisSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+        [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ThesisSession'], meta: { name: 'ThesisSession' } };
+        /**
+         * Fields of the ThesisSession model
+         */
+        readonly fields: ThesisSessionFieldRefs;
+        /**
+         * Find zero or one ThesisSession that matches the filter.
+         * @param {ThesisSessionFindUniqueArgs} args - Arguments to find a ThesisSession
+         * @example
+         * // Get one ThesisSession
+         * const thesisSession = await prisma.thesisSession.findUnique({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUnique<T extends ThesisSessionFindUniqueArgs>(args: SelectSubset<T, ThesisSessionFindUniqueArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find one ThesisSession that matches the filter or throw an error with `error.code='P2025'`
+         * if no matches were found.
+         * @param {ThesisSessionFindUniqueOrThrowArgs} args - Arguments to find a ThesisSession
+         * @example
+         * // Get one ThesisSession
+         * const thesisSession = await prisma.thesisSession.findUniqueOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findUniqueOrThrow<T extends ThesisSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, ThesisSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ThesisSession that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ThesisSessionFindFirstArgs} args - Arguments to find a ThesisSession
+         * @example
+         * // Get one ThesisSession
+         * const thesisSession = await prisma.thesisSession.findFirst({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirst<T extends ThesisSessionFindFirstArgs>(args?: SelectSubset<T, ThesisSessionFindFirstArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find the first ThesisSession that matches the filter or
+         * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ThesisSessionFindFirstOrThrowArgs} args - Arguments to find a ThesisSession
+         * @example
+         * // Get one ThesisSession
+         * const thesisSession = await prisma.thesisSession.findFirstOrThrow({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        findFirstOrThrow<T extends ThesisSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, ThesisSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Find zero or more ThesisSessions that matches the filter.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ThesisSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+         * @example
+         * // Get all ThesisSessions
+         * const thesisSessions = await prisma.thesisSession.findMany()
+         *
+         * // Get first 10 ThesisSessions
+         * const thesisSessions = await prisma.thesisSession.findMany({ take: 10 })
+         *
+         * // Only select the `id`
+         * const thesisSessionWithIdOnly = await prisma.thesisSession.findMany({ select: { id: true } })
+         */
+        findMany<T extends ThesisSessionFindManyArgs>(args?: SelectSubset<T, ThesisSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+        /**
+         * Create a ThesisSession.
+         * @param {ThesisSessionCreateArgs} args - Arguments to create a ThesisSession.
+         * @example
+         * // Create one ThesisSession
+         * const ThesisSession = await prisma.thesisSession.create({
+         *   data: {
+         *     // ... data to create a ThesisSession
+         *   }
+         * })
+         */
+        create<T extends ThesisSessionCreateArgs>(args: SelectSubset<T, ThesisSessionCreateArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Create many ThesisSessions.
+         * @param {ThesisSessionCreateManyArgs} args - Arguments to create many ThesisSessions.
+         * @example
+         * // Create many ThesisSessions
+         * const thesisSession = await prisma.thesisSession.createMany({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         */
+        createMany<T extends ThesisSessionCreateManyArgs>(args?: SelectSubset<T, ThesisSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Create many ThesisSessions and returns the data saved in the database.
+         * @param {ThesisSessionCreateManyAndReturnArgs} args - Arguments to create many ThesisSessions.
+         * @example
+         * // Create many ThesisSessions
+         * const thesisSession = await prisma.thesisSession.createManyAndReturn({
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Create many ThesisSessions and only return the `id`
+         * const thesisSessionWithIdOnly = await prisma.thesisSession.createManyAndReturn({
+         *   select: { id: true },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        createManyAndReturn<T extends ThesisSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, ThesisSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Delete a ThesisSession.
+         * @param {ThesisSessionDeleteArgs} args - Arguments to delete one ThesisSession.
+         * @example
+         * // Delete one ThesisSession
+         * const ThesisSession = await prisma.thesisSession.delete({
+         *   where: {
+         *     // ... filter to delete one ThesisSession
+         *   }
+         * })
+         */
+        delete<T extends ThesisSessionDeleteArgs>(args: SelectSubset<T, ThesisSessionDeleteArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Update one ThesisSession.
+         * @param {ThesisSessionUpdateArgs} args - Arguments to update one ThesisSession.
+         * @example
+         * // Update one ThesisSession
+         * const thesisSession = await prisma.thesisSession.update({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        update<T extends ThesisSessionUpdateArgs>(args: SelectSubset<T, ThesisSessionUpdateArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Delete zero or more ThesisSessions.
+         * @param {ThesisSessionDeleteManyArgs} args - Arguments to filter ThesisSessions to delete.
+         * @example
+         * // Delete a few ThesisSessions
+         * const { count } = await prisma.thesisSession.deleteMany({
+         *   where: {
+         *     // ... provide filter here
+         *   }
+         * })
+         */
+        deleteMany<T extends ThesisSessionDeleteManyArgs>(args?: SelectSubset<T, ThesisSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ThesisSessions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ThesisSessionUpdateManyArgs} args - Arguments to update one or more rows.
+         * @example
+         * // Update many ThesisSessions
+         * const thesisSession = await prisma.thesisSession.updateMany({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: {
+         *     // ... provide data here
+         *   }
+         * })
+         */
+        updateMany<T extends ThesisSessionUpdateManyArgs>(args: SelectSubset<T, ThesisSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>;
+        /**
+         * Update zero or more ThesisSessions and returns the data updated in the database.
+         * @param {ThesisSessionUpdateManyAndReturnArgs} args - Arguments to update many ThesisSessions.
+         * @example
+         * // Update many ThesisSessions
+         * const thesisSession = await prisma.thesisSession.updateManyAndReturn({
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         *
+         * // Update zero or more ThesisSessions and only return the `id`
+         * const thesisSessionWithIdOnly = await prisma.thesisSession.updateManyAndReturn({
+         *   select: { id: true },
+         *   where: {
+         *     // ... provide filter here
+         *   },
+         *   data: [
+         *     // ... provide data here
+         *   ]
+         * })
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         */
+        updateManyAndReturn<T extends ThesisSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, ThesisSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+        /**
+         * Create or update one ThesisSession.
+         * @param {ThesisSessionUpsertArgs} args - Arguments to update or create a ThesisSession.
+         * @example
+         * // Update or create a ThesisSession
+         * const thesisSession = await prisma.thesisSession.upsert({
+         *   create: {
+         *     // ... data to create a ThesisSession
+         *   },
+         *   update: {
+         *     // ... in case it already exists, update
+         *   },
+         *   where: {
+         *     // ... the filter for the ThesisSession we want to update
+         *   }
+         * })
+         */
+        upsert<T extends ThesisSessionUpsertArgs>(args: SelectSubset<T, ThesisSessionUpsertArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+        /**
+         * Count the number of ThesisSessions.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ThesisSessionCountArgs} args - Arguments to filter ThesisSessions to count.
+         * @example
+         * // Count the number of ThesisSessions
+         * const count = await prisma.thesisSession.count({
+         *   where: {
+         *     // ... the filter for the ThesisSessions we want to count
+         *   }
+         * })
+         */
+        count<T extends ThesisSessionCountArgs>(args?: Subset<T, ThesisSessionCountArgs>): Prisma.PrismaPromise<
+            T extends $Utils.Record<'select', any>
+            ? T['select'] extends true
+            ? number
+            : GetScalarType<T['select'], ThesisSessionCountAggregateOutputType>
+            : number
+        >;
+        /**
+         * Allows you to perform aggregations operations on a ThesisSession.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ThesisSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+         * @example
+         * // Ordered by age ascending
+         * // Where email contains prisma.io
+         * // Limited to the 10 users
+         * const aggregations = await prisma.user.aggregate({
+         *   _avg: {
+         *     age: true,
+         *   },
+         *   where: {
+         *     email: {
+         *       contains: "prisma.io",
+         *     },
+         *   },
+         *   orderBy: {
+         *     age: "asc",
+         *   },
+         *   take: 10,
+         * })
+         */
+        aggregate<T extends ThesisSessionAggregateArgs>(args: Subset<T, ThesisSessionAggregateArgs>): Prisma.PrismaPromise<GetThesisSessionAggregateType<T>>;
+        /**
+         * Group by ThesisSession.
+         * Note, that providing `undefined` is treated as the value not being there.
+         * Read more here: https://pris.ly/d/null-undefined
+         * @param {ThesisSessionGroupByArgs} args - Group by arguments.
+         * @example
+         * // Group by city, order by createdAt, get count
+         * const result = await prisma.user.groupBy({
+         *   by: ['city', 'createdAt'],
+         *   orderBy: {
+         *     createdAt: true
+         *   },
+         *   _count: {
+         *     _all: true
+         *   },
+         * })
+         */
+        groupBy<T extends ThesisSessionGroupByArgs, HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+        >, OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ThesisSessionGroupByArgs['orderBy'] }
+        : { orderBy?: ThesisSessionGroupByArgs['orderBy'] }, OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>, ByFields extends MaybeTupleToUnion<T['by']>, ByValid extends Has<ByFields, OrderFields>, HavingFields extends GetHavingFields<T['having']>, HavingValid extends Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? True : False, InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+        ? {
+            [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+            ]
+        }[HavingFields]
+        : 'take' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+        : 'skip' extends Keys<T>
+        ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+        : ByValid extends True
+        ? {}
+        : {
+            [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]>(args: SubsetIntersection<T, ThesisSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetThesisSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    }
+
+    /**
+     * The delegate class that acts as a "Promise-like" for ThesisSession.
+     * Why is this prefixed with `Prisma__`?
+     * Because we want to prevent naming conflicts as mentioned in
+     * https://github.com/prisma/prisma-client-js/issues/707
+     */
+    export interface Prisma__ThesisSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+        readonly [Symbol.toStringTag]: "PrismaPromise";
+        trainingObjectType<T extends TrainingObjectTypeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingObjectTypeDefaultArgs<ExtArgs>>): Prisma__TrainingObjectTypeClient<$Result.GetResult<Prisma.$TrainingObjectTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        trainingCourse<T extends TrainingCourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TrainingCourseDefaultArgs<ExtArgs>>): Prisma__TrainingCourseClient<$Result.GetResult<Prisma.$TrainingCoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        thesisProject<T extends ThesisSession$thesisProjectArgs<ExtArgs> = {}>(args?: Subset<T, ThesisSession$thesisProjectArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+        /**
+         * Attaches callbacks for the resolution and/or rejection of the Promise.
+         * @param onfulfilled The callback to execute when the Promise is resolved.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of which ever callback is executed.
+         */
+        then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+        /**
+         * Attaches a callback for only the rejection of the Promise.
+         * @param onrejected The callback to execute when the Promise is rejected.
+         * @returns A Promise for the completion of the callback.
+         */
+        catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+        /**
+         * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+         * resolved value cannot be modified from the callback.
+         * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+         * @returns A Promise for the completion of the callback.
+         */
+        finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+    }
+
+    /**
+     * Fields of the ThesisSession model
+     */
+    interface ThesisSessionFieldRefs {
+        readonly id: FieldRef<"ThesisSession", 'String'>;
+        readonly code: FieldRef<"ThesisSession", 'String'>;
+        readonly active: FieldRef<"ThesisSession", 'Boolean'>;
+        readonly description: FieldRef<"ThesisSession", 'String'>;
+        readonly deletedAt: FieldRef<"ThesisSession", 'DateTime'>;
+        readonly createdAt: FieldRef<"ThesisSession", 'DateTime'>;
+        readonly updatedAt: FieldRef<"ThesisSession", 'DateTime'>;
+        readonly name: FieldRef<"ThesisSession", 'String'>;
+        readonly startDate: FieldRef<"ThesisSession", 'DateTime'>;
+        readonly endDate: FieldRef<"ThesisSession", 'DateTime'>;
+        readonly trainingObjectTypeId: FieldRef<"ThesisSession", 'String'>;
+        readonly trainingCourseId: FieldRef<"ThesisSession", 'String'>;
+        readonly decisionNumber: FieldRef<"ThesisSession", 'String'>;
+        readonly decisionMaker: FieldRef<"ThesisSession", 'String'>;
+        readonly decisionDate: FieldRef<"ThesisSession", 'DateTime'>;
+        readonly defenseDecisionNumber: FieldRef<"ThesisSession", 'String'>;
+        readonly defenseDecisionMaker: FieldRef<"ThesisSession", 'String'>;
+        readonly defenseDecisionDate: FieldRef<"ThesisSession", 'DateTime'>;
+        readonly chief: FieldRef<"ThesisSession", 'String'>;
+    }
+
     export interface ThesisProjectDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
         [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ThesisProject'], meta: { name: 'ThesisProject' } };
         /**
@@ -67622,7 +68073,8 @@ export namespace Prisma {
      */
     export interface Prisma__ThesisProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
-        subjectClass<T extends SubjectClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubjectClassDefaultArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        subjectClass<T extends ThesisProject$subjectClassArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$subjectClassArgs<ExtArgs>>): Prisma__SubjectClassClient<$Result.GetResult<Prisma.$SubjectClassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+        thesisSession<T extends ThesisProject$thesisSessionArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$thesisSessionArgs<ExtArgs>>): Prisma__ThesisSessionClient<$Result.GetResult<Prisma.$ThesisSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         supervisor<T extends ExpertProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExpertProfileDefaultArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         coSupervisor<T extends ThesisProject$coSupervisorArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProject$coSupervisorArgs<ExtArgs>>): Prisma__ExpertProfileClient<$Result.GetResult<Prisma.$ExpertProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         organization<T extends DM_DonViDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DM_DonViDefaultArgs<ExtArgs>>): Prisma__DM_DonViClient<$Result.GetResult<Prisma.$DM_DonViPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
@@ -67678,6 +68130,7 @@ export namespace Prisma {
         readonly technologies: FieldRef<"ThesisProject", 'String'>;
         readonly status: FieldRef<"ThesisProject", 'ThesisProjectStatus'>;
         readonly subjectClassId: FieldRef<"ThesisProject", 'String'>;
+        readonly thesisSessionId: FieldRef<"ThesisProject", 'String'>;
         readonly supervisorId: FieldRef<"ThesisProject", 'String'>;
         readonly coSupervisorId: FieldRef<"ThesisProject", 'String'>;
         readonly organizationId: FieldRef<"ThesisProject", 'String'>;
@@ -108261,7 +108714,7 @@ export namespace Prisma {
             omit: GlobalOmitOptions
         }
         meta: {
-            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "criterionAssignment" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoomSlot" | "examRoom" | "testStructureRule" | "examBank" | "examBankQuestion" | "examSession" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
+            modelProps: "config" | "changeLog" | "userProfile" | "hocHam" | "hocVi" | "relative" | "trinhDoLyLuanChinhTri" | "trinhDoQuanLyNhaNuoc" | "ngoaiNgu" | "tinHoc" | "boiDuongQuocPhongAnNinh" | "capBac" | "quaTrinhCongTac" | "quaTrinhCuDiCongTac" | "quaTrinhCuDiDaoTao" | "khenThuong" | "kyLuat" | "doiTuongChinhSach" | "keKhaiTaiSan" | "tiengDanToc" | "chienDau" | "nuocNgoai" | "thuongTat" | "danhHieu" | "quaTrinhHocTap" | "toChucXaHoi" | "quaTrinhLuong" | "group" | "role" | "permission" | "chatBotConfig" | "userSession" | "document" | "documentTopic" | "fAQ" | "prompt" | "conversation" | "message" | "citationMessage" | "topic" | "documentClassification" | "dM_CapBac" | "dM_ChucDanh" | "dM_ChucVu" | "dM_HocHam" | "dM_HocVi" | "dM_ChungChiTinHoc" | "dM_DanToc" | "dM_DonVi" | "dM_DonViHanhChinh" | "dM_KhuVuc_DiaLy" | "dM_NgoaiNgu" | "dM_TonGiao" | "dM_TrinhDoNgoaiNgu" | "dM_TrinhDoTinHoc" | "dM_GioiTinh" | "dM_NhanVien" | "dM_PhanCap_ChatLuong_TrangThietBi" | "dM_PhanLoai_CSKT" | "dM_NhomNguoiDung" | "dM_NhomUngDung" | "dM_QuocGia" | "dM_Tinh" | "dM_Tinh_New" | "dM_QuanHuyen" | "dM_XaPhuong" | "dM_XaPhuong_New" | "dM_ViTriCongViec" | "planTrainingDelay" | "planTrainingDelaySubject" | "planTraining" | "planTrainingSubject" | "studentScoreConvert" | "subjectScoreConvert" | "studentSubjectScore" | "studentSubjectScoreHistory" | "archivedCertificateOnStudentSubjectScore" | "archivedCertificate" | "archivedAwardOnStudentSubjectScore" | "archivedAward" | "schoolYear" | "semester" | "milestone" | "trainingLanguage" | "trainingCourse" | "trainingCourseRegulation" | "fixedClass" | "curriculum" | "curriculumVersion" | "subject" | "subjectVersionCategory" | "subjectVersion" | "subjectVersionHistory" | "equivalencyGroup" | "subjectInGroup" | "trainingBlockSubject" | "classRegisterSessionCredit" | "classRegisterSession" | "classRegisterLogs" | "subjectClass" | "subjectClassHistory" | "subjectClassTime" | "classSchedule" | "trainingObjectType" | "priorityObject" | "trainingType" | "trainingLevel" | "trainingForm" | "trainingLocation" | "building" | "room" | "trainingField" | "trainingFieldOnTrainingObjectType" | "trainingMajor" | "trainingMajorOnTrainingObjectType" | "trainingBlock" | "trainingBlockOnCurriculumVersion" | "trainingTime" | "certificate" | "certificateOnSubject" | "award" | "diplomaType" | "scoreConvert" | "trainingKPI" | "student" | "studentSemesterResult" | "studentYearResult" | "notification" | "documentFile" | "academicActionConfig" | "academicActionRuleSet" | "academicActionCondition" | "studentAcademicDecision" | "trainingScoreSession" | "studentTrainingScore" | "lecturerType" | "staffType" | "staffPosition" | "lecturer" | "lecturerHistory" | "researchProject" | "studentResearchRegistration" | "thesisSession" | "thesisProject" | "defenseSession" | "studentThesisRegistration" | "expertProfile" | "decision" | "invitation" | "council" | "councilMember" | "defenseRecord" | "librarySubmission" | "defaultCouncilRolePayAmount" | "paymentRecord" | "supervisorPaymentRecord" | "evaluationPeriod" | "standardCatalog" | "criterionCatalog" | "criterionAssignment" | "requirementCriterionCatalog" | "scoreScaleCatalog" | "evaluationStandard" | "evaluationCriterion" | "evidenceCategory" | "evidence" | "requirementCriterion" | "analysisFormEvidence" | "evaluationCouncil" | "evaluationCouncilMember" | "evaluationSecretarYCouncil" | "evaluationSecretaryMember" | "evidenceFile" | "surveyObjectType" | "surveyTopic" | "surveyQuestionGroup" | "clusterSurvey" | "survey" | "surveyQuestion" | "surveyChoice" | "surveySession" | "surveyResponse" | "questionBank" | "difficulty" | "knowledgeBlock" | "question" | "multipleChoiceOption" | "fillInBlankSlot" | "orderingItem" | "exam" | "examRoomSlot" | "examRoom" | "testStructureRule" | "examBank" | "examBankQuestion" | "examSession" | "staff" | "staffHistory" | "scholarship" | "scholarshipCriteria" | "scholarshipAward" | "graduationSession" | "studentGraduationApplication" | "applicationCheckResult" | "graduationDecision" | "academicRankingConvert" | "graduationRankDowngradeRule" | "graduationRankDowngradeCondition" | "rankingCondition" | "diplomaVerificationApplication" | "note" | "noteFolder" | "noteTag" | "noteReminder" | "academicWarningRule" | "academicWarning" | "disciplinaryWarning" | "disciplinaryWarningReason" | "feedback" | "dM_TrinhDoHocVan" | "dM_TrinhDoLyLuanChinhTri" | "dM_TrinhDoQuanLyNhaNuoc" | "dM_TinhTrangHonNhan" | "dM_TrangThaiLamViec" | "dM_HinhThucKhenThuongChinhQuyen" | "dM_HinhThucKhenThuongDang" | "dM_XepLoaiDanhGiaCanBo" | "dM_XepLoaiDanhGiaChatLuongDangVien" | "dM_LoaiHinhCongTac" | "dM_TinhTrangCongTac" | "dM_LoaiHinhDiHocTap" | "dM_TinhTrangDiHocTap" | "dM_NuocCuDiHocTap" | "dM_ChucDanhCMNVGiangVien" | "dM_ChucDanhCMNVNghienCuuVien" | "dM_ChucDanhCMNVKySu" | "dM_TruongDaoTaoBacDH" | "dM_ChuyenNganhDaoTaoBacDH" | "dM_ChiHuyQuanLy" | "dM_ChuyenMonKyThuat" | "dM_SucKhoe" | "dM_NhomMau" | "dM_LoaiThuongTat" | "dM_NganhHoc" | "dM_ToChucXaHoi" | "dM_Ngach" | "dM_BacLuong" | "templateFile" | "blockedIp"
             txIsolationLevel: Prisma.TransactionIsolationLevel
         }
         model: {
@@ -118773,6 +119226,80 @@ export namespace Prisma {
                     }
                 }
             }
+            ThesisSession: {
+                payload: Prisma.$ThesisSessionPayload<ExtArgs>
+                fields: Prisma.ThesisSessionFieldRefs
+                operations: {
+                    findUnique: {
+                        args: Prisma.ThesisSessionFindUniqueArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload> | null
+                    }
+                    findUniqueOrThrow: {
+                        args: Prisma.ThesisSessionFindUniqueOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload>
+                    }
+                    findFirst: {
+                        args: Prisma.ThesisSessionFindFirstArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload> | null
+                    }
+                    findFirstOrThrow: {
+                        args: Prisma.ThesisSessionFindFirstOrThrowArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload>
+                    }
+                    findMany: {
+                        args: Prisma.ThesisSessionFindManyArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload>[]
+                    }
+                    create: {
+                        args: Prisma.ThesisSessionCreateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload>
+                    }
+                    createMany: {
+                        args: Prisma.ThesisSessionCreateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    createManyAndReturn: {
+                        args: Prisma.ThesisSessionCreateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload>[]
+                    }
+                    delete: {
+                        args: Prisma.ThesisSessionDeleteArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload>
+                    }
+                    update: {
+                        args: Prisma.ThesisSessionUpdateArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload>
+                    }
+                    deleteMany: {
+                        args: Prisma.ThesisSessionDeleteManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateMany: {
+                        args: Prisma.ThesisSessionUpdateManyArgs<ExtArgs>
+                        result: BatchPayload
+                    }
+                    updateManyAndReturn: {
+                        args: Prisma.ThesisSessionUpdateManyAndReturnArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload>[]
+                    }
+                    upsert: {
+                        args: Prisma.ThesisSessionUpsertArgs<ExtArgs>
+                        result: $Utils.PayloadToResult<Prisma.$ThesisSessionPayload>
+                    }
+                    aggregate: {
+                        args: Prisma.ThesisSessionAggregateArgs<ExtArgs>
+                        result: $Utils.Optional<AggregateThesisSession>
+                    }
+                    groupBy: {
+                        args: Prisma.ThesisSessionGroupByArgs<ExtArgs>
+                        result: $Utils.Optional<ThesisSessionGroupByOutputType>[]
+                    }
+                    count: {
+                        args: Prisma.ThesisSessionCountArgs<ExtArgs>
+                        result: $Utils.Optional<ThesisSessionCountAggregateOutputType> | number
+                    }
+                }
+            }
             ThesisProject: {
                 payload: Prisma.$ThesisProjectPayload<ExtArgs>
                 fields: Prisma.ThesisProjectFieldRefs
@@ -126790,6 +127317,7 @@ export namespace Prisma {
         lecturerHistory?: LecturerHistoryOmit
         researchProject?: ResearchProjectOmit
         studentResearchRegistration?: StudentResearchRegistrationOmit
+        thesisSession?: ThesisSessionOmit
         thesisProject?: ThesisProjectOmit
         defenseSession?: DefenseSessionOmit
         studentThesisRegistration?: StudentThesisRegistrationOmit
@@ -128797,6 +129325,7 @@ export namespace Prisma {
         surveyObjectTypes: number
         classRegisterSession: number
         documentFiles: number
+        thesisSession: number
     };
     export type TrainingCourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingCourseRegulation?: boolean | TrainingCourseCountOutputTypeCountTrainingCourseRegulationArgs
@@ -128810,6 +129339,7 @@ export namespace Prisma {
         surveyObjectTypes?: boolean | TrainingCourseCountOutputTypeCountSurveyObjectTypesArgs
         classRegisterSession?: boolean | TrainingCourseCountOutputTypeCountClassRegisterSessionArgs
         documentFiles?: boolean | TrainingCourseCountOutputTypeCountDocumentFilesArgs
+        thesisSession?: boolean | TrainingCourseCountOutputTypeCountThesisSessionArgs
     };
     /**
      * TrainingCourseCountOutputType without action
@@ -128885,6 +129415,12 @@ export namespace Prisma {
      */
     export type TrainingCourseCountOutputTypeCountDocumentFilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: DocumentFileWhereInput
+    };
+    /**
+     * TrainingCourseCountOutputType without action
+     */
+    export type TrainingCourseCountOutputTypeCountThesisSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisSessionWhereInput
     };
     /**
      * Count Type FixedClassCountOutputType
@@ -129430,6 +129966,7 @@ export namespace Prisma {
         subjectVersion: number
         planTraining: number
         planTrainingDelay: number
+        thesisSession: number
     };
     export type TrainingObjectTypeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingCourse?: boolean | TrainingObjectTypeCountOutputTypeCountTrainingCourseArgs
@@ -129444,6 +129981,7 @@ export namespace Prisma {
         subjectVersion?: boolean | TrainingObjectTypeCountOutputTypeCountSubjectVersionArgs
         planTraining?: boolean | TrainingObjectTypeCountOutputTypeCountPlanTrainingArgs
         planTrainingDelay?: boolean | TrainingObjectTypeCountOutputTypeCountPlanTrainingDelayArgs
+        thesisSession?: boolean | TrainingObjectTypeCountOutputTypeCountThesisSessionArgs
     };
     /**
      * TrainingObjectTypeCountOutputType without action
@@ -129525,6 +130063,12 @@ export namespace Prisma {
      */
     export type TrainingObjectTypeCountOutputTypeCountPlanTrainingDelayArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: PlanTrainingDelayWhereInput
+    };
+    /**
+     * TrainingObjectTypeCountOutputType without action
+     */
+    export type TrainingObjectTypeCountOutputTypeCountThesisSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisSessionWhereInput
     };
     /**
      * Count Type PriorityObjectCountOutputType
@@ -130661,6 +131205,30 @@ export namespace Prisma {
      */
     export type ResearchProjectCountOutputTypeCountRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         where?: StudentResearchRegistrationWhereInput
+    };
+    /**
+     * Count Type ThesisSessionCountOutputType
+     */
+    export type ThesisSessionCountOutputType = {
+        thesisProject: number
+    };
+    export type ThesisSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        thesisProject?: boolean | ThesisSessionCountOutputTypeCountThesisProjectArgs
+    };
+    /**
+     * ThesisSessionCountOutputType without action
+     */
+    export type ThesisSessionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSessionCountOutputType
+         */
+        select?: ThesisSessionCountOutputTypeSelect<ExtArgs> | null
+    };
+    /**
+     * ThesisSessionCountOutputType without action
+     */
+    export type ThesisSessionCountOutputTypeCountThesisProjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisProjectWhereInput
     };
     /**
      * Count Type ThesisProjectCountOutputType
@@ -198803,6 +199371,7 @@ export namespace Prisma {
         surveyObjectTypes?: boolean | TrainingCourse$surveyObjectTypesArgs<ExtArgs>
         classRegisterSession?: boolean | TrainingCourse$classRegisterSessionArgs<ExtArgs>
         documentFiles?: boolean | TrainingCourse$documentFilesArgs<ExtArgs>
+        thesisSession?: boolean | TrainingCourse$thesisSessionArgs<ExtArgs>
         _count?: boolean | TrainingCourseCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingCourse"]>;
     export type TrainingCourseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -198935,6 +199504,7 @@ export namespace Prisma {
         surveyObjectTypes?: boolean | TrainingCourse$surveyObjectTypesArgs<ExtArgs>
         classRegisterSession?: boolean | TrainingCourse$classRegisterSessionArgs<ExtArgs>
         documentFiles?: boolean | TrainingCourse$documentFilesArgs<ExtArgs>
+        thesisSession?: boolean | TrainingCourse$thesisSessionArgs<ExtArgs>
         _count?: boolean | TrainingCourseCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type TrainingCourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -198964,6 +199534,7 @@ export namespace Prisma {
             surveyObjectTypes: Prisma.$SurveyObjectTypePayload<ExtArgs>[]
             classRegisterSession: Prisma.$ClassRegisterSessionPayload<ExtArgs>[]
             documentFiles: Prisma.$DocumentFilePayload<ExtArgs>[]
+            thesisSession: Prisma.$ThesisSessionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -199684,6 +200255,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: DocumentFileScalarFieldEnum | DocumentFileScalarFieldEnum[]
+    };
+    /**
+     * TrainingCourse.thesisSession
+     */
+    export type TrainingCourse$thesisSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        where?: ThesisSessionWhereInput
+        orderBy?: ThesisSessionOrderByWithRelationInput | ThesisSessionOrderByWithRelationInput[]
+        cursor?: ThesisSessionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ThesisSessionScalarFieldEnum | ThesisSessionScalarFieldEnum[]
     };
     /**
      * TrainingCourse without action
@@ -215376,6 +215970,7 @@ export namespace Prisma {
         subjectVersion?: boolean | TrainingObjectType$subjectVersionArgs<ExtArgs>
         planTraining?: boolean | TrainingObjectType$planTrainingArgs<ExtArgs>
         planTrainingDelay?: boolean | TrainingObjectType$planTrainingDelayArgs<ExtArgs>
+        thesisSession?: boolean | TrainingObjectType$thesisSessionArgs<ExtArgs>
         _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["trainingObjectType"]>;
     export type TrainingObjectTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -215437,6 +216032,7 @@ export namespace Prisma {
         subjectVersion?: boolean | TrainingObjectType$subjectVersionArgs<ExtArgs>
         planTraining?: boolean | TrainingObjectType$planTrainingArgs<ExtArgs>
         planTrainingDelay?: boolean | TrainingObjectType$planTrainingDelayArgs<ExtArgs>
+        thesisSession?: boolean | TrainingObjectType$thesisSessionArgs<ExtArgs>
         _count?: boolean | TrainingObjectTypeCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type TrainingObjectTypeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -215464,6 +216060,7 @@ export namespace Prisma {
             subjectVersion: Prisma.$SubjectVersionPayload<ExtArgs>[]
             planTraining: Prisma.$PlanTrainingPayload<ExtArgs>[]
             planTrainingDelay: Prisma.$PlanTrainingDelayPayload<ExtArgs>[]
+            thesisSession: Prisma.$ThesisSessionPayload<ExtArgs>[]
         }
         scalars: $Extensions.GetPayloadResult<{
             id: string
@@ -216172,6 +216769,29 @@ export namespace Prisma {
         take?: number
         skip?: number
         distinct?: PlanTrainingDelayScalarFieldEnum | PlanTrainingDelayScalarFieldEnum[]
+    };
+    /**
+     * TrainingObjectType.thesisSession
+     */
+    export type TrainingObjectType$thesisSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        where?: ThesisSessionWhereInput
+        orderBy?: ThesisSessionOrderByWithRelationInput | ThesisSessionOrderByWithRelationInput[]
+        cursor?: ThesisSessionWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ThesisSessionScalarFieldEnum | ThesisSessionScalarFieldEnum[]
     };
     /**
      * TrainingObjectType without action
@@ -246727,6 +247347,823 @@ export namespace Prisma {
         include?: StudentResearchRegistrationInclude<ExtArgs> | null
     };
     /**
+     * Model ThesisSession
+     */
+    export type AggregateThesisSession = {
+        _count: ThesisSessionCountAggregateOutputType | null
+        _min: ThesisSessionMinAggregateOutputType | null
+        _max: ThesisSessionMaxAggregateOutputType | null
+    };
+    export type ThesisSessionMinAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        startDate: Date | null
+        endDate: Date | null
+        trainingObjectTypeId: string | null
+        trainingCourseId: string | null
+        decisionNumber: string | null
+        decisionMaker: string | null
+        decisionDate: Date | null
+        defenseDecisionNumber: string | null
+        defenseDecisionMaker: string | null
+        defenseDecisionDate: Date | null
+        chief: string | null
+    };
+    export type ThesisSessionMaxAggregateOutputType = {
+        id: string | null
+        code: string | null
+        active: boolean | null
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date | null
+        updatedAt: Date | null
+        name: string | null
+        startDate: Date | null
+        endDate: Date | null
+        trainingObjectTypeId: string | null
+        trainingCourseId: string | null
+        decisionNumber: string | null
+        decisionMaker: string | null
+        decisionDate: Date | null
+        defenseDecisionNumber: string | null
+        defenseDecisionMaker: string | null
+        defenseDecisionDate: Date | null
+        chief: string | null
+    };
+    export type ThesisSessionCountAggregateOutputType = {
+        id: number
+        code: number
+        active: number
+        description: number
+        deletedAt: number
+        createdAt: number
+        updatedAt: number
+        name: number
+        startDate: number
+        endDate: number
+        trainingObjectTypeId: number
+        trainingCourseId: number
+        decisionNumber: number
+        decisionMaker: number
+        decisionDate: number
+        defenseDecisionNumber: number
+        defenseDecisionMaker: number
+        defenseDecisionDate: number
+        chief: number
+        _all: number
+    };
+    export type ThesisSessionMinAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        startDate?: true
+        endDate?: true
+        trainingObjectTypeId?: true
+        trainingCourseId?: true
+        decisionNumber?: true
+        decisionMaker?: true
+        decisionDate?: true
+        defenseDecisionNumber?: true
+        defenseDecisionMaker?: true
+        defenseDecisionDate?: true
+        chief?: true
+    };
+    export type ThesisSessionMaxAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        startDate?: true
+        endDate?: true
+        trainingObjectTypeId?: true
+        trainingCourseId?: true
+        decisionNumber?: true
+        decisionMaker?: true
+        decisionDate?: true
+        defenseDecisionNumber?: true
+        defenseDecisionMaker?: true
+        defenseDecisionDate?: true
+        chief?: true
+    };
+    export type ThesisSessionCountAggregateInputType = {
+        id?: true
+        code?: true
+        active?: true
+        description?: true
+        deletedAt?: true
+        createdAt?: true
+        updatedAt?: true
+        name?: true
+        startDate?: true
+        endDate?: true
+        trainingObjectTypeId?: true
+        trainingCourseId?: true
+        decisionNumber?: true
+        decisionMaker?: true
+        decisionDate?: true
+        defenseDecisionNumber?: true
+        defenseDecisionMaker?: true
+        defenseDecisionDate?: true
+        chief?: true
+        _all?: true
+    };
+    export type ThesisSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ThesisSession to aggregate.
+         */
+        where?: ThesisSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ThesisSessions to fetch.
+         */
+        orderBy?: ThesisSessionOrderByWithRelationInput | ThesisSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the start position
+         */
+        cursor?: ThesisSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ThesisSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ThesisSessions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Count returned ThesisSessions
+        **/
+        _count?: true | ThesisSessionCountAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the minimum value
+        **/
+        _min?: ThesisSessionMinAggregateInputType
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+         * 
+         * Select which fields to find the maximum value
+        **/
+        _max?: ThesisSessionMaxAggregateInputType
+    };
+    export type GetThesisSessionAggregateType<T extends ThesisSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateThesisSession]: P extends '_count' | 'count'
+        ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateThesisSession[P]>
+        : GetScalarType<T[P], AggregateThesisSession[P]>
+    };
+    export type ThesisSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        where?: ThesisSessionWhereInput
+        orderBy?: ThesisSessionOrderByWithAggregationInput | ThesisSessionOrderByWithAggregationInput[]
+        by: ThesisSessionScalarFieldEnum[] | ThesisSessionScalarFieldEnum
+        having?: ThesisSessionScalarWhereWithAggregatesInput
+        take?: number
+        skip?: number
+        _count?: ThesisSessionCountAggregateInputType | true
+        _min?: ThesisSessionMinAggregateInputType
+        _max?: ThesisSessionMaxAggregateInputType
+    };
+    export type ThesisSessionGroupByOutputType = {
+        id: string
+        code: string | null
+        active: boolean
+        description: string | null
+        deletedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+        name: string
+        startDate: Date
+        endDate: Date
+        trainingObjectTypeId: string
+        trainingCourseId: string
+        decisionNumber: string | null
+        decisionMaker: string | null
+        decisionDate: Date | null
+        defenseDecisionNumber: string | null
+        defenseDecisionMaker: string | null
+        defenseDecisionDate: Date | null
+        chief: string | null
+        _count: ThesisSessionCountAggregateOutputType | null
+        _min: ThesisSessionMinAggregateOutputType | null
+        _max: ThesisSessionMaxAggregateOutputType | null
+    };
+    type GetThesisSessionGroupByPayload<T extends ThesisSessionGroupByArgs> = Prisma.PrismaPromise<
+        Array<
+            PickEnumerable<ThesisSessionGroupByOutputType, T['by']> &
+            {
+                [P in ((keyof T) & (keyof ThesisSessionGroupByOutputType))]: P extends '_count'
+                ? T[P] extends boolean
+                ? number
+                : GetScalarType<T[P], ThesisSessionGroupByOutputType[P]>
+                : GetScalarType<T[P], ThesisSessionGroupByOutputType[P]>
+            }
+        >
+    >;
+    export type ThesisSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        trainingObjectTypeId?: boolean
+        trainingCourseId?: boolean
+        decisionNumber?: boolean
+        decisionMaker?: boolean
+        decisionDate?: boolean
+        defenseDecisionNumber?: boolean
+        defenseDecisionMaker?: boolean
+        defenseDecisionDate?: boolean
+        chief?: boolean
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+        trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+        thesisProject?: boolean | ThesisSession$thesisProjectArgs<ExtArgs>
+        _count?: boolean | ThesisSessionCountOutputTypeDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["thesisSession"]>;
+    export type ThesisSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        trainingObjectTypeId?: boolean
+        trainingCourseId?: boolean
+        decisionNumber?: boolean
+        decisionMaker?: boolean
+        decisionDate?: boolean
+        defenseDecisionNumber?: boolean
+        defenseDecisionMaker?: boolean
+        defenseDecisionDate?: boolean
+        chief?: boolean
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+        trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["thesisSession"]>;
+    export type ThesisSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        trainingObjectTypeId?: boolean
+        trainingCourseId?: boolean
+        decisionNumber?: boolean
+        decisionMaker?: boolean
+        decisionDate?: boolean
+        defenseDecisionNumber?: boolean
+        defenseDecisionMaker?: boolean
+        defenseDecisionDate?: boolean
+        chief?: boolean
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+        trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+    }, ExtArgs["result"]["thesisSession"]>;
+    export type ThesisSessionSelectScalar = {
+        id?: boolean
+        code?: boolean
+        active?: boolean
+        description?: boolean
+        deletedAt?: boolean
+        createdAt?: boolean
+        updatedAt?: boolean
+        name?: boolean
+        startDate?: boolean
+        endDate?: boolean
+        trainingObjectTypeId?: boolean
+        trainingCourseId?: boolean
+        decisionNumber?: boolean
+        decisionMaker?: boolean
+        decisionDate?: boolean
+        defenseDecisionNumber?: boolean
+        defenseDecisionMaker?: boolean
+        defenseDecisionDate?: boolean
+        chief?: boolean
+    };
+    export type ThesisSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "name" | "startDate" | "endDate" | "trainingObjectTypeId" | "trainingCourseId" | "decisionNumber" | "decisionMaker" | "decisionDate" | "defenseDecisionNumber" | "defenseDecisionMaker" | "defenseDecisionDate" | "chief", ExtArgs["result"]["thesisSession"]>;
+    export type ThesisSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+        trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+        thesisProject?: boolean | ThesisSession$thesisProjectArgs<ExtArgs>
+        _count?: boolean | ThesisSessionCountOutputTypeDefaultArgs<ExtArgs>
+    };
+    export type ThesisSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+        trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+    };
+    export type ThesisSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        trainingObjectType?: boolean | TrainingObjectTypeDefaultArgs<ExtArgs>
+        trainingCourse?: boolean | TrainingCourseDefaultArgs<ExtArgs>
+    };
+    export type $ThesisSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        name: "ThesisSession"
+        objects: {
+            trainingObjectType: Prisma.$TrainingObjectTypePayload<ExtArgs>
+            trainingCourse: Prisma.$TrainingCoursePayload<ExtArgs>
+            thesisProject: Prisma.$ThesisProjectPayload<ExtArgs>[]
+        }
+        scalars: $Extensions.GetPayloadResult<{
+            id: string
+            code: string | null
+            active: boolean
+            description: string | null
+            deletedAt: Date | null
+            createdAt: Date
+            updatedAt: Date
+            name: string
+            startDate: Date
+            endDate: Date
+            trainingObjectTypeId: string
+            trainingCourseId: string
+            /**
+             * Số QĐĐT
+             */
+            decisionNumber: string | null
+            /**
+             * người ký quyết định
+             */
+            decisionMaker: string | null
+            /**
+             * Ngày QĐĐT
+             */
+            decisionDate: Date | null
+            /**
+             * Số QĐBVLV
+             */
+            defenseDecisionNumber: string | null
+            /**
+             * người ký QĐBVLV
+             */
+            defenseDecisionMaker: string | null
+            /**
+             * Ngày QĐBVLV
+             */
+            defenseDecisionDate: Date | null
+            /**
+             * Thủ trưởng
+             */
+            chief: string | null
+        }, ExtArgs["result"]["thesisSession"]>
+        composites: {}
+    };
+    type ThesisSessionGetPayload<S extends boolean | null | undefined | ThesisSessionDefaultArgs> = $Result.GetResult<Prisma.$ThesisSessionPayload, S>;
+    type ThesisSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<ThesisSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+        select?: ThesisSessionCountAggregateInputType | true
+    };
+    /**
+     * ThesisSession findUnique
+     */
+    export type ThesisSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ThesisSession to fetch.
+         */
+        where: ThesisSessionWhereUniqueInput
+    };
+    /**
+     * ThesisSession findUniqueOrThrow
+     */
+    export type ThesisSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ThesisSession to fetch.
+         */
+        where: ThesisSessionWhereUniqueInput
+    };
+    /**
+     * ThesisSession findFirst
+     */
+    export type ThesisSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ThesisSession to fetch.
+         */
+        where?: ThesisSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ThesisSessions to fetch.
+         */
+        orderBy?: ThesisSessionOrderByWithRelationInput | ThesisSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ThesisSessions.
+         */
+        cursor?: ThesisSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ThesisSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ThesisSessions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ThesisSessions.
+         */
+        distinct?: ThesisSessionScalarFieldEnum | ThesisSessionScalarFieldEnum[]
+    };
+    /**
+     * ThesisSession findFirstOrThrow
+     */
+    export type ThesisSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ThesisSession to fetch.
+         */
+        where?: ThesisSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ThesisSessions to fetch.
+         */
+        orderBy?: ThesisSessionOrderByWithRelationInput | ThesisSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for searching for ThesisSessions.
+         */
+        cursor?: ThesisSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ThesisSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ThesisSessions.
+         */
+        skip?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+         * 
+         * Filter by unique combinations of ThesisSessions.
+         */
+        distinct?: ThesisSessionScalarFieldEnum | ThesisSessionScalarFieldEnum[]
+    };
+    /**
+     * ThesisSession findMany
+     */
+    export type ThesisSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        /**
+         * Filter, which ThesisSessions to fetch.
+         */
+        where?: ThesisSessionWhereInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+         * 
+         * Determine the order of ThesisSessions to fetch.
+         */
+        orderBy?: ThesisSessionOrderByWithRelationInput | ThesisSessionOrderByWithRelationInput[]
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+         * 
+         * Sets the position for listing ThesisSessions.
+         */
+        cursor?: ThesisSessionWhereUniqueInput
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Take `±n` ThesisSessions from the position of the cursor.
+         */
+        take?: number
+        /**
+         * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+         * 
+         * Skip the first `n` ThesisSessions.
+         */
+        skip?: number
+        distinct?: ThesisSessionScalarFieldEnum | ThesisSessionScalarFieldEnum[]
+    };
+    /**
+     * ThesisSession create
+     */
+    export type ThesisSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        /**
+         * The data needed to create a ThesisSession.
+         */
+        data: XOR<ThesisSessionCreateInput, ThesisSessionUncheckedCreateInput>
+    };
+    /**
+     * ThesisSession createMany
+     */
+    export type ThesisSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to create many ThesisSessions.
+         */
+        data: ThesisSessionCreateManyInput | ThesisSessionCreateManyInput[]
+        skipDuplicates?: boolean
+    };
+    /**
+     * ThesisSession createManyAndReturn
+     */
+    export type ThesisSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelectCreateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * The data used to create many ThesisSessions.
+         */
+        data: ThesisSessionCreateManyInput | ThesisSessionCreateManyInput[]
+        skipDuplicates?: boolean
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionIncludeCreateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ThesisSession update
+     */
+    export type ThesisSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        /**
+         * The data needed to update a ThesisSession.
+         */
+        data: XOR<ThesisSessionUpdateInput, ThesisSessionUncheckedUpdateInput>
+        /**
+         * Choose, which ThesisSession to update.
+         */
+        where: ThesisSessionWhereUniqueInput
+    };
+    /**
+     * ThesisSession updateMany
+     */
+    export type ThesisSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * The data used to update ThesisSessions.
+         */
+        data: XOR<ThesisSessionUpdateManyMutationInput, ThesisSessionUncheckedUpdateManyInput>
+        /**
+         * Filter which ThesisSessions to update
+         */
+        where?: ThesisSessionWhereInput
+        /**
+         * Limit how many ThesisSessions to update.
+         */
+        limit?: number
+    };
+    /**
+     * ThesisSession updateManyAndReturn
+     */
+    export type ThesisSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelectUpdateManyAndReturn<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * The data used to update ThesisSessions.
+         */
+        data: XOR<ThesisSessionUpdateManyMutationInput, ThesisSessionUncheckedUpdateManyInput>
+        /**
+         * Filter which ThesisSessions to update
+         */
+        where?: ThesisSessionWhereInput
+        /**
+         * Limit how many ThesisSessions to update.
+         */
+        limit?: number
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionIncludeUpdateManyAndReturn<ExtArgs> | null
+    };
+    /**
+     * ThesisSession upsert
+     */
+    export type ThesisSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        /**
+         * The filter to search for the ThesisSession to update in case it exists.
+         */
+        where: ThesisSessionWhereUniqueInput
+        /**
+         * In case the ThesisSession found by the `where` argument doesn't exist, create a new ThesisSession with this data.
+         */
+        create: XOR<ThesisSessionCreateInput, ThesisSessionUncheckedCreateInput>
+        /**
+         * In case the ThesisSession was found with the provided `where` argument, update it with this data.
+         */
+        update: XOR<ThesisSessionUpdateInput, ThesisSessionUncheckedUpdateInput>
+    };
+    /**
+     * ThesisSession delete
+     */
+    export type ThesisSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        /**
+         * Filter which ThesisSession to delete.
+         */
+        where: ThesisSessionWhereUniqueInput
+    };
+    /**
+     * ThesisSession deleteMany
+     */
+    export type ThesisSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Filter which ThesisSessions to delete
+         */
+        where?: ThesisSessionWhereInput
+        /**
+         * Limit how many ThesisSessions to delete.
+         */
+        limit?: number
+    };
+    /**
+     * ThesisSession.thesisProject
+     */
+    export type ThesisSession$thesisProjectArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisProject
+         */
+        select?: ThesisProjectSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisProject
+         */
+        omit?: ThesisProjectOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisProjectInclude<ExtArgs> | null
+        where?: ThesisProjectWhereInput
+        orderBy?: ThesisProjectOrderByWithRelationInput | ThesisProjectOrderByWithRelationInput[]
+        cursor?: ThesisProjectWhereUniqueInput
+        take?: number
+        skip?: number
+        distinct?: ThesisProjectScalarFieldEnum | ThesisProjectScalarFieldEnum[]
+    };
+    /**
+     * ThesisSession without action
+     */
+    export type ThesisSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+    };
+    /**
      * Model ThesisProject
      */
     export type AggregateThesisProject = {
@@ -246763,6 +248200,7 @@ export namespace Prisma {
         technologies: string | null
         status: $Enums.ThesisProjectStatus | null
         subjectClassId: string | null
+        thesisSessionId: string | null
         supervisorId: string | null
         coSupervisorId: string | null
         organizationId: string | null
@@ -246796,6 +248234,7 @@ export namespace Prisma {
         technologies: string | null
         status: $Enums.ThesisProjectStatus | null
         subjectClassId: string | null
+        thesisSessionId: string | null
         supervisorId: string | null
         coSupervisorId: string | null
         organizationId: string | null
@@ -246829,6 +248268,7 @@ export namespace Prisma {
         technologies: number
         status: number
         subjectClassId: number
+        thesisSessionId: number
         supervisorId: number
         coSupervisorId: number
         organizationId: number
@@ -246871,6 +248311,7 @@ export namespace Prisma {
         technologies?: true
         status?: true
         subjectClassId?: true
+        thesisSessionId?: true
         supervisorId?: true
         coSupervisorId?: true
         organizationId?: true
@@ -246904,6 +248345,7 @@ export namespace Prisma {
         technologies?: true
         status?: true
         subjectClassId?: true
+        thesisSessionId?: true
         supervisorId?: true
         coSupervisorId?: true
         organizationId?: true
@@ -246937,6 +248379,7 @@ export namespace Prisma {
         technologies?: true
         status?: true
         subjectClassId?: true
+        thesisSessionId?: true
         supervisorId?: true
         coSupervisorId?: true
         organizationId?: true
@@ -247050,7 +248493,8 @@ export namespace Prisma {
         requirements: string | null
         technologies: string | null
         status: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId: string | null
+        thesisSessionId: string | null
         supervisorId: string
         coSupervisorId: string | null
         organizationId: string
@@ -247101,6 +248545,7 @@ export namespace Prisma {
         technologies?: boolean
         status?: boolean
         subjectClassId?: boolean
+        thesisSessionId?: boolean
         supervisorId?: boolean
         coSupervisorId?: boolean
         organizationId?: boolean
@@ -247114,7 +248559,8 @@ export namespace Prisma {
         registrationEnd?: boolean
         projectStart?: boolean
         projectEnd?: boolean
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
+        thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
@@ -247147,6 +248593,7 @@ export namespace Prisma {
         technologies?: boolean
         status?: boolean
         subjectClassId?: boolean
+        thesisSessionId?: boolean
         supervisorId?: boolean
         coSupervisorId?: boolean
         organizationId?: boolean
@@ -247160,7 +248607,8 @@ export namespace Prisma {
         registrationEnd?: boolean
         projectStart?: boolean
         projectEnd?: boolean
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
+        thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
@@ -247187,6 +248635,7 @@ export namespace Prisma {
         technologies?: boolean
         status?: boolean
         subjectClassId?: boolean
+        thesisSessionId?: boolean
         supervisorId?: boolean
         coSupervisorId?: boolean
         organizationId?: boolean
@@ -247200,7 +248649,8 @@ export namespace Prisma {
         registrationEnd?: boolean
         projectStart?: boolean
         projectEnd?: boolean
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
+        thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
@@ -247227,6 +248677,7 @@ export namespace Prisma {
         technologies?: boolean
         status?: boolean
         subjectClassId?: boolean
+        thesisSessionId?: boolean
         supervisorId?: boolean
         coSupervisorId?: boolean
         organizationId?: boolean
@@ -247241,9 +248692,10 @@ export namespace Prisma {
         projectStart?: boolean
         projectEnd?: boolean
     };
-    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "status" | "subjectClassId" | "supervisorId" | "coSupervisorId" | "organizationId" | "maxStudents" | "currentStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
+    export type ThesisProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "title" | "titleEN" | "summary" | "objectives" | "scope" | "methodology" | "expectedResults" | "requirements" | "technologies" | "status" | "subjectClassId" | "thesisSessionId" | "supervisorId" | "coSupervisorId" | "organizationId" | "maxStudents" | "currentStudents" | "councilId" | "roomId" | "defenseDate" | "defenseSessionId" | "registrationStart" | "registrationEnd" | "projectStart" | "projectEnd", ExtArgs["result"]["thesisProject"]>;
     export type ThesisProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
+        thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
@@ -247258,7 +248710,8 @@ export namespace Prisma {
         _count?: boolean | ThesisProjectCountOutputTypeDefaultArgs<ExtArgs>
     };
     export type ThesisProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
+        thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
@@ -247267,7 +248720,8 @@ export namespace Prisma {
         defenseSession?: boolean | ThesisProject$defenseSessionArgs<ExtArgs>
     };
     export type ThesisProjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-        subjectClass?: boolean | SubjectClassDefaultArgs<ExtArgs>
+        subjectClass?: boolean | ThesisProject$subjectClassArgs<ExtArgs>
+        thesisSession?: boolean | ThesisProject$thesisSessionArgs<ExtArgs>
         supervisor?: boolean | ExpertProfileDefaultArgs<ExtArgs>
         coSupervisor?: boolean | ThesisProject$coSupervisorArgs<ExtArgs>
         organization?: boolean | DM_DonViDefaultArgs<ExtArgs>
@@ -247278,7 +248732,8 @@ export namespace Prisma {
     export type $ThesisProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         name: "ThesisProject"
         objects: {
-            subjectClass: Prisma.$SubjectClassPayload<ExtArgs>
+            subjectClass: Prisma.$SubjectClassPayload<ExtArgs> | null
+            thesisSession: Prisma.$ThesisSessionPayload<ExtArgs> | null
             /**
              * Chuyên gia hướng dẫn
              */
@@ -247324,7 +248779,8 @@ export namespace Prisma {
             requirements: string | null
             technologies: string | null
             status: $Enums.ThesisProjectStatus
-            subjectClassId: string
+            subjectClassId: string | null
+            thesisSessionId: string | null
             supervisorId: string
             coSupervisorId: string | null
             organizationId: string
@@ -247724,6 +249180,42 @@ export namespace Prisma {
          * Limit how many ThesisProjects to delete.
          */
         limit?: number
+    };
+    /**
+     * ThesisProject.subjectClass
+     */
+    export type ThesisProject$subjectClassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the SubjectClass
+         */
+        select?: SubjectClassSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the SubjectClass
+         */
+        omit?: SubjectClassOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: SubjectClassInclude<ExtArgs> | null
+        where?: SubjectClassWhereInput
+    };
+    /**
+     * ThesisProject.thesisSession
+     */
+    export type ThesisProject$thesisSessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the ThesisSession
+         */
+        select?: ThesisSessionSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the ThesisSession
+         */
+        omit?: ThesisSessionOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: ThesisSessionInclude<ExtArgs> | null
+        where?: ThesisSessionWhereInput
     };
     /**
      * ThesisProject.coSupervisor
@@ -321686,6 +323178,7 @@ export namespace Prisma {
     export type LecturerHistoryScalarFieldEnum = (typeof LecturerHistoryScalarFieldEnum)[keyof typeof LecturerHistoryScalarFieldEnum];
     export type ResearchProjectScalarFieldEnum = (typeof ResearchProjectScalarFieldEnum)[keyof typeof ResearchProjectScalarFieldEnum];
     export type StudentResearchRegistrationScalarFieldEnum = (typeof StudentResearchRegistrationScalarFieldEnum)[keyof typeof StudentResearchRegistrationScalarFieldEnum];
+    export type ThesisSessionScalarFieldEnum = (typeof ThesisSessionScalarFieldEnum)[keyof typeof ThesisSessionScalarFieldEnum];
     export type ThesisProjectScalarFieldEnum = (typeof ThesisProjectScalarFieldEnum)[keyof typeof ThesisProjectScalarFieldEnum];
     export type DefenseSessionScalarFieldEnum = (typeof DefenseSessionScalarFieldEnum)[keyof typeof DefenseSessionScalarFieldEnum];
     export type StudentThesisRegistrationScalarFieldEnum = (typeof StudentThesisRegistrationScalarFieldEnum)[keyof typeof StudentThesisRegistrationScalarFieldEnum];
@@ -321939,6 +323432,7 @@ export namespace Prisma {
     export type LecturerHistoryOrderByRelevanceFieldEnum = (typeof LecturerHistoryOrderByRelevanceFieldEnum)[keyof typeof LecturerHistoryOrderByRelevanceFieldEnum];
     export type ResearchProjectOrderByRelevanceFieldEnum = (typeof ResearchProjectOrderByRelevanceFieldEnum)[keyof typeof ResearchProjectOrderByRelevanceFieldEnum];
     export type StudentResearchRegistrationOrderByRelevanceFieldEnum = (typeof StudentResearchRegistrationOrderByRelevanceFieldEnum)[keyof typeof StudentResearchRegistrationOrderByRelevanceFieldEnum];
+    export type ThesisSessionOrderByRelevanceFieldEnum = (typeof ThesisSessionOrderByRelevanceFieldEnum)[keyof typeof ThesisSessionOrderByRelevanceFieldEnum];
     export type ThesisProjectOrderByRelevanceFieldEnum = (typeof ThesisProjectOrderByRelevanceFieldEnum)[keyof typeof ThesisProjectOrderByRelevanceFieldEnum];
     export type DefenseSessionOrderByRelevanceFieldEnum = (typeof DefenseSessionOrderByRelevanceFieldEnum)[keyof typeof DefenseSessionOrderByRelevanceFieldEnum];
     export type StudentThesisRegistrationOrderByRelevanceFieldEnum = (typeof StudentThesisRegistrationOrderByRelevanceFieldEnum)[keyof typeof StudentThesisRegistrationOrderByRelevanceFieldEnum];
@@ -331631,6 +333125,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeListRelationFilter
         classRegisterSession?: ClassRegisterSessionListRelationFilter
         documentFiles?: DocumentFileListRelationFilter
+        thesisSession?: ThesisSessionListRelationFilter
     };
     export type TrainingCourseOrderByWithRelationInput = {
         id?: SortOrder
@@ -331681,6 +333176,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeOrderByRelationAggregateInput
         classRegisterSession?: ClassRegisterSessionOrderByRelationAggregateInput
         documentFiles?: DocumentFileOrderByRelationAggregateInput
+        thesisSession?: ThesisSessionOrderByRelationAggregateInput
         _relevance?: TrainingCourseOrderByRelevanceInput
     };
     export type TrainingCourseWhereUniqueInput = Prisma.AtLeast<{
@@ -331735,6 +333231,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeListRelationFilter
         classRegisterSession?: ClassRegisterSessionListRelationFilter
         documentFiles?: DocumentFileListRelationFilter
+        thesisSession?: ThesisSessionListRelationFilter
     }, "id" | "code">;
     export type TrainingCourseOrderByWithAggregationInput = {
         id?: SortOrder
@@ -334058,6 +335555,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionListRelationFilter
         planTraining?: PlanTrainingListRelationFilter
         planTrainingDelay?: PlanTrainingDelayListRelationFilter
+        thesisSession?: ThesisSessionListRelationFilter
     };
     export type TrainingObjectTypeOrderByWithRelationInput = {
         id?: SortOrder
@@ -334085,6 +335583,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionOrderByRelationAggregateInput
         planTraining?: PlanTrainingOrderByRelationAggregateInput
         planTrainingDelay?: PlanTrainingDelayOrderByRelationAggregateInput
+        thesisSession?: ThesisSessionOrderByRelationAggregateInput
         _relevance?: TrainingObjectTypeOrderByRelevanceInput
     };
     export type TrainingObjectTypeWhereUniqueInput = Prisma.AtLeast<{
@@ -334116,6 +335615,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionListRelationFilter
         planTraining?: PlanTrainingListRelationFilter
         planTrainingDelay?: PlanTrainingDelayListRelationFilter
+        thesisSession?: ThesisSessionListRelationFilter
     }, "id" | "code" | "name">;
     export type TrainingObjectTypeOrderByWithAggregationInput = {
         id?: SortOrder
@@ -338187,6 +339687,133 @@ export namespace Prisma {
         reviewedById?: StringNullableWithAggregatesFilter<"StudentResearchRegistration"> | string | null
         reviewNote?: StringNullableWithAggregatesFilter<"StudentResearchRegistration"> | string | null
     };
+    export type ThesisSessionWhereInput = {
+        AND?: ThesisSessionWhereInput | ThesisSessionWhereInput[]
+        OR?: ThesisSessionWhereInput[]
+        NOT?: ThesisSessionWhereInput | ThesisSessionWhereInput[]
+        id?: StringFilter<"ThesisSession"> | string
+        code?: StringNullableFilter<"ThesisSession"> | string | null
+        active?: BoolFilter<"ThesisSession"> | boolean
+        description?: StringNullableFilter<"ThesisSession"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        createdAt?: DateTimeFilter<"ThesisSession"> | Date | string
+        updatedAt?: DateTimeFilter<"ThesisSession"> | Date | string
+        name?: StringFilter<"ThesisSession"> | string
+        startDate?: DateTimeFilter<"ThesisSession"> | Date | string
+        endDate?: DateTimeFilter<"ThesisSession"> | Date | string
+        trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
+        trainingCourseId?: StringFilter<"ThesisSession"> | string
+        decisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
+        decisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
+        decisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        defenseDecisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
+        defenseDecisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
+        defenseDecisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        chief?: StringNullableFilter<"ThesisSession"> | string | null
+        trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
+        trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
+        thesisProject?: ThesisProjectListRelationFilter
+    };
+    export type ThesisSessionOrderByWithRelationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        trainingCourseId?: SortOrder
+        decisionNumber?: SortOrderInput | SortOrder
+        decisionMaker?: SortOrderInput | SortOrder
+        decisionDate?: SortOrderInput | SortOrder
+        defenseDecisionNumber?: SortOrderInput | SortOrder
+        defenseDecisionMaker?: SortOrderInput | SortOrder
+        defenseDecisionDate?: SortOrderInput | SortOrder
+        chief?: SortOrderInput | SortOrder
+        trainingObjectType?: TrainingObjectTypeOrderByWithRelationInput
+        trainingCourse?: TrainingCourseOrderByWithRelationInput
+        thesisProject?: ThesisProjectOrderByRelationAggregateInput
+        _relevance?: ThesisSessionOrderByRelevanceInput
+    };
+    export type ThesisSessionWhereUniqueInput = Prisma.AtLeast<{
+        id?: string
+        code?: string
+        AND?: ThesisSessionWhereInput | ThesisSessionWhereInput[]
+        OR?: ThesisSessionWhereInput[]
+        NOT?: ThesisSessionWhereInput | ThesisSessionWhereInput[]
+        active?: BoolFilter<"ThesisSession"> | boolean
+        description?: StringNullableFilter<"ThesisSession"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        createdAt?: DateTimeFilter<"ThesisSession"> | Date | string
+        updatedAt?: DateTimeFilter<"ThesisSession"> | Date | string
+        name?: StringFilter<"ThesisSession"> | string
+        startDate?: DateTimeFilter<"ThesisSession"> | Date | string
+        endDate?: DateTimeFilter<"ThesisSession"> | Date | string
+        trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
+        trainingCourseId?: StringFilter<"ThesisSession"> | string
+        decisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
+        decisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
+        decisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        defenseDecisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
+        defenseDecisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
+        defenseDecisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        chief?: StringNullableFilter<"ThesisSession"> | string | null
+        trainingObjectType?: XOR<TrainingObjectTypeScalarRelationFilter, TrainingObjectTypeWhereInput>
+        trainingCourse?: XOR<TrainingCourseScalarRelationFilter, TrainingCourseWhereInput>
+        thesisProject?: ThesisProjectListRelationFilter
+    }, "id" | "code">;
+    export type ThesisSessionOrderByWithAggregationInput = {
+        id?: SortOrder
+        code?: SortOrderInput | SortOrder
+        active?: SortOrder
+        description?: SortOrderInput | SortOrder
+        deletedAt?: SortOrderInput | SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        trainingCourseId?: SortOrder
+        decisionNumber?: SortOrderInput | SortOrder
+        decisionMaker?: SortOrderInput | SortOrder
+        decisionDate?: SortOrderInput | SortOrder
+        defenseDecisionNumber?: SortOrderInput | SortOrder
+        defenseDecisionMaker?: SortOrderInput | SortOrder
+        defenseDecisionDate?: SortOrderInput | SortOrder
+        chief?: SortOrderInput | SortOrder
+        _count?: ThesisSessionCountOrderByAggregateInput
+        _max?: ThesisSessionMaxOrderByAggregateInput
+        _min?: ThesisSessionMinOrderByAggregateInput
+    };
+    export type ThesisSessionScalarWhereWithAggregatesInput = {
+        AND?: ThesisSessionScalarWhereWithAggregatesInput | ThesisSessionScalarWhereWithAggregatesInput[]
+        OR?: ThesisSessionScalarWhereWithAggregatesInput[]
+        NOT?: ThesisSessionScalarWhereWithAggregatesInput | ThesisSessionScalarWhereWithAggregatesInput[]
+        id?: StringWithAggregatesFilter<"ThesisSession"> | string
+        code?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+        active?: BoolWithAggregatesFilter<"ThesisSession"> | boolean
+        description?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+        deletedAt?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
+        createdAt?: DateTimeWithAggregatesFilter<"ThesisSession"> | Date | string
+        updatedAt?: DateTimeWithAggregatesFilter<"ThesisSession"> | Date | string
+        name?: StringWithAggregatesFilter<"ThesisSession"> | string
+        startDate?: DateTimeWithAggregatesFilter<"ThesisSession"> | Date | string
+        endDate?: DateTimeWithAggregatesFilter<"ThesisSession"> | Date | string
+        trainingObjectTypeId?: StringWithAggregatesFilter<"ThesisSession"> | string
+        trainingCourseId?: StringWithAggregatesFilter<"ThesisSession"> | string
+        decisionNumber?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+        decisionMaker?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+        decisionDate?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
+        defenseDecisionNumber?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+        defenseDecisionMaker?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+        defenseDecisionDate?: DateTimeNullableWithAggregatesFilter<"ThesisSession"> | Date | string | null
+        chief?: StringNullableWithAggregatesFilter<"ThesisSession"> | string | null
+    };
     export type ThesisProjectWhereInput = {
         AND?: ThesisProjectWhereInput | ThesisProjectWhereInput[]
         OR?: ThesisProjectWhereInput[]
@@ -338208,7 +339835,8 @@ export namespace Prisma {
         requirements?: StringNullableFilter<"ThesisProject"> | string | null
         technologies?: StringNullableFilter<"ThesisProject"> | string | null
         status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFilter<"ThesisProject"> | string
+        subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
+        thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorId?: StringFilter<"ThesisProject"> | string
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         organizationId?: UuidFilter<"ThesisProject"> | string
@@ -338222,7 +339850,8 @@ export namespace Prisma {
         registrationEnd?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
         projectStart?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
         projectEnd?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
-        subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
+        subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
+        thesisSession?: XOR<ThesisSessionNullableScalarRelationFilter, ThesisSessionWhereInput> | null
         supervisor?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
         coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
         organization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
@@ -338253,7 +339882,8 @@ export namespace Prisma {
         requirements?: SortOrderInput | SortOrder
         technologies?: SortOrderInput | SortOrder
         status?: SortOrder
-        subjectClassId?: SortOrder
+        subjectClassId?: SortOrderInput | SortOrder
+        thesisSessionId?: SortOrderInput | SortOrder
         supervisorId?: SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
         organizationId?: SortOrder
@@ -338268,6 +339898,7 @@ export namespace Prisma {
         projectStart?: SortOrderInput | SortOrder
         projectEnd?: SortOrderInput | SortOrder
         subjectClass?: SubjectClassOrderByWithRelationInput
+        thesisSession?: ThesisSessionOrderByWithRelationInput
         supervisor?: ExpertProfileOrderByWithRelationInput
         coSupervisor?: ExpertProfileOrderByWithRelationInput
         organization?: DM_DonViOrderByWithRelationInput
@@ -338302,7 +339933,8 @@ export namespace Prisma {
         requirements?: StringNullableFilter<"ThesisProject"> | string | null
         technologies?: StringNullableFilter<"ThesisProject"> | string | null
         status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFilter<"ThesisProject"> | string
+        subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
+        thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorId?: StringFilter<"ThesisProject"> | string
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         organizationId?: UuidFilter<"ThesisProject"> | string
@@ -338316,7 +339948,8 @@ export namespace Prisma {
         registrationEnd?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
         projectStart?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
         projectEnd?: DateTimeNullableFilter<"ThesisProject"> | Date | string | null
-        subjectClass?: XOR<SubjectClassScalarRelationFilter, SubjectClassWhereInput>
+        subjectClass?: XOR<SubjectClassNullableScalarRelationFilter, SubjectClassWhereInput> | null
+        thesisSession?: XOR<ThesisSessionNullableScalarRelationFilter, ThesisSessionWhereInput> | null
         supervisor?: XOR<ExpertProfileScalarRelationFilter, ExpertProfileWhereInput>
         coSupervisor?: XOR<ExpertProfileNullableScalarRelationFilter, ExpertProfileWhereInput> | null
         organization?: XOR<DM_DonViScalarRelationFilter, DM_DonViWhereInput>
@@ -338347,7 +339980,8 @@ export namespace Prisma {
         requirements?: SortOrderInput | SortOrder
         technologies?: SortOrderInput | SortOrder
         status?: SortOrder
-        subjectClassId?: SortOrder
+        subjectClassId?: SortOrderInput | SortOrder
+        thesisSessionId?: SortOrderInput | SortOrder
         supervisorId?: SortOrder
         coSupervisorId?: SortOrderInput | SortOrder
         organizationId?: SortOrder
@@ -338388,7 +340022,8 @@ export namespace Prisma {
         requirements?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         technologies?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         status?: EnumThesisProjectStatusWithAggregatesFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
-        subjectClassId?: StringWithAggregatesFilter<"ThesisProject"> | string
+        subjectClassId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
+        thesisSessionId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         supervisorId?: StringWithAggregatesFilter<"ThesisProject"> | string
         coSupervisorId?: StringNullableWithAggregatesFilter<"ThesisProject"> | string | null
         organizationId?: UuidWithAggregatesFilter<"ThesisProject"> | string
@@ -357720,6 +359355,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateInput = {
         id?: string
@@ -357767,6 +359403,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -357814,6 +359451,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -357861,6 +359499,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseCreateManyInput = {
         id?: string
@@ -360461,6 +362100,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateInput = {
         id?: string
@@ -360486,6 +362126,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -360511,6 +362152,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -360536,6 +362178,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeCreateManyInput = {
         id?: string
@@ -365071,6 +366714,155 @@ export namespace Prisma {
         reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ThesisSessionCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
+        trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
+        thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
+    };
+    export type ThesisSessionUncheckedCreateInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingObjectTypeId: string
+        trainingCourseId: string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+        thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
+    };
+    export type ThesisSessionUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+        thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionUncheckedUpdateInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionCreateManyInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingObjectTypeId: string
+        trainingCourseId: string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+    };
+    export type ThesisSessionUpdateManyMutationInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ThesisSessionUncheckedUpdateManyInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type ThesisProjectCreateInput = {
         id?: string
         code?: string | null
@@ -365096,7 +366888,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -365127,7 +366920,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -365172,7 +366966,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -365203,7 +366998,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -365241,7 +367037,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -365300,7 +367097,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -381543,6 +383341,11 @@ export namespace Prisma {
         some?: AcademicActionConfigWhereInput
         none?: AcademicActionConfigWhereInput
     };
+    export type ThesisSessionListRelationFilter = {
+        every?: ThesisSessionWhereInput
+        some?: ThesisSessionWhereInput
+        none?: ThesisSessionWhereInput
+    };
     export type TrainingCourseRegulationOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
@@ -381559,6 +383362,9 @@ export namespace Prisma {
         _count?: SortOrder
     };
     export type AcademicActionConfigOrderByRelationAggregateInput = {
+        _count?: SortOrder
+    };
+    export type ThesisSessionOrderByRelationAggregateInput = {
         _count?: SortOrder
     };
     export type TrainingCourseOrderByRelevanceInput = {
@@ -386108,11 +387914,83 @@ export namespace Prisma {
         _min?: NestedEnumRegistrationStatusFilter<$PrismaModel>
         _max?: NestedEnumRegistrationStatusFilter<$PrismaModel>
     };
+    export type ThesisSessionOrderByRelevanceInput = {
+        fields: ThesisSessionOrderByRelevanceFieldEnum | ThesisSessionOrderByRelevanceFieldEnum[]
+        sort: SortOrder
+        search: string
+    };
+    export type ThesisSessionCountOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        trainingCourseId?: SortOrder
+        decisionNumber?: SortOrder
+        decisionMaker?: SortOrder
+        decisionDate?: SortOrder
+        defenseDecisionNumber?: SortOrder
+        defenseDecisionMaker?: SortOrder
+        defenseDecisionDate?: SortOrder
+        chief?: SortOrder
+    };
+    export type ThesisSessionMaxOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        trainingCourseId?: SortOrder
+        decisionNumber?: SortOrder
+        decisionMaker?: SortOrder
+        decisionDate?: SortOrder
+        defenseDecisionNumber?: SortOrder
+        defenseDecisionMaker?: SortOrder
+        defenseDecisionDate?: SortOrder
+        chief?: SortOrder
+    };
+    export type ThesisSessionMinOrderByAggregateInput = {
+        id?: SortOrder
+        code?: SortOrder
+        active?: SortOrder
+        description?: SortOrder
+        deletedAt?: SortOrder
+        createdAt?: SortOrder
+        updatedAt?: SortOrder
+        name?: SortOrder
+        startDate?: SortOrder
+        endDate?: SortOrder
+        trainingObjectTypeId?: SortOrder
+        trainingCourseId?: SortOrder
+        decisionNumber?: SortOrder
+        decisionMaker?: SortOrder
+        decisionDate?: SortOrder
+        defenseDecisionNumber?: SortOrder
+        defenseDecisionMaker?: SortOrder
+        defenseDecisionDate?: SortOrder
+        chief?: SortOrder
+    };
     export type EnumThesisProjectStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.ThesisProjectStatus | EnumThesisProjectStatusFieldRefInput<$PrismaModel>
         in?: $Enums.ThesisProjectStatus[] | ListEnumThesisProjectStatusFieldRefInput<$PrismaModel>
         notIn?: $Enums.ThesisProjectStatus[] | ListEnumThesisProjectStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumThesisProjectStatusFilter<$PrismaModel> | $Enums.ThesisProjectStatus
+    };
+    export type ThesisSessionNullableScalarRelationFilter = {
+        is?: ThesisSessionWhereInput | null
+        isNot?: ThesisSessionWhereInput | null
     };
     export type ExpertProfileScalarRelationFilter = {
         is?: ExpertProfileWhereInput
@@ -386174,6 +388052,7 @@ export namespace Prisma {
         technologies?: SortOrder
         status?: SortOrder
         subjectClassId?: SortOrder
+        thesisSessionId?: SortOrder
         supervisorId?: SortOrder
         coSupervisorId?: SortOrder
         organizationId?: SortOrder
@@ -386211,6 +388090,7 @@ export namespace Prisma {
         technologies?: SortOrder
         status?: SortOrder
         subjectClassId?: SortOrder
+        thesisSessionId?: SortOrder
         supervisorId?: SortOrder
         coSupervisorId?: SortOrder
         organizationId?: SortOrder
@@ -386244,6 +388124,7 @@ export namespace Prisma {
         technologies?: SortOrder
         status?: SortOrder
         subjectClassId?: SortOrder
+        thesisSessionId?: SortOrder
         supervisorId?: SortOrder
         coSupervisorId?: SortOrder
         organizationId?: SortOrder
@@ -399241,6 +401122,12 @@ export namespace Prisma {
         createMany?: DocumentFileCreateManyTrainingCourseInputEnvelope
         connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
     };
+    export type ThesisSessionCreateNestedManyWithoutTrainingCourseInput = {
+        create?: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput> | ThesisSessionCreateWithoutTrainingCourseInput[] | ThesisSessionUncheckedCreateWithoutTrainingCourseInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCourseInput | ThesisSessionCreateOrConnectWithoutTrainingCourseInput[]
+        createMany?: ThesisSessionCreateManyTrainingCourseInputEnvelope
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+    };
     export type TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput = {
         create?: XOR<TrainingCourseRegulationCreateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput> | TrainingCourseRegulationCreateWithoutTrainingCourseInput[] | TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput[]
         connectOrCreate?: TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput | TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput[]
@@ -399303,6 +401190,12 @@ export namespace Prisma {
         connectOrCreate?: DocumentFileCreateOrConnectWithoutTrainingCourseInput | DocumentFileCreateOrConnectWithoutTrainingCourseInput[]
         createMany?: DocumentFileCreateManyTrainingCourseInputEnvelope
         connect?: DocumentFileWhereUniqueInput | DocumentFileWhereUniqueInput[]
+    };
+    export type ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput = {
+        create?: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput> | ThesisSessionCreateWithoutTrainingCourseInput[] | ThesisSessionUncheckedCreateWithoutTrainingCourseInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCourseInput | ThesisSessionCreateOrConnectWithoutTrainingCourseInput[]
+        createMany?: ThesisSessionCreateManyTrainingCourseInputEnvelope
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
     };
     export type EnumAcademicRankingBaseTypeFieldUpdateOperationsInput = {
         set?: $Enums.AcademicRankingBaseType
@@ -399470,6 +401363,19 @@ export namespace Prisma {
         updateMany?: DocumentFileUpdateManyWithWhereWithoutTrainingCourseInput | DocumentFileUpdateManyWithWhereWithoutTrainingCourseInput[]
         deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
     };
+    export type ThesisSessionUpdateManyWithoutTrainingCourseNestedInput = {
+        create?: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput> | ThesisSessionCreateWithoutTrainingCourseInput[] | ThesisSessionUncheckedCreateWithoutTrainingCourseInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCourseInput | ThesisSessionCreateOrConnectWithoutTrainingCourseInput[]
+        upsert?: ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput | ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput[]
+        createMany?: ThesisSessionCreateManyTrainingCourseInputEnvelope
+        set?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        disconnect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        delete?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        update?: ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput | ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput[]
+        updateMany?: ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput | ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput[]
+        deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
+    };
     export type TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput = {
         create?: XOR<TrainingCourseRegulationCreateWithoutTrainingCourseInput, TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput> | TrainingCourseRegulationCreateWithoutTrainingCourseInput[] | TrainingCourseRegulationUncheckedCreateWithoutTrainingCourseInput[]
         connectOrCreate?: TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput | TrainingCourseRegulationCreateOrConnectWithoutTrainingCourseInput[]
@@ -399609,6 +401515,19 @@ export namespace Prisma {
         update?: DocumentFileUpdateWithWhereUniqueWithoutTrainingCourseInput | DocumentFileUpdateWithWhereUniqueWithoutTrainingCourseInput[]
         updateMany?: DocumentFileUpdateManyWithWhereWithoutTrainingCourseInput | DocumentFileUpdateManyWithWhereWithoutTrainingCourseInput[]
         deleteMany?: DocumentFileScalarWhereInput | DocumentFileScalarWhereInput[]
+    };
+    export type ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput = {
+        create?: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput> | ThesisSessionCreateWithoutTrainingCourseInput[] | ThesisSessionUncheckedCreateWithoutTrainingCourseInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingCourseInput | ThesisSessionCreateOrConnectWithoutTrainingCourseInput[]
+        upsert?: ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput | ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput[]
+        createMany?: ThesisSessionCreateManyTrainingCourseInputEnvelope
+        set?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        disconnect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        delete?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        update?: ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput | ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput[]
+        updateMany?: ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput | ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput[]
+        deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
     };
     export type TrainingCourseCreateNestedOneWithoutTrainingCourseRegulationInput = {
         create?: XOR<TrainingCourseCreateWithoutTrainingCourseRegulationInput, TrainingCourseUncheckedCreateWithoutTrainingCourseRegulationInput>
@@ -402158,6 +404077,12 @@ export namespace Prisma {
         createMany?: PlanTrainingDelayCreateManyTrainingObjectTypeInputEnvelope
         connect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
     };
+    export type ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput = {
+        create?: XOR<ThesisSessionCreateWithoutTrainingObjectTypeInput, ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput> | ThesisSessionCreateWithoutTrainingObjectTypeInput[] | ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput | ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput[]
+        createMany?: ThesisSessionCreateManyTrainingObjectTypeInputEnvelope
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+    };
     export type TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
         create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
         connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -402229,6 +404154,12 @@ export namespace Prisma {
         connectOrCreate?: PlanTrainingDelayCreateOrConnectWithoutTrainingObjectTypeInput | PlanTrainingDelayCreateOrConnectWithoutTrainingObjectTypeInput[]
         createMany?: PlanTrainingDelayCreateManyTrainingObjectTypeInputEnvelope
         connect?: PlanTrainingDelayWhereUniqueInput | PlanTrainingDelayWhereUniqueInput[]
+    };
+    export type ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput = {
+        create?: XOR<ThesisSessionCreateWithoutTrainingObjectTypeInput, ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput> | ThesisSessionCreateWithoutTrainingObjectTypeInput[] | ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput | ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput[]
+        createMany?: ThesisSessionCreateManyTrainingObjectTypeInputEnvelope
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
     };
     export type EnumTrainingObjectTypesFieldUpdateOperationsInput = {
         set?: $Enums.TrainingObjectTypes
@@ -402407,6 +404338,19 @@ export namespace Prisma {
         updateMany?: PlanTrainingDelayUpdateManyWithWhereWithoutTrainingObjectTypeInput | PlanTrainingDelayUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
         deleteMany?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
     };
+    export type ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput = {
+        create?: XOR<ThesisSessionCreateWithoutTrainingObjectTypeInput, ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput> | ThesisSessionCreateWithoutTrainingObjectTypeInput[] | ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput | ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput[]
+        upsert?: ThesisSessionUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | ThesisSessionUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        createMany?: ThesisSessionCreateManyTrainingObjectTypeInputEnvelope
+        set?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        disconnect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        delete?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        update?: ThesisSessionUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | ThesisSessionUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        updateMany?: ThesisSessionUpdateManyWithWhereWithoutTrainingObjectTypeInput | ThesisSessionUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+        deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
+    };
     export type TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
         create?: XOR<TrainingCourseCreateWithoutTrainingObjectTypeInput, TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput> | TrainingCourseCreateWithoutTrainingObjectTypeInput[] | TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput[]
         connectOrCreate?: TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput | TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput[]
@@ -402562,6 +404506,19 @@ export namespace Prisma {
         update?: PlanTrainingDelayUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | PlanTrainingDelayUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
         updateMany?: PlanTrainingDelayUpdateManyWithWhereWithoutTrainingObjectTypeInput | PlanTrainingDelayUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
         deleteMany?: PlanTrainingDelayScalarWhereInput | PlanTrainingDelayScalarWhereInput[]
+    };
+    export type ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput = {
+        create?: XOR<ThesisSessionCreateWithoutTrainingObjectTypeInput, ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput> | ThesisSessionCreateWithoutTrainingObjectTypeInput[] | ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput[]
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput | ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput[]
+        upsert?: ThesisSessionUpsertWithWhereUniqueWithoutTrainingObjectTypeInput | ThesisSessionUpsertWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        createMany?: ThesisSessionCreateManyTrainingObjectTypeInputEnvelope
+        set?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        disconnect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        delete?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        connect?: ThesisSessionWhereUniqueInput | ThesisSessionWhereUniqueInput[]
+        update?: ThesisSessionUpdateWithWhereUniqueWithoutTrainingObjectTypeInput | ThesisSessionUpdateWithWhereUniqueWithoutTrainingObjectTypeInput[]
+        updateMany?: ThesisSessionUpdateManyWithWhereWithoutTrainingObjectTypeInput | ThesisSessionUpdateManyWithWhereWithoutTrainingObjectTypeInput[]
+        deleteMany?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
     };
     export type StudentCreateNestedManyWithoutPriorityObjectInput = {
         create?: XOR<StudentCreateWithoutPriorityObjectInput, StudentUncheckedCreateWithoutPriorityObjectInput> | StudentCreateWithoutPriorityObjectInput[] | StudentUncheckedCreateWithoutPriorityObjectInput[]
@@ -407058,10 +409015,77 @@ export namespace Prisma {
         connect?: LecturerWhereUniqueInput
         update?: XOR<XOR<LecturerUpdateToOneWithWhereWithoutReviewedRegistrationsInput, LecturerUpdateWithoutReviewedRegistrationsInput>, LecturerUncheckedUpdateWithoutReviewedRegistrationsInput>
     };
+    export type TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput = {
+        create?: XOR<TrainingObjectTypeCreateWithoutThesisSessionInput, TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput>
+        connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutThesisSessionInput
+        connect?: TrainingObjectTypeWhereUniqueInput
+    };
+    export type TrainingCourseCreateNestedOneWithoutThesisSessionInput = {
+        create?: XOR<TrainingCourseCreateWithoutThesisSessionInput, TrainingCourseUncheckedCreateWithoutThesisSessionInput>
+        connectOrCreate?: TrainingCourseCreateOrConnectWithoutThesisSessionInput
+        connect?: TrainingCourseWhereUniqueInput
+    };
+    export type ThesisProjectCreateNestedManyWithoutThesisSessionInput = {
+        create?: XOR<ThesisProjectCreateWithoutThesisSessionInput, ThesisProjectUncheckedCreateWithoutThesisSessionInput> | ThesisProjectCreateWithoutThesisSessionInput[] | ThesisProjectUncheckedCreateWithoutThesisSessionInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutThesisSessionInput | ThesisProjectCreateOrConnectWithoutThesisSessionInput[]
+        createMany?: ThesisProjectCreateManyThesisSessionInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    };
+    export type ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput = {
+        create?: XOR<ThesisProjectCreateWithoutThesisSessionInput, ThesisProjectUncheckedCreateWithoutThesisSessionInput> | ThesisProjectCreateWithoutThesisSessionInput[] | ThesisProjectUncheckedCreateWithoutThesisSessionInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutThesisSessionInput | ThesisProjectCreateOrConnectWithoutThesisSessionInput[]
+        createMany?: ThesisProjectCreateManyThesisSessionInputEnvelope
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+    };
+    export type TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput = {
+        create?: XOR<TrainingObjectTypeCreateWithoutThesisSessionInput, TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput>
+        connectOrCreate?: TrainingObjectTypeCreateOrConnectWithoutThesisSessionInput
+        upsert?: TrainingObjectTypeUpsertWithoutThesisSessionInput
+        connect?: TrainingObjectTypeWhereUniqueInput
+        update?: XOR<XOR<TrainingObjectTypeUpdateToOneWithWhereWithoutThesisSessionInput, TrainingObjectTypeUpdateWithoutThesisSessionInput>, TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput>
+    };
+    export type TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput = {
+        create?: XOR<TrainingCourseCreateWithoutThesisSessionInput, TrainingCourseUncheckedCreateWithoutThesisSessionInput>
+        connectOrCreate?: TrainingCourseCreateOrConnectWithoutThesisSessionInput
+        upsert?: TrainingCourseUpsertWithoutThesisSessionInput
+        connect?: TrainingCourseWhereUniqueInput
+        update?: XOR<XOR<TrainingCourseUpdateToOneWithWhereWithoutThesisSessionInput, TrainingCourseUpdateWithoutThesisSessionInput>, TrainingCourseUncheckedUpdateWithoutThesisSessionInput>
+    };
+    export type ThesisProjectUpdateManyWithoutThesisSessionNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutThesisSessionInput, ThesisProjectUncheckedCreateWithoutThesisSessionInput> | ThesisProjectCreateWithoutThesisSessionInput[] | ThesisProjectUncheckedCreateWithoutThesisSessionInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutThesisSessionInput | ThesisProjectCreateOrConnectWithoutThesisSessionInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutThesisSessionInput | ThesisProjectUpsertWithWhereUniqueWithoutThesisSessionInput[]
+        createMany?: ThesisProjectCreateManyThesisSessionInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutThesisSessionInput | ThesisProjectUpdateWithWhereUniqueWithoutThesisSessionInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput | ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput = {
+        create?: XOR<ThesisProjectCreateWithoutThesisSessionInput, ThesisProjectUncheckedCreateWithoutThesisSessionInput> | ThesisProjectCreateWithoutThesisSessionInput[] | ThesisProjectUncheckedCreateWithoutThesisSessionInput[]
+        connectOrCreate?: ThesisProjectCreateOrConnectWithoutThesisSessionInput | ThesisProjectCreateOrConnectWithoutThesisSessionInput[]
+        upsert?: ThesisProjectUpsertWithWhereUniqueWithoutThesisSessionInput | ThesisProjectUpsertWithWhereUniqueWithoutThesisSessionInput[]
+        createMany?: ThesisProjectCreateManyThesisSessionInputEnvelope
+        set?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        disconnect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        delete?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        connect?: ThesisProjectWhereUniqueInput | ThesisProjectWhereUniqueInput[]
+        update?: ThesisProjectUpdateWithWhereUniqueWithoutThesisSessionInput | ThesisProjectUpdateWithWhereUniqueWithoutThesisSessionInput[]
+        updateMany?: ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput | ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput[]
+        deleteMany?: ThesisProjectScalarWhereInput | ThesisProjectScalarWhereInput[]
+    };
     export type SubjectClassCreateNestedOneWithoutThesisProjectsInput = {
         create?: XOR<SubjectClassCreateWithoutThesisProjectsInput, SubjectClassUncheckedCreateWithoutThesisProjectsInput>
         connectOrCreate?: SubjectClassCreateOrConnectWithoutThesisProjectsInput
         connect?: SubjectClassWhereUniqueInput
+    };
+    export type ThesisSessionCreateNestedOneWithoutThesisProjectInput = {
+        create?: XOR<ThesisSessionCreateWithoutThesisProjectInput, ThesisSessionUncheckedCreateWithoutThesisProjectInput>
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutThesisProjectInput
+        connect?: ThesisSessionWhereUniqueInput
     };
     export type ExpertProfileCreateNestedOneWithoutSupervisedThesesInput = {
         create?: XOR<ExpertProfileCreateWithoutSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutSupervisedThesesInput>
@@ -407152,12 +409176,23 @@ export namespace Prisma {
     export type EnumThesisProjectStatusFieldUpdateOperationsInput = {
         set?: $Enums.ThesisProjectStatus
     };
-    export type SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput = {
+    export type SubjectClassUpdateOneWithoutThesisProjectsNestedInput = {
         create?: XOR<SubjectClassCreateWithoutThesisProjectsInput, SubjectClassUncheckedCreateWithoutThesisProjectsInput>
         connectOrCreate?: SubjectClassCreateOrConnectWithoutThesisProjectsInput
         upsert?: SubjectClassUpsertWithoutThesisProjectsInput
+        disconnect?: SubjectClassWhereInput | boolean
+        delete?: SubjectClassWhereInput | boolean
         connect?: SubjectClassWhereUniqueInput
         update?: XOR<XOR<SubjectClassUpdateToOneWithWhereWithoutThesisProjectsInput, SubjectClassUpdateWithoutThesisProjectsInput>, SubjectClassUncheckedUpdateWithoutThesisProjectsInput>
+    };
+    export type ThesisSessionUpdateOneWithoutThesisProjectNestedInput = {
+        create?: XOR<ThesisSessionCreateWithoutThesisProjectInput, ThesisSessionUncheckedCreateWithoutThesisProjectInput>
+        connectOrCreate?: ThesisSessionCreateOrConnectWithoutThesisProjectInput
+        upsert?: ThesisSessionUpsertWithoutThesisProjectInput
+        disconnect?: ThesisSessionWhereInput | boolean
+        delete?: ThesisSessionWhereInput | boolean
+        connect?: ThesisSessionWhereUniqueInput
+        update?: XOR<XOR<ThesisSessionUpdateToOneWithWhereWithoutThesisProjectInput, ThesisSessionUpdateWithoutThesisProjectInput>, ThesisSessionUncheckedUpdateWithoutThesisProjectInput>
     };
     export type ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput = {
         create?: XOR<ExpertProfileCreateWithoutSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutSupervisedThesesInput>
@@ -446457,7 +448492,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         council?: CouncilCreateNestedOneWithoutThesisInput
@@ -446487,7 +448523,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         maxStudents: number
@@ -446959,7 +448996,8 @@ export namespace Prisma {
         requirements?: StringNullableFilter<"ThesisProject"> | string | null
         technologies?: StringNullableFilter<"ThesisProject"> | string | null
         status?: EnumThesisProjectStatusFilter<"ThesisProject"> | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFilter<"ThesisProject"> | string
+        subjectClassId?: StringNullableFilter<"ThesisProject"> | string | null
+        thesisSessionId?: StringNullableFilter<"ThesisProject"> | string | null
         supervisorId?: StringFilter<"ThesisProject"> | string
         coSupervisorId?: StringNullableFilter<"ThesisProject"> | string | null
         organizationId?: UuidFilter<"ThesisProject"> | string
@@ -455457,6 +457495,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutPlanTrainingDelayInput = {
         id?: string
@@ -455481,6 +457520,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutPlanTrainingDelayInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -455546,6 +457586,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutPlanTrainingDelayInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -455570,6 +457611,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type PlanTrainingDelaySubjectUpsertWithWhereUniqueWithoutPlanTrainingDelayInput = {
         where: PlanTrainingDelaySubjectWhereUniqueInput
@@ -455955,6 +457997,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutPlanTrainingInput = {
         id?: string
@@ -455979,6 +458022,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutPlanTrainingInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -456098,6 +458142,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutPlanTrainingInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -456122,6 +458167,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SemesterUpsertWithoutPlanTrainingInput = {
         update: XOR<SemesterUpdateWithoutPlanTrainingInput, SemesterUncheckedUpdateWithoutPlanTrainingInput>
@@ -461327,6 +463373,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutSemesterStartInput = {
         id?: string
@@ -461373,6 +463420,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutSemesterStartInput = {
         where: TrainingCourseWhereUniqueInput
@@ -462236,6 +464284,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutTrainingLanguageInput = {
         id?: string
@@ -462282,6 +464331,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutTrainingLanguageInput = {
         where: TrainingCourseWhereUniqueInput
@@ -462542,6 +464592,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingCourseInput = {
         id?: string
@@ -462566,6 +464617,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingCourseInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -463061,6 +465113,56 @@ export namespace Prisma {
         data: DocumentFileCreateManyTrainingCourseInput | DocumentFileCreateManyTrainingCourseInput[]
         skipDuplicates?: boolean
     };
+    export type ThesisSessionCreateWithoutTrainingCourseInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
+        thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
+    };
+    export type ThesisSessionUncheckedCreateWithoutTrainingCourseInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingObjectTypeId: string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+        thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
+    };
+    export type ThesisSessionCreateOrConnectWithoutTrainingCourseInput = {
+        where: ThesisSessionWhereUniqueInput
+        create: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput>
+    };
+    export type ThesisSessionCreateManyTrainingCourseInputEnvelope = {
+        data: ThesisSessionCreateManyTrainingCourseInput | ThesisSessionCreateManyTrainingCourseInput[]
+        skipDuplicates?: boolean
+    };
     export type SemesterUpsertWithoutTrainingCoursesStartInput = {
         update: XOR<SemesterUpdateWithoutTrainingCoursesStartInput, SemesterUncheckedUpdateWithoutTrainingCoursesStartInput>
         create: XOR<SemesterCreateWithoutTrainingCoursesStartInput, SemesterUncheckedCreateWithoutTrainingCoursesStartInput>
@@ -463181,6 +465283,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463205,6 +465308,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingCourseRegulationUpsertWithWhereUniqueWithoutTrainingCourseInput = {
         where: TrainingCourseRegulationWhereUniqueInput
@@ -463461,6 +465565,43 @@ export namespace Prisma {
         where: DocumentFileScalarWhereInput
         data: XOR<DocumentFileUpdateManyMutationInput, DocumentFileUncheckedUpdateManyWithoutTrainingCourseInput>
     };
+    export type ThesisSessionUpsertWithWhereUniqueWithoutTrainingCourseInput = {
+        where: ThesisSessionWhereUniqueInput
+        update: XOR<ThesisSessionUpdateWithoutTrainingCourseInput, ThesisSessionUncheckedUpdateWithoutTrainingCourseInput>
+        create: XOR<ThesisSessionCreateWithoutTrainingCourseInput, ThesisSessionUncheckedCreateWithoutTrainingCourseInput>
+    };
+    export type ThesisSessionUpdateWithWhereUniqueWithoutTrainingCourseInput = {
+        where: ThesisSessionWhereUniqueInput
+        data: XOR<ThesisSessionUpdateWithoutTrainingCourseInput, ThesisSessionUncheckedUpdateWithoutTrainingCourseInput>
+    };
+    export type ThesisSessionUpdateManyWithWhereWithoutTrainingCourseInput = {
+        where: ThesisSessionScalarWhereInput
+        data: XOR<ThesisSessionUpdateManyMutationInput, ThesisSessionUncheckedUpdateManyWithoutTrainingCourseInput>
+    };
+    export type ThesisSessionScalarWhereInput = {
+        AND?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
+        OR?: ThesisSessionScalarWhereInput[]
+        NOT?: ThesisSessionScalarWhereInput | ThesisSessionScalarWhereInput[]
+        id?: StringFilter<"ThesisSession"> | string
+        code?: StringNullableFilter<"ThesisSession"> | string | null
+        active?: BoolFilter<"ThesisSession"> | boolean
+        description?: StringNullableFilter<"ThesisSession"> | string | null
+        deletedAt?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        createdAt?: DateTimeFilter<"ThesisSession"> | Date | string
+        updatedAt?: DateTimeFilter<"ThesisSession"> | Date | string
+        name?: StringFilter<"ThesisSession"> | string
+        startDate?: DateTimeFilter<"ThesisSession"> | Date | string
+        endDate?: DateTimeFilter<"ThesisSession"> | Date | string
+        trainingObjectTypeId?: StringFilter<"ThesisSession"> | string
+        trainingCourseId?: StringFilter<"ThesisSession"> | string
+        decisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
+        decisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
+        decisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        defenseDecisionNumber?: StringNullableFilter<"ThesisSession"> | string | null
+        defenseDecisionMaker?: StringNullableFilter<"ThesisSession"> | string | null
+        defenseDecisionDate?: DateTimeNullableFilter<"ThesisSession"> | Date | string | null
+        chief?: StringNullableFilter<"ThesisSession"> | string | null
+    };
     export type TrainingCourseCreateWithoutTrainingCourseRegulationInput = {
         id?: string
         code?: string | null
@@ -463506,6 +465647,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutTrainingCourseRegulationInput = {
         id?: string
@@ -463552,6 +465694,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutTrainingCourseRegulationInput = {
         where: TrainingCourseWhereUniqueInput
@@ -463611,6 +465754,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutTrainingCourseRegulationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -463657,6 +465801,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type StudentCreateWithoutClassMonitorInput = {
         id?: string
@@ -463999,6 +466144,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutFixedClassInput = {
         id?: string
@@ -464045,6 +466191,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutFixedClassInput = {
         where: TrainingCourseWhereUniqueInput
@@ -465064,6 +467211,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutFixedClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -465110,6 +467258,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type DM_DonViUpsertWithoutFixedClassInput = {
         update: XOR<DM_DonViUpdateWithoutFixedClassInput, DM_DonViUncheckedUpdateWithoutFixedClassInput>
@@ -465618,6 +467767,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutCurriculumInput = {
         id?: string
@@ -465642,6 +467792,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutCurriculumInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -466007,6 +468158,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -466031,6 +468183,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingBlockOnCurriculumVersionUpsertWithWhereUniqueWithoutCurriculumInput = {
         where: TrainingBlockOnCurriculumVersionWhereUniqueInput
@@ -466177,6 +468330,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutCurriculumVersionInput = {
         id?: string
@@ -466201,6 +468355,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutCurriculumVersionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -466864,6 +469019,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutCurriculumVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -466888,6 +469044,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingLevelUpsertWithoutCurriculumVersionInput = {
         update: XOR<TrainingLevelUpdateWithoutCurriculumVersionInput, TrainingLevelUncheckedUpdateWithoutCurriculumVersionInput>
@@ -467709,6 +469866,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSubjectVersionInput = {
         id?: string
@@ -467733,6 +469891,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSubjectVersionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -468852,6 +471011,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSubjectVersionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -468876,6 +471036,7 @@ export namespace Prisma {
         graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SubjectVersionCategoryUpsertWithoutSubjectVersionsInput = {
         update: XOR<SubjectVersionCategoryUpdateWithoutSubjectVersionsInput, SubjectVersionCategoryUncheckedUpdateWithoutSubjectVersionsInput>
@@ -470861,6 +473022,7 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutClassRegisterSessionInput = {
         id?: string
@@ -470907,6 +473069,7 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutClassRegisterSessionInput = {
         where: TrainingCourseWhereUniqueInput
@@ -471807,6 +473970,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutSubjectClassInput = {
         id?: string
@@ -471831,6 +473995,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutSubjectClassInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -472421,6 +474586,7 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -472451,6 +474617,7 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -472929,6 +475096,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutSubjectClassInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -472953,6 +475121,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type SemesterUpsertWithoutSubjectClassesInput = {
         update: XOR<SemesterUpdateWithoutSubjectClassesInput, SemesterUncheckedUpdateWithoutSubjectClassesInput>
@@ -475587,6 +477756,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutTrainingObjectTypeInput = {
         id?: string
@@ -475633,6 +477803,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutTrainingObjectTypeInput = {
         where: TrainingCourseWhereUniqueInput
@@ -476328,6 +478499,56 @@ export namespace Prisma {
         data: PlanTrainingDelayCreateManyTrainingObjectTypeInput | PlanTrainingDelayCreateManyTrainingObjectTypeInput[]
         skipDuplicates?: boolean
     };
+    export type ThesisSessionCreateWithoutTrainingObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+        trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
+        thesisProject?: ThesisProjectCreateNestedManyWithoutThesisSessionInput
+    };
+    export type ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingCourseId: string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+        thesisProject?: ThesisProjectUncheckedCreateNestedManyWithoutThesisSessionInput
+    };
+    export type ThesisSessionCreateOrConnectWithoutTrainingObjectTypeInput = {
+        where: ThesisSessionWhereUniqueInput
+        create: XOR<ThesisSessionCreateWithoutTrainingObjectTypeInput, ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput>
+    };
+    export type ThesisSessionCreateManyTrainingObjectTypeInputEnvelope = {
+        data: ThesisSessionCreateManyTrainingObjectTypeInput | ThesisSessionCreateManyTrainingObjectTypeInput[]
+        skipDuplicates?: boolean
+    };
     export type TrainingFormUpsertWithoutTrainingObjectTypeInput = {
         update: XOR<TrainingFormUpdateWithoutTrainingObjectTypeInput, TrainingFormUncheckedUpdateWithoutTrainingObjectTypeInput>
         create: XOR<TrainingFormCreateWithoutTrainingObjectTypeInput, TrainingFormUncheckedCreateWithoutTrainingObjectTypeInput>
@@ -476605,6 +478826,19 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
         updatedAt?: DateTimeFilter<"PlanTrainingDelay"> | Date | string
         trainingObjectTypeId?: StringFilter<"PlanTrainingDelay"> | string
+    };
+    export type ThesisSessionUpsertWithWhereUniqueWithoutTrainingObjectTypeInput = {
+        where: ThesisSessionWhereUniqueInput
+        update: XOR<ThesisSessionUpdateWithoutTrainingObjectTypeInput, ThesisSessionUncheckedUpdateWithoutTrainingObjectTypeInput>
+        create: XOR<ThesisSessionCreateWithoutTrainingObjectTypeInput, ThesisSessionUncheckedCreateWithoutTrainingObjectTypeInput>
+    };
+    export type ThesisSessionUpdateWithWhereUniqueWithoutTrainingObjectTypeInput = {
+        where: ThesisSessionWhereUniqueInput
+        data: XOR<ThesisSessionUpdateWithoutTrainingObjectTypeInput, ThesisSessionUncheckedUpdateWithoutTrainingObjectTypeInput>
+    };
+    export type ThesisSessionUpdateManyWithWhereWithoutTrainingObjectTypeInput = {
+        where: ThesisSessionScalarWhereInput
+        data: XOR<ThesisSessionUpdateManyMutationInput, ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeInput>
     };
     export type StudentCreateWithoutPriorityObjectInput = {
         id?: string
@@ -477193,6 +479427,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingLevelInput = {
         id?: string
@@ -477217,6 +479452,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingLevelInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -477456,6 +479692,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingFormInput = {
         id?: string
@@ -477480,6 +479717,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingFormInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -478490,7 +480728,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -478520,7 +480759,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -479278,6 +481518,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingFieldsInput = {
         id?: string
@@ -479302,6 +481543,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingFieldsInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -479382,6 +481624,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFieldsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -479406,6 +481649,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type DM_DonViCreateWithoutTrainingMajorsInput = {
         Id?: string
@@ -480361,6 +482605,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingMajorsInput = {
         id?: string
@@ -480385,6 +482630,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingMajorsInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -480477,6 +482723,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingMajorsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -480501,6 +482748,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingBlockCreateWithoutChildrenInput = {
         id?: string
@@ -481723,6 +483971,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutScoreConvertsInput = {
         id?: string
@@ -481769,6 +484018,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutScoreConvertsInput = {
         where: TrainingCourseWhereUniqueInput
@@ -481828,6 +484078,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutScoreConvertsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -481874,6 +484125,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingLocationCreateWithoutStudentsInput = {
         id?: string
@@ -482546,6 +484798,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutStudentsInput = {
         id?: string
@@ -482570,6 +484823,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutStudentsInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -484360,6 +486614,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutStudentsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -484384,6 +486639,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingTypeUpsertWithoutStudentsInput = {
         update: XOR<TrainingTypeUpdateWithoutStudentsInput, TrainingTypeUncheckedUpdateWithoutStudentsInput>
@@ -485905,6 +488161,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutNotificationsInput = {
         id?: string
@@ -485951,6 +488208,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutNotificationsInput = {
         where: TrainingCourseWhereUniqueInput
@@ -486530,6 +488788,7 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutDocumentFilesInput = {
         id?: string
@@ -486576,6 +488835,7 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutDocumentFilesInput = {
         where: TrainingCourseWhereUniqueInput
@@ -487460,6 +489720,7 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutDocumentFilesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -487506,6 +489767,7 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type ArchivedAwardUpsertWithoutDocumentFilesInput = {
         update: XOR<ArchivedAwardUpdateWithoutDocumentFilesInput, ArchivedAwardUncheckedUpdateWithoutDocumentFilesInput>
@@ -488412,6 +490674,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutAcademicActionConfigInput = {
         id?: string
@@ -488458,6 +490721,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutAcademicActionConfigInput = {
         where: TrainingCourseWhereUniqueInput
@@ -488591,6 +490855,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutAcademicActionConfigInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -488637,6 +490902,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type AcademicActionRuleSetUpsertWithWhereUniqueWithoutConfigInput = {
         where: AcademicActionRuleSetWhereUniqueInput
@@ -489572,6 +491838,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutTrainingScoreSessionInput = {
         id?: string
@@ -489596,6 +491863,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutTrainingScoreSessionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -489722,6 +491990,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingScoreSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -489746,6 +492015,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type StudentTrainingScoreUpsertWithWhereUniqueWithoutTrainingScoreSessionInput = {
         where: StudentTrainingScoreWhereUniqueInput
@@ -494335,6 +496605,417 @@ export namespace Prisma {
         examRoomsExtra?: ExamRoomUncheckedUpdateManyWithoutSecondSupervisorNestedInput
         criterionAssignments?: CriterionAssignmentUncheckedUpdateManyWithoutLecturerNestedInput
     };
+    export type TrainingObjectTypeCreateWithoutThesisSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: $Enums.TrainingObjectTypes
+        trainingForm?: TrainingFormCreateNestedOneWithoutTrainingObjectTypeInput
+        trainingLevel?: TrainingLevelCreateNestedOneWithoutTrainingObjectTypeInput
+        trainingCourse?: TrainingCourseCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculum?: CurriculumCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculumVersion?: CurriculumVersionCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeCreateNestedManyWithoutTrainingObjectTypeInput
+        students?: StudentCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingScoreSession?: TrainingScoreSessionCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectClass?: SubjectClassCreateNestedManyWithoutTrainingObjectTypeInput
+        graduationSession?: GraduationSessionCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
+        planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
+        planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+    };
+    export type TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        type: $Enums.TrainingObjectTypes
+        trainingFormId?: string | null
+        trainingLevelId?: string | null
+        trainingCourse?: TrainingCourseUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculum?: CurriculumUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        curriculumVersion?: CurriculumVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        students?: StudentUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectClass?: SubjectClassUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        graduationSession?: GraduationSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+    };
+    export type TrainingObjectTypeCreateOrConnectWithoutThesisSessionInput = {
+        where: TrainingObjectTypeWhereUniqueInput
+        create: XOR<TrainingObjectTypeCreateWithoutThesisSessionInput, TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput>
+    };
+    export type TrainingCourseCreateWithoutThesisSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startYear?: number | null
+        endYear?: number | null
+        academicYear?: string | null
+        maxTrainingTime?: number | null
+        admissionQuota?: number | null
+        admissionStartDate?: Date | string | null
+        admissionEndDate?: Date | string | null
+        admissionDecision?: string | null
+        studentRecognitionDecision?: string | null
+        regulation?: string | null
+        isGeneralInfoLocked?: boolean
+        isRegulationLocked?: boolean
+        isScoreConfigLocked?: boolean
+        baseScore: $Enums.AcademicRankingBaseType
+        coef_1?: number
+        coef_2?: number
+        coef_3?: number
+        scoreToTakeExam?: number
+        scoreToPass?: number
+        scoreToPassConditional?: number
+        scoreToTakeGraduation?: number
+        scoreToPassGraduation?: number
+        scoreToRetain?: number
+        semesterStart: SemesterCreateNestedOneWithoutTrainingCoursesStartInput
+        trainingLanguage?: TrainingLanguageCreateNestedOneWithoutTrainingCoursesInput
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutTrainingCourseInput
+        trainingCourseRegulation?: TrainingCourseRegulationCreateNestedManyWithoutTrainingCourseInput
+        fixedClass?: FixedClassCreateNestedManyWithoutTrainingCourseInput
+        scoreConverts?: ScoreConvertCreateNestedManyWithoutTrainingCourseInput
+        academicRankingConvert?: AcademicRankingConvertCreateNestedManyWithoutTrainingCourseInput
+        scholarships?: ScholarshipCreateNestedManyWithoutTrainingCourseInput
+        academicWarningRule?: AcademicWarningRuleCreateNestedManyWithoutTrainingCourseInput
+        academicActionConfig?: AcademicActionConfigCreateNestedManyWithoutTrainingCourseInput
+        notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
+        surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
+        documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+    };
+    export type TrainingCourseUncheckedCreateWithoutThesisSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        semesterStartId: string
+        startYear?: number | null
+        endYear?: number | null
+        academicYear?: string | null
+        maxTrainingTime?: number | null
+        admissionQuota?: number | null
+        admissionStartDate?: Date | string | null
+        admissionEndDate?: Date | string | null
+        admissionDecision?: string | null
+        studentRecognitionDecision?: string | null
+        regulation?: string | null
+        trainingLanguageId?: string | null
+        isGeneralInfoLocked?: boolean
+        isRegulationLocked?: boolean
+        isScoreConfigLocked?: boolean
+        baseScore: $Enums.AcademicRankingBaseType
+        coef_1?: number
+        coef_2?: number
+        coef_3?: number
+        scoreToTakeExam?: number
+        scoreToPass?: number
+        scoreToPassConditional?: number
+        scoreToTakeGraduation?: number
+        scoreToPassGraduation?: number
+        scoreToRetain?: number
+        trainingObjectTypeId: string
+        trainingCourseRegulation?: TrainingCourseRegulationUncheckedCreateNestedManyWithoutTrainingCourseInput
+        fixedClass?: FixedClassUncheckedCreateNestedManyWithoutTrainingCourseInput
+        scoreConverts?: ScoreConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
+        academicRankingConvert?: AcademicRankingConvertUncheckedCreateNestedManyWithoutTrainingCourseInput
+        scholarships?: ScholarshipUncheckedCreateNestedManyWithoutTrainingCourseInput
+        academicWarningRule?: AcademicWarningRuleUncheckedCreateNestedManyWithoutTrainingCourseInput
+        academicActionConfig?: AcademicActionConfigUncheckedCreateNestedManyWithoutTrainingCourseInput
+        notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
+        documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+    };
+    export type TrainingCourseCreateOrConnectWithoutThesisSessionInput = {
+        where: TrainingCourseWhereUniqueInput
+        create: XOR<TrainingCourseCreateWithoutThesisSessionInput, TrainingCourseUncheckedCreateWithoutThesisSessionInput>
+    };
+    export type ThesisProjectCreateWithoutThesisSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title: string
+        titleEN?: string | null
+        summary: string
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        status?: $Enums.ThesisProjectStatus
+        maxStudents: number
+        currentStudents?: number
+        defenseDate?: Date | string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
+        coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
+        organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
+        council?: CouncilCreateNestedOneWithoutThesisInput
+        room?: RoomCreateNestedOneWithoutThesisProjectInput
+        defenseSession?: DefenseSessionCreateNestedOneWithoutThesisProjectInput
+        defenseRecord?: DefenseRecordCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionCreateNestedOneWithoutThesisInput
+        decisions?: DecisionCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationCreateNestedManyWithoutThesisProjectInput
+        supervisorPayments?: SupervisorPaymentRecordCreateNestedManyWithoutThesisProjectInput
+    };
+    export type ThesisProjectUncheckedCreateWithoutThesisSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title: string
+        titleEN?: string | null
+        summary: string
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        status?: $Enums.ThesisProjectStatus
+        subjectClassId?: string | null
+        supervisorId: string
+        coSupervisorId?: string | null
+        organizationId: string
+        maxStudents: number
+        currentStudents?: number
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+        defenseRecord?: DefenseRecordUncheckedCreateNestedOneWithoutThesisInput
+        librarySubmission?: LibrarySubmissionUncheckedCreateNestedOneWithoutThesisInput
+        decisions?: DecisionUncheckedCreateNestedManyWithoutThesisProjectInput
+        registrations?: StudentThesisRegistrationUncheckedCreateNestedManyWithoutThesisProjectInput
+        supervisorPayments?: SupervisorPaymentRecordUncheckedCreateNestedManyWithoutThesisProjectInput
+    };
+    export type ThesisProjectCreateOrConnectWithoutThesisSessionInput = {
+        where: ThesisProjectWhereUniqueInput
+        create: XOR<ThesisProjectCreateWithoutThesisSessionInput, ThesisProjectUncheckedCreateWithoutThesisSessionInput>
+    };
+    export type ThesisProjectCreateManyThesisSessionInputEnvelope = {
+        data: ThesisProjectCreateManyThesisSessionInput | ThesisProjectCreateManyThesisSessionInput[]
+        skipDuplicates?: boolean
+    };
+    export type TrainingObjectTypeUpsertWithoutThesisSessionInput = {
+        update: XOR<TrainingObjectTypeUpdateWithoutThesisSessionInput, TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput>
+        create: XOR<TrainingObjectTypeCreateWithoutThesisSessionInput, TrainingObjectTypeUncheckedCreateWithoutThesisSessionInput>
+        where?: TrainingObjectTypeWhereInput
+    };
+    export type TrainingObjectTypeUpdateToOneWithWhereWithoutThesisSessionInput = {
+        where?: TrainingObjectTypeWhereInput
+        data: XOR<TrainingObjectTypeUpdateWithoutThesisSessionInput, TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput>
+    };
+    export type TrainingObjectTypeUpdateWithoutThesisSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        trainingForm?: TrainingFormUpdateOneWithoutTrainingObjectTypeNestedInput
+        trainingLevel?: TrainingLevelUpdateOneWithoutTrainingObjectTypeNestedInput
+        trainingCourse?: TrainingCourseUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculum?: CurriculumUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculumVersion?: CurriculumVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeUpdateManyWithoutTrainingObjectTypeNestedInput
+        students?: StudentUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingScoreSession?: TrainingScoreSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectClass?: SubjectClassUpdateManyWithoutTrainingObjectTypeNestedInput
+        graduationSession?: GraduationSessionUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
+        planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
+        planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+    };
+    export type TrainingObjectTypeUncheckedUpdateWithoutThesisSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        type?: EnumTrainingObjectTypesFieldUpdateOperationsInput | $Enums.TrainingObjectTypes
+        trainingFormId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLevelId?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourse?: TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculum?: CurriculumUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        curriculumVersion?: CurriculumVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingMajors?: TrainingMajorOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingFields?: TrainingFieldOnTrainingObjectTypeUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        students?: StudentUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        trainingScoreSession?: TrainingScoreSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectClass?: SubjectClassUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        graduationSession?: GraduationSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+    };
+    export type TrainingCourseUpsertWithoutThesisSessionInput = {
+        update: XOR<TrainingCourseUpdateWithoutThesisSessionInput, TrainingCourseUncheckedUpdateWithoutThesisSessionInput>
+        create: XOR<TrainingCourseCreateWithoutThesisSessionInput, TrainingCourseUncheckedCreateWithoutThesisSessionInput>
+        where?: TrainingCourseWhereInput
+    };
+    export type TrainingCourseUpdateToOneWithWhereWithoutThesisSessionInput = {
+        where?: TrainingCourseWhereInput
+        data: XOR<TrainingCourseUpdateWithoutThesisSessionInput, TrainingCourseUncheckedUpdateWithoutThesisSessionInput>
+    };
+    export type TrainingCourseUpdateWithoutThesisSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        endYear?: NullableIntFieldUpdateOperationsInput | number | null
+        academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+        maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+        admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+        admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+        studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+        regulation?: NullableStringFieldUpdateOperationsInput | string | null
+        isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+        isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+        isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        coef_1?: FloatFieldUpdateOperationsInput | number
+        coef_2?: FloatFieldUpdateOperationsInput | number
+        coef_3?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        scoreToPass?: FloatFieldUpdateOperationsInput | number
+        scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
+        semesterStart?: SemesterUpdateOneRequiredWithoutTrainingCoursesStartNestedInput
+        trainingLanguage?: TrainingLanguageUpdateOneWithoutTrainingCoursesNestedInput
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutTrainingCourseNestedInput
+        trainingCourseRegulation?: TrainingCourseRegulationUpdateManyWithoutTrainingCourseNestedInput
+        fixedClass?: FixedClassUpdateManyWithoutTrainingCourseNestedInput
+        scoreConverts?: ScoreConvertUpdateManyWithoutTrainingCourseNestedInput
+        academicRankingConvert?: AcademicRankingConvertUpdateManyWithoutTrainingCourseNestedInput
+        scholarships?: ScholarshipUpdateManyWithoutTrainingCourseNestedInput
+        academicWarningRule?: AcademicWarningRuleUpdateManyWithoutTrainingCourseNestedInput
+        academicActionConfig?: AcademicActionConfigUpdateManyWithoutTrainingCourseNestedInput
+        notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
+        documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+    };
+    export type TrainingCourseUncheckedUpdateWithoutThesisSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        semesterStartId?: StringFieldUpdateOperationsInput | string
+        startYear?: NullableIntFieldUpdateOperationsInput | number | null
+        endYear?: NullableIntFieldUpdateOperationsInput | number | null
+        academicYear?: NullableStringFieldUpdateOperationsInput | string | null
+        maxTrainingTime?: NullableFloatFieldUpdateOperationsInput | number | null
+        admissionQuota?: NullableIntFieldUpdateOperationsInput | number | null
+        admissionStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        admissionEndDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        admissionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+        studentRecognitionDecision?: NullableStringFieldUpdateOperationsInput | string | null
+        regulation?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingLanguageId?: NullableStringFieldUpdateOperationsInput | string | null
+        isGeneralInfoLocked?: BoolFieldUpdateOperationsInput | boolean
+        isRegulationLocked?: BoolFieldUpdateOperationsInput | boolean
+        isScoreConfigLocked?: BoolFieldUpdateOperationsInput | boolean
+        baseScore?: EnumAcademicRankingBaseTypeFieldUpdateOperationsInput | $Enums.AcademicRankingBaseType
+        coef_1?: FloatFieldUpdateOperationsInput | number
+        coef_2?: FloatFieldUpdateOperationsInput | number
+        coef_3?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeExam?: FloatFieldUpdateOperationsInput | number
+        scoreToPass?: FloatFieldUpdateOperationsInput | number
+        scoreToPassConditional?: FloatFieldUpdateOperationsInput | number
+        scoreToTakeGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToPassGraduation?: FloatFieldUpdateOperationsInput | number
+        scoreToRetain?: FloatFieldUpdateOperationsInput | number
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        trainingCourseRegulation?: TrainingCourseRegulationUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        fixedClass?: FixedClassUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        scoreConverts?: ScoreConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        academicRankingConvert?: AcademicRankingConvertUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        scholarships?: ScholarshipUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        academicWarningRule?: AcademicWarningRuleUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        academicActionConfig?: AcademicActionConfigUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
+        surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
+        documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+    };
+    export type ThesisProjectUpsertWithWhereUniqueWithoutThesisSessionInput = {
+        where: ThesisProjectWhereUniqueInput
+        update: XOR<ThesisProjectUpdateWithoutThesisSessionInput, ThesisProjectUncheckedUpdateWithoutThesisSessionInput>
+        create: XOR<ThesisProjectCreateWithoutThesisSessionInput, ThesisProjectUncheckedCreateWithoutThesisSessionInput>
+    };
+    export type ThesisProjectUpdateWithWhereUniqueWithoutThesisSessionInput = {
+        where: ThesisProjectWhereUniqueInput
+        data: XOR<ThesisProjectUpdateWithoutThesisSessionInput, ThesisProjectUncheckedUpdateWithoutThesisSessionInput>
+    };
+    export type ThesisProjectUpdateManyWithWhereWithoutThesisSessionInput = {
+        where: ThesisProjectScalarWhereInput
+        data: XOR<ThesisProjectUpdateManyMutationInput, ThesisProjectUncheckedUpdateManyWithoutThesisSessionInput>
+    };
     export type SubjectClassCreateWithoutThesisProjectsInput = {
         id?: string
         active?: boolean
@@ -494442,6 +497123,52 @@ export namespace Prisma {
     export type SubjectClassCreateOrConnectWithoutThesisProjectsInput = {
         where: SubjectClassWhereUniqueInput
         create: XOR<SubjectClassCreateWithoutThesisProjectsInput, SubjectClassUncheckedCreateWithoutThesisProjectsInput>
+    };
+    export type ThesisSessionCreateWithoutThesisProjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+        trainingObjectType: TrainingObjectTypeCreateNestedOneWithoutThesisSessionInput
+        trainingCourse: TrainingCourseCreateNestedOneWithoutThesisSessionInput
+    };
+    export type ThesisSessionUncheckedCreateWithoutThesisProjectInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingObjectTypeId: string
+        trainingCourseId: string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+    };
+    export type ThesisSessionCreateOrConnectWithoutThesisProjectInput = {
+        where: ThesisSessionWhereUniqueInput
+        create: XOR<ThesisSessionCreateWithoutThesisProjectInput, ThesisSessionUncheckedCreateWithoutThesisProjectInput>
     };
     export type ExpertProfileCreateWithoutSupervisedThesesInput = {
         id?: string
@@ -495038,6 +497765,57 @@ export namespace Prisma {
         subjectClassHistory?: SubjectClassHistoryUncheckedUpdateManyWithoutSubjectClassNestedInput
         survey?: SurveyUncheckedUpdateManyWithoutSubjectClassesNestedInput
     };
+    export type ThesisSessionUpsertWithoutThesisProjectInput = {
+        update: XOR<ThesisSessionUpdateWithoutThesisProjectInput, ThesisSessionUncheckedUpdateWithoutThesisProjectInput>
+        create: XOR<ThesisSessionCreateWithoutThesisProjectInput, ThesisSessionUncheckedCreateWithoutThesisProjectInput>
+        where?: ThesisSessionWhereInput
+    };
+    export type ThesisSessionUpdateToOneWithWhereWithoutThesisProjectInput = {
+        where?: ThesisSessionWhereInput
+        data: XOR<ThesisSessionUpdateWithoutThesisProjectInput, ThesisSessionUncheckedUpdateWithoutThesisProjectInput>
+    };
+    export type ThesisSessionUpdateWithoutThesisProjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionUncheckedUpdateWithoutThesisProjectInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type ExpertProfileUpsertWithoutSupervisedThesesInput = {
         update: XOR<ExpertProfileUpdateWithoutSupervisedThesesInput, ExpertProfileUncheckedUpdateWithoutSupervisedThesesInput>
         create: XOR<ExpertProfileCreateWithoutSupervisedThesesInput, ExpertProfileUncheckedCreateWithoutSupervisedThesesInput>
@@ -495541,7 +498319,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -495571,7 +498350,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -495858,7 +498638,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -495888,7 +498669,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -496273,7 +499055,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -496303,7 +499086,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -496569,7 +499353,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
@@ -496599,7 +499384,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         coSupervisorId?: string | null
         organizationId: string
         maxStudents: number
@@ -496651,7 +499437,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
         council?: CouncilCreateNestedOneWithoutThesisInput
@@ -496681,7 +499468,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         organizationId: string
         maxStudents: number
@@ -497210,7 +499998,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -497240,7 +500029,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -497310,7 +500100,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -497340,7 +500131,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -497493,7 +500285,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -497523,7 +500316,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -498004,7 +500798,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -498034,7 +500829,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -498159,7 +500955,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -498189,7 +500986,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -498246,7 +501044,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -498276,7 +501075,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -498333,7 +501133,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -498363,7 +501164,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -498601,7 +501403,8 @@ export namespace Prisma {
         registrationEnd?: Date | string | null
         projectStart?: Date | string | null
         projectEnd?: Date | string | null
-        subjectClass: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        subjectClass?: SubjectClassCreateNestedOneWithoutThesisProjectsInput
+        thesisSession?: ThesisSessionCreateNestedOneWithoutThesisProjectInput
         supervisor: ExpertProfileCreateNestedOneWithoutSupervisedThesesInput
         coSupervisor?: ExpertProfileCreateNestedOneWithoutCoSupervisedThesesInput
         organization: DM_DonViCreateNestedOneWithoutThesisProjectsInput
@@ -498631,7 +501434,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -498750,7 +501554,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -498780,7 +501585,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -502313,6 +505119,7 @@ export namespace Prisma {
         notifications?: NotificationCreateNestedManyWithoutTargetCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutSurveyObjectTypesInput = {
         id?: string
@@ -502359,6 +505166,7 @@ export namespace Prisma {
         notifications?: NotificationUncheckedCreateNestedManyWithoutTargetCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutSurveyObjectTypesInput = {
         where: TrainingCourseWhereUniqueInput
@@ -511496,6 +514304,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutScholarshipsInput = {
         id?: string
@@ -511542,6 +514351,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutScholarshipsInput = {
         where: TrainingCourseWhereUniqueInput
@@ -511675,6 +514485,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutScholarshipsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -511721,6 +514532,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type ScholarshipCriteriaUpsertWithWhereUniqueWithoutScholarshipInput = {
         where: ScholarshipCriteriaWhereUniqueInput
@@ -512362,6 +515174,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeUncheckedCreateWithoutGraduationSessionInput = {
         id?: string
@@ -512386,6 +515199,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTraining?: PlanTrainingUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
         planTrainingDelay?: PlanTrainingDelayUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingObjectTypeInput
     };
     export type TrainingObjectTypeCreateOrConnectWithoutGraduationSessionInput = {
         where: TrainingObjectTypeWhereUniqueInput
@@ -512463,6 +515277,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutGraduationSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -512487,6 +515302,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type StudentGraduationApplicationUpsertWithWhereUniqueWithoutSessionInput = {
         where: StudentGraduationApplicationWhereUniqueInput
@@ -514317,6 +517133,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutAcademicRankingConvertInput = {
         id?: string
@@ -514363,6 +517180,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutAcademicRankingConvertInput = {
         where: TrainingCourseWhereUniqueInput
@@ -514540,6 +517358,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutAcademicRankingConvertInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -514586,6 +517405,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type RankingConditionUpsertWithWhereUniqueWithoutRankingInput = {
         where: RankingConditionWhereUniqueInput
@@ -516883,6 +519703,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseUncheckedCreateWithoutAcademicWarningRuleInput = {
         id?: string
@@ -516929,6 +519750,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedCreateNestedManyWithoutTrainingCoursesInput
         classRegisterSession?: ClassRegisterSessionUncheckedCreateNestedManyWithoutTrainingCoursesInput
         documentFiles?: DocumentFileUncheckedCreateNestedManyWithoutTrainingCourseInput
+        thesisSession?: ThesisSessionUncheckedCreateNestedManyWithoutTrainingCourseInput
     };
     export type TrainingCourseCreateOrConnectWithoutAcademicWarningRuleInput = {
         where: TrainingCourseWhereUniqueInput
@@ -517020,6 +519842,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutAcademicWarningRuleInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -517066,6 +519889,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type AcademicWarningUpsertWithWhereUniqueWithoutRulesInput = {
         where: AcademicWarningWhereUniqueInput
@@ -528095,7 +530919,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         maxStudents: number
@@ -528954,7 +531779,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
@@ -528984,7 +531810,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: IntFieldUpdateOperationsInput | number
@@ -529021,7 +531848,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         maxStudents?: IntFieldUpdateOperationsInput | number
@@ -544189,6 +547017,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutSemesterStartInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -544235,6 +547064,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutSemesterStartInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -544794,6 +547624,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutTrainingLanguageInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -544840,6 +547671,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutTrainingLanguageInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -545125,6 +547957,26 @@ export namespace Prisma {
         trainingFieldId?: string | null
         studentScoreConvertId?: string | null
         noteId?: string | null
+    };
+    export type ThesisSessionCreateManyTrainingCourseInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingObjectTypeId: string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
     };
     export type TrainingCourseRegulationUpdateWithoutTrainingCourseInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -545719,6 +548571,68 @@ export namespace Prisma {
         trainingFieldId?: NullableStringFieldUpdateOperationsInput | string | null
         studentScoreConvertId?: NullableStringFieldUpdateOperationsInput | string | null
         noteId?: NullableStringFieldUpdateOperationsInput | string | null
+    };
+    export type ThesisSessionUpdateWithoutTrainingCourseInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingObjectType?: TrainingObjectTypeUpdateOneRequiredWithoutThesisSessionNestedInput
+        thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionUncheckedUpdateWithoutTrainingCourseInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionUncheckedUpdateManyWithoutTrainingCourseInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingObjectTypeId?: StringFieldUpdateOperationsInput | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
     };
     export type StudentCreateManyFixedClassInput = {
         id?: string
@@ -549291,6 +552205,7 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutClassRegisterSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549337,6 +552252,7 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutClassRegisterSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -549479,6 +552395,7 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -549793,6 +552710,7 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -549823,6 +552741,7 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -549860,6 +552779,7 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -550525,6 +553445,26 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
     };
+    export type ThesisSessionCreateManyTrainingObjectTypeInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        name: string
+        startDate: Date | string
+        endDate: Date | string
+        trainingCourseId: string
+        decisionNumber?: string | null
+        decisionMaker?: string | null
+        decisionDate?: Date | string | null
+        defenseDecisionNumber?: string | null
+        defenseDecisionMaker?: string | null
+        defenseDecisionDate?: Date | string | null
+        chief?: string | null
+    };
     export type TrainingCourseUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -550570,6 +553510,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -550616,6 +553557,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -551487,6 +554429,68 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     };
+    export type ThesisSessionUpdateWithoutTrainingObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        trainingCourse?: TrainingCourseUpdateOneRequiredWithoutThesisSessionNestedInput
+        thesisProject?: ThesisProjectUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionUncheckedUpdateWithoutTrainingObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisProject?: ThesisProjectUncheckedUpdateManyWithoutThesisSessionNestedInput
+    };
+    export type ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        name?: StringFieldUpdateOperationsInput | string
+        startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+        trainingCourseId?: StringFieldUpdateOperationsInput | string
+        decisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        decisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseDecisionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionMaker?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDecisionDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        chief?: NullableStringFieldUpdateOperationsInput | string | null
+    };
     export type StudentUpdateWithoutPriorityObjectInput = {
         id?: StringFieldUpdateOperationsInput | string
         code?: NullableStringFieldUpdateOperationsInput | string | null
@@ -552341,6 +555345,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -552365,6 +555370,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingLevelInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -552653,6 +555659,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateWithoutTrainingFormInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -552677,6 +555684,7 @@ export namespace Prisma {
         subjectVersion?: SubjectVersionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTraining?: PlanTrainingUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
         planTrainingDelay?: PlanTrainingDelayUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingObjectTypeNestedInput
     };
     export type TrainingObjectTypeUncheckedUpdateManyWithoutTrainingFormInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -553297,7 +556305,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -553673,7 +556682,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -553703,7 +556713,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -553740,7 +556751,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -556790,6 +559802,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -556836,6 +559849,7 @@ export namespace Prisma {
         surveyObjectTypes?: SurveyObjectTypeUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutNotificationsInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559561,6 +562575,148 @@ export namespace Prisma {
         reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
     };
+    export type ThesisProjectCreateManyThesisSessionInput = {
+        id?: string
+        code?: string | null
+        active?: boolean
+        description?: string | null
+        deletedAt?: Date | string | null
+        createdAt?: Date | string
+        updatedAt?: Date | string
+        title: string
+        titleEN?: string | null
+        summary: string
+        objectives?: string | null
+        scope?: string | null
+        methodology?: string | null
+        expectedResults?: string | null
+        requirements?: string | null
+        technologies?: string | null
+        status?: $Enums.ThesisProjectStatus
+        subjectClassId?: string | null
+        supervisorId: string
+        coSupervisorId?: string | null
+        organizationId: string
+        maxStudents: number
+        currentStudents?: number
+        councilId?: string | null
+        roomId?: string | null
+        defenseDate?: Date | string | null
+        defenseSessionId?: string | null
+        registrationStart?: Date | string | null
+        registrationEnd?: Date | string | null
+        projectStart?: Date | string | null
+        projectEnd?: Date | string | null
+    };
+    export type ThesisProjectUpdateWithoutThesisSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: StringFieldUpdateOperationsInput | string
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: StringFieldUpdateOperationsInput | string
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        maxStudents?: IntFieldUpdateOperationsInput | number
+        currentStudents?: IntFieldUpdateOperationsInput | number
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
+        coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
+        organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
+        council?: CouncilUpdateOneWithoutThesisNestedInput
+        room?: RoomUpdateOneWithoutThesisProjectNestedInput
+        defenseSession?: DefenseSessionUpdateOneWithoutThesisProjectNestedInput
+        defenseRecord?: DefenseRecordUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUpdateManyWithoutThesisProjectNestedInput
+        supervisorPayments?: SupervisorPaymentRecordUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateWithoutThesisSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: StringFieldUpdateOperationsInput | string
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: StringFieldUpdateOperationsInput | string
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: StringFieldUpdateOperationsInput | string
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: StringFieldUpdateOperationsInput | string
+        maxStudents?: IntFieldUpdateOperationsInput | number
+        currentStudents?: IntFieldUpdateOperationsInput | number
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseRecord?: DefenseRecordUncheckedUpdateOneWithoutThesisNestedInput
+        librarySubmission?: LibrarySubmissionUncheckedUpdateOneWithoutThesisNestedInput
+        decisions?: DecisionUncheckedUpdateManyWithoutThesisProjectNestedInput
+        registrations?: StudentThesisRegistrationUncheckedUpdateManyWithoutThesisProjectNestedInput
+        supervisorPayments?: SupervisorPaymentRecordUncheckedUpdateManyWithoutThesisProjectNestedInput
+    };
+    export type ThesisProjectUncheckedUpdateManyWithoutThesisSessionInput = {
+        id?: StringFieldUpdateOperationsInput | string
+        code?: NullableStringFieldUpdateOperationsInput | string | null
+        active?: BoolFieldUpdateOperationsInput | boolean
+        description?: NullableStringFieldUpdateOperationsInput | string | null
+        deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+        title?: StringFieldUpdateOperationsInput | string
+        titleEN?: NullableStringFieldUpdateOperationsInput | string | null
+        summary?: StringFieldUpdateOperationsInput | string
+        objectives?: NullableStringFieldUpdateOperationsInput | string | null
+        scope?: NullableStringFieldUpdateOperationsInput | string | null
+        methodology?: NullableStringFieldUpdateOperationsInput | string | null
+        expectedResults?: NullableStringFieldUpdateOperationsInput | string | null
+        requirements?: NullableStringFieldUpdateOperationsInput | string | null
+        technologies?: NullableStringFieldUpdateOperationsInput | string | null
+        status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        supervisorId?: StringFieldUpdateOperationsInput | string
+        coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
+        organizationId?: StringFieldUpdateOperationsInput | string
+        maxStudents?: IntFieldUpdateOperationsInput | number
+        currentStudents?: IntFieldUpdateOperationsInput | number
+        councilId?: NullableStringFieldUpdateOperationsInput | string | null
+        roomId?: NullableStringFieldUpdateOperationsInput | string | null
+        defenseDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        defenseSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+        registrationStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+        projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    };
     export type DecisionCreateManyThesisProjectInput = {
         id?: string
         code?: string | null
@@ -559759,7 +562915,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -559798,7 +562955,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -559828,7 +562986,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -559865,7 +563024,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -559897,7 +563057,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         coSupervisorId?: string | null
         organizationId: string
         maxStudents: number
@@ -559929,7 +563090,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         organizationId: string
         maxStudents: number
@@ -560072,7 +563234,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
@@ -560102,7 +563265,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
         maxStudents?: IntFieldUpdateOperationsInput | number
@@ -560139,7 +563303,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
         maxStudents?: IntFieldUpdateOperationsInput | number
@@ -560178,7 +563343,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
         council?: CouncilUpdateOneWithoutThesisNestedInput
@@ -560208,7 +563374,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         organizationId?: StringFieldUpdateOperationsInput | string
         maxStudents?: IntFieldUpdateOperationsInput | number
@@ -560245,7 +563412,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         organizationId?: StringFieldUpdateOperationsInput | string
         maxStudents?: IntFieldUpdateOperationsInput | number
@@ -560664,7 +563832,8 @@ export namespace Prisma {
         requirements?: string | null
         technologies?: string | null
         status?: $Enums.ThesisProjectStatus
-        subjectClassId: string
+        subjectClassId?: string | null
+        thesisSessionId?: string | null
         supervisorId: string
         coSupervisorId?: string | null
         organizationId: string
@@ -560714,7 +563883,8 @@ export namespace Prisma {
         registrationEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         projectEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-        subjectClass?: SubjectClassUpdateOneRequiredWithoutThesisProjectsNestedInput
+        subjectClass?: SubjectClassUpdateOneWithoutThesisProjectsNestedInput
+        thesisSession?: ThesisSessionUpdateOneWithoutThesisProjectNestedInput
         supervisor?: ExpertProfileUpdateOneRequiredWithoutSupervisedThesesNestedInput
         coSupervisor?: ExpertProfileUpdateOneWithoutCoSupervisedThesesNestedInput
         organization?: DM_DonViUpdateOneRequiredWithoutThesisProjectsNestedInput
@@ -560744,7 +563914,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -560781,7 +563952,8 @@ export namespace Prisma {
         requirements?: NullableStringFieldUpdateOperationsInput | string | null
         technologies?: NullableStringFieldUpdateOperationsInput | string | null
         status?: EnumThesisProjectStatusFieldUpdateOperationsInput | $Enums.ThesisProjectStatus
-        subjectClassId?: StringFieldUpdateOperationsInput | string
+        subjectClassId?: NullableStringFieldUpdateOperationsInput | string | null
+        thesisSessionId?: NullableStringFieldUpdateOperationsInput | string | null
         supervisorId?: StringFieldUpdateOperationsInput | string
         coSupervisorId?: NullableStringFieldUpdateOperationsInput | string | null
         organizationId?: StringFieldUpdateOperationsInput | string
@@ -562145,6 +565317,7 @@ export namespace Prisma {
         notifications?: NotificationUpdateManyWithoutTargetCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateWithoutSurveyObjectTypesInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -562191,6 +565364,7 @@ export namespace Prisma {
         notifications?: NotificationUncheckedUpdateManyWithoutTargetCoursesNestedInput
         classRegisterSession?: ClassRegisterSessionUncheckedUpdateManyWithoutTrainingCoursesNestedInput
         documentFiles?: DocumentFileUncheckedUpdateManyWithoutTrainingCourseNestedInput
+        thesisSession?: ThesisSessionUncheckedUpdateManyWithoutTrainingCourseNestedInput
     };
     export type TrainingCourseUncheckedUpdateManyWithoutSurveyObjectTypesInput = {
         id?: StringFieldUpdateOperationsInput | string

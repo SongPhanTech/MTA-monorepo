@@ -2875,6 +2875,7 @@ model TrainingCourse {
   surveyObjectTypes          SurveyObjectType[]
   classRegisterSession       ClassRegisterSession[]
   documentFiles              DocumentFile[]
+  thesisSession              ThesisSession[]
 
   @@schema("ql-dao-tao")
 }
@@ -3476,6 +3477,7 @@ model TrainingObjectType {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   planTrainingDelay    PlanTrainingDelay[]
+  thesisSession        ThesisSession[]
 
   @@schema("ql-dao-tao")
 }
@@ -4543,6 +4545,43 @@ model StudentResearchRegistration {
 /// @@allow('all', auth() != null)
 /// @@deny('read', deletedAt != null)
 /// @@allow('read', auth() != null)
+model ThesisSession {
+  id                    String             @id() @default(cuid())
+  code                  String?            @unique()
+  active                Boolean            @default(true)
+  description           String?            @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @default(now()) @updatedAt()
+  name                  String
+  startDate             DateTime
+  endDate               DateTime
+  trainingObjectType    TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId  String
+  trainingCourse        TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId      String
+  /// Số QĐĐT
+  decisionNumber        String?
+  /// người ký quyết định
+  decisionMaker         String?
+  /// Ngày QĐĐT
+  decisionDate          DateTime?
+  /// Số QĐBVLV
+  defenseDecisionNumber String?
+  /// người ký QĐBVLV
+  defenseDecisionMaker  String?
+  /// Ngày QĐBVLV
+  defenseDecisionDate   DateTime?
+  /// Thủ trưởng
+  chief                 String?
+  thesisProject         ThesisProject[]
+
+  @@schema("ql-dao-tao")
+}
+
+/// @@allow('all', auth() != null)
+/// @@deny('read', deletedAt != null)
+/// @@allow('read', auth() != null)
 model ThesisProject {
   id                 String                      @id() @default(cuid())
   code               String?                     @unique()
@@ -4561,8 +4600,10 @@ model ThesisProject {
   requirements       String?                     @db.Text()
   technologies       String?                     @db.Text()
   status             ThesisProjectStatus         @default(PROPOSED)
-  subjectClass       SubjectClass                @relation(fields: [subjectClassId], references: [id])
-  subjectClassId     String
+  subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
+  subjectClassId     String?
+  thesisSession      ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
+  thesisSessionId    String?
   /// Chuyên gia hướng dẫn
   supervisor         ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId       String

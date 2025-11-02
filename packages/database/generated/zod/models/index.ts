@@ -146,6 +146,7 @@ export * from './Lecturer.schema';
 export * from './LecturerHistory.schema';
 export * from './ResearchProject.schema';
 export * from './StudentResearchRegistration.schema';
+export * from './ThesisSession.schema';
 export * from './ThesisProject.schema';
 export * from './DefenseSession.schema';
 export * from './StudentThesisRegistration.schema';

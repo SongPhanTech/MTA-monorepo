@@ -5,11 +5,12 @@ import '../ql-dao-tao/thesis'
 import '../ql-danh-muc/common'
 import '../ql-ho-so/profile'
 import '../ql-danh-muc/core-categories'
-import 'training-score'
-import 'ranking'
 import '../khao-thi/exam'
 import '../ql-danh-muc/document'
 import "../khao-thi/survey"
+import 'training-score'
+import 'ranking'
+import 'thesis'
 
 enum TrainingObjectTypes {
   MILITARY // Học viên quân sự
@@ -42,6 +43,7 @@ model TrainingObjectType extends Base {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   planTrainingDelay    PlanTrainingDelay[]
+  thesisSession        ThesisSession[]
 
   @@schema("ql-dao-tao")
 }

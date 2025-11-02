@@ -422,6 +422,7 @@ model TrainingCourse extends Base {
   surveyObjectTypes          SurveyObjectType[]
   classRegisterSession       ClassRegisterSession[]
   documentFiles              DocumentFile[]
+  thesisSession              ThesisSession[]
 
   @@schema("ql-dao-tao")
 }
