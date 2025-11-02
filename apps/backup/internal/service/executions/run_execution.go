@@ -68,7 +68,7 @@ func (s *Service) RunExecution(ctx context.Context, backupID uuid.UUID) error {
 			logError(err)
 			return updateExec(dbgen.ExecutionsServiceUpdateExecutionParams{
 				ID:         ex.ID,
-				Status:     sql.NullString{Valid: true, String: "failed"},
+				Status:     sql.NullString{Valid: true, String: "Thất bại"},
 				Message:    sql.NullString{Valid: true, String: err.Error()},
 				FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 			})
@@ -80,7 +80,7 @@ func (s *Service) RunExecution(ctx context.Context, backupID uuid.UUID) error {
 		logError(err)
 		return updateExec(dbgen.ExecutionsServiceUpdateExecutionParams{
 			ID:         ex.ID,
-			Status:     sql.NullString{Valid: true, String: "failed"},
+			Status:     sql.NullString{Valid: true, String: "Thất bại"},
 			Message:    sql.NullString{Valid: true, String: err.Error()},
 			FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		})
@@ -91,7 +91,7 @@ func (s *Service) RunExecution(ctx context.Context, backupID uuid.UUID) error {
 		logError(err)
 		return updateExec(dbgen.ExecutionsServiceUpdateExecutionParams{
 			ID:         ex.ID,
-			Status:     sql.NullString{Valid: true, String: "failed"},
+			Status:     sql.NullString{Valid: true, String: "Thất bại"},
 			Message:    sql.NullString{Valid: true, String: err.Error()},
 			FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		})
@@ -123,7 +123,7 @@ func (s *Service) RunExecution(ctx context.Context, backupID uuid.UUID) error {
 			logError(err)
 			return updateExec(dbgen.ExecutionsServiceUpdateExecutionParams{
 				ID:         ex.ID,
-				Status:     sql.NullString{Valid: true, String: "failed"},
+				Status:     sql.NullString{Valid: true, String: "Thất bại"},
 				Message:    sql.NullString{Valid: true, String: err.Error()},
 				Path:       sql.NullString{Valid: true, String: path},
 				FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
@@ -141,7 +141,7 @@ func (s *Service) RunExecution(ctx context.Context, backupID uuid.UUID) error {
 			logError(err)
 			return updateExec(dbgen.ExecutionsServiceUpdateExecutionParams{
 				ID:         ex.ID,
-				Status:     sql.NullString{Valid: true, String: "failed"},
+				Status:     sql.NullString{Valid: true, String: "Thất bại"},
 				Message:    sql.NullString{Valid: true, String: err.Error()},
 				Path:       sql.NullString{Valid: true, String: path},
 				FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
@@ -156,7 +156,7 @@ func (s *Service) RunExecution(ctx context.Context, backupID uuid.UUID) error {
 	return updateExec(dbgen.ExecutionsServiceUpdateExecutionParams{
 		ID:         ex.ID,
 		Status:     sql.NullString{Valid: true, String: "success"},
-		Message:    sql.NullString{Valid: true, String: "Backup created successfully"},
+		Message:    sql.NullString{Valid: true, String: "Tạo bản sao lưu thành công"},
 		Path:       sql.NullString{Valid: true, String: path},
 		FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		FileSize:   sql.NullInt64{Valid: true, Int64: fileSize},

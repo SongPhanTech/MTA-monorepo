@@ -2,8 +2,15 @@ import type { Session, SessionStatus } from '..'
 import { useSession } from './hook'
 import SessionProvider from './provider'
 
+declare global {
+    interface Window {
+        tenantCode: string
+    }
+}
+
 const signIn = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/authsso/signin?appCode=${process.env.NEXT_PUBLIC_APP_CODE}&sRedirectDefault=${process.env.NEXT_PUBLIC_APP_URL}`
+    const tenantCode = window.tenantCode || 'dev'
+    window.location.href = `${process.env.NEXT_PUBLIC_AUTH_ISSUER}/authsso/signin?appCode=${process.env.NEXT_PUBLIC_APP_CODE}&tenantCode=${tenantCode}&sRedirectDefault=${process.env.NEXT_PUBLIC_APP_URL}`
 }
 const fetchSession = async (): Promise<{
     status: SessionStatus
@@ -12,7 +19,7 @@ const fetchSession = async (): Promise<{
 }> => {
     try {
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_MODEL_BASE_URL}/api/auth/get-session`,
+            `${process.env.NEXT_PUBLIC_API_MODEL_BASE_URL}/api/auth/get-session?appCode=${process.env.NEXT_PUBLIC_APP_CODE}`,
             {
                 method: 'GET',
                 credentials: 'include',

@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS databases (
   updated_at TIMESTAMPTZ
 );
 
+drop trigger if exists databases_change_updated_at on databases;
+
 CREATE TRIGGER databases_change_updated_at
 BEFORE UPDATE ON databases FOR EACH ROW EXECUTE FUNCTION change_updated_at();
 -- +goose StatementEnd

@@ -11,6 +11,8 @@ export interface ImportPhanCongGiangDay {
     file: Blob
     semesterId: string
     trainingObjectTypeId: string
+    /** @nullable */
+    retake?: boolean | null
     fileType?: ImportPhanCongGiangDayFileType
     importType?: ImportPhanCongGiangDayImportType
 }

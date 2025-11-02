@@ -124,30 +124,30 @@ function buildOrgTree(
         }))
 }
 
-       function normalizeVietnamese(str: string): string {
-        return str
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd')
-            .replace(/Đ/g, 'D')
-            .toLowerCase()
-    }
-        function searchVietnamese(
-        data: { value: string; label: string }[],
-        keyword: string
-    ): { value: string; label: string }[] {
-        const normalizedKeyword = normalizeVietnamese(keyword.trim())
-        if (!normalizedKeyword) return data
+function normalizeVietnamese(str: string): string {
+    return str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .toLowerCase()
+}
+function searchVietnamese(
+    data: { value: string; label: string }[],
+    keyword: string
+): { value: string; label: string }[] {
+    const normalizedKeyword = normalizeVietnamese(keyword.trim())
+    if (!normalizedKeyword) return data
 
-        return data.filter((item) => {
-            const normalizedLabel = normalizeVietnamese(item.label)
-            const normalizedValue = normalizeVietnamese(item.value)
-            return (
-                normalizedLabel.includes(normalizedKeyword) ||
-                normalizedValue.includes(normalizedKeyword)
-            )
-        })
-    }
+    return data.filter((item) => {
+        const normalizedLabel = normalizeVietnamese(item.label)
+        const normalizedValue = normalizeVietnamese(item.value)
+        return (
+            normalizedLabel.includes(normalizedKeyword) ||
+            normalizedValue.includes(normalizedKeyword)
+        )
+    })
+}
 
 export {
     formatDate,
@@ -161,5 +161,5 @@ export {
     stringToSlug,
     generatePassword,
     buildOrgTree,
-    searchVietnamese
+    searchVietnamese,
 }

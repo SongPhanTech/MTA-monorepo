@@ -16,6 +16,176 @@ import { getCurrentDateForReport } from '../utils'
 
 const app = new OpenAPIHono({ strict: false })
 
+const createClusterSurvey = createRoute({
+    operationId: 'create-cluster-survey',
+    path: '/cluster-survey',
+    tags: ['Survey'],
+    summary: 'Tạo cụm khảo sát',
+    description: 'Tạo cụm khảo sát',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            name: z.string(),
+                            additionalSuggestion: z.boolean(),
+                            startDate: z.coerce.date(),
+                            endDate: z.coerce.date().optional(),
+                            isPublic: z.boolean().default(false),
+                            anonymous: z.boolean().default(false),
+                            surveyTopicId: z.string(),
+                            surveyObjectTypeIds: z.array(z.string()).optional().default([]),
+                            lecturerIds: z.array(z.string()).nonempty(),
+                            surveyQuestionIds: z.array(z.string()).nonempty(),
+                            semesterId: z.string(),
+                            surveyChoices: z
+                                .array(
+                                    z.object({
+                                        answer: z.string(),
+                                        description: z.string(),
+                                        requireExplanation: z.boolean(),
+                                    })
+                                )
+                                .nonempty(),
+                        })
+                        .openapi('create-cluster-survey-request'),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Success',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+        400: {
+            description: 'Invalid request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(createClusterSurvey, async (c) => {
+    const {
+        surveyQuestionIds,
+        surveyChoices,
+        surveyObjectTypeIds,
+        lecturerIds,
+        surveyTopicId,
+        semesterId,
+        ...payload
+    } = c.req.valid('json')
+
+    await prisma.$transaction(async (tx) => {
+        const cluster = await tx.clusterSurvey.create({
+            data: {
+                ...payload,
+                surveyTopic: {
+                    connect: { id: surveyTopicId },
+                },
+                surveyQuestion: {
+                    connect: surveyQuestionIds.map((id) => ({ id })),
+                },
+                surveyChoice: {
+                    create: surveyChoices,
+                },
+                surveyObjectType: {
+                    connect: surveyObjectTypeIds.map((id) => ({ id })),
+                },
+                lecturers: {
+                    connect: lecturerIds.map((id) => ({ id })),
+                },
+            },
+        })
+        const lecturers = await tx.lecturer.findMany({
+            where: {
+                id: {
+                    in: lecturerIds,
+                },
+                mainSubjectClasses: {
+                    some: {
+                        semester: {
+                            id: semesterId,
+                        },
+                    },
+                },
+            },
+            include: {
+                mainSubjectClasses: {
+                    where: {
+                        semester: {
+                            id: semesterId,
+                        },
+                    },
+                },
+            },
+        })
+
+        const surveys = await tx.survey.createManyAndReturn({
+            data: lecturerIds.map((lectureId) => ({
+                ...payload,
+                clusterSurveyId: cluster.id,
+                lectureId,
+                surveyTopicId,
+            })),
+        })
+
+        for (const survey of surveys) {
+            await tx.survey.update({
+                where: { id: survey.id },
+                data: {
+                    surveyQuestion: {
+                        connect: surveyQuestionIds.map((id) => ({ id })),
+                    },
+                    surveyObjectType: {
+                        connect: surveyObjectTypeIds.map((id) => ({ id })),
+                    },
+                    subjectClasses: {
+                        connect: lecturers
+                            .find((lecturer) => lecturer.id === survey.lectureId)
+                            ?.mainSubjectClasses.map((subjectClass) => ({
+                                id: subjectClass.id,
+                            })),
+                    },
+                },
+            })
+        }
+
+        await tx.surveyChoice.createMany({
+            data: surveys.flatMap((survey) =>
+                surveyChoices.map((choice) => ({
+                    ...choice,
+                    surveyId: survey.id,
+                }))
+            ),
+        })
+    })
+
+    return c.json({ message: 'Success' })
+})
+
 const exportReportSurvey = createRoute({
     operationId: 'export-report-survey',
     path: '/export-report-survey',
@@ -102,7 +272,7 @@ app.openapi(exportReportSurvey, async (c) => {
     })
 
     const reportDocx = document.render(templateData)
-    return c.body(reportDocx.getZip().generate({ type: 'nodebuffer' }), 200, {
+    return c.body(reportDocx.getZip().generate({ type: 'arraybuffer' }), 200, {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'Content-Disposition': `attachment; filename="BaoCaoKhaoThi.docx"`,
     })
@@ -198,7 +368,7 @@ app.openapi(exportReportSurveyOrganizational, async (c) => {
     })
 
     const reportDocx = document.render(templateData)
-    return c.body(reportDocx.getZip().generate({ type: 'nodebuffer' }), 200, {
+    return c.body(reportDocx.getZip().generate({ type: 'arraybuffer' }), 200, {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'Content-Disposition': `attachment; filename="BaoCaoKhaoThi.docx"`,
     })
@@ -710,16 +880,11 @@ app.openapi(getSurveyStatistics, async (c) => {
     const answerCounts = await prisma.surveyResponse.groupBy({
         by: ['surveyQuestionId', 'surveyChoiceId'],
         where: {
-            surveyQuestionId: {
-                in: questionIds,
-            },
-            surveyChoiceId: {
-                not: null,
-            },
+            surveySession: { surveyId: survey.id },
+            surveyQuestionId: { in: questionIds },
+            surveyChoiceId: { not: null },
         },
-        _count: {
-            surveyChoiceId: true,
-        },
+        _count: { surveyChoiceId: true },
     })
 
     const answerCountMap = answerCounts.reduce(
@@ -743,11 +908,7 @@ app.openapi(getSurveyStatistics, async (c) => {
                 count: answerCountMap[key] || 0,
             }
         })
-        return {
-            id: question.id,
-            name: question.name,
-            answers,
-        }
+        return { id: question.id, name: question.name, answers }
     })
 
     const responseData = {

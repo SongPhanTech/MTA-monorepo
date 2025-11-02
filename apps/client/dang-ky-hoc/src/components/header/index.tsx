@@ -7,6 +7,7 @@ import { env } from '@/env'
 declare global {
     interface Window {
         MTAMenuComponents: any
+        tenantCode: string
     }
 }
 
@@ -18,6 +19,8 @@ const HeaderApp: React.FC = () => {
                 menuAppId: 'menuContainer',
                 notificationAppId: 'notificationContainer',
                 userAppId: 'userContainer',
+                tenantCode: window.tenantCode || 'dev',
+                appCode: env.NEXT_PUBLIC_APP_CODE,
             })
         } catch (error) {
             console.log(error)

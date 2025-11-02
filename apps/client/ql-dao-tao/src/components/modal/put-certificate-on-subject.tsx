@@ -3,7 +3,7 @@ import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
-import { Subject } from '@workspace/db'
+import type { Subject } from '@workspace/db'
 import type { CertificateOnSubject } from '@workspace/db/client'
 import {
     useCreateCertificateOnSubject,
@@ -103,7 +103,7 @@ const PutCertificateOnSubjectScoreModal = () => {
             className="w-[600px]"
         >
             <Col span={24} className="mb-0 hidden">
-                <FormItem form={form} name="certificateId" label="" required></FormItem>
+                <FormItem form={form} name="certificateId" label="" required />
             </Col>
             <Col span={24} className="mb-4">
                 <FormItem form={form} name="finalScore" label="Điểm phiên cho môn học" required>

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { AcademicRankingBaseTypeSchema } from '../enums/AcademicRankingBaseType.schema';
@@ -37,9 +36,36 @@ const baseSchema = z.object({
     expelled: z.boolean().default(false),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    code: z.string(),
+    studyYear: z.number(),
+    isLastStudyYear: z.boolean(),
+    baseScore: AcademicRankingBaseTypeSchema,
+    gpaBase4: DecimalSchema,
+    cumulativeGpaBase4: DecimalSchema,
+    gpaBase10: DecimalSchema,
+    cumulativeGpaBase10: DecimalSchema,
+    conductScore: z.number().nullish(),
+    studentTrainingType: StudentTrainingTypeSchema,
+    totalCredits: z.number(),
+    failedCredits: z.number(),
+    isClassMonitor: z.boolean(),
+    isUnionLeader: z.boolean(),
+    academicWarningLevel: z.number(),
+    disciplinaryWarningLevel: z.number(),
+    suspended: z.boolean(),
+    expelled: z.boolean(),
+}
+).strict();
 const relationSchema = z.object({
-    student: z.record(z.unknown()),
-    schoolYear: z.record(z.unknown()),
+    student: z.record(z.string(), z.unknown()),
+    schoolYear: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -64,7 +90,7 @@ export const StudentYearResultSchema = StudentYearResultScalarSchema.merge(fkSch
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StudentYearResultPrismaCreateSchema = baseSchema.partial().passthrough();
+export const StudentYearResultPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -73,36 +99,36 @@ export const StudentYearResultPrismaCreateSchema = baseSchema.partial().passthro
  */
 export const StudentYearResultPrismaUpdateSchema = z.object({
     id: z.string(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     code: z.string(),
-    studyYear: z.union([z.number(), z.record(z.unknown())]),
+    studyYear: z.union([z.number(), z.record(z.string(), z.unknown())]),
     isLastStudyYear: z.boolean(),
     baseScore: AcademicRankingBaseTypeSchema,
     gpaBase4: DecimalSchema,
     cumulativeGpaBase4: DecimalSchema,
     gpaBase10: DecimalSchema,
     cumulativeGpaBase10: DecimalSchema,
-    conductScore: z.union([z.number().nullish(), z.record(z.unknown())]),
+    conductScore: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     studentTrainingType: StudentTrainingTypeSchema,
-    totalCredits: z.union([z.number(), z.record(z.unknown())]),
-    failedCredits: z.union([z.number(), z.record(z.unknown())]),
+    totalCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    failedCredits: z.union([z.number(), z.record(z.string(), z.unknown())]),
     isClassMonitor: z.boolean(),
     isUnionLeader: z.boolean(),
-    academicWarningLevel: z.union([z.number().default(0), z.record(z.unknown())]),
-    disciplinaryWarningLevel: z.union([z.number().default(0), z.record(z.unknown())]),
-    suspended: z.boolean().default(false),
-    expelled: z.boolean().default(false)
+    academicWarningLevel: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    disciplinaryWarningLevel: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    suspended: z.boolean(),
+    expelled: z.boolean()
 }).partial().passthrough();
 
 
 /**
  * `StudentYearResult` schema for create operations excluding foreign keys and relations.
  */
-export const StudentYearResultCreateScalarSchema = baseSchema.partial({
+export const StudentYearResultCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, academicWarningLevel: true, disciplinaryWarningLevel: true, suspended: true, expelled: true
 });
 
@@ -116,7 +142,7 @@ export const StudentYearResultCreateSchema = StudentYearResultCreateScalarSchema
 /**
  * `StudentYearResult` schema for update operations excluding foreign keys and relations.
  */
-export const StudentYearResultUpdateScalarSchema = baseSchema.partial();
+export const StudentYearResultUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

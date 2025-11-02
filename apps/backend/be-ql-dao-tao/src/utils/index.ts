@@ -653,3 +653,12 @@ export const buildDMChuyenNganhMap = async (
 
     return new Map(data.map(({ name, id }) => [name, id]))
 }
+
+export const fetchBuffer = async (url: string): Promise<Buffer> => {
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    const arrayBuffer = await response.arrayBuffer()
+    return Buffer.from(arrayBuffer)
+}

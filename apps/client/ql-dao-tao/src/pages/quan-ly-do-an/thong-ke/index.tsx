@@ -2,7 +2,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import DefaultLayout from '@layouts/default-layout'
-import { StudentThesisRegistrationStatus, SubjectVersionType } from '@workspace/db/client'
+import { Prisma, StudentThesisRegistrationStatus, SubjectVersionType } from '@workspace/db/client'
 import { useCountSubjectClass, useFindManySubjectClass } from '@workspace/db/hooks'
 import { useSemesterStore } from '@workspace/ui'
 import { Col, Flex, Input, Row, Segmented, Tabs } from 'antd'
@@ -113,7 +113,8 @@ export default function ThongKe() {
             deletedAt: null,
             active: true,
             cancelled: false,
-        }
+            status: 'OFFICIAL',
+        } satisfies Prisma.SubjectClassWhereInput
     }, [semesterId, filters.searchText, filters.name, filters.code])
 
     const { data } = useFindManySubjectClass({

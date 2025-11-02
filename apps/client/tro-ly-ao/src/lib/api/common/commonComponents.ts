@@ -437,6 +437,7 @@ export type SqlTransactionRequestBody = {
     | "ClassRegisterSession"
     | "ClassRegisterLogs"
     | "SubjectClass"
+    | "SubjectClassHistory"
     | "SubjectClassTime"
     | "ClassSchedule"
     | "TrainingObjectType"

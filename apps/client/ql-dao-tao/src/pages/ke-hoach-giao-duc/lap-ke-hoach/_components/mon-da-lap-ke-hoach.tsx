@@ -1,6 +1,5 @@
 import { queryClient } from '@api/index'
 import Table from '@components/commons/table'
-import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { getMinioUrl } from '@workspace/constant'
@@ -73,6 +72,9 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                     },
                                 },
                             },
+                            orderBy: {
+                                code: 'asc',
+                            },
                         },
                         subjectVersion: {
                             include: {
@@ -124,6 +126,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
+            queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
         }, 500),
@@ -141,7 +144,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
             }}
         >
             <Row align="top" justify="space-between">
-                <Col span={16}>
+                <Col span={12}>
                     <Form.Item className="m-0" name="searchText">
                         <Input
                             id="search"
@@ -159,8 +162,9 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                         />
                     </Form.Item>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                     <Flex justify="end" gap={4}>
+                        <Button type="default">Khởi tạo môn</Button>
                         <Button
                             type="primary"
                             onClick={() =>
@@ -259,6 +263,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                             subjectVersionId: { in: subjectSelected },
                                         },
                                     })
+                                    debouncedRefetch()
                                     message.success('Xoá môn đã lập kế hoạch thành công')
                                     form.resetFields()
                                 } catch (error) {
@@ -268,8 +273,8 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                 hideSpinner()
                             }}
                         >
-                            <Button disabled={!subjectSelected.length} type="primary">
-                                Xoá
+                            <Button disabled={!subjectSelected.length} type="primary" danger>
+                                Đưa môn ra khỏi KHDG
                             </Button>
                         </Popconfirm>
                     </Flex>
@@ -320,7 +325,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                             title: 'Mã MH',
                             dataIndex: ['subjectVersion', 'code'],
                             align: 'center',
-                            width: 100,
+                            width: 80,
                         },
                         {
                             title: 'Tên môn',
@@ -332,27 +337,6 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                                     {text} ({record.subjectVersion.credit})
                                 </div>
                             ),
-                        },
-                        {
-                            title: 'Danh sách lớp quản lý',
-                            dataIndex: 'fixedClass',
-                            align: 'center',
-                            width: 120,
-                            render: (__, record) => {
-                                return record?.fixedClasses.length ? (
-                                    <TextTruncate
-                                        arr={record?.fixedClasses.map((i: any) => {
-                                            return {
-                                                key: i?.id,
-                                                label: ` ${i.code} (${i._count?.students})`,
-                                            }
-                                        })}
-                                        key="fixedClass"
-                                    />
-                                ) : (
-                                    ''
-                                )
-                            },
                         },
                     ]}
                     pagination={{

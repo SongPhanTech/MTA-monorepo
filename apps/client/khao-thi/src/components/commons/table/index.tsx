@@ -46,7 +46,7 @@ type TableProps<T = Record<string, unknown>> = {
     filters?: FilterProps
     setFilters?: (record: FilterProps) => void
     expandable?: TableAntdProps<T>['expandable']
-    rowKey?: string
+    rowKey?: string | any
     id?: string
     selectedRow?: string | null
     scrollable?: boolean
@@ -372,7 +372,14 @@ const Table = <T extends Record<string, unknown>>({
                     if (!item.options) return
                     return (
                         <div className="p-4 w-full min-w-[200px] max-w-[300px]">
-                            <FilterSelect item={item} onCheckAllChange={onCheckAllChange} onCheckChange = {onCheckChange} checkAll={checkAll} indeterminate={indeterminate} filtersTable={filtersTable}/>
+                            <FilterSelect
+                                item={item}
+                                onCheckAllChange={onCheckAllChange}
+                                onCheckChange={onCheckChange}
+                                checkAll={checkAll}
+                                indeterminate={indeterminate}
+                                filtersTable={filtersTable}
+                            />
                             <ListButton
                                 clear={() => {
                                     setFiltersTable({

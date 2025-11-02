@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -20,8 +19,22 @@ const baseSchema = z.object({
     documentType: z.string().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    content: z.string().nullish(),
+    index: z.number().nullish(),
+    documentId: z.string().nullish(),
+    documentType: z.string().nullish(),
+}
+).strict();
 const relationSchema = z.object({
-    message: z.record(z.unknown()).optional(),
+    message: z.record(z.string(), z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
@@ -45,7 +58,7 @@ export const CitationMessageSchema = CitationMessageScalarSchema.merge(fkSchema)
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const CitationMessagePrismaCreateSchema = baseSchema.partial().passthrough();
+export const CitationMessagePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -55,13 +68,13 @@ export const CitationMessagePrismaCreateSchema = baseSchema.partial().passthroug
 export const CitationMessagePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     content: z.string().nullish(),
-    index: z.union([z.number().nullish(), z.record(z.unknown())]),
+    index: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     documentId: z.string().nullish(),
     documentType: z.string().nullish()
 }).partial().passthrough();
@@ -70,7 +83,7 @@ export const CitationMessagePrismaUpdateSchema = z.object({
 /**
  * `CitationMessage` schema for create operations excluding foreign keys and relations.
  */
-export const CitationMessageCreateScalarSchema = baseSchema.partial({
+export const CitationMessageCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -84,7 +97,7 @@ export const CitationMessageCreateSchema = CitationMessageCreateScalarSchema.mer
 /**
  * `CitationMessage` schema for update operations excluding foreign keys and relations.
  */
-export const CitationMessageUpdateScalarSchema = baseSchema.partial();
+export const CitationMessageUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

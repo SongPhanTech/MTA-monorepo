@@ -1,16 +1,18 @@
-import { queryClient } from '@api/index'
+import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import useSpinner from '@hooks/spinner'
-import { Col, Form, message, DatePicker as AntdDatePicker } from 'antd'
-import { Dayjs } from 'dayjs'
-import { useDisclosure } from 'react-hook-disclosure-modal'
-import DatePicker from '@components/commons/date-picker'
+import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
+import { DatePicker as AntdDatePicker, Col, Form, message } from 'antd'
 import locale from 'antd/es/date-picker/locale/vi_VN'
-import { useUpdateSubjectClass } from '@workspace/db/hooks'
+import type { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
+import { useEffect } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
+
 export type PutUpdateTime = {
-    examScoreDeadline: Dayjs
-    time: [Dayjs, Dayjs]
+    time: (Dayjs | null | undefined)[]
+    examScoreDeadline?: Dayjs | null
 }
 const PutDeadlineScoreModal = () => {
     const [form] = Form.useForm<PutUpdateTime>()
@@ -23,48 +25,55 @@ const PutDeadlineScoreModal = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const { data } = useFindUniqueSubjectClass({
+        where: { id },
+        select: {
+            scoreDeadLineStart: true,
+            scoreDeadline: true,
+            examScoreDeadline: true,
+        },
+    })
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
     async function onOk(output?: PutUpdateTime) {
         if (!output) return
+        console.log(111, output.time)
+
         try {
             showSpinner()
-            let dataSubmit: any = {}
-            if (output?.time && output?.time.length === 2) {
-                dataSubmit = {
-                    scoreDeadline: output?.time[0],
-                    examScoreDeadline: output?.time[1],
-                }
-            }
-            if (output?.examScoreDeadline) {
-                dataSubmit = {
-                    ...dataSubmit,
-                    examScoreDeadline: output?.examScoreDeadline,
-                }
-            }
-            const res = await updateSubjectClass({
-                data: dataSubmit,
-                where: {
-                    id,
+            await updateSubjectClass({
+                where: { id },
+                data: {
+                    scoreDeadLineStart: output?.time[0]?.toISOString(),
+                    scoreDeadline: output?.time[1]?.toISOString(),
+                    examScoreDeadline: output?.examScoreDeadline?.toISOString(),
                 },
+                select: { id: true },
             })
-            if (res) {
-                message.success('Đặt hạn nhập điểm thành công')
-            }
-            // refetch() lại danh sách level
-            queryClient.invalidateQueries({
-                queryKey: ['SubjectClass'],
-            })
-            onClose()
-        } catch (error: any) {
-            console.log(error)
 
+            message.success('Đặt hạn nhập điểm thành công')
+            onClose()
+        } catch (error: unknown) {
+            console.error(error)
             message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
         } finally {
             hideSpinner()
         }
     }
+
+    useEffect(() => {
+        if (data) {
+            form.setFieldsValue({
+                time: [
+                    data.scoreDeadLineStart ? dayjs(data.scoreDeadLineStart) : undefined,
+                    data.scoreDeadline ? dayjs(data.scoreDeadline) : undefined,
+                ],
+                examScoreDeadline: data.examScoreDeadline
+                    ? dayjs(data.examScoreDeadline)
+                    : undefined,
+            })
+        }
+    }, [data, form.setFieldsValue])
 
     return (
         <PutFormModal

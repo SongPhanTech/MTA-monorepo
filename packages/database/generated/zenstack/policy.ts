@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { type QueryContext, type CrudContract, type PermissionCheckerContext } from "@zenstackhq/runtime";
 import { allFieldsEqual } from "@zenstackhq/runtime/validation";
@@ -24,6 +23,7 @@ import { ClassRegisterStatus } from "../prisma-client";
 import { SubjectClassSchedule } from "../prisma-client";
 import { PeriodType } from "../prisma-client";
 import { SubjectClassType } from "../prisma-client";
+import { SubjectClassStatus } from "../prisma-client";
 import { TrainingObjectTypes } from "../prisma-client";
 import { DiplomaTypeEnum } from "../prisma-client";
 import { AcademicRankingBaseType } from "../prisma-client";
@@ -2060,6 +2060,26 @@ const policy: PolicyDef = {
             },
 
         },
+        subjectClassHistory: {
+            modelLevel: {
+                read: { guard: SubjectClassHistory_read, },
+                create: { guard: SubjectClassHistory_create, inputChecker: SubjectClassHistory_create_input, },
+                update: { guard: SubjectClassHistory_update, },
+                postUpdate: { guard: SubjectClassHistory_postUpdate, },
+                delete: { guard: SubjectClassHistory_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         subjectClassTime: {
             modelLevel: {
                 read: { guard: SubjectClassTime_read, },
@@ -3800,6 +3820,26 @@ const policy: PolicyDef = {
             },
 
         },
+        examRoomSlot: {
+            modelLevel: {
+                read: { guard: ExamRoomSlot_read, },
+                create: { guard: ExamRoomSlot_create, inputChecker: ExamRoomSlot_create_input, },
+                update: { guard: ExamRoomSlot_update, },
+                postUpdate: { guard: ExamRoomSlot_postUpdate, },
+                delete: { guard: ExamRoomSlot_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         examRoom: {
             modelLevel: {
                 read: { guard: ExamRoom_read, },
@@ -5062,6 +5102,7 @@ const policy: PolicyDef = {
         classRegisterSession: { hasValidation: false },
         classRegisterLogs: { hasValidation: false },
         subjectClass: { hasValidation: false },
+        subjectClassHistory: { hasValidation: false },
         subjectClassTime: { hasValidation: false },
         classSchedule: { hasValidation: false },
         trainingObjectType: { hasValidation: false },
@@ -5149,6 +5190,7 @@ const policy: PolicyDef = {
         fillInBlankSlot: { hasValidation: false },
         orderingItem: { hasValidation: false },
         exam: { hasValidation: false },
+        examRoomSlot: { hasValidation: false },
         examRoom: { hasValidation: false },
         testStructureRule: { hasValidation: false },
         examBank: { hasValidation: false },
@@ -11690,6 +11732,71 @@ function $check_SubjectClass_delete(input: any, context: QueryContext): any {
     return false;
 }
 
+function SubjectClassHistory_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_SubjectClassHistory_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassHistory_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassHistory_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassHistory_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function SubjectClassHistory_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassHistory_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function SubjectClassHistory_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_SubjectClassHistory_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function SubjectClassHistory_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_SubjectClassHistory_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
 function SubjectClassTime_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
@@ -17339,6 +17446,71 @@ function Exam_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_Exam_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamRoomSlot_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ExamRoomSlot_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamRoomSlot_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamRoomSlot_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamRoomSlot_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ExamRoomSlot_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamRoomSlot_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamRoomSlot_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ExamRoomSlot_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ExamRoomSlot_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamRoomSlot_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

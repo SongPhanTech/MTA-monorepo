@@ -119,13 +119,9 @@ const LectureTreeSelect: React.FC<LectureTreeSelectProps> = ({
 
     return (
         <TreeSelectAnt
-            // multiple
-            // treeCheckable
             style={style}
             dropdownStyle={dropdownStyle}
             allowClear
-            // showCheckedStrategy={TreeSelect.SHOW_PARENT}
-            // treeDefaultExpandAll
             treeData={treeData}
             filterTreeNode={filterTreeNode}
             showSearch={true}

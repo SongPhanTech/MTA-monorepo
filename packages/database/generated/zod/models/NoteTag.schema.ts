@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,18 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string(),
+    color: z.string().nullish(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     color: z.string().nullish(),
 }
@@ -39,7 +50,7 @@ export const NoteTagSchema = NoteTagScalarSchema.merge(relationSchema.partial())
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const NoteTagPrismaCreateSchema = baseSchema.partial().passthrough();
+export const NoteTagPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -49,11 +60,11 @@ export const NoteTagPrismaCreateSchema = baseSchema.partial().passthrough();
 export const NoteTagPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     color: z.string().nullish()
 }).partial().passthrough();
@@ -62,7 +73,7 @@ export const NoteTagPrismaUpdateSchema = z.object({
 /**
  * `NoteTag` schema for create operations excluding foreign keys and relations.
  */
-export const NoteTagCreateScalarSchema = baseSchema.partial({
+export const NoteTagCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -70,7 +81,7 @@ export const NoteTagCreateScalarSchema = baseSchema.partial({
 /**
  * `NoteTag` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const NoteTagCreateSchema = baseSchema.partial({
+export const NoteTagCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -78,7 +89,7 @@ export const NoteTagCreateSchema = baseSchema.partial({
 /**
  * `NoteTag` schema for update operations excluding foreign keys and relations.
  */
-export const NoteTagUpdateScalarSchema = baseSchema.partial();
+export const NoteTagUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

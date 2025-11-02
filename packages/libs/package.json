@@ -11,6 +11,7 @@
     "./template-excel": "./src/template-excel.ts",
     "./create-excel": "./src/create-excel.ts",
     "./utils": "./src/utils.ts",
+    "./server": "./src/server.ts",
     "./docxjs": "./src/docxjs.ts",
     ".": "./src/index.ts"
   },
@@ -26,7 +27,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.69.0",
+    "@tanstack/react-query": "catalog:",
     "@workspace/db": "workspace:*",
     "dayjs": "catalog:",
     "decimal.js": "catalog:",

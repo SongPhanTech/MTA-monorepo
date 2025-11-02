@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS destinations (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ
 );
+drop trigger if exists destinations_change_updated_at on destinations;
 
 CREATE TRIGGER destinations_change_updated_at
 BEFORE UPDATE ON destinations FOR EACH ROW EXECUTE FUNCTION change_updated_at();

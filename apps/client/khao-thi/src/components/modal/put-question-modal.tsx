@@ -25,7 +25,7 @@ export type PutQuestionType = Question & {
     multipleChoiceOptions: {
         content: string
         isCorrect: boolean
-        id?:string
+        id?: string
     }[]
 }
 const PutQuestionModal = () => {
@@ -93,22 +93,28 @@ const PutQuestionModal = () => {
                 output.type === QuestionType.MULTIPLE_CHOICE ||
                 output.type === QuestionType.SINGLE_CHOICE
             ) {
-                console.log(output.multipleChoiceOptions);
-                
-                const error = output.multipleChoiceOptions.find(i=>!i.content)
-                if(error || !output.multipleChoiceOptions.length){
+                const error = output.multipleChoiceOptions.find((i) => !i.content)
+                if (error || !output.multipleChoiceOptions.length) {
                     message.error('Vui lòng nhập đáp án')
                     return
                 }
-                const error1 = output.multipleChoiceOptions.filter(i=>!!i.isCorrect)
-                   if(error1.length===0 || (error1.length<2 && output.type === QuestionType.MULTIPLE_CHOICE)|| (error1.length>1 && output.type === QuestionType.SINGLE_CHOICE)){
+                const error1 = output.multipleChoiceOptions.filter((i) => !!i.isCorrect)
+                if (
+                    error1.length === 0 ||
+                    (error1.length < 2 && output.type === QuestionType.MULTIPLE_CHOICE) ||
+                    (error1.length > 1 && output.type === QuestionType.SINGLE_CHOICE)
+                ) {
                     message.error('Vui lòng nhập đúng đáp án')
                     return
                 }
                 if (input?.id) {
-
+                    await updateQuestion({
+                        data,
+                        where: {
+                            id: input.id,
+                        },
+                    })
                 } else {
-
                     res = await createQuestion({
                         data: {
                             ...data,
@@ -174,17 +180,28 @@ const PutQuestionModal = () => {
         orderBy: { level: 'asc' },
     })
 
+    const handleDeleteAnswer = (index: number) => {
+        const data = form.getFieldsValue()?.multipleChoiceOptions || []
+        if (data.length) {
+            const result = data.splice(index, 1)
+            setDataOptions(data)
+            form.setFieldValue('multipleChoiceOptions', data)
+        }
+    }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (initialValue) {
-            setDataOptions(initialValue.multipleChoiceOptions.map((i) => {
-                return {
-                    key: String(i.order),
-                    content: i.content,
-                    isCorrect: i.isCorrect,
-                    id: i.id
-                }
-            }))
+            setDataOptions(
+                initialValue.multipleChoiceOptions.map((i) => {
+                    return {
+                        key: String(i.order),
+                        content: i.content,
+                        isCorrect: i.isCorrect,
+                        id: i.id,
+                    }
+                })
+            )
             form.setFieldsValue({
                 ...initialValue,
                 multipleChoiceOptions: initialValue.multipleChoiceOptions.map((i) => {
@@ -193,12 +210,12 @@ const PutQuestionModal = () => {
                         isCorrect: i.isCorrect,
                         key: String(i.order),
                     }
-                })
+                }),
             })
         } else {
             form.setFieldsValue({
                 isAutoGraded: false,
-                multipleChoiceOptions:dataOptions,
+                multipleChoiceOptions: dataOptions,
                 // type: QuestionType.ESSAY, // TODO: clear after add many QuestionType
                 point: 1,
             })
@@ -212,8 +229,6 @@ const PutQuestionModal = () => {
     const fixedHtmlExplanation = useMemo(() => {
         return explanation?.replace(/<li>\s*<p>(.*?)<\/p>\s*<\/li>/g, '<li>$1</li>')
     }, [explanation])
-
-
 
     const listForm = useWatch('multipleChoiceOptions', form) || []
 
@@ -387,7 +402,11 @@ const PutQuestionModal = () => {
                                                                         size={16}
                                                                         strokeWidth={1.5}
                                                                         className="text-red-600 cursor-pointer"
-                                                                        onClick={() => {}}
+                                                                        onClick={() => {
+                                                                            handleDeleteAnswer(
+                                                                                index
+                                                                            )
+                                                                        }}
                                                                     />
                                                                 </Tooltip>
                                                             )

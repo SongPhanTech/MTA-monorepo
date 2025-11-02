@@ -34,6 +34,7 @@ export interface ExportOptions {
     fontFamily?: string
     fontSize?: number
     mergeSheetsToOne?: boolean
+    sheetName?: string
 }
 
 function cloneWorksheet(
@@ -573,8 +574,9 @@ async function handleExcelJSMergeSheets(
     workbook.removeWorksheet(firstSheet.id)
 
     // Đổi tên sheet chính (nếu muốn)
-    //@ts-expect-error
-    masterSheet.name = 'TongHopDiem'
+    if (masterSheet) {
+        masterSheet.name = options.sheetName || 'TongHopDiem'
+    }
 
     const outBuffer = await workbook.xlsx.writeBuffer()
     saveAs(

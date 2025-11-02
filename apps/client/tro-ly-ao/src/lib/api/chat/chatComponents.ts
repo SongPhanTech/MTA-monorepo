@@ -163,7 +163,7 @@ export type IndexAllHybridIndexAllHybridPostVariables =
   ChatContext["fetcherOptions"];
 
 /**
- * Wipe and rebuild hybrid index (BM42 + dense embeddings) from all documents
+ * Wipe and rebuild hybrid index (BM42 + dense embeddings) with semantic chunking
  */
 export const fetchIndexAllHybridIndexAllHybridPost = (
   variables: IndexAllHybridIndexAllHybridPostVariables,
@@ -174,7 +174,7 @@ export const fetchIndexAllHybridIndexAllHybridPost = (
   );
 
 /**
- * Wipe and rebuild hybrid index (BM42 + dense embeddings) from all documents
+ * Wipe and rebuild hybrid index (BM42 + dense embeddings) with semantic chunking
  */
 export const useIndexAllHybridIndexAllHybridPost = (
   options?: Omit<
@@ -447,6 +447,126 @@ export const useIndexAllIndexAllPost = (
   });
 };
 
+export type DebugDocstoreSyncDebugDocstoreSyncGetError =
+  Fetcher.ErrorWrapper<undefined>;
+
+export type DebugDocstoreSyncDebugDocstoreSyncGetVariables =
+  ChatContext["fetcherOptions"];
+
+/**
+ * Kiểm tra sync giữa docstore và Qdrant
+ */
+export const fetchDebugDocstoreSyncDebugDocstoreSyncGet = (
+  variables: DebugDocstoreSyncDebugDocstoreSyncGetVariables,
+  signal?: AbortSignal,
+) =>
+  chatFetch<
+    void,
+    DebugDocstoreSyncDebugDocstoreSyncGetError,
+    undefined,
+    {},
+    {},
+    {}
+  >({ url: "/debug_docstore_sync", method: "get", ...variables, signal });
+
+/**
+ * Kiểm tra sync giữa docstore và Qdrant
+ */
+export function debugDocstoreSyncDebugDocstoreSyncGetQuery(
+  variables: DebugDocstoreSyncDebugDocstoreSyncGetVariables,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: (options: QueryFnOptions) => Promise<void>;
+};
+
+export function debugDocstoreSyncDebugDocstoreSyncGetQuery(
+  variables:
+    | DebugDocstoreSyncDebugDocstoreSyncGetVariables
+    | reactQuery.SkipToken,
+): {
+  queryKey: reactQuery.QueryKey;
+  queryFn: ((options: QueryFnOptions) => Promise<void>) | reactQuery.SkipToken;
+};
+
+export function debugDocstoreSyncDebugDocstoreSyncGetQuery(
+  variables:
+    | DebugDocstoreSyncDebugDocstoreSyncGetVariables
+    | reactQuery.SkipToken,
+) {
+  return {
+    queryKey: queryKeyFn({
+      path: "/debug_docstore_sync",
+      operationId: "debugDocstoreSyncDebugDocstoreSyncGet",
+      variables,
+    }),
+    queryFn:
+      variables === reactQuery.skipToken
+        ? reactQuery.skipToken
+        : ({ signal }: QueryFnOptions) =>
+            fetchDebugDocstoreSyncDebugDocstoreSyncGet(variables, signal),
+  };
+}
+
+/**
+ * Kiểm tra sync giữa docstore và Qdrant
+ */
+export const useSuspenseDebugDocstoreSyncDebugDocstoreSyncGet = <TData = void,>(
+  variables: DebugDocstoreSyncDebugDocstoreSyncGetVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      void,
+      DebugDocstoreSyncDebugDocstoreSyncGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useSuspenseQuery<
+    void,
+    DebugDocstoreSyncDebugDocstoreSyncGetError,
+    TData
+  >({
+    ...debugDocstoreSyncDebugDocstoreSyncGetQuery(
+      deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+/**
+ * Kiểm tra sync giữa docstore và Qdrant
+ */
+export const useDebugDocstoreSyncDebugDocstoreSyncGet = <TData = void,>(
+  variables:
+    | DebugDocstoreSyncDebugDocstoreSyncGetVariables
+    | reactQuery.SkipToken,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      void,
+      DebugDocstoreSyncDebugDocstoreSyncGetError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >,
+) => {
+  const { queryOptions, fetcherOptions } = useChatContext(options);
+  return reactQuery.useQuery<
+    void,
+    DebugDocstoreSyncDebugDocstoreSyncGetError,
+    TData
+  >({
+    ...debugDocstoreSyncDebugDocstoreSyncGetQuery(
+      variables === reactQuery.skipToken
+        ? variables
+        : deepMerge(fetcherOptions, variables),
+    ),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type FaqVectorizeFaqVectorizePostError = Fetcher.ErrorWrapper<{
   status: 422;
   payload: Schemas.HTTPValidationError;
@@ -609,7 +729,7 @@ export type XoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPostVariable
   ChatContext["fetcherOptions"];
 
 /**
- * Delete vector points by ID_DOCUMENT in QA collection
+ * Delete document from both vector store and docstore by ID_DOCUMENT
  */
 export const fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost =
   (
@@ -631,7 +751,7 @@ export const fetchXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost =
     });
 
 /**
- * Delete vector points by ID_DOCUMENT in QA collection
+ * Delete document from both vector store and docstore by ID_DOCUMENT
  */
 export const useXoaBanGhiTrongVectorDbHoiDapXoaBanGhiTrongVectorDbHoiDapPost = (
   options?: Omit<
@@ -986,6 +1106,13 @@ export const useHealthCheckHealthGet = <TData = void,>(
 };
 
 export type QueryOperation =
+  | {
+      path: "/debug_docstore_sync";
+      operationId: "debugDocstoreSyncDebugDocstoreSyncGet";
+      variables:
+        | DebugDocstoreSyncDebugDocstoreSyncGetVariables
+        | reactQuery.SkipToken;
+    }
   | {
       path: "/citation/{documentId}";
       operationId: "getCitationContentCitationDocumentIdGet";

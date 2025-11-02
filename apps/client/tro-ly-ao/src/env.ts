@@ -21,6 +21,7 @@ export const env = createEnv({
         NEXT_PUBLIC_CHAT_BOT_URL: z.string().url(),
         NEXT_PUBLIC_DOC_CHAT_BOT_URL: z.string().url(),
         NEXT_PUBLIC_API_MODEL_BASE_URL: z.string().url(),
+        NEXT_PUBLIC_APP_CODE: z.string(),
     },
 
     /**
@@ -34,6 +35,7 @@ export const env = createEnv({
         NEXT_PUBLIC_CHAT_BOT_URL: process.env.NEXT_PUBLIC_CHAT_BOT_URL,
         NEXT_PUBLIC_DOC_CHAT_BOT_URL: process.env.NEXT_PUBLIC_DOC_CHAT_BOT_URL,
         NEXT_PUBLIC_API_MODEL_BASE_URL: process.env.NEXT_PUBLIC_API_MODEL_BASE_URL,
+        NEXT_PUBLIC_APP_CODE: process.env.NEXT_PUBLIC_APP_CODE,
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

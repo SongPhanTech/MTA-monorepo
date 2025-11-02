@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS backups (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ
 );
-
+drop trigger if exists backups_change_updated_at on backups;
 CREATE TRIGGER backups_change_updated_at
 BEFORE UPDATE ON backups FOR EACH ROW EXECUTE FUNCTION change_updated_at();
 

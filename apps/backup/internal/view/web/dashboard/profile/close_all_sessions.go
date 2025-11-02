@@ -12,29 +12,29 @@ import (
 func closeAllSessionsForm(sessions []dbgen.Session) nodx.Node {
 	return component.CardBox(component.CardBoxParams{
 		Children: []nodx.Node{
-			component.H2Text("Close all sessions"),
-			component.PText("This will log you out from all devices including this one."),
+			component.H2Text("Đóng tất cả các phiên"),
+			component.PText("Điều này sẽ đăng xuất bạn khỏi tất cả các thiết bị bao gồm cả thiết bị này."),
 			nodx.Button(
 				htmx.HxPost("/auth/logout-all"),
 				htmx.HxDisabledELT("this"),
-				htmx.HxConfirm("Are you sure you want to close all your sessions?"),
+				htmx.HxConfirm("Bạn có chắc chắn muốn đóng tất cả các phiên của mình không?"),
 				nodx.Class("mt-2 btn btn-error"),
-				component.SpanText("Close all sessions"),
+				component.SpanText("Đóng tất cả các phiên"),
 				lucide.LogOut(),
 			),
 
 			nodx.Div(nodx.Class("divider")),
 
-			component.H2Text("Active sessions"),
-			component.PText("All sessions are open for a maximum of 12 hours."),
+			component.H2Text("Các phiên đang hoạt động"),
+			component.PText("Tất cả các phiên đều mở trong tối đa 12 giờ."),
 			nodx.Div(
 				nodx.Class("overflow-x-auto"),
 				nodx.Table(
 					nodx.Class("table"),
 					nodx.Thead(
 						nodx.Tr(
-							nodx.Th(component.SpanText("Login time")),
-							nodx.Th(component.SpanText("IP address")),
+							nodx.Th(component.SpanText("Thời gian đăng nhập")),
+							nodx.Th(component.SpanText("Địa chỉ IP")),
 							nodx.Th(component.SpanText("User agent")),
 						),
 					),

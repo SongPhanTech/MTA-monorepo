@@ -2,6 +2,7 @@ import { DownOutlined } from '@ant-design/icons'
 import MonHocTienQuyetSongHanhPage from '@components/sub-pages/mon-hoc-tien-quyet-song-hanh'
 import MonHocTuongDuong from '@components/sub-pages/mon-hoc-tuong-duong'
 import DefaultLayout from '@layouts/default-layout'
+import type { Subject as SubjectDB, SubjectVersion } from '@workspace/db'
 import { useInfiniteFindManySubject } from '@workspace/db/hooks'
 import { Col, Divider, Input, Segmented, Spin, Tabs, Tree, Typography } from 'antd'
 import type { DataNode, EventDataNode } from 'antd/es/tree'
@@ -89,7 +90,7 @@ export default function Subject() {
 
     const treeData: CustomDataNode[] =
         data?.pages.flatMap((page) =>
-            page.map((subject) => ({
+            page.map((subject: SubjectDB & { subjectVersion: SubjectVersion[] }) => ({
                 title: subject.name,
                 key: `subject-${subject.id}`,
                 children: subject.subjectVersion.map((version) => ({

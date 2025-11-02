@@ -22,6 +22,7 @@ export type FilterProps = {
     searchText?: string
     trainingObjectTypes?: string[]
     pcgd?: boolean[]
+    approved?: boolean[]
     name?: string | ''
     code?: string | ''
     sort?: string
@@ -110,6 +111,11 @@ export type FilterProps = {
     examDate?: Date[]
     endDate?: Date[]
     englishName?: string | ''
+    creditCmp?: { lte?: number | null; gte?: number | null }
+    attendanceScoreCmp?: { lte?: number | null; gte?: number | null }
+    midtermScoreCmp?: { lte?: number | null; gte?: number | null }
+    examScoreCmp?: { lte?: number | null; gte?: number | null }
+    finalScoreCmp?: { lte?: number | null; gte?: number | null }
     finalGpa?: 'asc' | 'desc'
     diplomaNumber?: string
     diplomaIssueDate?: Date[]

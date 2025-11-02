@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 export * from './TransactionIsolationLevel.schema';
 export * from './ConfigScalarFieldEnum.schema';
@@ -106,6 +105,7 @@ export * from './ClassRegisterSessionCreditScalarFieldEnum.schema';
 export * from './ClassRegisterSessionScalarFieldEnum.schema';
 export * from './ClassRegisterLogsScalarFieldEnum.schema';
 export * from './SubjectClassScalarFieldEnum.schema';
+export * from './SubjectClassHistoryScalarFieldEnum.schema';
 export * from './SubjectClassTimeScalarFieldEnum.schema';
 export * from './ClassScheduleScalarFieldEnum.schema';
 export * from './TrainingObjectTypeScalarFieldEnum.schema';
@@ -193,6 +193,7 @@ export * from './MultipleChoiceOptionScalarFieldEnum.schema';
 export * from './FillInBlankSlotScalarFieldEnum.schema';
 export * from './OrderingItemScalarFieldEnum.schema';
 export * from './ExamScalarFieldEnum.schema';
+export * from './ExamRoomSlotScalarFieldEnum.schema';
 export * from './ExamRoomScalarFieldEnum.schema';
 export * from './TestStructureRuleScalarFieldEnum.schema';
 export * from './ExamBankScalarFieldEnum.schema';
@@ -356,6 +357,7 @@ export * from './ClassRegisterSessionCreditOrderByRelevanceFieldEnum.schema';
 export * from './ClassRegisterSessionOrderByRelevanceFieldEnum.schema';
 export * from './ClassRegisterLogsOrderByRelevanceFieldEnum.schema';
 export * from './SubjectClassOrderByRelevanceFieldEnum.schema';
+export * from './SubjectClassHistoryOrderByRelevanceFieldEnum.schema';
 export * from './SubjectClassTimeOrderByRelevanceFieldEnum.schema';
 export * from './ClassScheduleOrderByRelevanceFieldEnum.schema';
 export * from './TrainingObjectTypeOrderByRelevanceFieldEnum.schema';
@@ -443,6 +445,7 @@ export * from './MultipleChoiceOptionOrderByRelevanceFieldEnum.schema';
 export * from './FillInBlankSlotOrderByRelevanceFieldEnum.schema';
 export * from './OrderingItemOrderByRelevanceFieldEnum.schema';
 export * from './ExamOrderByRelevanceFieldEnum.schema';
+export * from './ExamRoomSlotOrderByRelevanceFieldEnum.schema';
 export * from './ExamRoomOrderByRelevanceFieldEnum.schema';
 export * from './TestStructureRuleOrderByRelevanceFieldEnum.schema';
 export * from './ExamBankOrderByRelevanceFieldEnum.schema';
@@ -517,6 +520,7 @@ export * from './EquivalencySide.schema';
 export * from './SubjectRequirementType.schema';
 export * from './ClassRegisterStatus.schema';
 export * from './SubjectClassSchedule.schema';
+export * from './SubjectClassStatus.schema';
 export * from './PeriodType.schema';
 export * from './TrainingObjectTypes.schema';
 export * from './DiplomaTypeEnum.schema';

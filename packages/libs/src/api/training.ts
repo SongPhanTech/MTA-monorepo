@@ -38,11 +38,17 @@ import type {
     CreateExamsRequest,
     CreateExamsResponse,
     CreateReExamsRequest,
+    DebtStatistics400,
+    DebtStatisticsParams,
     EnrollFixedClassOnSubjectClassBody,
     ExamCodes,
+    ExportLecturerProfile400,
+    ExportLecturerProfileBody,
     ExportStudentResultSemesterJson200Item,
     ExportStudentResultSemesterJson404,
     ExportStudentResultSemesterJsonParams,
+    FixedClassStudentCount400,
+    FixedClassStudentCountParams,
     GenExamCode,
     GenExamCode400,
     GenExamCode404,
@@ -77,6 +83,9 @@ import type {
     ListOfOpenSubjectClassRetakeResponse,
     ListOfOpenSubjectClassRetakeStudentsResponse,
     ListOfundefined,
+    MergeExamBadResponse,
+    MergeExamRequest,
+    MergeExamResponse,
     OpenSubjectClassParams,
     OpenSubjectClassRetakeParams,
     OpenSubjectClassRetakeStudentsParams,
@@ -150,8 +159,15 @@ import type {
     Room400,
     SaveExamCodesResult,
     SaveExamScore400,
+    SetExamScoreDeadLine200,
+    SetExamScoreDeadLineBody,
+    SetScoreDeadLine200,
+    SetScoreDeadLineBody,
     TrainingField200Item,
     TrainingField400,
+    UnmergeExamBadResponse,
+    UnmergeExamRequest,
+    UnmergeExamResponse,
     UpdateStudentStatus200,
     UpdateStudentStatus400,
     UpdateStudentStatusBody,
@@ -734,6 +750,169 @@ export const useClassDivision = <TError = void, TContext = unknown>(
     const mutationOptions = getClassDivisionMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
+}
+
+export type fixedClassStudentCountResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type fixedClassStudentCountResponse400 = {
+    data: FixedClassStudentCount400
+    status: 400
+}
+
+export type fixedClassStudentCountResponseComposite =
+    | fixedClassStudentCountResponse200
+    | fixedClassStudentCountResponse400
+
+export type fixedClassStudentCountResponse = fixedClassStudentCountResponseComposite & {
+    headers: Headers
+}
+
+export const getFixedClassStudentCountUrl = (params: FixedClassStudentCountParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/fixed-class/fixed-class-student-count?${stringifiedParams}`
+        : '/api/fixed-class/fixed-class-student-count'
+}
+
+export const fixedClassStudentCount = async (
+    params: FixedClassStudentCountParams,
+    options?: RequestInit
+): Promise<fixedClassStudentCountResponse> => {
+    return customTrainingFetch<fixedClassStudentCountResponse>(
+        getFixedClassStudentCountUrl(params),
+        {
+            ...options,
+            method: 'GET',
+        }
+    )
+}
+
+export const getFixedClassStudentCountQueryKey = (params: FixedClassStudentCountParams) => {
+    return ['/api/fixed-class/fixed-class-student-count', ...(params ? [params] : [])] as const
+}
+
+export const getFixedClassStudentCountQueryOptions = <
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getFixedClassStudentCountQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof fixedClassStudentCount>>> = ({
+        signal,
+    }) => fixedClassStudentCount(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof fixedClassStudentCount>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type FixedClassStudentCountQueryResult = NonNullable<
+    Awaited<ReturnType<typeof fixedClassStudentCount>>
+>
+export type FixedClassStudentCountQueryError = FixedClassStudentCount400
+
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>,
+                    TError,
+                    Awaited<ReturnType<typeof fixedClassStudentCount>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useFixedClassStudentCount<
+    TData = Awaited<ReturnType<typeof fixedClassStudentCount>>,
+    TError = FixedClassStudentCount400,
+>(
+    params: FixedClassStudentCountParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof fixedClassStudentCount>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getFixedClassStudentCountQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
 }
 
 /**
@@ -1373,6 +1552,213 @@ export const useEnrollFixedClassOnSubjectClass = <TError = void, TContext = unkn
     TContext
 > => {
     const mutationOptions = getEnrollFixedClassOnSubjectClassMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Đặt hạn nhập điểm
+ * @summary Đặt hạn nhập điểm
+ */
+export type setScoreDeadLineResponse200 = {
+    data: SetScoreDeadLine200
+    status: 200
+}
+
+export type setScoreDeadLineResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type setScoreDeadLineResponseComposite =
+    | setScoreDeadLineResponse200
+    | setScoreDeadLineResponse400
+
+export type setScoreDeadLineResponse = setScoreDeadLineResponseComposite & {
+    headers: Headers
+}
+
+export const getSetScoreDeadLineUrl = () => {
+    return '/api/subject-class/set-score-dead-line'
+}
+
+export const setScoreDeadLine = async (
+    setScoreDeadLineBody: SetScoreDeadLineBody,
+    options?: RequestInit
+): Promise<setScoreDeadLineResponse> => {
+    return customTrainingFetch<setScoreDeadLineResponse>(getSetScoreDeadLineUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(setScoreDeadLineBody),
+    })
+}
+
+export const getSetScoreDeadLineMutationOptions = <TError = void, TContext = unknown>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof setScoreDeadLine>>,
+        TError,
+        { data: SetScoreDeadLineBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof setScoreDeadLine>>,
+    TError,
+    { data: SetScoreDeadLineBody },
+    TContext
+> => {
+    const mutationKey = ['setScoreDeadLine']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof setScoreDeadLine>>,
+        { data: SetScoreDeadLineBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return setScoreDeadLine(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type SetScoreDeadLineMutationResult = NonNullable<
+    Awaited<ReturnType<typeof setScoreDeadLine>>
+>
+export type SetScoreDeadLineMutationBody = SetScoreDeadLineBody
+export type SetScoreDeadLineMutationError = undefined
+
+/**
+ * @summary Đặt hạn nhập điểm
+ */
+export const useSetScoreDeadLine = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof setScoreDeadLine>>,
+            TError,
+            { data: SetScoreDeadLineBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof setScoreDeadLine>>,
+    TError,
+    { data: SetScoreDeadLineBody },
+    TContext
+> => {
+    const mutationOptions = getSetScoreDeadLineMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Đặt hạn nhập điểm thi
+ * @summary Đặt hạn nhập điểm thi
+ */
+export type setExamScoreDeadLineResponse200 = {
+    data: SetExamScoreDeadLine200
+    status: 200
+}
+
+export type setExamScoreDeadLineResponse400 = {
+    data: undefined
+    status: 400
+}
+
+export type setExamScoreDeadLineResponseComposite =
+    | setExamScoreDeadLineResponse200
+    | setExamScoreDeadLineResponse400
+
+export type setExamScoreDeadLineResponse = setExamScoreDeadLineResponseComposite & {
+    headers: Headers
+}
+
+export const getSetExamScoreDeadLineUrl = () => {
+    return '/api/subject-class/set-exam-score-dead-line'
+}
+
+export const setExamScoreDeadLine = async (
+    setExamScoreDeadLineBody: SetExamScoreDeadLineBody,
+    options?: RequestInit
+): Promise<setExamScoreDeadLineResponse> => {
+    return customTrainingFetch<setExamScoreDeadLineResponse>(getSetExamScoreDeadLineUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(setExamScoreDeadLineBody),
+    })
+}
+
+export const getSetExamScoreDeadLineMutationOptions = <
+    TError = void,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+        TError,
+        { data: SetExamScoreDeadLineBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+    TError,
+    { data: SetExamScoreDeadLineBody },
+    TContext
+> => {
+    const mutationKey = ['setExamScoreDeadLine']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+        { data: SetExamScoreDeadLineBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return setExamScoreDeadLine(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type SetExamScoreDeadLineMutationResult = NonNullable<
+    Awaited<ReturnType<typeof setExamScoreDeadLine>>
+>
+export type SetExamScoreDeadLineMutationBody = SetExamScoreDeadLineBody
+export type SetExamScoreDeadLineMutationError = undefined
+
+/**
+ * @summary Đặt hạn nhập điểm thi
+ */
+export const useSetExamScoreDeadLine = <TError = void, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+            TError,
+            { data: SetExamScoreDeadLineBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof setExamScoreDeadLine>>,
+    TError,
+    { data: SetExamScoreDeadLineBody },
+    TContext
+> => {
+    const mutationOptions = getSetExamScoreDeadLineMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }
@@ -2120,6 +2506,251 @@ export const useImportHeQuanSu = <TError = ImportHeQuanSu400, TContext = unknown
     return useMutation(mutationOptions, queryClient)
 }
 
+export type debtStatisticsResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type debtStatisticsResponse400 = {
+    data: DebtStatistics400
+    status: 400
+}
+
+export type debtStatisticsResponseComposite = debtStatisticsResponse200 | debtStatisticsResponse400
+
+export type debtStatisticsResponse = debtStatisticsResponseComposite & {
+    headers: Headers
+}
+
+export const getDebtStatisticsUrl = (params: DebtStatisticsParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/student/debt-statistics?${stringifiedParams}`
+        : '/api/student/debt-statistics'
+}
+
+export const debtStatistics = async (
+    params: DebtStatisticsParams,
+    options?: RequestInit
+): Promise<debtStatisticsResponse> => {
+    return customTrainingFetch<debtStatisticsResponse>(getDebtStatisticsUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getDebtStatisticsQueryKey = (params: DebtStatisticsParams) => {
+    return ['/api/student/debt-statistics', ...(params ? [params] : [])] as const
+}
+
+export const getDebtStatisticsQueryOptions = <
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getDebtStatisticsQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof debtStatistics>>> = ({ signal }) =>
+        debtStatistics(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof debtStatistics>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DebtStatisticsQueryResult = NonNullable<Awaited<ReturnType<typeof debtStatistics>>>
+export type DebtStatisticsQueryError = DebtStatistics400
+
+export function useDebtStatistics<
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options: {
+        query: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>> &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof debtStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof debtStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDebtStatistics<
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof debtStatistics>>,
+                    TError,
+                    Awaited<ReturnType<typeof debtStatistics>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDebtStatistics<
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useDebtStatistics<
+    TData = Awaited<ReturnType<typeof debtStatistics>>,
+    TError = DebtStatistics400,
+>(
+    params: DebtStatisticsParams,
+    options?: {
+        query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof debtStatistics>>, TError, TData>>
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getDebtStatisticsQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
+}
+
+export type exportLecturerProfileResponse200 = {
+    data: Blob
+    status: 200
+}
+
+export type exportLecturerProfileResponse400 = {
+    data: ExportLecturerProfile400
+    status: 400
+}
+
+export type exportLecturerProfileResponseComposite =
+    | exportLecturerProfileResponse200
+    | exportLecturerProfileResponse400
+
+export type exportLecturerProfileResponse = exportLecturerProfileResponseComposite & {
+    headers: Headers
+}
+
+export const getExportLecturerProfileUrl = () => {
+    return '/api/lecturer/export-lecturer-profile'
+}
+
+export const exportLecturerProfile = async (
+    exportLecturerProfileBody: ExportLecturerProfileBody,
+    options?: RequestInit
+): Promise<exportLecturerProfileResponse> => {
+    return customTrainingFetch<exportLecturerProfileResponse>(getExportLecturerProfileUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(exportLecturerProfileBody),
+    })
+}
+
+export const getExportLecturerProfileMutationOptions = <
+    TError = ExportLecturerProfile400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof exportLecturerProfile>>,
+        TError,
+        { data: ExportLecturerProfileBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof exportLecturerProfile>>,
+    TError,
+    { data: ExportLecturerProfileBody },
+    TContext
+> => {
+    const mutationKey = ['exportLecturerProfile']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof exportLecturerProfile>>,
+        { data: ExportLecturerProfileBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return exportLecturerProfile(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type ExportLecturerProfileMutationResult = NonNullable<
+    Awaited<ReturnType<typeof exportLecturerProfile>>
+>
+export type ExportLecturerProfileMutationBody = ExportLecturerProfileBody
+export type ExportLecturerProfileMutationError = ExportLecturerProfile400
+
+export const useExportLecturerProfile = <TError = ExportLecturerProfile400, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof exportLecturerProfile>>,
+            TError,
+            { data: ExportLecturerProfileBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof exportLecturerProfile>>,
+    TError,
+    { data: ExportLecturerProfileBody },
+    TContext
+> => {
+    const mutationOptions = getExportLecturerProfileMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Import điểm rèn luyện lớp biên chế 
 
@@ -2597,6 +3228,9 @@ export const importPhanCongGiangDay = async (
     formData.append('file', importPhanCongGiangDay.file)
     formData.append('semesterId', importPhanCongGiangDay.semesterId)
     formData.append('trainingObjectTypeId', importPhanCongGiangDay.trainingObjectTypeId)
+    if (importPhanCongGiangDay.retake !== undefined && importPhanCongGiangDay.retake !== null) {
+        formData.append('retake', importPhanCongGiangDay.retake.toString())
+    }
     if (importPhanCongGiangDay.fileType !== undefined) {
         formData.append('fileType', importPhanCongGiangDay.fileType)
     }
@@ -6383,6 +7017,194 @@ export const useCreateNewReExamList = <TError = CreateExamsBadResponse, TContext
     return useMutation(mutationOptions, queryClient)
 }
 
+export type mergeExamResponse200 = {
+    data: MergeExamResponse
+    status: 200
+}
+
+export type mergeExamResponse400 = {
+    data: MergeExamBadResponse
+    status: 400
+}
+
+export type mergeExamResponseComposite = mergeExamResponse200 | mergeExamResponse400
+
+export type mergeExamResponse = mergeExamResponseComposite & {
+    headers: Headers
+}
+
+export const getMergeExamUrl = () => {
+    return '/api/exam/merge'
+}
+
+export const mergeExam = async (
+    mergeExamRequest: MergeExamRequest,
+    options?: RequestInit
+): Promise<mergeExamResponse> => {
+    return customTrainingFetch<mergeExamResponse>(getMergeExamUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(mergeExamRequest),
+    })
+}
+
+export const getMergeExamMutationOptions = <
+    TError = MergeExamBadResponse,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof mergeExam>>,
+        TError,
+        { data: MergeExamRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof mergeExam>>,
+    TError,
+    { data: MergeExamRequest },
+    TContext
+> => {
+    const mutationKey = ['mergeExam']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof mergeExam>>,
+        { data: MergeExamRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return mergeExam(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type MergeExamMutationResult = NonNullable<Awaited<ReturnType<typeof mergeExam>>>
+export type MergeExamMutationBody = MergeExamRequest
+export type MergeExamMutationError = MergeExamBadResponse
+
+export const useMergeExam = <TError = MergeExamBadResponse, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof mergeExam>>,
+            TError,
+            { data: MergeExamRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof mergeExam>>,
+    TError,
+    { data: MergeExamRequest },
+    TContext
+> => {
+    const mutationOptions = getMergeExamMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type unmergeExamResponse200 = {
+    data: UnmergeExamResponse
+    status: 200
+}
+
+export type unmergeExamResponse400 = {
+    data: UnmergeExamBadResponse
+    status: 400
+}
+
+export type unmergeExamResponseComposite = unmergeExamResponse200 | unmergeExamResponse400
+
+export type unmergeExamResponse = unmergeExamResponseComposite & {
+    headers: Headers
+}
+
+export const getUnmergeExamUrl = () => {
+    return '/api/exam/unmerge'
+}
+
+export const unmergeExam = async (
+    unmergeExamRequest: UnmergeExamRequest,
+    options?: RequestInit
+): Promise<unmergeExamResponse> => {
+    return customTrainingFetch<unmergeExamResponse>(getUnmergeExamUrl(), {
+        ...options,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...options?.headers },
+        body: JSON.stringify(unmergeExamRequest),
+    })
+}
+
+export const getUnmergeExamMutationOptions = <
+    TError = UnmergeExamBadResponse,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof unmergeExam>>,
+        TError,
+        { data: UnmergeExamRequest },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof unmergeExam>>,
+    TError,
+    { data: UnmergeExamRequest },
+    TContext
+> => {
+    const mutationKey = ['unmergeExam']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof unmergeExam>>,
+        { data: UnmergeExamRequest }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return unmergeExam(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type UnmergeExamMutationResult = NonNullable<Awaited<ReturnType<typeof unmergeExam>>>
+export type UnmergeExamMutationBody = UnmergeExamRequest
+export type UnmergeExamMutationError = UnmergeExamBadResponse
+
+export const useUnmergeExam = <TError = UnmergeExamBadResponse, TContext = unknown>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof unmergeExam>>,
+            TError,
+            { data: UnmergeExamRequest },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof unmergeExam>>,
+    TError,
+    { data: UnmergeExamRequest },
+    TContext
+> => {
+    const mutationOptions = getUnmergeExamMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
 /**
  * Sinh phách cho kỳ thi
  * @summary Sinh phách cho kỳ thi
@@ -6412,7 +7234,7 @@ export type genExamCodeResponse = genExamCodeResponseComposite & {
 }
 
 export const getGenExamCodeUrl = () => {
-    return '/api/exam-score/gex-exam-code'
+    return '/api/exam-score/gen-exam-code'
 }
 
 export const genExamCode = async (
@@ -6521,7 +7343,7 @@ export type genExamRoomCodeResponse = genExamRoomCodeResponseComposite & {
 }
 
 export const getGenExamRoomCodeUrl = () => {
-    return '/api/exam-score/gex-exam-room-code'
+    return '/api/exam-score/gen-exam-room-code'
 }
 
 export const genExamRoomCode = async (

@@ -1,10 +1,8 @@
 import { queryClient } from '@api/index'
-import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/text-truncate'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { TrainingMajor } from '@workspace/db/client'
 import type { PlanTraining } from '@workspace/db/client'
 import {
     useFindFirstPlanTrainingDelay,
@@ -226,48 +224,10 @@ export default function MonCham() {
                     }}
                 >
                     <Col span={24}>
-                        <Flex gap={4}>
-                            <Col span={8}>
-                                <Form.Item className="mb-0" name="searchText">
-                                    <Input id="search" placeholder="Tìm kiếm" allowClear />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    className="mb-0"
-                                    name="trainingMajorId"
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Chọn chuyên ngành đào tạo"
-                                        options={trainingMajorData.map((i: TrainingMajor) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        }))}
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    className="mb-0"
-                                    name="trainingCourseId"
-                                    labelAlign="left"
-                                >
-                                    <Select
-                                        placeholder="Khoá đào tạo"
-                                        options={trainingCourseData.map((i) => ({
-                                            value: i.id,
-                                            label: i.name,
-                                        }))}
-                                        allowClear
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Flex>
-                    </Col>
-                    <Col span={24} className="mt-2">
-                        <Flex justify="end" gap={4}>
+                        <Flex justify="space-between" gap={4}>
+                            <Form.Item className="mb-0" name="searchText">
+                                <Input id="search" placeholder="Tìm kiếm" allowClear />
+                            </Form.Item>
                             <Button onClick={onSubmit} type="primary">
                                 Thêm vào kế hoạch
                             </Button>

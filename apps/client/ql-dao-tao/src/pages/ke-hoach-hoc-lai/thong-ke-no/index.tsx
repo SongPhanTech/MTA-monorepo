@@ -1,9 +1,10 @@
 import Select from '@components/commons/select'
 import DefaultLayout from '@layouts/default-layout'
 import { useFindManyTrainingCourse, useFindManyTrainingMajor } from '@workspace/db/hooks'
-import { useOpenSubjectClassRetake } from '@workspace/libs/api/training'
+import { debtStatistics, useOpenSubjectClassRetake } from '@workspace/libs/api/training'
+import { getFilenameFromContentDisposition } from '@workspace/libs/utils'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Col, Form, Input, Row } from 'antd'
+import { Button, Col, Form, Input, message, Row } from 'antd'
 import {
     BarElement,
     CategoryScale,
@@ -26,19 +27,6 @@ interface SubjectBySemesterForm {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-export const options = {
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top' as const,
-        },
-        title: {
-            display: true,
-            text: 'Số SV nợ',
-        },
-    },
-}
-
 export default function DangKyHocLai() {
     const [form] = Form.useForm<SubjectBySemesterForm>()
     const { id: semesterId } = useSemesterStore()
@@ -47,6 +35,43 @@ export default function DangKyHocLai() {
     const trainingCourseId = Form.useWatch('trainingCourseId', form)
     const trainingMajorId = Form.useWatch('trainingMajorId', form)
     const [subjectVersionId, setSubjectVersionId] = useState<string>()
+    const [loading, setLoading] = useState(false)
+
+    const downloadStatsFile = async () => {
+        if (!trainingObjectTypeId) {
+            message.error('Vui lòng chọn ĐTĐT')
+            return
+        }
+        if (!trainingCourseId) {
+            message.error('Vui lòng chọn khoá đào tạo')
+            return
+        }
+        try {
+            setLoading(true)
+            // TODO: cho chọn ngày hoặc lấy ngày từ HK đang chọn
+            const { status, headers, data } = await debtStatistics({
+                trainingObjectTypeId: trainingObjectTypeId,
+                trainingCourseId,
+            })
+            if (status === 200) {
+                const filename = getFilenameFromContentDisposition(
+                    headers.get('content-disposition') as string
+                )
+                const blob = new Blob([data], { type: headers.get('content-type') as string })
+                const url = window.URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.href = url
+                link.download = filename || 'thong-ke-no.xlsx'
+                link.click()
+                window.URL.revokeObjectURL(url)
+            }
+        } catch (error) {
+            console.error(error)
+            message.error('Lỗi khi tải file')
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const { data: res } = useOpenSubjectClassRetake(
         {
@@ -70,6 +95,21 @@ export default function DangKyHocLai() {
 
     const rawData = useMemo(() => (res?.status === 200 ? res?.data.data : []), [res])
 
+    const options = useMemo(() => {
+        return {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top' as const,
+                },
+                title: {
+                    display: true,
+                    text: rawData.length ? 'Số SV nợ' : 'Không có SV nợ',
+                },
+            },
+        }
+    }, [rawData.length])
+
     const labels = useMemo(() => {
         return rawData.map((item) => [item.code, item.name].join(' - '))
     }, [rawData])
@@ -91,7 +131,6 @@ export default function DangKyHocLai() {
         const e = getElementAtEvent(chartRef.current, event)
         if (e[0]) {
             setSubjectVersionId(rawData.at(e[0].index)?.id)
-            console.log('sid', rawData.at(e[0].index)?.id)
         }
     }
 
@@ -100,12 +139,12 @@ export default function DangKyHocLai() {
             <div className="flex-1 md:w-1/2">
                 <Form form={form}>
                     <Row gutter={[8, 0]}>
-                        <Col span={8}>
+                        <Col span={7}>
                             <Form.Item className="mb-0" name="searchText">
                                 <Input id="search" placeholder="Tìm kiếm" allowClear />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col span={7}>
                             <Form.Item className="mb-0" name="trainingMajorId" labelAlign="left">
                                 <Select
                                     placeholder="Chọn chuyên ngành đào tạo"
@@ -117,7 +156,7 @@ export default function DangKyHocLai() {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col span={7}>
                             <Form.Item className="mb-0" name="trainingCourseId" labelAlign="left">
                                 <Select
                                     placeholder="Khoá đào tạo"
@@ -128,6 +167,11 @@ export default function DangKyHocLai() {
                                     allowClear
                                 />
                             </Form.Item>
+                        </Col>
+                        <Col span={3}>
+                            <Button type="primary" onClick={downloadStatsFile} loading={loading}>
+                                Tải thống kê
+                            </Button>
                         </Col>
                         <Col span={24}>
                             <Form.Item hidden name="subjectSelected" />

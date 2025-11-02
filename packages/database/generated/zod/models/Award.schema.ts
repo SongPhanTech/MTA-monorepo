@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,19 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string(),
+    englishName: z.string().nullish(),
+    bonusScore: z.number(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     englishName: z.string().nullish(),
     bonusScore: z.number(),
@@ -41,7 +53,7 @@ export const AwardSchema = AwardScalarSchema.merge(relationSchema.partial());
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const AwardPrismaCreateSchema = baseSchema.partial().passthrough();
+export const AwardPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -51,21 +63,21 @@ export const AwardPrismaCreateSchema = baseSchema.partial().passthrough();
 export const AwardPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     englishName: z.string().nullish(),
-    bonusScore: z.union([z.number(), z.record(z.unknown())])
+    bonusScore: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
 /**
  * `Award` schema for create operations excluding foreign keys and relations.
  */
-export const AwardCreateScalarSchema = baseSchema.partial({
+export const AwardCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -73,7 +85,7 @@ export const AwardCreateScalarSchema = baseSchema.partial({
 /**
  * `Award` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const AwardCreateSchema = baseSchema.partial({
+export const AwardCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -81,7 +93,7 @@ export const AwardCreateSchema = baseSchema.partial({
 /**
  * `Award` schema for update operations excluding foreign keys and relations.
  */
-export const AwardUpdateScalarSchema = baseSchema.partial();
+export const AwardUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

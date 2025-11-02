@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -23,12 +22,37 @@ const baseSchema = z.object({
     workplace: z.string().nullish(),
     phone: z.string().nullish(),
     email: z.string().email().nullish(),
+    bankAccountNumber: z.string().nullish(),
+    bankName: z.string().nullish(),
+    eligiblePresident: z.boolean(),
+    eligibleSecretary: z.boolean(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string().nullish(),
+    academicRank: z.string().nullish(),
+    academicDegree: z.string().nullish(),
+    organization: z.string().nullish(),
+    position: z.string().nullish(),
+    specialization: z.string().nullish(),
+    workplace: z.string().nullish(),
+    phone: z.string().nullish(),
+    email: z.string().email().nullish(),
+    bankAccountNumber: z.string().nullish(),
+    bankName: z.string().nullish(),
     eligiblePresident: z.boolean(),
     eligibleSecretary: z.boolean(),
 }
 ).strict();
 const relationSchema = z.object({
-    lecturer: z.record(z.unknown()).optional(),
+    lecturer: z.record(z.string(), z.unknown()).optional(),
     major: z.array(z.unknown()).optional(),
     supervisedTheses: z.array(z.unknown()).optional(),
     coSupervisedTheses: z.array(z.unknown()).optional(),
@@ -59,7 +83,7 @@ export const ExpertProfileSchema = ExpertProfileScalarSchema.merge(fkSchema).mer
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ExpertProfilePrismaCreateSchema = baseSchema.partial().passthrough();
+export const ExpertProfilePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -69,11 +93,11 @@ export const ExpertProfilePrismaCreateSchema = baseSchema.partial().passthrough(
 export const ExpertProfilePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string().nullish(),
     academicRank: z.string().nullish(),
     academicDegree: z.string().nullish(),
@@ -83,6 +107,8 @@ export const ExpertProfilePrismaUpdateSchema = z.object({
     workplace: z.string().nullish(),
     phone: z.string().nullish(),
     email: z.string().email().nullish(),
+    bankAccountNumber: z.string().nullish(),
+    bankName: z.string().nullish(),
     eligiblePresident: z.boolean(),
     eligibleSecretary: z.boolean()
 }).partial().passthrough();
@@ -91,7 +117,7 @@ export const ExpertProfilePrismaUpdateSchema = z.object({
 /**
  * `ExpertProfile` schema for create operations excluding foreign keys and relations.
  */
-export const ExpertProfileCreateScalarSchema = baseSchema.partial({
+export const ExpertProfileCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -105,7 +131,7 @@ export const ExpertProfileCreateSchema = ExpertProfileCreateScalarSchema.merge(f
 /**
  * `ExpertProfile` schema for update operations excluding foreign keys and relations.
  */
-export const ExpertProfileUpdateScalarSchema = baseSchema.partial();
+export const ExpertProfileUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

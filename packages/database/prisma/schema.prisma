@@ -140,6 +140,7 @@ enum SubjectVersionType {
   Internship
   Research
   Project
+  Practice
 
   @@schema("ql-dao-tao")
 }
@@ -194,6 +195,13 @@ enum SubjectClassType {
   NORMAL
   RETAKE
   REEXAM
+
+  @@schema("ql-dao-tao")
+}
+
+enum SubjectClassStatus {
+  DRAFT
+  OFFICIAL
 
   @@schema("ql-dao-tao")
 }
@@ -765,7 +773,9 @@ model UserProfile {
   faqsApproved                  FAQ[]                        @relation("FAQApproved")
   conversations                 Conversation[]
   subjectVersionHistory         SubjectVersionHistory[]
+  subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
+  surveySession                 SurveySession[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -2343,14 +2353,17 @@ model StudentSubjectScoreHistory {
   finalScore            Decimal?            @db.Decimal(5, 1)
   /// điểm tổng kết chuyển trường
   manualFinalScore      Float?
-  examPostponedReason   Boolean?
-  examPostponed         String?
+  /// hoãn thi
+  examPostponed         Boolean?
+  examPostponedReason   String?
+  /// cấm thi
   examBanned            Boolean?
   examBannedReason      String?
+  /// đình chỉ
   suspended             Boolean?
   suspendedReason       String?
-  updatedBy             UserProfile         @relation(fields: [updatedById], references: [id])
-  updatedById           String
+  updatedBy             UserProfile?        @relation(fields: [updatedById], references: [id])
+  updatedById           String?
 
   @@schema("ql-dao-tao")
 }
@@ -2966,65 +2979,94 @@ model ClassRegisterLogs {
 
 /// Lớp môn học
 model SubjectClass {
-  id                         String                @id() @default(cuid())
-  active                     Boolean               @default(true)
-  description                String?               @db.Text()
-  deletedAt                  DateTime?
-  createdAt                  DateTime              @default(now())
-  updatedAt                  DateTime              @default(now()) @updatedAt()
-  code                       String
-  name                       String
-  startDate                  DateTime?
-  endDate                    DateTime?
-  subject                    SubjectVersion        @relation(fields: [subjectId], references: [id])
-  subjectId                  String
-  schedule                   SubjectClassSchedule?
-  maxStudent                 Int
-  type                       SubjectClassType      @default(NORMAL)
-  trainingObjectType         TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
-  trainingObjectTypeId       String
-  semester                   Semester              @relation(fields: [semesterId], references: [id])
-  semesterId                 String
-  cancelled                  Boolean               @default(false)
-  lecturerAssignmentDeadline DateTime?
-  sendLecturerAssignmentAt   DateTime?
-  submitLecturerAssignmentAt DateTime?
-  examDate                   DateTime?
-  examType                   ExamType?
-  exam                       Exam?                 @relation(fields: [examId], references: [id])
-  examId                     String?
-  /// ngày bắt dầu nhập điểm CC/TX
-  scoreDeadLineStart         DateTime?
+  id                          String                @id() @default(cuid())
+  active                      Boolean               @default(true)
+  description                 String?               @db.Text()
+  deletedAt                   DateTime?
+  createdAt                   DateTime              @default(now())
+  updatedAt                   DateTime              @default(now()) @updatedAt()
+  code                        String
+  name                        String
+  startDate                   DateTime?
+  endDate                     DateTime?
+  subject                     SubjectVersion        @relation(fields: [subjectId], references: [id])
+  subjectId                   String
+  schedule                    SubjectClassSchedule?
+  maxStudent                  Int
+  type                        SubjectClassType      @default(NORMAL)
+  status                      SubjectClassStatus    @default(DRAFT)
+  trainingObjectType          TrainingObjectType    @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId        String
+  semester                    Semester              @relation(fields: [semesterId], references: [id])
+  semesterId                  String
+  cancelled                   Boolean               @default(false)
+  lecturerAssignmentDeadline  DateTime?
+  sendLecturerAssignmentAt    DateTime?
+  submitLecturerAssignmentAt  DateTime?
+  approveLecturerAssignmentAt DateTime?
+  examDate                    DateTime?
+  examType                    ExamType?
+  exam                        Exam?                 @relation(fields: [examId], references: [id])
+  examId                      String?
+  /// ngày bắt đầu nhập điểm CC/TX
+  scoreDeadLineStart          DateTime?
   /// ngày kết thúc nhập điểm CC/TX
-  scoreDeadline              DateTime?
+  scoreDeadline               DateTime?
   /// hạn nhập điểm thi
-  examScoreDeadline          DateTime?
-  enteredScore               Boolean               @default(false)
-  enteredExamScore           Boolean               @default(false)
-  issuedScoreAt              DateTime?
-  isLockScore                Boolean               @default(false)
-  isLockExamScore            Boolean               @default(true)
-  scoreSubmitted             Boolean               @default(false)
-  scoreChecked               Boolean               @default(false)
-  room                       Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
-  roomId                     String?
-  trainingLocation           TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
-  trainingLocationId         String?
-  mainLecturer               Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
-  lecturerId                 String?
-  extraLecturer              Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
-  extraLecturerId            String?
-  enterGradeLecturer         Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
-  enterGradeLecturerId       String?
-  subjectClassStudent        StudentSubjectScore[]
-  fixedClasses               FixedClass[]
-  classSchedules             ClassSchedule[]
-  thesisProjects             ThesisProject[]
-  expertProfile              ExpertProfile[]
-  defenseRooms               Room[]                @relation("DefenseRooms")
-  surveyObjectTypes          SurveyObjectType[]
-  classRegisterLogs          ClassRegisterLogs[]
-  subjectClassTimes          SubjectClassTime[]
+  examScoreDeadline           DateTime?
+  enteredScore                Boolean               @default(false)
+  enteredExamScore            Boolean               @default(false)
+  issuedScoreAt               DateTime?
+  /// khoá điểm CC/TX
+  isLockScore                 Boolean               @default(false)
+  /// khoá điểm thi
+  isLockExamScore             Boolean               @default(true)
+  scoreSubmitted              Boolean               @default(false)
+  scoreChecked                Boolean               @default(false)
+  room                        Room?                 @relation(name: "ClassRoom", fields: [roomId], references: [id])
+  roomId                      String?
+  trainingLocation            TrainingLocation?     @relation(name: "ClassTrainingLocation", fields: [trainingLocationId], references: [id])
+  trainingLocationId          String?
+  mainLecturer                Lecturer?             @relation(name: "MainLecturer", fields: [lecturerId], references: [id])
+  lecturerId                  String?
+  extraLecturer               Lecturer?             @relation(name: "ExtraLecturer", fields: [extraLecturerId], references: [id])
+  extraLecturerId             String?
+  enterGradeLecturer          Lecturer?             @relation(name: "EnterGradeLecturer", fields: [enterGradeLecturerId], references: [id])
+  enterGradeLecturerId        String?
+  subjectClassStudent         StudentSubjectScore[]
+  fixedClasses                FixedClass[]
+  classSchedules              ClassSchedule[]
+  thesisProjects              ThesisProject[]
+  expertProfile               ExpertProfile[]
+  defenseRooms                Room[]                @relation("DefenseRooms")
+  surveyObjectTypes           SurveyObjectType[]
+  classRegisterLogs           ClassRegisterLogs[]
+  subjectClassTimes           SubjectClassTime[]
+  subjectClassHistory         SubjectClassHistory[]
+  survey                      Survey[]
+
+  @@schema("ql-dao-tao")
+}
+
+model SubjectClassHistory {
+  id                 String       @id() @default(cuid())
+  code               String?      @unique()
+  active             Boolean      @default(true)
+  description        String?      @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @default(now()) @updatedAt()
+  subjectClass       SubjectClass @relation(fields: [subjectClassId], references: [id])
+  subjectClassId     String
+  scoreDeadLineStart DateTime?
+  scoreDeadline      DateTime?
+  examScoreDeadline  DateTime?
+  isLockScore        Boolean?
+  isLockExamScore    Boolean?
+  scoreSubmitted     Boolean?
+  scoreChecked       Boolean?
+  updatedBy          UserProfile? @relation(fields: [updatedById], references: [id])
+  updatedById        String?
 
   @@schema("ql-dao-tao")
 }
@@ -3225,12 +3267,12 @@ model Room {
   examCapacity   Int?
   building       Building?       @relation(fields: [buildingId], references: [id])
   buildingId     String?
-  exam           Exam[]
   subjectClasses SubjectClass[]  @relation("ClassRoom")
   defenseRooms   SubjectClass[]  @relation("DefenseRooms")
   thesisProject  ThesisProject[]
   classSchedules ClassSchedule[]
   examRooms      ExamRoom[]
+  examRoomSlot   ExamRoomSlot[]
 
   @@schema("ql-dao-tao")
 }
@@ -3880,8 +3922,8 @@ model StudentTrainingScore {
   trainingScoreSessionId String
   student                Student              @relation(fields: [studentId], references: [id])
   studentId              String
-  score                  Float                @default(0)
-  studentTrainingType    StudentTrainingType?
+  score                  Float?
+  studentTrainingType    StudentTrainingType? @default(GOOD)
 
   @@unique([trainingScoreSessionId, studentId])
   @@schema("ql-dao-tao")
@@ -4169,6 +4211,8 @@ model ExpertProfile {
   workplace               String?
   phone                   String?
   email                   String?
+  bankAccountNumber       String?
+  bankName                String?
   eligiblePresident       Boolean
   eligibleSecretary       Boolean
   supervisedTheses        ThesisProject[]           @relation("SupervisorToThesis")
@@ -4699,6 +4743,7 @@ model SurveyTopic {
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @default(now()) @updatedAt()
   name                String
+  clusterSurvey       ClusterSurvey[]
   survey              Survey[]
   surveyQuestionGroup SurveyQuestionGroup[]
 
@@ -4715,31 +4760,33 @@ model SurveyQuestionGroup {
   updatedAt      DateTime         @default(now()) @updatedAt()
   name           String
   surveyQuestion SurveyQuestion[]
-  surveyTopic    SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId  String
+  surveyTopic    SurveyTopic[]
 
   @@schema("khao-thi")
 }
 
 /// Khảo sát cụm
 model ClusterSurvey {
-  id               String             @id() @default(cuid())
-  code             String?            @unique()
-  active           Boolean            @default(true)
-  description      String?            @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now()) @updatedAt()
-  name             String
-  startDate        DateTime
-  endDate          DateTime?
-  isPublic         Boolean            @default(false)
-  anonymous        Boolean            @default(true)
-  surveyObjectType SurveyObjectType[]
-  lecturers        Lecturer[]
-  surveyChoice     SurveyChoice[]
-  surveyQuestion   SurveyQuestion[]
-  surveys          Survey[]
+  id                   String             @id() @default(cuid())
+  code                 String?            @unique()
+  active               Boolean            @default(true)
+  description          String?            @db.Text()
+  deletedAt            DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now()) @updatedAt()
+  name                 String
+  additionalSuggestion Boolean
+  startDate            DateTime
+  endDate              DateTime?
+  isPublic             Boolean            @default(false)
+  anonymous            Boolean            @default(true)
+  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId        String
+  surveyObjectType     SurveyObjectType[]
+  lecturers            Lecturer[]
+  surveyChoice         SurveyChoice[]
+  surveyQuestion       SurveyQuestion[]
+  surveys              Survey[]
 
   @@schema("khao-thi")
 }
@@ -4758,6 +4805,7 @@ model Survey {
   isPublic             Boolean            @default(false)
   anonymous            Boolean            @default(true)
   surveyObjectType     SurveyObjectType[]
+  subjectClasses       SubjectClass[]
   lectureId            String?
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
   surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
@@ -4773,21 +4821,19 @@ model Survey {
 }
 
 model SurveyQuestion {
-  id                    String               @id() @default(cuid())
-  code                  String?              @unique()
-  active                Boolean              @default(true)
-  description           String?              @db.Text()
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
   deletedAt             DateTime?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @default(now()) @updatedAt()
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt()
   name                  String
   type                  SurveyQuestionType
-  surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
-  surveyQuestionGroupId String?
-  survey                Survey?              @relation(fields: [surveyId], references: [id])
-  surveyId              String?
-  clusterSurvey         ClusterSurvey?       @relation(fields: [clusterSurveyId], references: [id])
-  clusterSurveyId       String?
+  surveyQuestionGroup   SurveyQuestionGroup @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String
+  survey                Survey[]
+  clusterSurvey         ClusterSurvey[]
   surveyResponses       SurveyResponse[]
 
   @@schema("khao-thi")
@@ -4825,6 +4871,8 @@ model SurveySession {
   survey               Survey            @relation(fields: [surveyId], references: [id])
   surveyId             String
   additionalSuggestion String?
+  profile              UserProfile?      @relation(fields: [profileId], references: [id])
+  profileId            String?
   student              Student?          @relation(fields: [studentId], references: [id])
   studentId            String?
   startedAt            DateTime          @default(now())
@@ -4863,18 +4911,19 @@ model SurveyResponse {
 
 /// Phiên bản ngân hàng câu hỏi
 model QuestionBank {
-  id               String         @id() @default(cuid())
-  code             String?        @unique()
-  active           Boolean        @default(true)
-  description      String?        @db.Text()
-  deletedAt        DateTime?
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now()) @updatedAt()
-  name             String
-  subjectVersion   SubjectVersion @relation(fields: [subjectVersionId], references: [id])
-  subjectVersionId String
-  questions        Question[]
-  exam             Exam[]
+  id                 String              @id() @default(cuid())
+  code               String?             @unique()
+  active             Boolean             @default(true)
+  description        String?             @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @default(now()) @updatedAt()
+  name               String
+  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId   String
+  questions          Question[]
+  testStructureRules TestStructureRule[]
+  exam               Exam[]
 
   @@unique([subjectVersionId, name])
   @@schema("khao-thi")
@@ -5009,6 +5058,10 @@ model Exam {
   status              ExamStatus            @default(DRAFT)
   questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
   questionBankId      String?
+  /// khoá DS thi
+  lockExamSessions    Boolean               @default(false)
+  /// Đã đánh phách
+  createdExamCode     Boolean               @default(false)
   lockExamCode        Boolean               @default(false)
   /// thời gian thi
   duration            Int?
@@ -5016,12 +5069,30 @@ model Exam {
   subjectClass        SubjectClass[]
   /// thí sinh
   studentSubjectScore StudentSubjectScore[]
-  room                Room[]
+  examRoomSlots       ExamRoomSlot[]
   examBank            ExamBank[]
   testStructureRules  TestStructureRule[]
   examSessions        ExamSession[]
   examRooms           ExamRoom[]
 
+  @@schema("khao-thi")
+}
+
+model ExamRoomSlot {
+  id          String    @id() @default(cuid())
+  code        String?   @unique()
+  active      Boolean   @default(true)
+  description String?   @db.Text()
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt()
+  exam        Exam      @relation(fields: [examId], references: [id])
+  examId      String
+  room        Room      @relation(fields: [roomId], references: [id])
+  roomId      String
+  cap         Int
+
+  @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 
@@ -5059,8 +5130,10 @@ model TestStructureRule {
   deletedAt        DateTime?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @default(now()) @updatedAt()
-  exam             Exam           @relation(fields: [examId], references: [id])
-  examId           String
+  exam             Exam?          @relation(fields: [examId], references: [id])
+  examId           String?
+  questionBank     QuestionBank?  @relation(fields: [questionBankId], references: [id])
+  questionBankId   String?
   knowledgeBlock   KnowledgeBlock @relation(fields: [knowledgeBlockId], references: [id])
   knowledgeBlockId String
   questionPoint    Float
@@ -5068,6 +5141,7 @@ model TestStructureRule {
   count            Int
 
   @@unique([examId, knowledgeBlockId, questionPoint, questionType])
+  @@unique([questionBankId, knowledgeBlockId, questionPoint, questionType])
   @@schema("khao-thi")
 }
 

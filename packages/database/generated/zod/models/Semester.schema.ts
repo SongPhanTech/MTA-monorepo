@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { SemesterTypeSchema } from '../enums/SemesterType.schema';
@@ -22,8 +21,23 @@ const baseSchema = z.object({
     endDate: z.coerce.date(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    shortName: z.string().nullish(),
+    semesterType: SemesterTypeSchema.nullish(),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date(),
+}
+).strict();
 const relationSchema = z.object({
-    schoolYear: z.record(z.unknown()),
+    schoolYear: z.record(z.string(), z.unknown()),
     subjectClasses: z.array(z.unknown()).optional(),
     trainingCoursesStart: z.array(z.unknown()).optional(),
     trainingScoreSession: z.array(z.unknown()).optional(),
@@ -57,7 +71,7 @@ export const SemesterSchema = SemesterScalarSchema.merge(fkSchema).merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const SemesterPrismaCreateSchema = baseSchema.partial().passthrough();
+export const SemesterPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -67,11 +81,11 @@ export const SemesterPrismaCreateSchema = baseSchema.partial().passthrough();
 export const SemesterPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     shortName: z.string().nullish(),
     semesterType: SemesterTypeSchema.nullish(),
@@ -83,7 +97,7 @@ export const SemesterPrismaUpdateSchema = z.object({
 /**
  * `Semester` schema for create operations excluding foreign keys and relations.
  */
-export const SemesterCreateScalarSchema = baseSchema.partial({
+export const SemesterCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -97,7 +111,7 @@ export const SemesterCreateSchema = SemesterCreateScalarSchema.merge(fkSchema);
 /**
  * `Semester` schema for update operations excluding foreign keys and relations.
  */
-export const SemesterUpdateScalarSchema = baseSchema.partial();
+export const SemesterUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

@@ -45,7 +45,7 @@ func (h *handlers) editDestinationHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
-	return respondhtmx.AlertWithRefresh(c, "Destination updated")
+	return respondhtmx.AlertWithRefresh(c, "Đích đến lưu trữ đã được cập nhật thành công.")
 }
 
 func editDestinationButton(
@@ -68,7 +68,7 @@ func editDestinationButton(
 
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeMd,
-		Title: "Edit destination",
+		Title: "Chỉnh sửa",
 		Content: []nodx.Node{
 			nodx.FormEl(
 				nodx.Id(formID),
@@ -181,7 +181,7 @@ func editDestinationButton(
 		component.OptionsDropdownButton(
 			mo.OpenerAttr,
 			lucide.Pencil(),
-			component.SpanText("Edit destination"),
+			component.SpanText("Chỉnh sửa"),
 		),
 	)
 }

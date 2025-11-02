@@ -1,0 +1,517 @@
+import { queryClient } from '@api/index'
+import Table from '@components/commons/table'
+import { useStore } from '@tanstack/react-store'
+import type { ScoreConvert } from '@workspace/db/client'
+import {
+    useCountStudent,
+    useFindManyFixedClass,
+    useFindManyStudent,
+    useFindUniqueSubjectClass,
+} from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
+import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Checkbox, Col, Form, Input, message, Row, Select } from 'antd'
+import _ from 'lodash'
+import { Search } from 'lucide-react'
+import { type Key, useCallback, useEffect, useState } from 'react'
+import { dangKyHocChoLopQuanLyStore } from '../..'
+import useSpinner from '@hooks/spinner'
+
+interface FilterProps {
+    searchText: string | null
+    trainingCourseId?: string
+    fixedClassId?: string
+}
+
+interface RegisterClassProps {
+    hocLai?: boolean
+}
+
+export default function CaNhanTrongLopQuanLy({ hocLai }: RegisterClassProps) {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [numberOfPages, setNumberOfPages] = useState(50)
+    const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
+
+    const [filters, setFilters] = useState<FilterProps>({
+        searchText: '',
+        trainingCourseId: undefined,
+        fixedClassId: undefined,
+    })
+    const { id: semesterId } = useSemesterStore()
+    const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
+
+    const { subjectClassId, fixedClassesIds } = useStore(dangKyHocChoLopQuanLyStore)
+
+    const { data: fixedClassData = [] } = useFindManyFixedClass({
+        orderBy: {
+            code: 'asc',
+        },
+        where: {
+            active: true,
+            trainingCourseId: filters.trainingCourseId,
+            id: {
+                in: fixedClassesIds,
+            },
+        },
+    })
+
+    const { data: students = [], refetch } = useFindManyStudent({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          {
+                              userProfile: {
+                                  fullname: {
+                                      contains: filters.searchText,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            fixedClass: {
+                trainingCourseId: filters.trainingCourseId,
+                id: filters.fixedClassId
+                    ? filters.fixedClassId
+                    : {
+                          in: fixedClassesIds,
+                      },
+            },
+            active: true,
+            status: 'ENROLLED',
+            deletedAt: null,
+            trainingObjectTypeId,
+        },
+        include: {
+            userProfile: {
+                select: {
+                    fullname: true,
+                },
+            },
+            studentSemesterResult: {
+                select: {
+                    gpaBase10: true,
+                    cumulativeGpaBase10: true,
+                },
+                orderBy: {
+                    semester: {
+                        startDate: 'desc',
+                    },
+                },
+            },
+            subjectClassStudent: {
+                select: {
+                    finalScore: true,
+                },
+                orderBy: {
+                    finalScore: 'desc',
+                },
+                where: {
+                    subjectClassId: subjectClassId || undefined,
+                },
+            },
+            fixedClass: {
+                select: {
+                    code: true,
+                    trainingCourse: {
+                        select: {
+                            name: true,
+                            scoreConverts: true,
+                        },
+                    },
+                },
+            },
+        },
+        orderBy: [
+            {
+                fixedClass: {
+                    code: 'asc',
+                },
+            },
+            {
+                userProfile: {
+                    firstName: 'asc',
+                },
+            },
+        ],
+        take: numberOfPages,
+        skip: (currentPage - 1) * numberOfPages,
+    })
+
+    const { data: allStudentIds = [] } = useFindManyStudent({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          {
+                              userProfile: {
+                                  fullname: {
+                                      contains: filters.searchText,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            fixedClass: {
+                trainingCourseId: filters.trainingCourseId,
+                id: filters.fixedClassId
+                    ? filters.fixedClassId
+                    : {
+                          in: fixedClassesIds,
+                      },
+            },
+            active: true,
+            status: 'ENROLLED',
+            deletedAt: null,
+            trainingObjectTypeId,
+        },
+        select: {
+            id: true,
+        },
+    })
+
+    const { data: selectedSubjectClass } = useFindUniqueSubjectClass(
+        {
+            where: {
+                id: subjectClassId as string,
+            },
+            select: {
+                subjectId: true,
+                subjectClassStudent: {
+                    select: {
+                        studentId: true,
+                    },
+                },
+            },
+        },
+        { enabled: !!semesterId && !!subjectClassId }
+    )
+
+    const { data: countStudents = 0 } = useCountStudent({
+        where: {
+            ...(filters.searchText && filters.searchText !== ''
+                ? {
+                      OR: [
+                          {
+                              userProfile: {
+                                  fullname: {
+                                      contains: filters.searchText,
+                                      mode: 'insensitive',
+                                  },
+                              },
+                          },
+                          {
+                              code: {
+                                  contains: filters.searchText,
+                                  mode: 'insensitive',
+                              },
+                          },
+                      ],
+                  }
+                : {}),
+            fixedClass: {
+                trainingCourseId: filters.trainingCourseId,
+                id: filters.fixedClassId
+                    ? filters.fixedClassId
+                    : {
+                          in: fixedClassesIds,
+                      },
+            },
+            active: true,
+            status: 'ENROLLED',
+            deletedAt: null,
+            trainingObjectTypeId,
+        },
+    })
+
+    const debouncedRefetch = useCallback(
+        _.debounce(() => {
+            refetch()
+        }, 500),
+        []
+    )
+
+    useEffect(() => {
+        if (students && selectedSubjectClass) {
+            const selectedSubjectClassFixedClassIds = selectedSubjectClass?.subjectClassStudent.map(
+                (scs) => scs.studentId
+            )
+            const selectedKeys = students
+                .filter((item) => selectedSubjectClassFixedClassIds?.includes(item.id))
+                .map((item) => item.id)
+            setSelectedRowKeys(selectedKeys)
+            if (
+                !dangKyHocChoLopQuanLyStore.state.studentIds.compare(
+                    selectedKeys,
+                    (a, b) => a === b
+                )
+            ) {
+                dangKyHocChoLopQuanLyStore.setState((prev) => ({
+                    ...prev,
+                    studentIds: selectedKeys as string[],
+                }))
+            }
+        }
+    }, [students, selectedSubjectClass])
+
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => {
+            const newFilters = { ...prev, [key]: value }
+            debouncedRefetch()
+            return newFilters
+        })
+    }
+
+    const handleRowSelection = (ids: Key[]) => {
+        setSelectedRowKeys(ids)
+    }
+
+    const { showSpinner, hideSpinner } = useSpinner()
+
+    const handleSaveDangKyHoc = async () => {
+        try {
+            showSpinner()
+            const res = await sqlTransaction([
+                {
+                    model: 'SubjectClass',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id: subjectClassId as string,
+                        },
+                        data: {
+                            subjectClassStudent: {
+                                deleteMany: {},
+                            },
+                            fixedClasses: {
+                                set: fixedClassesIds.map((id) => ({ id })),
+                            },
+                        },
+                    },
+                },
+                {
+                    model: 'SubjectClass',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id: subjectClassId as string,
+                        },
+                        data: {
+                            subjectClassStudent: {
+                                create: selectedRowKeys.map((studentId) => ({
+                                    student: {
+                                        connect: {
+                                            id: studentId as string,
+                                        },
+                                    },
+                                    subjectVersion: {
+                                        connect: {
+                                            id: selectedSubjectClass?.subjectId as string,
+                                        },
+                                    },
+                                })),
+                            },
+                        },
+                    },
+                },
+            ])
+            if (res.status !== 200) throw new Error('Transaction failed')
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'SubjectClass'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'FixedClass'],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'Student'],
+            })
+            message.success('Lưu danh sách đăng ký học thành công')
+        } catch (error) {
+            message.error('Lưu danh sách đăng ký học thất bại')
+        }
+        hideSpinner()
+    }
+
+    return (
+        <Row gutter={[4, 0]}>
+            <Col span={8}>
+                <Form.Item className="mb-1" name="searchText">
+                    <Input
+                        id="search"
+                        placeholder="Tìm kiếm HV/SV..."
+                        onChange={(e) => handleFilterChange('searchText', e.target.value)}
+                        style={{ height: 32 }}
+                        prefix={
+                            <Search
+                                size={15}
+                                style={{
+                                    color: 'rgba(0, 0, 0, 0.25)',
+                                }}
+                            />
+                        }
+                        allowClear
+                    />
+                </Form.Item>
+            </Col>
+            <Col span={8}>
+                <Select
+                    placeholder="Chọn lớp"
+                    className="w-full"
+                    dropdownStyle={{
+                        width: '400px',
+                    }}
+                    allowClear
+                    showSearch
+                    filterOption={(input, option) =>
+                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                    }
+                    options={fixedClassData.map((i) => ({
+                        value: i.id,
+                        label: `${i.code} - ${i.name}`,
+                    }))}
+                    onChange={(value) => handleFilterChange('fixedClassId', value)}
+                />
+            </Col>
+            <Col span={8} className="text-right">
+                <Button
+                    type="primary"
+                    onClick={handleSaveDangKyHoc}
+                    disabled={!subjectClassId || fixedClassesIds.length === 0}
+                >
+                    Lưu danh sách ĐKH
+                </Button>
+            </Col>
+            <Col span={24}>
+                <Table
+                    rowKey="id"
+                    className="mt-2"
+                    data={students}
+                    onRow={(record) => ({
+                        onClick: () => {
+                            if (!selectedRowKeys.includes(record.id)) {
+                                handleRowSelection([...selectedRowKeys, record.id])
+                            } else {
+                                handleRowSelection(
+                                    selectedRowKeys.filter((key) => key !== record.id)
+                                )
+                            }
+                        },
+                        style: { cursor: 'pointer' },
+                        columnWidth: 35,
+                    })}
+                    rowSelection={{
+                        selectedRowKeys: selectedRowKeys,
+                        onChange: (selectedKeys, _, { type }) => {
+                            if (type === 'all') {
+                                if (selectedRowKeys.length > 0) {
+                                    handleRowSelection([])
+                                } else {
+                                    handleRowSelection(allStudentIds.map((i) => i.id))
+                                }
+                            } else handleRowSelection(selectedKeys)
+                        },
+                        type: 'checkbox',
+                        columnWidth: 35,
+                    }}
+                    columns={[
+                        {
+                            title: 'TT',
+                            width: 35,
+                            align: 'center',
+                            render: (_, __, index) => index + 1 + (currentPage - 1) * numberOfPages,
+                        },
+                        {
+                            title: 'Mã',
+                            dataIndex: 'code',
+                            align: 'center',
+                            width: 100,
+                        },
+                        {
+                            title: 'Tên',
+                            dataIndex: ['userProfile', 'fullname'],
+                            align: 'center',
+                            width: 200,
+                            render: (text: string) => <p className="text-left">{text}</p>,
+                        },
+                        {
+                            title: 'Lớp',
+                            align: 'center',
+                            width: 80,
+                            dataIndex: ['fixedClass', 'code'],
+                        },
+                        {
+                            title: 'Khoá',
+                            align: 'center',
+                            width: 80,
+                            dataIndex: ['fixedClass', 'trainingCourse', 'name'],
+                        },
+                        {
+                            title: 'GPA tích luỹ',
+                            align: 'center',
+                            dataIndex: ['studentSemesterResult', 0, 'cumulativeGpaBase10'],
+                            width: 80,
+                        },
+                        {
+                            title: 'Điểm',
+                            align: 'center',
+                            width: 50,
+                            render: (_, record) => record.subjectClassStudent[0]?.finalScore || '-',
+                        },
+                        {
+                            title: 'Cải thiện',
+                            align: 'center',
+                            width: 50,
+                            render: (_, record) => (
+                                <Checkbox
+                                    checked={
+                                        record?.subjectClassStudent.length > 0 &&
+                                        record?.subjectClassStudent[0]?.finalScore !== null
+                                            ? record?.fixedClass?.trainingCourse?.scoreConverts?.some(
+                                                  (sc: ScoreConvert) =>
+                                                      sc?.base10Min <=
+                                                          record.subjectClassStudent[0]
+                                                              ?.finalScore &&
+                                                      record.subjectClassStudent[0]?.finalScore <=
+                                                          sc?.base10Max &&
+                                                      sc?.improvementRegister
+                                              )
+                                            : false
+                                    }
+                                />
+                            ),
+                        },
+                    ]}
+                    pagination={{
+                        current: currentPage,
+                        pageSize: numberOfPages,
+                        total: countStudents,
+                        onChange: (page, pageSize) => {
+                            if (numberOfPages === pageSize) {
+                                setCurrentPage(page)
+                            } else {
+                                setCurrentPage(1)
+                                setNumberOfPages(pageSize)
+                            }
+                        },
+                    }}
+                />
+            </Col>
+        </Row>
+    )
+}

@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -19,10 +18,23 @@ const baseSchema = z.object({
     endDate: z.coerce.date().nullish(),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date().nullish(),
+}
+).strict();
 const relationSchema = z.object({
     standards: z.array(z.unknown()).optional(),
     councils: z.array(z.unknown()).optional(),
-    evaluationSecretarYCouncil: z.record(z.unknown()).optional(),
+    evaluationSecretarYCouncil: z.record(z.string(), z.unknown()).optional(),
 }
 );
 
@@ -42,7 +54,7 @@ export const EvaluationPeriodSchema = EvaluationPeriodScalarSchema.merge(relatio
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const EvaluationPeriodPrismaCreateSchema = baseSchema.partial().passthrough();
+export const EvaluationPeriodPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -52,13 +64,13 @@ export const EvaluationPeriodPrismaCreateSchema = baseSchema.partial().passthrou
 export const EvaluationPeriodPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
-    startDate: z.coerce.date().default(() => new Date()),
+    startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish()
 }).partial().passthrough();
 
@@ -66,7 +78,7 @@ export const EvaluationPeriodPrismaUpdateSchema = z.object({
 /**
  * `EvaluationPeriod` schema for create operations excluding foreign keys and relations.
  */
-export const EvaluationPeriodCreateScalarSchema = baseSchema.partial({
+export const EvaluationPeriodCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, startDate: true
 });
 
@@ -74,7 +86,7 @@ export const EvaluationPeriodCreateScalarSchema = baseSchema.partial({
 /**
  * `EvaluationPeriod` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const EvaluationPeriodCreateSchema = baseSchema.partial({
+export const EvaluationPeriodCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, startDate: true
 });
 
@@ -82,7 +94,7 @@ export const EvaluationPeriodCreateSchema = baseSchema.partial({
 /**
  * `EvaluationPeriod` schema for update operations excluding foreign keys and relations.
  */
-export const EvaluationPeriodUpdateScalarSchema = baseSchema.partial();
+export const EvaluationPeriodUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

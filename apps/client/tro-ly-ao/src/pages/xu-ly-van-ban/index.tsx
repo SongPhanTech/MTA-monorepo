@@ -1,13 +1,12 @@
-import { CopyOutlined, FileSyncOutlined, StopOutlined } from '@ant-design/icons'
-import ChatLayout from '@layouts/chat-layout'
-import { Button, Col, Input, message, Row, Select, Typography } from 'antd'
-import type { ReactElement } from 'react'
-import { useCallback, useState } from 'react'
 import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
 import { readStreamToText } from '@/utils'
+import { CloseOutlined, CopyOutlined, FileSyncOutlined, StopOutlined } from '@ant-design/icons'
+import AutoResizeTextArea from '@components/commons/text-area-auto-resize'
+import ChatLayout from '@layouts/chat-layout'
+import { Button, message, Select } from 'antd'
+import type { ReactElement } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-const { TextArea } = Input
-const { Title } = Typography
 const { Option } = Select
 
 type Mode = 'translate' | 'summarize' | 'extraction' | 'fix'
@@ -23,49 +22,11 @@ function Page() {
     const [loading, setLoading] = useState(false)
     const [abortController, setAbortController] = useState<AbortController | null>(null)
 
-    const handleTranslate = async (signal: AbortSignal) => {
-        const response = await fetchXuLyVanBan({
-            text: inputText,
-            topic_type: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
-            conversationId: 'None',
-            signal,
-        } as any)
-        if (!response?.body) throw new Error('Không có nội dung phản hồi')
-        return cleanOutputText(await readStreamToText(response.body))
-    }
-
-    const handleSummarize = async (signal: AbortSignal) => {
-        const response = await fetchXuLyVanBan({
-            text: inputText,
-            topic_type: 'EXTRACTIVE_TEXT_SUMMARIZATION',
-            conversationId: 'None',
-            signal,
-        } as any)
-        if (!response?.body) throw new Error('Không có nội dung phản hồi')
-        return cleanOutputText(await readStreamToText(response.body))
-    }
-
-    const handleExtraction = async (signal: AbortSignal) => {
-        const response = await fetchXuLyVanBan({
-            text: inputText,
-            topic_type: 'ABSTRACTIVE_TEXT_SUMMARIZATION',
-            conversationId: 'None',
-            signal,
-        } as any)
-        if (!response?.body) throw new Error('Không có nội dung phản hồi')
-        return cleanOutputText(await readStreamToText(response.body))
-    }
-
-    const handleFixSpelling = async (signal: AbortSignal) => {
-        const response = await fetchXuLyVanBan({
-            text: inputText,
-            topic_type: 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS',
-            conversationId: 'None',
-            signal,
-        } as any)
-        if (!response?.body) throw new Error('Không có nội dung phản hồi')
-        return cleanOutputText(await readStreamToText(response.body))
-    }
+    useEffect(() => {
+        if (!inputText.trim() && outputText) {
+            setOutputText('')
+        }
+    }, [inputText, outputText])
 
     const handleProcess = useCallback(async () => {
         if (!inputText.trim()) {
@@ -75,6 +36,51 @@ function Page() {
 
         const controller = new AbortController()
         setAbortController(controller)
+
+        const handleTranslate = async (signal: AbortSignal) => {
+            const response = await fetchXuLyVanBan({
+                text: inputText,
+                topic_type: 'TRANSLATION_FROM_OTHER_LANGUAGES_INTO_VIETNAMESE',
+                conversationId: 'None',
+                signal,
+            } as any)
+            if (!response?.body) throw new Error('Không có nội dung phản hồi')
+            return cleanOutputText(await readStreamToText(response.body))
+        }
+
+        const handleSummarize = async (signal: AbortSignal) => {
+            const response = await fetchXuLyVanBan({
+                text: inputText,
+                topic_type: 'EXTRACTIVE_TEXT_SUMMARIZATION',
+                conversationId: 'None',
+                signal,
+            } as any)
+            if (!response?.body) throw new Error('Không có nội dung phản hồi')
+            return cleanOutputText(await readStreamToText(response.body))
+        }
+
+        const handleExtraction = async (signal: AbortSignal) => {
+            const response = await fetchXuLyVanBan({
+                text: inputText,
+                topic_type: 'ABSTRACTIVE_TEXT_SUMMARIZATION',
+                conversationId: 'None',
+                signal,
+            } as any)
+            if (!response?.body) throw new Error('Không có nội dung phản hồi')
+            return cleanOutputText(await readStreamToText(response.body))
+        }
+
+        const handleFixSpelling = async (signal: AbortSignal) => {
+            const response = await fetchXuLyVanBan({
+                text: inputText,
+                topic_type: 'DETECTION_AND_CORRECTION_OF_TEXT_ERRORS',
+                conversationId: 'None',
+                signal,
+            } as any)
+            if (!response?.body) throw new Error('Không có nội dung phản hồi')
+            return cleanOutputText(await readStreamToText(response.body))
+        }
+
         try {
             setLoading(true)
             let result = ''
@@ -97,7 +103,7 @@ function Page() {
             setLoading(false)
             setAbortController(null)
         }
-    }, [inputText, mode, handleExtraction, handleFixSpelling, handleSummarize, handleTranslate])
+    }, [inputText, mode])
 
     const handleCopy = (text: string) => {
         navigator.clipboard
@@ -119,83 +125,131 @@ function Page() {
     }
 
     return (
-        <div className="h-full flex flex-col overflow-auto p-4 sm:p-6 lg:p-8 max-h-screen">
-            <Row justify="center" className="mb-4 sm:mb-6">
-                <Col xs={24} sm={20} md={16} lg={12} xl={10}>
-                    <div className="flex flex-row items-center justify-center gap-3 sm:gap-4">
-                        <Select
-                            value={mode}
-                            onChange={(value: Mode) => setMode(value)}
-                            className="flex-1 sm:w-auto sm:min-w-48 max-w-xs"
-                            size="large"
-                            disabled={loading}
-                        >
-                            <Option value="translate">Dịch văn bản</Option>
-                            <Option value="fix">Sửa lỗi chính tả</Option>
-                            <Option value="summarize">Tóm lược</Option>
-                            <Option value="extraction">Trích lược</Option>
-                        </Select>
-                        <Button
-                            icon={loading ? <StopOutlined /> : <FileSyncOutlined />}
-                            type="primary"
-                            onClick={loading ? () => abortController?.abort() : handleProcess}
-                            loading={false}
-                            size="large"
-                            danger={loading}
-                            className="flex-shrink-0"
-                        >
-                            {loading ? '' : 'Xử lý'}
-                        </Button>
+        <div className="flex flex-col h-full bg-gray-50 overflow-hidden text-gray-900">
+            <div className="px-6 py-6 border-b border-gray-100 bg-gradient-to-b from-white to-gray-50 sticky top-0 z-10">
+                <div className="max-w-6xl mx-auto">
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                            <Select
+                                value={mode}
+                                onChange={(value: Mode) => setMode(value)}
+                                className="w-full sm:w-auto sm:min-w-[200px] [&_.ant-select-selector]:!border-gray-300"
+                                size="large"
+                                disabled={loading}
+                            >
+                                <Option value="translate">Dịch văn bản</Option>
+                                <Option value="fix">Sửa lỗi chính tả</Option>
+                                <Option value="summarize">Tóm lược</Option>
+                                <Option value="extraction">Trích lược</Option>
+                            </Select>
+                            <Button
+                                icon={loading ? <StopOutlined /> : <FileSyncOutlined />}
+                                type="primary"
+                                onClick={loading ? () => abortController?.abort() : handleProcess}
+                                loading={false}
+                                size="large"
+                                danger={loading}
+                                className="w-full sm:w-auto min-w-[120px] shadow-sm"
+                                style={{
+                                    backgroundColor: loading ? '#ff4d4f' : '#028850',
+                                    borderColor: loading ? '#ff4d4f' : '#028850',
+                                }}
+                            >
+                                {loading ? 'Dừng lại' : 'Xử lý'}
+                            </Button>
+                        </div>
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
-            <Row gutter={[16, 12]} className="flex-1 lg:h-full">
-                <Col xs={24} lg={12}>
-                    <div className="relative group h-full">
-                        <div className="text-sm font-medium text-gray-600 mb-2">Văn bản gốc</div>
-                        <TextArea
-                            size="large"
-                            rows={6}
-                            value={inputText}
-                            onChange={(e) => setInputText(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Nhập văn bản tại đây (Ctrl+Enter để xử lý)"
-                            disabled={loading}
-                            className="resize-none lg:!h-80 pr-12"
-                        />
-                        <Button
-                            size="small"
-                            icon={<CopyOutlined />}
-                            className="absolute top-8 right-2 opacity-0 group-hover:opacity-100 sm:opacity-100 transition-opacity duration-200 bg-primary text-white shadow-md z-10"
-                            onClick={() => handleCopy(inputText)}
-                            type="text"
-                        />
+            <div className="flex-1 overflow-y-auto px-4 lg:px-6 pt-6 pb-4">
+                <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4 lg:gap-6">
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col">
+                        <div className="px-4 py-3 border-b border-gray-100 rounded-t-xl">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-base font-medium text-gray-700">Văn bản gốc</h3>
+                                <div className="flex items-center gap-2">
+                                    <Button
+                                        size="small"
+                                        icon={<CloseOutlined />}
+                                        type="text"
+                                        onClick={() => {
+                                            setInputText('')
+                                            setOutputText('')
+                                        }}
+                                        disabled={!inputText || loading}
+                                        className="text-red-500 hover:text-red-600"
+                                        title="Xóa văn bản"
+                                    />
+                                    <Button
+                                        size="small"
+                                        icon={<CopyOutlined />}
+                                        type="text"
+                                        onClick={() => handleCopy(inputText)}
+                                        disabled={!inputText}
+                                        className="text-gray-500 hover:text-[#028850]"
+                                        title="Sao chép"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="p-3 flex-1">
+                            <AutoResizeTextArea
+                                value={inputText}
+                                onChange={(e) => setInputText(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                placeholder="Nhập văn bản cần xử lý tại đây..."
+                                disabled={loading}
+                                minHeight={120}
+                                maxHeight={9999}
+                            />
+                        </div>
                     </div>
-                </Col>
 
-                <Col xs={24} lg={12}>
-                    <div className="relative group h-full">
-                        <div className="text-sm font-medium text-gray-600 mb-2">Kết quả xử lý</div>
-                        <TextArea
-                            size="large"
-                            rows={6}
-                            value={outputText}
-                            readOnly
-                            placeholder="Kết quả sẽ hiển thị tại đây"
-                            onKeyDown={handleKeyDown}
-                            className="resize-none lg:!h-80 pr-12"
-                        />
-                        <Button
-                            size="small"
-                            icon={<CopyOutlined />}
-                            className="absolute top-8 right-2 opacity-0 group-hover:opacity-100 sm:opacity-100 transition-opacity duration-200 bg-primary text-white shadow-md z-10"
-                            onClick={() => handleCopy(outputText)}
-                            type="text"
-                        />
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 output-panel flex flex-col">
+                        <div className="px-4 py-3 border-b border-gray-100 rounded-t-xl">
+                            <div className="flex items-center justify-between">
+                                <h3 className="text-base font-medium text-gray-700">
+                                    Kết quả xử lý
+                                </h3>
+                                <Button
+                                    size="small"
+                                    icon={<CopyOutlined />}
+                                    type="text"
+                                    onClick={() => handleCopy(outputText)}
+                                    disabled={!outputText}
+                                    className="text-gray-500 hover:text-[#028850]"
+                                />
+                            </div>
+                        </div>
+                        <div className="p-3 flex-1 flex flex-col">
+                            {loading ? (
+                                <div className="flex items-center justify-center py-16 flex-1">
+                                    <div className="text-center">
+                                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#028850] mb-4" />
+                                        <p className="text-sm text-gray-600">
+                                            Đang xử lý văn bản...
+                                        </p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex-1">
+                                    <AutoResizeTextArea
+                                        value={outputText}
+                                        onChange={() => {}}
+                                        placeholder="Kết quả sẽ hiển thị tại đây sau khi xử lý"
+                                        readOnly
+                                        minHeight={120}
+                                        maxHeight={9999}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </Col>
-            </Row>
+                </div>
+
+                <div className="h-20" />
+            </div>
         </div>
     )
 }

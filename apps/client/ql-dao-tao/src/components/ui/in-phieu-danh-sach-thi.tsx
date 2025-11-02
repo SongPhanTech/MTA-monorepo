@@ -10,12 +10,14 @@ interface ExportTemplateExamProps {
     selectedFixedClass: string | undefined
     dataTable: any[]
     dataClass: any
+    disabled?: boolean
 }
 
 const ExportTemplateExam = ({
     selectedFixedClass,
     dataTable,
     dataClass,
+    disabled,
 }: ExportTemplateExamProps) => {
     const { getExamTypeLabel } = useExamTypeOptions()
     const firstTrainingCourse = useMemo(() => {
@@ -389,7 +391,7 @@ const ExportTemplateExam = ({
     }
 
     return (
-        <Button onClick={exportTemplate} disabled={!selectedFixedClass}>
+        <Button onClick={exportTemplate} disabled={!selectedFixedClass || disabled}>
             <Printer />
             Xuất phiếu danh sách thi
         </Button>

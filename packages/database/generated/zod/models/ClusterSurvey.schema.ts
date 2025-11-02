@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -15,18 +14,40 @@ const baseSchema = z.object({
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
     name: z.string(),
+    additionalSuggestion: z.boolean(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
     isPublic: z.boolean().default(false),
     anonymous: z.boolean().default(true),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    name: z.string(),
+    additionalSuggestion: z.boolean(),
+    startDate: z.coerce.date(),
+    endDate: z.coerce.date().nullish(),
+    isPublic: z.boolean(),
+    anonymous: z.boolean(),
+}
+).strict();
 const relationSchema = z.object({
+    surveyTopic: z.record(z.string(), z.unknown()),
     surveyObjectType: z.array(z.unknown()).optional(),
     lecturers: z.array(z.unknown()).optional(),
     surveyChoice: z.array(z.unknown()).optional(),
     surveyQuestion: z.array(z.unknown()).optional(),
     surveys: z.array(z.unknown()).optional(),
+}
+);
+const fkSchema = z.object({
+    surveyTopicId: z.string(),
 }
 );
 
@@ -39,14 +60,14 @@ export const ClusterSurveyScalarSchema = baseSchema;
 /**
  * `ClusterSurvey` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const ClusterSurveySchema = ClusterSurveyScalarSchema.merge(relationSchema.partial());
+export const ClusterSurveySchema = ClusterSurveyScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ClusterSurveyPrismaCreateSchema = baseSchema.partial().passthrough();
+export const ClusterSurveyPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,23 +77,24 @@ export const ClusterSurveyPrismaCreateSchema = baseSchema.partial().passthrough(
 export const ClusterSurveyPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
+    additionalSuggestion: z.boolean(),
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullish(),
-    isPublic: z.boolean().default(false),
-    anonymous: z.boolean().default(true)
+    isPublic: z.boolean(),
+    anonymous: z.boolean()
 }).partial().passthrough();
 
 
 /**
  * `ClusterSurvey` schema for create operations excluding foreign keys and relations.
  */
-export const ClusterSurveyCreateScalarSchema = baseSchema.partial({
+export const ClusterSurveyCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, isPublic: true, anonymous: true
 });
 
@@ -80,19 +102,17 @@ export const ClusterSurveyCreateScalarSchema = baseSchema.partial({
 /**
  * `ClusterSurvey` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const ClusterSurveyCreateSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, isPublic: true, anonymous: true
-});
+export const ClusterSurveyCreateSchema = ClusterSurveyCreateScalarSchema.merge(fkSchema);
 
 
 /**
  * `ClusterSurvey` schema for update operations excluding foreign keys and relations.
  */
-export const ClusterSurveyUpdateScalarSchema = baseSchema.partial();
+export const ClusterSurveyUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
  * `ClusterSurvey` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const ClusterSurveyUpdateSchema = ClusterSurveyUpdateScalarSchema;
+export const ClusterSurveyUpdateSchema = ClusterSurveyUpdateScalarSchema.merge(fkSchema.partial());
 

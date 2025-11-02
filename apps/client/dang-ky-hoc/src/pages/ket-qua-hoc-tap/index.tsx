@@ -2,7 +2,7 @@ import TableCollapse from '@components/commons/tableCollapse'
 import { useScoreConverter } from '@hooks/scoreConverter'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import type { ArchivedAward, ArchivedCertificate } from '@workspace/db'
+import type { ArchivedAward, ArchivedCertificate, Certificate } from '@workspace/db'
 import {
     useFindManySemester,
     useFindUniqueStudent,
@@ -120,7 +120,11 @@ export default function StudentScoreClassPage() {
                             subjectVersion: true,
                             certificates: {
                                 include: {
-                                    archivedCertificate: true,
+                                    archivedCertificate: {
+                                        include: {
+                                            certificate: true,
+                                        },
+                                    },
                                 },
                             },
                             awards: {
@@ -336,8 +340,11 @@ export default function StudentScoreClassPage() {
                                 render: (_, { id, subjectClassStudent }) =>
                                     subjectClassStudent?.[0]?.certificates
                                         .map(
-                                            (i: { archivedCertificate: ArchivedCertificate }) =>
-                                                i?.archivedCertificate?.name
+                                            (i: {
+                                                archivedCertificate: ArchivedCertificate & {
+                                                    certificate: Certificate
+                                                }
+                                            }) => i?.archivedCertificate?.certificate.name
                                         )
                                         .join(', '),
                             },

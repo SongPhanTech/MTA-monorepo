@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 import { CriteriaFieldSchema } from '../enums/CriteriaField.schema';
@@ -23,8 +22,23 @@ const baseSchema = z.object({
     tuple: z.array(z.string()),
 }
 ).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    field: CriteriaFieldSchema,
+    operator: CriteriaOperatorSchema,
+    invert: z.boolean(),
+    value: z.number(),
+    tuple: z.array(z.string()),
+}
+).strict();
 const relationSchema = z.object({
-    ranking: z.record(z.unknown()),
+    ranking: z.record(z.string(), z.unknown()),
     applicationCheckResult: z.array(z.unknown()).optional(),
 }
 );
@@ -49,7 +63,7 @@ export const RankingConditionSchema = RankingConditionScalarSchema.merge(fkSchem
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const RankingConditionPrismaCreateSchema = baseSchema.partial().passthrough();
+export const RankingConditionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -59,15 +73,15 @@ export const RankingConditionPrismaCreateSchema = baseSchema.partial().passthrou
 export const RankingConditionPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     field: CriteriaFieldSchema,
     operator: CriteriaOperatorSchema,
-    invert: z.boolean().default(false),
-    value: z.union([z.number(), z.record(z.unknown())]),
+    invert: z.boolean(),
+    value: z.union([z.number(), z.record(z.string(), z.unknown())]),
     tuple: z.array(z.string())
 }).partial().passthrough();
 
@@ -75,7 +89,7 @@ export const RankingConditionPrismaUpdateSchema = z.object({
 /**
  * `RankingCondition` schema for create operations excluding foreign keys and relations.
  */
-export const RankingConditionCreateScalarSchema = baseSchema.partial({
+export const RankingConditionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true, invert: true, tuple: true
 });
 
@@ -89,7 +103,7 @@ export const RankingConditionCreateSchema = RankingConditionCreateScalarSchema.m
 /**
  * `RankingCondition` schema for update operations excluding foreign keys and relations.
  */
-export const RankingConditionUpdateScalarSchema = baseSchema.partial();
+export const RankingConditionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

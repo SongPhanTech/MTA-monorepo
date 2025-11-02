@@ -3,8 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 
-export const TestStructureRuleOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "examId", "knowledgeBlockId"])
+export const TestStructureRuleOrderByRelevanceFieldEnumSchema = z.enum(["id", "code", "description", "examId", "questionBankId", "knowledgeBlockId"])

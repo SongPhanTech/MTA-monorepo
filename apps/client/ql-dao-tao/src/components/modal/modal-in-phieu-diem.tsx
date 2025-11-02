@@ -92,7 +92,7 @@ const ModalPrintStudentSubjectScore = () => {
 
     const { data: session } = useSession()
     const profileName = session?.preferred_username || ''
-
+    const profileId = session?.sDM_NhanVienId || ''
     const { data } = useFindUniqueSubjectClass(
         {
             where: { id: input?.dataTable?.[0]?.subjectClass?.id || '' },
@@ -136,7 +136,7 @@ const ModalPrintStudentSubjectScore = () => {
                 },
             },
         },
-        { enabel: input?.dataTable?.[0]?.subjectClass?.id }
+        { enabled: !!input?.dataTable?.[0]?.subjectClass?.id }
     )
     const statistics = getScoreStatistics(input?.dataTable || [])
     const firstTrainingCourse = useMemo(() => {
@@ -159,18 +159,23 @@ const ModalPrintStudentSubjectScore = () => {
 
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
 
+    const lockExam = async () => {
+        const listTransition: any = []
+        if (data?.id) {
+            await updateSubjectClass({
+                where: { id: data.id },
+                data: { isLockScore: true, isLockExamScore: true },
+                select: { id: true },
+            })
+            message.success('Cập nhật thành công')
+        }
+    }
+
     async function onOk({ ...rest }: PutSubjectClass) {
         try {
             showSpinner()
             if (input?.type === EnumInPhieuDiem.PHIEU_DIEM_KHOA) {
-                await updateSubjectClass({
-                    data: {
-                        isLockExamScore: true,
-                        isLockScore: true,
-                    },
-                    where: { id: data?.id },
-                })
-                message.success('Cập nhật thành công')
+                lockExam()
             }
             // refetch() lại danh sách level
             queryClient.invalidateQueries({

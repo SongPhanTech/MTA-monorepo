@@ -1497,8 +1497,8 @@ exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
   examScore: 'examScore',
   finalScore: 'finalScore',
   manualFinalScore: 'manualFinalScore',
-  examPostponedReason: 'examPostponedReason',
   examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   examBanned: 'examBanned',
   examBannedReason: 'examBannedReason',
   suspended: 'suspended',
@@ -1923,12 +1923,14 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   schedule: 'schedule',
   maxStudent: 'maxStudent',
   type: 'type',
+  status: 'status',
   trainingObjectTypeId: 'trainingObjectTypeId',
   semesterId: 'semesterId',
   cancelled: 'cancelled',
   lecturerAssignmentDeadline: 'lecturerAssignmentDeadline',
   sendLecturerAssignmentAt: 'sendLecturerAssignmentAt',
   submitLecturerAssignmentAt: 'submitLecturerAssignmentAt',
+  approveLecturerAssignmentAt: 'approveLecturerAssignmentAt',
   examDate: 'examDate',
   examType: 'examType',
   examId: 'examId',
@@ -1947,6 +1949,25 @@ exports.Prisma.SubjectClassScalarFieldEnum = {
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
   enterGradeLecturerId: 'enterGradeLecturerId'
+};
+
+exports.Prisma.SubjectClassHistoryScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  subjectClassId: 'subjectClassId',
+  scoreDeadLineStart: 'scoreDeadLineStart',
+  scoreDeadline: 'scoreDeadline',
+  examScoreDeadline: 'examScoreDeadline',
+  isLockScore: 'isLockScore',
+  isLockExamScore: 'isLockExamScore',
+  scoreSubmitted: 'scoreSubmitted',
+  scoreChecked: 'scoreChecked',
+  updatedById: 'updatedById'
 };
 
 exports.Prisma.SubjectClassTimeScalarFieldEnum = {
@@ -2721,6 +2742,8 @@ exports.Prisma.ExpertProfileScalarFieldEnum = {
   workplace: 'workplace',
   phone: 'phone',
   email: 'email',
+  bankAccountNumber: 'bankAccountNumber',
+  bankName: 'bankName',
   eligiblePresident: 'eligiblePresident',
   eligibleSecretary: 'eligibleSecretary'
 };
@@ -3104,8 +3127,7 @@ exports.Prisma.SurveyQuestionGroupScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  name: 'name',
-  surveyTopicId: 'surveyTopicId'
+  name: 'name'
 };
 
 exports.Prisma.ClusterSurveyScalarFieldEnum = {
@@ -3117,10 +3139,12 @@ exports.Prisma.ClusterSurveyScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   name: 'name',
+  additionalSuggestion: 'additionalSuggestion',
   startDate: 'startDate',
   endDate: 'endDate',
   isPublic: 'isPublic',
-  anonymous: 'anonymous'
+  anonymous: 'anonymous',
+  surveyTopicId: 'surveyTopicId'
 };
 
 exports.Prisma.SurveyScalarFieldEnum = {
@@ -3152,9 +3176,7 @@ exports.Prisma.SurveyQuestionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   name: 'name',
   type: 'type',
-  surveyQuestionGroupId: 'surveyQuestionGroupId',
-  surveyId: 'surveyId',
-  clusterSurveyId: 'clusterSurveyId'
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
 
 exports.Prisma.SurveyChoiceScalarFieldEnum = {
@@ -3181,6 +3203,7 @@ exports.Prisma.SurveySessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
+  profileId: 'profileId',
   studentId: 'studentId',
   startedAt: 'startedAt',
   completedAt: 'completedAt',
@@ -3308,8 +3331,23 @@ exports.Prisma.ExamScalarFieldEnum = {
   updatedAt: 'updatedAt',
   status: 'status',
   questionBankId: 'questionBankId',
+  lockExamSessions: 'lockExamSessions',
+  createdExamCode: 'createdExamCode',
   lockExamCode: 'lockExamCode',
   duration: 'duration'
+};
+
+exports.Prisma.ExamRoomSlotScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  examId: 'examId',
+  roomId: 'roomId',
+  cap: 'cap'
 };
 
 exports.Prisma.ExamRoomScalarFieldEnum = {
@@ -3338,6 +3376,7 @@ exports.Prisma.TestStructureRuleScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   examId: 'examId',
+  questionBankId: 'questionBankId',
   knowledgeBlockId: 'knowledgeBlockId',
   questionPoint: 'questionPoint',
   questionType: 'questionType',
@@ -4999,7 +5038,7 @@ exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   studentSubjectScoreId: 'studentSubjectScoreId',
-  examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
   suspendedReason: 'suspendedReason',
   updatedById: 'updatedById'
@@ -5253,6 +5292,14 @@ exports.Prisma.SubjectClassOrderByRelevanceFieldEnum = {
   lecturerId: 'lecturerId',
   extraLecturerId: 'extraLecturerId',
   enterGradeLecturerId: 'enterGradeLecturerId'
+};
+
+exports.Prisma.SubjectClassHistoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  subjectClassId: 'subjectClassId',
+  updatedById: 'updatedById'
 };
 
 exports.Prisma.SubjectClassTimeOrderByRelevanceFieldEnum = {
@@ -5703,7 +5750,9 @@ exports.Prisma.ExpertProfileOrderByRelevanceFieldEnum = {
   specialization: 'specialization',
   workplace: 'workplace',
   phone: 'phone',
-  email: 'email'
+  email: 'email',
+  bankAccountNumber: 'bankAccountNumber',
+  bankName: 'bankName'
 };
 
 exports.Prisma.DecisionOrderByRelevanceFieldEnum = {
@@ -5936,15 +5985,15 @@ exports.Prisma.SurveyQuestionGroupOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name',
-  surveyTopicId: 'surveyTopicId'
+  name: 'name'
 };
 
 exports.Prisma.ClusterSurveyOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  name: 'name'
+  name: 'name',
+  surveyTopicId: 'surveyTopicId'
 };
 
 exports.Prisma.SurveyOrderByRelevanceFieldEnum = {
@@ -5962,9 +6011,7 @@ exports.Prisma.SurveyQuestionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   name: 'name',
-  surveyQuestionGroupId: 'surveyQuestionGroupId',
-  surveyId: 'surveyId',
-  clusterSurveyId: 'clusterSurveyId'
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
 
 exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
@@ -5982,6 +6029,7 @@ exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
   description: 'description',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
+  profileId: 'profileId',
   studentId: 'studentId',
   surveyObjectTypeId: 'surveyObjectTypeId'
 };
@@ -6062,6 +6110,14 @@ exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   questionBankId: 'questionBankId'
 };
 
+exports.Prisma.ExamRoomSlotOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  examId: 'examId',
+  roomId: 'roomId'
+};
+
 exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -6077,6 +6133,7 @@ exports.Prisma.TestStructureRuleOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   examId: 'examId',
+  questionBankId: 'questionBankId',
   knowledgeBlockId: 'knowledgeBlockId'
 };
 
@@ -6618,7 +6675,8 @@ exports.SubjectVersionType = exports.$Enums.SubjectVersionType = {
   Normal: 'Normal',
   Internship: 'Internship',
   Research: 'Research',
-  Project: 'Project'
+  Project: 'Project',
+  Practice: 'Practice'
 };
 
 exports.EquivalencySide = exports.$Enums.EquivalencySide = {
@@ -6643,6 +6701,11 @@ exports.SubjectClassSchedule = exports.$Enums.SubjectClassSchedule = {
   MORNING: 'MORNING',
   AFTERNOON: 'AFTERNOON',
   EVENING: 'EVENING'
+};
+
+exports.SubjectClassStatus = exports.$Enums.SubjectClassStatus = {
+  DRAFT: 'DRAFT',
+  OFFICIAL: 'OFFICIAL'
 };
 
 exports.PeriodType = exports.$Enums.PeriodType = {
@@ -7017,6 +7080,7 @@ exports.Prisma.ModelName = {
   ClassRegisterSession: 'ClassRegisterSession',
   ClassRegisterLogs: 'ClassRegisterLogs',
   SubjectClass: 'SubjectClass',
+  SubjectClassHistory: 'SubjectClassHistory',
   SubjectClassTime: 'SubjectClassTime',
   ClassSchedule: 'ClassSchedule',
   TrainingObjectType: 'TrainingObjectType',
@@ -7104,6 +7168,7 @@ exports.Prisma.ModelName = {
   FillInBlankSlot: 'FillInBlankSlot',
   OrderingItem: 'OrderingItem',
   Exam: 'Exam',
+  ExamRoomSlot: 'ExamRoomSlot',
   ExamRoom: 'ExamRoom',
   TestStructureRule: 'TestStructureRule',
   ExamBank: 'ExamBank',

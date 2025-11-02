@@ -6,7 +6,7 @@ const app = new OpenAPIHono({ strict: false })
 
 const genExamCode = createRoute({
     operationId: 'gen-exam-code',
-    path: '/gex-exam-code',
+    path: '/gen-exam-code',
     tags: ['Exam'],
     summary: 'Sinh phách cho kỳ thi',
     description: 'Sinh phách cho kỳ thi',
@@ -127,6 +127,15 @@ app.openapi(genExamCode, async (c) => {
             WHERE
                 "id" IN (${Prisma.join(ids)})
             `
+        await tx.exam.update({
+            where: { id: examId },
+            data: { lockExamCode: true },
+        })
+
+        await tx.examRoom.updateMany({
+            where: { examId },
+            data: { lockExamCode: true },
+        })
     })
 
     return c.json({ success: true, message: 'Success' }, 200)
@@ -134,7 +143,7 @@ app.openapi(genExamCode, async (c) => {
 
 const genExamRoomCode = createRoute({
     operationId: 'gen-exam-room-code',
-    path: '/gex-exam-room-code',
+    path: '/gen-exam-room-code',
     tags: ['Exam'],
     summary: 'Sinh phách cho phòng thi',
     description: 'Sinh phách cho phòng thi',
@@ -247,6 +256,11 @@ app.openapi(genExamRoomCode, async (c) => {
             WHERE
                 "id" IN (${Prisma.join(ids)})
             `
+
+        await tx.examRoom.update({
+            where: { id: examRoomId },
+            data: { lockExamCode: true },
+        })
     })
 
     return c.json({ success: true, message: 'Success' }, 200)

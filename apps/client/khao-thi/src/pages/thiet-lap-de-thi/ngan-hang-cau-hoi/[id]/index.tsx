@@ -44,6 +44,7 @@ export default function QuestionPage() {
         explanation: '',
         point: undefined,
         knowledgeBlockId: undefined,
+        difficultyId: undefined,
     })
 
     const { onOpen: onOpenPutQuestion } = useDisclosure<{
@@ -93,6 +94,13 @@ export default function QuestionPage() {
                     ? { knowledgeBlockId: { in: filters.knowledgeBlockId } }
                     : { knowledgeBlockId: filters.knowledgeBlockId }
                 : {}),
+            ...(filters.difficultyId
+                ? Array.isArray(filters.difficultyId)
+                    ? {
+                          difficultyId: { in: filters.difficultyId },
+                      }
+                    : { difficultyId: filters.difficultyId }
+                : {}),
         }),
         [
             questionBankId,
@@ -100,6 +108,7 @@ export default function QuestionPage() {
             filters.content,
             filters.explanation,
             filters.knowledgeBlockId,
+            filters.difficultyId,
         ]
     )
 
@@ -116,6 +125,7 @@ export default function QuestionPage() {
             include: {
                 knowledgeBlock: true,
                 difficulty: true,
+                multipleChoiceOptions: true,
             },
             take: numberOfPages,
             skip: (currentPage - 1) * numberOfPages,
@@ -149,7 +159,7 @@ export default function QuestionPage() {
         where: { subjectVersionId: initialValue?.subjectVersionId },
     })
 
-    const { data: difficultyData } = useFindManyDifficulty({
+    const { data: difficultyData = [] } = useFindManyDifficulty({
         orderBy: { level: 'asc' },
     })
 
@@ -326,7 +336,21 @@ export default function QuestionPage() {
                                     getQuestionTypeLabel(record?.type) || 'Chưa xác định',
                             },
                             {
-                                title: 'Chương mục',
+                                title: 'Độ khó',
+                                dataIndex: 'difficultyId',
+                                width: 80,
+                                align: 'center',
+                                type: 'select',
+                                options: difficultyData.map((data) => ({
+                                    value: data.id,
+                                    label: data.name,
+                                })),
+                                render: (__, record) => {
+                                    return record.difficulty?.name || ''
+                                },
+                            },
+                            {
+                                title: 'Chuẩn đầu ra',
                                 dataIndex: 'knowledgeBlockId',
                                 width: 100,
                                 align: 'center',
@@ -358,17 +382,22 @@ export default function QuestionPage() {
                                 width: 300,
                                 type: 'input',
 
-                                render: (html: string) => (
-                                    <HtmlTruncate key="explanation">
-                                        <div
-                                            dangerouslySetInnerHTML={{
-                                                __html: html
-                                                    ? renderWithMath(html)
-                                                    : '<i>Chưa có nội dung</i>',
-                                            }}
-                                        />
-                                    </HtmlTruncate>
-                                ),
+                                render: (__, record) => {
+                                    return record.type === QuestionType.MULTIPLE_CHOICE ||
+                                        record.type === QuestionType.SINGLE_CHOICE ? (
+                                        <div>{record?.multipleChoiceOptions.length} lựa chọn</div>
+                                    ) : (
+                                        <HtmlTruncate key="explanation">
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: record.explanation
+                                                        ? renderWithMath(record.explanation)
+                                                        : '<i>Chưa có nội dung</i>',
+                                                }}
+                                            />
+                                        </HtmlTruncate>
+                                    )
+                                },
                             },
                             // {
                             //     title: 'Tự động chấm điểm',

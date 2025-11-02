@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS restorations (
   updated_at TIMESTAMPTZ,
   finished_at TIMESTAMPTZ
 );
+drop trigger if exists restorations_change_updated_at on restorations;
 
 CREATE TRIGGER restorations_change_updated_at
 BEFORE UPDATE ON restorations FOR EACH ROW EXECUTE FUNCTION change_updated_at();

@@ -52,7 +52,7 @@ func (s *Service) RunRestoration(
 		logError(err)
 		return updateRes(dbgen.RestorationsServiceUpdateRestorationParams{
 			ID:         res.ID,
-			Status:     sql.NullString{Valid: true, String: "failed"},
+			Status:     sql.NullString{Valid: true, String: "Thất bại"},
 			Message:    sql.NullString{Valid: true, String: err.Error()},
 			FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		})
@@ -63,7 +63,7 @@ func (s *Service) RunRestoration(
 		logError(err)
 		return updateRes(dbgen.RestorationsServiceUpdateRestorationParams{
 			ID:         res.ID,
-			Status:     sql.NullString{Valid: true, String: "failed"},
+			Status:     sql.NullString{Valid: true, String: "Thất bại"},
 			Message:    sql.NullString{Valid: true, String: err.Error()},
 			FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		})
@@ -74,7 +74,7 @@ func (s *Service) RunRestoration(
 		logError(err)
 		return updateRes(dbgen.RestorationsServiceUpdateRestorationParams{
 			ID:         res.ID,
-			Status:     sql.NullString{Valid: true, String: "failed"},
+			Status:     sql.NullString{Valid: true, String: "Thất bại"},
 			Message:    sql.NullString{Valid: true, String: err.Error()},
 			FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		})
@@ -86,7 +86,7 @@ func (s *Service) RunRestoration(
 			logError(err)
 			return updateRes(dbgen.RestorationsServiceUpdateRestorationParams{
 				ID:         res.ID,
-				Status:     sql.NullString{Valid: true, String: "failed"},
+				Status:     sql.NullString{Valid: true, String: "Thất bại"},
 				Message:    sql.NullString{Valid: true, String: err.Error()},
 				FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 			})
@@ -99,7 +99,7 @@ func (s *Service) RunRestoration(
 		logError(err)
 		return updateRes(dbgen.RestorationsServiceUpdateRestorationParams{
 			ID:         res.ID,
-			Status:     sql.NullString{Valid: true, String: "failed"},
+			Status:     sql.NullString{Valid: true, String: "Thất bại"},
 			Message:    sql.NullString{Valid: true, String: err.Error()},
 			FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		})
@@ -110,7 +110,7 @@ func (s *Service) RunRestoration(
 		logError(err)
 		return updateRes(dbgen.RestorationsServiceUpdateRestorationParams{
 			ID:         res.ID,
-			Status:     sql.NullString{Valid: true, String: "failed"},
+			Status:     sql.NullString{Valid: true, String: "Thất bại"},
 			Message:    sql.NullString{Valid: true, String: err.Error()},
 			FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		})
@@ -123,7 +123,7 @@ func (s *Service) RunRestoration(
 		logError(err)
 		return updateRes(dbgen.RestorationsServiceUpdateRestorationParams{
 			ID:         res.ID,
-			Status:     sql.NullString{Valid: true, String: "failed"},
+			Status:     sql.NullString{Valid: true, String: "Thất bại"},
 			Message:    sql.NullString{Valid: true, String: err.Error()},
 			FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		})
@@ -136,7 +136,7 @@ func (s *Service) RunRestoration(
 		logError(err)
 		return updateRes(dbgen.RestorationsServiceUpdateRestorationParams{
 			ID:         res.ID,
-			Status:     sql.NullString{Valid: true, String: "failed"},
+			Status:     sql.NullString{Valid: true, String: "Thất bại"},
 			Message:    sql.NullString{Valid: true, String: err.Error()},
 			FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 		})
@@ -148,8 +148,8 @@ func (s *Service) RunRestoration(
 	})
 	return updateRes(dbgen.RestorationsServiceUpdateRestorationParams{
 		ID:         res.ID,
-		Status:     sql.NullString{Valid: true, String: "success"},
-		Message:    sql.NullString{Valid: true, String: "Backup restored successfully"},
+		Status:     sql.NullString{Valid: true, String: "Thành công"},
+		Message:    sql.NullString{Valid: true, String: "Khôi phục bản sao lưu thành công"},
 		FinishedAt: sql.NullTime{Valid: true, Time: time.Now()},
 	})
 }

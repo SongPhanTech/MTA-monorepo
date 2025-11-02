@@ -10,6 +10,11 @@ app.openapi(
         operationId: 'get-session',
         path: '/get-session',
         method: 'get',
+        request: {
+            query: z.object({
+                appCode: z.string(),
+            }),
+        },
         responses: {
             200: {
                 content: { 'application/json': { schema: sessionSchema } },
@@ -26,15 +31,17 @@ app.openapi(
         },
     }),
     async (c) => {
-        const xToken = getCookie(c, 'x-token')
+        const { appCode } = c.req.valid('query')
+        const xToken = getCookie(c, `x-token-${appCode}`)
+        const tenantCode = getCookie(c, 'x-tenantcode')
         const cookie = c.req.header('Cookie')
 
         console.log('[get-session].xToken', xToken)
-        if (!xToken || !cookie) {
+        if (!xToken || !tenantCode || !cookie) {
             return c.json({ error: 'Unauthorized' }, 401)
         }
 
-        const session = await auth(xToken, cookie)
+        const session = await auth({ xToken, appCode, tenantCode, cookie })
         if (!session) {
             return c.json({ error: 'Unauthorized' }, 401)
         }

@@ -2,22 +2,94 @@ import { CloseOutlined } from '@ant-design/icons'
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
+import Table from '@components/commons/table'
+import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
+import type { Prisma, SubjectClassSchedule, SubjectClassTime } from '@workspace/db/client'
 import { useImportPhanCongGiangDay } from '@workspace/libs/api/training'
-import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Form, message, Radio, Space, Tag } from 'antd'
+import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
+import { Button, Checkbox, Col, Form, message, Radio, Space, Tag } from 'antd'
 import { useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
+type SubjectClassPreviewData = Prisma.SubjectClassGetPayload<{
+    include: {
+        fixedClasses: {
+            select: {
+                code: true
+                _count: {
+                    select: {
+                        students: true
+                    }
+                }
+            }
+        }
+        mainLecturer: {
+            select: {
+                userProfile: {
+                    select: {
+                        fullname: true
+                    }
+                }
+            }
+        }
+        extraLecturer: {
+            select: {
+                userProfile: {
+                    select: {
+                        fullname: true
+                    }
+                }
+            }
+        }
+        enterGradeLecturer: {
+            select: {
+                userProfile: {
+                    select: {
+                        fullname: true
+                    }
+                }
+            }
+        }
+        trainingLocation: {
+            select: {
+                name: true
+            }
+        }
+        room: {
+            select: {
+                name: true
+            }
+        }
+        subjectClassTimes: true
+        subject: {
+            select: {
+                managementOrganization: {
+                    select: {
+                        sMa: true
+                    }
+                }
+                onePoint: true
+            }
+        }
+    }
+}>
 interface FilterProps {
     file?: File
     semesterId?: string
     fileType?: 'THONG_KE_GIAO_VIEN_GIANG_DAY' | 'TKB_THEO_LOP_HOC_PHAN'
+    previewData?: SubjectClassPreviewData[]
 }
 
 const ModalNhapTKB = () => {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const [form] = Form.useForm<Record<string, unknown>>()
+
+    const fileType = Form.useWatch('fileType', form) as
+        | 'THONG_KE_GIAO_VIEN_GIANG_DAY'
+        | 'TKB_THEO_LOP_HOC_PHAN'
+    const previewData = (Form.useWatch('previewData', form) as SubjectClassPreviewData[]) || []
     const {
         isOpen,
         onClose,
@@ -27,18 +99,33 @@ const ModalNhapTKB = () => {
         onClose: form.resetFields,
     })
     const { showSpinner, hideSpinner } = useSpinner()
-
+    const { options, getExamTypeLabel } = useExamTypeOptions()
     const [file, setFile] = useState<File | null>(null)
     const [fileName, setFileName] = useState<string>('')
     const { id: semesterId } = useSemesterStore()
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
-        if (!file) return
-
+        if (!file) {
+            form.setFieldValue('previewData', [])
+            return
+        }
         setFile(file)
         setFileName(`Dữ liệu thời khoá biểu.${file.name.split('.')[1]}`)
-        const reader = new FileReader()
-        reader.readAsArrayBuffer(file)
+        if (!semesterId || !trainingObjectTypeId) return
+        const res = await ImportPhanCongGiangDay({
+            data: {
+                file: file,
+                semesterId,
+                trainingObjectTypeId,
+                fileType: fileType,
+                importType: 'XEM_TRUOC',
+            },
+        })
+        if (res?.status === 200) {
+            form.setFieldValue('previewData', (res.data as any)?.data || [])
+        } else {
+            message.error(res?.data?.message || 'Nhập dữ liệu từ file thất bại')
+        }
     }
 
     const handleRemoveFile = () => {
@@ -48,6 +135,7 @@ const ModalNhapTKB = () => {
         if (fileInput) {
             fileInput.value = ''
         }
+        form.setFieldValue('previewData', [])
     }
 
     const { mutateAsync: ImportPhanCongGiangDay } = useImportPhanCongGiangDay()
@@ -77,6 +165,9 @@ const ModalNhapTKB = () => {
                 queryClient.invalidateQueries({
                     queryKey: ['zenstack', 'SubjectClass'],
                 })
+                queryClient.invalidateQueries({
+                    queryKey: ['zenstack', 'DM_DonVi'],
+                })
             } else {
                 message.error(res?.data?.message || 'Nhập dữ liệu từ file thất bại')
             }
@@ -98,8 +189,8 @@ const ModalNhapTKB = () => {
             onFinish={handleSubmit}
             open={isOpen}
             onCancel={handleCancel}
-            title={'Import danh sách phân công giảng dạy'}
-            className="w-[60vw]"
+            title={'Import thời khoá biểu từ file Excel'}
+            className="w-[99vw]"
             formProps={{
                 initialValues: {
                     fileType: 'THONG_KE_GIAO_VIEN_GIANG_DAY',
@@ -107,6 +198,7 @@ const ModalNhapTKB = () => {
                 },
             }}
         >
+            <FormItem form={form} name="previewData" hidden />
             <Col span={24}>
                 <FormItem form={form} name="file" label="File Excel" required>
                     <div className="rounded-lg border-[1px] border-solid border-blue-400 bg-blue-50 p-3 mb-4">
@@ -142,7 +234,7 @@ const ModalNhapTKB = () => {
                     </div>
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
                 <FormItem form={form} name="fileType" label="Mẫu" required>
                     <Radio.Group
                         options={[
@@ -180,9 +272,196 @@ const ModalNhapTKB = () => {
                         window.open(link, '_blank')
                     }}
                 >
-                    Xem mẫu file Excel
+                    Tải mẫu file Excel
                 </Button>
             </Col>
+            {previewData.length > 0 && (
+                <Col span={24}>
+                    <p>Xem trước dữ liệu TKB</p>
+                    <Table
+                        data={previewData}
+                        columns={[
+                            {
+                                title: 'TT',
+                                width: 35,
+                                align: 'center',
+                                render: (_value, _record, index) => index + 1,
+                            },
+                            {
+                                title: 'Mã LMH',
+                                width: 80,
+                                dataIndex: 'code',
+                            },
+                            {
+                                title: 'Tên môn học',
+                                width: 150,
+                                dataIndex: 'name',
+                            },
+                            {
+                                title: 'Mã LMH',
+                                dataIndex: 'code',
+                                width: 120,
+                                align: 'center',
+                                type: 'input',
+                            },
+                            {
+                                title: 'Tên môn học',
+                                dataIndex: 'name',
+                                align: 'center',
+                                type: 'input',
+                                render: (text) => <p className="text-left">{text}</p>,
+                            },
+                            {
+                                title: 'STC',
+                                dataIndex: 'credit',
+                                width: 70,
+                                align: 'center',
+                                type: 'order',
+                                render: (_, record) =>
+                                    record.subject?.credit ? record.subject?.credit : '',
+                            },
+                            {
+                                title: 'Kíp học',
+                                dataIndex: 'schedule',
+                                align: 'center',
+                                width: 80,
+                                type: 'select',
+                                options: Object.entries(SUBJECT_CLASS_SCHEDULE_TYPE).map(
+                                    ([key, value_]) => {
+                                        return {
+                                            label: value_,
+                                            value: key,
+                                        }
+                                    }
+                                ),
+                                render: (value: SubjectClassSchedule) =>
+                                    SUBJECT_CLASS_SCHEDULE_TYPE[
+                                        value as keyof typeof SUBJECT_CLASS_SCHEDULE_TYPE
+                                    ],
+                            },
+                            {
+                                title: 'Lớp QL',
+                                align: 'center',
+                                render: (_, record) => (
+                                    <p>
+                                        {record?.fixedClasses
+                                            ?.map((e: { code: string }) => e.code)
+                                            .join(', ') || '-'}
+                                    </p>
+                                ),
+                            },
+                            {
+                                title: 'Số SV',
+                                width: 80,
+                                align: 'center',
+                                type: 'order',
+                                distinctFilters: ['maxStudent', 'credit'],
+                                render: (_, record) => (
+                                    <p>
+                                        {record?.fixedClasses?.reduce(
+                                            (
+                                                acc: number,
+                                                curr: { _count?: { students?: number } }
+                                            ) => acc + (curr?._count?.students ?? 0),
+                                            0
+                                        ) ?? 0}
+                                    </p>
+                                ),
+                            },
+                            {
+                                title: 'Giảng viên 1',
+                                align: 'center',
+                                type: 'input',
+                                dataIndex: 'mainLecturer',
+                                render: (__, record) =>
+                                    record?.mainLecturer?.userProfile?.fullname ?? '-',
+                            },
+                            {
+                                title: 'Giảng viên 2',
+                                align: 'center',
+                                type: 'input',
+                                dataIndex: 'extraLecturer',
+                                render: (__, record) =>
+                                    record?.extraLecturer?.userProfile?.fullname ?? '-',
+                            },
+                            {
+                                title: 'Hình thức thi',
+                                dataIndex: 'examType',
+                                align: 'center',
+                                width: 160,
+                                type: 'select',
+                                options: options,
+                                render: (__, record) =>
+                                    record.examType && getExamTypeLabel(record.examType),
+                            },
+                            {
+                                title: 'Khu vực',
+                                dataIndex: 'trainingLocationId',
+                                align: 'center',
+                                width: 150,
+                                type: 'input',
+                                render: (_, record) => record.trainingLocation?.name || '-',
+                            },
+                            {
+                                title: 'Phòng học',
+                                dataIndex: 'roomId',
+                                align: 'center',
+                                width: 200,
+                                render: (_, record) => record.room?.name || '-',
+                            },
+                            {
+                                title: 'Giảng viên nhập điểm',
+                                align: 'center',
+                                render: (__, record) =>
+                                    record?.enterGradeLecturer?.userProfile?.fullname ?? '-',
+                            },
+                            {
+                                title: 'Ngày thi',
+                                dataIndex: 'examDate',
+                                align: 'center',
+                                width: 100,
+                                render: (value) => (value ? dayjs(value).format('DD/MM/YYYY') : ''),
+                            },
+                            {
+                                title: 'Thời khoá biểu',
+                                width: 150,
+                                align: 'center',
+                                dataIndex: 'subjectClassTimes',
+                                render: (subjectClassTimes: SubjectClassTime[]) => {
+                                    return subjectClassTimes?.map?.((tkb: SubjectClassTime) => {
+                                        return (
+                                            <p>
+                                                {tkb.dayOfWeek === 8 ? 'CN' : `T${tkb.dayOfWeek}`} -{' '}
+                                                {tkb.startPeriod} - {tkb.endPeriod}
+                                            </p>
+                                        )
+                                    })
+                                },
+                            },
+                            {
+                                title: 'ĐV phụ trách',
+                                dataIndex: 'subject',
+                                width: 150,
+                                align: 'center',
+                                type: 'tree_select',
+                                render: (value) => value?.managementOrganization?.sMa || '',
+                            },
+                            {
+                                title: 'Điểm bằng nhau',
+                                dataIndex: 'subject',
+                                width: 150,
+                                align: 'center',
+                                render: (value) => (
+                                    <Checkbox checked={!!value?.onePoint} disabled />
+                                ),
+                            },
+                        ]}
+                        pagination={{
+                            defaultPageSize: 10,
+                        }}
+                    />
+                </Col>
+            )}
         </PutFormModal>
     )
 }

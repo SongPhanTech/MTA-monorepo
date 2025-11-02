@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMPTZ
 );
 
+drop trigger if exists users_change_updated_at on users;
 CREATE TRIGGER users_change_updated_at
 BEFORE UPDATE ON users FOR EACH ROW EXECUTE FUNCTION change_updated_at();
 -- +goose StatementEnd

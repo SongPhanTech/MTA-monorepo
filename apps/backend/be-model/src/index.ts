@@ -14,7 +14,6 @@ import MinIOApp from './api/minio'
 import SqlTransactionApp from './api/transaction'
 import { checkIp } from './middlewares/check-ip'
 import { setupOpenApi } from './utils/openapi'
-
 export const prisma = new PrismaClient()
 const app = new OpenAPIHono({ strict: false })
 app.use(

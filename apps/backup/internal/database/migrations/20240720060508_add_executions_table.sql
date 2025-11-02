@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS executions (
   finished_at TIMESTAMPTZ,
   deleted_at TIMESTAMPTZ
 );
+drop trigger if exists executions_change_updated_at on executions;
 
 CREATE TRIGGER executions_change_updated_at
 BEFORE UPDATE ON executions FOR EACH ROW EXECUTE FUNCTION change_updated_at();

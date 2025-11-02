@@ -1,7 +1,7 @@
 import NAVIGATION, {
     type DANG_KY_HOC_PERMISSION,
     type KHAO_THI_PERMISSION,
-    MenuItem,
+    type MenuItem,
     type QL_DAO_TAO_PERMISSION,
     type QL_HO_SO_PERMISSION,
     ROUTER_PATH,
@@ -18,6 +18,7 @@ declare global {
     interface Window {
         contextData: {
             userId: string
+            userName: string
         }
     }
 }
@@ -56,7 +57,8 @@ const useAbility = () => {
         ) => {
             if (
                 process?.env?.NODE_ENV === 'development' ||
-                window?.location.host?.startsWith('localhost')
+                window?.location.host?.startsWith('localhost') ||
+                window?.contextData?.userName === 'superadmin'
             )
                 return true
             const perm = ability.actionsFor(subject)
@@ -76,7 +78,8 @@ const useAbility = () => {
         ) => {
             if (
                 process?.env?.NODE_ENV === 'development' ||
-                window?.location.host?.startsWith('localhost')
+                window?.location.host?.startsWith('localhost') ||
+                window?.contextData?.userName === 'superadmin'
             )
                 return true
             const perm = ability.actionsFor(subject)
@@ -350,7 +353,7 @@ function getDynamicBreadcrumb(
                         }
                     }
                 }
-                if(child?.path === pathname) {
+                if (child?.path === pathname) {
                     return [{ title: menu?.label as string }, { title: child?.label as string }]
                 }
             }

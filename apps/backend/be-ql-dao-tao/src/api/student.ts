@@ -2,7 +2,10 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 import { AcademicActionType, type Prisma, StudentStatus } from '@workspace/db'
 import { postDMNhanViens, putDMNhanViens } from '@workspace/libs/api/system'
 import { parseSheetHeQuanSu, parseSheetStudent, zParseSheetError } from '@workspace/libs/parseExcel'
+import { getTemplateBuffer } from '@workspace/libs/server'
 import { splitFullName } from '@workspace/libs/utils'
+import dayjs from 'dayjs'
+import XlsxTemplate from 'xlsx-template'
 import { prisma } from '..'
 import { UploadExcelModel } from '../dto/upload-excel.dto'
 import {
@@ -816,6 +819,277 @@ app.openapi(importHeQuanSu, async (c) => {
         },
         200
     )
+})
+
+const debtStatistics = createRoute({
+    operationId: 'debt-statistics',
+    tags: ['Student'],
+    path: '/debt-statistics',
+    method: 'get',
+    request: {
+        query: z.object({
+            trainingObjectTypeId: z.string(),
+            trainingCourseId: z.string(),
+            date: z.coerce.date().optional(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Export thống kê nợ',
+            content: {
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': {
+                    schema: z.any().openapi({ type: 'string', format: 'binary' }),
+                },
+            },
+        },
+        400: {
+            description: 'Bad request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(debtStatistics, async (c) => {
+    const { trainingObjectTypeId, trainingCourseId, date = new Date() } = c.req.valid('query')
+
+    const trainingObjectType = await prisma.trainingObjectType.findUniqueOrThrow({
+        where: { id: trainingObjectTypeId },
+        select: { name: true },
+    })
+
+    const trainingCourse = await prisma.trainingCourse.findUniqueOrThrow({
+        where: { id: trainingCourseId },
+        select: { name: true },
+    })
+
+    type Result = {
+        studentId: string
+        studentCode: string
+        fullname: string
+        dateOfBirth: string
+        fixedClassCode: string
+        subjectCode: string
+        subjectName: string
+        subjectCredit: number
+        semesterCode: string
+        finalScore: number | null
+    }[]
+
+    const res = await prisma.$queryRaw<Result>`
+                    select
+                        SSS."studentId",
+                        S."code" as "studentCode",
+                        "UP"."fullname" as "fullname",
+                        "UP"."dateOfBirth" as "dateOfBirth",
+                        FC.code as "fixedClassCode",
+                        sv.code as "subjectCode",
+                        sv.name as "subjectName",
+                        sv.credit as "subjectCredit",
+                        SEM.code as "semesterCode",
+                        SSS."finalScore" as "finalScore"
+                    from "ql-dao-tao"."StudentSubjectScore" as SSS
+                        inner join "ql-dao-tao"."Student" S on S.id = SSS."studentId"
+                        inner join "ql-nguoi-dung"."UserProfile" "UP" on "UP".id = S."userProfileId"
+                        inner join "ql-dao-tao"."FixedClass" FC on FC.id = S."fixedClassId"
+                        inner join "ql-dao-tao"."TrainingCourse" TC on TC.id = FC."trainingCourseId"
+                        inner join "ql-dao-tao"."SubjectClass" SC on SC.id = SSS."subjectClassId"
+                        inner join "ql-dao-tao"."Semester" SEM on SEM.id = SC."semesterId"
+                        inner join "ql-dao-tao"."SubjectVersion" sv on sv.id = SSS."subjectVersionId"
+                        inner join "ql-dao-tao"."CurriculumVersion" CV on CV.id = S."curriculumVersionId"
+                        inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV on CV.id = TBOCV."curriculumVersionId"
+                        inner join "ql-dao-tao"."TrainingBlockSubject" TBS on TBOCV.id = TBS."trainingBlockOnCurriculumVersionId" and TBS."subjectId" = sv.id
+                    where
+                        SC.cancelled = false and
+                        SEM."endDate" <= ${date} and
+                        (
+                            SSS."finalScore" is null or
+                            (TBS.graduation = true and SSS."finalScore" < TC."scoreToPassGraduation") or
+                            (TBS."useForFinalScore" = true and SSS."finalScore" < TC."scoreToPass") or
+                            (TBS."useForFinalScore" = false and SSS."finalScore" < TC."scoreToPassConditional") or
+                            SSS."examBanned" = true or
+                            SSS.suspended = true
+                        )
+                        and SSS.withdrew = false
+                        and SSS.exempted = false
+                        and SSS."examPostponed" = false
+                        and (
+                            ${trainingObjectTypeId}::TEXT IS NULL
+                            OR sv."trainingObjectTypeId" = ${trainingObjectTypeId}
+                        )
+                        and (
+                            ${trainingCourseId}::TEXT IS NULL
+                            OR TC.id = ${trainingCourseId}
+                        )
+                        and not exists (
+                            select 1
+                            from "ql-dao-tao"."StudentSubjectScore" as SSS_pass
+                                inner join "ql-dao-tao"."Student" S_pass on S_pass.id = SSS_pass."studentId"
+                                inner join "ql-dao-tao"."SubjectVersion" sv_pass on sv_pass.id = SSS_pass."subjectVersionId"
+                                inner join "ql-dao-tao"."FixedClass" FC_pass on FC_pass.id = S_pass."fixedClassId"
+                                inner join "ql-dao-tao"."TrainingCourse" TC_pass on TC_pass.id = FC_pass."trainingCourseId"
+                                inner join "ql-dao-tao"."CurriculumVersion" CV_pass on CV_pass.id = S_pass."curriculumVersionId"
+                                inner join "ql-dao-tao"."TrainingBlockOnCurriculumVersion" TBOCV_pass on CV_pass.id = TBOCV_pass."curriculumVersionId"
+                                inner join "ql-dao-tao"."TrainingBlockSubject" TBS_pass on TBOCV_pass.id = TBS_pass."trainingBlockOnCurriculumVersionId" and TBS_pass."subjectId" = sv_pass.id
+                            where
+                                SSS_pass."studentId" = SSS."studentId" and sv_pass.id = sv.id
+                                and SSS_pass.withdrew = false
+                                and SSS_pass.exempted = false
+                                and SSS_pass."examPostponed" = false
+                                and SSS_pass."examBanned" = false
+                                and SSS_pass.suspended = false
+                                and (
+                                    (TBS_pass.graduation = true and SSS_pass."finalScore" >= TC_pass."scoreToPassGraduation" or SSS_pass."manualFinalScore" >= TC_pass."scoreToPassGraduation") or
+                                    (TBS_pass."useForFinalScore" = true and SSS_pass."finalScore" >= TC_pass."scoreToPass" or SSS_pass."manualFinalScore" >= TC_pass."scoreToPass") or
+                                    (TBS_pass."useForFinalScore" = false and SSS_pass."finalScore" >= TC_pass."scoreToPassConditional" or SSS_pass."manualFinalScore" >= TC_pass."scoreToPassConditional")
+                                )
+                        )
+                    order by SSS."studentId", sv.id
+                    `
+
+    type SubjectAttempt = {
+        semesterCode: string
+        finalScore: number | null
+    }
+
+    type DebtSubject = {
+        subjectCode: string
+        subjectName: string
+        subjectCredit: number
+        attempts: SubjectAttempt[]
+    }
+
+    type StudentDebtSummary = {
+        studentId: string
+        studentCode: string
+        fullname: string
+        dateOfBirth: string
+        fixedClassCode: string
+        subjects: DebtSubject[]
+    }
+
+    const studentDebtMap = res.reduce(
+        (acc, record) => {
+            const {
+                studentId,
+                studentCode,
+                fullname,
+                dateOfBirth,
+                fixedClassCode,
+                subjectCode,
+                subjectName,
+                subjectCredit,
+                semesterCode,
+                finalScore,
+            } = record
+
+            if (!acc[studentId]) {
+                acc[studentId] = {
+                    studentId,
+                    studentCode,
+                    fullname,
+                    dateOfBirth,
+                    fixedClassCode,
+                    subjects: {},
+                }
+            }
+
+            if (!acc[studentId].subjects[subjectCode]) {
+                acc[studentId].subjects[subjectCode] = {
+                    subjectCode,
+                    subjectName,
+                    subjectCredit,
+                    attempts: [],
+                }
+            }
+
+            acc[studentId].subjects[subjectCode].attempts.push({ semesterCode, finalScore })
+
+            return acc
+        },
+        {} as Record<
+            string,
+            {
+                studentId: string
+                studentCode: string
+                fullname: string
+                dateOfBirth: string
+                fixedClassCode: string
+                subjects: Record<string, DebtSubject>
+            }
+        >
+    )
+
+    const debtSummary: StudentDebtSummary[] = Object.values(studentDebtMap).map((student) => ({
+        ...student,
+        subjects: Object.values(student.subjects),
+    }))
+
+    const rows = debtSummary.flatMap((s) => {
+        const totalDebtSubject = s.subjects.length
+        const totalDebtCredit = Object.values(s.subjects).reduce(
+            (acc, subject) => acc + subject.subjectCredit,
+            0
+        )
+
+        return s.subjects.map((subject) => {
+            const finalScores = subject.attempts.map((attempt) => attempt.finalScore)
+            let type = 'THI LẠI'
+            let note = 'Đã thi trượt 1 lần'
+
+            if (finalScores[finalScores.length - 1] === null) {
+                type = 'CHƯA THI'
+                note = 'Chưa thi hoặc GV chưa nhập điểm thi'
+            } else if (finalScores.length > 1) {
+                type = 'HỌC LẠI'
+                note = `Đã thi trượt ít nhất ${finalScores.length} lần`
+            }
+
+            return {
+                studentCode: s.studentCode,
+                fullname: s.fullname,
+                dateOfBirth: s.dateOfBirth ? dayjs(s.dateOfBirth).format('DD/MM/YYYY') : '',
+                fixedClassCode: s.fixedClassCode,
+                totalDebtSubject,
+                totalDebtCredit,
+                subjectCode: subject.subjectCode,
+                subjectName: subject.subjectName,
+                subjectCredit: subject.subjectCredit,
+                semesters: subject.attempts.map((attempt) => attempt.semesterCode).join('/'),
+                finalScores: subject.attempts
+                    .map((attempt) => String(attempt.finalScore))
+                    .join('/'),
+                type,
+                note,
+            }
+        })
+    })
+
+    const buffer = await getTemplateBuffer(prisma, 'THONG_KE_NO')
+    const template = new XlsxTemplate(buffer)
+    const sheetName = 'DS HV nợ môn'
+
+    template.substitute(sheetName, {
+        ĐTĐT: trainingObjectType.name,
+        KHOÁ: trainingCourse.name,
+        DATE: dayjs(date).format('DD/MM/YYYY'),
+        data: rows.map((r, idx) => ({ no: idx + 1, ...r })),
+    })
+
+    const result = await template.generate({ type: 'arraybuffer' })
+
+    const fileName = `thong_ke_no_${trainingObjectType.name}_${trainingCourse.name}.xlsx`
+    const disposition = `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+
+    return c.body(result, 200, {
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition': disposition,
+    })
 })
 
 export default app

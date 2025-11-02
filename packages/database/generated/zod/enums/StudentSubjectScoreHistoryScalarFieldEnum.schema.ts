@@ -3,8 +3,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 
-export const StudentSubjectScoreHistoryScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "studentSubjectScoreId", "attendanceScore", "midtermScore", "examScore", "finalScore", "manualFinalScore", "examPostponedReason", "examPostponed", "examBanned", "examBannedReason", "suspended", "suspendedReason", "updatedById"])
+export const StudentSubjectScoreHistoryScalarFieldEnumSchema = z.enum(["id", "code", "active", "description", "deletedAt", "createdAt", "updatedAt", "studentSubjectScoreId", "attendanceScore", "midtermScore", "examScore", "finalScore", "manualFinalScore", "examPostponed", "examPostponedReason", "examBanned", "examBannedReason", "suspended", "suspendedReason", "updatedById"])

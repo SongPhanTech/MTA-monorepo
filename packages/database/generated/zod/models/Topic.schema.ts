@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
 const baseSchema = z.object({
@@ -14,6 +13,18 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
+    name: z.string(),
+    type: z.string(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     type: z.string(),
 }
@@ -42,7 +53,7 @@ export const TopicSchema = TopicScalarSchema.merge(relationSchema.partial());
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const TopicPrismaCreateSchema = baseSchema.partial().passthrough();
+export const TopicPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -52,11 +63,11 @@ export const TopicPrismaCreateSchema = baseSchema.partial().passthrough();
 export const TopicPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
     name: z.string(),
     type: z.string()
 }).partial().passthrough();
@@ -65,7 +76,7 @@ export const TopicPrismaUpdateSchema = z.object({
 /**
  * `Topic` schema for create operations excluding foreign keys and relations.
  */
-export const TopicCreateScalarSchema = baseSchema.partial({
+export const TopicCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -73,7 +84,7 @@ export const TopicCreateScalarSchema = baseSchema.partial({
 /**
  * `Topic` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const TopicCreateSchema = baseSchema.partial({
+export const TopicCreateSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
@@ -81,7 +92,7 @@ export const TopicCreateSchema = baseSchema.partial({
 /**
  * `Topic` schema for update operations excluding foreign keys and relations.
  */
-export const TopicUpdateScalarSchema = baseSchema.partial();
+export const TopicUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

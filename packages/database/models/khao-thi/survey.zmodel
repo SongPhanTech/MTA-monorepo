@@ -44,8 +44,10 @@ model SurveyObjectType extends Base {
 // chủ đề khảo sát (Đánh giá giảng viên, đánh giá cơ sở vật chất,...)
 model SurveyTopic extends Base {
   name                String
+  clusterSurvey       ClusterSurvey[]
   survey              Survey[]
   surveyQuestionGroup SurveyQuestionGroup[]
+
   @@schema("khao-thi")
 }
 
@@ -53,26 +55,28 @@ model SurveyTopic extends Base {
 model SurveyQuestionGroup extends Base {
   name           String
   surveyQuestion SurveyQuestion[]
-  surveyTopic    SurveyTopic      @relation(fields: [surveyTopicId], references: [id])
-  surveyTopicId  String
+  surveyTopic    SurveyTopic[]
   @@schema("khao-thi")
 }
 
 /// Khảo sát cụm
 model ClusterSurvey extends Base {
-  name             String
+  name                 String
+  additionalSuggestion Boolean
 
   // những cấu hình sẽ được copy sang Survey
-  startDate        DateTime
-  endDate          DateTime?
-  isPublic         Boolean            @default(false)
-  anonymous        Boolean            @default(true)
-  surveyObjectType SurveyObjectType[]
-  lecturers        Lecturer[] // DS giảng viên => sinh ra Survey cho từng giảng viên
-  surveyChoice     SurveyChoice[] // lựa chọn
-  surveyQuestion   SurveyQuestion[] // câu hỏi
+  startDate            DateTime
+  endDate              DateTime?
+  isPublic             Boolean            @default(false)
+  anonymous            Boolean            @default(true)
+  surveyTopic          SurveyTopic        @relation(fields: [surveyTopicId], references: [id])
+  surveyTopicId        String
+  surveyObjectType     SurveyObjectType[]
+  lecturers            Lecturer[] // DS giảng viên => sinh ra Survey cho từng giảng viên
+  surveyChoice         SurveyChoice[] // lựa chọn
+  surveyQuestion       SurveyQuestion[] // câu hỏi
 
-  surveys          Survey[]
+  surveys              Survey[]
 
   @@schema("khao-thi")
 }
@@ -87,6 +91,7 @@ model Survey extends Base {
   anonymous            Boolean            @default(true)
 
   surveyObjectType     SurveyObjectType[]
+  subjectClasses       SubjectClass[]
 
   lectureId            String?            // khảo sát cho GV nào
   lecture              Lecturer?          @relation(fields: [lectureId], references: [id])
@@ -121,15 +126,11 @@ model SurveyQuestion extends Base {
   // Hiển thị surveyChoice khi type = SINGLE_CHOICE
   type                  SurveyQuestionType
 
-  surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
-  surveyQuestionGroupId String?
+  surveyQuestionGroup   SurveyQuestionGroup @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String
 
-  survey                Survey?              @relation(fields: [surveyId], references: [id])
-  surveyId              String?
-
-  clusterSurvey         ClusterSurvey?       @relation(fields: [clusterSurveyId], references: [id])
-  clusterSurveyId       String?
-
+  survey                Survey[]
+  clusterSurvey         ClusterSurvey[]
   surveyResponses       SurveyResponse[]  // Thêm relation mới
 
   @@schema("khao-thi")
@@ -157,6 +158,9 @@ model SurveySession extends Base {
   surveyId             String
 
   additionalSuggestion String?
+
+  profile              UserProfile?      @relation(fields: [profileId], references: [id])
+  profileId            String?
 
   student              Student?          @relation(fields: [studentId], references: [id])
   studentId            String?

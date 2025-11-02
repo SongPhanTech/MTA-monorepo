@@ -15,7 +15,7 @@ export async function fetchHoiDap({
 
     const response = await fetch(
         // 'https://api.chat.chatbot.swantech.vn/hoi_dap_v2',
-        `${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_v3`,
+        `${env.NEXT_PUBLIC_CHAT_BOT_URL}/hoi_dap_v4`,
         {
             method: 'POST',
             body: formData,

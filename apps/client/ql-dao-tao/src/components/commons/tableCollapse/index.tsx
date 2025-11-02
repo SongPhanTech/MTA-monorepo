@@ -24,7 +24,7 @@ export type Data<T, ChildKey extends keyof T> = T &
 type TableProps<T, ChildKey extends keyof T> = {
     data?: Data<T, ChildKey>[]
     columns?: (ColumnType<Data<T, ChildKey>[ChildKey][number]> & {
-        type?: 'input' | 'input_search' | 'select' | 'tree_select' | 'order' | 'date'
+        type?: 'input' | 'input_search' | 'select' | 'tree_select' | 'order' | 'date' | 'cmp'
         distinctFilters?: string[]
         options?: ColumnOption[]
     })[]
@@ -52,7 +52,7 @@ type TableProps<T, ChildKey extends keyof T> = {
     defaultExpandAll?: boolean
 } & Omit<
     TableAntdProps,
-    'columns' | 'data' | 'pagination' | 'headerTitleKey' | 'onRow' | 'childrenFieldName'
+    'columns' | 'data' | 'pagination' | 'headerTitleKey' | 'onRow' | 'childrenFieldName' | 'number'
 >
 
 const TableCollapse = <
@@ -232,14 +232,14 @@ const TableCollapse = <
             <Table
                 id={id}
                 rowKey={rowKey}
-                className="mt-4"
+                className="mt-2"
                 // sticky={{ offsetHeader: 100 }} // Ghim header ở đầu bảng khi scroll y
                 // scroll={{ x: 'max-content', y: scrollable ? maxHeight : undefined }}
                 // scroll={{ x: '100%', y: scrollable ? maxHeight : 500 }} // Ghim header ở đầu bảng khi scroll y
-                scroll={{
-                    x: 'max-content',
-                    y: scrollable ? maxHeight : undefined,
-                }}
+                // scroll={{
+                //     x: 'max-content',
+                //     y: scrollable ? maxHeight : undefined,
+                // }}
                 bordered
                 data={dataWithKey}
                 pagination={pagination}

@@ -3,9 +3,10 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
-const metadata = {
+import type { ModelMeta } from "@zenstackhq/runtime";
+
+const metadata: ModelMeta = {
     models: {
         config: {
             name: 'Config', fields: {
@@ -1231,12 +1232,24 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'updatedBy',
+                }, subjectClassHistory: {
+                    name: "subjectClassHistory",
+                    type: "SubjectClassHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'updatedBy',
                 }, changeLog: {
                     name: "changeLog",
                     type: "ChangeLog",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'userProfile',
+                }, surveySession: {
+                    name: "surveySession",
+                    type: "SurveySession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'profile',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -7882,12 +7895,12 @@ const metadata = {
                     type: "Float",
                     isOptional: true,
                     attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
-                }, examPostponedReason: {
-                    name: "examPostponedReason",
-                    type: "Boolean",
-                    isOptional: true,
                 }, examPostponed: {
                     name: "examPostponed",
+                    type: "Boolean",
+                    isOptional: true,
+                }, examPostponedReason: {
+                    name: "examPostponedReason",
                     type: "String",
                     isOptional: true,
                 }, examBanned: {
@@ -7910,6 +7923,7 @@ const metadata = {
                     name: "updatedBy",
                     type: "UserProfile",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentSubjectScoreHistory',
                     isRelationOwner: true,
@@ -7917,6 +7931,7 @@ const metadata = {
                 }, updatedById: {
                     name: "updatedById",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'updatedBy',
                 },
@@ -10582,6 +10597,10 @@ const metadata = {
                     name: "type",
                     type: "SubjectClassType",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, status: {
+                    name: "status",
+                    type: "SubjectClassStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, trainingObjectType: {
                     name: "trainingObjectType",
                     type: "TrainingObjectType",
@@ -10622,6 +10641,10 @@ const metadata = {
                     isOptional: true,
                 }, submitLecturerAssignmentAt: {
                     name: "submitLecturerAssignmentAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, approveLecturerAssignmentAt: {
+                    name: "approveLecturerAssignmentAt",
                     type: "DateTime",
                     isOptional: true,
                 }, examDate: {
@@ -10820,11 +10843,125 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectClass',
+                }, subjectClassHistory: {
+                    name: "subjectClassHistory",
+                    type: "SubjectClassHistory",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClass',
+                }, survey: {
+                    name: "survey",
+                    type: "Survey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectClasses',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
                     name: "id",
                     fields: ["id"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
+        },
+        subjectClassHistory: {
+            name: 'SubjectClassHistory', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, subjectClass: {
+                    name: "subjectClass",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectClassHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectClassId" },
+                }, subjectClassId: {
+                    name: "subjectClassId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectClass',
+                }, scoreDeadLineStart: {
+                    name: "scoreDeadLineStart",
+                    type: "DateTime",
+                    isOptional: true,
+                }, scoreDeadline: {
+                    name: "scoreDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, examScoreDeadline: {
+                    name: "examScoreDeadline",
+                    type: "DateTime",
+                    isOptional: true,
+                }, isLockScore: {
+                    name: "isLockScore",
+                    type: "Boolean",
+                    isOptional: true,
+                }, isLockExamScore: {
+                    name: "isLockExamScore",
+                    type: "Boolean",
+                    isOptional: true,
+                }, scoreSubmitted: {
+                    name: "scoreSubmitted",
+                    type: "Boolean",
+                    isOptional: true,
+                }, scoreChecked: {
+                    name: "scoreChecked",
+                    type: "Boolean",
+                    isOptional: true,
+                }, updatedBy: {
+                    name: "updatedBy",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'subjectClassHistory',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "updatedById" },
+                }, updatedById: {
+                    name: "updatedById",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'updatedBy',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "ql-dao-tao" }] }],
@@ -11709,13 +11846,6 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'building',
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'room',
-                    isRelationOwner: true,
                 }, subjectClasses: {
                     name: "subjectClasses",
                     type: "SubjectClass",
@@ -11745,6 +11875,12 @@ const metadata = {
                 }, examRooms: {
                     name: "examRooms",
                     type: "ExamRoom",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'room',
+                }, examRoomSlot: {
+                    name: "examRoomSlot",
+                    type: "ExamRoomSlot",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'room',
@@ -14557,11 +14693,12 @@ const metadata = {
                 }, score: {
                     name: "score",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    isOptional: true,
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
                     isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -15867,6 +16004,14 @@ const metadata = {
                     type: "String",
                     isOptional: true,
                     attributes: [{ "name": "@email", "args": [] }],
+                }, bankAccountNumber: {
+                    name: "bankAccountNumber",
+                    type: "String",
+                    isOptional: true,
+                }, bankName: {
+                    name: "bankName",
+                    type: "String",
+                    isOptional: true,
                 }, eligiblePresident: {
                     name: "eligiblePresident",
                     type: "Boolean",
@@ -18024,6 +18169,12 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, clusterSurvey: {
+                    name: "clusterSurvey",
+                    type: "ClusterSurvey",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'surveyTopic',
                 }, survey: {
                     name: "survey",
                     type: "Survey",
@@ -18036,6 +18187,7 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'surveyTopic',
+                    isRelationOwner: true,
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18094,15 +18246,9 @@ const metadata = {
                     name: "surveyTopic",
                     type: "SurveyTopic",
                     isDataModel: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    isArray: true,
                     backLink: 'surveyQuestionGroup',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyTopicId" },
-                }, surveyTopicId: {
-                    name: "surveyTopicId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'surveyTopic',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18151,6 +18297,9 @@ const metadata = {
                 }, name: {
                     name: "name",
                     type: "String",
+                }, additionalSuggestion: {
+                    name: "additionalSuggestion",
+                    type: "Boolean",
                 }, startDate: {
                     name: "startDate",
                     type: "DateTime",
@@ -18166,6 +18315,19 @@ const metadata = {
                     name: "anonymous",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, surveyTopic: {
+                    name: "surveyTopic",
+                    type: "SurveyTopic",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'clusterSurvey',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "surveyTopicId" },
+                }, surveyTopicId: {
+                    name: "surveyTopicId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'surveyTopic',
                 }, surveyObjectType: {
                     name: "surveyObjectType",
                     type: "SurveyObjectType",
@@ -18192,6 +18354,7 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'clusterSurvey',
+                    isRelationOwner: true,
                 }, surveys: {
                     name: "surveys",
                     type: "Survey",
@@ -18268,6 +18431,13 @@ const metadata = {
                     isArray: true,
                     backLink: 'survey',
                     isRelationOwner: true,
+                }, subjectClasses: {
+                    name: "subjectClasses",
+                    type: "SubjectClass",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'survey',
+                    isRelationOwner: true,
                 }, lectureId: {
                     name: "lectureId",
                     type: "String",
@@ -18311,6 +18481,7 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'survey',
+                    isRelationOwner: true,
                 }, surveySessions: {
                     name: "surveySessions",
                     type: "SurveySession",
@@ -18387,7 +18558,6 @@ const metadata = {
                     name: "surveyQuestionGroup",
                     type: "SurveyQuestionGroup",
                     isDataModel: true,
-                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveyQuestion',
                     isRelationOwner: true,
@@ -18395,39 +18565,22 @@ const metadata = {
                 }, surveyQuestionGroupId: {
                     name: "surveyQuestionGroupId",
                     type: "String",
-                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'surveyQuestionGroup',
                 }, survey: {
                     name: "survey",
                     type: "Survey",
                     isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    isArray: true,
                     backLink: 'surveyQuestion',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyId" },
-                }, surveyId: {
-                    name: "surveyId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'survey',
                 }, clusterSurvey: {
                     name: "clusterSurvey",
                     type: "ClusterSurvey",
                     isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    isArray: true,
                     backLink: 'surveyQuestion',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "clusterSurveyId" },
-                }, clusterSurveyId: {
-                    name: "clusterSurveyId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'clusterSurvey',
                 }, surveyResponses: {
                     name: "surveyResponses",
                     type: "SurveyResponse",
@@ -18583,6 +18736,21 @@ const metadata = {
                     name: "additionalSuggestion",
                     type: "String",
                     isOptional: true,
+                }, profile: {
+                    name: "profile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'surveySession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "profileId" },
+                }, profileId: {
+                    name: "profileId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'profile',
                 }, student: {
                     name: "student",
                     type: "Student",
@@ -18799,6 +18967,12 @@ const metadata = {
                 }, questions: {
                     name: "questions",
                     type: "Question",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'questionBank',
+                }, testStructureRules: {
+                    name: "testStructureRules",
+                    type: "TestStructureRule",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'questionBank',
@@ -19353,6 +19527,14 @@ const metadata = {
                     isOptional: true,
                     isForeignKey: true,
                     relationField: 'questionBank',
+                }, lockExamSessions: {
+                    name: "lockExamSessions",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
+                }, createdExamCode: {
+                    name: "createdExamCode",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
                 }, lockExamCode: {
                     name: "lockExamCode",
                     type: "Boolean",
@@ -19373,13 +19555,12 @@ const metadata = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'exam',
-                }, room: {
-                    name: "room",
-                    type: "Room",
+                }, examRoomSlots: {
+                    name: "examRoomSlots",
+                    type: "ExamRoomSlot",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'exam',
-                    isRelationOwner: true,
                 }, examBank: {
                     name: "examBank",
                     type: "ExamBank",
@@ -19415,6 +19596,83 @@ const metadata = {
                 },
             },
             attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+        },
+        examRoomSlot: {
+            name: 'ExamRoomSlot', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@id", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@unique", "args": [] }],
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                    attributes: [{ "name": "@db.Text", "args": [] }],
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, exam: {
+                    name: "exam",
+                    type: "Exam",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'examRoomSlots',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examId" },
+                }, examId: {
+                    name: "examId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'exam',
+                }, room: {
+                    name: "room",
+                    type: "Room",
+                    isDataModel: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'examRoomSlot',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "roomId" },
+                }, roomId: {
+                    name: "roomId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'room',
+                }, cap: {
+                    name: "cap",
+                    type: "Int",
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, examId_roomId: {
+                    name: "examId_roomId",
+                    fields: ["examId", "roomId"]
+                },
+            },
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         examRoom: {
             name: 'ExamRoom', fields: {
@@ -19574,6 +19832,7 @@ const metadata = {
                     name: "exam",
                     type: "Exam",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'testStructureRules',
                     isRelationOwner: true,
@@ -19581,8 +19840,24 @@ const metadata = {
                 }, examId: {
                     name: "examId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'exam',
+                }, questionBank: {
+                    name: "questionBank",
+                    type: "QuestionBank",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'testStructureRules',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "questionBankId" },
+                }, questionBankId: {
+                    name: "questionBankId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'questionBank',
                 }, knowledgeBlock: {
                     name: "knowledgeBlock",
                     type: "KnowledgeBlock",
@@ -19616,9 +19891,12 @@ const metadata = {
                 }, examId_knowledgeBlockId_questionPoint_questionType: {
                     name: "examId_knowledgeBlockId_questionPoint_questionType",
                     fields: ["examId", "knowledgeBlockId", "questionPoint", "questionType"]
+                }, questionBankId_knowledgeBlockId_questionPoint_questionType: {
+                    name: "questionBankId_knowledgeBlockId_questionPoint_questionType",
+                    fields: ["questionBankId", "knowledgeBlockId", "questionPoint", "questionType"]
                 },
             },
-            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
+            attributes: [{ "name": "@@allow", "args": [{ "name": "operation", "value": "all" }, { "name": "condition" }] }, { "name": "@@deny", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@allow", "args": [{ "name": "operation", "value": "read" }, { "name": "condition" }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@unique", "args": [{ "name": "fields", "value": [null, null, null, null] }] }, { "name": "@@schema", "args": [{ "name": "name", "value": "khao-thi" }] }],
         },
         examBank: {
             name: 'ExamBank', fields: {

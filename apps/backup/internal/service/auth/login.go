@@ -10,9 +10,9 @@ import (
 )
 
 func (s *Service) Login(
-	ctx context.Context, email, password, ip, userAgent string,
+	ctx context.Context, username, password, ip, userAgent string,
 ) (dbgen.AuthServiceLoginCreateSessionRow, error) {
-	user, err := s.dbgen.AuthServiceLoginGetUserByEmail(ctx, email)
+	user, err := s.dbgen.AuthServiceLoginGetUserByEmail(ctx, username)
 	if err != nil {
 		return dbgen.AuthServiceLoginCreateSessionRow{}, err
 	}

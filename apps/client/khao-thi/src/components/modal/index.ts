@@ -7,7 +7,6 @@ import ModalPrintExamBank from './modal-print-exam-bank'
 import ModalSinhDeThiTuDong from './modal-sinh-de-thi-tu-dong'
 import PutTestStructureRule from './put-cau-hinh-de-thi-tu-dong'
 import PutKnowledgeBlock from './put-chuong-muc'
-import PutSurveyExamModal from './put-create-survey-exam'
 import PutExamBank from './put-de-thi'
 import PutEvaluationPeriod from './put-dot-danh-gia-ctdt'
 import PutEvaluationCouncil from './put-evaluation-council'
@@ -47,7 +46,6 @@ export {
     ModalPrintExamBank,
     ModalPrintAllExams,
     PutSurveyQuestionGroupModal,
-    PutSurveyExamModal,
     PutStandardCatalog,
     PutCriterionCatalog,
     PutRequirementCriterionCatalog,

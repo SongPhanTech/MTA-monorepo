@@ -87,7 +87,7 @@ func showRestorationButton(
 
 	return nodx.Div(
 		nodx.Class("inline-block tooltip tooltip-right"),
-		nodx.Data("tip", "Show details"),
+		nodx.Data("tip", "Xem chi tiết"),
 		mo.HTML,
 		button,
 	)

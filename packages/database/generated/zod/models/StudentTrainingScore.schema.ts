@@ -3,9 +3,9 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import { z } from 'zod';
+import { StudentTrainingType } from '../../zenstack/models';
 import { StudentTrainingTypeSchema } from '../enums/StudentTrainingType.schema';
 const baseSchema = z.object({
     id: z.string(),
@@ -15,13 +15,25 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    score: z.number().default(0),
+    score: z.number().nullish(),
+    studentTrainingType: StudentTrainingTypeSchema.nullish(),
+}
+).strict();
+const baseSchemaWithoutDefaults = z.object({
+    id: z.string(),
+    code: z.string().nullish(),
+    active: z.boolean(),
+    description: z.string().nullish(),
+    deletedAt: z.coerce.date().nullish(),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    score: z.number().nullish(),
     studentTrainingType: StudentTrainingTypeSchema.nullish(),
 }
 ).strict();
 const relationSchema = z.object({
-    trainingScoreSession: z.record(z.unknown()),
-    student: z.record(z.unknown()),
+    trainingScoreSession: z.record(z.string(), z.unknown()),
+    student: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
@@ -46,7 +58,7 @@ export const StudentTrainingScoreSchema = StudentTrainingScoreScalarSchema.merge
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const StudentTrainingScorePrismaCreateSchema = baseSchema.partial().passthrough();
+export const StudentTrainingScorePrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
@@ -56,12 +68,12 @@ export const StudentTrainingScorePrismaCreateSchema = baseSchema.partial().passt
 export const StudentTrainingScorePrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
-    active: z.boolean().default(true),
+    active: z.boolean(),
     description: z.string().nullish(),
     deletedAt: z.coerce.date().nullish(),
-    createdAt: z.coerce.date().default(() => new Date()),
-    updatedAt: z.coerce.date().default(() => new Date()),
-    score: z.union([z.number().default(0), z.record(z.unknown())]),
+    createdAt: z.coerce.date(),
+    updatedAt: z.coerce.date(),
+    score: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     studentTrainingType: StudentTrainingTypeSchema.nullish()
 }).partial().passthrough();
 
@@ -69,8 +81,8 @@ export const StudentTrainingScorePrismaUpdateSchema = z.object({
 /**
  * `StudentTrainingScore` schema for create operations excluding foreign keys and relations.
  */
-export const StudentTrainingScoreCreateScalarSchema = baseSchema.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, score: true
+export const StudentTrainingScoreCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+    id: true, active: true, createdAt: true, updatedAt: true, studentTrainingType: true
 });
 
 
@@ -83,7 +95,7 @@ export const StudentTrainingScoreCreateSchema = StudentTrainingScoreCreateScalar
 /**
  * `StudentTrainingScore` schema for update operations excluding foreign keys and relations.
  */
-export const StudentTrainingScoreUpdateScalarSchema = baseSchema.partial();
+export const StudentTrainingScoreUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**

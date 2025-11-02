@@ -268,7 +268,7 @@ func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow) nodx.Node {
 		component.OptionsDropdownButton(
 			mo.OpenerAttr,
 			lucide.Pencil(),
-			component.SpanText("Chỉnh sửa nhiệm vụ sao lưu"),
+			component.SpanText("Chỉnh sửa"),
 		),
 	)
 }

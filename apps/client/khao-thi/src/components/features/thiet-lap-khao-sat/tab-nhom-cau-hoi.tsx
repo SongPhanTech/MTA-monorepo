@@ -1,5 +1,6 @@
 import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
+import TextTruncate from '@components/commons/tex-truncate'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -103,6 +104,8 @@ function TabNhomCauHoi() {
         hideSpinner()
     }
 
+    console.log('data', data)
+
     return (
         <div>
             <Row gutter={[16, 16]}>
@@ -155,8 +158,21 @@ function TabNhomCauHoi() {
                                     value: id,
                                     label: name,
                                 })),
-                                render: (_, record) =>
-                                    record?.surveyTopic ? record?.surveyTopic.name : '',
+                                render: (_, record) => {
+                                    return record.surveyTopic?.length ? (
+                                        <TextTruncate
+                                            arr={record.surveyTopic.map((i: any) => {
+                                                return {
+                                                    key: i.id,
+                                                    label: i.name,
+                                                }
+                                            })}
+                                            key="surveyTopic"
+                                        />
+                                    ) : (
+                                        ''
+                                    )
+                                },
                             },
                             {
                                 title: 'Số lượng câu hỏi',

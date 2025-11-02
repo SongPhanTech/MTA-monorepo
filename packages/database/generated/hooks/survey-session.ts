@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import type { Prisma, SurveySession } from "../zenstack/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
@@ -328,7 +327,7 @@ export function useSuspenseCountSurveySession<TArgs extends Prisma.SurveySession
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SurveySession', `${endpoint}/surveySession/count`, args, options, fetch);
 }
 
-export function useCheckSurveySession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; surveyId?: string; additionalSuggestion?: string; studentId?: string; isCompleted?: boolean; surveyObjectTypeId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSurveySession<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; surveyId?: string; additionalSuggestion?: string; profileId?: string; studentId?: string; isCompleted?: boolean; surveyObjectTypeId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SurveySession', `${endpoint}/surveySession/check`, args, options, fetch);
 }

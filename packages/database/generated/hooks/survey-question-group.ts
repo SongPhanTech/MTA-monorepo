@@ -3,7 +3,6 @@
  ******************************************************************************/
 
 /* eslint-disable */
-// @ts-nocheck
 
 import type { Prisma, SurveyQuestionGroup } from "../zenstack/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/react-query';
@@ -328,7 +327,7 @@ export function useSuspenseCountSurveyQuestionGroup<TArgs extends Prisma.SurveyQ
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('SurveyQuestionGroup', `${endpoint}/surveyQuestionGroup/count`, args, options, fetch);
 }
 
-export function useCheckSurveyQuestionGroup<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string; surveyTopicId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckSurveyQuestionGroup<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; name?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('SurveyQuestionGroup', `${endpoint}/surveyQuestionGroup/check`, args, options, fetch);
 }

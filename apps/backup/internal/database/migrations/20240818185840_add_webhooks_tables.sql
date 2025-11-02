@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS webhooks (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ
 );
+drop trigger if exists webhooks_change_updated_at on webhooks;
 
 CREATE TRIGGER webhooks_change_updated_at
 BEFORE UPDATE ON webhooks FOR EACH ROW EXECUTE FUNCTION change_updated_at();

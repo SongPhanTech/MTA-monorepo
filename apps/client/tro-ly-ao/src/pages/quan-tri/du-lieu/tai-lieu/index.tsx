@@ -1,20 +1,30 @@
-import { AuditOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons'
+import { AuditOutlined, EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
+import DocumentSidebar from '@components/commons/document-sidebar'
 import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
-import { cn, formatDateReadable, formatNiceBytes } from '@lib/utils'
+import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { $Enums } from '@workspace/db'
-import { useCountDocument, useDeleteDocument, useDeleteManyDocumentTopic, useFindManyDocument } from '@workspace/db/hooks'
-import { Button, Input, message, Tag, Tooltip } from 'antd'
+import {
+    useCountDocument,
+    useDeleteDocument,
+    useDeleteManyDocumentTopic,
+    useFindManyDocument,
+    useFindManyDocumentClassification,
+} from '@workspace/db/hooks'
+import { Button, Input, message, Select, Tabs, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { deleteVectorRecordHoiDap } from '@/api/chunking_and_vectorize'
+import { deleteVectorRecordHoiDap, reloadBM25 } from '@/api/chunking_and_vectorize'
+import { useTopics } from '@/hooks/useTopics'
 
 function Page() {
     const [filters, setFilters] = useState<{
         title: string
         status: $Enums.DocumentStatus
+        topicId?: string
+        classificationId?: string
     }>({
         title: '',
         status: $Enums.DocumentStatus.APPROVE,
@@ -22,6 +32,8 @@ function Page() {
     const [tableParams, setTableParams] = useState({
         pagination: { current: 1, pageSize: 10, total: 10 },
     })
+    const [isReloading, setIsReloading] = useState(false)
+    const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
 
     const { onOpen: openAddTaiLieu } = useDisclosure({
         tag: 'ThemTaiLieu',
@@ -29,10 +41,6 @@ function Page() {
 
     const { onOpen: openPheDuyetTaiLieu } = useDisclosure<string>({
         tag: 'PheDuyetTaiLieu',
-    })
-
-    const { onOpen: openPreviewTaiLieu } = useDisclosure<string>({
-        tag: 'PreviewTaiLieu',
     })
 
     const { onOpen: openSuaTaiLieu } = useDisclosure<string>({
@@ -43,15 +51,37 @@ function Page() {
         where: { status: $Enums.DocumentStatus.PENDING },
     })
 
-    const { data: totalFilteredDocument = 0 } = useCountDocument({
-        where: {
+    const { selectableTopicOptions } = useTopics()
+    const { data: classifications = [] } = useFindManyDocumentClassification({})
+
+    const buildWhereClause = () => {
+        const where: any = {
             status: filters.status,
             title: {
                 contains: filters.title,
                 mode: 'insensitive',
             },
-        },
+        }
+
+        if (filters.topicId) {
+            where.topics = {
+                some: {
+                    topicId: filters.topicId,
+                },
+            }
+        }
+
+        if (filters.classificationId) {
+            where.classificationId = filters.classificationId
+        }
+
+        return where
+    }
+
+    const { data: totalFilteredDocument = 0 } = useCountDocument({
+        where: buildWhereClause(),
     })
+
     const { data: documents = [] } = useFindManyDocument({
         include: {
             uploadedBy: true,
@@ -62,13 +92,7 @@ function Page() {
             },
             classification: true,
         },
-        where: {
-            status: filters.status,
-            title: {
-                contains: filters.title,
-                mode: 'insensitive',
-            },
-        },
+        where: buildWhereClause(),
         skip: (tableParams.pagination.current - 1) * tableParams.pagination.pageSize,
         take: tableParams.pagination.pageSize,
     })
@@ -91,7 +115,7 @@ function Page() {
             },
         }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filters.status, filters.title])
+    }, [filters.status, filters.title, filters.topicId, filters.classificationId])
 
     const { mutateAsync: deleteDocument } = useDeleteDocument()
     const { mutateAsync: deleteManyDocumentTopic } = useDeleteManyDocumentTopic()
@@ -118,6 +142,24 @@ function Page() {
         }
     }
 
+    const handleReloadBM25 = async () => {
+        setIsReloading(true)
+        try {
+            const result = await reloadBM25('')
+
+            if (result?.error === 'True') {
+                message.error(result?.message || 'Đã xảy ra lỗi khi reload BM25')
+                return
+            }
+
+            message.success('Reload BM25 thành công')
+        } catch (_error) {
+            message.error('Reload BM25 thất bại')
+        } finally {
+            setIsReloading(false)
+        }
+    }
+
     return (
         <div className="h-full">
             <div className="flex gap-4 h-full overflow-hidden">
@@ -128,11 +170,43 @@ function Page() {
                                 Danh sách tài liệu
                             </span>
                         </div>
-                        <Button onClick={openAddTaiLieu} type="primary">
-                            Thêm mới
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                icon={<ReloadOutlined />}
+                                onClick={handleReloadBM25}
+                                loading={isReloading}
+                            >
+                                Làm mới
+                            </Button>
+                            <Button onClick={openAddTaiLieu} type="primary">
+                                Thêm mới
+                            </Button>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2 mb-4">
+                    <Tabs
+                        activeKey={filters.status}
+                        onChange={(key) =>
+                            setFilters((prev) => ({
+                                ...prev,
+                                status: key as $Enums.DocumentStatus,
+                            }))
+                        }
+                        items={[
+                            {
+                                key: $Enums.DocumentStatus.APPROVE,
+                                label: 'Đã duyệt',
+                            },
+                            {
+                                key: $Enums.DocumentStatus.PENDING,
+                                label: `Chờ duyệt (${totalPendingDocument})`,
+                            },
+                            {
+                                key: $Enums.DocumentStatus.DENY,
+                                label: 'Từ chối',
+                            },
+                        ]}
+                    />
+                    <div className="flex items-center gap-2 mb-4 flex-wrap">
                         <Input
                             placeholder="Tìm theo tên tài liệu"
                             allowClear
@@ -144,54 +218,38 @@ function Page() {
                             }
                             style={{ width: 300 }}
                         />
-                        <Button
-                            className={cn(
-                                'border rounded px-4 py-1 font-medium',
-                                filters.status === $Enums.DocumentStatus.APPROVE
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'text-primary border-primary'
-                            )}
-                            onClick={() =>
+                        <Select
+                            placeholder="Loại tài liệu"
+                            allowClear
+                            style={{ width: 200 }}
+                            value={filters.topicId}
+                            onChange={(value) =>
                                 setFilters((prev) => ({
                                     ...prev,
-                                    status: $Enums.DocumentStatus.APPROVE,
+                                    topicId: value,
                                 }))
                             }
-                        >
-                            Đã duyệt
-                        </Button>
-                        <Button
-                            className={cn(
-                                'border rounded px-4 py-1 font-medium',
-                                filters.status === $Enums.DocumentStatus.PENDING
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'text-primary border-primary'
-                            )}
-                            onClick={() =>
+                            options={selectableTopicOptions.map((topic) => ({
+                                label: topic.name,
+                                value: topic.id,
+                            }))}
+                        />
+                        <Select
+                            placeholder="Phân loại"
+                            allowClear
+                            style={{ width: 200 }}
+                            value={filters.classificationId}
+                            onChange={(value) =>
                                 setFilters((prev) => ({
                                     ...prev,
-                                    status: $Enums.DocumentStatus.PENDING,
+                                    classificationId: value,
                                 }))
                             }
-                        >
-                            Chờ duyệt ({totalPendingDocument})
-                        </Button>
-                        <Button
-                            className={cn(
-                                'border rounded px-4 py-1 font-medium',
-                                filters.status === $Enums.DocumentStatus.DENY
-                                    ? 'bg-primary text-white border-primary'
-                                    : 'text-primary border-primary'
-                            )}
-                            onClick={() =>
-                                setFilters((prev) => ({
-                                    ...prev,
-                                    status: $Enums.DocumentStatus.DENY,
-                                }))
-                            }
-                        >
-                            Từ chối
-                        </Button>
+                            options={classifications.map((classification) => ({
+                                label: classification.name,
+                                value: classification.id,
+                            }))}
+                        />
                     </div>
                     <Table
                         rowKey="id"
@@ -343,7 +401,9 @@ function Page() {
                                         </Tooltip>
                                         <Tooltip title="Xem chi tiết" placement="top">
                                             <EyeOutlined
-                                                onClick={() => openPreviewTaiLieu(record.id)}
+                                                onClick={() => {
+                                                    setSelectedDocumentId(record.id)
+                                                }}
                                                 className="text-blue-700 cursor-pointer text-lg"
                                             />
                                         </Tooltip>
@@ -373,6 +433,11 @@ function Page() {
                     />
                 </div>
             </div>
+            <DocumentSidebar
+                documentId={selectedDocumentId}
+                citationContent={null}
+                onClose={() => setSelectedDocumentId(null)}
+            />
         </div>
     )
 }

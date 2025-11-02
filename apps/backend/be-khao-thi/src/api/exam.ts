@@ -125,7 +125,7 @@ app.openapi(genRandomExamQuestionByRule, async (c) => {
 
     for (const examBank of examBanks) {
         for (const rule of exam.testStructureRules) {
-            if (!rule.exam.questionBankId) {
+            if (!rule.exam?.questionBankId) {
                 continue
             }
             const questionIds = await prisma.$queryRawTyped(

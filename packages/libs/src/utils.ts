@@ -10,17 +10,20 @@ declare global {
         titleCase(): string
         firstCase(): string
     }
-}
+    interface Array<T> {
+        compare(otherArray: T[], cb: (a: T, b: T) => boolean): boolean
+    }
 
-type StudentSubjectScoreRelation = StudentSubjectScore & {
-    finalScore: Decimal | null
-    student?: {
-        fixedClass?: {
-            trainingCourse?: {
-                scoreConverts?: ScoreConvert[] | null
-                scoreToPass?: number | null
+    type StudentSubjectScoreRelation = StudentSubjectScore & {
+        finalScore: Decimal | null
+        student?: {
+            fixedClass?: {
+                trainingCourse?: {
+                    scoreConverts?: ScoreConvert[] | null
+                    scoreToPass?: number | null
+                } | null
             } | null
-        } | null
+        }
     }
 }
 
@@ -43,6 +46,27 @@ String.prototype.titleCase = function (): string {
 }
 String.prototype.firstCase = function (): string {
     return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase()
+}
+
+Array.prototype.compare = function <T>(
+    this: T[],
+    otherArray: T[],
+    cb: (a: T, b: T) => boolean
+): boolean {
+    if (this.length !== otherArray.length) {
+        return false
+    }
+    for (let i = 0; i < this.length; i++) {
+        const otherItem = otherArray[i]
+        const thisItem = this[i]
+        if (!thisItem || !otherItem) {
+            return false
+        }
+        if (!cb(thisItem, otherItem)) {
+            return false
+        }
+    }
+    return true
 }
 
 export function splitFullName(fullName?: string): {
@@ -209,14 +233,40 @@ export function diffArrays<T, K extends keyof T>(a: T[], b: T[], key: K) {
 }
 
 export function diffArraysKey<T>(a: T[], b: T[], keys: (keyof T)[]) {
-  const getKey = (item: T) => keys.map(k => String(item[k])).join('|')
+    const getKey = (item: T) => keys.map((k) => String(item[k])).join('|')
 
-  const bKeys = new Set(b.map(getKey))
-  const aKeys = new Set(a.map(getKey))
+    const bKeys = new Set(b.map(getKey))
+    const aKeys = new Set(a.map(getKey))
 
-  const onlyInA = a.filter(itemA => !bKeys.has(getKey(itemA)))
-  const onlyInB = b.filter(itemB => !aKeys.has(getKey(itemB)))
-  const both = a.filter(itemA => bKeys.has(getKey(itemA)))
+    const onlyInA = a.filter((itemA) => !bKeys.has(getKey(itemA)))
+    const onlyInB = b.filter((itemB) => !aKeys.has(getKey(itemB)))
+    const both = a.filter((itemA) => bKeys.has(getKey(itemA)))
 
-  return { onlyInA, onlyInB, both }
+    return { onlyInA, onlyInB, both }
+}
+
+export function getFilenameFromContentDisposition(contentDispositionHeader: string): string | null {
+    if (!contentDispositionHeader) {
+        return null
+    }
+
+    // Regex to match filename or filename*
+    const utf8FilenameRegex = /filename\*=UTF-8''([\w%-.]+)(?:; ?|$)/i
+    const asciiFilenameRegex = /filename=(["]?)(.*?)\1(?:; ?|$)/i
+
+    let filename = null
+
+    // Try to match UTF-8 encoded filename first
+    let match = contentDispositionHeader.match(utf8FilenameRegex)
+    if (match?.[1]) {
+        filename = decodeURIComponent(match[1])
+    } else {
+        // If no UTF-8, try ASCII filename
+        match = contentDispositionHeader.match(asciiFilenameRegex)
+        if (match?.[2]) {
+            filename = match[2].replace(/"/g, '') // Remove quotes
+        }
+    }
+
+    return filename
 }

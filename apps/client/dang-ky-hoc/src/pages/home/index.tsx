@@ -88,10 +88,7 @@ function Page() {
         const validSubjects =
             subjectScoreData?.trainingBlocks
                 .flatMap((block) => block.subjects)
-                .filter(
-                    (subjectItem) =>
-                        subjectItem.print === true && subjectItem.useForFinalScore === true
-                ) || []
+                .filter((subjectItem) => subjectItem.useForFinalScore === true) || []
 
         let totalWeightedScore = 0
         let totalCredits = 0
