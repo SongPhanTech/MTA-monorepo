@@ -698,6 +698,11 @@ const NAVIGATION: NavigationType = {
                         label: 'Đợt khảo sát',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                     },
+                     {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                        label: 'Danh sách khảo sát',
+                        path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
+                    },
                 ],
             },
             {

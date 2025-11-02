@@ -16,8 +16,7 @@ export interface CreateClusterSurveyRequest {
     isPublic?: boolean
     anonymous?: boolean
     surveyTopicId: string
-    /** @minItems 1 */
-    surveyObjectTypeIds: string[]
+    surveyObjectTypeIds?: string[]
     /** @minItems 1 */
     lecturerIds: string[]
     /** @minItems 1 */

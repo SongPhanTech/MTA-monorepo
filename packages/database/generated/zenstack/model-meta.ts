@@ -1244,6 +1244,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'userProfile',
+                }, surveySession: {
+                    name: "surveySession",
+                    type: "SurveySession",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'profile',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -7889,12 +7895,12 @@ const metadata: ModelMeta = {
                     type: "Float",
                     isOptional: true,
                     attributes: [{ "name": "@gte", "args": [{ "name": "value", "value": 0 }, { "name": "message", "value": "Điểm tối thiểu là 0" }] }, { "name": "@lte", "args": [{ "name": "value", "value": 10 }, { "name": "message", "value": "Điểm tối đa là 10" }] }],
-                }, examPostponedReason: {
-                    name: "examPostponedReason",
-                    type: "Boolean",
-                    isOptional: true,
                 }, examPostponed: {
                     name: "examPostponed",
+                    type: "Boolean",
+                    isOptional: true,
+                }, examPostponedReason: {
+                    name: "examPostponedReason",
                     type: "String",
                     isOptional: true,
                 }, examBanned: {
@@ -14687,11 +14693,12 @@ const metadata: ModelMeta = {
                 }, score: {
                     name: "score",
                     type: "Float",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    isOptional: true,
                 }, studentTrainingType: {
                     name: "studentTrainingType",
                     type: "StudentTrainingType",
                     isOptional: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18347,6 +18354,7 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'clusterSurvey',
+                    isRelationOwner: true,
                 }, surveys: {
                     name: "surveys",
                     type: "Survey",
@@ -18473,6 +18481,7 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'survey',
+                    isRelationOwner: true,
                 }, surveySessions: {
                     name: "surveySessions",
                     type: "SurveySession",
@@ -18549,7 +18558,6 @@ const metadata: ModelMeta = {
                     name: "surveyQuestionGroup",
                     type: "SurveyQuestionGroup",
                     isDataModel: true,
-                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'surveyQuestion',
                     isRelationOwner: true,
@@ -18557,39 +18565,22 @@ const metadata: ModelMeta = {
                 }, surveyQuestionGroupId: {
                     name: "surveyQuestionGroupId",
                     type: "String",
-                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'surveyQuestionGroup',
                 }, survey: {
                     name: "survey",
                     type: "Survey",
                     isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    isArray: true,
                     backLink: 'surveyQuestion',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "surveyId" },
-                }, surveyId: {
-                    name: "surveyId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'survey',
                 }, clusterSurvey: {
                     name: "clusterSurvey",
                     type: "ClusterSurvey",
                     isDataModel: true,
-                    isOptional: true,
-                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    isArray: true,
                     backLink: 'surveyQuestion',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "clusterSurveyId" },
-                }, clusterSurveyId: {
-                    name: "clusterSurveyId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'clusterSurvey',
                 }, surveyResponses: {
                     name: "surveyResponses",
                     type: "SurveyResponse",
@@ -18745,6 +18736,21 @@ const metadata: ModelMeta = {
                     name: "additionalSuggestion",
                     type: "String",
                     isOptional: true,
+                }, profile: {
+                    name: "profile",
+                    type: "UserProfile",
+                    isDataModel: true,
+                    isOptional: true,
+                    attributes: [{ "name": "@relation", "args": [{ "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
+                    backLink: 'surveySession',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "profileId" },
+                }, profileId: {
+                    name: "profileId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'profile',
                 }, student: {
                     name: "student",
                     type: "Student",

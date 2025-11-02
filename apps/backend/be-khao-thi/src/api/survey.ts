@@ -36,7 +36,7 @@ const createClusterSurvey = createRoute({
                             isPublic: z.boolean().default(false),
                             anonymous: z.boolean().default(false),
                             surveyTopicId: z.string(),
-                            surveyObjectTypeIds: z.array(z.string()).nonempty(),
+                            surveyObjectTypeIds: z.array(z.string()).optional().default([]),
                             lecturerIds: z.array(z.string()).nonempty(),
                             surveyQuestionIds: z.array(z.string()).nonempty(),
                             semesterId: z.string(),
@@ -149,29 +149,29 @@ app.openapi(createClusterSurvey, async (c) => {
                 clusterSurveyId: cluster.id,
                 lectureId,
                 surveyTopicId,
-                subjectClasses: {
-                    connect: lecturers
-                        .find((lecturer) => lecturer.id === lectureId)
-                        ?.mainSubjectClasses.map((subjectClass) => ({ id: subjectClass.id })),
-                },
             })),
         })
 
-        await Promise.all(
-            surveys.map((survey) =>
-                tx.survey.update({
-                    where: { id: survey.id },
-                    data: {
-                        surveyQuestion: {
-                            connect: surveyQuestionIds.map((id) => ({ id })),
-                        },
-                        surveyObjectType: {
-                            connect: surveyObjectTypeIds.map((id) => ({ id })),
-                        },
+        for (const survey of surveys) {
+            await tx.survey.update({
+                where: { id: survey.id },
+                data: {
+                    surveyQuestion: {
+                        connect: surveyQuestionIds.map((id) => ({ id })),
                     },
-                })
-            )
-        )
+                    surveyObjectType: {
+                        connect: surveyObjectTypeIds.map((id) => ({ id })),
+                    },
+                    subjectClasses: {
+                        connect: lecturers
+                            .find((lecturer) => lecturer.id === survey.lectureId)
+                            ?.mainSubjectClasses.map((subjectClass) => ({
+                                id: subjectClass.id,
+                            })),
+                    },
+                },
+            })
+        }
 
         await tx.surveyChoice.createMany({
             data: surveys.flatMap((survey) =>

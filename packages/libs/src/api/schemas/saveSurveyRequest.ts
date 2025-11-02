@@ -8,6 +8,8 @@ import type { SaveSurveyRequestResponsesItem } from './saveSurveyRequestResponse
 
 export interface SaveSurveyRequest {
     surveyId: string
+    profileId?: string
+    studentId?: string
     /** @nullable */
     surveyObjectTypeId?: string | null
     additionalSuggestion: string

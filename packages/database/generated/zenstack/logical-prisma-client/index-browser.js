@@ -1497,8 +1497,8 @@ exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
   examScore: 'examScore',
   finalScore: 'finalScore',
   manualFinalScore: 'manualFinalScore',
-  examPostponedReason: 'examPostponedReason',
   examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   examBanned: 'examBanned',
   examBannedReason: 'examBannedReason',
   suspended: 'suspended',
@@ -3176,9 +3176,7 @@ exports.Prisma.SurveyQuestionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   name: 'name',
   type: 'type',
-  surveyQuestionGroupId: 'surveyQuestionGroupId',
-  surveyId: 'surveyId',
-  clusterSurveyId: 'clusterSurveyId'
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
 
 exports.Prisma.SurveyChoiceScalarFieldEnum = {
@@ -3205,6 +3203,7 @@ exports.Prisma.SurveySessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
+  profileId: 'profileId',
   studentId: 'studentId',
   startedAt: 'startedAt',
   completedAt: 'completedAt',
@@ -5039,7 +5038,7 @@ exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   studentSubjectScoreId: 'studentSubjectScoreId',
-  examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
   suspendedReason: 'suspendedReason',
   updatedById: 'updatedById'
@@ -6012,9 +6011,7 @@ exports.Prisma.SurveyQuestionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   name: 'name',
-  surveyQuestionGroupId: 'surveyQuestionGroupId',
-  surveyId: 'surveyId',
-  clusterSurveyId: 'clusterSurveyId'
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
 
 exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
@@ -6032,6 +6029,7 @@ exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
   description: 'description',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
+  profileId: 'profileId',
   studentId: 'studentId',
   surveyObjectTypeId: 'surveyObjectTypeId'
 };

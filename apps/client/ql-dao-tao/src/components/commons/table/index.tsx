@@ -813,8 +813,7 @@ const Table = <T extends Record<string, unknown>>({
                 filterDropdown: (props: FilterDropdownProps) => (
                     <div className="p-4 flex flex-col w-full min-w-[200px] max-w-[300px]">
                         <div>
-                            <div className="mb-2">Tìm kiếm</div>
-                            Lớn hơn
+                            Lớn hơn hoặc bằng
                             <Input
                                 placeholder="0"
                                 type="number"
@@ -834,7 +833,7 @@ const Table = <T extends Record<string, unknown>>({
                                 }}
                                 className="mb-3"
                             />
-                            Nhỏ hơn
+                            Nhỏ hơn hoặc bằng
                             <Input
                                 placeholder="10"
                                 type="number"

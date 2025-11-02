@@ -64,6 +64,12 @@ function TabDoiTuongKhaoSat() {
 
     const { data: subjectClassData = [] } = useFindManySubjectClass({
         orderBy: { name: 'asc' },
+        where: {
+            active: true,
+            deletedAt: null,
+            cancelled: false,
+            status: 'OFFICIAL',
+        },
     })
 
     const where = useMemo(

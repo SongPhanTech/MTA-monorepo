@@ -3,6 +3,7 @@ import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Table from '@components/commons/table'
 import { type DataTable, EnumInPhieuDiem } from '@components/modal/modal-in-phieu-diem'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
+import { examSuspendedReason } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
 import { useSession } from '@workspace/auth/react'
@@ -13,7 +14,19 @@ import { listUser } from '@workspace/libs/constants'
 import { calcFinalScore } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
-import { Button, Checkbox, Col, Flex, Form, Input, InputNumber, Modal, message, Row } from 'antd'
+import {
+    AutoComplete,
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    Modal,
+    message,
+    Row,
+} from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FileUp, Printer, Save } from 'lucide-react'
@@ -896,7 +909,7 @@ export default function DiemThi({
                                                     valuePropName="checked"
                                                 >
                                                     <Checkbox
-                                                        disabled={profileId !== listUser.P13}
+                                                    // disabled={profileId !== listUser.P13}
                                                     />
                                                 </Form.Item>
                                             )
@@ -913,21 +926,23 @@ export default function DiemThi({
                                                 <Form.Item
                                                     name={['list', record.id, 'suspendedReason']}
                                                     style={{ margin: 0 }}
+                                                    required={!!suspended}
                                                 >
-                                                    <Input
-                                                        placeholder="Nhập lý do đình chỉ"
-                                                        disabled={
-                                                            !(
-                                                                suspended &&
-                                                                profileId === listUser.P13
-                                                            )
-                                                        }
+                                                    <AutoComplete
+                                                        placeholder="Nhập lý do hoãn thi"
+                                                        options={examSuspendedReason.map((s) => ({
+                                                            label: s,
+                                                            value: s,
+                                                        }))}
+                                                        styles={{
+                                                            popup: { root: { width: 'fit' } },
+                                                        }}
+                                                        disabled={!suspended}
                                                     />
                                                 </Form.Item>
                                             )
                                         },
                                     },
-
                                     {
                                         title: 'Ghi chú',
                                         dataIndex: 'description',
@@ -962,7 +977,7 @@ export default function DiemThi({
                     </Form>
                 </Col>
             </Row>
-            <div className="fixed p-3 z-[10] bottom-[34px] left-0 right-0 w-[100vw] bg-white ">
+            <div className="fixed p-3 z-[10] bottom-[30px] left-0 right-0 w-[100vw] bg-white ">
                 <div>
                     Bấm Tab: Chuyển ô theo hàng ngang, Mũi tên xuống: Chuyển ô theo hàng dọc, và
                     hàng ngang
