@@ -1,6 +1,16 @@
 import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
 import Decimal from 'decimal.js'
-
+type StudentSubjectScoreRelation = StudentSubjectScore & {
+    finalScore: Decimal | null
+    student?: {
+        fixedClass?: {
+            trainingCourse?: {
+                scoreConverts?: ScoreConvert[] | null
+                scoreToPass?: number | null
+            } | null
+        } | null
+    }
+}
 declare global {
     interface Number {
         toFixedSmart(fractionDigits: number): string
@@ -12,18 +22,6 @@ declare global {
     }
     interface Array<T> {
         compare(otherArray: T[], cb: (a: T, b: T) => boolean): boolean
-    }
-
-    type StudentSubjectScoreRelation = StudentSubjectScore & {
-        finalScore: Decimal | null
-        student?: {
-            fixedClass?: {
-                trainingCourse?: {
-                    scoreConverts?: ScoreConvert[] | null
-                    scoreToPass?: number | null
-                } | null
-            } | null
-        }
     }
 }
 
@@ -270,3 +268,6 @@ export function getFilenameFromContentDisposition(contentDispositionHeader: stri
 
     return filename
 }
+
+
+export { fastIsEqual } from './fast-is-equal'

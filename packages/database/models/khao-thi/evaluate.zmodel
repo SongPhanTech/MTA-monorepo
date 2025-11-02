@@ -43,6 +43,17 @@ model CriterionCatalog extends Base {
   @@schema("khao-thi")
 }
 
+//Phân công giảng viên đánh giá tiêu chí
+model CriterionAssignment extends Base {
+  evaluationCriterion   EvaluationCriterion @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
+  evaluationCriterionId String
+  lecturer              Lecturer            @relation(fields: [lecturerId], references: [id])
+  lecturerId            String
+  deadline              DateTime
+
+  @@schema("khao-thi")
+}
+
 /// Danh mục yêu cầu
 model RequirementCriterionCatalog extends Base {
   criterionCatalog   CriterionCatalog @relation(fields: [criterionCatalogId], references: [id])
@@ -101,6 +112,8 @@ model EvaluationCriterion extends Base {
 
   /// Yêu cầu trong phiếu phân tích
   requirementCriterions RequirementCriterion[]
+
+  criterionAssignments  CriterionAssignment[]
 
   // Phiếu đánh giá
   /// 1. Mô tả hiện trạng
@@ -175,6 +188,7 @@ enum EvaluationMemberRole {
   HEAD_SECRETARY // Truỏng ban thư ký
   SECRETARY // Thư ký
   MEMBER // Uỷ viên
+  ADVISORY_BOARD // Ban tư vấn
 
   @@schema("khao-thi")
 }

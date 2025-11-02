@@ -659,7 +659,6 @@ export default function DiemThi({
                             <Table
                                 className="table-subject-score"
                                 rowKey="id"
-                                id="student-subject-score"
                                 filters={filterTable}
                                 setFilters={setFilterTable}
                                 // onRow={(record) => {

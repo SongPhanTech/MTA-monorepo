@@ -51,6 +51,7 @@ const relationSchema = z.object({
     clusterSurvey: z.array(z.unknown()).optional(),
     examRoomsMain: z.array(z.unknown()).optional(),
     examRoomsExtra: z.array(z.unknown()).optional(),
+    criterionAssignments: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

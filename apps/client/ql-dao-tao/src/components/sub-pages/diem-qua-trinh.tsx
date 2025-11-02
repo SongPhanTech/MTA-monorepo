@@ -1,17 +1,22 @@
-import ImportScoreModal from '@components/commons/print/nhap-diem-tu-file'
+import { queryClient } from '@api/index'
+import ImportScoreModal, { ImportScoreData } from '@components/commons/print/nhap-diem-tu-file'
 import ExportScoreTemplate from '@components/commons/print/xuat-mau-nhap-diem'
 import Table from '@components/commons/table'
 import ExportTemplateExam from '@components/ui/in-phieu-danh-sach-thi'
 import { examBanReason, examPostponeReason } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
+import { diemLopMonHocStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import type { StudentSubjectScore } from '@workspace/db/client'
 import { useFindManyStudentSubjectScore } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { listUser } from '@workspace/libs/constants'
+import { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
+import { fastIsEqual } from '@workspace/libs/utils'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { cn } from '@workspace/ui/lib/utils'
 import {
     AutoComplete,
     Button,
@@ -21,14 +26,13 @@ import {
     Form,
     Input,
     InputNumber,
-    Modal,
     message,
+    Modal,
     Row,
 } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { FileUp, Save } from 'lucide-react'
-import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 type FilterTable = FilterProps & {
@@ -38,31 +42,29 @@ type FilterTable = FilterProps & {
     midtermScore?: 'asc' | 'desc'
     examScore?: 'asc' | 'desc'
 }
-interface SubjectClassScoreForm {
+type SubjectClassScoreForm = {
     list: Record<
         string,
         {
             attendanceScore?: number | null
             midtermScore?: number | null
+            examScore?: number | null
             description?: string | null
             examBanned?: boolean | null
             examBannedReason?: string | null
             examPostponed?: boolean | null
             examPostponedReason?: string | null
-            attendanceScoreOld?: number | null
-            midtermScoreOld?: number | null
+            scoreToTakeExam?: number | null
             isChanged?: boolean
         }
     >
 }
-export default function DiemQuaTrinh({
-    dataDetailSubjectClass,
-    refetchSubjectClass,
-    subjectClassId,
-}: any) {
+export default function DiemQuaTrinh({ dataDetailSubjectClass, loadData }: any) {
     const { can } = useAbility()
     const { showSpinner, hideSpinner } = useSpinner()
     const [form] = Form.useForm<SubjectClassScoreForm>()
+    const listForm = Form.useWatch('list', form) || {}
+    const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
 
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId
@@ -90,7 +92,9 @@ export default function DiemQuaTrinh({
     const debouncedRefetch = useCallback(
         _.debounce(() => {
             refetch()
-            refetchSubjectClass()
+            queryClient.invalidateQueries({
+                queryKey: ['zenstack', 'SubjectClass'],
+            })
         }, 500),
         []
     )
@@ -98,22 +102,22 @@ export default function DiemQuaTrinh({
     const handleSaveScores = async () => {
         try {
             showSpinner()
-            const dataTableSubmit = form.getFieldsValue()
-            const listObject = Object.entries(dataTableSubmit.list).map(([key, value]) => {
-                return {
-                    id: key,
-                    ...value,
-                }
-            })
+            const listChange = Object.entries(listForm)
+                .map(([key, value]) => {
+                    return {
+                        id: key,
+                        ...value,
+                    }
+                })
+                .filter((e) => e.isChanged)
 
-            let listSqlTransaction: any = []
-
-            const list = dataTable.find(
-                (i: any) =>
-                    (!i.attendanceScore || !dataTableSubmit.list[i.id].attendanceScore) &&
-                    (!i.midtermScore || !dataTableSubmit.list[i.id].midtermScore)
+            let listSqlTransaction: SqlTransactionBodyItem[] = []
+            const emptyScore = dataTable.find(
+                (i) =>
+                    (!i.attendanceScore || !listForm?.[i.id].attendanceScore) &&
+                    (!i.midtermScore || !listForm?.[i.id].midtermScore)
             )
-            if (!list && subjectClassId) {
+            if (!emptyScore && selectedSubjectClassId) {
                 listSqlTransaction = [
                     ...listSqlTransaction,
                     {
@@ -121,76 +125,57 @@ export default function DiemQuaTrinh({
                         operation: 'update',
                         data: {
                             where: {
-                                id: subjectClassId,
+                                id: selectedSubjectClassId,
                             },
                             data: { enteredScore: true },
                         },
                     },
                 ]
             }
-            const listChange = listObject.filter(
-                (i) =>
-                    i.attendanceScore ||
-                    i.midtermScore ||
-                    i.description ||
-                    i.examPostponed ||
-                    i.examPostponedReason ||
-                    i.examBanned ||
-                    i.examBannedReason
-            )
-
             if (listChange.length > 0) {
+                const dataWithFinalScore = listChange.map((item) => {
+                    let finalScore: number | null = null
+                    if (item.attendanceScore && item.midtermScore && item.examScore) {
+                        finalScore =
+                            item.attendanceScore * 0.1 +
+                            item.midtermScore * 0.3 +
+                            item.examScore * 0.6
+                    }
+                    return {
+                        attendanceScore: item.attendanceScore,
+                        midtermScore: item.midtermScore,
+                        finalScore,
+                        description: item?.description,
+                        examPostponed: item?.examPostponed,
+                        examPostponedReason: item?.examPostponedReason,
+                        examBanned: !!item?.examBanned,
+                        examBannedReason: item?.examBannedReason,
+                        id: item.id,
+                    }
+                })
+
                 listSqlTransaction = [
                     ...listSqlTransaction,
-                    ...listChange.map((item) => {
-                        const { id } = item
-                        const newData = dataTableSubmit.list[id]
-
+                    ...dataWithFinalScore.map(({ id, ...item }) => {
                         return {
-                            model: 'StudentSubjectScore',
+                            model: 'StudentSubjectScore' as const,
                             operation: 'update',
                             data: {
                                 where: { id },
                                 data: {
-                                    ...newData,
-                                    attendanceScore:
-                                        newData?.attendanceScore ?? item.attendanceScore,
-                                    midtermScore: newData?.midtermScore ?? item.midtermScore,
-                                    // examScore: item?.examScore,
-                                    finalScore: item?.finalScore,
-                                    description: newData?.description ?? item?.description,
-                                    examPostponed: newData?.examPostponed ?? item?.examPostponed,
-                                    examPostponedReason:
-                                        newData?.examPostponedReason ?? item?.examPostponedReason,
-                                    examBanned: newData?.examBanned ?? item?.examBanned,
-                                    examBannedReason:
-                                        newData?.examBannedReason ?? item?.examBannedReason,
+                                    ...item,
                                 },
                             },
                         }
                     }),
                     {
-                        model: 'StudentSubjectScoreHistory',
+                        model: 'StudentSubjectScoreHistory' as const,
                         operation: 'createMany',
                         data: {
-                            data: listChange.map((item) => {
-                                const { id } = item
-                                const newData = dataTableSubmit.list[id]
-
+                            data: dataWithFinalScore.map(({ id, ...item }) => {
                                 return {
+                                    ...item,
                                     studentSubjectScoreId: id,
-                                    attendanceScore:
-                                        newData?.attendanceScore ?? item.attendanceScore,
-                                    midtermScore: newData?.midtermScore ?? item.midtermScore,
-                                    description: newData?.description ?? item?.description,
-                                    examPostponed: newData?.examPostponed ?? item?.examPostponed,
-                                    examPostponedReason:
-                                        newData?.examPostponedReason ?? item?.examPostponedReason,
-                                    examBanned: newData?.examBanned ?? item?.examBanned,
-                                    examBannedReason:
-                                        newData?.examBannedReason ?? item?.examBannedReason,
-                                    finalScore: item?.finalScore,
-                                    // manualFinalScore: item?.manualFinalScore,
                                     updatedById: profileId,
                                 }
                             }),
@@ -202,20 +187,20 @@ export default function DiemQuaTrinh({
             if (listSqlTransaction?.length > 0) {
                 const res = await sqlTransaction(listSqlTransaction)
                 if (res?.status === 200) {
+                    form.resetFields()
                     message.success('Đã cập nhật điểm thi thành công!')
                     debouncedRefetch()
                 }
             }
         } catch (error: any) {
             message.error(error)
-
             message.error('Đã xảy ra lỗi khi lưu điểm, vui lòng thử lại.')
         } finally {
             hideSpinner()
         }
     }
 
-    const handleImportConfirm = (importedData: any[]) => {
+    const handleImportConfirm = (importedData: ImportScoreData[]) => {
         showSpinner()
         try {
             message.success('Nhập điểm từ file thành công!')
@@ -230,14 +215,10 @@ export default function DiemQuaTrinh({
         }
     }
 
-    const {
-        data: dataTable = [],
-        refetch,
-        isFetching: loadingTable,
-    } = useFindManyStudentSubjectScore(
+    const { data: dataTable = [], refetch } = useFindManyStudentSubjectScore(
         {
             where: {
-                subjectClassId: subjectClassId || '',
+                subjectClassId: selectedSubjectClassId || '',
                 ...(filterTable.fullname
                     ? {
                           student: {
@@ -372,7 +353,10 @@ export default function DiemQuaTrinh({
                 },
             ],
         },
-        { refetchOnWindowFocus: false }
+        {
+            refetchOnWindowFocus: false,
+            enabled: loadData && !!selectedSubjectClassId,
+        }
     )
 
     const handleScoreInputKeyDown = (
@@ -415,7 +399,6 @@ export default function DiemQuaTrinh({
         }
     }
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
     const disabledForm: boolean = useMemo(() => {
         return !(
             can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC, 'NHAP_DIEM') &&
@@ -425,11 +408,11 @@ export default function DiemQuaTrinh({
             dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
             !dataDetailSubjectClass?.isLockScore
         )
-    }, [dataDetailSubjectClass, subjectClassId])
+    }, [dataDetailSubjectClass, can])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <form>
     useEffect(() => {
-        if (subjectClassId) {
+        if (dataTable) {
             form.setFieldsValue({
                 list: dataTable.reduce(
                     (acc, cur) => {
@@ -439,13 +422,15 @@ export default function DiemQuaTrinh({
                         acc[cur.id] = {
                             attendanceScore: cur.attendanceScore,
                             midtermScore: cur.midtermScore,
+                            examScore: cur.examScore,
                             description: cur.description,
                             examBanned: cur.examBanned,
                             examBannedReason: cur.examBannedReason,
                             examPostponed: cur.examPostponed,
                             examPostponedReason: cur.examPostponedReason,
-                            attendanceScoreOld: cur.attendanceScore,
-                            midtermScoreOld: cur.midtermScore,
+                            scoreToTakeExam:
+                                cur.student?.fixedClass?.trainingCourse?.scoreToTakeExam,
+                            isChanged: false,
                         }
                         return acc
                     },
@@ -453,38 +438,7 @@ export default function DiemQuaTrinh({
                 ),
             })
         }
-    }, [dataDetailSubjectClass, subjectClassId, dataTable])
-    const listForm = Form.useWatch('list', form) || []
-    // useEffect(() => {
-    //     if (listForm) {
-    //         const item = Object.values(listForm).find(
-    //             (i: any) =>
-    //                 i?.attendanceScore !== i?.attendanceScoreOld ||
-    //                 i?.midtermScore !== i?.midtermScoreOld
-    //         )
-    //         if (item) {
-    //             setIsChanged(true)
-    //         }
-    //     }
-    // }, [listForm])
-    // useEffect(() => {
-    //     if (!isChanged) return
-    //     const handleRouteChange = (url: string) => {
-    //         if (
-    //             router.pathname !== url &&
-    //             !confirm('Bạn có thay đổi chưa được lưu. Bạn có chắc muốn rời đi?')
-    //         ) {
-    //             router.events.emit('routeChangeError')
-    //             throw 'Route change aborted'
-    //         }
-    //     }
-
-    //     router.events.on('routeChangeStart', handleRouteChange)
-
-    //     return () => {
-    //         router.events.off('routeChangeStart', handleRouteChange)
-    //     }
-    // }, [isChanged, router.events.emit, router.events.off, router.events.on, router.pathname])
+    }, [dataTable])
 
     return (
         <Row gutter={[8, 8]}>
@@ -498,7 +452,7 @@ export default function DiemQuaTrinh({
                             <Button
                                 onClick={() => setImportModalVisible(true)}
                                 disabled={
-                                    !subjectClassId ||
+                                    !selectedSubjectClassId ||
                                     disabledForm ||
                                     dataDetailSubjectClass?.enteredScore
                                 }
@@ -520,7 +474,7 @@ export default function DiemQuaTrinh({
                         'XUAT_EXCEL'
                     ) && (
                         <ExportScoreTemplate
-                            selectedFixedClass={subjectClassId}
+                            selectedFixedClass={selectedSubjectClassId}
                             dataTable={dataTable}
                             type="cc-tx"
                         />
@@ -530,7 +484,7 @@ export default function DiemQuaTrinh({
                         'IN_DS_THI'
                     ) && (
                         <ExportTemplateExam
-                            selectedFixedClass={subjectClassId}
+                            selectedFixedClass={selectedSubjectClassId}
                             dataClass={dataDetailSubjectClass}
                             dataTable={dataTable}
                             disabled={!dataDetailSubjectClass?.enteredScore}
@@ -543,19 +497,51 @@ export default function DiemQuaTrinh({
                 </Flex>
             </Col>
             <Col span={24} className="mb-16">
-                <Form form={form}>
+                <Form
+                    form={form}
+                    onValuesChange={(changedValues) => {
+                        const changedId = Object.keys(changedValues.list || {})?.[0]
+                        if (changedId) {
+                            const score =
+                                changedValues.list[changedId]?.midtermScore ||
+                                changedValues.list[changedId]?.attendanceScore
+                            const numberScore = score ? Number(score) : null
+                            const scoreToTakeExam = listForm[changedId]?.scoreToTakeExam
+                            const isExamBanned =
+                                changedValues.list[changedId]?.examBanned ||
+                                listForm[changedId]?.examBanned ||
+                                (numberScore && scoreToTakeExam && numberScore <= scoreToTakeExam)
+                            form.setFieldsValue({
+                                list: {
+                                    ...listForm,
+                                    ...changedValues.list,
+                                    [changedId]: {
+                                        ...listForm[changedId],
+                                        examBanned: isExamBanned,
+                                        ...changedValues.list[changedId],
+                                        isChanged: !fastIsEqual(listForm[changedId], {
+                                            ...listForm[changedId],
+                                            ...changedValues.list[changedId],
+                                        }),
+                                    },
+                                },
+                            })
+                        }
+                    }}
+                >
                     <Table
                         rowKey="id"
-                        className='m-0'
-                        id="student-subject-score"
+                        className="m-0"
                         filters={filterTable}
                         setFilters={setFilterTable}
+                        onRow={(record) => ({
+                            className: cn(!!listForm?.[record.id]?.isChanged && 'bg-yellow-100'),
+                        })}
                         columns={[
                             {
                                 title: 'STT',
                                 width: 60,
                                 align: 'center',
-                                fixed: 'left',
                                 render: (_, __, index) => index + 1,
                             },
                             {
@@ -563,7 +549,6 @@ export default function DiemQuaTrinh({
                                 dataIndex: 'code',
                                 align: 'center',
                                 width: 150,
-                                fixed: 'left',
                                 type: 'input',
                                 render: (_, record) => record.student?.code || '',
                             },
@@ -571,7 +556,6 @@ export default function DiemQuaTrinh({
                                 title: 'Họ và tên',
                                 dataIndex: 'fullname',
                                 width: 150,
-                                fixed: 'left',
                                 type: 'input',
                                 render: (_, record) => record?.student?.userProfile?.fullname || '',
                             },
@@ -604,83 +588,61 @@ export default function DiemQuaTrinh({
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
-                                    const recordForm = listForm?.[record.id]?.attendanceScore
+                                    // const recordForm = listForm?.[record.id]?.attendanceScore
                                     return (
-                                        <Form.Item
-                                            className="w-full mb-0"
-                                            name={['list', record.id, 'attendanceScore']}
-                                            label=""
-                                            rules={[
-                                                {
-                                                    validator: (_, value) => {
-                                                        if (value == null || value === '')
-                                                            return Promise.resolve()
-                                                        if (value > 10) {
-                                                            message.error(
-                                                                'Điểm phải là nhỏ hơn 10!'
-                                                            )
-                                                            return Promise.reject()
-                                                        }
-                                                        if (value % 0.5 !== 0) {
-                                                            message.error(
-                                                                'Điểm phải là bội số của 0.5!'
-                                                            )
-                                                            return Promise.reject()
-                                                        }
+                                        <>
+                                            <Form.Item
+                                                className="w-full m-0"
+                                                name={['list', record.id, 'attendanceScore']}
+                                                label=""
+                                                rules={[
+                                                    {
+                                                        validator: (_, value) => {
+                                                            if (value == null || value === '')
+                                                                return Promise.resolve()
+                                                            if (value > 10) {
+                                                                message.error(
+                                                                    'Điểm phải là nhỏ hơn 10!'
+                                                                )
+                                                                return Promise.reject()
+                                                            }
+                                                            if (value % 0.5 !== 0) {
+                                                                message.error(
+                                                                    'Điểm phải là bội số của 0.5!'
+                                                                )
+                                                                return Promise.reject()
+                                                            }
 
-                                                        return Promise.resolve()
+                                                            return Promise.resolve()
+                                                        },
                                                     },
-                                                },
-                                            ]}
-                                        >
-                                            <InputNumber
-                                                disabled={disabledForm}
-                                                min={0}
-                                                id={`score-cc-${record.id}`}
-                                                style={{
-                                                    width: '100%',
-                                                    borderColor:
-                                                        !!recordForm &&
-                                                        (recordForm > 10 ||
-                                                            Math.round(recordForm * 10) !==
-                                                                recordForm * 10)
-                                                            ? 'red'
-                                                            : recordForm !== record?.attendanceScore
-                                                              ? '#f0b60ce0'
-                                                              : '',
-                                                }}
-                                                step={0.5}
-                                                controls={false}
-                                                onBlur={(e) => {
-                                                    const score = e.currentTarget.value
-                                                        ? Number(e.currentTarget.value)
-                                                        : 0
-                                                    if (
-                                                        score &&
-                                                        score <=
-                                                            record?.student?.fixedClass
-                                                                ?.trainingCourse?.scoreToTakeExam
-                                                    ) {
-                                                        const currentList = {
-                                                            ...listForm,
-                                                            [record.id]: {
-                                                                ...listForm[record.id],
-                                                                examBanned: true,
-                                                            },
-                                                        }
-                                                        form.setFieldsValue({ list: currentList })
+                                                ]}
+                                            >
+                                                <InputNumber
+                                                    disabled={disabledForm}
+                                                    min={0}
+                                                    id={`score-cc-${record.id}`}
+                                                    style={{
+                                                        width: '100%',
+                                                    }}
+                                                    step={0.5}
+                                                    controls={false}
+                                                    onKeyDown={(e) =>
+                                                        handleScoreInputKeyDown(
+                                                            e,
+                                                            record.id,
+                                                            'cc',
+                                                            dataTable
+                                                        )
                                                     }
-                                                }}
-                                                onKeyDown={(e) =>
-                                                    handleScoreInputKeyDown(
-                                                        e,
-                                                        record.id,
-                                                        'cc',
-                                                        dataTable
-                                                    )
-                                                }
+                                                />
+                                            </Form.Item>
+                                            <Form.Item
+                                                className="w-full m-0"
+                                                name={['list', record.id, 'isChanged']}
+                                                hidden
                                             />
-                                        </Form.Item>
+                                        </>
                                     )
                                 },
                             },
@@ -692,7 +654,6 @@ export default function DiemQuaTrinh({
                                 align: 'center',
                                 type: 'order',
                                 render: (_, record) => {
-                                    const recordForm = listForm?.[record.id]?.midtermScore
                                     return (
                                         <Form.Item
                                             className="w-full mb-0"
@@ -727,38 +688,9 @@ export default function DiemQuaTrinh({
                                                 id={`score-tx-${record.id}`}
                                                 style={{
                                                     width: '100%',
-                                                    borderColor:
-                                                        !!recordForm &&
-                                                        (recordForm > 10 ||
-                                                            Math.round(recordForm * 10) !==
-                                                                recordForm * 10)
-                                                            ? 'red'
-                                                            : recordForm !== record?.midtermScore
-                                                              ? '#f0b60ce0'
-                                                              : '',
                                                 }}
                                                 step={0.5}
                                                 controls={false}
-                                                onBlur={(e) => {
-                                                    const score = e.currentTarget.value
-                                                        ? Number(e.currentTarget.value)
-                                                        : 0
-                                                    if (
-                                                        score &&
-                                                        score <=
-                                                            record?.student?.fixedClass
-                                                                ?.trainingCourse?.scoreToTakeExam
-                                                    ) {
-                                                        const currentList = {
-                                                            ...listForm,
-                                                            [record.id]: {
-                                                                ...listForm[record.id],
-                                                                examBanned: true,
-                                                            },
-                                                        }
-                                                        form.setFieldsValue({ list: currentList })
-                                                    }
-                                                }}
                                                 onKeyDown={(e) =>
                                                     handleScoreInputKeyDown(
                                                         e,
@@ -779,7 +711,7 @@ export default function DiemQuaTrinh({
                                 width: 100,
                                 type: 'order',
                                 align: 'center',
-                                render: (_, record, index: number) => {
+                                render: (_, record) => {
                                     return record?.examScore || ''
                                 },
                             },
@@ -826,7 +758,6 @@ export default function DiemQuaTrinh({
                                     )
                                 },
                             },
-
                             {
                                 title: 'Hoãn thi',
                                 dataIndex: 'examPostponed',
@@ -845,14 +776,12 @@ export default function DiemQuaTrinh({
                                     )
                                 },
                             },
-
                             {
                                 title: 'Lý do hoãn thi',
                                 dataIndex: 'examPostponedReason',
                                 width: 200,
                                 render: (_, record) => {
                                     const examPostponed = listForm[record.id]?.examPostponed
-
                                     return (
                                         <Form.Item
                                             name={[record.id, 'examPostponedReason']}
@@ -872,7 +801,6 @@ export default function DiemQuaTrinh({
                                     )
                                 },
                             },
-
                             {
                                 title: 'Đình chỉ',
                                 dataIndex: 'suspended',
@@ -882,7 +810,6 @@ export default function DiemQuaTrinh({
                                     return <Checkbox disabled={true} checked={record?.suspended} />
                                 },
                             },
-
                             {
                                 title: 'Lý do đình chỉ',
                                 dataIndex: 'suspendedReason',
@@ -897,7 +824,6 @@ export default function DiemQuaTrinh({
                                     )
                                 },
                             },
-
                             {
                                 title: 'Ghi chú',
                                 dataIndex: 'description',

@@ -9,29 +9,19 @@ import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row } from 'antd'
 import _ from 'lodash'
-import { useRouter } from 'next/router'
 import { useCallback, useMemo, useState } from 'react'
 
 export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
-    const router = useRouter()
 
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: session } = useSession()
-    const profileId = session?.sDM_NhanVienId || ''
     const [filters, setFilters] = useState<FilterProps>({
         name: '',
     })
-
-    // const { onOpen } = useDisclosure<{
-    //     dataTable: DataTable[]
-    //     type: number // 1: In phiếu điểm và khóa, 0: In phiếu điểm nháp
-    // }>({
-    //     tag: 'ModalPrintStudentSubjectScore',
-    // })
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     const where: any = useMemo(() => {
@@ -98,11 +88,9 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
     return (
         <div className="bg-white">
             <Row gutter={[16, 16]}>
-                {/* <Col span={24}></Col> */}
                 <Col span={24}>
                     <Table
                         rowKey="id"
-                        id="student-subject-score"
                         filters={filters}
                         setFilters={setFilters}
                         onRow={(record) => {
@@ -115,8 +103,8 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                         }}
                         columns={[
                             {
-                                title: 'STT',
-                                width: 60,
+                                title: 'TT',
+                                width: 35,
                                 align: 'center',
                                 render: (_, __, index) => index + 1,
                             },
@@ -125,6 +113,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 dataIndex: 'name',
                                 width: 150,
                                 type: 'input',
+                                align: 'center',
                                 render: (_, record) => record?.room?.name || '',
                             },
                             {
@@ -132,6 +121,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 dataIndex: 'fullname',
                                 width: 150,
                                 type: 'input',
+                                align: 'center',
                                 render: (_, record) =>
                                     `${record?.room?.building?.name} ${record?.room?.building?.trainingLocation?.name}`,
                             },
@@ -140,6 +130,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 dataIndex: 'fullname',
                                 width: 150,
                                 type: 'input',
+                                align: 'center',
                                 render: (_, record) => {
                                     return record?.exam?.subjectClass?.length ? (
                                         <TextTruncate
@@ -159,6 +150,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 title: 'Tiết',
                                 dataIndex: 'fullname',
                                 width: 150,
+                                align: 'center',
                                 render: (_, record) =>
                                     `${record?.start || ''} - ${record?.end || ''}`,
                             },
@@ -166,6 +158,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 title: 'Ngày thi',
                                 dataIndex: 'fullname',
                                 width: 150,
+                                align: 'center',
                                 render: (_, record) =>
                                     `${formatDate(record?.exam?.subjectClass[0]?.examDate) || ''}`,
                             },

@@ -21,6 +21,40 @@ enum ThesisProjectStatus {
   @@schema("ql-dao-tao")
 }
 
+model ThesisSession extends Base {
+  name                  String
+  startDate             DateTime
+  endDate               DateTime
+
+  // Đối tượng đào tạo
+  trainingObjectType    TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId  String
+
+  trainingCourse        TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId      String
+
+  /// Số QĐĐT
+  decisionNumber        String?
+  /// người ký quyết định
+  decisionMaker         String?
+  /// Ngày QĐĐT
+  decisionDate          DateTime?
+
+  /// Số QĐBVLV
+  defenseDecisionNumber String?
+  /// người ký QĐBVLV
+  defenseDecisionMaker  String?
+  /// Ngày QĐBVLV
+  defenseDecisionDate   DateTime?
+
+  /// Thủ trưởng
+  chief                 String?
+
+  thesisProject         ThesisProject[]
+
+  @@schema("ql-dao-tao")
+}
+
 // Bảng đồ án
 model ThesisProject extends Base {
   title              String                        // Tên đồ án
@@ -35,8 +69,11 @@ model ThesisProject extends Base {
 
   status             ThesisProjectStatus         @default(PROPOSED)
 
-  subjectClass       SubjectClass                @relation(fields: [subjectClassId], references: [id])
-  subjectClassId     String
+  subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
+  subjectClassId     String?
+
+  thesisSession      ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
+  thesisSessionId    String?
 
   /// Chuyên gia hướng dẫn
   supervisor         ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])

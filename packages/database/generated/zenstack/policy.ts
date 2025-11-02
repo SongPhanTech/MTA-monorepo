@@ -2900,6 +2900,26 @@ const policy: PolicyDef = {
             },
 
         },
+        thesisSession: {
+            modelLevel: {
+                read: { guard: ThesisSession_read, },
+                create: { guard: ThesisSession_create, inputChecker: ThesisSession_create_input, },
+                update: { guard: ThesisSession_update, },
+                postUpdate: { guard: ThesisSession_postUpdate, },
+                delete: { guard: ThesisSession_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
         thesisProject: {
             modelLevel: {
                 read: { guard: ThesisProject_read, },
@@ -3207,6 +3227,26 @@ const policy: PolicyDef = {
                 update: { guard: CriterionCatalog_update, },
                 postUpdate: { guard: CriterionCatalog_postUpdate, },
                 delete: { guard: CriterionCatalog_delete, }
+            },
+            fieldLevel: {
+                read:
+                {
+
+                },
+                update:
+                {
+
+                },
+            },
+
+        },
+        criterionAssignment: {
+            modelLevel: {
+                read: { guard: CriterionAssignment_read, },
+                create: { guard: CriterionAssignment_create, inputChecker: CriterionAssignment_create_input, },
+                update: { guard: CriterionAssignment_update, },
+                postUpdate: { guard: CriterionAssignment_postUpdate, },
+                delete: { guard: CriterionAssignment_delete, }
             },
             fieldLevel: {
                 read:
@@ -5144,6 +5184,7 @@ const policy: PolicyDef = {
         lecturerHistory: { hasValidation: false },
         researchProject: { hasValidation: false },
         studentResearchRegistration: { hasValidation: false },
+        thesisSession: { hasValidation: false },
         thesisProject: { hasValidation: false },
         defenseSession: { hasValidation: false },
         studentThesisRegistration: { hasValidation: false },
@@ -5160,6 +5201,7 @@ const policy: PolicyDef = {
         evaluationPeriod: { hasValidation: false },
         standardCatalog: { hasValidation: false },
         criterionCatalog: { hasValidation: false },
+        criterionAssignment: { hasValidation: false },
         requirementCriterionCatalog: { hasValidation: false },
         scoreScaleCatalog: { hasValidation: false },
         evaluationStandard: { hasValidation: false },
@@ -14462,6 +14504,71 @@ function $check_StudentResearchRegistration_delete(input: any, context: QueryCon
     return false;
 }
 
+function ThesisSession_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ThesisSession_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ThesisSession_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ThesisSession_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ThesisSession_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ThesisSession_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ThesisSession_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ThesisSession_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ThesisSession_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ThesisSession_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ThesisSession_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
 function ThesisProject_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
@@ -15496,6 +15603,71 @@ function CriterionCatalog_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_CriterionCatalog_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriterionAssignment_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_CriterionAssignment_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriterionAssignment_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CriterionAssignment_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriterionAssignment_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function CriterionAssignment_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CriterionAssignment_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function CriterionAssignment_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_CriterionAssignment_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function CriterionAssignment_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_CriterionAssignment_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

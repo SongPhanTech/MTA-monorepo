@@ -44,6 +44,7 @@ const relationSchema = z.object({
     scoreScale: z.record(z.string(), z.unknown()),
     evaluationCouncil: z.record(z.string(), z.unknown()).optional(),
     requirementCriterions: z.array(z.unknown()).optional(),
+    criterionAssignments: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
