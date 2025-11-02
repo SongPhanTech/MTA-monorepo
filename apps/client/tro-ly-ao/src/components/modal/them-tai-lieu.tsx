@@ -1,9 +1,11 @@
+import { fetchOCR } from '@/api/ocr'
+import { useTopics } from '@/hooks/useTopics'
 import { CloseCircleOutlined, InboxOutlined } from '@ant-design/icons'
 import { fetchReadDocumentContentDocumentDocumentReaderPost } from '@api/qa/qaComponents'
+import DocumentSidebar from '@components/commons/document-sidebar'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
-import DocumentSidebar from '@components/commons/document-sidebar'
 import { cn, formatNiceBytes } from '@lib/utils'
 import {
     useCreateDocument,
@@ -12,12 +14,10 @@ import {
     useFindManyDocumentClassification,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Col, Form, Input, Modal, message, Progress, Tag } from 'antd'
+import { Col, Form, Input, message, Modal, Progress, Tag } from 'antd'
 import axios from 'axios'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { fetchOCR } from '@/api/ocr'
-import { useTopics } from '@/hooks/useTopics'
 
 type DocumentFormType = {
     topicIds: string[]
@@ -174,11 +174,22 @@ const ThemTaiLieu = () => {
         }>
     ) => {
         try {
-            // Kiểm tra xem đã chọn topic chưa
+            // Kiểm tra chọn topic
             const currentTopicIds = form.getFieldValue('topicIds')
             if (!currentTopicIds || currentTopicIds.length === 0) {
                 message.error('Vui lòng chọn ít nhất một loại tài liệu trước khi tải lên')
                 return
+            }
+
+            // Kiểm tra kích thước file PDF (giới hạn 100MB)
+            const MAX_PDF_SIZE = 100 * 1024 * 1024 // 100MB in bytes
+            for (const item of values) {
+                if (isPDFFile(item.file) && item.file.size > MAX_PDF_SIZE) {
+                    message.error(
+                        `File PDF "${item.file.name}" vượt quá giới hạn 100MB (${formatNiceBytes(item.file.size)})`
+                    )
+                    return
+                }
             }
 
             const valuesWithId = values.map((item) => ({

@@ -1,15 +1,15 @@
-import { FileUploadIcon } from '@components/commons/upload'
+import { TimKiemTheoNguNghia, TimKiemTheoTuKhoa } from '@/api/tim-kiem-van-ban'
 import DocumentSidebar from '@components/commons/document-sidebar'
+import { FileUploadIcon } from '@components/commons/upload'
 import ChatLayout from '@layouts/chat-layout'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import { $Enums } from '@workspace/db'
 import { useFindManyDocument } from '@workspace/db/hooks'
-import { Button, Divider, Empty, Input, Modal, message, Radio, Spin, Tag, Typography } from 'antd'
+import { Button, Divider, Empty, Input, message, Modal, Radio, Spin, Tag, Typography } from 'antd'
 import { FileDown } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
-import { TimKiemTheoNguNghia, TimKiemTheoTuKhoa } from '@/api/tim-kiem-van-ban'
 
 const { Title } = Typography
 
@@ -21,6 +21,21 @@ export default function Page() {
     const [results, setResults] = useState<string[]>([])
     const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
     const [searchType, setSearchType] = useState<SearchType>('semantic')
+
+    // Clear results
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        setInput(value)
+        if (!value.trim()) {
+            setResults([])
+        }
+    }
+
+    // Clear results
+    const handleSearchTypeChange = (value: SearchType) => {
+        setSearchType(value)
+        setResults([])
+    }
 
     const { data: documentsData = [], isLoading: isLoadingDocuments } = useFindManyDocument(
         {
@@ -45,7 +60,6 @@ export default function Page() {
         }
     )
 
-    // Sắp xếp documents theo thứ tự của results từ API
     const documents = results
         .map((id) => documentsData.find((doc) => doc.id === id))
         .filter((doc): doc is NonNullable<typeof doc> => Boolean(doc))
@@ -89,14 +103,13 @@ export default function Page() {
 
     return (
         <div className="h-full flex flex-col">
-            {/* Search Header */}
             <div className="px-6 py-6 border-b border-gray-100 bg-gradient-to-b from-white to-gray-50">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center justify-center gap-3">
                             <Radio.Group
                                 value={searchType}
-                                onChange={(e) => setSearchType(e.target.value)}
+                                onChange={(e) => handleSearchTypeChange(e.target.value)}
                                 buttonStyle="solid"
                             >
                                 <Radio.Button
@@ -153,9 +166,10 @@ export default function Page() {
                             }
                             size="large"
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={handleInputChange}
                             onSearch={handleSearch}
                             loading={loading}
+                            allowClear
                             style={
                                 {
                                     '--ant-color-primary': '#028850',
