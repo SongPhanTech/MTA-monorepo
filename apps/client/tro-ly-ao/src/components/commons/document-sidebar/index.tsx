@@ -347,7 +347,19 @@ export default function DocumentSidebar({
                     </div>
 
                     <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 py-6">
-                        {highlightedContent ? (
+                        {!document?.body || document.body.length === 0 ? (
+                            <div className="flex items-center justify-center h-full text-gray-400">
+                                <div className="text-center">
+                                    <FileTextOutlined className="text-4xl mb-2" />
+                                    <p className="mb-2">Tài liệu chưa được phân đoạn</p>
+                                    <p className="text-sm">
+                                        Vui lòng nhấn biểu tượng{' '}
+                                        <InfoCircleOutlined className="text-primary" /> để tải xuống
+                                        tài liệu
+                                    </p>
+                                </div>
+                            </div>
+                        ) : highlightedContent ? (
                             <div
                                 ref={contentRef}
                                 className="prose prose-sm max-w-none text-gray-800 leading-relaxed whitespace-pre-wrap break-words overflow-wrap-anywhere"
