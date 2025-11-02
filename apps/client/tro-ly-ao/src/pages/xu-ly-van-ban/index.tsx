@@ -1,11 +1,11 @@
-import { CopyOutlined, FileSyncOutlined, StopOutlined, CloseOutlined } from '@ant-design/icons'
+import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
+import { readStreamToText } from '@/utils'
+import { CloseOutlined, CopyOutlined, FileSyncOutlined, StopOutlined } from '@ant-design/icons'
+import AutoResizeTextArea from '@components/commons/text-area-auto-resize'
 import ChatLayout from '@layouts/chat-layout'
 import { Button, message, Select } from 'antd'
 import type { ReactElement } from 'react'
-import { useCallback, useState, useEffect } from 'react'
-import { fetchXuLyVanBan } from '@/api/xu-ly-van-ban'
-import { readStreamToText } from '@/utils'
-import AutoResizeTextArea from '@components/commons/text-area-auto-resize'
+import { useCallback, useEffect, useState } from 'react'
 
 const { Option } = Select
 
@@ -126,36 +126,38 @@ function Page() {
 
     return (
         <div className="flex flex-col h-full bg-gray-50 overflow-hidden text-gray-900">
-            <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-                <div className="px-4 py-4">
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-2xl mx-auto">
-                        <Select
-                            value={mode}
-                            onChange={(value: Mode) => setMode(value)}
-                            className="w-full sm:w-auto sm:min-w-[200px]"
-                            size="large"
-                            disabled={loading}
-                        >
-                            <Option value="translate">Dịch văn bản</Option>
-                            <Option value="fix">Sửa lỗi chính tả</Option>
-                            <Option value="summarize">Tóm lược</Option>
-                            <Option value="extraction">Trích lược</Option>
-                        </Select>
-                        <Button
-                            icon={loading ? <StopOutlined /> : <FileSyncOutlined />}
-                            type="primary"
-                            onClick={loading ? () => abortController?.abort() : handleProcess}
-                            loading={false}
-                            size="large"
-                            danger={loading}
-                            className="w-full sm:w-auto min-w-[120px]"
-                            style={{
-                                backgroundColor: loading ? '#ff4d4f' : '#028850',
-                                borderColor: loading ? '#ff4d4f' : '#028850',
-                            }}
-                        >
-                            {loading ? 'Dừng lại' : 'Xử lý'}
-                        </Button>
+            <div className="px-6 py-6 border-b border-gray-100 bg-gradient-to-b from-white to-gray-50 sticky top-0 z-10">
+                <div className="max-w-6xl mx-auto">
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                            <Select
+                                value={mode}
+                                onChange={(value: Mode) => setMode(value)}
+                                className="w-full sm:w-auto sm:min-w-[200px] [&_.ant-select-selector]:!border-gray-300"
+                                size="large"
+                                disabled={loading}
+                            >
+                                <Option value="translate">Dịch văn bản</Option>
+                                <Option value="fix">Sửa lỗi chính tả</Option>
+                                <Option value="summarize">Tóm lược</Option>
+                                <Option value="extraction">Trích lược</Option>
+                            </Select>
+                            <Button
+                                icon={loading ? <StopOutlined /> : <FileSyncOutlined />}
+                                type="primary"
+                                onClick={loading ? () => abortController?.abort() : handleProcess}
+                                loading={false}
+                                size="large"
+                                danger={loading}
+                                className="w-full sm:w-auto min-w-[120px] shadow-sm"
+                                style={{
+                                    backgroundColor: loading ? '#ff4d4f' : '#028850',
+                                    borderColor: loading ? '#ff4d4f' : '#028850',
+                                }}
+                            >
+                                {loading ? 'Dừng lại' : 'Xử lý'}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,8 @@
+import { fetchOCR } from '@/api/ocr'
+import { useTopics } from '@/hooks/useTopics'
 import { CloseCircleOutlined, InboxOutlined } from '@ant-design/icons'
 import { fetchReadDocumentContentDocumentDocumentReaderPost } from '@api/qa/qaComponents'
+import DocumentSidebar from '@components/commons/document-sidebar'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
@@ -7,15 +10,14 @@ import { cn, formatNiceBytes } from '@lib/utils'
 import {
     useCreateDocument,
     useCreateManyDocumentTopic,
+    useFindManyDocument,
     useFindManyDocumentClassification,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Col, Form, Input, Modal, message, Progress } from 'antd'
+import { Col, Form, Input, message, Modal, Progress, Tag } from 'antd'
 import axios from 'axios'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { fetchOCR } from '@/api/ocr'
-import { useTopics } from '@/hooks/useTopics'
 
 type DocumentFormType = {
     topicIds: string[]
@@ -29,6 +31,7 @@ type DocumentFormType = {
             progress?: number
             timeLeft?: number
             similar?: number
+            similarDocumentId?: string
             id: string
             customName?: string
             isProcessingOCR?: boolean
@@ -53,10 +56,36 @@ const ThemTaiLieu = () => {
     const { mutateAsync: createManyDocumentTopic } = useCreateManyDocumentTopic()
 
     const [selectedFile, setSelectedFile] = useState<DocumentFormType['files'][0]>()
+    const [viewingSimilarDocId, setViewingSimilarDocId] = useState<string | null>(null)
 
     const [form] = Form.useForm<DocumentFormType>()
 
     const files = Form.useWatch('files', form) || {}
+
+    // Lấy danh sách ID tài liệu tương đồng từ files
+    const similarDocumentIds = useMemo(() => {
+        return Object.values(files)
+            .map((file) => file.similarDocumentId)
+            .filter((id): id is string => Boolean(id))
+    }, [files])
+
+    // Fetch thông tin tài liệu tương đồng
+    const { data: similarDocuments = [] } = useFindManyDocument(
+        {
+            where: {
+                id: {
+                    in: similarDocumentIds,
+                },
+            },
+            select: {
+                id: true,
+                title: true,
+            },
+        },
+        {
+            enabled: similarDocumentIds.length > 0,
+        }
+    )
     const selectedTopicIds = Form.useWatch('topicIds', form)
     const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
@@ -145,11 +174,22 @@ const ThemTaiLieu = () => {
         }>
     ) => {
         try {
-            // Kiểm tra xem đã chọn topic chưa
+            // Kiểm tra chọn topic
             const currentTopicIds = form.getFieldValue('topicIds')
             if (!currentTopicIds || currentTopicIds.length === 0) {
                 message.error('Vui lòng chọn ít nhất một loại tài liệu trước khi tải lên')
                 return
+            }
+
+            // Kiểm tra kích thước file PDF (giới hạn 100MB)
+            const MAX_PDF_SIZE = 100 * 1024 * 1024 // 100MB in bytes
+            for (const item of values) {
+                if (isPDFFile(item.file) && item.file.size > MAX_PDF_SIZE) {
+                    message.error(
+                        `File PDF "${item.file.name}" vượt quá giới hạn 100MB (${formatNiceBytes(item.file.size)})`
+                    )
+                    return
+                }
             }
 
             const valuesWithId = values.map((item) => ({
@@ -228,6 +268,7 @@ const ThemTaiLieu = () => {
                     })
                     const currentTopicIds = form.getFieldValue('topicIds')
 
+                    let similarDocId: string | undefined
                     if (!needOCR) {
                         const resReaderDocument =
                             await fetchReadDocumentContentDocumentDocumentReaderPost({
@@ -237,11 +278,10 @@ const ThemTaiLieu = () => {
                                 },
                             } as any)
                         documentBody = resReaderDocument.body || ''
-                        similarScore =
-                            resReaderDocument.document_simmilar &&
-                            resReaderDocument.document_simmilar.length > 0
-                                ? resReaderDocument.document_simmilar[0].score
-                                : 0
+                        const similarDocs = resReaderDocument.document_simmilar || []
+                        const hasSimilarDocument = similarDocs.length > 0
+                        similarScore = hasSimilarDocument ? similarDocs[0].score : 0
+                        similarDocId = hasSimilarDocument ? similarDocs[0].id : undefined
 
                         if (
                             isPDFFile(file.file) &&
@@ -270,6 +310,7 @@ const ThemTaiLieu = () => {
                                 ...file,
                                 body: documentBody,
                                 similar: similarScore,
+                                similarDocumentId: similarDocId,
                                 progress: 100,
                                 isProcessingOCR: false,
                             },
@@ -282,14 +323,10 @@ const ThemTaiLieu = () => {
         }
     }
 
-    const bgColorSimilar = (similar: number) => {
-        if (similar > 0.8) {
-            return 'bg-red-500'
-        }
-        if (similar > 0.5) {
-            return 'bg-yellow-500'
-        }
-        return 'bg-green-500'
+    const getSimilarDocumentTitle = (similarDocumentId?: string) => {
+        if (!similarDocumentId) return null
+        const doc = similarDocuments.find((d) => d.id === similarDocumentId)
+        return doc?.title || null
     }
 
     const onFinish = async (values: DocumentFormType) => {
@@ -440,22 +477,17 @@ const ThemTaiLieu = () => {
                                 key={file.url}
                                 onClick={setSelectedFile.bind(null, file)}
                                 className={cn(
-                                    'flex items-center gap-2 mt-2 border relative border-gray-300 rounded-lg p-2 justify-between cursor-pointer hover:bg-gray-100',
+                                    'flex items-start gap-2 mt-2 border border-gray-300 rounded-lg p-2 cursor-pointer hover:bg-gray-100',
                                     selectedFile?.url === file.url && 'bg-gray-100 border-primary'
                                 )}
                             >
-                                {!!file.similar && (
-                                    <span
-                                        className={cn(
-                                            'text-xs absolute right-2 -top-2 text-white px-1 rounded',
-                                            bgColorSimilar(file.similar)
-                                        )}
-                                    >
-                                        {`  ${Math.floor(file.similar * 100)} % tương đồng`}
-                                    </span>
-                                )}
-                                <FileUploadIcon fileType={file.file.type} width={40} height={40} />
-                                <div className="flex flex-col flex-1 gap-1">
+                                <FileUploadIcon
+                                    fileType={file.file.type}
+                                    width={40}
+                                    height={40}
+                                    className="flex-shrink-0"
+                                />
+                                <div className="flex flex-col flex-1 gap-1 min-w-0">
                                     {file.progress === 100 ? (
                                         <Input
                                             size="small"
@@ -504,6 +536,39 @@ const ThemTaiLieu = () => {
                                         )}
                                     </span>
 
+                                    {file.similarDocumentId && file.similar && (
+                                        <div
+                                            className="flex items-center gap-2 mt-1 cursor-pointer hover:underline min-w-0"
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                setViewingSimilarDocId(
+                                                    file.similarDocumentId || null
+                                                )
+                                            }}
+                                        >
+                                            <Tag
+                                                color={
+                                                    file.similar > 0.8
+                                                        ? 'red'
+                                                        : file.similar > 0.5
+                                                          ? 'orange'
+                                                          : 'green'
+                                                }
+                                                className="m-0 flex-shrink-0"
+                                            >
+                                                {Math.floor(file.similar * 100)}% tương đồng
+                                            </Tag>
+                                            <span className="text-xs text-gray-600 truncate">
+                                                với:{' '}
+                                                <span className="font-medium text-primary">
+                                                    {getSimilarDocumentTitle(
+                                                        file.similarDocumentId
+                                                    ) || 'Đang tải...'}
+                                                </span>
+                                            </span>
+                                        </div>
+                                    )}
+
                                     {file.progress !== 0 && file.progress !== 100 && (
                                         <Progress percent={file.progress} status="active" />
                                     )}
@@ -519,7 +584,7 @@ const ThemTaiLieu = () => {
                                             files,
                                         })
                                     }}
-                                    className="text-lg cursor-pointer"
+                                    className="text-lg cursor-pointer flex-shrink-0 self-start"
                                 />
                             </div>
                         ))}
@@ -540,6 +605,12 @@ const ThemTaiLieu = () => {
                     </div>
                 )}
             </div>
+
+            <DocumentSidebar
+                documentId={viewingSimilarDocId}
+                citationContent={null}
+                onClose={() => setViewingSimilarDocId(null)}
+            />
         </Modal>
     )
 }
