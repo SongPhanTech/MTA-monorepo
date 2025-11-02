@@ -19,6 +19,25 @@ import axios from 'axios'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
+let pdfjsLibPromise: Promise<typeof import('pdfjs-dist/legacy/build/pdf')> | null = null
+let pdfWorkerSrc: string | null = null
+
+const loadPdfJsLib = async () => {
+    if (!pdfjsLibPromise) {
+        pdfjsLibPromise = import('pdfjs-dist/legacy/build/pdf')
+    }
+    const pdfjsLib = await pdfjsLibPromise
+
+    if (typeof window !== 'undefined' && !pdfWorkerSrc) {
+        const workerModule = await import('pdfjs-dist/legacy/build/pdf.worker.min.mjs?url')
+        const resolvedWorker = (workerModule as { default?: unknown })?.default ?? workerModule
+        pdfWorkerSrc = typeof resolvedWorker === 'string' ? resolvedWorker : String(resolvedWorker)
+        pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerSrc
+    }
+
+    return pdfjsLib
+}
+
 type DocumentFormType = {
     topicIds: string[]
     classificationId?: string
@@ -96,6 +115,43 @@ const ThemTaiLieu = () => {
 
     const isPDFFile = (file: File) => {
         return file.type === 'application/pdf'
+    }
+
+    const isPDFTextDocument = async (file: File) => {
+        try {
+            const pdfjsLib = await loadPdfJsLib()
+            const fileBuffer = await file.arrayBuffer()
+            const pdfDocument = await pdfjsLib.getDocument({
+                data: fileBuffer,
+            }).promise
+
+            try {
+                const pagesToInspect = Math.min(pdfDocument.numPages, 3)
+                for (let pageIndex = 1; pageIndex <= pagesToInspect; pageIndex++) {
+                    const page = await pdfDocument.getPage(pageIndex)
+                    const textContent = await page.getTextContent()
+                    const hasText = textContent.items.some((item: unknown) => {
+                        if (!item || typeof item !== 'object') return false
+                        const value = (item as { str?: unknown }).str
+                        return typeof value === 'string' && value.trim().length > 0
+                    })
+                    if (hasText) {
+                        return true
+                    }
+                }
+                return false
+            } finally {
+                if (typeof pdfDocument.cleanup === 'function') {
+                    pdfDocument.cleanup()
+                }
+                if (typeof pdfDocument.destroy === 'function') {
+                    await pdfDocument.destroy()
+                }
+            }
+        } catch (error) {
+            console.error('[PDF] Lỗi xác định loại PDF:', error)
+            return false
+        }
     }
 
     const processWithOCR = async (file: File, fileId: string) => {
@@ -235,6 +291,14 @@ const ThemTaiLieu = () => {
                         })
                         documentBody = await processWithOCR(file.file, file.id)
                         console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
+                    } else if (isPDFFile(file.file)) {
+                        const isTextPdf = await isPDFTextDocument(file.file)
+                        if (!isTextPdf) {
+                            needOCR = true
+                            console.log('[PDF] Xác định PDF ảnh, chuyển sang OCR')
+                            documentBody = await processWithOCR(file.file, file.id)
+                            console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
+                        }
                     }
 
                     const { data: resPresignedUrl } = await generatePresignedUrl({
@@ -303,11 +367,13 @@ const ThemTaiLieu = () => {
                         }
                     }
 
+                    const currentFiles = form.getFieldValue('files')
+                    const currentFile = currentFiles?.[file.id] || file
                     form.setFieldsValue({
                         files: {
-                            ...form.getFieldValue('files'),
+                            ...currentFiles,
                             [file.id]: {
-                                ...file,
+                                ...currentFile,
                                 body: documentBody,
                                 similar: similarScore,
                                 similarDocumentId: similarDocId,
@@ -482,7 +548,7 @@ const ThemTaiLieu = () => {
                                 )}
                             >
                                 <FileUploadIcon
-                                    fileType={file.file.type}
+                                    fileType={file?.file?.type}
                                     width={40}
                                     height={40}
                                     className="flex-shrink-0"

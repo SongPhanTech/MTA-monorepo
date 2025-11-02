@@ -97,6 +97,7 @@ catalog:
   orval: 7.9.0
   oxlint: ^1.24.0
   patch-package: ^8.0.1
+  pdfjs-dist: ^4.4.168
   path-browserify: ^1.0.1
   pizzip: 3.2.0
   postcss: ^8.4.49
