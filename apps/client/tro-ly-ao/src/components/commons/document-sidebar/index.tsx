@@ -3,6 +3,7 @@ import {
     DownCircleOutlined,
     DownOutlined,
     FileTextOutlined,
+    InfoCircleOutlined,
     LinkOutlined,
     SearchOutlined,
     UpCircleOutlined,
@@ -10,7 +11,8 @@ import {
 } from '@ant-design/icons'
 import { useFindUniqueDocument } from '@workspace/db/hooks'
 import { useEffect, useRef, useState } from 'react'
-import { Drawer, Input } from 'antd'
+import { Drawer, Input, Tooltip } from 'antd'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface DocumentSidebarProps {
     documentId: string | null
@@ -31,6 +33,10 @@ export default function DocumentSidebar({
     const [isTopicsExpanded, setIsTopicsExpanded] = useState(false)
     const contentRef = useRef<HTMLDivElement>(null)
     const debounceTimer = useRef<NodeJS.Timeout | null>(null)
+
+    const { onOpen: openPreviewTaiLieu } = useDisclosure<string>({
+        tag: 'PreviewTaiLieu',
+    })
 
     const { data: document } = useFindUniqueDocument(
         {
@@ -243,6 +249,17 @@ export default function DocumentSidebar({
                         <FileTextOutlined className="text-primary" />
                         <span className="font-semibold">Tài liệu nguồn</span>
                     </div>
+                    {documentId && (
+                        <Tooltip title="Xem thông tin chi tiết" placement="left">
+                            <button
+                                type="button"
+                                onClick={() => openPreviewTaiLieu(documentId)}
+                                className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors"
+                            >
+                                <InfoCircleOutlined className="text-lg" />
+                            </button>
+                        </Tooltip>
+                    )}
                 </div>
             }
             size="default"

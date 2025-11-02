@@ -1,6 +1,7 @@
 import { AuditOutlined, EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
+import DocumentSidebar from '@components/commons/document-sidebar'
 import DeleteIcon from '@components/icons/delete'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
@@ -32,6 +33,7 @@ function Page() {
         pagination: { current: 1, pageSize: 10, total: 10 },
     })
     const [isReloading, setIsReloading] = useState(false)
+    const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
 
     const { onOpen: openAddTaiLieu } = useDisclosure({
         tag: 'ThemTaiLieu',
@@ -39,10 +41,6 @@ function Page() {
 
     const { onOpen: openPheDuyetTaiLieu } = useDisclosure<string>({
         tag: 'PheDuyetTaiLieu',
-    })
-
-    const { onOpen: openPreviewTaiLieu } = useDisclosure<string>({
-        tag: 'PreviewTaiLieu',
     })
 
     const { onOpen: openSuaTaiLieu } = useDisclosure<string>({
@@ -403,7 +401,9 @@ function Page() {
                                         </Tooltip>
                                         <Tooltip title="Xem chi tiết" placement="top">
                                             <EyeOutlined
-                                                onClick={() => openPreviewTaiLieu(record.id)}
+                                                onClick={() => {
+                                                    setSelectedDocumentId(record.id)
+                                                }}
                                                 className="text-blue-700 cursor-pointer text-lg"
                                             />
                                         </Tooltip>
@@ -433,6 +433,11 @@ function Page() {
                     />
                 </div>
             </div>
+            <DocumentSidebar
+                documentId={selectedDocumentId}
+                citationContent={null}
+                onClose={() => setSelectedDocumentId(null)}
+            />
         </div>
     )
 }

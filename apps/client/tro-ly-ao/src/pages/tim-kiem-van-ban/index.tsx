@@ -1,4 +1,5 @@
 import { FileUploadIcon } from '@components/commons/upload'
+import DocumentSidebar from '@components/commons/document-sidebar'
 import ChatLayout from '@layouts/chat-layout'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
@@ -16,6 +17,7 @@ export default function Page() {
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
     const [results, setResults] = useState<string[]>([])
+    const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
 
     const { data: documentsData = [] } = useFindManyDocument({
         include: {
@@ -119,7 +121,7 @@ export default function Page() {
                                         className="bg-white p-5 rounded-lg border border-gray-200 hover:border-[#028850] hover:bg-[#D9EDE4] hover:shadow-md transition-all duration-200 cursor-pointer"
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            setSelectedDocument(item)
+                                            setSelectedDocumentId(item.id)
                                         }}
                                     >
                                         <div className="flex items-start space-x-4">
@@ -279,6 +281,12 @@ export default function Page() {
                     </div>
                 )}
             </Modal>
+
+            <DocumentSidebar
+                documentId={selectedDocumentId}
+                citationContent={null}
+                onClose={() => setSelectedDocumentId(null)}
+            />
         </div>
     )
 }
