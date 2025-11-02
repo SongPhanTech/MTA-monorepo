@@ -1,4 +1,4 @@
-import { AuditOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons'
+import { AuditOutlined, EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import { FileUploadIcon } from '@components/commons/upload'
 import DeleteIcon from '@components/icons/delete'
@@ -14,7 +14,7 @@ import {
 import { Button, Input, message, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { deleteVectorRecordHoiDap } from '@/api/chunking_and_vectorize'
+import { deleteVectorRecordHoiDap, reloadBM25 } from '@/api/chunking_and_vectorize'
 
 function Page() {
     const [filters, setFilters] = useState<{
@@ -27,6 +27,7 @@ function Page() {
     const [tableParams, setTableParams] = useState({
         pagination: { current: 1, pageSize: 10, total: 10 },
     })
+    const [isReloading, setIsReloading] = useState(false)
 
     const { onOpen: openAddTaiLieu } = useDisclosure({
         tag: 'ThemTaiLieu',
@@ -123,6 +124,24 @@ function Page() {
         }
     }
 
+    const handleReloadBM25 = async () => {
+        setIsReloading(true)
+        try {
+            const result = await reloadBM25('')
+
+            if (result?.error === 'True') {
+                message.error(result?.message || 'Đã xảy ra lỗi khi reload BM25')
+                return
+            }
+
+            message.success('Reload BM25 thành công')
+        } catch (_error) {
+            message.error('Reload BM25 thất bại')
+        } finally {
+            setIsReloading(false)
+        }
+    }
+
     return (
         <div className="h-full">
             <div className="flex gap-4 h-full overflow-hidden">
@@ -133,9 +152,18 @@ function Page() {
                                 Danh sách tài liệu
                             </span>
                         </div>
-                        <Button onClick={openAddTaiLieu} type="primary">
-                            Thêm mới
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                icon={<ReloadOutlined />}
+                                onClick={handleReloadBM25}
+                                loading={isReloading}
+                            >
+                                Làm mới
+                            </Button>
+                            <Button onClick={openAddTaiLieu} type="primary">
+                                Thêm mới
+                            </Button>
+                        </div>
                     </div>
                     <div className="flex items-center gap-2 mb-4">
                         <Input

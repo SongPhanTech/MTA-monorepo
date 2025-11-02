@@ -61,3 +61,14 @@ export const deleteVectorRecordFAQ = async (id_document: string) => {
         return { status: 500, error: 'True', message: 'Lỗi xóa bản ghi FAQ' }
     }
 }
+
+export const reloadBM25 = async (id_document: string) => {
+    try {
+        return await postFormUrlEncoded(
+            `${env.NEXT_PUBLIC_CHAT_BOT_URL}/reload_bm25`,
+            id_document
+        )
+    } catch (_error: any) {
+        return { status: 500, error: 'True', message: 'Lỗi reload BM25' }
+    }
+}
