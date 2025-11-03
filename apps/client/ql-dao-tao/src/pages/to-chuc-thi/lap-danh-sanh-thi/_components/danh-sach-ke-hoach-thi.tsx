@@ -16,9 +16,9 @@ import { Button, Checkbox, Col, Flex, Form, Input, message, Popover, Row, Switch
 import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
 import { useCallback, useState } from 'react'
+import { keHoachThiStore } from '..'
 
 interface Props {
-    onSelectSubjectClass: (id: string | null) => void
     setActiveKey: (key: string) => void
 }
 
@@ -39,7 +39,7 @@ type ButtonFormType = {
     mergeClasses: boolean
 }
 
-export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey }: Props) {
+export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { id: semesterId } = useSemesterStore()
     const { options: examTypeOptions, getExamTypeLabel } = useExamTypeOptions()
@@ -135,8 +135,6 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
             capacity: true,
         },
     })
-
-    console.log(exams)
 
     const { mutateAsync: createExam } = useCreateExams()
     const { mutateAsync: mergeExam } = useMergeExam()
@@ -364,27 +362,28 @@ export default function DanhSachKeHoachThi({ onSelectSubjectClass, setActiveKey 
                             type: 'checkbox',
                             ...rowSelection,
                         }}
-                        // onRow={(record) => ({
-                        //     // onClick: () => {
-                        //     //     setSelectedRowKey(record?.id)
-                        //     //     onSelectSubjectClass(record?.id)
-                        //     // },
-                        //     onDoubleClick: (e) => {
-                        //         const target = e.target as HTMLElement
-                        //         if (
-                        //             target.closest('.ant-select') ||
-                        //             target.closest('.ant-popover') ||
-                        //             target.closest('.ant-input') ||
-                        //             target.closest('.ant-table-row-selection')
-                        //         ) {
-                        //             e.stopPropagation()
-                        //             return
-                        //         }
-                        //         onSelectSubjectClass(record?.id)
-                        //         setSelectedRowKey(record?.id)
-                        //         setActiveKey?.('2')
-                        //     },
-                        // })}
+                        onRow={(record) => ({
+                            // onClick: () => {
+                            //     setSelectedRowKey(record?.id)
+                            //     onSelectSubjectClass(record?.id)
+                            // },
+                            onDoubleClick: (e) => {
+                                const target = e.target as HTMLElement
+                                if (
+                                    target.closest('.ant-select') ||
+                                    target.closest('.ant-popover') ||
+                                    target.closest('.ant-input') ||
+                                    target.closest('.ant-table-row-selection')
+                                ) {
+                                    e.stopPropagation()
+                                    return
+                                }
+                                keHoachThiStore.setState({
+                                    selectedSubjectClassId: record?.id,
+                                })
+                                setActiveKey?.('2')
+                            },
+                        })}
                         data={exams}
                         columns={[
                             {
