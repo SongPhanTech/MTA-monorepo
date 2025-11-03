@@ -1,5 +1,6 @@
 import { EyeOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
+import Table from '@components/commons/table'
 import TableCollapse from '@components/commons/tableCollapse'
 import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
@@ -11,20 +12,24 @@ import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import { type CouncilMember, SubjectVersionType, ThesisProjectStatus } from '@workspace/db/client'
+import { type CouncilMember, Student, SubjectVersionType, ThesisProjectStatus } from '@workspace/db/client'
 import {
+    useCountStudent,
     useCountSubjectClass,
     useCreateManyInvitation,
     useFindManyDM_DonVi,
+    useFindManyFixedClass,
     useFindManyGraduationSession,
+    useFindManyStudent,
     useFindManySubjectClass,
     useFindManyThesisProject,
+    useFindManyTrainingCourse,
     useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -35,6 +40,9 @@ import { BsGear } from 'react-icons/bs'
 
 export default function PostgraduateProject() {
     const { can, canSome } = useAbility()
+    const [editingRowKey, setEditingRowKey] = useState<string | null>(null);
+
+    const [editingValue, setEditingValue] = useState<string>('');
     const router = useRouter()
     const { getThesisProjectStatusColor, getThesisProjectStatusLabel, thesisProjectStatusOptions } =
         useThesisProjectStatusOptions()
@@ -53,12 +61,18 @@ export default function PostgraduateProject() {
         currentStudents: undefined,
         summary: undefined,
     })
+    const handleSave = async (rowId: string) => {
+        console.log('Đang lưu hàng:', rowId, 'với giá trị mới:', editingValue);
+        await refetchStudents();
+    };
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectId } = useTrainingObjectTypeStore()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { mutateAsync: createManyInvitation } = useCreateManyInvitation()
     const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
     const treeData = buildOrgTree(manageOrgData)
+     const [trainingCourseseselected,setTrainingCoursesSelected] = useState<string[]>([])
+     const [fixedClassesSelected,setFixedClassesSelected] = useState<string[]>([])
     const ALLOWED_STATUSES: ThesisProjectStatus[] = [
         ThesisProjectStatus.COMPLETED,
         ThesisProjectStatus.DEFENDED_FAILED,
@@ -161,6 +175,27 @@ export default function PostgraduateProject() {
         filters.endDate,
         filters.summary,
     ])
+    const {data : trainingCourse} = useFindManyTrainingCourse(
+        {
+            where :
+            {
+                deletedAt : null,
+                active : true,
+                trainingObjectTypeId : trainingObjectId,
+            }
+        }
+    )
+    const {data: fixedClasses} = useFindManyFixedClass(
+        {
+            where :
+            {
+                trainingCourseId : {
+                    in : trainingCourseseselected,
+                },
+            }
+        }
+    )
+
 
     const { data: subjectClass } = useFindManySubjectClass({
         where,
@@ -307,38 +342,6 @@ export default function PostgraduateProject() {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { mutateAsync: updateThesisProject } = useUpdateThesisProject()
-    async function handleDelete(id: string) {
-        try {
-            showSpinner()
-            await updateThesisProject({
-                where: {
-                    id,
-                },
-                data: {
-                    deletedAt: new Date(),
-                },
-            })
-            message.success('Xóa thành công')
-        } catch (error: any) {
-            if (error?.info?.message) {
-                message.error(error?.info?.message)
-                return
-            }
-            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-        } finally {
-            hideSpinner()
-        }
-    }
-
-    const handleNavigate = (record: { id?: string }) => {
-        if (
-            can(QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN, 'XEM_CHI_TIET') &&
-            record?.id
-        ) {
-            router.push(`${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN}/${record.id}`)
-        }
-    }
 
     const { data: selectedThesisProjects } = useFindManyThesisProject(
         {
@@ -387,11 +390,7 @@ export default function PostgraduateProject() {
         }
     }
 
-    const handleNavigateSetting = (id: string) => {
-        router.push(
-            `${ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG}?subjectClassId=${id}`
-        )
-    }
+
 
     const isEligibleForPayment = (selectedRowKeys: string[]) => {
         if (!subjectClass) return false
@@ -411,399 +410,369 @@ export default function PostgraduateProject() {
         return selectedProjects.every((p) => ALLOWED_STATUSES.includes(p.status))
     }
 
-    return (
-        <div>
-            <Row gutter={[16, 0]}>
-                <Col span={24}>
-                    <Row gutter={[16, 16]} align="top" justify="space-between">
-                        <Col span={24}>
-                            <Flex gap={12}>
-                                <Form.Item name="searchDotXet" label="Đợt xét">
-                                    <Select
-                                        className="w-36"
-                                        mode="multiple"
-                                        options={graduationSessionData?.map((item) => ({
-                                            label: item.name,
-                                            value: item.id,
-                                        }))}
-                                        placeholder="Chọn đợt xét"
-                                    />
-                                </Form.Item>
-                                <Form.Item name="searchKhoaHoc" label="Khóa học">
-                                    <Select
-                                        className="w-36"
-                                        mode="multiple"
-                                        options={[]}
-                                        placeholder="Chọn khóa học"
-                                    />
-                                </Form.Item>
-                                <Form.Item name="searchText" label="Lớp học">
-                                    {/* <Input
-                                        id="search"
-                                        onChange={(e) =>
-                                            setFilters({
-                                                ...filters,
-                                                searchText: e.target.value,
-                                            })
-                                        }
-                                        className="py-0"
-                                        placeholder="Tìm kiếm lớp môn học"
-                                        prefix={
-                                            <Search
-                                                size={12}
-                                                style={{
-                                                    color: 'rgba(0, 0, 0, 0.25)',
-                                                }}
-                                            />
-                                        }
-                                        allowClear
-                                    /> */}
-                                    <Select
-                                        mode="multiple"
-                                        className="w-36"
-                                        options={[]}
-                                        placeholder="Chọn lớp học"
-                                    />
-                                </Form.Item>
-                                <Form.Item name="searchKhoaQuanLy" label="Khoa quản lí">
-                                    <Select
-                                        mode="multiple"
-                                        className="w-40"
-                                        options={[]}
-                                        placeholder="Chọn khoa quản lí"
-                                    />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" onClick={() => {}}>
-                                        Xem kết quả
-                                    </Button>
-                                </Form.Item>
-                            </Flex>
-                        </Col>
-                    </Row>
-                    <Row gutter={[16, 16]}>
-                        <Col>
-                            <Flex justify="end" gap={4}>
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                                    'SUA'
-                                ) && (
-                                    <Button
-                                        onClick={() =>
-                                            openPaymentRecord({
-                                                selectedRowKeys: selectedRowKeys as string[],
-                                            })
-                                        }
-                                        type="primary"
-                                        disabled={
-                                            selectedRowKeys.length === 0 ||
-                                            !isEligibleForPayment(selectedRowKeys as string[])
-                                        }
-                                    >
-                                        Tạo thanh toán
-                                    </Button>
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                                    'IN'
-                                ) && (
-                                    <>
-                                        <Button
-                                            onClick={() => openPrintSupervisorGuide()}
-                                            type="primary"
-                                            disabled={
-                                                !subjectClass ||
-                                                subjectClass.length === 0 ||
-                                                !subjectClass.some(
-                                                    (item) =>
-                                                        item.thesisProjects &&
-                                                        item.thesisProjects.length > 0
-                                                )
-                                            }
-                                        >
-                                            In quyết định hướng dẫn
-                                        </Button>
-                                        <Button
-                                            onClick={() =>
-                                                openModalPrintDecision({
-                                                    subjecClassData: subjectClass,
-                                                    isCopy: false,
-                                                })
-                                            }
-                                            type="primary"
-                                            disabled={
-                                                !subjectClass ||
-                                                subjectClass.length === 0 ||
-                                                !subjectClass.some(
-                                                    (item) =>
-                                                        item.thesisProjects &&
-                                                        item.thesisProjects.length > 0
-                                                )
-                                            }
-                                        >
-                                            Quyết định
-                                        </Button>
-                                        <Button
-                                            onClick={() =>
-                                                openModalPrintDecision({
-                                                    subjecClassData: subjectClass,
-                                                    isCopy: true,
-                                                })
-                                            }
-                                            type="primary"
-                                            disabled={
-                                                !subjectClass ||
-                                                subjectClass.length === 0 ||
-                                                !subjectClass.some(
-                                                    (item) =>
-                                                        item.thesisProjects &&
-                                                        item.thesisProjects.length > 0
-                                                )
-                                            }
-                                        >
-                                            In bản sao Quyết định
-                                        </Button>
-                                        <Button
-                                            onClick={createInvitations}
-                                            type="primary"
-                                            disabled={selectedRowKeys.length === 0}
-                                        >
-                                            <BookPlus />
-                                            Tạo thư mời
-                                        </Button>
-                                    </>
-                                )}
-                            </Flex>
-                        </Col>
-                    </Row>
-                </Col>
+    const {data: students,refetch} = useFindManyStudent(
+        {
+            where :
+            {
+                fixedClassId : {
+                    in : fixedClassesSelected,
+                },
 
-                <Col span={24}>
-                    <TableCollapse
-                        rowKey="id"
-                        id="thesis-project"
-                        filters={filters}
-                        headerTitleKey={({ code, name, subject }) =>
-                            `${[subject.name, name, code].filter(Boolean).join(' - ')}`
-                        }
-                        setFilters={(value) => {
-                            setFilters(value)
-                            setCurrentPage(1)
-                        }}
-                        data={subjectClass}
-                        childrenFieldName="thesisProjects"
-                        onRowClick={(record) => handleNavigate(record)}
-                        rowSelection={{
-                            selectedRowKeys,
-                            onChange: setSelectedRowKeys,
-                            getCheckboxProps: (record) => {
-                                if (record.thesisProjects) {
-                                    return {
-                                        disabled: true,
-                                        style: { display: 'none' },
-                                    }
-                                }
-                                return {}
-                            },
-                        }}
-                        headerRight={({ id }) => (
-                            <div className="flex gap-2.5 w-[85px] items-center justify-center">
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                                    'THEM'
-                                ) && (
-                                    <CreateIcon
-                                        onClick={() => {
-                                            onOpen({
-                                                subjectClassId: id,
-                                                thesisProjectId: '',
-                                            })
-                                        }}
-                                        title="Thêm mới đề tài"
-                                    />
-                                )}
-                                {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                                    'SUA'
-                                ) && (
-                                    <Tooltip title="Cấu hình lớp đồ án" placement="top">
-                                        <BsGear
-                                            className="cursor-pointer"
-                                            onClick={() => handleNavigateSetting(id)}
-                                        />
-                                    </Tooltip>
-                                )}
-                            </div>
-                        )}
-                        columns={[
-                            {
-                                title: 'Tên đề tài',
-                                dataIndex: 'title',
-                                width: 150,
-                                fixed: 'left',
-                                type: 'input',
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tên đề tài(Tiếng Anh)',
-                                dataIndex: 'titleEN',
-                                width: 200,
-                                type: 'input',
-                                align: 'center',
-                            },
-                            {
-                                title: 'Tóm tắt đề tài',
-                                dataIndex: 'summary',
-                                width: 150,
-                                align: 'center',
-                                type: 'input',
-                            },
-                            {
-                                title: 'Chuyên gia hướng dẫn',
-                                dataIndex: 'supervisor',
-                                width: 200,
-                                type: 'input',
-                                render: (record) => record?.name,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Đơn vị quản lý',
-                                dataIndex: 'organization',
-                                width: 150,
-                                type: 'tree_select',
-                                options: treeData,
-                                render: (record) => record?.sTen,
-                                align: 'center',
-                            },
-                            {
-                                title: 'Số lượng HV',
-                                dataIndex: 'currentStudents',
-                                align: 'center',
-                                width: 150,
-                                render: (_, record) => record.registrations?.length,
-                            },
-                            {
-                                title: 'Số lượng HV tối đa',
-                                dataIndex: 'maxStudents',
-                                align: 'center',
-                                width: 180,
-                                type: 'order',
-                            },
-                            {
-                                title: 'Thời gian mở ĐK',
-                                dataIndex: 'startDate',
-                                align: 'center',
-                                width: 180,
-                                type: 'date',
-                                render: (_, record) =>
-                                    record?.registrationStart
-                                        ? dayjs(record?.registrationStart).format('DD/MM/YYYY')
-                                        : '',
-                            },
-                            {
-                                title: 'Thời gian đóng ĐK',
-                                dataIndex: 'endDate',
-                                align: 'center',
-                                width: 190,
-                                type: 'date',
-                                render: (_, record) =>
-                                    record?.registrationEnd
-                                        ? dayjs(record?.registrationEnd).format('DD/MM/YYYY')
-                                        : '',
-                            },
-                            {
-                                title: 'Trạng thái',
-                                dataIndex: 'statusThesisProject',
-                                align: 'center',
-                                width: 160,
-                                fixed: 'right',
-                                type: 'select',
-                                options: thesisProjectStatusOptions,
-                                render: (_, record) => {
-                                    const label = getThesisProjectStatusLabel(record?.status)
-                                    const color = getThesisProjectStatusColor(record?.status)
-                                    return <Tag color={color}>{label}</Tag>
-                                },
-                            },
-                            {
-                                title: 'Thao tác',
-                                width: 100,
-                                align: 'center',
-                                fixed: 'right',
-                                hidden: !canSome(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                                    'XEM_CHI_TIET',
-                                    'SUA',
-                                    'XOA'
-                                ),
-                                render: (_, record) => {
-                                    if (record.id) {
-                                        return (
-                                            <Row className="justify-center gap-2">
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                                                    'XEM_CHI_TIET'
-                                                ) && (
-                                                    <Tooltip title="Xem chi tiết" placement="top">
-                                                        <EyeOutlined className="text-sm cursor-pointer" />
-                                                    </Tooltip>
-                                                )}
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                                                    'SUA'
-                                                ) && (
-                                                    <EditIcon
-                                                        onClick={(e) => {
-                                                            onOpen({
-                                                                subjectClassId:
-                                                                    record.subjectClassId,
-                                                                thesisProjectId: record.id,
-                                                            })
-                                                            e.stopPropagation()
-                                                        }}
-                                                        className="text-sm text-blue-700 cursor-pointer"
-                                                    />
-                                                )}
-                                                {can(
-                                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
-                                                    'XOA'
-                                                ) && (
-                                                    <DeleteIcon
-                                                        popConfirm={{
-                                                            onConfirm: (e) => {
-                                                                handleDelete(record.id)
-                                                                e?.stopPropagation()
-                                                            },
-                                                            onCancel: (e) => e?.stopPropagation(),
-                                                        }}
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    />
-                                                )}
-                                            </Row>
-                                        )
-                                    }
-                                    return ''
-                                },
-                            },
-                        ]}
-                        pagination={{
-                            current: currentPage,
-                            pageSize: numberOfPages,
-                            total: count,
-                            onChange: (page, pageSize) => {
-                                if (numberOfPages === pageSize) {
-                                    setCurrentPage(page)
-                                } else {
-                                    setCurrentPage(1)
-                                    setNumberOfPages(pageSize)
-                                }
-                            },
-                        }}
-                    />
-                </Col>
-            </Row>
-        </div>
+            },
+            include : {
+                userProfile : true,
+                fixedClass : {
+                    include : {
+                        trainingCourse : true,
+                    }
+                },
+                trainingObjectType : true,
+
+            },
+            skip : (currentPage - 1) * numberOfPages,
+            take : numberOfPages,
+        }
     )
+    const {data: countStudent} = useCountStudent(
+        {
+            where :
+            {
+                fixedClassId : {
+                    in : fixedClassesSelected,
+                },
+            }
+        }
+    )
+    const [countStudents, setCountStudents] = useState<number>(0)
+    const [selectedStudents, setSelectedStudents] = useState<any[]>([])
+    const taodulieumau = async () => {
+        await refetch();
+        setCountStudents(countStudent || 0);
+        setSelectedStudents(students || []);
+    }
+    const refetchStudents = async () => {
+        await refetch();
+        setCountStudents(countStudent || 0);
+        setSelectedStudents(students || []);
+    }
+
+    return (
+      <div>
+        <Row gutter={[16, 0]}>
+          <Col span={24}>
+            <Row gutter={[16, 16]} align="top" justify="space-between">
+              <Col span={24}>
+                <Flex gap={12}>
+                  <Form.Item name="searchDotXet" label="Đợt xét">
+                    <Select
+                      className="w-36"
+                      mode="multiple"
+                      options={graduationSessionData?.map((item) => ({
+                        label: item.name,
+                        value: item.id,
+                      }))}
+                      placeholder="Chọn đợt xét"
+                    />
+                  </Form.Item>
+                  <Form.Item name="searchKhoaHoc" label="Khóa học">
+                    <Select
+                      className="w-36"
+                      mode="multiple"
+                      options={trainingCourse?.map((x) => {
+                        return {
+                          label: x.name,
+                          value: x.id,
+                        };
+                      })}
+                      onChange={(value) => {
+                        setTrainingCoursesSelected(value as string[]);
+                      }}
+                      placeholder="Chọn khóa học"
+                    />
+                  </Form.Item>
+                  <Form.Item name="searchText" label="Lớp học">
+                    <Select
+                      mode="multiple"
+                      className="w-36"
+                      options={fixedClasses?.map((x) => {
+                        return {
+                          label: x.name,
+                          value: x.id,
+                        };
+                      })}
+                      onChange={(value) => {
+                        setFixedClassesSelected(value as string[]);
+                      }}
+                      placeholder="Chọn lớp học"
+                    />
+                  </Form.Item>
+                  <Form.Item name="searchKhoaQuanLy" label="Khoa quản lí">
+                    <Select
+                      mode="multiple"
+                      className="w-40"
+                      options={[]}
+                      placeholder="Chọn khoa quản lí"
+                    />
+                  </Form.Item>
+                  <Form.Item className="flex justify-end gap-3">
+                    <Button type="primary" onClick={() => {}}>
+                      Xem kết quả
+                    </Button>
+                    <Button type="primary" className='ml-2' onClick={ async () => await taodulieumau()}>
+                      Tạo dữ liệu mẫu
+                    </Button>
+                  </Form.Item>
+                </Flex>
+              </Col>
+            </Row>
+            <Row gutter={[16, 16]}>
+              <Col>
+                <Flex justify="end" gap={4}>
+                  {can(
+                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                    "SUA"
+                  ) && (
+                    <Button
+                      onClick={() =>
+                        openPaymentRecord({
+                          selectedRowKeys: selectedRowKeys as string[],
+                        })
+                      }
+                      type="primary"
+                      disabled={
+                        selectedRowKeys.length === 0 ||
+                        !isEligibleForPayment(selectedRowKeys as string[])
+                      }
+                    >
+                      Tạo thanh toán
+                    </Button>
+                  )}
+                  {can(
+                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_DO_AN,
+                    "IN"
+                  ) && (
+                    <>
+                      <Button
+                        onClick={() => openPrintSupervisorGuide()}
+                        type="primary"
+                        disabled={
+                          !subjectClass ||
+                          subjectClass.length === 0 ||
+                          !subjectClass.some(
+                            (item) =>
+                              item.thesisProjects &&
+                              item.thesisProjects.length > 0
+                          )
+                        }
+                      >
+                        In quyết định hướng dẫn
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          openModalPrintDecision({
+                            subjecClassData: subjectClass,
+                            isCopy: false,
+                          })
+                        }
+                        type="primary"
+                        disabled={
+                          !subjectClass ||
+                          subjectClass.length === 0 ||
+                          !subjectClass.some(
+                            (item) =>
+                              item.thesisProjects &&
+                              item.thesisProjects.length > 0
+                          )
+                        }
+                      >
+                        Quyết định
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          openModalPrintDecision({
+                            subjecClassData: subjectClass,
+                            isCopy: true,
+                          })
+                        }
+                        type="primary"
+                        disabled={
+                          !subjectClass ||
+                          subjectClass.length === 0 ||
+                          !subjectClass.some(
+                            (item) =>
+                              item.thesisProjects &&
+                              item.thesisProjects.length > 0
+                          )
+                        }
+                      >
+                        In bản sao Quyết định
+                      </Button>
+                      <Button
+                        onClick={createInvitations}
+                        type="primary"
+                        disabled={selectedRowKeys.length === 0}
+                      >
+                        <BookPlus />
+                        Tạo thư mời
+                      </Button>
+                    </>
+                  )}
+                </Flex>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col span={24}>
+            <Table
+              className="w-full custom-scrollbar"
+              rowKey="id"
+              columns={[
+                {
+                  title: "Đối tượng đào tạo",
+                  dataIndex: "Đợt xét",
+                  render: (_, record) => {
+                    return record?.trainingObjectType?.name;
+                  },
+                },
+                {
+                  title: "Đợt xét",
+                  dataIndex: "name",
+                },
+                {
+                  title: "Mã sinh viên",
+                  render: (_, record) => {
+                    return record?.userProfile?.code;
+                  },
+                },
+                {
+                  title: "Họ tên",
+                  dataIndex: "name",
+                  render: (_, record) => {
+                    return record?.userProfile?.fullname;
+                  },
+                },
+                {
+                  title: "Ngày sinh",
+                  dataIndex: "name",
+                  render: (_, record) => {
+                    return record?.userProfile?.dateOfBirth;
+                  },
+                },
+                {
+                    title: "Đề tài",
+                    width: 200,
+                    dataIndex: "name",
+                    render: (text: string, record: any) => {
+                        if (record.id === editingRowKey) {
+                            return (
+                                <Input
+                                    value={editingValue}
+                                    onChange={(e) => setEditingValue(e.target.value)}
+                                    onPressEnter={() => handleSave(record.id)} // Tùy chọn: Bấm Enter để lưu
+                                />
+                            );
+                        }
+                        // Nếu không phải, hiển thị text bình thường
+                        return text;
+                    },
+                },
+                {
+                  title: "GVHD 1",
+                  dataIndex: "name",
+                },
+                {
+                  title: "GVHD 2",
+                  dataIndex: "name",
+                },
+                {
+                  title: "Ngôn ngữ",
+                  dataIndex: "name",
+                },
+                {
+                  title: "Luận văn/Đề án",
+                  dataIndex: "name",
+                },
+                {
+                  title: "QĐ đề tài ",
+                  dataIndex: "name",
+                },
+                {
+                  title: "Ký QĐ đề tài",
+                },
+                {
+                    title: "Thao tác",
+                    render: (_, record: any) => {
+                        // Kiểm tra xem hàng này có phải là hàng đang sửa không
+                        if (record.id === editingRowKey) {
+                            return (
+                                <Row className="justify-center gap-2">
+                                    <Button
+                                        size="small"
+                                        type="primary"
+                                        onClick={() => handleSave(record.id)}
+                                    >
+                                        Lưu
+                                    </Button>
+                                    <Button
+                                        size="small"
+                                        onClick={() => {
+                                            setEditingRowKey(null); // Hủy, thoát chế độ edit
+                                            setEditingValue(''); // Xóa giá trị tạm
+                                        }}
+                                    >
+                                        Hủy
+                                    </Button>
+                                </Row>
+                            );
+                        }
+        
+                        // Nếu không phải, hiển thị nút Edit/Delete (như code cũ)
+                        if (record?.id) {
+                            return (
+                                <Row className="justify-center gap-2">
+                                    <EditIcon
+                                        className="text-sm text-blue-700 cursor-pointer"
+                                        onClick={() => {
+                                            // Khi bấm "Sửa"
+                                            setEditingRowKey(record.id); // Đặt hàng này vào chế độ edit
+                                            // Tải giá trị hiện tại của 'name' vào state tạm
+                                            setEditingValue(record.name || '');
+                                        }}
+                                    />
+                                    <DeleteIcon />
+                                </Row>
+                            );
+                        }
+                        return "";
+                    },
+                },
+              ]}
+              data={selectedStudents}
+              pagination={{
+                current: currentPage,
+                pageSize: numberOfPages,
+                total: countStudents,
+                onChange: async (page, pageSize) => {
+                    console.log(page, pageSize)
+                    console.log(currentPage)
+                  if (numberOfPages === pageSize) {
+                    setCurrentPage(page);
+                    setCountStudents(countStudent || 0);
+
+                  } else {
+                    setCurrentPage(1);
+                    setNumberOfPages(pageSize);
+                    setCountStudents(countStudent || 0);
+                    
+                  }
+                  await refetchStudents();
+                },
+              }}
+            />
+          </Col>
+        </Row>
+      </div>
+    );
 }
 
 PostgraduateProject.getLayout = function getLayout(page: React.ReactElement) {
