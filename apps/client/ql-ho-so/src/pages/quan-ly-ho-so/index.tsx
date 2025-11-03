@@ -17,7 +17,6 @@ import {
 import { useAbility } from '@workspace/permissions/hooks'
 import { QL_HO_SO_PERMISSION, ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Dropdown, Flex, Form, Input, Menu, message, Row, Tag } from 'antd'
-import axios from 'axios'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Printer } from 'lucide-react'
@@ -26,6 +25,7 @@ import type React from 'react'
 import { useCallback, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 import TreeSelect from '@/components/commons/tree-select'
+import { deleteDMNhanViensId } from '@workspace/libs/api/system'
 
 dayjs.locale('vi')
 export default function UserProfilePageDs() {
@@ -200,7 +200,7 @@ export default function UserProfilePageDs() {
     async function handleDelete(id: string) {
         try {
             showSpinner()
-            const res = await axios.delete(`https://mta.swantech.vn/DM_NhanViens/${id}`)
+            const res = await deleteDMNhanViensId(id)
             if (res.status === 200) {
                 await updateUserProfile({
                     where: {
