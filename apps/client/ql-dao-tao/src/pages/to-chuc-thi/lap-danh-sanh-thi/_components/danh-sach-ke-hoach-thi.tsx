@@ -106,8 +106,14 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         },
                     },
                 },
+                orderBy: {
+                    code: 'asc',
+                },
             },
             studentSubjectScore: true,
+        },
+        orderBy: {
+            subjectVersionId: 'asc',
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -363,10 +369,16 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             ...rowSelection,
                         }}
                         onRow={(record) => ({
-                            // onClick: () => {
-                            //     setSelectedRowKey(record?.id)
-                            //     onSelectSubjectClass(record?.id)
-                            // },
+                            onClick: () => {
+                                const selectedKeys = [...selectedRowKeys]
+                                const index = selectedKeys.indexOf(record.id)
+                                if (index >= 0) {
+                                    selectedKeys.splice(index, 1)
+                                } else {
+                                    selectedKeys.push(record.id)
+                                }
+                                setSelectedRowKeys(selectedKeys)
+                            },
                             onDoubleClick: (e) => {
                                 const target = e.target as HTMLElement
                                 if (
@@ -387,7 +399,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         data={exams}
                         columns={[
                             {
-                                title: 'STT',
+                                title: 'TT',
                                 align: 'center',
                                 width: 30,
                                 render: (_, __, index) =>
@@ -541,7 +553,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 width: 170,
                                 render: (_, record) => {
                                     const uniqueRooms = Array.from(
-                                        new Map(
+                                        new Set(
                                             record.subjectClass
                                                 ?.filter(
                                                     (sc: SubjectClass & { room: Room }) => sc.room

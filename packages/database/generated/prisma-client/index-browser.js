@@ -3370,7 +3370,8 @@ exports.Prisma.ExamScalarFieldEnum = {
   lockExamSessions: 'lockExamSessions',
   createdExamCode: 'createdExamCode',
   lockExamCode: 'lockExamCode',
-  duration: 'duration'
+  duration: 'duration',
+  subjectVersionId: 'subjectVersionId'
 };
 
 exports.Prisma.ExamRoomSlotScalarFieldEnum = {
@@ -6166,7 +6167,8 @@ exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  questionBankId: 'questionBankId'
+  questionBankId: 'questionBankId',
+  subjectVersionId: 'subjectVersionId'
 };
 
 exports.Prisma.ExamRoomSlotOrderByRelevanceFieldEnum = {

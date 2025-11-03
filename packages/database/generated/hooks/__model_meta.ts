@@ -9480,6 +9480,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'subjectVersion',
+                }, exams: {
+                    name: "exams",
+                    type: "Exam",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'subjectVersion',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -18727,6 +18733,18 @@ const metadata: ModelMeta = {
                     name: "duration",
                     type: "Int",
                     isOptional: true,
+                }, subjectVersionId: {
+                    name: "subjectVersionId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'subjectVersion',
+                }, subjectVersion: {
+                    name: "subjectVersion",
+                    type: "SubjectVersion",
+                    isDataModel: true,
+                    backLink: 'exams',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "subjectVersionId" },
                 }, subjectClass: {
                     name: "subjectClass",
                     type: "SubjectClass",

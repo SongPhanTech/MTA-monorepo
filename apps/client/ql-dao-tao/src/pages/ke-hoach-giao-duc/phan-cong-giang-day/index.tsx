@@ -1621,6 +1621,7 @@ export default function PhanCongGiangDay({
                             </p>
                             <p className="flex gap-1 items-center">
                                 <Checkbox
+                                    disabled={khoaBoMon}
                                     checked={countSubjectClassOfficial === countSubjectClass}
                                     onChange={async (e) => {
                                         try {
