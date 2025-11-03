@@ -273,4 +273,68 @@ app.openapi(savePublicSurvey, async (c) => {
     return c.json({ success: true, message: 'Success' }, 200)
 })
 
+const validateUserSurvey = createRoute({
+    operationId: 'validate-user-survey',
+    path: '/validate-user-survey',
+    tags: ['Survey'],
+    summary: 'Kiểm tra mã sinh viên có trong cơ sở dữ liệu',
+    description: 'Kiểm tra mã sinh viên có trong cơ sở dữ liệu',
+    method: 'get',
+    request: {
+        query: z.object({
+            studentCode: z.string(),
+        }),
+    },
+    responses: {
+        200: {
+            description: 'Get Survey result',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        studentCode: z.string(),
+                        exists: z.boolean(),
+                    }),
+                },
+            },
+        },
+        400: {
+            description: 'Bad request',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+        404: {
+            description: 'Not found',
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string(),
+                    }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(validateUserSurvey, async (c) => {
+    const { studentCode } = c.req.valid('query')
+
+    if (!studentCode) {
+        return c.json({ message: 'Vui lý nhập mã SV' }, 400)
+    }
+
+    const student = await prisma.student.findFirst({
+        where: { code: studentCode, deletedAt: null },
+    })
+    if (!student) {
+        return c.json({ message: 'Mã SV không tồn tại' }, 404)
+    }
+
+    return c.json({ studentCode, exists: true }, 200)
+})
+
 export default app

@@ -5,7 +5,7 @@ import useSpinner from '@hooks/spinner'
 import KhaoSatLayout from '@layouts/khao-sat-layout'
 import { cn } from '@lib/utils'
 import type { SurveySession } from '@workspace/db'
-import { getPublicSurvey, useSavePublicSurvey } from '@workspace/libs/api/exam'
+import { getPublicSurvey, useSavePublicSurvey, validateUserSurvey } from '@workspace/libs/api/exam'
 import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResult'
 import { Button, Col, Flex, Form, Input, message, Modal, Row } from 'antd'
 
@@ -65,6 +65,8 @@ function TakeTestPage() {
 
     // const { data } =  useGetPublicSurvey(id)
     const { mutateAsync: createSavePublicSurvey } = useSavePublicSurvey()
+    // const {  }=useValidateUserSurvey()
+
     const onChange = (SurveyQuestionId: string, value: string, requireExplanation: boolean) => {
         const result = form.getFieldValue('responses').map((i: { surveyQuestionId?: string }) => {
             if (i.surveyQuestionId === SurveyQuestionId) {
@@ -203,14 +205,14 @@ function TakeTestPage() {
     const fetchData = async () => {
         const response = await getPublicSurvey(id)
         if (response?.status === 200) {
-            if(!response?.data?.isPublic){
+            if (!response?.data?.isPublic) {
                 return
             }
-            if(!response?.data?.anonymous){
-                 setAnonymous(true)
-                 setIsOpen(true)
+            if (!response?.data?.anonymous) {
+                setAnonymous(false)
+                setIsOpen(true)
             }
-           
+
             setSurvey(response?.data)
             setStartAt(new Date())
             const list = response?.data?.surveyQuestion?.map((i) => {
@@ -242,8 +244,16 @@ function TakeTestPage() {
     }
 
     const CheckUser = async () => {
-        const datasub = formUser.getFieldValue('code')
-        console.log(datasub, 125367)
+        try {
+            const studentCode = formUser.getFieldValue('code')
+            const res = await validateUserSurvey({ studentCode })
+            if (res.status === 200) {
+                setAnonymous(true)
+                setIsOpen(false)
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>

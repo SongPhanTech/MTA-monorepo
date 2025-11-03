@@ -64,6 +64,10 @@ import type {
     SaveSurveyResult,
     SimplifiedFacultyDissatisfiedResponse,
     SurveyStatisticsBySemesterResponse,
+    ValidateUserSurvey200,
+    ValidateUserSurvey400,
+    ValidateUserSurvey404,
+    ValidateUserSurveyParams,
 } from './schemas'
 
 type AwaitedInput<T> = PromiseLike<T> | T
@@ -336,6 +340,179 @@ export const useSavePublicSurvey = <
     const mutationOptions = getSavePublicSurveyMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
+}
+
+/**
+ * Kiểm tra mã sinh viên có trong cơ sở dữ liệu
+ * @summary Kiểm tra mã sinh viên có trong cơ sở dữ liệu
+ */
+export type validateUserSurveyResponse200 = {
+    data: ValidateUserSurvey200
+    status: 200
+}
+
+export type validateUserSurveyResponse400 = {
+    data: ValidateUserSurvey400
+    status: 400
+}
+
+export type validateUserSurveyResponse404 = {
+    data: ValidateUserSurvey404
+    status: 404
+}
+
+export type validateUserSurveyResponseComposite =
+    | validateUserSurveyResponse200
+    | validateUserSurveyResponse400
+    | validateUserSurveyResponse404
+
+export type validateUserSurveyResponse = validateUserSurveyResponseComposite & {
+    headers: Headers
+}
+
+export const getValidateUserSurveyUrl = (params: ValidateUserSurveyParams) => {
+    const normalizedParams = new URLSearchParams()
+
+    Object.entries(params || {}).forEach(([key, value]) => {
+        if (value !== undefined) {
+            normalizedParams.append(key, value === null ? 'null' : value.toString())
+        }
+    })
+
+    const stringifiedParams = normalizedParams.toString()
+
+    return stringifiedParams.length > 0
+        ? `/api/survey/validate-user-survey?${stringifiedParams}`
+        : '/api/survey/validate-user-survey'
+}
+
+export const validateUserSurvey = async (
+    params: ValidateUserSurveyParams,
+    options?: RequestInit
+): Promise<validateUserSurveyResponse> => {
+    return customExamFetch<validateUserSurveyResponse>(getValidateUserSurveyUrl(params), {
+        ...options,
+        method: 'GET',
+    })
+}
+
+export const getValidateUserSurveyQueryKey = (params: ValidateUserSurveyParams) => {
+    return ['/api/survey/validate-user-survey', ...(params ? [params] : [])] as const
+}
+
+export const getValidateUserSurveyQueryOptions = <
+    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+>(
+    params: ValidateUserSurveyParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    }
+) => {
+    const { query: queryOptions, request: requestOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getValidateUserSurveyQueryKey(params)
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof validateUserSurvey>>> = ({ signal }) =>
+        validateUserSurvey(params, { signal, ...requestOptions })
+
+    return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+        Awaited<ReturnType<typeof validateUserSurvey>>,
+        TError,
+        TData
+    > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ValidateUserSurveyQueryResult = NonNullable<
+    Awaited<ReturnType<typeof validateUserSurvey>>
+>
+export type ValidateUserSurveyQueryError = ValidateUserSurvey400 | ValidateUserSurvey404
+
+
+export function useValidateUserSurvey<
+    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+>(
+    params: ValidateUserSurveyParams,
+    options: {
+        query: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
+        > &
+            Pick<
+                DefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof validateUserSurvey>>,
+                    TError,
+                    Awaited<ReturnType<typeof validateUserSurvey>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateUserSurvey<
+    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+>(
+    params: ValidateUserSurveyParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
+        > &
+            Pick<
+                UndefinedInitialDataOptions<
+                    Awaited<ReturnType<typeof validateUserSurvey>>,
+                    TError,
+                    Awaited<ReturnType<typeof validateUserSurvey>>
+                >,
+                'initialData'
+            >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useValidateUserSurvey<
+    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+>(
+    params: ValidateUserSurveyParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Kiểm tra mã sinh viên có trong cơ sở dữ liệu
+ */
+
+export function useValidateUserSurvey<
+    TData = Awaited<ReturnType<typeof validateUserSurvey>>,
+    TError = ValidateUserSurvey400 | ValidateUserSurvey404,
+>(
+    params: ValidateUserSurveyParams,
+    options?: {
+        query?: Partial<
+            UseQueryOptions<Awaited<ReturnType<typeof validateUserSurvey>>, TError, TData>
+        >
+        request?: SecondParameter<typeof customExamFetch>
+    },
+    queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+    const queryOptions = getValidateUserSurveyQueryOptions(params, options)
+
+    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+        queryKey: DataTag<QueryKey, TData, TError>
+    }
+
+    query.queryKey = queryOptions.queryKey
+
+    return query
 }
 
 /**
