@@ -4,6 +4,8 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import { cn } from '@lib/utils'
+import { DiemLopMonHocProps, diemLopMonHocStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import type { Prisma, SubjectVersion } from '@workspace/db/client'
 import {
@@ -18,14 +20,9 @@ import { Checkbox, Col, Flex, Form, Input, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+import { Key, useCallback, useMemo, useState } from 'react'
 
-type Props = {
-    selectedRowKeys: string
-    setSelectedRowKeys: (key: string) => void
-}
-
-export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Props) {
+export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -61,6 +58,8 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
         QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_DS_LOP_MON_HOC,
         'XEM_TAT_CA'
     )
+
+    const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
 
     const { data: session } = useSession()
     const profileId = session?.sDM_NhanVienId || ''
@@ -226,6 +225,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
             active: true,
             deletedAt: null,
             cancelled: false,
+            status: 'OFFICIAL',
         } satisfies Prisma.SubjectClassWhereInput
     }, [filters, semesterId, trainingObjectTypeId, profileId, canReadAll])
 
@@ -328,11 +328,21 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                         setFilters={setFilters}
                         rowKey="id"
                         id="training-category"
-                        // rowClassName={rowClassName}
+                        rowSelection={{
+                            type: 'radio',
+                            selectedRowKeys:[selectedSubjectClassId as Key],
+                            onChange: (selectedRowKeys) => {
+                                diemLopMonHocStore.setState({
+                                    selectedSubjectClassId: selectedRowKeys?.[0] as string,
+                                })
+                            }
+                        }}
                         onRow={(record) => {
                             return {
                                 onClick: () => {
-                                    setSelectedRowKeys(record.id)
+                                    diemLopMonHocStore.setState({
+                                        selectedSubjectClassId: record.id,
+                                    })
                                 },
                                 className: cn(
                                     record?.subject?.examType === 'OfflineWritten'
@@ -344,7 +354,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                                             !record?.enteredExamScore
                                           ? 'bg-yellow-100'
                                           : '',
-                                    selectedRowKeys === record.id ? 'bg-orange-200' : ''
+                                    // selectedSubjectClassId === record.id ? 'bg-orange-200' : ''
                                 ),
                             }
                         }}
@@ -486,7 +496,7 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                                     record ? dayjs(record).format('DD/MM/YYYY') : '',
                             },
                             {
-                                title: 'Hạn ĐT',
+                                title: 'Hạn NĐT',
                                 width: 120,
                                 align: 'center',
                                 type: 'date',
@@ -504,21 +514,17 @@ export default function ClassSubject({ selectedRowKeys, setSelectedRowKeys }: Pr
                                     )
                                 },
                             },
-
                             {
-                                title: 'Hạn ĐQT',
+                                title: 'Hạn ĐT',
                                 width: 100,
                                 align: 'center',
                                 render: (__, record) => {
                                     const today = dayjs()
-                                    const examScoreDeadline = dayjs(record?.examScoreDeadline)
-
-                                    if (!examScoreDeadline) {
+                                    if (!record?.examScoreDeadline) {
                                         return '-'
                                     }
-
+                                    const examScoreDeadline = dayjs(record?.examScoreDeadline)
                                     let daysRemaining: number
-
                                     if (today?.isBefore(examScoreDeadline)) {
                                         daysRemaining = examScoreDeadline?.diff(today, 'day')
                                     } else {

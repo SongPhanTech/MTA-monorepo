@@ -380,6 +380,7 @@ enum EvaluationMemberRole {
   HEAD_SECRETARY
   SECRETARY
   MEMBER
+  ADVISORY_BOARD
 
   @@schema("khao-thi")
 }
@@ -775,6 +776,7 @@ model UserProfile {
   subjectVersionHistory         SubjectVersionHistory[]
   subjectClassHistory           SubjectClassHistory[]
   changeLog                     ChangeLog[]
+  surveySession                 SurveySession[]
 
   @@schema("ql-nguoi-dung")
 }
@@ -2353,8 +2355,8 @@ model StudentSubjectScoreHistory {
   /// điểm tổng kết chuyển trường
   manualFinalScore      Float?
   /// hoãn thi
-  examPostponedReason   Boolean?
-  examPostponed         String?
+  examPostponed         Boolean?
+  examPostponedReason   String?
   /// cấm thi
   examBanned            Boolean?
   examBannedReason      String?
@@ -2600,6 +2602,7 @@ model TrainingCourse {
   surveyObjectTypes          SurveyObjectType[]
   classRegisterSession       ClassRegisterSession[]
   documentFiles              DocumentFile[]
+  thesisSession              ThesisSession[]
 
   @@schema("ql-dao-tao")
 }
@@ -3144,6 +3147,7 @@ model TrainingObjectType {
   subjectVersion       SubjectVersion[]
   planTraining         PlanTraining[]
   planTrainingDelay    PlanTrainingDelay[]
+  thesisSession        ThesisSession[]
 
   @@schema("ql-dao-tao")
 }
@@ -3921,8 +3925,8 @@ model StudentTrainingScore {
   trainingScoreSessionId String
   student                Student              @relation(fields: [studentId], references: [id])
   studentId              String
-  score                  Float                @default(0)
-  studentTrainingType    StudentTrainingType?
+  score                  Float?
+  studentTrainingType    StudentTrainingType? @default(GOOD)
 
   @@unique([trainingScoreSessionId, studentId])
   @@schema("ql-dao-tao")
@@ -4009,6 +4013,7 @@ model Lecturer {
   clusterSurvey               ClusterSurvey[]
   examRoomsMain               ExamRoom[]                    @relation("FirstSupervisor")
   examRoomsExtra              ExamRoom[]                    @relation("SecondSupervisor")
+  criterionAssignments        CriterionAssignment[]
 
   @@schema("ql-dao-tao")
 }
@@ -4091,6 +4096,40 @@ model StudentResearchRegistration {
   @@schema("ql-dao-tao")
 }
 
+model ThesisSession {
+  id                    String             @id() @default(cuid())
+  code                  String?            @unique()
+  active                Boolean            @default(true)
+  description           String?            @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @default(now()) @updatedAt()
+  name                  String
+  startDate             DateTime
+  endDate               DateTime
+  trainingObjectType    TrainingObjectType @relation(fields: [trainingObjectTypeId], references: [id])
+  trainingObjectTypeId  String
+  trainingCourse        TrainingCourse     @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId      String
+  /// Số QĐĐT
+  decisionNumber        String?
+  /// người ký quyết định
+  decisionMaker         String?
+  /// Ngày QĐĐT
+  decisionDate          DateTime?
+  /// Số QĐBVLV
+  defenseDecisionNumber String?
+  /// người ký QĐBVLV
+  defenseDecisionMaker  String?
+  /// Ngày QĐBVLV
+  defenseDecisionDate   DateTime?
+  /// Thủ trưởng
+  chief                 String?
+  thesisProject         ThesisProject[]
+
+  @@schema("ql-dao-tao")
+}
+
 model ThesisProject {
   id                 String                      @id() @default(cuid())
   code               String?                     @unique()
@@ -4109,8 +4148,10 @@ model ThesisProject {
   requirements       String?                     @db.Text()
   technologies       String?                     @db.Text()
   status             ThesisProjectStatus         @default(PROPOSED)
-  subjectClass       SubjectClass                @relation(fields: [subjectClassId], references: [id])
-  subjectClassId     String
+  subjectClass       SubjectClass?               @relation(fields: [subjectClassId], references: [id])
+  subjectClassId     String?
+  thesisSession      ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
+  thesisSessionId    String?
   /// Chuyên gia hướng dẫn
   supervisor         ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
   supervisorId       String
@@ -4450,6 +4491,23 @@ model CriterionCatalog {
   @@schema("khao-thi")
 }
 
+model CriterionAssignment {
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
+  deletedAt             DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt()
+  evaluationCriterion   EvaluationCriterion @relation(fields: [evaluationCriterionId], references: [id], onDelete: Cascade)
+  evaluationCriterionId String
+  lecturer              Lecturer            @relation(fields: [lecturerId], references: [id])
+  lecturerId            String
+  deadline              DateTime
+
+  @@schema("khao-thi")
+}
+
 /// Danh mục yêu cầu
 model RequirementCriterionCatalog {
   id                 String           @id() @default(cuid())
@@ -4531,6 +4589,7 @@ model EvaluationCriterion {
   evaluationCouncilId   String?
   /// Yêu cầu trong phiếu phân tích
   requirementCriterions RequirementCriterion[]
+  criterionAssignments  CriterionAssignment[]
   /// 1. Mô tả hiện trạng
   currentSituation      String                 @default("")
   /// 2. Điểm mạnh
@@ -4820,21 +4879,19 @@ model Survey {
 }
 
 model SurveyQuestion {
-  id                    String               @id() @default(cuid())
-  code                  String?              @unique()
-  active                Boolean              @default(true)
-  description           String?              @db.Text()
+  id                    String              @id() @default(cuid())
+  code                  String?             @unique()
+  active                Boolean             @default(true)
+  description           String?             @db.Text()
   deletedAt             DateTime?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @default(now()) @updatedAt()
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @default(now()) @updatedAt()
   name                  String
   type                  SurveyQuestionType
-  surveyQuestionGroup   SurveyQuestionGroup? @relation(fields: [surveyQuestionGroupId], references: [id])
-  surveyQuestionGroupId String?
-  survey                Survey?              @relation(fields: [surveyId], references: [id])
-  surveyId              String?
-  clusterSurvey         ClusterSurvey?       @relation(fields: [clusterSurveyId], references: [id])
-  clusterSurveyId       String?
+  surveyQuestionGroup   SurveyQuestionGroup @relation(fields: [surveyQuestionGroupId], references: [id])
+  surveyQuestionGroupId String
+  survey                Survey[]
+  clusterSurvey         ClusterSurvey[]
   surveyResponses       SurveyResponse[]
 
   @@schema("khao-thi")
@@ -4872,6 +4929,8 @@ model SurveySession {
   survey               Survey            @relation(fields: [surveyId], references: [id])
   surveyId             String
   additionalSuggestion String?
+  profile              UserProfile?      @relation(fields: [profileId], references: [id])
+  profileId            String?
   student              Student?          @relation(fields: [studentId], references: [id])
   studentId            String?
   startedAt            DateTime          @default(now())

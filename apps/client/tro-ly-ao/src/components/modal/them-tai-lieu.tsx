@@ -1,5 +1,8 @@
+import { cancelOCRTask, fetchOCR, pollOCRResult, stopOCRPolling } from '@/api/ocr'
+import { useTopics } from '@/hooks/useTopics'
 import { CloseCircleOutlined, InboxOutlined } from '@ant-design/icons'
 import { fetchReadDocumentContentDocumentDocumentReaderPost } from '@api/qa/qaComponents'
+import DocumentSidebar from '@components/commons/document-sidebar'
 import FormItem from '@components/commons/form-item'
 import Select from '@components/commons/select'
 import UploadDragAndDrop, { FileUploadIcon } from '@components/commons/upload'
@@ -7,15 +10,33 @@ import { cn, formatNiceBytes } from '@lib/utils'
 import {
     useCreateDocument,
     useCreateManyDocumentTopic,
+    useFindManyDocument,
     useFindManyDocumentClassification,
 } from '@workspace/db/hooks'
 import { generatePresignedUrl } from '@workspace/libs/api/model'
-import { Col, Form, Input, Modal, message, Progress } from 'antd'
+import { Col, Form, Input, message, Modal, Progress, Tag } from 'antd'
 import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { fetchOCR } from '@/api/ocr'
-import { useTopics } from '@/hooks/useTopics'
+
+let pdfjsLibPromise: Promise<typeof import('pdfjs-dist/legacy/build/pdf')> | null = null
+let pdfWorkerSrc: string | null = null
+
+const loadPdfJsLib = async () => {
+    if (!pdfjsLibPromise) {
+        pdfjsLibPromise = import('pdfjs-dist/legacy/build/pdf')
+    }
+    const pdfjsLib = await pdfjsLibPromise
+
+    if (typeof window !== 'undefined' && !pdfWorkerSrc) {
+        const workerModule = await import('pdfjs-dist/legacy/build/pdf.worker.min.mjs?url')
+        const resolvedWorker = (workerModule as { default?: unknown })?.default ?? workerModule
+        pdfWorkerSrc = typeof resolvedWorker === 'string' ? resolvedWorker : String(resolvedWorker)
+        pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerSrc
+    }
+
+    return pdfjsLib
+}
 
 type DocumentFormType = {
     topicIds: string[]
@@ -29,10 +50,12 @@ type DocumentFormType = {
             progress?: number
             timeLeft?: number
             similar?: number
+            similarDocumentId?: string
             id: string
             customName?: string
             isProcessingOCR?: boolean
             ocrStatus?: 'processing' | 'success' | 'failed'
+            taskId?: string
         }
     >
 }
@@ -53,12 +76,65 @@ const ThemTaiLieu = () => {
     const { mutateAsync: createManyDocumentTopic } = useCreateManyDocumentTopic()
 
     const [selectedFile, setSelectedFile] = useState<DocumentFormType['files'][0]>()
+    const [viewingSimilarDocId, setViewingSimilarDocId] = useState<string | null>(null)
 
     const [form] = Form.useForm<DocumentFormType>()
+    const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
     const files = Form.useWatch('files', form) || {}
+    const pendingAPICallsRef = useRef<number>(0)
+
+    const hasActiveWork = () => {
+        const filesArray = Object.values(files)
+        const hasFileWork = filesArray.some(
+            (file) =>
+                (file.isProcessingOCR && file.taskId) || // OCR đang chạy
+                (file.progress !== undefined && file.progress < 100) // Upload đang chạy
+        )
+        // Có task: api đang chạy
+        return hasFileWork || pendingAPICallsRef.current > 0
+    }
+
+    // cảnh báo khi cố đóng tab/reload nếu có task đang chạy
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (hasActiveWork()) {
+                e.preventDefault()
+                return ''
+            }
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
+    }, [files, pendingAPICallsRef])
+
+    // Lấy danh sách ID tài liệu tương đồng từ files
+    const similarDocumentIds = useMemo(() => {
+        return Object.values(files)
+            .map((file) => file.similarDocumentId)
+            .filter((id): id is string => Boolean(id))
+    }, [files])
+
+    // Kiểm tra thông tin tài liệu tương đồng
+    const { data: similarDocuments = [] } = useFindManyDocument(
+        {
+            where: {
+                id: {
+                    in: similarDocumentIds,
+                },
+            },
+            select: {
+                id: true,
+                title: true,
+            },
+        },
+        {
+            enabled: similarDocumentIds.length > 0,
+        }
+    )
     const selectedTopicIds = Form.useWatch('topicIds', form)
-    const [modalThemTaiLieu, contextConfirmThemTaiLieu] = Modal.useModal()
 
     const isImageFile = (file: File) => {
         const imageTypes = ['image/png', 'image/jpeg', 'image/jpg']
@@ -69,73 +145,167 @@ const ThemTaiLieu = () => {
         return file.type === 'application/pdf'
     }
 
-    const processWithOCR = async (file: File, fileId: string) => {
+    const isPDFTextDocument = async (file: File) => {
         try {
-            console.log('[OCR] Bắt đầu xử lý OCR cho file:', file.name)
+            const pdfjsLib = await loadPdfJsLib()
+            const fileBuffer = await file.arrayBuffer()
+            const pdfDocument = await pdfjsLib.getDocument({
+                data: fileBuffer,
+            }).promise
 
-            // Bắt đầu OCR
-            form.setFieldsValue({
-                files: {
-                    ...form.getFieldValue('files'),
-                    [fileId]: {
-                        ...form.getFieldValue('files')[fileId],
-                        isProcessingOCR: true,
-                        ocrStatus: 'processing',
-                    },
-                },
-            })
-
-            const ocrResult = await fetchOCR(file)
-            console.log('[OCR] Kết quả OCR:', JSON.stringify(ocrResult, null, 2))
-
-            let textResult = ''
-            if (typeof ocrResult === 'string') {
-                textResult = ocrResult
-            } else if (ocrResult.text) {
-                textResult = ocrResult.text
-            } else if (ocrResult.body) {
-                textResult = ocrResult.body
-            } else if (ocrResult.data) {
-                textResult = ocrResult.data
-            } else if (ocrResult.result) {
-                textResult = ocrResult.result
+            try {
+                const pagesToInspect = Math.min(pdfDocument.numPages, 3)
+                for (let pageIndex = 1; pageIndex <= pagesToInspect; pageIndex++) {
+                    const page = await pdfDocument.getPage(pageIndex)
+                    const textContent = await page.getTextContent()
+                    const hasText = textContent.items.some((item: unknown) => {
+                        if (!item || typeof item !== 'object') return false
+                        const value = (item as { str?: unknown }).str
+                        return typeof value === 'string' && value.trim().length > 0
+                    })
+                    if (hasText) {
+                        return true
+                    }
+                }
+                return false
+            } finally {
+                if (typeof pdfDocument.cleanup === 'function') {
+                    pdfDocument.cleanup()
+                }
+                if (typeof pdfDocument.destroy === 'function') {
+                    await pdfDocument.destroy()
+                }
             }
-
-            // Kiểm tra kết quả OCR
-            const ocrStatus = textResult.trim().length === 0 ? 'failed' : 'success'
-
-            form.setFieldsValue({
-                files: {
-                    ...form.getFieldValue('files'),
-                    [fileId]: {
-                        ...form.getFieldValue('files')[fileId],
-                        isProcessingOCR: false,
-                        ocrStatus: ocrStatus,
-                    },
-                },
-            })
-
-            console.log(
-                `[OCR] Text trích xuất được (length: ${textResult.length}):`,
-                textResult.substring(0, 500)
-            )
-            return textResult
         } catch (error) {
-            console.error('[OCR] Lỗi xử lý OCR:', error)
-
-            // Set OCR failed state on error
-            form.setFieldsValue({
-                files: {
-                    ...form.getFieldValue('files'),
-                    [fileId]: {
-                        ...form.getFieldValue('files')[fileId],
-                        isProcessingOCR: false,
-                        ocrStatus: 'failed',
-                    },
-                },
-            })
-            return ''
+            console.error('[PDF] Lỗi xác định loại PDF:', error)
+            return false
         }
+    }
+
+    const processWithOCR = async (file: File, fileId: string) => {
+        return new Promise<string>((resolve) => {
+            try {
+                console.log('[OCR] Bắt đầu xử lý OCR cho file:', file.name)
+
+                // Bắt đầu OCR
+                form.setFieldsValue({
+                    files: {
+                        ...form.getFieldValue('files'),
+                        [fileId]: {
+                            ...form.getFieldValue('files')[fileId],
+                            isProcessingOCR: true,
+                            ocrStatus: 'processing',
+                        },
+                    },
+                })
+
+                ;(async () => {
+                    try {
+                        const ocrResult = await fetchOCR(file)
+                        console.log('[OCR] Upload file thành công, task_id:', ocrResult.task_id)
+
+                        // Check taskId hợp lệ
+                        if (!ocrResult.task_id) {
+                            console.error('[OCR] Không nhận được task_id từ server')
+                            form.setFieldsValue({
+                                files: {
+                                    ...form.getFieldValue('files'),
+                                    [fileId]: {
+                                        ...form.getFieldValue('files')[fileId],
+                                        isProcessingOCR: false,
+                                        ocrStatus: 'failed',
+                                    },
+                                },
+                            })
+                            resolve('')
+                            return
+                        }
+
+                        // Lưu task_id vào state
+                        form.setFieldsValue({
+                            files: {
+                                ...form.getFieldValue('files'),
+                                [fileId]: {
+                                    ...form.getFieldValue('files')[fileId],
+                                    taskId: ocrResult.task_id,
+                                },
+                            },
+                        })
+
+                        // Bắt đầu polling
+                        pollOCRResult(
+                            ocrResult.task_id,
+                            (result) => {
+                                const textResult = result.output || result.text || ''
+                                console.log(
+                                    `[OCR] Text trích xuất được (length: ${textResult.length}):`,
+                                    textResult.substring(0, 500)
+                                )
+
+                                form.setFieldsValue({
+                                    files: {
+                                        ...form.getFieldValue('files'),
+                                        [fileId]: {
+                                            ...form.getFieldValue('files')[fileId],
+                                            isProcessingOCR: false,
+                                            ocrStatus: 'success',
+                                        },
+                                    },
+                                })
+
+                                resolve(textResult)
+                            },
+                            (error) => {
+                                console.error('[OCR] Lỗi xử lý OCR:', error)
+
+                                form.setFieldsValue({
+                                    files: {
+                                        ...form.getFieldValue('files'),
+                                        [fileId]: {
+                                            ...form.getFieldValue('files')[fileId],
+                                            isProcessingOCR: false,
+                                            ocrStatus: 'failed',
+                                        },
+                                    },
+                                })
+
+                                resolve('')
+                            }
+                        )
+                    } catch (error) {
+                        console.error('[OCR] Lỗi upload file:', error)
+
+                        form.setFieldsValue({
+                            files: {
+                                ...form.getFieldValue('files'),
+                                [fileId]: {
+                                    ...form.getFieldValue('files')[fileId],
+                                    isProcessingOCR: false,
+                                    ocrStatus: 'failed',
+                                },
+                            },
+                        })
+
+                        resolve('')
+                    }
+                })()
+            } catch (error) {
+                console.error('[OCR] Lỗi xử lý OCR:', error)
+
+                form.setFieldsValue({
+                    files: {
+                        ...form.getFieldValue('files'),
+                        [fileId]: {
+                            ...form.getFieldValue('files')[fileId],
+                            isProcessingOCR: false,
+                            ocrStatus: 'failed',
+                        },
+                    },
+                })
+
+                resolve('')
+            }
+        })
     }
 
     const onUpload = async (
@@ -145,11 +315,22 @@ const ThemTaiLieu = () => {
         }>
     ) => {
         try {
-            // Kiểm tra xem đã chọn topic chưa
+            // Kiểm tra chọn topic
             const currentTopicIds = form.getFieldValue('topicIds')
             if (!currentTopicIds || currentTopicIds.length === 0) {
                 message.error('Vui lòng chọn ít nhất một loại tài liệu trước khi tải lên')
                 return
+            }
+
+            // Kiểm tra kích thước file PDF (giới hạn 100MB)
+            const MAX_PDF_SIZE = 100 * 1024 * 1024 // 100MB in bytes
+            for (const item of values) {
+                if (isPDFFile(item.file) && item.file.size > MAX_PDF_SIZE) {
+                    message.error(
+                        `File PDF "${item.file.name}" vượt quá giới hạn 100MB (${formatNiceBytes(item.file.size)})`
+                    )
+                    return
+                }
             }
 
             const valuesWithId = values.map((item) => ({
@@ -195,6 +376,14 @@ const ThemTaiLieu = () => {
                         })
                         documentBody = await processWithOCR(file.file, file.id)
                         console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
+                    } else if (isPDFFile(file.file)) {
+                        const isTextPdf = await isPDFTextDocument(file.file)
+                        if (!isTextPdf) {
+                            needOCR = true
+                            console.log('[PDF] Xác định PDF ảnh, chuyển sang OCR')
+                            documentBody = await processWithOCR(file.file, file.id)
+                            console.log(`[OCR] Body sau khi xử lý (length: ${documentBody.length})`)
+                        }
                     }
 
                     const { data: resPresignedUrl } = await generatePresignedUrl({
@@ -208,7 +397,7 @@ const ThemTaiLieu = () => {
                             const currentFiles = form.getFieldValue('files')
                             const currentFile = currentFiles[file.id]
 
-                            // Nếu đang OCR thì không update upload progress
+                            // Nếu đang OCR => không update upload progress
                             if (currentFile?.isProcessingOCR) {
                                 return
                             }
@@ -228,20 +417,27 @@ const ThemTaiLieu = () => {
                     })
                     const currentTopicIds = form.getFieldValue('topicIds')
 
+                    let similarDocId: string | undefined
                     if (!needOCR) {
-                        const resReaderDocument =
-                            await fetchReadDocumentContentDocumentDocumentReaderPost({
-                                body: {
-                                    uri_file: resPresignedUrl.fileName,
-                                    topic_ids: currentTopicIds,
-                                },
-                            } as any)
-                        documentBody = resReaderDocument.body || ''
-                        similarScore =
-                            resReaderDocument.document_simmilar &&
-                            resReaderDocument.document_simmilar.length > 0
-                                ? resReaderDocument.document_simmilar[0].score
-                                : 0
+                        try {
+                            pendingAPICallsRef.current++
+                            const resReaderDocument =
+                                await fetchReadDocumentContentDocumentDocumentReaderPost({
+                                    body: {
+                                        uri_file: resPresignedUrl.fileName,
+                                        topic_ids: currentTopicIds,
+                                    },
+                                } as any)
+                            documentBody = resReaderDocument.body || ''
+                            const similarDocs = resReaderDocument.document_simmilar || []
+                            const hasSimilarDocument = similarDocs.length > 0
+                            similarScore = hasSimilarDocument ? similarDocs[0].score : 0
+                            similarDocId = hasSimilarDocument ? similarDocs[0].id : undefined
+                        } catch (error) {
+                            console.error('[Document Reader] Lỗi khi đọc tài liệu:', error)
+                        } finally {
+                            pendingAPICallsRef.current--
+                        }
 
                         if (
                             isPDFFile(file.file) &&
@@ -263,13 +459,16 @@ const ThemTaiLieu = () => {
                         }
                     }
 
+                    const currentFiles = form.getFieldValue('files')
+                    const currentFile = currentFiles?.[file.id] || file
                     form.setFieldsValue({
                         files: {
-                            ...form.getFieldValue('files'),
+                            ...currentFiles,
                             [file.id]: {
-                                ...file,
+                                ...currentFile,
                                 body: documentBody,
                                 similar: similarScore,
+                                similarDocumentId: similarDocId,
                                 progress: 100,
                                 isProcessingOCR: false,
                             },
@@ -282,14 +481,62 @@ const ThemTaiLieu = () => {
         }
     }
 
-    const bgColorSimilar = (similar: number) => {
-        if (similar > 0.8) {
-            return 'bg-red-500'
+    const getSimilarDocumentTitle = (similarDocumentId?: string) => {
+        if (!similarDocumentId) return null
+        const doc = similarDocuments.find((d) => d.id === similarDocumentId)
+        return doc?.title || null
+    }
+
+    const handleModalClose = async () => {
+        if (hasActiveWork()) {
+            const filesArray = Object.values(files)
+            const hasOCR = filesArray.some((file) => file.isProcessingOCR && file.taskId)
+            const hasUpload = filesArray.some(
+                (file) => file.progress !== undefined && file.progress < 100
+            )
+
+            let confirmMessage = ''
+            if (hasOCR && hasUpload) {
+                confirmMessage =
+                    'Có tài liệu đang được tải lên và chuyển đổi hình ảnh sang văn bản. Bạn có muốn hủy tất cả và đóng không?'
+            } else if (hasOCR) {
+                confirmMessage =
+                    'Có tài liệu đang được chuyển đổi hình ảnh sang văn bản. Bạn có muốn hủy và đóng không?'
+            } else {
+                confirmMessage = 'Có tài liệu đang được tải lên. Bạn có muốn hủy và đóng không?'
+            }
+
+            const confirmed = await modalThemTaiLieu.confirm({
+                title: 'Tài liệu đang xử lý',
+                content: confirmMessage,
+                okText: 'Hủy tất cả & Đóng',
+                cancelText: 'Tiếp tục',
+                okButtonProps: { danger: true },
+            })
+
+            if (confirmed) {
+                // Cancel tất cả OCR tasks
+                const cancelledFiles: string[] = []
+                await Promise.all(
+                    filesArray
+                        .filter((file) => file.isProcessingOCR && file.taskId)
+                        .map(async (file) => {
+                            if (file.taskId) {
+                                console.log('[OCR] Hủy task OCR', file.file.name)
+                                await cancelOCRTask(file.taskId)
+                                stopOCRPolling(file.taskId)
+                                cancelledFiles.push(file.file.name)
+                            }
+                        })
+                )
+                if (cancelledFiles.length > 0) {
+                    message.info(`Đã hủy OCR cho: ${cancelledFiles.join(', ')}`)
+                }
+                onClose()
+            }
+        } else {
+            onClose()
         }
-        if (similar > 0.5) {
-            return 'bg-yellow-500'
-        }
-        return 'bg-green-500'
     }
 
     const onFinish = async (values: DocumentFormType) => {
@@ -353,7 +600,7 @@ const ThemTaiLieu = () => {
             className={cn(selectedFile ? 'min-w-[70vw]' : 'min-w-[30vw]')}
             okText="Đồng ý"
             cancelText="Hủy"
-            onCancel={onClose}
+            onCancel={handleModalClose}
             okButtonProps={{
                 disabled:
                     Object.keys(files).length === 0 ||
@@ -440,22 +687,17 @@ const ThemTaiLieu = () => {
                                 key={file.url}
                                 onClick={setSelectedFile.bind(null, file)}
                                 className={cn(
-                                    'flex items-center gap-2 mt-2 border relative border-gray-300 rounded-lg p-2 justify-between cursor-pointer hover:bg-gray-100',
+                                    'flex items-start gap-2 mt-2 border border-gray-300 rounded-lg p-2 cursor-pointer hover:bg-gray-100',
                                     selectedFile?.url === file.url && 'bg-gray-100 border-primary'
                                 )}
                             >
-                                {!!file.similar && (
-                                    <span
-                                        className={cn(
-                                            'text-xs absolute right-2 -top-2 text-white px-1 rounded',
-                                            bgColorSimilar(file.similar)
-                                        )}
-                                    >
-                                        {`  ${Math.floor(file.similar * 100)} % tương đồng`}
-                                    </span>
-                                )}
-                                <FileUploadIcon fileType={file.file.type} width={40} height={40} />
-                                <div className="flex flex-col flex-1 gap-1">
+                                <FileUploadIcon
+                                    fileType={file?.file?.type}
+                                    width={40}
+                                    height={40}
+                                    className="flex-shrink-0"
+                                />
+                                <div className="flex flex-col flex-1 gap-1 min-w-0">
                                     {file.progress === 100 ? (
                                         <Input
                                             size="small"
@@ -504,13 +746,57 @@ const ThemTaiLieu = () => {
                                         )}
                                     </span>
 
+                                    {file.similarDocumentId && file.similar && (
+                                        <div
+                                            className="flex items-center gap-2 mt-1 cursor-pointer hover:underline min-w-0"
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                setViewingSimilarDocId(
+                                                    file.similarDocumentId || null
+                                                )
+                                            }}
+                                        >
+                                            <Tag
+                                                color={
+                                                    file.similar > 0.8
+                                                        ? 'red'
+                                                        : file.similar > 0.5
+                                                          ? 'orange'
+                                                          : 'green'
+                                                }
+                                                className="m-0 flex-shrink-0"
+                                            >
+                                                {Math.floor(file.similar * 100)}% tương đồng
+                                            </Tag>
+                                            <span className="text-xs text-gray-600 truncate">
+                                                với:{' '}
+                                                <span className="font-medium text-primary">
+                                                    {getSimilarDocumentTitle(
+                                                        file.similarDocumentId
+                                                    ) || 'Đang tải...'}
+                                                </span>
+                                            </span>
+                                        </div>
+                                    )}
+
                                     {file.progress !== 0 && file.progress !== 100 && (
                                         <Progress percent={file.progress} status="active" />
                                     )}
                                 </div>
                                 <CloseCircleOutlined
-                                    onClick={(e) => {
+                                    onClick={async (e) => {
                                         e.stopPropagation()
+
+                                        // Nếu file đang OCR thì cancel task trước
+                                        if (file.isProcessingOCR && file.taskId) {
+                                            console.log(
+                                                '[OCR] Hủy task OCR cho file:',
+                                                file.file.name
+                                            )
+                                            await cancelOCRTask(file.taskId)
+                                            stopOCRPolling(file.taskId)
+                                        }
+
                                         if (key === selectedFile?.id) {
                                             setSelectedFile(undefined)
                                         }
@@ -519,7 +805,7 @@ const ThemTaiLieu = () => {
                                             files,
                                         })
                                     }}
-                                    className="text-lg cursor-pointer"
+                                    className="text-lg cursor-pointer flex-shrink-0 self-start"
                                 />
                             </div>
                         ))}
@@ -540,6 +826,12 @@ const ThemTaiLieu = () => {
                     </div>
                 )}
             </div>
+
+            <DocumentSidebar
+                documentId={viewingSimilarDocId}
+                citationContent={null}
+                onClose={() => setViewingSimilarDocId(null)}
+            />
         </Modal>
     )
 }

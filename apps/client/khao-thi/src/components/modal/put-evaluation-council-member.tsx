@@ -4,7 +4,7 @@ import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
 import { EVALUATION_MEMBER_ROLE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import type { EvaluationCouncilMember } from '@workspace/db'
+import { $Enums, type EvaluationCouncilMember } from '@workspace/db'
 import {
     useCreateEvaluationCouncilMember,
     useFindManyLecturer,
@@ -13,7 +13,7 @@ import {
 } from '@workspace/db/hooks'
 import { Col, Form, message } from 'antd'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutEvaluationCouncilMemberType = EvaluationCouncilMember
 const PutEvaluationCouncilMember = () => {
@@ -28,6 +28,9 @@ const PutEvaluationCouncilMember = () => {
         onClose: form.resetFields,
     })
     const evaluationCouncilId = router.query.id as string
+
+    const roleWatch = Form.useWatch('role', form)
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: createEvaluationCouncilMember } = useCreateEvaluationCouncilMember()
@@ -74,7 +77,20 @@ const PutEvaluationCouncilMember = () => {
 
     const { data: lecturerData = [] } = useFindManyLecturer({
         include: {
-            userProfile: true,
+            userProfile: {
+                include: {
+                    academicDegreeType: {
+                        select: {
+                            sTen: true,
+                        },
+                    },
+                    academicRankType: {
+                        select: {
+                            sTen: true,
+                        },
+                    },
+                },
+            },
         },
         orderBy: {
             userProfile: {
@@ -91,6 +107,47 @@ const PutEvaluationCouncilMember = () => {
             enabled: !!id,
         }
     )
+
+    console.log(roleWatch)
+
+    const filteredLecturers = useMemo(() => {
+        if (!roleWatch || roleWatch.length === 0) return lecturerData
+
+        return lecturerData.filter((lecturer) => {
+            const academicRank = lecturer.userProfile.academicRankType?.sTen || ''
+            const degree = lecturer.userProfile.academicDegreeType?.sTen || ''
+
+            const isChairmanQualified =
+                academicRank.includes('Giáo sư') || degree.includes('Tiến sĩ')
+            const isVicePresidentQualified =
+                academicRank.includes('Giáo sư') ||
+                degree.includes('Tiến sĩ') ||
+                degree.includes('Thạc sĩ')
+
+            const isSecretaryQualified =
+                degree.includes('Thạc sĩ') ||
+                degree.includes('Tiến sĩ') ||
+                academicRank.includes('Giáo sư') ||
+                academicRank.includes('Giảng viên')
+
+            if (roleWatch.includes($Enums.EvaluationMemberRole.CHAIRMAN) && isChairmanQualified) {
+                return true
+            }
+
+            if (
+                roleWatch.includes($Enums.EvaluationMemberRole.VICE_PRESIDENT) &&
+                isVicePresidentQualified
+            ) {
+                return true
+            }
+
+            if (roleWatch.includes($Enums.EvaluationMemberRole.SECRETARY) && isSecretaryQualified) {
+                return true
+            }
+
+            return true
+        })
+    }, [roleWatch, lecturerData])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -112,26 +169,34 @@ const PutEvaluationCouncilMember = () => {
             className="w-[600px]"
         >
             <Col span={24}>
-                <FormItem form={form} name="lecturerId" label="Giáo viên">
-                    <Select
-                        placeholder="Chọn giáo viên"
-                        options={lecturerData.map((i) => {
-                            return {
-                                value: i?.id,
-                                label: `${i.code} - ${i?.userProfile?.fullname ? i?.userProfile?.fullname : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`}`,
-                            }
-                        })}
-                        // onChange={(val) =>handleMajorChange(val)}
-                    />
-                </FormItem>
-            </Col>
-            <Col span={24}>
                 <FormItem form={form} name="role" label="Chức vụ trong hội đồng" required>
                     <Select
                         mode="multiple"
                         maxTagCount={'responsive'}
-                        placeholder="Chọn chương mục"
+                        placeholder="Chọn chức vụ trong hội đồng"
                         options={EVALUATION_MEMBER_ROLE}
+                    />
+                </FormItem>
+            </Col>
+            <Col span={24}>
+                <FormItem form={form} name="lecturerId" label="Giáo viên">
+                    <Select
+                        placeholder="Chọn giáo viên"
+                        options={filteredLecturers.map((i) => {
+                            const academicRank = i.userProfile?.academicRankType?.sTen || ''
+                            const degree = i.userProfile?.academicDegreeType?.sTen || ''
+
+                            const fullName = i?.userProfile?.fullname
+                                ? i?.userProfile?.fullname
+                                : `${i?.userProfile?.firstName} ${i?.userProfile?.lastName}`
+
+                            const academicTitle = [academicRank, degree].filter(Boolean).join('.')
+
+                            return {
+                                value: i?.id,
+                                label: `${i.code} - ${academicTitle ? `${academicTitle} ` : ''}${fullName}`,
+                            }
+                        })}
                     />
                 </FormItem>
             </Col>

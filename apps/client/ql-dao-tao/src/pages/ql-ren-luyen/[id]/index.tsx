@@ -11,7 +11,7 @@ import {
     useFindUniqueTrainingScoreSession,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Col, Divider, Flex, InputNumber, message, Row, Select, Tag } from 'antd'
+import { Button, Col, Divider, Flex, message, Row, Select, Tag } from 'antd'
 import { Save } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -242,41 +242,41 @@ export default function SubjectClassScore() {
                                         width: 180,
                                         render: (_, record) => record?.userProfile?.fullname,
                                     },
-                                    {
-                                        title: 'Điểm',
-                                        align: 'center',
-                                        dataIndex: 'name',
-                                        width: 100,
-                                        render: (_, record) => (
-                                            <InputNumber
-                                                type="number"
-                                                min={0}
-                                                value={
-                                                    editableData.get(record.id)?.score ??
-                                                    record.score ??
-                                                    undefined
-                                                }
-                                                onChange={(value) => {
-                                                    setEditableData((prev) => {
-                                                        const newMap = new Map(prev)
+                                    // {
+                                    //     title: 'Điểm',
+                                    //     align: 'center',
+                                    //     dataIndex: 'name',
+                                    //     width: 100,
+                                    //     render: (_, record) => (
+                                    //         <InputNumber
+                                    //             type="number"
+                                    //             min={0}
+                                    //             value={
+                                    //                 editableData.get(record.id)?.score ??
+                                    //                 record.score ??
+                                    //                 undefined
+                                    //             }
+                                    //             onChange={(value) => {
+                                    //                 setEditableData((prev) => {
+                                    //                     const newMap = new Map(prev)
 
-                                                        const entry = newMap.get(record.id)
-                                                        if (entry) {
-                                                            entry.score = value
-                                                        } else {
-                                                            newMap.set(record.id, {
-                                                                studentId: record.id,
-                                                                scoreId: record.id,
-                                                                score: value,
-                                                            })
-                                                        }
+                                    //                     const entry = newMap.get(record.id)
+                                    //                     if (entry) {
+                                    //                         entry.score = value
+                                    //                     } else {
+                                    //                         newMap.set(record.id, {
+                                    //                             studentId: record.id,
+                                    //                             scoreId: record.id,
+                                    //                             score: value,
+                                    //                         })
+                                    //                     }
 
-                                                        return newMap
-                                                    })
-                                                }}
-                                            />
-                                        ),
-                                    },
+                                    //                     return newMap
+                                    //                 })
+                                    //             }}
+                                    //         />
+                                    //     ),
+                                    // },
                                     {
                                         title: 'Xếp loại',
                                         dataIndex: 'ranking',

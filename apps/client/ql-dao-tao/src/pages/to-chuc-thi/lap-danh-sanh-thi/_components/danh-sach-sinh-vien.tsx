@@ -1,11 +1,13 @@
 import TableCollapse from '@components/commons/tableCollapse'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
+import { useStore } from '@tanstack/react-store'
 import type { Prisma } from '@workspace/db/client'
 import { useFindManyStudentSubjectScore } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Checkbox, Col, Flex, Form, Input, message, Row } from 'antd'
 import { useEffect, useMemo } from 'react'
+import { keHoachThiStore } from '..'
 
 interface Props {
     subjectClassId: string | null
@@ -34,13 +36,15 @@ interface StudentSubjectScoreFormType {
     >
 }
 
-export default function DanhSachSinhVien({ subjectClassId }: Props) {
+export default function DanhSachSinhVien() {
     const [form] = Form.useForm<StudentSubjectScoreFormType>()
+
+    const { selectedSubjectClassId } = useStore(keHoachThiStore)
 
     const { data = [], isLoading } = useFindManyStudentSubjectScore(
         {
             where: {
-                subjectClassId: subjectClassId || undefined,
+                subjectClassId: selectedSubjectClassId ,
             },
             include: {
                 student: {
@@ -83,7 +87,7 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                 },
             },
         },
-        { enabled: !!subjectClassId }
+        { enabled: !!selectedSubjectClassId }
     )
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -172,7 +176,7 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
     }
 
     useEffect(() => {
-        if (subjectClassId && data.length > 0) {
+        if (selectedSubjectClassId && data.length > 0) {
             form.setFieldsValue({
                 list: data.reduce(
                     (acc, cur) => {
@@ -189,7 +193,7 @@ export default function DanhSachSinhVien({ subjectClassId }: Props) {
                 ),
             })
         }
-    }, [subjectClassId, data, form])
+    }, [selectedSubjectClassId, data, form])
 
     return (
         <Row gutter={16}>

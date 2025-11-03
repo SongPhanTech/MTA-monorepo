@@ -3,6 +3,7 @@ import {
     DownCircleOutlined,
     DownOutlined,
     FileTextOutlined,
+    InfoCircleOutlined,
     LinkOutlined,
     SearchOutlined,
     UpCircleOutlined,
@@ -10,7 +11,8 @@ import {
 } from '@ant-design/icons'
 import { useFindUniqueDocument } from '@workspace/db/hooks'
 import { useEffect, useRef, useState } from 'react'
-import { Drawer, Input } from 'antd'
+import { Drawer, Input, Tooltip } from 'antd'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 interface DocumentSidebarProps {
     documentId: string | null
@@ -31,6 +33,10 @@ export default function DocumentSidebar({
     const [isTopicsExpanded, setIsTopicsExpanded] = useState(false)
     const contentRef = useRef<HTMLDivElement>(null)
     const debounceTimer = useRef<NodeJS.Timeout | null>(null)
+
+    const { onOpen: openPreviewTaiLieu } = useDisclosure<string>({
+        tag: 'PreviewTaiLieu',
+    })
 
     const { data: document } = useFindUniqueDocument(
         {
@@ -238,11 +244,22 @@ export default function DocumentSidebar({
     return (
         <Drawer
             title={
-                <div className="flex items-center justify-between pr-8">
+                <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <FileTextOutlined className="text-primary" />
-                        <span className="font-semibold">Tài liệu nguồn</span>
+                        <span className="font-semibold">Tài liệu</span>
                     </div>
+                    {documentId && (
+                        <Tooltip title="Xem thông tin chi tiết" placement="left">
+                            <button
+                                type="button"
+                                onClick={() => openPreviewTaiLieu(documentId)}
+                                className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors"
+                            >
+                                <InfoCircleOutlined className="text-lg" />
+                            </button>
+                        </Tooltip>
+                    )}
                 </div>
             }
             size="default"
@@ -330,7 +347,19 @@ export default function DocumentSidebar({
                     </div>
 
                     <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 py-6">
-                        {highlightedContent ? (
+                        {!document?.body || document.body.length === 0 ? (
+                            <div className="flex items-center justify-center h-full text-gray-400">
+                                <div className="text-center">
+                                    <FileTextOutlined className="text-4xl mb-2" />
+                                    <p className="mb-2">Tài liệu chưa được phân đoạn</p>
+                                    <p className="text-sm">
+                                        Vui lòng nhấn biểu tượng{' '}
+                                        <InfoCircleOutlined className="text-primary" /> để tải xuống
+                                        tài liệu
+                                    </p>
+                                </div>
+                            </div>
+                        ) : highlightedContent ? (
                             <div
                                 ref={contentRef}
                                 className="prose prose-sm max-w-none text-gray-800 leading-relaxed whitespace-pre-wrap break-words overflow-wrap-anywhere"

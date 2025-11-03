@@ -10,7 +10,12 @@ import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
 import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import { type CouncilMember, SubjectVersionType, ThesisProjectStatus } from '@workspace/db/client'
+import {
+    type CouncilMember,
+    Prisma,
+    SubjectVersionType,
+    ThesisProjectStatus,
+} from '@workspace/db/client'
 import {
     useCountSubjectClass,
     useCreateManyInvitation,
@@ -145,7 +150,8 @@ export default function ThesisProject() {
             deletedAt: null,
             active: true,
             cancelled: false,
-        }
+            status: 'OFFICIAL',
+        } satisfies Prisma.SubjectClassWhereInput
     }, [
         semesterId,
         filters.searchText,

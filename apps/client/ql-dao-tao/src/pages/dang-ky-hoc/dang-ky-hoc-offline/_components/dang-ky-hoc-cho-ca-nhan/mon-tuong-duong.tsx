@@ -94,6 +94,7 @@ export default function MonTuongDuong({ hocLai }: StudentCourseByPlanProps) {
                 subjectId: {
                     in: studentSubjects?.map((ss) => ss.subjectId),
                 },
+                status: 'OFFICIAL',
             },
             include: {
                 subject: {
@@ -175,6 +176,7 @@ export default function MonTuongDuong({ hocLai }: StudentCourseByPlanProps) {
                 subjectId: {
                     in: studentSubjects?.map((ss) => ss.subjectId),
                 },
+                status: 'OFFICIAL',
             },
         },
         {

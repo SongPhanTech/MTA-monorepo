@@ -84,6 +84,7 @@ export default function MonTrongCTDT({ hocLai }: StudentCourseByPlanProps) {
                 subjectId: {
                     in: studentSubjects?.map((ss) => ss.subjectId),
                 },
+                status: 'OFFICIAL',
             },
             include: {
                 subject: {
@@ -165,6 +166,7 @@ export default function MonTrongCTDT({ hocLai }: StudentCourseByPlanProps) {
                 subjectId: {
                     in: studentSubjects?.map((ss) => ss.subjectId),
                 },
+                status: 'OFFICIAL',
             },
         },
         {

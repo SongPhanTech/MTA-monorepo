@@ -1,44 +1,70 @@
+import { TimKiemTheoNguNghia, TimKiemTheoTuKhoa } from '@/api/tim-kiem-van-ban'
+import DocumentSidebar from '@components/commons/document-sidebar'
 import { FileUploadIcon } from '@components/commons/upload'
 import ChatLayout from '@layouts/chat-layout'
 import { formatDateReadable, formatNiceBytes } from '@lib/utils'
 import { getMinioUrl } from '@workspace/constant'
 import { $Enums } from '@workspace/db'
 import { useFindManyDocument } from '@workspace/db/hooks'
-import { Button, Divider, Empty, Input, Modal, message, Spin, Tag, Typography } from 'antd'
+import { Button, Divider, Empty, Input, message, Modal, Radio, Spin, Tag, Typography } from 'antd'
 import { FileDown } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
-import { TimKiemTheoTuKhoa } from '@/api/tim-kiem-van-ban'
 
 const { Title } = Typography
+
+type SearchType = 'semantic' | 'keyword'
 
 export default function Page() {
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
     const [results, setResults] = useState<string[]>([])
+    const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null)
+    const [searchType, setSearchType] = useState<SearchType>('semantic')
 
-    const { data: documentsData = [] } = useFindManyDocument({
-        include: {
-            uploadedBy: true,
-            topics: {
-                include: {
-                    topic: true,
+    // Clear results
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        setInput(value)
+        if (!value.trim()) {
+            setResults([])
+        }
+    }
+
+    // Clear results
+    const handleSearchTypeChange = (value: SearchType) => {
+        setSearchType(value)
+        setResults([])
+    }
+
+    const { data: documentsData = [], isLoading: isLoadingDocuments } = useFindManyDocument(
+        {
+            include: {
+                uploadedBy: true,
+                topics: {
+                    include: {
+                        topic: true,
+                    },
+                },
+                classification: true,
+            },
+            where: {
+                status: $Enums.DocumentStatus.APPROVE,
+                id: {
+                    in: results,
                 },
             },
-            classification: true,
         },
-        where: {
-            status: $Enums.DocumentStatus.APPROVE,
-            id: {
-                in: results,
-            },
-        },
-    })
+        {
+            enabled: results.length > 0,
+        }
+    )
 
-    // Sắp xếp documents theo thứ tự của results từ API
     const documents = results
         .map((id) => documentsData.find((doc) => doc.id === id))
         .filter((doc): doc is NonNullable<typeof doc> => Boolean(doc))
+
+    console.log('Debug search:', { results, documentsData, documents })
 
     const [selectedDocument, setSelectedDocument] = useState<(typeof documents)[0] | undefined>()
     const onDownload = async (url: string, fileName: string) => {
@@ -62,7 +88,10 @@ export default function Page() {
 
         setLoading(true)
         try {
-            const response = await TimKiemTheoTuKhoa(input)
+            const response =
+                searchType === 'semantic'
+                    ? await TimKiemTheoNguNghia(input)
+                    : await TimKiemTheoTuKhoa(input)
             setResults(response?.success_detail || [])
         } catch (_error: unknown) {
             message.warning('Không tìm thấy kết quả nào')
@@ -74,29 +103,86 @@ export default function Page() {
 
     return (
         <div className="h-full flex flex-col">
-            {/* Search Header */}
-            <div className="px-6 py-4 border-b border-gray-100">
+            <div className="px-6 py-6 border-b border-gray-100 bg-gradient-to-b from-white to-gray-50">
                 <div className="max-w-6xl mx-auto">
-                    <div className="w-full">
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-center justify-center gap-3">
+                            <Radio.Group
+                                value={searchType}
+                                onChange={(e) => handleSearchTypeChange(e.target.value)}
+                                buttonStyle="solid"
+                            >
+                                <Radio.Button
+                                    value="semantic"
+                                    className="[&.ant-radio-button-wrapper-checked]:!bg-[#028850] [&.ant-radio-button-wrapper-checked]:!border-[#028850]"
+                                >
+                                    <span className="flex items-center gap-1.5">
+                                        <svg
+                                            className="w-4 h-4"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                                            />
+                                        </svg>
+                                        Ngữ nghĩa
+                                    </span>
+                                </Radio.Button>
+                                <Radio.Button
+                                    value="keyword"
+                                    className="[&.ant-radio-button-wrapper-checked]:!bg-[#028850] [&.ant-radio-button-wrapper-checked]:!border-[#028850]"
+                                >
+                                    <span className="flex items-center gap-1.5">
+                                        <svg
+                                            className="w-4 h-4"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
+                                            />
+                                        </svg>
+                                        Từ khóa
+                                    </span>
+                                </Radio.Button>
+                            </Radio.Group>
+                        </div>
                         <Input.Search
-                            placeholder="Nhập từ khoá cần tìm..."
+                            placeholder={
+                                searchType === 'semantic'
+                                    ? 'Nhập nội dung cần tìm kiếm...'
+                                    : 'Nhập từ khóa để tìm kiếm...'
+                            }
                             size="large"
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={handleInputChange}
                             onSearch={handleSearch}
                             loading={loading}
+                            allowClear
                             style={
                                 {
                                     '--ant-color-primary': '#028850',
                                 } as any
                             }
-                            className="[&_.ant-input-search-button]:!bg-[#028850] [&_.ant-input-search-button]:!border-[#028850] [&_.ant-input-search-button_.anticon]:!text-white"
+                            className="[&_.ant-input-search-button]:!bg-[#028850] [&_.ant-input-search-button]:!border-[#028850] [&_.ant-input-search-button_.anticon]:!text-white shadow-sm"
                         />
                     </div>
                     {results.length > 0 && (
-                        <div className="text-center mt-3">
-                            <span className="text-sm text-gray-600">
-                                Tìm thấy {documents.length} tài liệu cho "{input}"
+                        <div className="text-center mt-4 py-2 bg-[#028850]/5 rounded-lg">
+                            <span className="text-sm font-medium text-[#028850]">
+                                Tìm thấy <span className="font-bold">{documents.length}</span> tài
+                                liệu cho "{input}"
                             </span>
                         </div>
                     )}
@@ -107,7 +193,7 @@ export default function Page() {
             <div className="flex-1 overflow-y-auto">
                 <div className="px-6 py-6">
                     <div className="max-w-6xl mx-auto">
-                        {loading ? (
+                        {loading || isLoadingDocuments ? (
                             <div className="flex justify-center items-center h-64">
                                 <Spin size="large" tip="Đang tìm kiếm tài liệu..." />
                             </div>
@@ -119,7 +205,7 @@ export default function Page() {
                                         className="bg-white p-5 rounded-lg border border-gray-200 hover:border-[#028850] hover:bg-[#D9EDE4] hover:shadow-md transition-all duration-200 cursor-pointer"
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            setSelectedDocument(item)
+                                            setSelectedDocumentId(item.id)
                                         }}
                                     >
                                         <div className="flex items-start space-x-4">
@@ -279,6 +365,12 @@ export default function Page() {
                     </div>
                 )}
             </Modal>
+
+            <DocumentSidebar
+                documentId={selectedDocumentId}
+                citationContent={null}
+                onClose={() => setSelectedDocumentId(null)}
+            />
         </div>
     )
 }

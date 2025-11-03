@@ -1497,8 +1497,8 @@ exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
   examScore: 'examScore',
   finalScore: 'finalScore',
   manualFinalScore: 'manualFinalScore',
-  examPostponedReason: 'examPostponedReason',
   examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   examBanned: 'examBanned',
   examBannedReason: 'examBannedReason',
   suspended: 'suspended',
@@ -2658,6 +2658,28 @@ exports.Prisma.StudentResearchRegistrationScalarFieldEnum = {
   reviewNote: 'reviewNote'
 };
 
+exports.Prisma.ThesisSessionScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  trainingCourseId: 'trainingCourseId',
+  decisionNumber: 'decisionNumber',
+  decisionMaker: 'decisionMaker',
+  decisionDate: 'decisionDate',
+  defenseDecisionNumber: 'defenseDecisionNumber',
+  defenseDecisionMaker: 'defenseDecisionMaker',
+  defenseDecisionDate: 'defenseDecisionDate',
+  chief: 'chief'
+};
+
 exports.Prisma.ThesisProjectScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -2677,6 +2699,7 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   technologies: 'technologies',
   status: 'status',
   subjectClassId: 'subjectClassId',
+  thesisSessionId: 'thesisSessionId',
   supervisorId: 'supervisorId',
   coSupervisorId: 'coSupervisorId',
   organizationId: 'organizationId',
@@ -2911,6 +2934,19 @@ exports.Prisma.CriterionCatalogScalarFieldEnum = {
   order: 'order',
   name: 'name',
   scoreScaleId: 'scoreScaleId'
+};
+
+exports.Prisma.CriterionAssignmentScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  evaluationCriterionId: 'evaluationCriterionId',
+  lecturerId: 'lecturerId',
+  deadline: 'deadline'
 };
 
 exports.Prisma.RequirementCriterionCatalogScalarFieldEnum = {
@@ -3176,9 +3212,7 @@ exports.Prisma.SurveyQuestionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   name: 'name',
   type: 'type',
-  surveyQuestionGroupId: 'surveyQuestionGroupId',
-  surveyId: 'surveyId',
-  clusterSurveyId: 'clusterSurveyId'
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
 
 exports.Prisma.SurveyChoiceScalarFieldEnum = {
@@ -3205,6 +3239,7 @@ exports.Prisma.SurveySessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
+  profileId: 'profileId',
   studentId: 'studentId',
   startedAt: 'startedAt',
   completedAt: 'completedAt',
@@ -5039,7 +5074,7 @@ exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   studentSubjectScoreId: 'studentSubjectScoreId',
-  examPostponed: 'examPostponed',
+  examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
   suspendedReason: 'suspendedReason',
   updatedById: 'updatedById'
@@ -5696,6 +5731,20 @@ exports.Prisma.StudentResearchRegistrationOrderByRelevanceFieldEnum = {
   reviewNote: 'reviewNote'
 };
 
+exports.Prisma.ThesisSessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  name: 'name',
+  trainingObjectTypeId: 'trainingObjectTypeId',
+  trainingCourseId: 'trainingCourseId',
+  decisionNumber: 'decisionNumber',
+  decisionMaker: 'decisionMaker',
+  defenseDecisionNumber: 'defenseDecisionNumber',
+  defenseDecisionMaker: 'defenseDecisionMaker',
+  chief: 'chief'
+};
+
 exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
@@ -5710,6 +5759,7 @@ exports.Prisma.ThesisProjectOrderByRelevanceFieldEnum = {
   requirements: 'requirements',
   technologies: 'technologies',
   subjectClassId: 'subjectClassId',
+  thesisSessionId: 'thesisSessionId',
   supervisorId: 'supervisorId',
   coSupervisorId: 'coSupervisorId',
   organizationId: 'organizationId',
@@ -5847,6 +5897,14 @@ exports.Prisma.CriterionCatalogOrderByRelevanceFieldEnum = {
   standardId: 'standardId',
   name: 'name',
   scoreScaleId: 'scoreScaleId'
+};
+
+exports.Prisma.CriterionAssignmentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  code: 'code',
+  description: 'description',
+  evaluationCriterionId: 'evaluationCriterionId',
+  lecturerId: 'lecturerId'
 };
 
 exports.Prisma.RequirementCriterionCatalogOrderByRelevanceFieldEnum = {
@@ -6012,9 +6070,7 @@ exports.Prisma.SurveyQuestionOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   name: 'name',
-  surveyQuestionGroupId: 'surveyQuestionGroupId',
-  surveyId: 'surveyId',
-  clusterSurveyId: 'clusterSurveyId'
+  surveyQuestionGroupId: 'surveyQuestionGroupId'
 };
 
 exports.Prisma.SurveyChoiceOrderByRelevanceFieldEnum = {
@@ -6032,6 +6088,7 @@ exports.Prisma.SurveySessionOrderByRelevanceFieldEnum = {
   description: 'description',
   surveyId: 'surveyId',
   additionalSuggestion: 'additionalSuggestion',
+  profileId: 'profileId',
   studentId: 'studentId',
   surveyObjectTypeId: 'surveyObjectTypeId'
 };
@@ -6888,7 +6945,8 @@ exports.EvaluationMemberRole = exports.$Enums.EvaluationMemberRole = {
   VICE_PRESIDENT: 'VICE_PRESIDENT',
   HEAD_SECRETARY: 'HEAD_SECRETARY',
   SECRETARY: 'SECRETARY',
-  MEMBER: 'MEMBER'
+  MEMBER: 'MEMBER',
+  ADVISORY_BOARD: 'ADVISORY_BOARD'
 };
 
 exports.EvaluationSecretaryMemberRole = exports.$Enums.EvaluationSecretaryMemberRole = {
@@ -7124,6 +7182,7 @@ exports.Prisma.ModelName = {
   LecturerHistory: 'LecturerHistory',
   ResearchProject: 'ResearchProject',
   StudentResearchRegistration: 'StudentResearchRegistration',
+  ThesisSession: 'ThesisSession',
   ThesisProject: 'ThesisProject',
   DefenseSession: 'DefenseSession',
   StudentThesisRegistration: 'StudentThesisRegistration',
@@ -7140,6 +7199,7 @@ exports.Prisma.ModelName = {
   EvaluationPeriod: 'EvaluationPeriod',
   StandardCatalog: 'StandardCatalog',
   CriterionCatalog: 'CriterionCatalog',
+  CriterionAssignment: 'CriterionAssignment',
   RequirementCriterionCatalog: 'RequirementCriterionCatalog',
   ScoreScaleCatalog: 'ScoreScaleCatalog',
   EvaluationStandard: 'EvaluationStandard',
