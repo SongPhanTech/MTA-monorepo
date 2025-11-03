@@ -1,20 +1,29 @@
 import { CopyOutlined } from '@ant-design/icons'
-import { Modal, Table, Tooltip } from 'antd'
+import { Button, Flex, Input, message, Modal } from 'antd'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
 const ThongTinKhaoSatModal = () => {
     const { isOpen, onClose, input } = useDisclosure<{ dataTable: any[]; id: string }>({
         tag: 'ThongTinKhaoSatModal',
     })
+         const link =`https://mta.swantech.vn/ems/lam-khao-sat/${input?.id}`
 
-    const handleCopy = async (id: string) => {
-        try {
-            const link = `https://mta.swantech.vn/ems/lam-khao-sat/${input?.id}?surveyObjectTypeId=${id}`
-            await navigator.clipboard.writeText(link)
-        } catch (err) {
-            console.error('Failed to copy: ', err)
+    // const handleCopy = async () => {
+    //     try {
+    //         const link = `https://mta.swantech.vn/ems/lam-khao-sat/${input?.id}`
+    //         await navigator.clipboard.writeText(link)
+    //     } catch (err) {
+    //         console.error('Failed to copy: ', err)
+    //     }
+    // }
+      const handleCopy = async () => {
+    try {
+        await navigator.clipboard.writeText(link);
+        message.success("Đã sao chép liên kết!");
+        } catch {
+        message.error("Không thể sao chép liên kết");
         }
-    }
+  };
 
     return (
         <Modal
@@ -26,7 +35,18 @@ const ThongTinKhaoSatModal = () => {
             width="600px"
             footer={null}
         >
-            <Table
+            <Flex>
+                        <Input
+                value={link}
+                readOnly
+                className="rounded-r-[0px]"
+                />
+            <Button icon={<CopyOutlined />} onClick={handleCopy} type='primary'  className="rounded-l-[0px]">
+                    Copy
+                    </Button>
+            </Flex>
+     
+            {/* <Table
                 columns={[
                     {
                         title: 'STT',
@@ -50,7 +70,7 @@ const ThongTinKhaoSatModal = () => {
                         render: (__, { id }) => {
                             return (
                                 <Tooltip title={'Copy'} placement="top">
-                                    <CopyOutlined onClick={() => handleCopy(id)} />
+                                    <CopyOutlined onClick={() => handleCopy()} />
                                 </Tooltip>
                             )
                         },
@@ -61,7 +81,7 @@ const ThongTinKhaoSatModal = () => {
                 rowKey="key"
                 size="small"
                 bordered
-            />
+            /> */}
         </Modal>
     )
 }

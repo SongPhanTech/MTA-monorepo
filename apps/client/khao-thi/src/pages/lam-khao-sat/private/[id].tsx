@@ -208,6 +208,9 @@ function TakeTestPage() {
     const fetchData = async () => {
         const response = await getPublicSurvey(id)
         if (response?.status === 200) {
+            if(response?.data?.isPublic){
+                return
+            }
             setSurvey(response?.data)
             setStartAt(new Date())
             const list = response?.data?.surveyQuestion?.map((i) => {

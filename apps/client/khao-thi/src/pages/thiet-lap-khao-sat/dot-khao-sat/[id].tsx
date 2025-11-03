@@ -197,7 +197,7 @@ export default function DetailSurveyPage() {
 
                                {
                                                       title: 'Thao tác',
-                                                      width: 150,
+                                                      width: 130,
                                                       align: 'center',
                                                       hidden: !canSome(
                                                           KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -208,7 +208,7 @@ export default function DetailSurveyPage() {
                                                       ),
                                                       render: (
                                                           _,
-                                                          { id, surveyTopicId, surveyQuestion, surveyObjectType,surveySessions }
+                                                          { id, isPublic, surveyQuestion, surveyObjectType,surveySessions }
                                                       ) => (
                                                           <Row className="justify-end gap-2">
                                                               {can(
@@ -235,7 +235,7 @@ export default function DetailSurveyPage() {
                                                                   can(
                                                                       KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                                                       'XEM_CHI_TIET'
-                                                                  ) && (
+                                                                  )&&  !!isPublic && (
                                                                       <Tooltip
                                                                           className="mr-2"
                                                                           title={'Xem đề khảo sát'}
@@ -256,7 +256,7 @@ export default function DetailSurveyPage() {
                                                               {can(
                                                                   KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                                                   'SUA'
-                                                              ) &&  (
+                                                              )  && (
                                                                   <EditIcon
                                                                   disabled={surveySessions.length > 0}
                                                                       onClick={() => onOpen({ id, type: 'one' })}

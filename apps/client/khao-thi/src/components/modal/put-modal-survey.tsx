@@ -299,6 +299,7 @@ const PutSurveyModal = () => {
     }
 
     const surveyTopicId = Form.useWatch('surveyTopicId', form)
+    const isPublic = Form.useWatch('isPublic', form)
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     const steps: StepItem[] = useMemo(() => {
@@ -437,7 +438,7 @@ const PutSurveyModal = () => {
                                 </Radio.Group>
                             </FormItem>
                         </Col>
-                        {/* <Col span={12}>
+                        {isPublic===true&&       <Col span={12}>
                             <FormItem
                                 form={form}
                                 name={'anonymous'}
@@ -449,7 +450,8 @@ const PutSurveyModal = () => {
                                     <Radio value={false}>Không</Radio>
                                 </Radio.Group>
                             </FormItem>
-                        </Col> */}
+                        </Col>}
+                 
                     </Row>
                 ),
             },
@@ -477,7 +479,7 @@ const PutSurveyModal = () => {
                 ),
             },
         ]
-    }, [input, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId, semesterId])
+    }, [input, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId, semesterId,isPublic])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {

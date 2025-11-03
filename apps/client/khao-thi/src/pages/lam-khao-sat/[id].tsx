@@ -3,10 +3,11 @@ import Loading from '@components/commons/loading'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
 import KhaoSatLayout from '@layouts/khao-sat-layout'
+import { cn } from '@lib/utils'
 import type { SurveySession } from '@workspace/db'
 import { getPublicSurvey, useSavePublicSurvey } from '@workspace/libs/api/exam'
 import type { GetSurveyResult } from '@workspace/libs/api/schemas/getSurveyResult'
-import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Modal, Row } from 'antd'
 
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -32,17 +33,24 @@ type GroupedSurveyQuestion = {
         type: string
     }[]
 }
+
+type PutUser = {
+    code: string
+}
 type SurveyType = GetSurveyResult
 function TakeTestPage() {
     const router = useRouter()
     const { showSpinner, hideSpinner } = useSpinner()
     const [startAt, setStartAt] = useState<Date>(new Date())
     const id = router.query.id as string
-    const surveyObjectTypeId = router.query.surveyObjectTypeId as string
-    
+    // const surveyObjectTypeId = router.query.surveyObjectTypeId as string
+
     const [form] = Form.useForm<PutSurveySession>()
+    const [formUser] = Form.useForm<PutUser>()
     const [survey, setSurvey] = useState<SurveyType>()
     const [isLoading, setIsLoading] = useState(true)
+    const [anonymous, setAnonymous] = useState(true)
+    const [isOpen, setIsOpen] = useState(false)
     const [isDone, setIsDone] = useState(false)
     const [selected, setSelected] = useState<
         {
@@ -164,7 +172,7 @@ function TakeTestPage() {
                     additionalSuggestion: dataSubmit.additionalSuggestion || '',
                     startedAt: new Date(startAt).toISOString(),
                     surveyId: id,
-                    surveyObjectTypeId: surveyObjectTypeId,
+                    // surveyObjectTypeId: surveyObjectTypeId,
                     responses: dataSubmit?.responses?.map((i) => {
                         return {
                             surveyQuestionId: i.surveyQuestionId,
@@ -195,6 +203,14 @@ function TakeTestPage() {
     const fetchData = async () => {
         const response = await getPublicSurvey(id)
         if (response?.status === 200) {
+            if(!response?.data?.isPublic){
+                return
+            }
+            if(!response?.data?.anonymous){
+                 setAnonymous(true)
+                 setIsOpen(true)
+            }
+           
             setSurvey(response?.data)
             setStartAt(new Date())
             const list = response?.data?.surveyQuestion?.map((i) => {
@@ -225,6 +241,11 @@ function TakeTestPage() {
         setIsLoading(false)
     }
 
+    const CheckUser = async () => {
+        const datasub = formUser.getFieldValue('code')
+        console.log(datasub, 125367)
+    }
+
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (id) {
@@ -252,163 +273,203 @@ function TakeTestPage() {
             <Confetti width={window?.innerWidth || 1000} height={window?.innerHeight || 1000} />
         </div>
     ) : (
-        <Form form={form} className="p-6 max-w-[1100px] w-full mx-auto">
-            <div className="text-xl font-bold">{survey?.name}</div>
-            {survey?.surveyChoice?.length && (
-                <Row gutter={[16, 16]}>
-                    <Col span={24}>
-                        <Table
-                            rowKey="id"
-                            dataSource={[{ id: 'abc' }]}
-                            columns={survey.surveyChoice.map((i) => {
-                                return {
-                                    title: `${i?.description} ${i?.requireExplanation === true ? '*' : ''}`,
-                                    dataIndex: i?.id,
-                                    key: i?.id,
-                                    align: 'center',
-                                    render: () => (
-                                        <div className="flex items-center justify-center">
-                                            <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px]">
-                                                {i?.answer}
-                                            </Button>
-                                        </div>
-                                    ),
-                                }
-                            })}
-                            pagination={false}
-                        />
-                    </Col>
-                    <Col span={24} className="text-base text-[#e80808]">
-                        Nếu ở mức (*), bạn phải ghi rõ lý do
-                    </Col>
+        <div>
+            {anonymous && (
+                <Form form={form} className="p-6 max-w-[1100px] w-full mx-auto">
+                    <div className="text-xl font-bold">{survey?.name}</div>
+                    {survey?.surveyChoice?.length && (
+                        <Row gutter={[16, 16]}>
+                            <Col span={24}>
+                                <Table
+                                    rowKey="id"
+                                    dataSource={[{ id: 'abc' }]}
+                                    columns={survey.surveyChoice.map((i) => {
+                                        return {
+                                            title: `${i?.description} ${i?.requireExplanation === true ? '*' : ''}`,
+                                            dataIndex: i?.id,
+                                            key: i?.id,
+                                            align: 'center',
+                                            render: () => (
+                                                <div className="flex items-center justify-center">
+                                                    <Button className="flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px]">
+                                                        {i?.answer}
+                                                    </Button>
+                                                </div>
+                                            ),
+                                        }
+                                    })}
+                                    pagination={false}
+                                />
+                            </Col>
+                            <Col span={24} className="text-base text-[#e80808]">
+                                Nếu ở mức (*), bạn phải ghi rõ lý do
+                            </Col>
 
-                    <Col span={24}>
-                        <Form.List name="responses">
-                            {(fields) => (
-                                <>
-                                    {dataTest.map((section, sectionIndex) => (
-                                        <div key={section.id} className="mb-2">
-                                            <div className="font-bold mb-1">{section.name}</div>
-
-                                            {section.children?.map((q, qIndex) => {
-                                                return (
-                                                    <div key={q.id} className="px-4">
-                                                        {q.type === 'SINGLE_CHOICE' ? (
-                                                            <>
-                                                                <div className="flex items-center w-full justify-between mb-2">
-                                                                    <div className="mb-2">
-                                                                        {sectionIndex + 1}.
-                                                                        {qIndex + 1}. {q.name}
-                                                                    </div>
-                                                                    <div className="flex items-center justify-end">
-                                                                        {survey?.surveyChoice.map(
-                                                                            (i) => {
-                                                                                return (
-                                                                                    <Button
-                                                                                        key={i.id}
-                                                                                        onClick={() =>
-                                                                                            onChange(
-                                                                                                q?.id,
-                                                                                                i.id,
-                                                                                                i.requireExplanation
-                                                                                            )
-                                                                                        }
-                                                                                        className={`flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px] mr-2  ${checkedQuestion(q?.id, i.id) ? '!bg-[#ea1212] text-white' : 'bg-white text-[#ea1212]'}`}
-                                                                                    >
-                                                                                        {i.answer}
-                                                                                    </Button>
-                                                                                )
-                                                                            }
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-
-                                                                {/* Nếu requireExplanation true thì hiển thị input */}
-                                                                {requireExplanation?.length > 0 &&
-                                                                    requireExplanation.includes(
-                                                                        q?.id
-                                                                    ) && (
-                                                                        <Form.Item
-                                                                            className="!mb-0 !mt-2"
-                                                                            shouldUpdate
-                                                                        >
-                                                                            {() => {
-                                                                                return (
-                                                                                    <Form.Item
-                                                                                        name={[
-                                                                                            qIndex,
-                                                                                            'explanation',
-                                                                                        ]}
-                                                                                        label="Lý do"
-                                                                                        rules={[
-                                                                                            {
-                                                                                                required: true,
-                                                                                                message:
-                                                                                                    'Nhập lý do',
-                                                                                            },
-                                                                                        ]}
-                                                                                    >
-                                                                                        <Input.TextArea placeholder="Nhập lý do" />
-                                                                                    </Form.Item>
-                                                                                )
-                                                                            }}
-                                                                        </Form.Item>
-                                                                    )}
-                                                            </>
-                                                        ) : (
-                                                            // ESSAY
-                                                            <>
-                                                                <div className="mb-2">
-                                                                    {sectionIndex + 1}.{qIndex + 1}.{' '}
-                                                                    {q.name}
-                                                                </div>
-                                                                <Form.Item
-                                                                    name={[qIndex, 'answerText']}
-                                                                    rules={[
-                                                                        {
-                                                                            required: true,
-                                                                            message:
-                                                                                'Nhập câu trả lời',
-                                                                        },
-                                                                    ]}
-                                                                >
-                                                                    <Input.TextArea placeholder="Nhập câu trả lời" />
-                                                                </Form.Item>
-                                                            </>
-                                                        )}
+                            <Col span={24}>
+                                <Form.List name="responses">
+                                    {(fields) => (
+                                        <>
+                                            {dataTest.map((section, sectionIndex) => (
+                                                <div key={section.id} className="mb-2">
+                                                    <div className="font-bold mb-1">
+                                                        {section.name}
                                                     </div>
-                                                )
-                                            })}
-                                        </div>
-                                    ))}
-                                </>
+
+                                                    {section.children?.map((q, qIndex) => {
+                                                        return (
+                                                            <div key={q.id} className="px-4">
+                                                                {q.type === 'SINGLE_CHOICE' ? (
+                                                                    <>
+                                                                        <div className="flex items-center w-full justify-between mb-2">
+                                                                            <div className="mb-2">
+                                                                                {sectionIndex + 1}.
+                                                                                {qIndex + 1}.{' '}
+                                                                                {q.name}
+                                                                            </div>
+                                                                            <div className="flex items-center justify-end">
+                                                                                {survey?.surveyChoice.map(
+                                                                                    (i) => {
+                                                                                        return (
+                                                                                            <Button
+                                                                                                key={
+                                                                                                    i.id
+                                                                                                }
+                                                                                                onClick={() =>
+                                                                                                    onChange(
+                                                                                                        q?.id,
+                                                                                                        i.id,
+                                                                                                        i.requireExplanation
+                                                                                                    )
+                                                                                                }
+                                                                                                className={`flex items-center justify-center w-6 h-6 border-solid border-[1px] border-[#ed9e9e] text-[#ea1212] text-[12px] mr-2  ${checkedQuestion(q?.id, i.id) ? '!bg-[#ea1212] text-white' : 'bg-white text-[#ea1212]'}`}
+                                                                                            >
+                                                                                                {
+                                                                                                    i.answer
+                                                                                                }
+                                                                                            </Button>
+                                                                                        )
+                                                                                    }
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+
+                                                                        {/* Nếu requireExplanation true thì hiển thị input */}
+                                                                        {requireExplanation?.length >
+                                                                            0 &&
+                                                                            requireExplanation.includes(
+                                                                                q?.id
+                                                                            ) && (
+                                                                                <Form.Item
+                                                                                    className="!mb-0 !mt-2"
+                                                                                    shouldUpdate
+                                                                                >
+                                                                                    {() => {
+                                                                                        return (
+                                                                                            <Form.Item
+                                                                                                name={[
+                                                                                                    qIndex,
+                                                                                                    'explanation',
+                                                                                                ]}
+                                                                                                label="Lý do"
+                                                                                                rules={[
+                                                                                                    {
+                                                                                                        required: true,
+                                                                                                        message:
+                                                                                                            'Nhập lý do',
+                                                                                                    },
+                                                                                                ]}
+                                                                                            >
+                                                                                                <Input.TextArea placeholder="Nhập lý do" />
+                                                                                            </Form.Item>
+                                                                                        )
+                                                                                    }}
+                                                                                </Form.Item>
+                                                                            )}
+                                                                    </>
+                                                                ) : (
+                                                                    // ESSAY
+                                                                    <>
+                                                                        <div className="mb-2">
+                                                                            {sectionIndex + 1}.
+                                                                            {qIndex + 1}. {q.name}
+                                                                        </div>
+                                                                        <Form.Item
+                                                                            name={[
+                                                                                qIndex,
+                                                                                'answerText',
+                                                                            ]}
+                                                                            rules={[
+                                                                                {
+                                                                                    required: true,
+                                                                                    message:
+                                                                                        'Nhập câu trả lời',
+                                                                                },
+                                                                            ]}
+                                                                        >
+                                                                            <Input.TextArea placeholder="Nhập câu trả lời" />
+                                                                        </Form.Item>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            ))}
+                                        </>
+                                    )}
+                                </Form.List>
+                            </Col>
+                            {survey.additionalSuggestion && (
+                                <Col span={24}>
+                                    <div className="mb-3 font-bold">Ý kiến khác :</div>
+                                    <FormItem
+                                        className="block"
+                                        form={form}
+                                        name="additionalSuggestion"
+                                        label=""
+                                    >
+                                        <Input.TextArea placeholder="Nhập ý kiến khác" />
+                                    </FormItem>
+                                </Col>
                             )}
-                        </Form.List>
-                    </Col>
-                    {survey.additionalSuggestion && (
+
+                            <Col span={24} className="mt-6">
+                                <Flex justify="end">
+                                    <Button onClick={() => onOk()} type="primary">
+                                        Lưu
+                                    </Button>
+                                </Flex>
+                            </Col>
+                        </Row>
+                    )}
+                </Form>
+            )}
+            <Modal
+                title={`Khảo sát ${survey?.name}`}
+                open={isOpen}
+                className={'w-[500px]'}
+                okText="Đồng ý"
+                cancelText="Hủy"
+                onCancel={() => setIsOpen(false)}
+                onOk={formUser.submit}
+                maskClosable={false}
+            >
+                <div className="flex gap-4 justify-between">
+                    <Form
+                        form={formUser}
+                        onFinish={CheckUser}
+                        layout="vertical"
+                        className={cn('mt-4', 'w-full')}
+                    >
                         <Col span={24}>
-                            <div className="mb-3 font-bold">Ý kiến khác :</div>
-                            <FormItem
-                                className="block"
-                                form={form}
-                                name="additionalSuggestion"
-                                label=""
-                            >
-                                <Input.TextArea placeholder="Nhập ý kiến khác" />
+                            <FormItem form={formUser} name={'code'} label="Mã học viên" required>
+                                <Input placeholder="Mã học viên" />
                             </FormItem>
                         </Col>
-                    )}
-
-                    <Col span={24} className="mt-6">
-                        <Flex justify="end">
-                            <Button onClick={() => onOk()} type="primary">
-                                Lưu
-                            </Button>
-                        </Flex>
-                    </Col>
-                </Row>
-            )}
-        </Form>
+                    </Form>
+                </div>
+            </Modal>
+        </div>
     )
 }
 
