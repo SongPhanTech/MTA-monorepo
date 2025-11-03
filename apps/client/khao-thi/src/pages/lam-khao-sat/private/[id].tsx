@@ -2,7 +2,7 @@ import FormItem from '@components/commons/form-item'
 import Loading from '@components/commons/loading'
 import Table from '@components/commons/table'
 import useSpinner from '@hooks/spinner'
-import KhaoSatLayout from '@layouts/khao-sat-layout'
+import KhaoSatPrivateLayout from '@layouts/khao-sat-layout/private'
 import { useSession } from '@workspace/auth/react'
 import type { SurveySession } from '@workspace/db'
 import { useSuspenseFindFirstStudent } from '@workspace/db/hooks'
@@ -427,5 +427,5 @@ function TakeTestPage() {
 
 export default TakeTestPage
 TakeTestPage.getLayout = function getLayout(page: React.ReactNode) {
-    return <KhaoSatLayout>{page}</KhaoSatLayout>
+    return <KhaoSatPrivateLayout>{page}</KhaoSatPrivateLayout>
 }

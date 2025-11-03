@@ -95,11 +95,11 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
     }
     return (
         <Row gutter={16}>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name="code" label="Mã khảo sát" required>
                     <Input placeholder="Nhập mã khảo sát" />
                 </FormItem>
-            </Col>
+            </Col> */}
             <Col span={12}>
                 <FormItem form={form} name="name" label="Tên khảo sát" required>
                     <Input placeholder="Nhập tên đối tượng khảo sát" />
@@ -211,14 +211,14 @@ export default function InfoSurveyExam({ id, type }: { id: string; type: string 
                     </Radio.Group>
                 </FormItem>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
                 <FormItem form={form} name={'anonymous'} label="Có ẩn danh không?" required>
                     <Radio.Group buttonStyle="solid">
                         <Radio value={true}>Có</Radio>
                         <Radio value={false}>Không</Radio>
                     </Radio.Group>
                 </FormItem>
-            </Col>
+            </Col> */}
         </Row>
     )
 }
