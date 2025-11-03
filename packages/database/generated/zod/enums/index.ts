@@ -536,6 +536,7 @@ export * from './AcademicActionType.schema';
 export * from './CriteriaField.schema';
 export * from './CriteriaOperator.schema';
 export * from './DecisionStatus.schema';
+export * from './TrainingScoreStatus.schema';
 export * from './ResearchProjectStatus.schema';
 export * from './RegistrationStatus.schema';
 export * from './ThesisProjectStatus.schema';

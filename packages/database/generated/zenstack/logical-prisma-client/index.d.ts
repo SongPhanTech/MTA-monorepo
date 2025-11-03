@@ -2629,6 +2629,7 @@ export type NotificationType = $Enums.NotificationType;
 export type NotificationPriority = $Enums.NotificationPriority;
 export type AcademicActionType = $Enums.AcademicActionType;
 export type DecisionStatus = $Enums.DecisionStatus;
+export type TrainingScoreStatus = $Enums.TrainingScoreStatus;
 export type StudentTrainingType = $Enums.StudentTrainingType;
 export type ResearchProjectStatus = $Enums.ResearchProjectStatus;
 export type RegistrationStatus = $Enums.RegistrationStatus;
@@ -5040,6 +5041,7 @@ export const NotificationType: typeof $Enums.NotificationType;
 export const NotificationPriority: typeof $Enums.NotificationPriority;
 export const AcademicActionType: typeof $Enums.AcademicActionType;
 export const DecisionStatus: typeof $Enums.DecisionStatus;
+export const TrainingScoreStatus: typeof $Enums.TrainingScoreStatus;
 export const StudentTrainingType: typeof $Enums.StudentTrainingType;
 export const ResearchProjectStatus: typeof $Enums.ResearchProjectStatus;
 export const RegistrationStatus: typeof $Enums.RegistrationStatus;
@@ -5278,6 +5280,11 @@ export namespace $Enums {
         APPEALED: 'APPEALED'
     };
     export type DecisionStatus = (typeof DecisionStatus)[keyof typeof DecisionStatus];
+    export const TrainingScoreStatus: {
+        PENDING: 'PENDING',
+        APPROVED: 'APPROVED'
+    };
+    export type TrainingScoreStatus = (typeof TrainingScoreStatus)[keyof typeof TrainingScoreStatus];
     export const StudentTrainingType: {
         EXCELLENT: 'EXCELLENT',
         GOOD: 'GOOD',
@@ -8182,7 +8189,8 @@ export namespace Prisma {
         trainingScoreSessionId: 'trainingScoreSessionId',
         studentId: 'studentId',
         score: 'score',
-        studentTrainingType: 'studentTrainingType'
+        studentTrainingType: 'studentTrainingType',
+        status: 'status'
     };
     export const LecturerTypeScalarFieldEnum: {
         id: 'id',
@@ -64616,6 +64624,7 @@ export namespace Prisma {
         readonly studentId: FieldRef<"StudentTrainingScore", 'String'>;
         readonly score: FieldRef<"StudentTrainingScore", 'Float'>;
         readonly studentTrainingType: FieldRef<"StudentTrainingScore", 'StudentTrainingType'>;
+        readonly status: FieldRef<"StudentTrainingScore", 'TrainingScoreStatus'>;
     }
 
     export interface LecturerTypeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
@@ -241198,6 +241207,7 @@ export namespace Prisma {
         studentId: string | null
         score: number | null
         studentTrainingType: $Enums.StudentTrainingType | null
+        status: $Enums.TrainingScoreStatus | null
     };
     export type StudentTrainingScoreMaxAggregateOutputType = {
         id: string | null
@@ -241211,6 +241221,7 @@ export namespace Prisma {
         studentId: string | null
         score: number | null
         studentTrainingType: $Enums.StudentTrainingType | null
+        status: $Enums.TrainingScoreStatus | null
     };
     export type StudentTrainingScoreCountAggregateOutputType = {
         id: number
@@ -241224,6 +241235,7 @@ export namespace Prisma {
         studentId: number
         score: number
         studentTrainingType: number
+        status: number
         _all: number
     };
     export type StudentTrainingScoreAvgAggregateInputType = {
@@ -241244,6 +241256,7 @@ export namespace Prisma {
         studentId?: true
         score?: true
         studentTrainingType?: true
+        status?: true
     };
     export type StudentTrainingScoreMaxAggregateInputType = {
         id?: true
@@ -241257,6 +241270,7 @@ export namespace Prisma {
         studentId?: true
         score?: true
         studentTrainingType?: true
+        status?: true
     };
     export type StudentTrainingScoreCountAggregateInputType = {
         id?: true
@@ -241270,6 +241284,7 @@ export namespace Prisma {
         studentId?: true
         score?: true
         studentTrainingType?: true
+        status?: true
         _all?: true
     };
     export type StudentTrainingScoreAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -241364,6 +241379,7 @@ export namespace Prisma {
         studentId: string
         score: number | null
         studentTrainingType: $Enums.StudentTrainingType | null
+        status: $Enums.TrainingScoreStatus
         _count: StudentTrainingScoreCountAggregateOutputType | null
         _avg: StudentTrainingScoreAvgAggregateOutputType | null
         _sum: StudentTrainingScoreSumAggregateOutputType | null
@@ -241394,6 +241410,7 @@ export namespace Prisma {
         studentId?: boolean
         score?: boolean
         studentTrainingType?: boolean
+        status?: boolean
         trainingScoreSession?: boolean | TrainingScoreSessionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["studentTrainingScore"]>;
@@ -241409,6 +241426,7 @@ export namespace Prisma {
         studentId?: boolean
         score?: boolean
         studentTrainingType?: boolean
+        status?: boolean
         trainingScoreSession?: boolean | TrainingScoreSessionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["studentTrainingScore"]>;
@@ -241424,6 +241442,7 @@ export namespace Prisma {
         studentId?: boolean
         score?: boolean
         studentTrainingType?: boolean
+        status?: boolean
         trainingScoreSession?: boolean | TrainingScoreSessionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
     }, ExtArgs["result"]["studentTrainingScore"]>;
@@ -241439,8 +241458,9 @@ export namespace Prisma {
         studentId?: boolean
         score?: boolean
         studentTrainingType?: boolean
+        status?: boolean
     };
-    export type StudentTrainingScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "trainingScoreSessionId" | "studentId" | "score" | "studentTrainingType", ExtArgs["result"]["studentTrainingScore"]>;
+    export type StudentTrainingScoreOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "trainingScoreSessionId" | "studentId" | "score" | "studentTrainingType" | "status", ExtArgs["result"]["studentTrainingScore"]>;
     export type StudentTrainingScoreInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         trainingScoreSession?: boolean | TrainingScoreSessionDefaultArgs<ExtArgs>
         student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -241471,6 +241491,7 @@ export namespace Prisma {
             studentId: string
             score: number | null
             studentTrainingType: $Enums.StudentTrainingType | null
+            status: $Enums.TrainingScoreStatus
         }, ExtArgs["result"]["studentTrainingScore"]>
         composites: {}
     };
@@ -323885,6 +323906,14 @@ export namespace Prisma {
      */
     export type ListEnumDecisionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DecisionStatus[]'>;
     /**
+     * Reference to a field of type 'TrainingScoreStatus'
+     */
+    export type EnumTrainingScoreStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TrainingScoreStatus'>;
+    /**
+     * Reference to a field of type 'TrainingScoreStatus[]'
+     */
+    export type ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TrainingScoreStatus[]'>;
+    /**
      * Reference to a field of type 'ResearchProjectStatus'
      */
     export type EnumResearchProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ResearchProjectStatus'>;
@@ -338957,6 +338986,7 @@ export namespace Prisma {
         studentId?: StringFilter<"StudentTrainingScore"> | string
         score?: FloatNullableFilter<"StudentTrainingScore"> | number | null
         studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentTrainingScore"> | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFilter<"StudentTrainingScore"> | $Enums.TrainingScoreStatus
         trainingScoreSession?: XOR<TrainingScoreSessionScalarRelationFilter, TrainingScoreSessionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     };
@@ -338972,6 +339002,7 @@ export namespace Prisma {
         studentId?: SortOrder
         score?: SortOrderInput | SortOrder
         studentTrainingType?: SortOrderInput | SortOrder
+        status?: SortOrder
         trainingScoreSession?: TrainingScoreSessionOrderByWithRelationInput
         student?: StudentOrderByWithRelationInput
         _relevance?: StudentTrainingScoreOrderByRelevanceInput
@@ -338992,6 +339023,7 @@ export namespace Prisma {
         studentId?: StringFilter<"StudentTrainingScore"> | string
         score?: FloatNullableFilter<"StudentTrainingScore"> | number | null
         studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentTrainingScore"> | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFilter<"StudentTrainingScore"> | $Enums.TrainingScoreStatus
         trainingScoreSession?: XOR<TrainingScoreSessionScalarRelationFilter, TrainingScoreSessionWhereInput>
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
     }, "id" | "code" | "trainingScoreSessionId_studentId">;
@@ -339007,6 +339039,7 @@ export namespace Prisma {
         studentId?: SortOrder
         score?: SortOrderInput | SortOrder
         studentTrainingType?: SortOrderInput | SortOrder
+        status?: SortOrder
         _count?: StudentTrainingScoreCountOrderByAggregateInput
         _avg?: StudentTrainingScoreAvgOrderByAggregateInput
         _max?: StudentTrainingScoreMaxOrderByAggregateInput
@@ -339028,6 +339061,7 @@ export namespace Prisma {
         studentId?: StringWithAggregatesFilter<"StudentTrainingScore"> | string
         score?: FloatNullableWithAggregatesFilter<"StudentTrainingScore"> | number | null
         studentTrainingType?: EnumStudentTrainingTypeNullableWithAggregatesFilter<"StudentTrainingScore"> | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusWithAggregatesFilter<"StudentTrainingScore"> | $Enums.TrainingScoreStatus
     };
     export type LecturerTypeWhereInput = {
         AND?: LecturerTypeWhereInput | LecturerTypeWhereInput[]
@@ -365895,6 +365929,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         score?: number | null
         studentTrainingType?: $Enums.StudentTrainingType | null
+        status?: $Enums.TrainingScoreStatus
         trainingScoreSession: TrainingScoreSessionCreateNestedOneWithoutStudentTrainingScoreInput
         student: StudentCreateNestedOneWithoutStudentTrainingScoreInput
     };
@@ -365910,6 +365945,7 @@ export namespace Prisma {
         studentId: string
         score?: number | null
         studentTrainingType?: $Enums.StudentTrainingType | null
+        status?: $Enums.TrainingScoreStatus
     };
     export type StudentTrainingScoreUpdateInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365921,6 +365957,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
         trainingScoreSession?: TrainingScoreSessionUpdateOneRequiredWithoutStudentTrainingScoreNestedInput
         student?: StudentUpdateOneRequiredWithoutStudentTrainingScoreNestedInput
     };
@@ -365936,6 +365973,7 @@ export namespace Prisma {
         studentId?: StringFieldUpdateOperationsInput | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
     };
     export type StudentTrainingScoreCreateManyInput = {
         id?: string
@@ -365949,6 +365987,7 @@ export namespace Prisma {
         studentId: string
         score?: number | null
         studentTrainingType?: $Enums.StudentTrainingType | null
+        status?: $Enums.TrainingScoreStatus
     };
     export type StudentTrainingScoreUpdateManyMutationInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365960,6 +365999,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
     };
     export type StudentTrainingScoreUncheckedUpdateManyInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -365973,6 +366013,7 @@ export namespace Prisma {
         studentId?: StringFieldUpdateOperationsInput | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
     };
     export type LecturerTypeCreateInput = {
         id?: string
@@ -387501,6 +387542,12 @@ export namespace Prisma {
         notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
         not?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel> | $Enums.StudentTrainingType | null
     };
+    export type EnumTrainingScoreStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.TrainingScoreStatus | EnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumTrainingScoreStatusFilter<$PrismaModel> | $Enums.TrainingScoreStatus
+    };
     export type TrainingScoreSessionScalarRelationFilter = {
         is?: TrainingScoreSessionWhereInput
         isNot?: TrainingScoreSessionWhereInput
@@ -387526,6 +387573,7 @@ export namespace Prisma {
         studentId?: SortOrder
         score?: SortOrder
         studentTrainingType?: SortOrder
+        status?: SortOrder
     };
     export type StudentTrainingScoreAvgOrderByAggregateInput = {
         score?: SortOrder
@@ -387542,6 +387590,7 @@ export namespace Prisma {
         studentId?: SortOrder
         score?: SortOrder
         studentTrainingType?: SortOrder
+        status?: SortOrder
     };
     export type StudentTrainingScoreMinOrderByAggregateInput = {
         id?: SortOrder
@@ -387555,6 +387604,7 @@ export namespace Prisma {
         studentId?: SortOrder
         score?: SortOrder
         studentTrainingType?: SortOrder
+        status?: SortOrder
     };
     export type StudentTrainingScoreSumOrderByAggregateInput = {
         score?: SortOrder
@@ -387567,6 +387617,15 @@ export namespace Prisma {
         _count?: NestedIntNullableFilter<$PrismaModel>
         _min?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
         _max?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
+    };
+    export type EnumTrainingScoreStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.TrainingScoreStatus | EnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumTrainingScoreStatusWithAggregatesFilter<$PrismaModel> | $Enums.TrainingScoreStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumTrainingScoreStatusFilter<$PrismaModel>
+        _max?: NestedEnumTrainingScoreStatusFilter<$PrismaModel>
     };
     export type LecturerTypeOrderByRelevanceInput = {
         fields: LecturerTypeOrderByRelevanceFieldEnum | LecturerTypeOrderByRelevanceFieldEnum[]
@@ -408071,6 +408130,9 @@ export namespace Prisma {
     export type NullableEnumStudentTrainingTypeFieldUpdateOperationsInput = {
         set?: $Enums.StudentTrainingType | null
     };
+    export type EnumTrainingScoreStatusFieldUpdateOperationsInput = {
+        set?: $Enums.TrainingScoreStatus
+    };
     export type TrainingScoreSessionUpdateOneRequiredWithoutStudentTrainingScoreNestedInput = {
         create?: XOR<TrainingScoreSessionCreateWithoutStudentTrainingScoreInput, TrainingScoreSessionUncheckedCreateWithoutStudentTrainingScoreInput>
         connectOrCreate?: TrainingScoreSessionCreateOrConnectWithoutStudentTrainingScoreInput
@@ -416386,6 +416448,12 @@ export namespace Prisma {
         notIn?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
         not?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel> | $Enums.StudentTrainingType | null
     };
+    export type NestedEnumTrainingScoreStatusFilter<$PrismaModel = never> = {
+        equals?: $Enums.TrainingScoreStatus | EnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumTrainingScoreStatusFilter<$PrismaModel> | $Enums.TrainingScoreStatus
+    };
     export type NestedEnumStudentTrainingTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
         equals?: $Enums.StudentTrainingType | EnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
         in?: $Enums.StudentTrainingType[] | ListEnumStudentTrainingTypeFieldRefInput<$PrismaModel> | null
@@ -416394,6 +416462,15 @@ export namespace Prisma {
         _count?: NestedIntNullableFilter<$PrismaModel>
         _min?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
         _max?: NestedEnumStudentTrainingTypeNullableFilter<$PrismaModel>
+    };
+    export type NestedEnumTrainingScoreStatusWithAggregatesFilter<$PrismaModel = never> = {
+        equals?: $Enums.TrainingScoreStatus | EnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        in?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        notIn?: $Enums.TrainingScoreStatus[] | ListEnumTrainingScoreStatusFieldRefInput<$PrismaModel>
+        not?: NestedEnumTrainingScoreStatusWithAggregatesFilter<$PrismaModel> | $Enums.TrainingScoreStatus
+        _count?: NestedIntFilter<$PrismaModel>
+        _min?: NestedEnumTrainingScoreStatusFilter<$PrismaModel>
+        _max?: NestedEnumTrainingScoreStatusFilter<$PrismaModel>
     };
     export type NestedEnumResearchProjectStatusFilter<$PrismaModel = never> = {
         equals?: $Enums.ResearchProjectStatus | EnumResearchProjectStatusFieldRefInput<$PrismaModel>
@@ -485365,6 +485442,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         score?: number | null
         studentTrainingType?: $Enums.StudentTrainingType | null
+        status?: $Enums.TrainingScoreStatus
         trainingScoreSession: TrainingScoreSessionCreateNestedOneWithoutStudentTrainingScoreInput
     };
     export type StudentTrainingScoreUncheckedCreateWithoutStudentInput = {
@@ -485378,6 +485456,7 @@ export namespace Prisma {
         trainingScoreSessionId: string
         score?: number | null
         studentTrainingType?: $Enums.StudentTrainingType | null
+        status?: $Enums.TrainingScoreStatus
     };
     export type StudentTrainingScoreCreateOrConnectWithoutStudentInput = {
         where: StudentTrainingScoreWhereUniqueInput
@@ -487220,6 +487299,7 @@ export namespace Prisma {
         studentId?: StringFilter<"StudentTrainingScore"> | string
         score?: FloatNullableFilter<"StudentTrainingScore"> | number | null
         studentTrainingType?: EnumStudentTrainingTypeNullableFilter<"StudentTrainingScore"> | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFilter<"StudentTrainingScore"> | $Enums.TrainingScoreStatus
     };
     export type StudentSemesterResultUpsertWithWhereUniqueWithoutStudentInput = {
         where: StudentSemesterResultWhereUniqueInput
@@ -492155,6 +492235,7 @@ export namespace Prisma {
         updatedAt?: Date | string
         score?: number | null
         studentTrainingType?: $Enums.StudentTrainingType | null
+        status?: $Enums.TrainingScoreStatus
         student: StudentCreateNestedOneWithoutStudentTrainingScoreInput
     };
     export type StudentTrainingScoreUncheckedCreateWithoutTrainingScoreSessionInput = {
@@ -492168,6 +492249,7 @@ export namespace Prisma {
         studentId: string
         score?: number | null
         studentTrainingType?: $Enums.StudentTrainingType | null
+        status?: $Enums.TrainingScoreStatus
     };
     export type StudentTrainingScoreCreateOrConnectWithoutTrainingScoreSessionInput = {
         where: StudentTrainingScoreWhereUniqueInput
@@ -558902,6 +558984,7 @@ export namespace Prisma {
         trainingScoreSessionId: string
         score?: number | null
         studentTrainingType?: $Enums.StudentTrainingType | null
+        status?: $Enums.TrainingScoreStatus
     };
     export type StudentSemesterResultCreateManyStudentInput = {
         id?: string
@@ -559330,6 +559413,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
         trainingScoreSession?: TrainingScoreSessionUpdateOneRequiredWithoutStudentTrainingScoreNestedInput
     };
     export type StudentTrainingScoreUncheckedUpdateWithoutStudentInput = {
@@ -559343,6 +559427,7 @@ export namespace Prisma {
         trainingScoreSessionId?: StringFieldUpdateOperationsInput | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
     };
     export type StudentTrainingScoreUncheckedUpdateManyWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -559355,6 +559440,7 @@ export namespace Prisma {
         trainingScoreSessionId?: StringFieldUpdateOperationsInput | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
     };
     export type StudentSemesterResultUpdateWithoutStudentInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561149,6 +561235,7 @@ export namespace Prisma {
         studentId: string
         score?: number | null
         studentTrainingType?: $Enums.StudentTrainingType | null
+        status?: $Enums.TrainingScoreStatus
     };
     export type StudentTrainingScoreUpdateWithoutTrainingScoreSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561160,6 +561247,7 @@ export namespace Prisma {
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
         student?: StudentUpdateOneRequiredWithoutStudentTrainingScoreNestedInput
     };
     export type StudentTrainingScoreUncheckedUpdateWithoutTrainingScoreSessionInput = {
@@ -561173,6 +561261,7 @@ export namespace Prisma {
         studentId?: StringFieldUpdateOperationsInput | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
     };
     export type StudentTrainingScoreUncheckedUpdateManyWithoutTrainingScoreSessionInput = {
         id?: StringFieldUpdateOperationsInput | string
@@ -561185,6 +561274,7 @@ export namespace Prisma {
         studentId?: StringFieldUpdateOperationsInput | string
         score?: NullableFloatFieldUpdateOperationsInput | number | null
         studentTrainingType?: NullableEnumStudentTrainingTypeFieldUpdateOperationsInput | $Enums.StudentTrainingType | null
+        status?: EnumTrainingScoreStatusFieldUpdateOperationsInput | $Enums.TrainingScoreStatus
     };
     export type LecturerCreateManyLecturerTypeInput = {
         id?: string

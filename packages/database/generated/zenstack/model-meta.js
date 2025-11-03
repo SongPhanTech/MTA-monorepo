@@ -14714,6 +14714,10 @@ const metadata = {
                     type: "StudentTrainingType",
                     isOptional: true,
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, status: {
+                    name: "status",
+                    type: "TrainingScoreStatus",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 },
             }, uniqueConstraints: {
                 id: {

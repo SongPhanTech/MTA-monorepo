@@ -5,8 +5,9 @@
 /* eslint-disable */
 
 import { z } from 'zod';
-import { StudentTrainingType } from '../../zenstack/models';
+import { StudentTrainingType, TrainingScoreStatus } from '../../zenstack/models';
 import { StudentTrainingTypeSchema } from '../enums/StudentTrainingType.schema';
+import { TrainingScoreStatusSchema } from '../enums/TrainingScoreStatus.schema';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -17,6 +18,7 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     score: z.number().nullish(),
     studentTrainingType: StudentTrainingTypeSchema.nullish(),
+    status: TrainingScoreStatusSchema,
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -29,6 +31,7 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     score: z.number().nullish(),
     studentTrainingType: StudentTrainingTypeSchema.nullish(),
+    status: TrainingScoreStatusSchema,
 }
 ).strict();
 const relationSchema = z.object({
@@ -74,7 +77,8 @@ export const StudentTrainingScorePrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     score: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    studentTrainingType: StudentTrainingTypeSchema.nullish()
+    studentTrainingType: StudentTrainingTypeSchema.nullish(),
+    status: TrainingScoreStatusSchema
 }).partial().passthrough();
 
 
@@ -82,7 +86,7 @@ export const StudentTrainingScorePrismaUpdateSchema = z.object({
  * `StudentTrainingScore` schema for create operations excluding foreign keys and relations.
  */
 export const StudentTrainingScoreCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, studentTrainingType: true
+    id: true, active: true, createdAt: true, updatedAt: true, studentTrainingType: true, status: true
 });
 
 

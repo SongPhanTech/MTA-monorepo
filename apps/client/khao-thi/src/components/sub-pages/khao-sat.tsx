@@ -254,7 +254,7 @@ function TabDotKhaoSat() {
                                         {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                             'XEM_CHI_TIET'
-                                        ) && (
+                                        ) &&surveySessions?.length > 0 && (
                                             <Tooltip
                                                 className="mr-2"
                                                 title={'Báo cáo khảo sát'}

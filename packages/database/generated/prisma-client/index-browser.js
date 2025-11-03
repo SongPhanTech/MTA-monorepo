@@ -2544,7 +2544,8 @@ exports.Prisma.StudentTrainingScoreScalarFieldEnum = {
   trainingScoreSessionId: 'trainingScoreSessionId',
   studentId: 'studentId',
   score: 'score',
-  studentTrainingType: 'studentTrainingType'
+  studentTrainingType: 'studentTrainingType',
+  status: 'status'
 };
 
 exports.Prisma.LecturerTypeScalarFieldEnum = {
@@ -6881,6 +6882,11 @@ exports.DecisionStatus = exports.$Enums.DecisionStatus = {
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
   APPEALED: 'APPEALED'
+};
+
+exports.TrainingScoreStatus = exports.$Enums.TrainingScoreStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED'
 };
 
 exports.ResearchProjectStatus = exports.$Enums.ResearchProjectStatus = {

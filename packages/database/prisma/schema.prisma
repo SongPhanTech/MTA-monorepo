@@ -284,6 +284,13 @@ enum DecisionStatus {
   @@schema("ql-dao-tao")
 }
 
+enum TrainingScoreStatus {
+  PENDING
+  APPROVED
+
+  @@schema("ql-dao-tao")
+}
+
 enum StudentTrainingType {
   EXCELLENT
   GOOD
@@ -3928,6 +3935,7 @@ model StudentTrainingScore {
   studentId              String
   score                  Float?
   studentTrainingType    StudentTrainingType? @default(GOOD)
+  status                 TrainingScoreStatus  @default(PENDING)
 
   @@unique([trainingScoreSessionId, studentId])
   @@schema("ql-dao-tao")

@@ -32,6 +32,7 @@ import { NotificationType } from "../prisma-client";
 import { NotificationPriority } from "../prisma-client";
 import { AcademicActionType } from "../prisma-client";
 import { DecisionStatus } from "../prisma-client";
+import { TrainingScoreStatus } from "../prisma-client";
 import { StudentTrainingType } from "../prisma-client";
 import { ResearchProjectStatus } from "../prisma-client";
 import { RegistrationStatus } from "../prisma-client";
