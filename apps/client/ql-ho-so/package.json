@@ -24,6 +24,7 @@
 		"@workspace/db": "workspace:*",
 		"@workspace/router": "workspace:*",
 		"@workspace/ui": "workspace:*",
+		"@workspace/libs": "workspace:*",
 		"@workspace/permissions": "workspace:*",
 		"antd": "catalog:",
 		"antd-img-crop": "^4.25.0",

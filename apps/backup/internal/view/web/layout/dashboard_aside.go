@@ -58,18 +58,18 @@ func dashboardAside() nodx.Node {
 				"/dashboard/restorations",
 				false,
 			),
-			dashboardAsideItem(
-				lucide.Webhook,
-				"Webhooks",
-				"/dashboard/webhooks",
-				false,
-			),
-			dashboardAsideItem(
-				lucide.User,
-				"Hồ sơ",
-				"/dashboard/profile",
-				false,
-			),
+			// dashboardAsideItem(
+			// 	lucide.Webhook,
+			// 	"Webhooks",
+			// 	"/dashboard/webhooks",
+			// 	false,
+			// ),
+			// dashboardAsideItem(
+			// 	lucide.User,
+			// 	"Hồ sơ",
+			// 	"/dashboard/profile",
+			// 	false,
+			// ),
 		),
 	)
 }

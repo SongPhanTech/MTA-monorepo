@@ -74,9 +74,10 @@ func (h *handlers) restoreExecutionHandler(c echo.Context) error {
 		)
 	}()
 
-	return respondhtmx.ToastSuccess(
-		c, "Quá trình đã bắt đầu, hãy kiểm tra trang khôi phục để biết thêm chi tiết.",
-	)
+	return respondhtmx.AlertWithRedirect(c, "Quá trình khôi phục đã bắt đầu.", "/dashboard/restorations")
+	// return respondhtmx.ToastSuccess(
+	// 	c, "Quá trình đã bắt đầu, hãy kiểm tra trang khôi phục để biết thêm chi tiết.",
+	// )
 }
 
 func (h *handlers) restoreExecutionFormHandler(c echo.Context) error {
