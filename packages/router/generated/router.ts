@@ -110,6 +110,7 @@ export default {
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_ID": "/quan-ly-do-an/danh-muc-do-an/[id]",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN_CAU_HINH_HOI_DONG": "/quan-ly-do-an/danh-muc-do-an/cau-hinh-hoi-dong",
     "QUAN_LY_DO_AN_DANH_MUC_DO_AN": "/quan-ly-do-an/danh-muc-do-an",
+    "QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN": "/quan-ly-do-an/danh-muc-luan-van",
     "QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA": "/quan-ly-do-an/danh-sach-chuyen-gia",
     "QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN_GVHD": "/quan-ly-do-an/danh-sach-thanh-toan-gvhd",
     "QUAN_LY_DO_AN_DANH_SACH_THANH_TOAN": "/quan-ly-do-an/danh-sach-thanh-toan",
