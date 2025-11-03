@@ -1,7 +1,7 @@
 import { Popconfirm, type PopconfirmProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import type { LucideProps } from 'lucide-react'
-import { CheckCircle2 } from 'lucide-react'
+import { BadgeCheck } from 'lucide-react'
 
 // import { CheckCircleOutlined } from '@ant-design/icons'
 
@@ -13,7 +13,7 @@ type DeleteIconProps = {
 
 const ApproveIcon = ({ title, popConfirm, disabled = false, ...props }: DeleteIconProps) => {
     const icon = (
-        <CheckCircle2
+        <BadgeCheck
             size={16}
             strokeWidth={1.5}
             className={clsx(
