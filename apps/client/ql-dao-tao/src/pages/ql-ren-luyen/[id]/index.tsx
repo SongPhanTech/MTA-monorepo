@@ -1,7 +1,11 @@
 import Table from '@components/commons/table'
+import ApproveIcon from '@components/icons/approve'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
+import {
+    useStudentTrainingTypeOptions,
+    useTrainingScoreStatusStatusOptions,
+} from '@hooks/studentTrainingType'
 import DefaultLayout from '@layouts/default-layout'
 import type { StudentTrainingType } from '@workspace/db/client'
 import {
@@ -9,6 +13,7 @@ import {
     useFindManyStudent,
     useFindManyStudentTrainingScore,
     useFindUniqueTrainingScoreSession,
+    useUpdateStudentTrainingScore,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Col, Divider, Flex, message, Popover, Row, Select, Tag } from 'antd'
@@ -29,10 +34,24 @@ export default function SubjectClassScore() {
         getStudentTrainingTypeLabel,
         getStudentTrainingTypeColor,
     } = useStudentTrainingTypeOptions()
+    const {
+        statusOptions: trainingScoreStatusOptions,
+        getTrainingScoreStatusLabel,
+        getTrainingScoreStatusColor,
+    } = useTrainingScoreStatusStatusOptions()
     const [open, setOpen] = useState(false)
     const [defaultTrainingType, setDefaultTrainingType] = useState<StudentTrainingType>()
 
-    const handleSetDefault = () => {}
+    const { mutateAsync } = useUpdateStudentTrainingScore()
+    const handleApprove = (id: string) => {
+        mutateAsync({
+            where: { id },
+            data: { status: 'APPROVED' },
+        }).then(() => {
+            message.success('Đã duyệt')
+            // refetch()
+        })
+    }
 
     const [editableData, setEditableData] = useState<
         Map<
@@ -51,7 +70,10 @@ export default function SubjectClassScore() {
     const { data: initialValue, refetch: refetchSession } = useFindUniqueTrainingScoreSession(
         {
             where: { id },
-            include: { semester: { include: { schoolYear: true } }, trainingObjectType: true },
+            include: {
+                semester: { include: { schoolYear: true } },
+                trainingObjectType: true,
+            },
         },
         { enabled: !!id }
     )
@@ -122,6 +144,7 @@ export default function SubjectClassScore() {
                 scoreId: scoreInfo?.id ?? null,
                 score: scoreInfo?.score ?? null,
                 studentTrainingType: scoreInfo?.studentTrainingType ?? null,
+                scoreStatus: scoreInfo?.status ?? null,
             }
         })
     }, [data, studentTrainingScoreData])
@@ -413,6 +436,49 @@ export default function SubjectClassScore() {
                                                 />
                                             )
                                         },
+                                    },
+                                    {
+                                        title: 'Trạng thái',
+                                        align: 'center',
+                                        dataIndex: 'name',
+                                        width: 100,
+                                        render: (_, record) => (
+                                            <Tag
+                                                color={getTrainingScoreStatusColor(
+                                                    record.scoreStatus
+                                                )}
+                                            >
+                                                {getTrainingScoreStatusLabel(record.scoreStatus)}
+                                            </Tag>
+                                        ),
+                                    },
+                                    {
+                                        title: 'Thao tác',
+                                        dataIndex: 'action',
+                                        width: 150,
+                                        align: 'center',
+                                        // hidden: !canSome(
+                                        //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                        //     'XEM_CHI_TIET',
+                                        //     'SUA',
+                                        //     'XOA'
+                                        // ),
+                                        render: (text, record) => (
+                                            <Row className="justify-center gap-2">
+                                                <ApproveIcon
+                                                    popConfirm={{
+                                                        onConfirm: (e) => {
+                                                            handleApprove(record.scoreId)
+                                                            e?.stopPropagation()
+                                                        },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
+                                            </Row>
+                                        ),
                                     },
                                 ]}
                                 data={mergedData}

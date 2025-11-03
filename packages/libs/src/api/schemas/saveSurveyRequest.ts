@@ -10,6 +10,7 @@ export interface SaveSurveyRequest {
     surveyId: string
     profileId?: string
     studentId?: string
+    studentCode?: string
     /** @nullable */
     surveyObjectTypeId?: string | null
     additionalSuggestion: string

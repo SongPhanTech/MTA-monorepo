@@ -1,5 +1,6 @@
 import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
 import Decimal from 'decimal.js'
+
 type StudentSubjectScoreRelation = StudentSubjectScore & {
     finalScore: Decimal | null
     student?: {
@@ -82,7 +83,7 @@ export function splitFullName(fullName?: string): {
     return { firstName, lastName }
 }
 
-export const  calcFinalScore = (
+export const calcFinalScore = (
     coef: Prisma.TrainingCourseGetPayload<{
         select: {
             coef_1: true
