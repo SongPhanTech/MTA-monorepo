@@ -186,7 +186,7 @@ export default function DetailSurveyPage() {
                                                       ),
                                                       render: (
                                                           _,
-                                                          { id, surveyTopicId, surveyQuestion, surveyObjectType,surveySessions }
+                                                          { id, isPublic,anonymous, surveyQuestion, surveyObjectType,surveySessions }
                                                       ) => (
                                                           <Row className="justify-end gap-2">
                                                               {surveyQuestion?.length >0  && (
@@ -197,7 +197,11 @@ export default function DetailSurveyPage() {
                                                                       >
                                                                           <EyeOutlined
                                                                               onClick={() => {
-                                                                                  router.push(`/lam-khao-sat/private/${id}`)
+                                                                                if(!isPublic){
+                                                                                    router.push(`/lam-khao-sat/private/${id}`)
+                                                                                }else {
+                                                                                    router.push(`/lam-khao-sat/${id}`)
+                                                                                }
                                                                               }}
                                                                               style={{ fontSize: '16px' }}
                                                                           />

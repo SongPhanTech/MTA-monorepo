@@ -3,10 +3,13 @@ package postgres
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
+	"regexp"
+	"strings"
 
 	"github.com/eduardolat/pgbackweb/internal/util/strutil"
 	"github.com/orsinium-labs/enum"
@@ -218,10 +221,10 @@ func (c *Client) DumpZip(
 //   - zipURLOrPath: URL or path to the ZIP file
 func (Client) RestoreZip(
 	version PGVersion, connString string, isLocal bool, zipURLOrPath string,
-) error {
+) (error, string) {
 	workDir, err := os.MkdirTemp("", "pbw-restore-*")
 	if err != nil {
-		return fmt.Errorf("error creating temp dir: %w", err)
+		return fmt.Errorf("error creating temp dir: %w", err), ""
 	}
 	defer os.RemoveAll(workDir)
 	zipPath := strutil.CreatePath(true, workDir, "dump.zip")
@@ -231,7 +234,7 @@ func (Client) RestoreZip(
 		cmd := exec.Command("cp", zipURLOrPath, zipPath)
 		output, err := cmd.CombinedOutput()
 		if err != nil {
-			return fmt.Errorf("error copying ZIP file to temp dir: %s", output)
+			return fmt.Errorf("error copying ZIP file to temp dir: %s", output), ""
 		}
 	}
 
@@ -239,32 +242,83 @@ func (Client) RestoreZip(
 		cmd := exec.Command("wget", "--no-verbose", "-O", zipPath, zipURLOrPath)
 		output, err := cmd.CombinedOutput()
 		if err != nil {
-			return fmt.Errorf("error downloading ZIP file: %s", output)
+			return fmt.Errorf("error downloading ZIP file: %s", output), ""
 		}
 	}
 
 	if _, err := os.Stat(zipPath); os.IsNotExist(err) {
-		return fmt.Errorf("zip file not found: %s", zipPath)
+		return fmt.Errorf("zip file not found: %s", zipPath), ""
 	}
 
 	cmd := exec.Command("unzip", "-o", zipPath, "dump.sql", "-d", workDir)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("error unzipping ZIP file: %s", output)
+		return fmt.Errorf("error unzipping ZIP file: %s", output), ""
 	}
 
 	if _, err := os.Stat(dumpPath); os.IsNotExist(err) {
-		return fmt.Errorf("dump.sql file not found in ZIP file: %s", zipPath)
+		return fmt.Errorf("dump.sql file not found in ZIP file: %s", zipPath), ""
 	}
 
-	cmd = exec.Command(version.Value.PSQL, connString, "-f", dumpPath)
+	cmd = exec.Command(version.Value.PSQL, connString, "-f", dumpPath, "--echo-queries")
 	output, err = cmd.CombinedOutput()
+	text := string(output)
+
 	if err != nil {
 		return fmt.Errorf(
 			"error running psql v%s command: %s",
 			version.Value.Version, output,
-		)
+		), text
 	}
 
-	return nil
+	// Regex nhận diện
+	reInsertTable := regexp.MustCompile(`INSERT INTO ([a-zA-Z0-9_\.]+)`)
+	reInsertCount := regexp.MustCompile(`INSERT 0 ([0-9]+)`)
+	reUpdateCount := regexp.MustCompile(`UPDATE ([0-9]+)`)
+	reCopyStart := regexp.MustCompile(`COPY ([a-zA-Z0-9_\.]+)`) // có tên bảng
+	reCopyDone := regexp.MustCompile(`^COPY ([0-9]+)$`)         // chỉ có số
+
+	tableStats := make(map[string]map[string]int)
+	lines := strings.Split(text, "\n")
+	currentTable := ""
+
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+
+		if m := reInsertTable.FindStringSubmatch(line); len(m) > 1 {
+			currentTable = m[1]
+		} else if m := reCopyStart.FindStringSubmatch(line); len(m) > 1 {
+			currentTable = m[1]
+		}
+
+		switch {
+		case reInsertCount.MatchString(line) && currentTable != "":
+			n := atoiSafe(reInsertCount.FindStringSubmatch(line)[1])
+			addStat(tableStats, currentTable, "insert", n)
+
+		case reUpdateCount.MatchString(line) && currentTable != "":
+			n := atoiSafe(reUpdateCount.FindStringSubmatch(line)[1])
+			addStat(tableStats, currentTable, "update", n)
+
+		case reCopyDone.MatchString(line) && currentTable != "":
+			n := atoiSafe(reCopyDone.FindStringSubmatch(line)[1])
+			addStat(tableStats, currentTable, "copy", n)
+		}
+	}
+	// Chuyển kết quả sang JSON
+	jsonData, _ := json.Marshal(tableStats)
+	return nil, string(jsonData)
+}
+
+func atoiSafe(s string) int {
+	var n int
+	fmt.Sscanf(s, "%d", &n)
+	return n
+}
+
+func addStat(m map[string]map[string]int, tbl, key string, val int) {
+	if _, ok := m[tbl]; !ok {
+		m[tbl] = map[string]int{}
+	}
+	m[tbl][key] += val
 }

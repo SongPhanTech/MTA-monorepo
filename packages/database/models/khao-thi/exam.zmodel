@@ -213,6 +213,9 @@ model Exam extends Base {
   // shuffleAnswers     Boolean             @default(true) // Xáo trộn đáp án
   // showResult         Boolean             @default(false) // Hiển thị kết quả ngay
 
+  subjectVersionId     String               // Môn thi
+  subjectVersion       SubjectVersion       @relation(fields: [subjectVersionId], references: [id])
+
   /// Lớp môn học
   subjectClass        SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
   /// thí sinh

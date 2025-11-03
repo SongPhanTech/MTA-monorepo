@@ -1,7 +1,11 @@
 import Table from '@components/commons/table'
+import ApproveIcon from '@components/icons/approve'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
-import { useStudentTrainingTypeOptions } from '@hooks/studentTrainingType'
+import {
+    useStudentTrainingTypeOptions,
+    useTrainingScoreStatusStatusOptions,
+} from '@hooks/studentTrainingType'
 import DefaultLayout from '@layouts/default-layout'
 import type { StudentTrainingType } from '@workspace/db/client'
 import {
@@ -9,9 +13,11 @@ import {
     useFindManyStudent,
     useFindManyStudentTrainingScore,
     useFindUniqueTrainingScoreSession,
+    useUpdateManyStudentTrainingScore,
+    useUpdateStudentTrainingScore,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Col, Divider, Flex, message, Row, Select, Tag } from 'antd'
+import { Button, Col, Divider, Flex, message, Popover, Row, Select, Tag } from 'antd'
 import { Save } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -22,13 +28,24 @@ export default function SubjectClassScore() {
     const router = useRouter()
     const id = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [numberOfPages, setNumberOfPages] = useState(50)
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
     const {
         options: studentTrainingTypeOptions,
         getStudentTrainingTypeLabel,
         getStudentTrainingTypeColor,
     } = useStudentTrainingTypeOptions()
+    const {
+        statusOptions: trainingScoreStatusOptions,
+        getTrainingScoreStatusLabel,
+        getTrainingScoreStatusColor,
+    } = useTrainingScoreStatusStatusOptions()
+    const [openApprove, setOpenApprove] = useState(false)
+    const [openRank, setOpenRank] = useState(false)
+    const [defaultTrainingType, setDefaultTrainingType] = useState<StudentTrainingType>()
+
+    const { mutateAsync: updateTrainingScore } = useUpdateStudentTrainingScore()
+    const { mutateAsync: updateManyTrainingScore } = useUpdateManyStudentTrainingScore()
 
     const [editableData, setEditableData] = useState<
         Map<
@@ -47,7 +64,10 @@ export default function SubjectClassScore() {
     const { data: initialValue, refetch: refetchSession } = useFindUniqueTrainingScoreSession(
         {
             where: { id },
-            include: { semester: { include: { schoolYear: true } }, trainingObjectType: true },
+            include: {
+                semester: { include: { schoolYear: true } },
+                trainingObjectType: true,
+            },
         },
         { enabled: !!id }
     )
@@ -107,9 +127,29 @@ export default function SubjectClassScore() {
             }
         )
 
+    const handleApprove = (id: string) => {
+        updateTrainingScore({
+            where: { id: id },
+            data: { status: 'APPROVED' },
+        }).then(() => {
+            message.success('Đã duyệt')
+        })
+    }
+
+    const handleApproveAll = () => {
+        updateManyTrainingScore({
+            where: {
+                trainingScoreSessionId: id,
+                student: { fixedClassId: selectedFixedClass },
+            },
+            data: { status: 'APPROVED' },
+        }).then(() => {
+            message.success('Đã duyệt')
+        })
+    }
+
     const mergedData = useMemo(() => {
         if (!data) return []
-        console.log(data)
 
         return data.map((student) => {
             const scoreInfo = studentTrainingScoreData.find((s) => s.studentId === student.id)
@@ -119,6 +159,7 @@ export default function SubjectClassScore() {
                 scoreId: scoreInfo?.id ?? null,
                 score: scoreInfo?.score ?? null,
                 studentTrainingType: scoreInfo?.studentTrainingType ?? null,
+                scoreStatus: scoreInfo?.status ?? null,
             }
         })
     }, [data, studentTrainingScoreData])
@@ -172,7 +213,7 @@ export default function SubjectClassScore() {
             await refetchStudentTrainingScore()
 
             message.success('Lưu điểm rèn luyện thành công')
-
+            editableData.clear()
             refetch()
             // setEditableData(new Map())
         } catch (error) {
@@ -206,9 +247,113 @@ export default function SubjectClassScore() {
                     <Row gutter={16}>
                         <Col span={24}>
                             <Flex justify="end" gap={4}>
+                                <Popover
+                                    content={
+                                        <div className="max-w-56">
+                                            <Col span={24} className="text-right mt-4">
+                                                <Button
+                                                    type="primary"
+                                                    onClick={(value) => {
+                                                        handleApproveAll()
+                                                        setOpenApprove(false)
+                                                    }}
+                                                >
+                                                    Xác nhận
+                                                </Button>
+                                            </Col>
+                                        </div>
+                                    }
+                                    title="Phê duyệt toàn bộ"
+                                    trigger="click"
+                                    placement="bottomRight"
+                                    open={openApprove}
+                                    onOpenChange={setOpenApprove}
+                                >
+                                    <Button
+                                        type="primary"
+                                        disabled={
+                                            !mergedData.some((s) => s.scoreStatus === 'PENDING')
+                                        }
+                                    >
+                                        Phê duyệt
+                                    </Button>
+                                </Popover>
+                                <Popover
+                                    content={
+                                        <div className="max-w-56">
+                                            <Select
+                                                style={{ width: '100%' }}
+                                                value={defaultTrainingType}
+                                                onChange={(value) => {
+                                                    setDefaultTrainingType(value)
+                                                }}
+                                                options={studentTrainingTypeOptions.map((opt) => ({
+                                                    label: <Tag color={opt.color}>{opt.label}</Tag>,
+                                                    value: opt.value,
+                                                }))}
+                                                tagRender={(props) => (
+                                                    <Tag
+                                                        color={getStudentTrainingTypeColor(
+                                                            props.value
+                                                        )}
+                                                    >
+                                                        {props.label}
+                                                    </Tag>
+                                                )}
+                                            />
+                                            <Col span={24} className="text-right mt-4">
+                                                <Button
+                                                    type="primary"
+                                                    disabled={!defaultTrainingType}
+                                                    onClick={(value) => {
+                                                        if (!defaultTrainingType) return
+                                                        setEditableData((prev) => {
+                                                            return new Map(
+                                                                mergedData
+                                                                    .filter(
+                                                                        (s) =>
+                                                                            !prev.has(s.id) ||
+                                                                            !s.studentTrainingType
+                                                                    )
+                                                                    .map((s) => [
+                                                                        s.id,
+                                                                        {
+                                                                            ...s,
+                                                                            studentId: s.id,
+                                                                            scoreId:
+                                                                                s.scoreId ||
+                                                                                undefined,
+                                                                            score: undefined,
+                                                                            studentTrainingType:
+                                                                                defaultTrainingType,
+                                                                        },
+                                                                    ])
+                                                            )
+                                                        })
+                                                        setOpenRank(false)
+                                                    }}
+                                                >
+                                                    Xác nhận
+                                                </Button>
+                                            </Col>
+                                        </div>
+                                    }
+                                    title="Đặt xếp loại mặc định"
+                                    trigger="click"
+                                    placement="bottomRight"
+                                    open={openRank}
+                                    onOpenChange={setOpenRank}
+                                >
+                                    <Button
+                                        type="primary"
+                                        disabled={!mergedData.some((s) => !s.studentTrainingType)}
+                                    >
+                                        Xếp loại mặc định
+                                    </Button>
+                                </Popover>
                                 <Button
                                     type="primary"
-                                    disabled={!selectedFixedClass}
+                                    disabled={!selectedFixedClass || editableData.size === 0}
                                     onClick={handleSave}
                                 >
                                     <Save stroke="white" />
@@ -232,14 +377,13 @@ export default function SubjectClassScore() {
                                     {
                                         title: 'Mã sinh viên',
                                         align: 'center',
-                                        width: 100,
+                                        width: 150,
                                         render: (_, record) => record.code || '',
                                     },
                                     {
                                         title: 'Họ và tên',
                                         align: 'center',
                                         dataIndex: 'name',
-                                        width: 180,
                                         render: (_, record) => record?.userProfile?.fullname,
                                     },
                                     // {
@@ -280,10 +424,20 @@ export default function SubjectClassScore() {
                                     {
                                         title: 'Xếp loại',
                                         dataIndex: 'ranking',
-                                        width: 100,
+                                        width: 250,
                                         align: 'center',
                                         render: (_, record) => {
-                                            return (
+                                            return record.scoreStatus === 'APPROVED' ? (
+                                                <Tag
+                                                    color={getStudentTrainingTypeColor(
+                                                        record.studentTrainingType
+                                                    )}
+                                                >
+                                                    {getStudentTrainingTypeLabel(
+                                                        record.studentTrainingType
+                                                    )}
+                                                </Tag>
+                                            ) : (
                                                 <Select
                                                     style={{ width: '100%' }}
                                                     value={
@@ -332,6 +486,50 @@ export default function SubjectClassScore() {
                                                 />
                                             )
                                         },
+                                    },
+                                    {
+                                        title: 'Trạng thái',
+                                        align: 'center',
+                                        dataIndex: 'name',
+                                        width: 150,
+                                        render: (_, record) => (
+                                            <Tag
+                                                color={getTrainingScoreStatusColor(
+                                                    record.scoreStatus
+                                                )}
+                                            >
+                                                {getTrainingScoreStatusLabel(record.scoreStatus)}
+                                            </Tag>
+                                        ),
+                                    },
+                                    {
+                                        title: 'Thao tác',
+                                        dataIndex: 'action',
+                                        width: 100,
+                                        align: 'center',
+                                        // hidden: !canSome(
+                                        //     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QL_REN_LUYEN,
+                                        //     'XEM_CHI_TIET',
+                                        //     'SUA',
+                                        //     'XOA'
+                                        // ),
+                                        render: (text, record) => (
+                                            <Row className="justify-center gap-2">
+                                                <ApproveIcon
+                                                    disabled={record.scoreStatus === 'APPROVED'}
+                                                    popConfirm={{
+                                                        onConfirm: (e) => {
+                                                            handleApprove(record.scoreId)
+                                                            e?.stopPropagation()
+                                                        },
+                                                        onCancel: (e) => {
+                                                            e?.stopPropagation()
+                                                        },
+                                                    }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                />
+                                            </Row>
+                                        ),
                                     },
                                 ]}
                                 data={mergedData}

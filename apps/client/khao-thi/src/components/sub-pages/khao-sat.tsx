@@ -248,13 +248,13 @@ function TabDotKhaoSat() {
                                 ),
                                 render: (
                                     _,
-                                    { id, surveyTopicId, surveyQuestion, surveyObjectType,surveySessions }
+                                    { id, isPublic, surveyQuestion, surveyObjectType,surveySessions }
                                 ) => (
                                     <Row className="justify-end gap-2">
                                         {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                             'XEM_CHI_TIET'
-                                        ) && (
+                                        ) &&surveySessions?.length > 0 && (
                                             <Tooltip
                                                 className="mr-2"
                                                 title={'Báo cáo khảo sát'}
@@ -273,7 +273,7 @@ function TabDotKhaoSat() {
                                             can(
                                                 KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                                 'XEM_CHI_TIET'
-                                            ) && (
+                                            )&&!!isPublic && (
                                                 <Tooltip
                                                     className="mr-2"
                                                     title={'Xem đề khảo sát'}

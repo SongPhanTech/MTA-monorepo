@@ -66,7 +66,7 @@ func (h *handlers) editBackupHandler(c echo.Context) error {
 		return respondhtmx.ToastError(c, err.Error())
 	}
 
-	return respondhtmx.AlertWithRefresh(c, "Backup task updated")
+	return respondhtmx.AlertWithRefresh(c, "Nhiệm vụ sao lưu đã được cập nhật thành công.")
 }
 
 func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow) nodx.Node {
@@ -87,7 +87,7 @@ func editBackupButton(backup dbgen.BackupsServicePaginateBackupsRow) nodx.Node {
 
 	mo := component.Modal(component.ModalParams{
 		Size:  component.SizeLg,
-		Title: "Edit backup task",
+		Title: "Chỉnh sửa nhiệm vụ sao lưu",
 		Content: []nodx.Node{
 			nodx.FormEl(
 				htmx.HxPost("/dashboard/backups/"+backup.ID.String()+"/edit"),

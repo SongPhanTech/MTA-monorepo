@@ -53,9 +53,8 @@ import { useFindUniqueUserProfile } from '@workspace/db/hooks'
 import { generatePresignedUrl, sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import ImgCrop from 'antd-img-crop'
-import axios from 'axios'
 import dayjs from 'dayjs'
-
+import { putDMNhanViens } from '@workspace/libs/api/system'
 dayjs.locale('vi')
 interface itemType {
     id: string
@@ -382,7 +381,7 @@ export default function UpdateUserPage() {
 
         try {
             showSpinner()
-            const res = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/DM_NhanViens`, {
+            const res = await putDMNhanViens({
                 sDM_DonViId: values.sDM_DonViId,
                 sMa: values.code,
                 sHoVaDem: values.lastName.trim(),
@@ -395,6 +394,19 @@ export default function UpdateUserPage() {
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
             })
+            // const res = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/DM_NhanViens`, {
+            //     sDM_DonViId: values.sDM_DonViId,
+            //     sMa: values.code,
+            //     sHoVaDem: values.lastName.trim(),
+            //     sTen: values.firstName.trim(),
+            //     sTenDayDu:
+            //         `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
+            //     sDM_GioiTinhId: genderId,
+            //     dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
+            //     sCCCD: values.idCardNumber,
+            //     sSDTDiDong: values?.phoneNumber || '',
+            //     sEmail: values?.email || '',
+            // })
             if (res.status === 200) {
                 let listTransaction: any = [
                     {

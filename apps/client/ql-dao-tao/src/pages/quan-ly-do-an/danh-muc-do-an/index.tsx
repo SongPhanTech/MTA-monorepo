@@ -12,7 +12,7 @@ import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
 import {
     type CouncilMember,
-    Prisma,
+    type Prisma,
     SubjectVersionType,
     ThesisProjectStatus,
 } from '@workspace/db/client'
@@ -715,7 +715,7 @@ export default function ThesisProject() {
                                                         onClick={(e) => {
                                                             onOpen({
                                                                 subjectClassId:
-                                                                    record.subjectClassId,
+                                                                    record.subjectClassId as string,
                                                                 thesisProjectId: record.id,
                                                             })
                                                             e.stopPropagation()

@@ -1,4 +1,3 @@
-import TreeSelect from '@/components/commons/tree-select'
 import TableCollapse from '@components/commons/tableCollapse'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -43,6 +42,7 @@ import { BookPlus, History, LockKeyhole, LockKeyholeOpen, Search } from 'lucide-
 import type React from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
+import TreeSelect from '@/components/commons/tree-select'
 export default function SubjectList() {
     const { can, canSome } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
@@ -66,17 +66,6 @@ export default function SubjectList() {
         numberOfOther: undefined,
         isTeaching: undefined,
     })
-    useEffect(() => {
-        if (SubjectData && Array.isArray(SubjectData)) {
-            const hasAnyUnlockedVersion = SubjectData.some(
-                (subject) =>
-                    Array.isArray(subject.subjectVersion) &&
-                    subject.subjectVersion.some((version) => version.isLocked === true)
-            )
-
-            setIsLocked(hasAnyUnlockedVersion)
-        }
-    }, [])
 
     const { id: trainingObjectTypeId } = useTrainingObjectTypeStore()
     const { data: selectedTrainingObjectType } = useFindUniqueTrainingObjectType(
@@ -94,10 +83,11 @@ export default function SubjectList() {
         try {
             showSpinner()
             await updateManySubjectVersion({
-                data: { isLocked: isLocked },
+                data: { isLocked: !isLocked },
             })
-            setIsLocked(!isLocked)
+
             message.success(isLocked ? 'Mở khoá thành công' : 'Khoá thành công')
+            setIsLocked(!isLocked)
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -227,6 +217,16 @@ export default function SubjectList() {
             deletedAt: null,
         },
     })
+
+    useEffect(() => {
+        if (SubjectData) {
+            const hasAnyUnlockedVersion = SubjectData.some((subject) =>
+                subject.subjectVersion.some((version) => version.isLocked === false)
+            )
+
+            setIsLocked(!hasAnyUnlockedVersion)
+        }
+    }, [SubjectData])
 
     const debouncedRefetch = useCallback(
         _.debounce(() => {
@@ -417,16 +417,14 @@ export default function SubjectList() {
                                 ) && (
                                     <Popconfirm
                                         placement="bottomRight"
-                                        title={`Bạn có chắc muốn ${isLocked ? 'mở' : 'khóa'} chỉnh sửa môn học không?`}
+                                        title={`Bạn có chắc muốn ${isLocked ? 'mở' : 'khoá'} chỉnh sửa môn học không?`}
                                         onConfirm={handleToggleLock}
                                         okText="Đồng ý"
                                         cancelText="Hủy"
                                     >
                                         <Button type="primary">
                                             {isLocked ? <LockKeyhole /> : <LockKeyholeOpen />}
-                                            {isLocked
-                                                ? 'Mở tất cả chỉnh sửa'
-                                                : 'Khóa tất cả chỉnh sửa'}
+                                            {isLocked ? 'Đã khoá' : 'Đang mở'}
                                         </Button>
                                     </Popconfirm>
                                 )}

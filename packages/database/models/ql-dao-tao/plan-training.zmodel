@@ -668,6 +668,7 @@ model SubjectVersion extends Base {
   planTrainingDelaySubject PlanTrainingDelaySubject[]
   planTrainingSubject      PlanTrainingSubject[]
   subjectVersionHistory    SubjectVersionHistory[]
+  exams                    Exam[]
 
   @@schema("ql-dao-tao")
 }

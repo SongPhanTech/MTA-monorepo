@@ -10,31 +10,6 @@ const KhaoSatLayout = ({ children, className }: { children: ReactNode; className
     return (
         <IdleTimerProvider timeout={Number.parseFloat('15') * 60 * 1000} onIdle={() => {}}>
             <Layout style={{ minHeight: '100vh' }} hasSider>
-                {/* <SiderDefaultLayout
-                    logo1={
-                        <Image
-                            src={logo_mta}
-                            alt="logo k01"
-                            className="size-12"
-                        />
-                    }
-                    logo2={
-                        <div className="flex items-center justify-center flex-col text-center">
-                            <Image
-                                src={logo_mta}
-                                alt="logo k01"
-                                className="w-12 h-12 mb-2"
-                            />
-                            <span className="text-base font-bold color text-primary">
-                                HỌC VIỆN KỸ THUẬT QUÂN SỰ
-                            </span>
-                        </div>
-                    }
-                    items={menus}
-                    onCollapse={handleCollapsed}
-                    collapsed={collapsed}
-                    theme={'light'}
-                /> */}
                 <Layout
                     style={{
                         // marginInlineStart: collapsed ? 80 : 280, // Điều chỉnh margin theo trạng thái collapsed

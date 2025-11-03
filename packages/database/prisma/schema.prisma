@@ -284,6 +284,13 @@ enum DecisionStatus {
   @@schema("ql-dao-tao")
 }
 
+enum TrainingScoreStatus {
+  PENDING
+  APPROVED
+
+  @@schema("ql-dao-tao")
+}
+
 enum StudentTrainingType {
   EXCELLENT
   GOOD
@@ -2836,6 +2843,7 @@ model SubjectVersion {
   planTrainingDelaySubject PlanTrainingDelaySubject[]
   planTrainingSubject      PlanTrainingSubject[]
   subjectVersionHistory    SubjectVersionHistory[]
+  exams                    Exam[]
 
   @@schema("ql-dao-tao")
 }
@@ -3927,6 +3935,7 @@ model StudentTrainingScore {
   studentId              String
   score                  Float?
   studentTrainingType    StudentTrainingType? @default(GOOD)
+  status                 TrainingScoreStatus  @default(PENDING)
 
   @@unique([trainingScoreSessionId, studentId])
   @@schema("ql-dao-tao")
@@ -5123,6 +5132,8 @@ model Exam {
   lockExamCode        Boolean               @default(false)
   /// thời gian thi
   duration            Int?
+  subjectVersionId    String
+  subjectVersion      SubjectVersion        @relation(fields: [subjectVersionId], references: [id])
   /// Lớp môn học
   subjectClass        SubjectClass[]
   /// thí sinh

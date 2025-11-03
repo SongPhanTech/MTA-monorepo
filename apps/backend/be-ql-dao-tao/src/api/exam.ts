@@ -65,6 +65,7 @@ app.openapi(createNewExamList, async (c) => {
                     cancelled: false,
                     deletedAt: null,
                     enteredScore: true,
+                    status: 'OFFICIAL',
                 },
             },
         },
@@ -72,6 +73,7 @@ app.openapi(createNewExamList, async (c) => {
             subjectClass: {
                 select: {
                     id: true,
+                    subjectId: true,
                     subjectClassStudent: {
                         select: { id: true },
                         where: {
@@ -95,6 +97,7 @@ app.openapi(createNewExamList, async (c) => {
             examId: isGroupBySubject ? id : createId(),
             classId: cls.id,
             studentSubjectScoreIds: cls.subjectClassStudent.map((scs) => scs.id),
+            subjectId: cls.subjectId,
         }))
     })
 
@@ -109,13 +112,17 @@ app.openapi(createNewExamList, async (c) => {
 
     const groupedExams = Object.entries(grouped).map(([examId, items]) => ({
         examId,
+        subjectId: items?.[0]?.subjectId ?? '',
         classIds: items?.map((i) => i.classId),
         studentSubjectScoreIds: items?.flatMap((i) => i.studentSubjectScoreIds),
     }))
 
     await prisma.$transaction(async (tx) => {
         await tx.exam.createMany({
-            data: groupedExams.map(({ examId }) => ({ id: examId })),
+            data: groupedExams.map(({ examId, subjectId }) => ({
+                id: examId,
+                subjectVersionId: subjectId,
+            })),
         })
 
         await tx.$executeRawUnsafe(`
@@ -215,6 +222,7 @@ app.openapi(createNewReExamList, async (c) => {
             subjectClass: {
                 select: {
                     id: true,
+                    subjectId: true,
                     subjectClassStudent: {
                         select: { id: true },
                         where: {
@@ -237,6 +245,7 @@ app.openapi(createNewReExamList, async (c) => {
             examId: id,
             classId: cls.id,
             studentSubjectScoreIds: cls.subjectClassStudent.map((scs) => scs.id),
+            subjectId: cls.subjectId,
         }))
     })
 
@@ -253,11 +262,15 @@ app.openapi(createNewReExamList, async (c) => {
         examId,
         classIds: items?.map((i) => i.classId),
         studentSubjectScoreIds: items?.flatMap((i) => i.studentSubjectScoreIds),
+        subjectId: items?.[0]?.subjectId ?? '',
     }))
 
     await prisma.$transaction(async (tx) => {
         await tx.exam.createMany({
-            data: groupedExams.map(({ examId }) => ({ id: examId })),
+            data: groupedExams.map(({ examId, subjectId }) => ({
+                id: examId,
+                subjectVersionId: subjectId,
+            })),
         })
 
         await tx.$executeRawUnsafe(`
@@ -343,6 +356,7 @@ app.openapi(mergeExam, async (c) => {
             examId: { in: examIds },
             cancelled: false,
             deletedAt: null,
+            status: 'OFFICIAL',
         },
         select: {
             id: true,
@@ -359,8 +373,8 @@ app.openapi(mergeExam, async (c) => {
         },
     })
 
-    const subjectVerionIds = [...new Set(classes.map((cls) => cls.subjectId))]
-    if (subjectVerionIds.length > 1) {
+    const subjectVersionIds = [...new Set(classes.map((cls) => cls.subjectId))]
+    if (subjectVersionIds.length > 1) {
         return c.json(
             {
                 success: false,
@@ -369,6 +383,8 @@ app.openapi(mergeExam, async (c) => {
             400
         )
     }
+
+    const subjectVersionId = subjectVersionIds[0] as string
 
     const newExamId = createId()
 
@@ -379,23 +395,28 @@ app.openapi(mergeExam, async (c) => {
 
     await prisma.$transaction(async (tx) => {
         await tx.exam.create({
-            data: { id: newExamId },
+            data: { id: newExamId, subjectVersionId },
         })
-
-        await tx.$executeRawUnsafe(`
-            UPDATE "ql-dao-tao"."SubjectClass"
-            SET "examId" = '${newExamId}'
-            WHERE "id" IN (${classIds.map((id) => `'${id}'`).join(', ')});
-        `)
-
+        await tx.subjectClass.updateMany({
+            where: { id: { in: classIds } },
+            data: { examId: newExamId },
+        })
+        // await tx.$executeRawUnsafe(`
+        //     UPDATE "ql-dao-tao"."SubjectClass"
+        //     SET "examId" = '${newExamId}'
+        //     WHERE "id" IN (${classIds.map((id) => `'${id}'`).join(', ')});
+        // `)
         if (studentSubjectScoreIds.length > 0) {
-            await tx.$executeRawUnsafe(`
-                UPDATE "ql-dao-tao"."StudentSubjectScore"
-                SET "examId" = '${newExamId}'
-                WHERE "id" IN (${studentSubjectScoreIds.map((id) => `'${id}'`).join(', ')});
-            `)
+            await tx.studentSubjectScore.updateMany({
+                where: { id: { in: studentSubjectScoreIds } },
+                data: { examId: newExamId },
+            })
+            // await tx.$executeRawUnsafe(`
+            //     UPDATE "ql-dao-tao"."StudentSubjectScore"
+            //     SET "examId" = '${newExamId}'
+            //     WHERE "id" IN (${studentSubjectScoreIds.map((id) => `'${id}'`).join(', ')});
+            // `)
         }
-
         await tx.exam.deleteMany({
             where: { id: { in: examIds } },
         })
@@ -459,9 +480,11 @@ app.openapi(unmergeExam, async (c) => {
             examId,
             cancelled: false,
             deletedAt: null,
+            status: 'OFFICIAL',
         },
         select: {
             id: true,
+            subjectId: true,
             subjectClassStudent: {
                 select: { id: true },
                 where: {
@@ -483,6 +506,8 @@ app.openapi(unmergeExam, async (c) => {
         )
     }
 
+    const subjectVersionId = classes?.[0]?.subjectId as string
+
     const newExams = classes.map((cls) => ({
         examId: createId(),
         classId: cls.id,
@@ -493,7 +518,7 @@ app.openapi(unmergeExam, async (c) => {
 
     await prisma.$transaction(async (tx) => {
         await tx.exam.createMany({
-            data: newExamIds.map((id) => ({ id })),
+            data: newExamIds.map((id) => ({ id, subjectVersionId })),
         })
 
         await tx.$executeRawUnsafe(`

@@ -42,7 +42,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
             include: {
                 subjectClass: { select: { id: true, semesterId: true } },
                 questionBank: true,
-                room: true,
+                examRooms: true,
             },
         },
         {
@@ -73,7 +73,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 ...initialValue,
                 subjectClass: initialValue.subjectClass?.map((sc) => sc.id),
                 semesterId: initialValue.subjectClass?.[0]?.semesterId || '',
-                room: initialValue.room?.map((r) => r.id),
+                room: initialValue.examRooms?.map((r) => r.id),
             })
             if (initialValue.questionBank?.subjectVersionId) {
                 setSelectedSubjectVersionId(initialValue.questionBank.subjectVersionId)
@@ -141,7 +141,7 @@ export default function Information({ id, selectedIds }: InformationProps) {
                         studentSubjectScore: {
                             set: studentScores.map((item) => ({ id: item.id })) || [],
                         },
-                        room: {
+                        examRooms: {
                             set: output.room?.map((item) => ({ id: item })) || [],
                         },
                     },
@@ -155,13 +155,16 @@ export default function Information({ id, selectedIds }: InformationProps) {
                 const newExam = await createExam({
                     data: {
                         ...data,
+                        subjectVersion: {
+                            connect: { id: selectedSubjectVersionId },
+                        },
                         subjectClass: {
                             connect: output.subjectClass?.map((item) => ({ id: item })) || [],
                         },
                         studentSubjectScore: {
                             connect: studentScores.map((item) => ({ id: item.id })) || [],
                         },
-                        room: {
+                        examRooms: {
                             connect: output.room?.map((item) => ({ id: item })) || [],
                         },
                     },

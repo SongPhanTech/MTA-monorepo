@@ -12,7 +12,7 @@ func showRestorationButton(
 	restoration dbgen.RestorationsServicePaginateRestorationsRow,
 ) nodx.Node {
 	mo := component.Modal(component.ModalParams{
-		Title: "Restoration details",
+		Title: "Chi tiết khôi phục",
 		Size:  component.SizeMd,
 		Content: []nodx.Node{
 			nodx.Div(

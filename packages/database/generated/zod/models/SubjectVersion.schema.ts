@@ -96,6 +96,7 @@ const relationSchema = z.object({
     planTrainingDelaySubject: z.array(z.unknown()).optional(),
     planTrainingSubject: z.array(z.unknown()).optional(),
     subjectVersionHistory: z.array(z.unknown()).optional(),
+    exams: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

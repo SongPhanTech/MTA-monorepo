@@ -1,17 +1,18 @@
-import { BarChartOutlined, EyeOutlined } from '@ant-design/icons'
+import {  EyeOutlined } from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { Survey } from '@workspace/db'
 import {
     useCountClusterSurvey,
     useFindManyClusterSurvey,
     useFindManySurveyObjectType,
     useFindManySurveyTopic,
-    useUpdateSurvey,
 } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
@@ -86,6 +87,11 @@ function TabDotKhaoSatCum() {
             surveyObjectType: true,
             surveyTopic: true,
             surveyQuestion: true,
+            surveys: {
+                include:{
+                    surveySessions: true
+                }
+            }
         },
         orderBy: { createdAt: 'desc' },
         take: numberOfPages,
@@ -108,19 +114,60 @@ function TabDotKhaoSatCum() {
         onOpen({ id: '', type: 'multiple' })
     }
 
-    const { mutateAsync: updateSurvey } = useUpdateSurvey()
+    // const { mutateAsync: updateSurvey } = useUpdateClusterSurvey()
 
-    async function handleDelete(id: string) {
+    async function handleDelete(id: string,surveys:Survey[]) {
         try {
             showSpinner()
-            await updateSurvey({
-                where: {
-                    id,
-                },
+            let listTranssition:any=[
+                {
+                model: 'ClusterSurvey',
+                operation: 'update',
                 data: {
-                    deletedAt: new Date(),
-                },
-            })
+                    where: {
+                        id,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                }}
+            ];
+            if(surveys?.length>0){
+            listTranssition=[
+                {
+                model: 'ClusterSurvey',
+                operation: 'update',
+                data: {
+                    where: {
+                        id,
+                    },
+                    data: {
+                        deletedAt: new Date(),
+                    },
+                }},
+              ...surveys.map((i:Survey)=>{
+                return {
+                    model: 'Survey',
+                    operation: 'update',
+                    data: {
+                        where: {
+                            id:i.id,
+                        },
+                        data: {
+                            deletedAt: new Date(),
+                        },
+                    }
+                }
+              })
+            ]
+            }
+            
+           const res= await sqlTransaction(listTranssition)
+            if(res?.status===200){
+                message.success('Xóa thành công')
+                 refetch()
+            refetchCount()
+            }
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -131,6 +178,17 @@ function TabDotKhaoSatCum() {
             hideSpinner()
         }
     }
+
+    const disabledDelete=useMemo(()=>{
+        if(data?.length>0){
+              const result=data.find((i:any)=>i?.surveys?.surveySessions?.length>0)
+            if(result){
+                return true
+            }
+        }
+      
+        return false
+    },[data])
 
     const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
     const { data: surveyObjectTypeData } = useFindManySurveyObjectType({
@@ -247,26 +305,26 @@ function TabDotKhaoSatCum() {
                                 ),
                                 render: (
                                     _,
-                                    { id, surveyTopicId, surveyQuestion, surveyObjectType }
+                                    { id, surveyQuestion ,surveys}
                                 ) => (
-                                    <Row className="justify-end gap-2">
-                                        {can(
+                                    <Row className="justify-center gap-2">
+                                        {/* {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                             'XEM_CHI_TIET'
-                                        ) && (
+                                        ) &&  (
                                             <Tooltip
                                                 className="mr-2"
                                                 title={'Báo cáo khảo sát'}
                                                 placement="top"
                                             >
-                                                <BarChartOutlined
+                                                <EyeOutlined
                                                     onClick={() => {
                                                         router.push(`/bao-cao-khao-sat/${id}`)
                                                     }}
                                                     style={{ fontSize: '16px' }}
                                                 />
                                             </Tooltip>
-                                        )}
+                                        )} */}
 
                                         {surveyQuestion?.length > 0 &&
                                             can(
@@ -289,23 +347,14 @@ function TabDotKhaoSatCum() {
                                                 </Tooltip>
                                             )}
 
-                                        {/* {can(
-                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                            'SUA'
-                                        ) && (
-                                            <EditIcon
-                                                onClick={() => onOpen({ id, type: 'multiple' })}
-                                                className="text-sm text-blue-700 cursor-pointer mr-2"
-                                            />
-                                        )} */}
-
                                         {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                             'XOA'
                                         ) && (
                                             <DeleteIcon
+                                                disabled={disabledDelete}
                                                 popConfirm={{
-                                                    onConfirm: () => handleDelete(id),
+                                                    onConfirm: () => handleDelete(id,surveys),
                                                 }}
                                             />
                                         )}

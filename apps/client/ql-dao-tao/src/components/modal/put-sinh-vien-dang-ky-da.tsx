@@ -63,7 +63,7 @@ const PutStudentThesisRegistration = () => {
     const { data: studentData, refetch } = useFindUniqueSubjectClass(
         {
             where: {
-                id: thesisProject?.subjectClassId,
+                id: thesisProject?.subjectClassId as string,
             },
             include: {
                 subjectClassStudent: {
@@ -124,7 +124,7 @@ const PutStudentThesisRegistration = () => {
             },
         },
         {
-            enabled: !!input?.thesisProjectId,
+            enabled: !!thesisProject?.subjectClassId,
         }
     )
 
