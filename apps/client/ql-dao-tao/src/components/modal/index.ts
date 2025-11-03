@@ -98,6 +98,7 @@ import PutCertificateOnSubjectScoreModal from './put-certificate-on-subject'
 import PutCertificateArchivedModal from './put-archived-certificate'
 import { XemTaiLieu } from './xem-tai-lieu'
 import PutDeadlineScoreModal from './set-deadline-score'
+import PutThesisSession from './put-dot-xet-luan-van'
 export {
     XemTaiLieu,
     ModalViewHistoryChange,
@@ -199,4 +200,5 @@ export {
     PutCertificateOnSubjectScoreModal,
     PutCertificateArchivedModal,
     PutDeadlineScoreModal,
+    PutThesisSession,
 }

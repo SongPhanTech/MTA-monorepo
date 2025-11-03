@@ -1,51 +1,40 @@
-import { EyeOutlined } from '@ant-design/icons'
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
-import TableCollapse from '@components/commons/tableCollapse'
-import CreateIcon from '@components/icons/create'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import useSpinner from '@hooks/spinner'
-import { useThesisProjectStatusOptions } from '@hooks/thesisProjectStatus'
 import DefaultLayout from '@layouts/default-layout'
-import { buildOrgTree } from '@lib/utils'
 import { emptyObjectIf } from '@workspace/constant'
-import { type CouncilMember, Student, SubjectVersionType, ThesisProjectStatus } from '@workspace/db/client'
+import { type CouncilMember, SubjectVersionType, ThesisProjectStatus } from '@workspace/db/client'
 import {
     useCountStudent,
-    useCountSubjectClass,
     useCreateManyInvitation,
     useFindManyDM_DonVi,
+    useFindManyExpertProfile,
     useFindManyFixedClass,
-    useFindManyGraduationSession,
     useFindManyStudent,
     useFindManySubjectClass,
     useFindManyThesisProject,
+    useFindManyThesisSession,
     useFindManyTrainingCourse,
-    useUpdateThesisProject,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION, ROUTER_PATH } from '@workspace/router'
+import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Col, Flex, Form, Input, message, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Flex, Form, Input, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { BookPlus } from 'lucide-react'
-import { useRouter } from 'next/router'
 import type React from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
-import { BsGear } from 'react-icons/bs'
 
 export default function PostgraduateProject() {
-    const { can, canSome } = useAbility()
+    const { can } = useAbility()
     const [editingRowKey, setEditingRowKey] = useState<string | null>(null);
 
     const [editingValue, setEditingValue] = useState<string>('');
-    const router = useRouter()
-    const { getThesisProjectStatusColor, getThesisProjectStatusLabel, thesisProjectStatusOptions } =
-        useThesisProjectStatusOptions()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [filters, setFilters] = useState<FilterProps>({
@@ -62,15 +51,12 @@ export default function PostgraduateProject() {
         summary: undefined,
     })
     const handleSave = async (rowId: string) => {
-        console.log('Đang lưu hàng:', rowId, 'với giá trị mới:', editingValue);
         await refetchStudents();
     };
     const { id: semesterId } = useSemesterStore()
     const { id: trainingObjectId } = useTrainingObjectTypeStore()
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const { mutateAsync: createManyInvitation } = useCreateManyInvitation()
-    const { data: manageOrgData = [] } = useFindManyDM_DonVi({ orderBy: { sTen: 'asc' } })
-    const treeData = buildOrgTree(manageOrgData)
      const [trainingCourseseselected,setTrainingCoursesSelected] = useState<string[]>([])
      const [fixedClassesSelected,setFixedClassesSelected] = useState<string[]>([])
     const ALLOWED_STATUSES: ThesisProjectStatus[] = [
@@ -175,16 +161,7 @@ export default function PostgraduateProject() {
         filters.endDate,
         filters.summary,
     ])
-    const {data : trainingCourse} = useFindManyTrainingCourse(
-        {
-            where :
-            {
-                deletedAt : null,
-                active : true,
-                trainingObjectTypeId : trainingObjectId,
-            }
-        }
-    )
+    const [thesisSessionSelected, setThesisSessionSelected] = useState<string | undefined>(undefined);
     const {data: fixedClasses} = useFindManyFixedClass(
         {
             where :
@@ -195,6 +172,16 @@ export default function PostgraduateProject() {
             }
         }
     )
+    const {data : expertProfileData} = useFindManyExpertProfile({
+      include : {
+        lecturer : {
+          include : {
+            userProfile : true,
+          },
+        },
+      },
+    })
+    console.log(expertProfileData);
 
 
     const { data: subjectClass } = useFindManySubjectClass({
@@ -297,22 +284,17 @@ export default function PostgraduateProject() {
         },
         orderBy: { subject: { name: 'asc' } },
     })
-    const { data: graduationSessionData } = useFindManyGraduationSession({
-        orderBy: { sessionDate: 'desc' },
+    const { data: thesisSessionData } = useFindManyThesisSession({
+        orderBy: { startDate: 'desc' },
         where: {
             trainingObjectTypeId: trainingObjectId,
-        },
-    })
 
-    const { data: count } = useCountSubjectClass({
-        where: {
-            ...where,
-            deletedAt: null,
         },
-    })
+        include: {
+            trainingObjectType: true,
+            trainingCourse: true,
+        },
 
-    const { onOpen } = useDisclosure<{ subjectClassId: string; thesisProjectId: string }>({
-        tag: 'PutThesisProject',
     })
 
     const { onOpen: openModalPrintDecision } = useDisclosure<{
@@ -466,11 +448,15 @@ export default function PostgraduateProject() {
                   <Form.Item name="searchDotXet" label="Đợt xét">
                     <Select
                       className="w-36"
-                      mode="multiple"
-                      options={graduationSessionData?.map((item) => ({
+                      options={thesisSessionData?.map((item) => ({
                         label: item.name,
                         value: item.id,
                       }))}
+                      onChange={(value, option) => {
+                        setThesisSessionSelected(
+                          (option as any)?.label as string
+                        );
+                      }}
                       placeholder="Chọn đợt xét"
                     />
                   </Form.Item>
@@ -478,10 +464,10 @@ export default function PostgraduateProject() {
                     <Select
                       className="w-36"
                       mode="multiple"
-                      options={trainingCourse?.map((x) => {
+                      options={thesisSessionData?.map((x) => {
                         return {
-                          label: x.name,
-                          value: x.id,
+                          label: x.trainingCourse.name,
+                          value: x.trainingCourse.id,
                         };
                       })}
                       onChange={(value) => {
@@ -518,7 +504,11 @@ export default function PostgraduateProject() {
                     <Button type="primary" onClick={() => {}}>
                       Xem kết quả
                     </Button>
-                    <Button type="primary" className='ml-2' onClick={ async () => await taodulieumau()}>
+                    <Button
+                      type="primary"
+                      className="ml-2"
+                      onClick={async () => await taodulieumau()}
+                    >
                       Tạo dữ liệu mẫu
                     </Button>
                   </Form.Item>
@@ -629,14 +619,15 @@ export default function PostgraduateProject() {
               columns={[
                 {
                   title: "Đối tượng đào tạo",
-                  dataIndex: "Đợt xét",
                   render: (_, record) => {
                     return record?.trainingObjectType?.name;
                   },
                 },
                 {
                   title: "Đợt xét",
-                  dataIndex: "name",
+                  render: (_, record) => {
+                    return thesisSessionSelected;
+                  },
                 },
                 {
                   title: "Mã sinh viên",
@@ -659,22 +650,22 @@ export default function PostgraduateProject() {
                   },
                 },
                 {
-                    title: "Đề tài",
-                    width: 200,
-                    dataIndex: "name",
-                    render: (text: string, record: any) => {
-                        if (record.id === editingRowKey) {
-                            return (
-                                <Input
-                                    value={editingValue}
-                                    onChange={(e) => setEditingValue(e.target.value)}
-                                    onPressEnter={() => handleSave(record.id)} // Tùy chọn: Bấm Enter để lưu
-                                />
-                            );
-                        }
-                        // Nếu không phải, hiển thị text bình thường
-                        return text;
-                    },
+                  title: "Đề tài",
+                  width: 200,
+                  dataIndex: "name",
+                  render: (text: string, record: any) => {
+                    if (record.id === editingRowKey) {
+                      return (
+                        <Input
+                          value={editingValue}
+                          onChange={(e) => setEditingValue(e.target.value)}
+                          onPressEnter={() => handleSave(record.id)} // Tùy chọn: Bấm Enter để lưu
+                        />
+                      );
+                    }
+                    // Nếu không phải, hiển thị text bình thường
+                    return text;
+                  },
                 },
                 {
                   title: "GVHD 1",
@@ -700,51 +691,51 @@ export default function PostgraduateProject() {
                   title: "Ký QĐ đề tài",
                 },
                 {
-                    title: "Thao tác",
-                    render: (_, record: any) => {
-                        // Kiểm tra xem hàng này có phải là hàng đang sửa không
-                        if (record.id === editingRowKey) {
-                            return (
-                                <Row className="justify-center gap-2">
-                                    <Button
-                                        size="small"
-                                        type="primary"
-                                        onClick={() => handleSave(record.id)}
-                                    >
-                                        Lưu
-                                    </Button>
-                                    <Button
-                                        size="small"
-                                        onClick={() => {
-                                            setEditingRowKey(null); // Hủy, thoát chế độ edit
-                                            setEditingValue(''); // Xóa giá trị tạm
-                                        }}
-                                    >
-                                        Hủy
-                                    </Button>
-                                </Row>
-                            );
-                        }
-        
-                        // Nếu không phải, hiển thị nút Edit/Delete (như code cũ)
-                        if (record?.id) {
-                            return (
-                                <Row className="justify-center gap-2">
-                                    <EditIcon
-                                        className="text-sm text-blue-700 cursor-pointer"
-                                        onClick={() => {
-                                            // Khi bấm "Sửa"
-                                            setEditingRowKey(record.id); // Đặt hàng này vào chế độ edit
-                                            // Tải giá trị hiện tại của 'name' vào state tạm
-                                            setEditingValue(record.name || '');
-                                        }}
-                                    />
-                                    <DeleteIcon />
-                                </Row>
-                            );
-                        }
-                        return "";
-                    },
+                  title: "Thao tác",
+                  render: (_, record: any) => {
+                    // Kiểm tra xem hàng này có phải là hàng đang sửa không
+                    if (record.id === editingRowKey) {
+                      return (
+                        <Row className="justify-center gap-2">
+                          <Button
+                            size="small"
+                            type="primary"
+                            onClick={() => handleSave(record.id)}
+                          >
+                            Lưu
+                          </Button>
+                          <Button
+                            size="small"
+                            onClick={() => {
+                              setEditingRowKey(null); // Hủy, thoát chế độ edit
+                              setEditingValue(""); // Xóa giá trị tạm
+                            }}
+                          >
+                            Hủy
+                          </Button>
+                        </Row>
+                      );
+                    }
+
+                    // Nếu không phải, hiển thị nút Edit/Delete (như code cũ)
+                    if (record?.id) {
+                      return (
+                        <Row className="justify-center gap-2">
+                          <EditIcon
+                            className="text-sm text-blue-700 cursor-pointer"
+                            onClick={() => {
+                              // Khi bấm "Sửa"
+                              setEditingRowKey(record.id); // Đặt hàng này vào chế độ edit
+                              // Tải giá trị hiện tại của 'name' vào state tạm
+                              setEditingValue(record.name || "");
+                            }}
+                          />
+                          <DeleteIcon />
+                        </Row>
+                      );
+                    }
+                    return "";
+                  },
                 },
               ]}
               data={selectedStudents}
@@ -753,17 +744,13 @@ export default function PostgraduateProject() {
                 pageSize: numberOfPages,
                 total: countStudents,
                 onChange: async (page, pageSize) => {
-                    console.log(page, pageSize)
-                    console.log(currentPage)
                   if (numberOfPages === pageSize) {
                     setCurrentPage(page);
                     setCountStudents(countStudent || 0);
-
                   } else {
                     setCurrentPage(1);
                     setNumberOfPages(pageSize);
                     setCountStudents(countStudent || 0);
-                    
                   }
                   await refetchStudents();
                 },
