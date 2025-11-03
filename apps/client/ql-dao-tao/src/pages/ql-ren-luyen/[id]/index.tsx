@@ -11,7 +11,7 @@ import {
     useFindUniqueTrainingScoreSession,
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { Button, Col, Divider, Flex, message, Row, Select, Tag } from 'antd'
+import { Button, Col, Divider, Flex, message, Popover, Row, Select, Tag } from 'antd'
 import { Save } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -22,13 +22,17 @@ export default function SubjectClassScore() {
     const router = useRouter()
     const id = router.query.id as string
     const [currentPage, setCurrentPage] = useState(1)
-    const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
+    const [numberOfPages, setNumberOfPages] = useState(50)
     const [selectedFixedClass, setSelectedFixedClass] = useState<string | undefined>(undefined)
     const {
         options: studentTrainingTypeOptions,
         getStudentTrainingTypeLabel,
         getStudentTrainingTypeColor,
     } = useStudentTrainingTypeOptions()
+    const [open, setOpen] = useState(false)
+    const [defaultTrainingType, setDefaultTrainingType] = useState<StudentTrainingType>()
+
+    const handleSetDefault = () => {}
 
     const [editableData, setEditableData] = useState<
         Map<
@@ -109,7 +113,6 @@ export default function SubjectClassScore() {
 
     const mergedData = useMemo(() => {
         if (!data) return []
-        console.log(data)
 
         return data.map((student) => {
             const scoreInfo = studentTrainingScoreData.find((s) => s.studentId === student.id)
@@ -206,9 +209,77 @@ export default function SubjectClassScore() {
                     <Row gutter={16}>
                         <Col span={24}>
                             <Flex justify="end" gap={4}>
+                                <Popover
+                                    content={
+                                        <div className="max-w-56">
+                                            <Select
+                                                style={{ width: '100%' }}
+                                                value={defaultTrainingType}
+                                                onChange={(value) => {
+                                                    setDefaultTrainingType(value)
+                                                }}
+                                                options={studentTrainingTypeOptions.map((opt) => ({
+                                                    label: <Tag color={opt.color}>{opt.label}</Tag>,
+                                                    value: opt.value,
+                                                }))}
+                                                tagRender={(props) => (
+                                                    <Tag
+                                                        color={getStudentTrainingTypeColor(
+                                                            props.value
+                                                        )}
+                                                    >
+                                                        {props.label}
+                                                    </Tag>
+                                                )}
+                                            />
+                                            <Col span={24} className="text-right mt-4">
+                                                <Button
+                                                    type="primary"
+                                                    disabled={!defaultTrainingType}
+                                                    onClick={(value) => {
+                                                        if (!defaultTrainingType) return
+                                                        setEditableData((prev) => {
+                                                            return new Map(
+                                                                mergedData
+                                                                    .filter(
+                                                                        (s) =>
+                                                                            !prev.has(s.id) ||
+                                                                            !s.studentTrainingType
+                                                                    )
+                                                                    .map((s) => [
+                                                                        s.id,
+                                                                        {
+                                                                            ...s,
+                                                                            studentId: s.id,
+                                                                            scoreId:
+                                                                                s.scoreId ||
+                                                                                undefined,
+                                                                            score: undefined,
+                                                                            studentTrainingType:
+                                                                                defaultTrainingType,
+                                                                        },
+                                                                    ])
+                                                            )
+                                                        })
+                                                        setOpen(false)
+                                                    }}
+                                                >
+                                                    Xác nhận
+                                                </Button>
+                                            </Col>
+                                        </div>
+                                    }
+                                    title="Đặt xếp loại mặc định"
+                                    trigger="click"
+                                    placement="bottomRight"
+                                    open={open}
+                                    onOpenChange={setOpen}
+                                >
+                                    <Button type="primary">Xếp loại mặc định</Button>
+                                </Popover>
                                 <Button
                                     type="primary"
-                                    disabled={!selectedFixedClass}
+                                    disabled={!selectedFixedClass || editableData.size === 0}
                                     onClick={handleSave}
                                 >
                                     <Save stroke="white" />
@@ -283,7 +354,17 @@ export default function SubjectClassScore() {
                                         width: 100,
                                         align: 'center',
                                         render: (_, record) => {
-                                            return (
+                                            return record.status === 'APPROVED' ? (
+                                                <Tag
+                                                    color={getStudentTrainingTypeColor(
+                                                        record.studentTrainingType
+                                                    )}
+                                                >
+                                                    {getStudentTrainingTypeLabel(
+                                                        record.studentTrainingType
+                                                    )}
+                                                </Tag>
+                                            ) : (
                                                 <Select
                                                     style={{ width: '100%' }}
                                                     value={

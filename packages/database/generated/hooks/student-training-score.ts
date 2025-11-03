@@ -326,9 +326,9 @@ export function useSuspenseCountStudentTrainingScore<TArgs extends Prisma.Studen
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('StudentTrainingScore', `${endpoint}/studentTrainingScore/count`, args, options, fetch);
 }
-import type { StudentTrainingType } from '../zenstack/models';
+import type { StudentTrainingType, TrainingScoreStatus } from '../zenstack/models';
 
-export function useCheckStudentTrainingScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; trainingScoreSessionId?: string; studentId?: string; studentTrainingType?: StudentTrainingType }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStudentTrainingScore<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; trainingScoreSessionId?: string; studentId?: string; studentTrainingType?: StudentTrainingType; status?: TrainingScoreStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StudentTrainingScore', `${endpoint}/studentTrainingScore/check`, args, options, fetch);
 }
