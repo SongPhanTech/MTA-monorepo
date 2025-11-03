@@ -141,6 +141,7 @@ function TakeTestPage() {
 
     async function onOk() {
         const dataSubmit = form.getFieldsValue()
+        const studentCode = formUser.getFieldValue('code')
         const responsesError = dataSubmit?.responses.filter(
             (i: any) => i?.type === 'SINGLE_CHOICE' && !i.surveyChoiceId
         )
@@ -174,6 +175,7 @@ function TakeTestPage() {
                     additionalSuggestion: dataSubmit.additionalSuggestion || '',
                     startedAt: new Date(startAt).toISOString(),
                     surveyId: id,
+                    studentCode,
                     // surveyObjectTypeId: surveyObjectTypeId,
                     responses: dataSubmit?.responses?.map((i) => {
                         return {
