@@ -14835,6 +14835,7 @@ const metadata: ModelMeta = {
                 }, title: {
                     name: "title",
                     type: "String",
+                    isOptional: true,
                 }, titleEN: {
                     name: "titleEN",
                     type: "String",
@@ -14842,6 +14843,7 @@ const metadata: ModelMeta = {
                 }, summary: {
                     name: "summary",
                     type: "String",
+                    isOptional: true,
                 }, objectives: {
                     name: "objectives",
                     type: "String",
@@ -14902,12 +14904,14 @@ const metadata: ModelMeta = {
                     name: "supervisor",
                     type: "ExpertProfile",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'supervisedTheses',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "supervisorId" },
                 }, supervisorId: {
                     name: "supervisorId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'supervisor',
                 }, coSupervisor: {
@@ -14928,21 +14932,20 @@ const metadata: ModelMeta = {
                     name: "organization",
                     type: "DM_DonVi",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'thesisProjects',
                     isRelationOwner: true,
                     foreignKeyMapping: { "Id": "organizationId" },
                 }, organizationId: {
                     name: "organizationId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'organization',
                 }, maxStudents: {
                     name: "maxStudents",
                     type: "Int",
-                }, currentStudents: {
-                    name: "currentStudents",
-                    type: "Int",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 0 }] }],
+                    isOptional: true,
                 }, council: {
                     name: "council",
                     type: "Council",

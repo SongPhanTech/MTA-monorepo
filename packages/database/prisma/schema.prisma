@@ -4147,9 +4147,9 @@ model ThesisProject {
   deletedAt          DateTime?
   createdAt          DateTime                    @default(now())
   updatedAt          DateTime                    @default(now()) @updatedAt()
-  title              String
+  title              String?
   titleEN            String?
-  summary            String                      @db.Text()
+  summary            String?                     @db.Text()
   objectives         String?                     @db.Text()
   scope              String?                     @db.Text()
   methodology        String?                     @db.Text()
@@ -4162,16 +4162,15 @@ model ThesisProject {
   thesisSession      ThesisSession?              @relation(fields: [thesisSessionId], references: [id])
   thesisSessionId    String?
   /// Chuyên gia hướng dẫn
-  supervisor         ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
-  supervisorId       String
+  supervisor         ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
+  supervisorId       String?
   /// Chuyên gia hướng dẫn phụ
   coSupervisor       ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
   coSupervisorId     String?
   /// Đơn vị quản lý
-  organization       DM_DonVi                    @relation(fields: [organizationId], references: [Id])
-  organizationId     String                      @db.Uuid()
-  maxStudents        Int
-  currentStudents    Int                         @default(0)
+  organization       DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
+  organizationId     String?                     @db.Uuid()
+  maxStudents        Int?
   /// Hội đồng đánh giá
   council            Council?                    @relation(fields: [councilId], references: [id])
   councilId          String?

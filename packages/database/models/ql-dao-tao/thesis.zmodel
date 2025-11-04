@@ -57,9 +57,9 @@ model ThesisSession extends Base {
 
 // Bảng đồ án
 model ThesisProject extends Base {
-  title              String                        // Tên đồ án
+  title              String?                        // Tên đồ án
   titleEN            String?                       // Tên đồ án (Tiếng Anh)
-  summary            String                      @db.Text() // Tóm tắt đồ án
+  summary            String?                     @db.Text() // Tóm tắt đồ án
   objectives         String?                     @db.Text() // Mục tiêu
   scope              String?                     @db.Text() // Phạm vi thực hiện
   methodology        String?                     @db.Text() // Phương pháp thực hiện
@@ -76,20 +76,19 @@ model ThesisProject extends Base {
   thesisSessionId    String?
 
   /// Chuyên gia hướng dẫn
-  supervisor         ExpertProfile               @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
-  supervisorId       String
+  supervisor         ExpertProfile?              @relation("SupervisorToThesis", fields: [supervisorId], references: [id])
+  supervisorId       String?
 
   /// Chuyên gia hướng dẫn phụ
   coSupervisor       ExpertProfile?              @relation("CoSupervisorToThesis", fields: [coSupervisorId], references: [id])
   coSupervisorId     String?
 
   /// Đơn vị quản lý
-  organization       DM_DonVi                    @relation(fields: [organizationId], references: [Id])
-  organizationId     String                      @db.Uuid
+  organization       DM_DonVi?                   @relation(fields: [organizationId], references: [Id])
+  organizationId     String?                     @db.Uuid
   
   // Thông tin đăng ký
-  maxStudents        Int                           // Số lượng học viên tối đa
-  currentStudents    Int                         @default(0) // Số học viên hiện tại
+  maxStudents        Int?                           // Số lượng học viên tối đa
 
   /// Hội đồng đánh giá
   council            Council?                    @relation(fields: [councilId], references: [id])
