@@ -255,9 +255,11 @@ app.openapi(savePublicSurvey, async (c) => {
     await prisma.surveySession.create({
         data: {
             survey: { connect: { id: surveyId } },
-            profile: { connect: { id: profileId } },
-            student: { connect: { id: studentId } },
-            surveyObjectType: { connect: { id: surveyObjectTypeId || undefined } },
+            ...(profileId && { profile: { connect: { id: profileId } } }),
+            ...(studentId && { student: { connect: { id: studentId } } }),
+            ...(surveyObjectTypeId && {
+                surveyObjectType: { connect: { id: surveyObjectTypeId } },
+            }),
             startedAt,
             additionalSuggestion,
             completedAt: new Date(),

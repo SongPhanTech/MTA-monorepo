@@ -9,12 +9,12 @@ export type ApplicationStatusOption = {
 export const useApplicationStatusOptions = () => {
     const applicationStatusOptions: ApplicationStatusOption[] = [
         { value: ApplicationStatus.SUBMITTED, label: 'Mới nộp', color: 'blue' },
+        { value: ApplicationStatus.IN_REVIEW, label: 'Đang được xem xét', color: 'orange' },
         {
             value: ApplicationStatus.APPROVED,
             label: 'Được chấp thuận',
             color: 'green',
         },
-        { value: ApplicationStatus.IN_REVIEW, label: 'Đang được xem xét', color: 'orange' },
         { value: ApplicationStatus.REJECTED, label: 'Bị từ chối', color: 'red' },
     ]
 
