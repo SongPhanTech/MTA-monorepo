@@ -177,6 +177,7 @@ function TakeTestPage() {
                     surveyId: id,
                     profileId: profileId,
                     studentId: student?.id,
+                    studentCode: student?.code || undefined,
                     responses: dataSubmit?.responses?.map((i) => {
                         return {
                             surveyQuestionId: i.surveyQuestionId,
