@@ -66,6 +66,7 @@ app.openapi(createNewExamList, async (c) => {
             status: 'OFFICIAL',
             active: true,
             type: $Enums.SubjectClassType.NORMAL,
+            examId: null,
         },
         select: {
             id: true,
@@ -77,11 +78,18 @@ app.openapi(createNewExamList, async (c) => {
             },
         },
     })
-    
+
+    const mapExamToSubjectClass: Record<string, string> = {}
     const exams = subjectClasses.map(({ id, subjectId, subjectClassStudent }) => {
+        if (mapExamToSubjectClass) {
+            if (!mapExamToSubjectClass?.[subjectId]) {
+                mapExamToSubjectClass[subjectId] = createId()
+            }
+        }
+        const examId = isGroupBySubject ? mapExamToSubjectClass[subjectId] : createId()
         return {
-            examId: createId(),
-            classId: id,
+            examId: examId as string,
+            subjectClassId: id,
             studentSubjectScoreIds: subjectClassStudent.map((scs) => scs.id),
             subjectId: subjectId,
         }
@@ -99,7 +107,7 @@ app.openapi(createNewExamList, async (c) => {
     const groupedExams = Object.entries(grouped).map(([examId, items]) => ({
         examId,
         subjectId: items?.[0]?.subjectId ?? '',
-        classIds: items?.map((i) => i.classId),
+        classIds: items?.map((i) => i.subjectClassId),
         studentSubjectScoreIds: items?.flatMap((i) => i.studentSubjectScoreIds),
     }))
 
@@ -116,7 +124,7 @@ app.openapi(createNewExamList, async (c) => {
             SET "examId" = data."examId"
             FROM (
                 VALUES
-                ${exams.map(({ examId, classId }) => `('${classId}', '${examId}')`).join(',\n')}
+                ${exams.map(({ examId, subjectClassId: classId }) => `('${classId}', '${examId}')`).join(',\n')}
             ) AS data("classId", "examId")
             WHERE c."id" = data."classId";
             `)

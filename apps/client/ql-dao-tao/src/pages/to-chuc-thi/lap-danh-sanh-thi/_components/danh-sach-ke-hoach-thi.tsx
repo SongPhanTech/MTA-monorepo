@@ -8,7 +8,7 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-import type { Room, SubjectClass } from '@workspace/db/client'
+import type { SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam, useFindManyRoom } from '@workspace/db/hooks'
 import { useCreateExams, useMergeExam, useUnmergeExam } from '@workspace/libs/api/training'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
@@ -17,6 +17,7 @@ import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { keHoachThiStore } from '..'
+import { cn } from '@workspace/ui/lib/utils'
 
 interface Props {
     setActiveKey: (key: string) => void
@@ -26,11 +27,8 @@ type SubjectClassFormType = {
     list: Record<
         string,
         {
-            isLockScore?: boolean
-            lockExamSessions?: boolean
-            createdExamCode?: boolean
-            lockExamCode?: boolean
-            rooms?: string[]
+            rooms?: Array<{ roomId: string; quantity: number }>
+            isChanged?: boolean
         }
     >
 }
@@ -47,6 +45,8 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [selectedSubjectId, setSelectedSubjectId] = useState<string>()
+
     const [filters, setFilters] = useState<FilterProps>({
         searchText: '',
         examType: undefined,
@@ -96,7 +96,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         select: {
                             id: true,
                             name: true,
-                            capacity: true,
+                            examCapacity: true,
                         },
                     },
                     subject: true,
@@ -152,7 +152,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
         select: {
             id: true,
             name: true,
-            capacity: true,
+            examCapacity: true,
         },
     })
 
@@ -162,13 +162,13 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 list: exams.reduce(
                     (acc, exam) => {
                         acc[exam.id] = {
-                            isLockScore: exam.subjectClass?.[0]?.isLockScore,
-                            lockExamSessions: exam.lockExamSessions,
-                            createdExamCode: exam.createdExamCode,
-                            lockExamCode: exam.lockExamCode,
                             rooms: exam.subjectClass
                                 .filter((sc) => !!sc.roomId)
-                                .map((sc) => sc.roomId ?? ''),
+                                .map((sc) => ({
+                                    roomId: sc.roomId as string,
+                                    quantity: sc.room?.examCapacity || 0,
+                                })),
+                            isChanged: false,
                         }
                         return acc
                     },
@@ -176,7 +176,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 ),
             })
         }
-    }, [exams])
+    }, [exams, form])
 
     const { mutateAsync: createExam } = useCreateExams()
     const { mutateAsync: mergeExam } = useMergeExam()
@@ -184,9 +184,23 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
 
     const rowSelection: TableRowSelection = {
         selectedRowKeys: selectedRowKeys,
-        onChange: (selectedKeys: React.Key[]) => {
+        onChange: (selectedKeys: React.Key[], selectedRows) => {
             setSelectedRowKeys(selectedKeys)
+            if (selectedKeys.length === 0) {
+                setSelectedSubjectId(undefined)
+                return
+            }
+            setSelectedSubjectId(selectedRows[0]?.subjectClass?.[0]?.subjectId)
         },
+        getCheckboxProps(record) {
+            return {
+                disabled:
+                    record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
+                    selectedSubjectId !== undefined,
+            }
+        },
+        hideSelectAll: true,
+        columnWidth: 30,
     }
 
     const debouncedSearch = useCallback(
@@ -276,6 +290,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
             message.success(res.data.message)
             refetchExams()
             setSelectedRowKeys([])
+            setSelectedSubjectId(undefined)
         } catch (error: any) {
             message.error(error?.message || 'Ghép lớp không thành công')
         } finally {
@@ -301,6 +316,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 message.success(res.data.message)
                 refetchExams()
                 setSelectedRowKeys([])
+                setSelectedSubjectId(undefined)
             }
         } catch (error: any) {
             message.error(error?.message || 'Tách lớp không thành công')
@@ -372,25 +388,34 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             open={open}
                             onOpenChange={setOpen}
                         >
-                            <Button type="primary">Tạo kế hoạch thi</Button>
+                            <Button type="dashed">0. Tạo kế hoạch thi</Button>
                         </Popover>
-
                         {exams.length > 0 && (
-                            <Button type="primary" onClick={handleMergeExam}>
+                            <Button
+                                type="primary"
+                                className="bg-blue-500"
+                                onClick={handleMergeExam}
+                                disabled={selectedRowKeys.length < 2}
+                            >
                                 Ghép lớp
                             </Button>
                         )}
-
                         {exams.length > 0 && (
-                            <Button type="primary" onClick={handleUnmergeExam}>
+                            <Button
+                                type="primary"
+                                className="bg-orange-500"
+                                onClick={handleUnmergeExam}
+                                disabled={selectedRowKeys.length !== 1}
+                            >
                                 Tách lớp
                             </Button>
                         )}
-
                         <Button type="primary" onClick={handleSubmitExam}>
                             Lưu
                         </Button>
-                        <Button type="primary">Hủy</Button>
+                        <Button type="primary" danger>
+                            Hủy
+                        </Button>
                     </Flex>
                 </Flex>
             </Col>
@@ -406,6 +431,12 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         onRow={(record) => ({
                             onClick: () => {
                                 const selectedKeys = [...selectedRowKeys]
+                                if (
+                                    selectedSubjectId &&
+                                    record.subjectClass?.[0]?.subjectId !== selectedSubjectId
+                                ) {
+                                    return
+                                }
                                 const index = selectedKeys.indexOf(record.id)
                                 if (index >= 0) {
                                     selectedKeys.splice(index, 1)
@@ -413,7 +444,17 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     selectedKeys.push(record.id)
                                 }
                                 setSelectedRowKeys(selectedKeys)
+                                setSelectedSubjectId(
+                                    selectedKeys.length > 0
+                                        ? record.subjectClass?.[0]?.subjectId
+                                        : undefined
+                                )
                             },
+                            className: cn(
+                                record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
+                                    selectedSubjectId !== undefined &&
+                                    'bg-yellow-100'
+                            ),
                             onDoubleClick: (e) => {
                                 const target = e.target as HTMLElement
                                 if (
@@ -527,17 +568,19 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 align: 'center',
                                 width: 70,
                                 render: (_, record) => {
-                                    const isLockScore = record.subjectClass?.[0]?.isLockScore
+                                    const isLockScore = record.subjectClass
+                                        ?.map?.((sc: SubjectClass) => sc.isLockScore)
+                                        .filter(Boolean)
                                     return (
-                                        <Form.Item
-                                            className="mb-0"
-                                            name={['list', record.id, 'isLockScore']}
-                                            valuePropName="checked"
-                                        >
-                                            <span className="pointer-events-none">
-                                                <Checkbox checked={isLockScore} />
-                                            </span>
-                                        </Form.Item>
+                                        <Checkbox
+                                            indeterminate={
+                                                isLockScore.length > 0 &&
+                                                isLockScore.length !== record.subjectClass.length
+                                            }
+                                            checked={
+                                                isLockScore.length === record.subjectClass.length
+                                            }
+                                        />
                                     )
                                 },
                             },
@@ -547,17 +590,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 width: 40,
                                 render: (_, record) => {
                                     const lockExamSessions = record.lockExamSessions
-                                    return (
-                                        <Form.Item
-                                            className="mb-0"
-                                            name={['list', record.id, 'lockExamSessions']}
-                                            valuePropName="checked"
-                                        >
-                                            <span className="pointer-events-none">
-                                                <Checkbox checked={lockExamSessions} />
-                                            </span>
-                                        </Form.Item>
-                                    )
+                                    return <Checkbox checked={lockExamSessions} />
                                 },
                             },
                             {
@@ -566,17 +599,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 width: 40,
                                 render: (_, record) => {
                                     const createdExamCode = record.createdExamCode
-                                    return (
-                                        <Form.Item
-                                            className="mb-0"
-                                            name={['list', record.id, 'createdExamCode']}
-                                            valuePropName="checked"
-                                        >
-                                            <span className="pointer-events-none">
-                                                <Checkbox checked={createdExamCode} />
-                                            </span>
-                                        </Form.Item>
-                                    )
+                                    return <Checkbox checked={createdExamCode} />
                                 },
                             },
                             {
@@ -585,17 +608,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 width: 40,
                                 render: (_, record) => {
                                     const lockExamCode = record.lockExamCode
-                                    return (
-                                        <Form.Item
-                                            className="mb-0"
-                                            name={['list', record.id, 'lockExamCode']}
-                                            valuePropName="checked"
-                                        >
-                                            <span className="pointer-events-none">
-                                                <Checkbox checked={lockExamCode} />
-                                            </span>
-                                        </Form.Item>
-                                    )
+                                    return <Checkbox checked={lockExamCode} />
                                 },
                             },
                             {
@@ -603,28 +616,18 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 align: 'center',
                                 width: 170,
                                 render: (_, record) => {
-                                    const uniqueRooms = Array.from(
-                                        new Set(
-                                            record.subjectClass
-                                                ?.filter(
-                                                    (sc: SubjectClass & { room: Room }) => sc.room
-                                                )
-                                                .map((sc: SubjectClass & { room: Room }) => [
-                                                    sc.room.id,
-                                                    {
-                                                        name: sc.room.name,
-                                                        roomId: sc.room.id,
-                                                        quantity: sc.room.capacity,
-                                                    },
-                                                ]) ?? []
-                                        ).values()
-                                    )
                                     return (
                                         <Form.Item
-                                            className="mb-0"
+                                            className="m-0"
                                             name={['list', record.id, 'rooms']}
                                         >
-                                            <RoomSelector rooms={rooms} />
+                                            <RoomSelector
+                                                rooms={rooms.map((room) => ({
+                                                    id: room.id,
+                                                    capacity: room.examCapacity ?? 0,
+                                                    name: room.name,
+                                                }))}
+                                            />
                                         </Form.Item>
                                     )
                                 },

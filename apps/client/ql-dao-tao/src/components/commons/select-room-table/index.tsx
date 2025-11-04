@@ -1,12 +1,12 @@
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
-import { Input, Popover, Select } from 'antd'
+import { Col, Input, Popover, Row, Select } from 'antd'
 import { useState } from 'react'
 
 interface RoomSelectorProps {
-    value?: Array<{ roomId: string; quantity: number; name: string }>
-    onChange?: (value: Array<{ roomId: string; quantity: number; name: string }>) => void
-    rooms: Array<{ id: string; name: string; capacity: number }>
+    value?: Array<{ roomId: string; quantity: number }>
+    onChange?: (value: Array<{ roomId: string; quantity: number }>) => void
+    rooms: Array<{ id: string; capacity: number; name: string }>
 }
 
 interface RoomTableData {
@@ -24,15 +24,12 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
     const [searchText, setSearchText] = useState('')
 
     const handleQuantityChange = (roomId: string, quantity: number) => {
-        const newValue = value.map((v) =>
-            v.roomId === roomId ? { roomId, quantity, name: v.name } : v
-        )
+        const newValue = value.map((v) => (v.roomId === roomId ? { roomId, quantity } : v))
         onChange?.(newValue)
     }
 
-    const handleDeselect = (tagValue: string) => {
-        const roomName = tagValue.split('-').slice(0, -1).join('-')
-        const newValue = value.filter((v) => v.name !== roomName)
+    const handleDeselect = (roomId: string) => {
+        const newValue = value.filter((v) => v.roomId !== roomId)
         onChange?.(newValue)
     }
 
@@ -40,10 +37,10 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
         const selectedValue = value.find((v) => v.roomId === room.id)
         return {
             id: room.id,
-            name: room.name,
             capacity: room.capacity,
             quantity: selectedValue?.quantity || room.capacity,
             isSelected: !!selectedValue,
+            name: room.name,
         }
     })
 
@@ -61,7 +58,6 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
                 return {
                     roomId: roomId as string,
                     quantity: existing?.quantity || room?.capacity || 0,
-                    name: existing?.name || room?.name || '',
                 }
             })
             onChange?.(newValue)
@@ -158,14 +154,27 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
             onOpenChange={setVisible}
             placement="bottomLeft"
         >
-            <Select
-                mode="multiple"
-                value={value.map((v) => `${v.name}-${v.quantity}`)}
-                placeholder="Chọn phòng thi"
-                maxTagCount="responsive"
-                open={false}
-                onDeselect={handleDeselect}
-            />
+            <Row>
+                <Col span={20}>
+                    <Select
+                        mode="multiple"
+                        value={value.map((v) => v.roomId)}
+                        options={rooms.map((room) => ({
+                            label: `${room.name}-${room.capacity}`,
+                            value: room.id,
+                        }))}
+                        placeholder="Chọn phòng thi"
+                        maxTagCount="responsive"
+                        open={false}
+                        onDeselect={handleDeselect}
+                    />
+                </Col>
+                <Col span={4} className="flex items-center pl-1">
+                    {value.length > 0 && (
+                        <span>: {value.reduce((acc, v) => acc + (v.quantity ?? 0), 0)}</span>
+                    )}
+                </Col>
+            </Row>
         </Popover>
     )
 }
