@@ -88,7 +88,6 @@ const NAVIGATION: NavigationType = {
                 icon: FileOutlined,
                 path: ROUTER_PATH.DANG_KY_HOC.KHAO_SAT,
             },
-
             {
                 id: DANG_KY_HOC_PERMISSION.DANG_KY_HOC_CHUONG_TRINH_DAO_TAO,
                 label: 'Chương trình đào tạo',
