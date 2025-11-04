@@ -393,6 +393,7 @@ export default function UpdateUserPage() {
                 sCCCD: values.idCardNumber,
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
+                Id: id,
             })
             // const res = await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/DM_NhanViens`, {
             //     sDM_DonViId: values.sDM_DonViId,
