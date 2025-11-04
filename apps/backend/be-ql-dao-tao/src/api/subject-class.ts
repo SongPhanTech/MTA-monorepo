@@ -389,7 +389,7 @@ app.openapi(openSubjectClass, async (c) => {
                         cv.code                           as curriculum_version_code,
                         sv.name                           as subject_version_name,
                         tbs.semester                      as training_block_subject_semester,
-                        ((${semesterYear} - fc."startYear") * 2 + ${semesterType}) as fixed_class_semester,
+                        ((${semesterYear} - DATE_PART('year', schy."startDate")) * 2 + ${semesterType}) as fixed_class_semester,
                         fc."startYear"                    as fixed_class_start_year,
                         fc.id                             as fixed_class_id,
                         fc.name                           as fixed_class_name,
@@ -412,6 +412,8 @@ app.openapi(openSubjectClass, async (c) => {
                         JOIN "ql-dao-tao"."FixedClass" fc ON cv.id = fc."curriculumVersionId"
                         JOIN "ql-dao-tao"."Student" s ON fc.id = s."fixedClassId"
                         JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
+                        JOIN "ql-dao-tao"."Semester" sem on tc."semesterStartId" = sem.id
+                        JOIN "ql-dao-tao"."SchoolYear" schy on sem."schoolYearId" = schy.id
                         LEFT JOIN "mta"."DM_DonVi" dv ON c."managementOrganizationId" = dv."Id"
                 WHERE fc.active = TRUE
                 AND tbs."deletedAt" IS NULL
@@ -436,7 +438,8 @@ app.openapi(openSubjectClass, async (c) => {
                         c."managementOrganizationId",
                         tc."trainingObjectTypeId",
                         dv."sTen",
-                        dv."sMa")
+                        dv."sMa",
+                        schy."startDate")
     SELECT json_build_object(
                 'subjectVersionCode',
                 subject_version_code,

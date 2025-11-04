@@ -15,7 +15,7 @@ import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Checkbox, Col, Flex, Form, Input, message, Popover, Row, Switch } from 'antd'
 import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { keHoachThiStore } from '..'
 
 interface Props {
@@ -125,6 +125,20 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 some: {
                     trainingObjectTypeId,
                     semesterId,
+                    ...(filters.searchText && {
+                        name: {
+                            contains: filters.searchText,
+                            mode: 'insensitive',
+                        },
+                    }),
+                    ...(filters.examType &&
+                        filters.examType.length > 0 && {
+                            subject: {
+                                examType: {
+                                    in: filters.examType,
+                                },
+                            },
+                        }),
                 },
             },
         },
@@ -141,6 +155,28 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
             capacity: true,
         },
     })
+
+    useEffect(() => {
+        if (exams) {
+            form.setFieldsValue({
+                list: exams.reduce(
+                    (acc, exam) => {
+                        acc[exam.id] = {
+                            isLockScore: exam.subjectClass?.[0]?.isLockScore,
+                            lockExamSessions: exam.lockExamSessions,
+                            createdExamCode: exam.createdExamCode,
+                            lockExamCode: exam.lockExamCode,
+                            rooms: exam.subjectClass
+                                .filter((sc) => !!sc.roomId)
+                                .map((sc) => sc.roomId ?? ''),
+                        }
+                        return acc
+                    },
+                    {} as SubjectClassFormType['list']
+                ),
+            })
+        }
+    }, [exams])
 
     const { mutateAsync: createExam } = useCreateExams()
     const { mutateAsync: mergeExam } = useMergeExam()
@@ -185,7 +221,6 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
 
     const handleSubmitExam = () => {
         const data = form.getFieldsValue()
-        console.log(data)
     }
 
     const handleCreateExam = async () => {
@@ -441,16 +476,16 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 },
                             },
                             {
-                                title: 'Số tín chỉ',
+                                title: 'STC',
                                 align: 'center',
-                                width: 50,
+                                width: 30,
                                 render: (_, record) =>
                                     record.subjectClass?.[0]?.subject?.credit || '',
                             },
                             {
-                                title: 'Số sinh viên',
+                                title: 'Số SV',
                                 align: 'center',
-                                width: 60,
+                                width: 30,
                                 render: (_, record) =>
                                     record.subjectClass?.reduce(
                                         (
@@ -472,9 +507,25 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                 },
                             },
                             {
+                                title: 'Trạng thái NĐ',
+                                dataIndex: 'scoreDeadLineStart',
+                                width: 80,
+                                align: 'center',
+                                type: 'date',
+                                render: (__, record) => {
+                                    return record.subjectClass?.[0]?.enteredExamScore ? (
+                                        'Đã nhập điểm thi'
+                                    ) : record.subjectClass?.[0]?.enteredScore ? (
+                                        'Đã nhập điểm TX,CC'
+                                    ) : (
+                                        <div className="text-red-500">Chưa nhập điểm</div>
+                                    )
+                                },
+                            },
+                            {
                                 title: 'Khóa nhập ĐQT',
                                 align: 'center',
-                                width: 60,
+                                width: 70,
                                 render: (_, record) => {
                                     const isLockScore = record.subjectClass?.[0]?.isLockScore
                                     return (
@@ -568,12 +619,10 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                                 ]) ?? []
                                         ).values()
                                     )
-
                                     return (
                                         <Form.Item
                                             className="mb-0"
                                             name={['list', record.id, 'rooms']}
-                                            initialValue={uniqueRooms}
                                         >
                                             <RoomSelector rooms={rooms} />
                                         </Form.Item>

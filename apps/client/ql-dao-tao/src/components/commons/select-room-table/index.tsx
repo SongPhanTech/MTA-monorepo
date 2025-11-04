@@ -85,6 +85,11 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
             </div>
             <Table
                 rowKey="id"
+                onRow={(record) => ({
+                    onClick: (e) => {
+                        e.stopPropagation()
+                    },
+                })}
                 columns={[
                     {
                         title: 'STT',
@@ -117,7 +122,7 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
                                 onChange={(e) =>
                                     handleQuantityChange(
                                         record.id,
-                                        Number.parseInt(e.target.value) || 0
+                                        Number.parseInt(e.target.value, 10) || 0
                                     )
                                 }
                             />

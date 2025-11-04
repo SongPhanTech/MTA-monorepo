@@ -56,49 +56,35 @@ const createNewExamList = createRoute({
 app.openapi(createNewExamList, async (c) => {
     const { isGroupBySubject, trainingObjectTypeId, semesterId } = c.req.valid('json')
 
-    const subjects = await prisma.subjectVersion.findMany({
+    const subjectClasses = await prisma.subjectClass.findMany({
         where: {
-            subjectClass: {
-                some: {
-                    trainingObjectTypeId,
-                    semesterId,
-                    cancelled: false,
-                    deletedAt: null,
-                    enteredScore: true,
-                    status: 'OFFICIAL',
-                },
-            },
+            trainingObjectTypeId,
+            semesterId,
+            cancelled: false,
+            deletedAt: null,
+            enteredScore: true,
+            status: 'OFFICIAL',
+            active: true,
+            type: $Enums.SubjectClassType.NORMAL,
         },
         select: {
-            subjectClass: {
+            id: true,
+            subjectId: true,
+            subjectClassStudent: {
                 select: {
                     id: true,
-                    subjectId: true,
-                    subjectClassStudent: {
-                        select: { id: true },
-                        // where: {
-                        //     examBanned: false,
-                        //     withdrew: false,
-                        //     exempted: false,
-                        // },
-                    },
-                },
-                where: {
-                    // TODO: cần kiểu tra theo yêu cầu
-                    examId: null,
                 },
             },
         },
     })
-
-    const exams = subjects.flatMap(({ subjectClass }) => {
-        const id = createId()
-        return subjectClass.map((cls) => ({
-            examId: isGroupBySubject ? id : createId(),
-            classId: cls.id,
-            studentSubjectScoreIds: cls.subjectClassStudent.map((scs) => scs.id),
-            subjectId: cls.subjectId,
-        }))
+    
+    const exams = subjectClasses.map(({ id, subjectId, subjectClassStudent }) => {
+        return {
+            examId: createId(),
+            classId: id,
+            studentSubjectScoreIds: subjectClassStudent.map((scs) => scs.id),
+            subjectId: subjectId,
+        }
     })
 
     if (exams.length === 0) {
