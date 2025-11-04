@@ -29,6 +29,8 @@ import PutCriterionCatalog from './put-tieu-chi-danh-gia-ctdt'
 import PutStandardCatalog from './put-tieu-chuan-ctdt'
 import PutRequirementCriterionCatalog from './put-yeu-cau'
 import ThongTinKhaoSatModal from './show-exam'
+import CriteriaAssignmentModal from './modal-phan-cong-giang-vien'
+import PutTieuChiMinhChungModal from './put-modal-tieu-chi-minh-chung'
 export {
     ConfirmModal,
     PutSurveyObjectTypeModal,
@@ -61,4 +63,6 @@ export {
     PutEvaluationSecretarYCouncil,
     PutEvaluationSecretaryMember,
     ThongTinKhaoSatModal,
+    CriteriaAssignmentModal,
+    PutTieuChiMinhChungModal,
 }

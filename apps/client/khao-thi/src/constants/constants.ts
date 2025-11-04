@@ -12,6 +12,7 @@ const EVALUATION_MEMBER_ROLE = [
     { label: 'Trưởng ban thư ký', value: $Enums.EvaluationMemberRole.HEAD_SECRETARY },
     { label: 'Thư ký', value: $Enums.EvaluationMemberRole.SECRETARY },
     { label: 'Uỷ viên', value: $Enums.EvaluationMemberRole.MEMBER },
+    { label: 'Ban tư vấn', value: $Enums.EvaluationMemberRole.ADVISORY_BOARD },
 ]
 const EVALUATION_SECRETARY_MEMBER_ROLE = [
     { label: 'Trưởng ban thư ký', value: $Enums.EvaluationSecretaryMemberRole.HEAD_SECRETARY },
