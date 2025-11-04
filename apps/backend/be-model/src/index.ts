@@ -95,14 +95,19 @@ app.all('/api/system/:appcode/*', async (c) => {
                 return process.env.KEYCLOAK_CLIENT_SECRET || ''
         }
     })()
-    return proxy(new URL(`${pathProxy}`, 'https://mta.swantech.vn/api/system/public/'), {
+
+    const urlProxy = new URL(`${pathProxy}`, 'https://mta.swantech.vn/api/system/public/')
+    const res = await proxy(urlProxy, {
+        ...c.req,
         headers: {
-            // ...c.req.header(), // optional, specify only when forwarding all the request data (including credentials) is necessary.
             'x-clientid': clientId,
             'x-clientsecret': clientSecret,
+            'content-type':'application/json-patch+json'
         },
     })
+    return res
 })
+
 app.route('/api/minio', MinIOApp)
 app.route('/api/sql', SqlTransactionApp)
 
