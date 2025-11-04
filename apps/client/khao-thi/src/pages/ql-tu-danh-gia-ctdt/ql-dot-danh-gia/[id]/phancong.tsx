@@ -1,6 +1,8 @@
 import DatePicker from '@components/commons/date-picker'
 import Select from '@components/commons/select'
 import TableCollapse from '@components/commons/tableCollapse'
+import EditIcon from '@components/icons/edit'
+import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useFindManyLecturer, useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
@@ -9,6 +11,7 @@ import { Button, Col, Flex, Form, message, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type EvaluationAssignmentFormType = {
     list: Record<string, { lecturerId: string; deadline: Date }>
@@ -19,6 +22,12 @@ export default function EvaluationAssignmentPage() {
     const id = router.query.id as string
 
     const [form] = Form.useForm<EvaluationAssignmentFormType>()
+
+    const { onOpen } = useDisclosure<{
+        evaluationCriterionId?: string
+    }>({
+        tag: 'CriteriaAssignmentModal',
+    })
 
     const { showSpinner, hideSpinner } = useSpinner()
 
@@ -119,7 +128,7 @@ export default function EvaluationAssignmentPage() {
         })
 
         form.setFieldsValue({ list: formData })
-    }, [data, form])
+    }, [data?.standards, form])
 
     const handleSave = async () => {
         try {
@@ -186,13 +195,13 @@ export default function EvaluationAssignmentPage() {
     }
 
     return (
-        <Row gutter={[8, 0]}>
+        <Row gutter={0}>
             <Col span={24}>
                 <h1 className="text-xl font-bold text-gray-800 mb-2">
                     Phân công giảng viên đánh giá
                 </h1>
                 <p className="text-gray-600 text-base">Đợt đánh giá: {data?.name}</p>
-                <Flex justify="flex-end">
+                <Flex justify="flex-end" className="pb-2">
                     <Button type="primary" onClick={handleSave}>
                         Lưu
                     </Button>
@@ -209,7 +218,8 @@ export default function EvaluationAssignmentPage() {
                         childrenFieldName="criteria"
                         data={tableData}
                         pagination={false}
-                        scroll={{ y: 'calc(100vh - 280px)' }}
+                        scroll={{ y: 'calc(100vh - 320px)', x: 'max-content' }}
+                        className="w-full"
                         columns={[
                             {
                                 title: 'Tiêu chí',
@@ -256,7 +266,7 @@ export default function EvaluationAssignmentPage() {
                             },
                             {
                                 title: 'Hạn hoàn thành',
-                                width: 150,
+                                width: 170,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
@@ -271,6 +281,35 @@ export default function EvaluationAssignmentPage() {
                                                 }
                                             />
                                         </Form.Item>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Thao tác',
+                                width: 80,
+                                render: (_, record) => {
+                                    return (
+                                        <Flex justify="center" align="center" gap={8}>
+                                            <UserPlusIcon
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    e.preventDefault()
+                                                    onOpen({
+                                                        evaluationCriterionId: record.id,
+                                                    })
+                                                }}
+                                            />
+                                            <EditIcon
+                                                className="text-blue-700 cursor-pointer"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    e.preventDefault()
+                                                    onOpen({
+                                                        evaluationCriterionId: record.id,
+                                                    })
+                                                }}
+                                            />
+                                        </Flex>
                                     )
                                 },
                             },
