@@ -192,7 +192,7 @@ export default function UserProfilePageDs() {
                   }
                 : {}),
         }),
-        [filters]
+        [filters, trainingObjectTypeId]
     )
 
     const { data = [] } = useFindManyStudent({
@@ -568,8 +568,10 @@ export default function UserProfilePageDs() {
                                 })),
                                 render: (__, record: any) => {
                                     if (!record.fixedClass) return ''
-                                    const fiexedClass = `${record.fixedClass?.code || ''} - ${record.fixedClass?.name}`
-                                    return fiexedClass || ''
+                                    const fixedClass = `${record.fixedClass?.code || ''} - ${
+                                        record.fixedClass?.name
+                                    }`
+                                    return fixedClass || ''
                                 },
                             },
                             {

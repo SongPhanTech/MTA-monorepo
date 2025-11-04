@@ -372,7 +372,7 @@ export const buildSubjectMapOrThrow = async (
 
             const groupMap = new Map(subjectGroup.map((s) => [s.name, s.id]))
 
-            return await prisma.subjectVersion.createManyAndReturn({
+            return await tx.subjectVersion.createManyAndReturn({
                 data: missing.map((subject) => ({
                     name: subject.name,
                     trainingObjectTypeId: subject.trainingObjectTypeId,

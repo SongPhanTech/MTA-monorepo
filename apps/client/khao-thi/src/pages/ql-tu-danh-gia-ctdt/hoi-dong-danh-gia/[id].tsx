@@ -107,7 +107,7 @@ export default function EvaluationCouncil() {
         )
 
         const advisoryBoardMembers = data.members.filter((member) =>
-            member.role?.some((r) => r === $Enums.EvaluationMemberRole.CHAIRMAN)
+            member.role?.some((r) => r === $Enums.EvaluationMemberRole.ADVISORY_BOARD)
         )
 
         const result: any[] = []

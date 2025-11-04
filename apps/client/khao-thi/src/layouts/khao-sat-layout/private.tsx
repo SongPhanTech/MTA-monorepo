@@ -1,7 +1,7 @@
 import { cn } from '@lib/utils'
 import { CONFIG_KEY } from '@workspace/constant'
 import { useFindUniqueConfig } from '@workspace/db/hooks'
-import {Layout, theme } from 'antd'
+import { Layout, theme } from 'antd'
 import { useRouter } from 'next/router'
 import { type ReactNode } from 'react'
 import { IdleTimerProvider } from 'react-idle-timer'
@@ -34,7 +34,6 @@ const KhaoSatPrivateLayout = ({
         token: { colorBgContainer },
     } = theme.useToken()
 
-
     return (
         <IdleTimerProvider
             timeout={Number.parseFloat(userSessionTimeout?.value || '15') * 60 * 1000}
@@ -47,10 +46,8 @@ const KhaoSatPrivateLayout = ({
                         transition: 'margin-inline-start 0.2s', // Hiệu ứng mượt
                     }}
                 >
-                    <Header
-                        className="flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  w-full"
-                    >
-                     <div className="text-lg font-bold text-primary">KHẢO THÍ</div>
+                    <Header className="flex justify-between items-center bg-white shadow-sm mb-2 fixed z-[1000] top-0  w-full">
+                        <div className="text-lg font-bold text-primary">KHẢO THÍ</div>
                         <HeaderApp />
                     </Header>
                     <Content className="mx-2 mt-20">

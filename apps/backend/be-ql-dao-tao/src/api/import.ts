@@ -154,8 +154,7 @@ app.openapi(importLecturer, async (c) => {
                             sTen: profileData.firstName,
                             sTenDayDu: lecturer.fullname,
                             sSDTDiDong: lecturer.phoneNumber ?? '',
-                            // TODO: fix this
-                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                            sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
                             sEmail: lecturer.email,
                             sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
                         },
@@ -198,8 +197,7 @@ app.openapi(importLecturer, async (c) => {
                             sTen: profileData.firstName,
                             sTenDayDu: lecturer.fullname,
                             sSDTDiDong: lecturer.phoneNumber ?? '',
-                            // TODO: fix this
-                            sDM_DonViId: 'e701b807-c390-45ff-a5c8-123f708ee0e1',
+                            sDM_DonViId: organizationMap.get(lecturer.departmentOrganization),
                             sEmail: lecturer.email,
                             sDM_GioiTinhId: lecturer.gender ? genderMap.get(lecturer.gender) : null,
                         },

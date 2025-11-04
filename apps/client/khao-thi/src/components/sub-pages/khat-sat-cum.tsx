@@ -1,4 +1,4 @@
-import {  EyeOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import HtmlTruncate from '@components/commons/html-truncate'
 import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
@@ -88,17 +88,19 @@ function TabDotKhaoSatCum() {
             surveyTopic: true,
             surveyQuestion: true,
             surveys: {
-                include:{
-                    surveySessions: true
-                }
-            }
+                include: {
+                    surveySessions: true,
+                },
+            },
         },
         orderBy: { createdAt: 'desc' },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count, refetch: refetchCount } = useCountClusterSurvey({ where: { ...where, deletedAt: null } })
+    const { data: count, refetch: refetchCount } = useCountClusterSurvey({
+        where: { ...where, deletedAt: null },
+    })
 
     const { onOpen } = useDisclosure<{ id: string; type: string }>({
         tag: 'PutSurveyModal',
@@ -116,57 +118,59 @@ function TabDotKhaoSatCum() {
 
     // const { mutateAsync: updateSurvey } = useUpdateClusterSurvey()
 
-    async function handleDelete(id: string,surveys:Survey[]) {
+    async function handleDelete(id: string, surveys: Survey[]) {
         try {
             showSpinner()
-            let listTranssition:any=[
+            let listTranssition: any = [
                 {
-                model: 'ClusterSurvey',
-                operation: 'update',
-                data: {
-                    where: {
-                        id,
-                    },
-                    data: {
-                        deletedAt: new Date(),
-                    },
-                }}
-            ];
-            if(surveys?.length>0){
-            listTranssition=[
-                {
-                model: 'ClusterSurvey',
-                operation: 'update',
-                data: {
-                    where: {
-                        id,
-                    },
-                    data: {
-                        deletedAt: new Date(),
-                    },
-                }},
-              ...surveys.map((i:Survey)=>{
-                return {
-                    model: 'Survey',
+                    model: 'ClusterSurvey',
                     operation: 'update',
                     data: {
                         where: {
-                            id:i.id,
+                            id,
                         },
                         data: {
                             deletedAt: new Date(),
                         },
-                    }
-                }
-              })
+                    },
+                },
             ]
+            if (surveys?.length > 0) {
+                listTranssition = [
+                    {
+                        model: 'ClusterSurvey',
+                        operation: 'update',
+                        data: {
+                            where: {
+                                id,
+                            },
+                            data: {
+                                deletedAt: new Date(),
+                            },
+                        },
+                    },
+                    ...surveys.map((i: Survey) => {
+                        return {
+                            model: 'Survey',
+                            operation: 'update',
+                            data: {
+                                where: {
+                                    id: i.id,
+                                },
+                                data: {
+                                    deletedAt: new Date(),
+                                },
+                            },
+                        }
+                    }),
+                ]
             }
-            
-           const res= await sqlTransaction(listTranssition)
-            if(res?.status===200){
+
+            const res = await sqlTransaction(listTranssition)
+            if (res?.status === 200) {
                 message.success('Xóa thành công')
-                 refetch()
-            refetchCount()
+                refetch()
+                refetchCount()
             }
         } catch (error: any) {
             if (error?.info?.message) {
@@ -179,16 +183,16 @@ function TabDotKhaoSatCum() {
         }
     }
 
-    const disabledDelete=useMemo(()=>{
-        if(data?.length>0){
-              const result=data.find((i:any)=>i?.surveys?.surveySessions?.length>0)
-            if(result){
+    const disabledDelete = useMemo(() => {
+        if (data?.length > 0) {
+            const result = data.find((i: any) => i?.surveys?.surveySessions?.length > 0)
+            if (result) {
                 return true
             }
         }
-      
+
         return false
-    },[data])
+    }, [data])
 
     const { data: surveyTopicData } = useFindManySurveyTopic({ orderBy: { createdAt: 'desc' } })
     const { data: surveyObjectTypeData } = useFindManySurveyObjectType({
@@ -303,10 +307,7 @@ function TabDotKhaoSatCum() {
                                     'XOA',
                                     'XEM_CHI_TIET'
                                 ),
-                                render: (
-                                    _,
-                                    { id, surveyQuestion ,surveys}
-                                ) => (
+                                render: (_, { id, surveyQuestion, surveys }) => (
                                     <Row className="justify-center gap-2">
                                         {/* {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
@@ -354,7 +355,7 @@ function TabDotKhaoSatCum() {
                                             <DeleteIcon
                                                 disabled={disabledDelete}
                                                 popConfirm={{
-                                                    onConfirm: () => handleDelete(id,surveys),
+                                                    onConfirm: () => handleDelete(id, surveys),
                                                 }}
                                             />
                                         )}

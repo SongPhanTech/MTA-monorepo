@@ -2705,7 +2705,6 @@ exports.Prisma.ThesisProjectScalarFieldEnum = {
   coSupervisorId: 'coSupervisorId',
   organizationId: 'organizationId',
   maxStudents: 'maxStudents',
-  currentStudents: 'currentStudents',
   councilId: 'councilId',
   roomId: 'roomId',
   defenseDate: 'defenseDate',
