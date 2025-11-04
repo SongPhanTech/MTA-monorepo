@@ -100,15 +100,14 @@ function TakeTestPage() {
         [selected]
     )
 
-    const {data:student}=useSuspenseFindFirstStudent(
-        {where:{
-            userProfileId:profileId
+    const { data: student } = useSuspenseFindFirstStudent({
+        where: {
+            userProfileId: profileId,
         },
         orderBy: {
             createdAt: 'desc',
         },
-    }
-    ) 
+    })
 
     const dataTest = useMemo(() => {
         const groupedMap = (survey?.surveyQuestion ?? []).reduce<
@@ -208,7 +207,7 @@ function TakeTestPage() {
     const fetchData = async () => {
         const response = await getPublicSurvey(id)
         if (response?.status === 200) {
-            if(response?.data?.isPublic){
+            if (response?.data?.isPublic) {
                 return
             }
             setSurvey(response?.data)

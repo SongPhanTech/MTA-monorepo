@@ -95,38 +95,37 @@ export default function DetailSurveyPage() {
         }
     )
 
-        const { onOpen } = useDisclosure<{ id: string; type: string }>({
-            tag: 'PutSurveyModal',
-        })
-    
-        const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string }>({
-            tag: 'ThongTinKhaoSatModal',
-        })
+    const { onOpen } = useDisclosure<{ id: string; type: string }>({
+        tag: 'PutSurveyModal',
+    })
 
-          const { mutateAsync: updateSurvey } = useUpdateSurvey()
-        
-            async function handleDelete(id: string) {
-                try {
-                    showSpinner()
-                    await updateSurvey({
-                        where: {
-                            id,
-                        },
-                        data: {
-                            deletedAt: new Date(),
-                        },
-                    })
-                } catch (error: any) {
-                    if (error?.info?.message) {
-                        message.error(error?.info?.message)
-                        return
-                    }
-                    message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
-                } finally {
-                    hideSpinner()
-                }
+    const { onOpen: onOpenKhaoSat } = useDisclosure<{ dataTable: any[]; id: string }>({
+        tag: 'ThongTinKhaoSatModal',
+    })
+
+    const { mutateAsync: updateSurvey } = useUpdateSurvey()
+
+    async function handleDelete(id: string) {
+        try {
+            showSpinner()
+            await updateSurvey({
+                where: {
+                    id,
+                },
+                data: {
+                    deletedAt: new Date(),
+                },
+            })
+        } catch (error: any) {
+            if (error?.info?.message) {
+                message.error(error?.info?.message)
+                return
             }
-    
+            message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
+        } finally {
+            hideSpinner()
+        }
+    }
 
     const { data: count } = useCountSurvey({
         where: {
@@ -136,7 +135,7 @@ export default function DetailSurveyPage() {
     })
     return (
         <Row gutter={[16, 16]}>
-            <Col span={24} >
+            <Col span={24}>
                 <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
             </Col>
             <Col span={24}>
@@ -195,89 +194,89 @@ export default function DetailSurveyPage() {
                                 record?.endDate ? dayjs(record?.endDate).format('DD/MM/YYYY') : '',
                         },
 
-                               {
-                                                      title: 'Thao tác',
-                                                      width: 130,
-                                                      align: 'center',
-                                                      hidden: !canSome(
-                                                          KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                                          'THEM',
-                                                          'SUA',
-                                                          'XOA',
-                                                          'XEM_CHI_TIET'
-                                                      ),
-                                                      render: (
-                                                          _,
-                                                          { id, isPublic, surveyQuestion, surveyObjectType,surveySessions }
-                                                      ) => (
-                                                          <Row className="justify-end gap-2">
-                                                              {can(
-                                                                  KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                                                  'XEM_CHI_TIET'
-                                                              ) && surveySessions.length > 0 && (
-                                                                  <Tooltip
-                                                                      className="mr-2"
-                                                                      title={'Báo cáo khảo sát'}
-                                                                      placement="top"
-                                                                  >
-                                                                        <BarChartOutlined
-                                                                     
-                                                                          onClick={() => {
-                                                                              router.push(`/bao-cao-khao-sat/${id}`)
-                                                                          }}
-                                                                          style={{ fontSize: '16px' }}
-                                                                      />
-                                                                  
-                                                                  </Tooltip>
-                                                              )}
-                      
-                                                              {surveyQuestion?.length > 0 &&
-                                                                  can(
-                                                                      KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                                                      'XEM_CHI_TIET'
-                                                                  )&&  !!isPublic && (
-                                                                      <Tooltip
-                                                                          className="mr-2"
-                                                                          title={'Xem đề khảo sát'}
-                                                                          placement="top"
-                                                                      >
-                                                                          <EyeOutlined
-                                                                              onClick={() => {
-                                                                                  onOpenKhaoSat({
-                                                                                      dataTable: surveyObjectType,
-                                                                                      id: id,
-                                                                                  })
-                                                                                  // router.push(`/lam-khao-sat/${id}`)
-                                                                              }}
-                                                                              style={{ fontSize: '16px' }}
-                                                                          />
-                                                                      </Tooltip>
-                                                                  )}
-                                                              {can(
-                                                                  KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                                                  'SUA'
-                                                              )  && (
-                                                                  <EditIcon
-                                                                  disabled={surveySessions.length > 0}
-                                                                      onClick={() => onOpen({ id, type: 'one' })}
-                                                                      className="text-sm text-blue-700 cursor-pointer mr-2"
-                                                                  />
-                                                              )}
-                      
-                                                              {can(
-                                                                  KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                                                  'XOA'
-                                                              ) && (
-                                                                  <DeleteIcon
-                                                                  disabled={surveySessions.length > 0}
-                                                                      popConfirm={{
-                                                                          onConfirm: () => handleDelete(id),
-                                                                      }}
-                                                                  />
-                                                              )}
-                                                          </Row>
-                                                      ),
-                                                  },
+                        {
+                            title: 'Thao tác',
+                            width: 130,
+                            align: 'center',
+                            hidden: !canSome(
+                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                'THEM',
+                                'SUA',
+                                'XOA',
+                                'XEM_CHI_TIET'
+                            ),
+                            render: (
+                                _,
+                                { id, isPublic, surveyQuestion, surveyObjectType, surveySessions }
+                            ) => (
+                                <Row className="justify-end gap-2">
+                                    {can(
+                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                        'XEM_CHI_TIET'
+                                    ) &&
+                                        surveySessions.length > 0 && (
+                                            <Tooltip
+                                                className="mr-2"
+                                                title={'Báo cáo khảo sát'}
+                                                placement="top"
+                                            >
+                                                <BarChartOutlined
+                                                    onClick={() => {
+                                                        router.push(`/bao-cao-khao-sat/${id}`)
+                                                    }}
+                                                    style={{ fontSize: '16px' }}
+                                                />
+                                            </Tooltip>
+                                        )}
+
+                                    {surveyQuestion?.length > 0 &&
+                                        can(
+                                            KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                            'XEM_CHI_TIET'
+                                        ) &&
+                                        !!isPublic && (
+                                            <Tooltip
+                                                className="mr-2"
+                                                title={'Xem đề khảo sát'}
+                                                placement="top"
+                                            >
+                                                <EyeOutlined
+                                                    onClick={() => {
+                                                        onOpenKhaoSat({
+                                                            dataTable: surveyObjectType,
+                                                            id: id,
+                                                        })
+                                                        // router.push(`/lam-khao-sat/${id}`)
+                                                    }}
+                                                    style={{ fontSize: '16px' }}
+                                                />
+                                            </Tooltip>
+                                        )}
+                                    {can(
+                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                        'SUA'
+                                    ) && (
+                                        <EditIcon
+                                            disabled={surveySessions.length > 0}
+                                            onClick={() => onOpen({ id, type: 'one' })}
+                                            className="text-sm text-blue-700 cursor-pointer mr-2"
+                                        />
+                                    )}
+
+                                    {can(
+                                        KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                        'XOA'
+                                    ) && (
+                                        <DeleteIcon
+                                            disabled={surveySessions.length > 0}
+                                            popConfirm={{
+                                                onConfirm: () => handleDelete(id),
+                                            }}
+                                        />
+                                    )}
+                                </Row>
+                            ),
+                        },
                     ]}
                     data={data}
                     pagination={{
@@ -299,5 +298,15 @@ export default function DetailSurveyPage() {
     )
 }
 DetailSurveyPage.getLayout = function getLayout(page: React.ReactNode) {
-    return <DefaultLayout breadcrumbList={[{ title: 'Thiết lập khảo sát' },{ title: 'Đợt khảo sát',href:'thiet-lap-khao-sat/dot-khao-sat' },{title:'Chi tiết khảo sát cụm'}]}>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Thiết lập khảo sát' },
+                { title: 'Đợt khảo sát', href: 'thiet-lap-khao-sat/dot-khao-sat' },
+                { title: 'Chi tiết khảo sát cụm' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

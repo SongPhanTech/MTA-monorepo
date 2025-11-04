@@ -6,7 +6,7 @@ const ThongTinKhaoSatModal = () => {
     const { isOpen, onClose, input } = useDisclosure<{ dataTable: any[]; id: string }>({
         tag: 'ThongTinKhaoSatModal',
     })
-         const link =`https://mta.swantech.vn/ems/lam-khao-sat/${input?.id}`
+    const link = `https://mta.swantech.vn/ems/lam-khao-sat/${input?.id}`
 
     // const handleCopy = async () => {
     //     try {
@@ -16,14 +16,14 @@ const ThongTinKhaoSatModal = () => {
     //         console.error('Failed to copy: ', err)
     //     }
     // }
-      const handleCopy = async () => {
-    try {
-        await navigator.clipboard.writeText(link);
-        message.success("Đã sao chép liên kết!");
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(link)
+            message.success('Đã sao chép liên kết!')
         } catch {
-        message.error("Không thể sao chép liên kết");
+            message.error('Không thể sao chép liên kết')
         }
-  };
+    }
 
     return (
         <Modal
@@ -36,16 +36,17 @@ const ThongTinKhaoSatModal = () => {
             footer={null}
         >
             <Flex>
-                        <Input
-                value={link}
-                readOnly
-                className="rounded-r-[0px]"
-                />
-            <Button icon={<CopyOutlined />} onClick={handleCopy} type='primary'  className="rounded-l-[0px]">
+                <Input value={link} readOnly className="rounded-r-[0px]" />
+                <Button
+                    icon={<CopyOutlined />}
+                    onClick={handleCopy}
+                    type="primary"
+                    className="rounded-l-[0px]"
+                >
                     Copy
-                    </Button>
+                </Button>
             </Flex>
-     
+
             {/* <Table
                 columns={[
                     {

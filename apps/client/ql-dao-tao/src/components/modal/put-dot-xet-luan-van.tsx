@@ -33,10 +33,7 @@ const PutThesisSession = () => {
 
     const { showSpinner, hideSpinner } = useSpinner()
 
-    const { data: thesisSession } = useFindUniqueThesisSession(
-        { where: { id } },
-        { enabled: !!id }
-    )
+    const { data: thesisSession } = useFindUniqueThesisSession({ where: { id } }, { enabled: !!id })
 
     useEffect(() => {
         if (thesisSession) {
@@ -49,12 +46,8 @@ const PutThesisSession = () => {
                 defenseDecisionNumber: thesisSession.defenseDecisionNumber,
                 defenseDecisionMaker: thesisSession.defenseDecisionMaker,
                 chief: thesisSession.chief,
-                startDate: thesisSession.startDate
-                    ? dayjs(thesisSession.startDate)
-                    : undefined,
-                endDate: thesisSession.endDate
-                    ? dayjs(thesisSession.endDate)
-                    : undefined,
+                startDate: thesisSession.startDate ? dayjs(thesisSession.startDate) : undefined,
+                endDate: thesisSession.endDate ? dayjs(thesisSession.endDate) : undefined,
                 decisionDate: thesisSession.decisionDate
                     ? dayjs(thesisSession.decisionDate)
                     : undefined,
@@ -64,18 +57,18 @@ const PutThesisSession = () => {
             })
             setTrainingObjectId(thesisSession.trainingObjectTypeId)
         } else {
-            form.setFieldsValue({
-            })
+            form.setFieldsValue({})
         }
     }, [thesisSession, form])
 
     const { data: trainingObjectTypes = [] } = useFindManyTrainingObjectType()
     const [trainingObjectId, setTrainingObjectId] = useState<string | null>(null)
-    const { data: trainingCourses = [] } = useFindManyTrainingCourse({
-      where: { trainingObjectTypeId: trainingObjectId ?? '' as string },
-    },
-    { enabled: !!trainingObjectId }
-);
+    const { data: trainingCourses = [] } = useFindManyTrainingCourse(
+        {
+            where: { trainingObjectTypeId: trainingObjectId ?? ('' as string) },
+        },
+        { enabled: !!trainingObjectId }
+    )
     const { mutateAsync: createThesisSession } = useCreateThesisSession()
     const { mutateAsync: updateThesisSession } = useUpdateThesisSession()
     async function onOk(output?: PutThesisSession) {
@@ -90,10 +83,14 @@ const PutThesisSession = () => {
                 trainingCourseId: output.trainingCourseId,
                 decisionNumber: output.decisionNumber,
                 decisionMaker: output.decisionMaker,
-                decisionDate: output.decisionDate ? dayjs(output.decisionDate).toDate() : new Date(),
+                decisionDate: output.decisionDate
+                    ? dayjs(output.decisionDate).toDate()
+                    : new Date(),
                 defenseDecisionNumber: output.defenseDecisionNumber,
                 defenseDecisionMaker: output.defenseDecisionMaker,
-                defenseDecisionDate: output.defenseDecisionDate ? dayjs(output.defenseDecisionDate).toDate() : new Date(),
+                defenseDecisionDate: output.defenseDecisionDate
+                    ? dayjs(output.defenseDecisionDate).toDate()
+                    : new Date(),
                 chief: output.chief,
                 endDate: output.endDate ? dayjs(output.endDate).toDate() : new Date(),
             }
@@ -157,7 +154,6 @@ const PutThesisSession = () => {
                             value: item.id,
                         }))}
                         onChange={(value) => setTrainingObjectId(value)}
-                        
                     />
                 </FormItem>
             </Col>
@@ -169,12 +165,12 @@ const PutThesisSession = () => {
                             label: item.name,
                             value: item.id,
                         }))}
-                        />
+                    />
                 </FormItem>
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="decisionNumber" label="Số QĐĐT" required>
-                   <Input placeholder="Nhập số QĐĐT" />
+                    <Input placeholder="Nhập số QĐĐT" />
                 </FormItem>
             </Col>
             <Col span={12}>
@@ -184,7 +180,7 @@ const PutThesisSession = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="decisionDate" label="Ngày QĐĐT" required>
-                <DatePicker
+                    <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',
                             type: 'mask',
@@ -222,12 +218,7 @@ const PutThesisSession = () => {
                 </FormItem>
             </Col>
             <Col span={12}>
-                <FormItem
-                    form={form}
-                    name="startDate"
-                    label="Ngày bắt đầu"
-                    required
-                >
+                <FormItem form={form} name="startDate" label="Ngày bắt đầu" required>
                     <DatePicker
                         format={{
                             format: 'DD/MM/YYYY',
@@ -255,7 +246,6 @@ const PutThesisSession = () => {
                     />
                 </FormItem>
             </Col>
-           
         </PutFormModal>
     )
 }

@@ -72,12 +72,12 @@ function SelectLecturer({
             },
             include: {
                 userProfile: {
-                    include:{
+                    include: {
                         academicDegreeType: true,
                         academicRankType: true,
                         level: true,
-                        rank: true
-                    }
+                        rank: true,
+                    },
                 },
                 mainSubjectClasses: {
                     include: {
@@ -121,14 +121,12 @@ function SelectLecturer({
                 },
                 selectable: true,
                 organizationId: lec.organizationId,
-              
             })),
             null
         )
     }, [organizations, lecturerData])
-    console.log(treeData);
-    
-    
+    console.log(treeData)
+
     const rowSelection = {
         selectedRowKeys,
         checkStrictly: false,
@@ -178,34 +176,35 @@ function SelectLecturer({
                         rowKey={'value'}
                         rowSelection={rowSelection}
                         columns={[
-                           
                             {
                                 title: 'Giảng viên',
                                 dataIndex: 'name',
                                 render: (__, record) => <span>{record?.title}</span>,
                             },
-                              {
+                            {
                                 title: 'Mã GV',
                                 dataIndex: 'code',
-                                render: (__, record:any) => <span>{record?.code}</span>,
+                                render: (__, record: any) => <span>{record?.code}</span>,
                             },
                             {
                                 title: 'Cấp bậc',
                                 dataIndex: 'rank',
                                 width: 100,
-                                render: (__, record:any) => <>{record?.rank?.sTen}</>,
+                                render: (__, record: any) => <>{record?.rank?.sTen}</>,
                             },
                             {
                                 title: 'Học hàm',
                                 dataIndex: 'rank',
                                 width: 100,
-                                render: (__, record:any) => <>{record?.academicRankType?.sTen}</>,
+                                render: (__, record: any) => <>{record?.academicRankType?.sTen}</>,
                             },
-                              {
+                            {
                                 title: 'Học vị',
                                 dataIndex: 'rank',
                                 width: 100,
-                                render: (__, record:any) => <>{record?.academicDegreeType?.sTen}</>,
+                                render: (__, record: any) => (
+                                    <>{record?.academicDegreeType?.sTen}</>
+                                ),
                             },
                         ]}
                         bordered
