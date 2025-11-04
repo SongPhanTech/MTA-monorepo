@@ -50,9 +50,10 @@ export const customModelFetch = async <T>(url: string, options: RequestInit): Pr
 
 export const customTrainingFetch = async <T>(url: string, options: RequestInit): Promise<T> => {
     const requestUrl = getUrl(
-        process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
-            ? 'http://localhost:3002'
-            : 'https://api.daotao.mta.swantech.vn',
+        // process.env.NEXT_PUBLIC_ENVIRONMENT === 'local'
+             'http://localhost:3002',
+            // ? 'http://localhost:3002'
+            // : 'https://api.daotao.mta.swantech.vn',
         url
     )
 
