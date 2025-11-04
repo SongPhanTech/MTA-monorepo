@@ -141,12 +141,11 @@ const PutSurveyModal = () => {
                         semesterId: output.semesterId,
                     },
                 })
-                if(res?.status === 200){
-                         message.success('Tạo thành công')
-                        onClose()
-                         return
+                if (res?.status === 200) {
+                    message.success('Tạo thành công')
+                    onClose()
+                    return
                 }
-               
             } else {
                 if (input?.id) {
                     await update({
@@ -236,7 +235,6 @@ const PutSurveyModal = () => {
             }
 
             // refetch() lại danh sách level
-
         } catch (error: any) {
             if (error?.info?.message) {
                 message.error(error?.info?.message)
@@ -341,8 +339,7 @@ const PutSurveyModal = () => {
                                 form={form}
                                 name="surveyObjectTypes"
                                 label="Đối tượng khảo sát"
-                                  required={input?.type !== 'multiple'}
-                                
+                                required={input?.type !== 'multiple'}
                             >
                                 <Select
                                     mode="multiple"
@@ -438,20 +435,21 @@ const PutSurveyModal = () => {
                                 </Radio.Group>
                             </FormItem>
                         </Col>
-                        {isPublic===true&&       <Col span={12}>
-                            <FormItem
-                                form={form}
-                                name={'anonymous'}
-                                label="Có ẩn danh không?"
-                                required
-                            >
-                                <Radio.Group buttonStyle="solid">
-                                    <Radio value={true}>Có</Radio>
-                                    <Radio value={false}>Không</Radio>
-                                </Radio.Group>
-                            </FormItem>
-                        </Col>}
-                 
+                        {isPublic === true && (
+                            <Col span={12}>
+                                <FormItem
+                                    form={form}
+                                    name={'anonymous'}
+                                    label="Có ẩn danh không?"
+                                    required
+                                >
+                                    <Radio.Group buttonStyle="solid">
+                                        <Radio value={true}>Có</Radio>
+                                        <Radio value={false}>Không</Radio>
+                                    </Radio.Group>
+                                </FormItem>
+                            </Col>
+                        )}
                     </Row>
                 ),
             },
@@ -479,7 +477,7 @@ const PutSurveyModal = () => {
                 ),
             },
         ]
-    }, [input, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId, semesterId,isPublic])
+    }, [input, surveyObjectTypesData, surveyTopics, treeData, surveyTopicId, semesterId, isPublic])
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
         if (survey) {
@@ -523,8 +521,6 @@ const PutSurveyModal = () => {
             })
         }
     }, [survey])
-
-    
 
     return (
         <Modal

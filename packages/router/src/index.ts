@@ -217,7 +217,7 @@ const NAVIGATION: NavigationType = {
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_DS_LOP_MON_HOC,
                         description: 'Hạn nhập điểm',
                     },
-                     {
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
                         label: 'Điểm lớp môn học',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DIEM_QL_DIEM_LOP_MON_HOC,
@@ -710,7 +710,7 @@ const NAVIGATION: NavigationType = {
                         label: 'Đợt khảo sát',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                     },
-                     {
+                    {
                         id: KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                         label: 'Danh sách khảo sát',
                         path: ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_DANH_SACH_KHAO_SAT,
@@ -746,6 +746,20 @@ const NAVIGATION: NavigationType = {
                         id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                         label: 'Quản lý đợt tự đánh giá',
                         path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                    },
+                    {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                        label: 'Phiếu phân tích tiêu chí',
+                        icon: FolderOpen,
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI,
+                        description: 'Phiếu phân tích tiêu chí',
+                    },
+                    {
+                        id: KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                        label: 'Phiếu đánh giá tiêu chí',
+                        icon: FolderOpen,
+                        path: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
+                        description: 'Phiếu đánh giá tiêu chí',
                     },
 
                     // {

@@ -94,7 +94,7 @@ function TabDotKhaoSat() {
             surveyObjectType: true,
             surveyTopic: true,
             surveyQuestion: true,
-                surveySessions: true,
+            surveySessions: true,
         },
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
@@ -248,32 +248,40 @@ function TabDotKhaoSat() {
                                 ),
                                 render: (
                                     _,
-                                    { id, isPublic, surveyQuestion, surveyObjectType,surveySessions }
+                                    {
+                                        id,
+                                        isPublic,
+                                        surveyQuestion,
+                                        surveyObjectType,
+                                        surveySessions,
+                                    }
                                 ) => (
                                     <Row className="justify-end gap-2">
                                         {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                             'XEM_CHI_TIET'
-                                        ) &&surveySessions?.length > 0 && (
-                                            <Tooltip
-                                                className="mr-2"
-                                                title={'Báo cáo khảo sát'}
-                                                placement="top"
-                                            >
-                                                <BarChartOutlined
-                                                    onClick={() => {
-                                                        router.push(`/bao-cao-khao-sat/${id}`)
-                                                    }}
-                                                    style={{ fontSize: '16px' }}
-                                                />
-                                            </Tooltip>
-                                        )}
+                                        ) &&
+                                            surveySessions?.length > 0 && (
+                                                <Tooltip
+                                                    className="mr-2"
+                                                    title={'Báo cáo khảo sát'}
+                                                    placement="top"
+                                                >
+                                                    <BarChartOutlined
+                                                        onClick={() => {
+                                                            router.push(`/bao-cao-khao-sat/${id}`)
+                                                        }}
+                                                        style={{ fontSize: '16px' }}
+                                                    />
+                                                </Tooltip>
+                                            )}
 
                                         {surveyQuestion?.length > 0 &&
                                             can(
                                                 KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
                                                 'XEM_CHI_TIET'
-                                            )&&!!isPublic && (
+                                            ) &&
+                                            !!isPublic && (
                                                 <Tooltip
                                                     className="mr-2"
                                                     title={'Xem đề khảo sát'}
@@ -296,7 +304,7 @@ function TabDotKhaoSat() {
                                             'SUA'
                                         ) && (
                                             <EditIcon
-                                            disabled={surveySessions.length > 0}
+                                                disabled={surveySessions.length > 0}
                                                 onClick={() => onOpen({ id, type: 'one' })}
                                                 className="text-sm text-blue-700 cursor-pointer mr-2"
                                             />
@@ -307,7 +315,7 @@ function TabDotKhaoSat() {
                                             'XOA'
                                         ) && (
                                             <DeleteIcon
-                                            disabled={surveySessions.length > 0}
+                                                disabled={surveySessions.length > 0}
                                                 popConfirm={{
                                                     onConfirm: () => handleDelete(id),
                                                 }}

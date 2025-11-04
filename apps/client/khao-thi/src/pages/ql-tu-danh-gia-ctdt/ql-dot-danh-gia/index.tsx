@@ -3,6 +3,7 @@ import Table from '@components/commons/table'
 import type { FilterProps } from '@components/commons/typeFilter'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
+import UserPlusIcon from '@components/icons/phan-cong-giang-vien'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
@@ -262,6 +263,30 @@ export default function EvaluationPeriod() {
                                                         />
                                                     </Tooltip>
                                                 )}
+                                                {/* {can(
+                                                    KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
+                                                    'XEM_CHI_TIET'
+                                                ) && (
+                                                    <Tooltip title={'Chi tiết'} placement="top">
+                                                        <EyeOutlined
+                                                            style={{ fontSize: '16px' }}
+                                                            onClick={(e) => {
+                                                                router.push(
+                                                                    `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}/phancong`
+                                                                )
+                                                                e?.stopPropagation()
+                                                            }}
+                                                        />
+                                                    </Tooltip>
+                                                )} */}
+                                                <UserPlusIcon
+                                                    onClick={(e) => {
+                                                        router.push(
+                                                            `${ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA}/${record?.id}/phancong`
+                                                        )
+                                                        e?.stopPropagation()
+                                                    }}
+                                                />
                                                 {can(
                                                     KHAO_THI_PERMISSION.KHAO_THI_QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA,
                                                     'SUA'

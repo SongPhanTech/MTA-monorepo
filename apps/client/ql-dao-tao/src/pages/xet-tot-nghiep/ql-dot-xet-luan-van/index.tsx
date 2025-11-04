@@ -51,8 +51,7 @@ export default function ThesisSession() {
                       },
                   }
                 : {}),
-           
-           
+
             trainingObjectTypeId,
         },
         include: {
@@ -189,7 +188,10 @@ export default function ThesisSession() {
                                 dataIndex: 'decisionDate',
                                 width: 170,
                                 align: 'center',
-                                render: (_, record) => record?.decisionDate ? dayjs(record.decisionDate).format('DD/MM/YYYY') : '',
+                                render: (_, record) =>
+                                    record?.decisionDate
+                                        ? dayjs(record.decisionDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Số QĐBVLV',
@@ -199,10 +201,13 @@ export default function ThesisSession() {
                             },
                             {
                                 title: 'Ngày QĐBVLV',
-                               
+
                                 width: 170,
                                 align: 'center',
-                                render: (_, record) => record?.defenseDecisionDate ? dayjs(record.defenseDecisionDate).format('DD/MM/YYYY') : '',
+                                render: (_, record) =>
+                                    record?.defenseDecisionDate
+                                        ? dayjs(record.defenseDecisionDate).format('DD/MM/YYYY')
+                                        : '',
                             },
                             {
                                 title: 'Thao tác',
@@ -218,7 +223,7 @@ export default function ThesisSession() {
                                 render: (_, { id }) => {
                                     if (id) {
                                         return (
-                                            <Row className="justify-center gap-2">                                               
+                                            <Row className="justify-center gap-2">
                                                 {can(
                                                     QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
                                                     'SUA'

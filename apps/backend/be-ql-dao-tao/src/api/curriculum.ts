@@ -97,6 +97,7 @@ app.openapi(importCurriculumVersion, async (c) => {
             subjects.map((s) => ({
                 trainingObjectTypeId,
                 ...s,
+                schedulePeriod: s.period,
                 type: s.subjectVersionType,
             }))
         )

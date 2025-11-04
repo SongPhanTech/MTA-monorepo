@@ -431,7 +431,6 @@ export type ValidateUserSurveyQueryResult = NonNullable<
 >
 export type ValidateUserSurveyQueryError = ValidateUserSurvey400 | ValidateUserSurvey404
 
-
 export function useValidateUserSurvey<
     TData = Awaited<ReturnType<typeof validateUserSurvey>>,
     TError = ValidateUserSurvey400 | ValidateUserSurvey404,

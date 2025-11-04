@@ -43,7 +43,7 @@ const baseSchemaWithoutDefaults = z.object({
 ).strict();
 const relationSchema = z.object({
     student: z.record(z.string(), z.unknown()),
-    studentSubjectScore: z.record(z.string(), z.unknown()),
+    studentSubjectScore: z.record(z.string(), z.unknown()).optional(),
     thesisProject: z.record(z.string(), z.unknown()),
     reviewedBy: z.record(z.string(), z.unknown()).optional(),
     council: z.record(z.string(), z.unknown()).optional(),
@@ -51,7 +51,7 @@ const relationSchema = z.object({
 );
 const fkSchema = z.object({
     studentId: z.string(),
-    studentSubjectScoreId: z.string(),
+    studentSubjectScoreId: z.string().nullish(),
     thesisProjectId: z.string(),
     reviewedById: z.string().nullish(),
 }

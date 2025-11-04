@@ -15,9 +15,9 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    title: z.string(),
+    title: z.string().nullish(),
     titleEN: z.string().nullish(),
-    summary: z.string(),
+    summary: z.string().nullish(),
     objectives: z.string().nullish(),
     scope: z.string().nullish(),
     methodology: z.string().nullish(),
@@ -25,8 +25,7 @@ const baseSchema = z.object({
     requirements: z.string().nullish(),
     technologies: z.string().nullish(),
     status: ThesisProjectStatusSchema,
-    maxStudents: z.number(),
-    currentStudents: z.number().default(0),
+    maxStudents: z.number().nullish(),
     defenseDate: z.coerce.date().nullish(),
     registrationStart: z.coerce.date().nullish(),
     registrationEnd: z.coerce.date().nullish(),
@@ -42,9 +41,9 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    title: z.string(),
+    title: z.string().nullish(),
     titleEN: z.string().nullish(),
-    summary: z.string(),
+    summary: z.string().nullish(),
     objectives: z.string().nullish(),
     scope: z.string().nullish(),
     methodology: z.string().nullish(),
@@ -52,8 +51,7 @@ const baseSchemaWithoutDefaults = z.object({
     requirements: z.string().nullish(),
     technologies: z.string().nullish(),
     status: ThesisProjectStatusSchema,
-    maxStudents: z.number(),
-    currentStudents: z.number(),
+    maxStudents: z.number().nullish(),
     defenseDate: z.coerce.date().nullish(),
     registrationStart: z.coerce.date().nullish(),
     registrationEnd: z.coerce.date().nullish(),
@@ -64,9 +62,9 @@ const baseSchemaWithoutDefaults = z.object({
 const relationSchema = z.object({
     subjectClass: z.record(z.string(), z.unknown()).optional(),
     thesisSession: z.record(z.string(), z.unknown()).optional(),
-    supervisor: z.record(z.string(), z.unknown()),
+    supervisor: z.record(z.string(), z.unknown()).optional(),
     coSupervisor: z.record(z.string(), z.unknown()).optional(),
-    organization: z.record(z.string(), z.unknown()),
+    organization: z.record(z.string(), z.unknown()).optional(),
     council: z.record(z.string(), z.unknown()).optional(),
     room: z.record(z.string(), z.unknown()).optional(),
     defenseSession: z.record(z.string(), z.unknown()).optional(),
@@ -80,9 +78,9 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     subjectClassId: z.string().nullish(),
     thesisSessionId: z.string().nullish(),
-    supervisorId: z.string(),
+    supervisorId: z.string().nullish(),
     coSupervisorId: z.string().nullish(),
-    organizationId: z.string().uuid(),
+    organizationId: z.string().uuid().nullish(),
     councilId: z.string().nullish(),
     roomId: z.string().nullish(),
     defenseSessionId: z.string().nullish(),
@@ -120,9 +118,9 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    title: z.string(),
+    title: z.string().nullish(),
     titleEN: z.string().nullish(),
-    summary: z.string(),
+    summary: z.string().nullish(),
     objectives: z.string().nullish(),
     scope: z.string().nullish(),
     methodology: z.string().nullish(),
@@ -130,8 +128,7 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
     requirements: z.string().nullish(),
     technologies: z.string().nullish(),
     status: ThesisProjectStatusSchema,
-    maxStudents: z.union([z.number(), z.record(z.string(), z.unknown())]),
-    currentStudents: z.union([z.number(), z.record(z.string(), z.unknown())]),
+    maxStudents: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
     defenseDate: z.coerce.date().nullish(),
     registrationStart: z.coerce.date().nullish(),
     registrationEnd: z.coerce.date().nullish(),
@@ -144,7 +141,7 @@ export const ThesisProjectPrismaUpdateSchema = z.object({
  * `ThesisProject` schema for create operations excluding foreign keys and relations.
  */
 export const ThesisProjectCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true, currentStudents: true
+    id: true, active: true, createdAt: true, updatedAt: true, status: true
 });
 
 

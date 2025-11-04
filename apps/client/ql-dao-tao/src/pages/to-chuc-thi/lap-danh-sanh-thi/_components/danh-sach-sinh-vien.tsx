@@ -44,7 +44,7 @@ export default function DanhSachSinhVien() {
     const { data = [], isLoading } = useFindManyStudentSubjectScore(
         {
             where: {
-                subjectClassId: selectedSubjectClassId ,
+                subjectClassId: selectedSubjectClassId,
             },
             include: {
                 student: {

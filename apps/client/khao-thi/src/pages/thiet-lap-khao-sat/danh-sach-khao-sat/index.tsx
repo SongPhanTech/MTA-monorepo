@@ -6,7 +6,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
-import { useCountSurvey, useFindManySurvey} from '@workspace/db/hooks'
+import { useCountSurvey, useFindManySurvey } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { KHAO_THI_PERMISSION } from '@workspace/router'
 import { Col, Row, Tooltip } from 'antd'
@@ -114,7 +114,7 @@ export default function DetailSurveyPage() {
     })
     return (
         <Row gutter={[16, 16]}>
-            <Col span={24} >
+            <Col span={24}>
                 <div className="text-lg font-bold">{data?.[0]?.clusterSurvey?.name}</div>
             </Col>
             <Col span={24}>
@@ -173,43 +173,50 @@ export default function DetailSurveyPage() {
                                 record?.endDate ? dayjs(record?.endDate).format('DD/MM/YYYY') : '',
                         },
 
-                               {
-                                                      title: 'Thao tác',
-                                                      width: 150,
-                                                      align: 'center',
-                                                      hidden: !canSome(
-                                                          KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                                          'THEM',
-                                                          'SUA',
-                                                          'XOA',
-                                                          'XEM_CHI_TIET'
-                                                      ),
-                                                      render: (
-                                                          _,
-                                                          { id, isPublic,anonymous, surveyQuestion, surveyObjectType,surveySessions }
-                                                      ) => (
-                                                          <Row className="justify-end gap-2">
-                                                              {surveyQuestion?.length >0  && (
-                                                                      <Tooltip
-                                                                          className="mr-2"
-                                                                          title={'Làm khảo sát'}
-                                                                          placement="top"
-                                                                      >
-                                                                          <EyeOutlined
-                                                                              onClick={() => {
-                                                                                if(!isPublic){
-                                                                                    router.push(`/lam-khao-sat/private/${id}`)
-                                                                                }else {
-                                                                                    router.push(`/lam-khao-sat/${id}`)
-                                                                                }
-                                                                              }}
-                                                                              style={{ fontSize: '16px' }}
-                                                                          />
-                                                                      </Tooltip>
-                                                                  )}
-                                                          </Row>
-                                                      ),
-                                                  },
+                        {
+                            title: 'Thao tác',
+                            width: 150,
+                            align: 'center',
+                            hidden: !canSome(
+                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
+                                'THEM',
+                                'SUA',
+                                'XOA',
+                                'XEM_CHI_TIET'
+                            ),
+                            render: (
+                                _,
+                                {
+                                    id,
+                                    isPublic,
+                                    anonymous,
+                                    surveyQuestion,
+                                    surveyObjectType,
+                                    surveySessions,
+                                }
+                            ) => (
+                                <Row className="justify-end gap-2">
+                                    {surveyQuestion?.length > 0 && (
+                                        <Tooltip
+                                            className="mr-2"
+                                            title={'Làm khảo sát'}
+                                            placement="top"
+                                        >
+                                            <EyeOutlined
+                                                onClick={() => {
+                                                    if (!isPublic) {
+                                                        router.push(`/lam-khao-sat/private/${id}`)
+                                                    } else {
+                                                        router.push(`/lam-khao-sat/${id}`)
+                                                    }
+                                                }}
+                                                style={{ fontSize: '16px' }}
+                                            />
+                                        </Tooltip>
+                                    )}
+                                </Row>
+                            ),
+                        },
                     ]}
                     data={data}
                     pagination={{
@@ -231,5 +238,15 @@ export default function DetailSurveyPage() {
     )
 }
 DetailSurveyPage.getLayout = function getLayout(page: React.ReactNode) {
-    return <DefaultLayout breadcrumbList={[{ title: 'Thiết lập khảo sát' },{ title: 'Đợt khảo sát',href:'thiet-lap-khao-sat/dot-khao-sat' },{title:'Chi tiết khảo sát cụm'}]}>{page}</DefaultLayout>
+    return (
+        <DefaultLayout
+            breadcrumbList={[
+                { title: 'Thiết lập khảo sát' },
+                { title: 'Đợt khảo sát', href: 'thiet-lap-khao-sat/dot-khao-sat' },
+                { title: 'Chi tiết khảo sát cụm' },
+            ]}
+        >
+            {page}
+        </DefaultLayout>
+    )
 }

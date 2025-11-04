@@ -330,12 +330,12 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                         id="training-category"
                         rowSelection={{
                             type: 'radio',
-                            selectedRowKeys:[selectedSubjectClassId as Key],
+                            selectedRowKeys: [selectedSubjectClassId as Key],
                             onChange: (selectedRowKeys) => {
                                 diemLopMonHocStore.setState({
                                     selectedSubjectClassId: selectedRowKeys?.[0] as string,
                                 })
-                            }
+                            },
                         }}
                         onRow={(record) => {
                             return {
@@ -353,7 +353,7 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                                         : dayjs().isAfter(record?.examScoreDeadline) &&
                                             !record?.enteredExamScore
                                           ? 'bg-yellow-100'
-                                          : '',
+                                          : ''
                                     // selectedSubjectClassId === record.id ? 'bg-orange-200' : ''
                                 ),
                             }
