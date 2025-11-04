@@ -7,15 +7,12 @@ import useSpinner from '@hooks/spinner'
 import DefaultLayout from '@layouts/default-layout'
 import { useSession } from '@workspace/auth/react'
 import { useCountSurvey, useFindManySurvey } from '@workspace/db/hooks'
-import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION } from '@workspace/router'
-import { Col, Row, Tooltip } from 'antd'
+import { Col, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 
 export default function DetailSurveyPage() {
-    const { can, canSome } = useAbility()
 
     const { showSpinner, hideSpinner } = useSpinner()
     const router = useRouter()
@@ -172,26 +169,25 @@ export default function DetailSurveyPage() {
                             render: (_, record) =>
                                 record?.endDate ? dayjs(record?.endDate).format('DD/MM/YYYY') : '',
                         },
+                        {
+                            title: 'Trạng thái',
+                            align: 'center',
+                            width:120,
+                            render: (_, record) => {
+                                return <Tag color={record?.surveySessions?.length>0 ? 'green' : 'default'}>{record?.surveySessions?.length>0 ? 'Đã làm' : 'Chưa làm'}</Tag>
+                            },
+                        },
 
                         {
                             title: 'Thao tác',
-                            width: 150,
+                            width: 100,
                             align: 'center',
-                            hidden: !canSome(
-                                KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_DOT_KHAO_SAT,
-                                'THEM',
-                                'SUA',
-                                'XOA',
-                                'XEM_CHI_TIET'
-                            ),
                             render: (
                                 _,
                                 {
                                     id,
                                     isPublic,
-                                    anonymous,
                                     surveyQuestion,
-                                    surveyObjectType,
                                     surveySessions,
                                 }
                             ) => (
@@ -203,6 +199,7 @@ export default function DetailSurveyPage() {
                                             placement="top"
                                         >
                                             <EyeOutlined
+                                            disabled={surveySessions?.length>0}
                                                 onClick={() => {
                                                     if (!isPublic) {
                                                         router.push(`/lam-khao-sat/private/${id}`)

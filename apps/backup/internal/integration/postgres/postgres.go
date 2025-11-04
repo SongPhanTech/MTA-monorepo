@@ -260,7 +260,7 @@ func (Client) RestoreZip(
 		return fmt.Errorf("dump.sql file not found in ZIP file: %s", zipPath), ""
 	}
 
-	cmd = exec.Command(version.Value.PSQL, connString, "-f", dumpPath, "--echo-queries")
+	cmd = exec.Command(version.Value.PSQL, connString, "-f", dumpPath, "--echo-queries", "|", "grep", "-E", "COPY")
 	output, err = cmd.CombinedOutput()
 	text := string(output)
 
@@ -272,42 +272,39 @@ func (Client) RestoreZip(
 	}
 
 	// Regex nhận diện
-	reInsertTable := regexp.MustCompile(`INSERT INTO ([a-zA-Z0-9_\.]+)`)
-	reInsertCount := regexp.MustCompile(`INSERT 0 ([0-9]+)`)
-	reUpdateCount := regexp.MustCompile(`UPDATE ([0-9]+)`)
-	reCopyStart := regexp.MustCompile(`COPY ([a-zA-Z0-9_\.]+)`) // có tên bảng
-	reCopyDone := regexp.MustCompile(`^COPY ([0-9]+)$`)         // chỉ có số
+	reStart := regexp.MustCompile(`(?i)COPY\s+"?([a-zA-Z0-9_-]+)"?\."?([a-zA-Z0-9_-]+)"?`)
+	reCount := regexp.MustCompile(`(?i)^COPY\s+([0-9]+)$`)
 
-	tableStats := make(map[string]map[string]int)
-	lines := strings.Split(text, "\n")
-	currentTable := ""
+	lines := strings.Split(strings.TrimSpace(text), "\n")
+
+	type TableInfo struct {
+		Schema  string `json:"schema"`
+		Table   string `json:"table"`
+		Records int    `json:"records"`
+	}
+	var results []TableInfo
+
+	var currentSchema, currentTable string
 
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
-
-		if m := reInsertTable.FindStringSubmatch(line); len(m) > 1 {
-			currentTable = m[1]
-		} else if m := reCopyStart.FindStringSubmatch(line); len(m) > 1 {
-			currentTable = m[1]
-		}
-
-		switch {
-		case reInsertCount.MatchString(line) && currentTable != "":
-			n := atoiSafe(reInsertCount.FindStringSubmatch(line)[1])
-			addStat(tableStats, currentTable, "insert", n)
-
-		case reUpdateCount.MatchString(line) && currentTable != "":
-			n := atoiSafe(reUpdateCount.FindStringSubmatch(line)[1])
-			addStat(tableStats, currentTable, "update", n)
-
-		case reCopyDone.MatchString(line) && currentTable != "":
-			n := atoiSafe(reCopyDone.FindStringSubmatch(line)[1])
-			addStat(tableStats, currentTable, "copy", n)
+		if m := reStart.FindStringSubmatch(line); len(m) > 2 {
+			currentSchema, currentTable = m[1], m[2]
+		} else if m := reCount.FindStringSubmatch(line); len(m) > 1 && currentTable != "" {
+			var n int
+			fmt.Sscanf(m[1], "%d", &n)
+			results = append(results, TableInfo{
+				Schema:  currentSchema,
+				Table:   currentTable,
+				Records: n,
+			})
+			currentSchema, currentTable = "", "" // reset
 		}
 	}
+
+	jsonBytes, _ := json.MarshalIndent(results, "", "  ")
 	// Chuyển kết quả sang JSON
-	jsonData, _ := json.Marshal(tableStats)
-	return nil, string(jsonData)
+	return nil, string(jsonBytes)
 }
 
 func atoiSafe(s string) int {

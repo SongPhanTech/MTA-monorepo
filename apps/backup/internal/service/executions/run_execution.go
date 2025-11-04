@@ -1,9 +1,13 @@
 package executions
 
 import (
+	"bufio"
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"regexp"
+	"strings"
 	"time"
 
 	"github.com/eduardolat/pgbackweb/internal/database/dbgen"
@@ -149,9 +153,62 @@ func (s *Service) RunExecution(ctx context.Context, backupID uuid.UUID) error {
 		}
 	}
 
+	reCopyStart := regexp.MustCompile(`(?i)^COPY\s+"?([a-zA-Z0-9_-]+)"?\."?([a-zA-Z0-9_-]+)"?`)
+	scanner := bufio.NewScanner(dumpReader)
+
+	type CopyInfo struct {
+		Schema  string `json:"schema"`
+		Table   string `json:"table"`
+		Records int    `json:"records"`
+	}
+	var result []CopyInfo
+
+	var schema, table string
+	var count int
+	inCopy := false
+
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		logger.Info("read line", logger.KV{
+			"backup_id": backupID.String(),
+			"line":      line,
+		})
+		if line == "" {
+			continue
+		}
+		if matches := reCopyStart.FindStringSubmatch(line); len(matches) > 2 {
+			// Nếu đang trong khối cũ thì lưu lại
+			if inCopy {
+				result = append(result, CopyInfo{schema, table, count})
+				count = 0
+			}
+			schema = matches[1]
+			table = matches[2]
+			inCopy = true
+			continue
+		}
+
+		if line == `\.` {
+			// Kết thúc một COPY
+			if inCopy {
+				result = append(result, CopyInfo{schema, table, count})
+				inCopy = false
+				count = 0
+			}
+			continue
+		}
+
+		if inCopy {
+			count++
+		}
+	}
+
+	// In kết quả JSON
+	out, _ := json.MarshalIndent(result, "", "  ")
 	logger.Info("backup created successfully", logger.KV{
 		"backup_id":    backupID.String(),
 		"execution_id": ex.ID.String(),
+		"copy_info":    string(out),
 	})
 	return updateExec(dbgen.ExecutionsServiceUpdateExecutionParams{
 		ID:         ex.ID,

@@ -52,6 +52,8 @@ app.openapi(exportLecturerProfile, async (c) => {
             ...(lecturerIds?.length ? { id: { in: lecturerIds } } : {}),
         },
         include: {
+            lecturerType: true,
+            organization: true,
             userProfile: {
                 include: {
                     gender: true,
@@ -63,15 +65,19 @@ app.openapi(exportLecturerProfile, async (c) => {
         },
     })
 
-    const data = lecturers.map((lecturer) => ({
+    const data = lecturers.map((lecturer, idx) => ({
+        no: idx + 1,
         ...lecturer,
         fullname: lecturer.userProfile?.fullname,
         dateOfBirth: lecturer.userProfile?.dateOfBirth
-            ? dayjs(lecturer.userProfile.dateOfBirth).format('DD/MM/YYYY')
+            ? `'${dayjs(lecturer.userProfile.dateOfBirth).format('DD/MM/YYYY')}`
             : '',
         gender: lecturer.userProfile?.gender?.sTen,
+        lecturerType: lecturer.lecturerType.name,
         academicRank: lecturer.userProfile?.academicRankType?.sTen,
         academicDegree: lecturer.userProfile?.academicDegreeType?.sTen,
+        facultyOrganization: lecturer.organization.sTen,
+        departmentOrganization: lecturer.organization.sTen,
         address: lecturer.userProfile?.currentAddress,
         phoneNumber: lecturer.userProfile?.phoneNumber,
         email: lecturer.userProfile?.email,

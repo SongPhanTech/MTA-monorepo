@@ -39,7 +39,7 @@ func showExecutionButton(
 	execution dbgen.ExecutionsServicePaginateExecutionsRow,
 ) nodx.Node {
 	mo := component.Modal(component.ModalParams{
-		Title: "Execution details",
+		Title: "Chi tiết thực thi",
 		Size:  component.SizeMd,
 		Content: []nodx.Node{
 			nodx.Div(

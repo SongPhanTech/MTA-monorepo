@@ -83,7 +83,7 @@ function Page() {
                 data: { surveyId: router.query.id as string, semesterId: '', organizationId: '' },
             })
             if (res.status === 200) {
-                saveAs(res.data, 'Bao_cao.xlsx')
+                saveAs(res.data, 'Bao_cao.docx')
             }
         } catch (error: any) {
             if (error?.info?.message) {
@@ -100,7 +100,7 @@ function Page() {
                 data: { surveyId: router.query.id as string },
             })
             if (res.status === 200) {
-                saveAs(res.data, 'Bao_cao.xlsx')
+                saveAs(res.data, 'Bao_cao.docx')
             }
         } catch (error: any) {
             if (error?.info?.message) {

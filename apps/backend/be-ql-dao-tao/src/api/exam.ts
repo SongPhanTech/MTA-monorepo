@@ -76,11 +76,11 @@ app.openapi(createNewExamList, async (c) => {
                     subjectId: true,
                     subjectClassStudent: {
                         select: { id: true },
-                        where: {
-                            examBanned: false,
-                            withdrew: false,
-                            exempted: false,
-                        },
+                        // where: {
+                        //     examBanned: false,
+                        //     withdrew: false,
+                        //     exempted: false,
+                        // },
                     },
                 },
                 where: {

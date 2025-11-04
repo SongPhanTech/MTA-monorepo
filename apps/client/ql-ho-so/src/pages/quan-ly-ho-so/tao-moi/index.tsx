@@ -425,20 +425,6 @@ export default function CreateUserPage() {
                 sSDTDiDong: values?.phoneNumber || '',
                 sEmail: values?.email || '',
             })
-            // const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/DM_NhanViens`, {
-            //     sDM_DonViId: values.sDM_DonViId,
-            //     sMa: values.code,
-            //     sHoVaDem: values.lastName.trim(),
-            //     sTen: values.firstName.trim(),
-            //     sTenDayDu:
-            //         `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
-            //     sDM_GioiTinhId: values.genderId,
-            //     dNgaySinh: values.dateOfBirth ? dayjs(values.dateOfBirth).toISOString() : null,
-            //     sCCCD: values.idCardNumber,
-            //     sSDTDiDong: values?.phoneNumber || '',
-            //     sEmail: values?.email || '',
-            // })
-
             if (res?.status === 200) {
                 const resProfile = await createUserProfile({
                     data: {
