@@ -465,6 +465,12 @@ const NAVIGATION: NavigationType = {
                         description: 'Danh mục đồ án',
                     },
                     {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
+                        label: 'Danh mục luận văn',
+                        path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_MUC_LUAN_VAN,
+                        description: 'Danh mục luận văn',
+                    },
+                    {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
                         label: 'Danh sách chuyên gia',
                         path: ROUTER_PATH.QL_DAO_TAO.QUAN_LY_DO_AN_DANH_SACH_CHUYEN_GIA,
@@ -500,6 +506,12 @@ const NAVIGATION: NavigationType = {
                         label: 'Đợt xét tốt nghiệp',
                         path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP,
                         description: 'Đợt xét tốt nghiệp',
+                    },
+                    {
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                        label: 'Đợt xét luận văn',
+                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                        description: 'Đợt xét luận văn',
                     },
                     {
                         id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_PHU_LUC_VAN_BANG,
