@@ -15147,12 +15147,14 @@ const metadata: ModelMeta = {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
                     isDataModel: true,
+                    isOptional: true,
                     backLink: 'studentThesisRegistration',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentSubjectScoreId" },
                 }, studentSubjectScoreId: {
                     name: "studentSubjectScoreId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'studentSubjectScore',
                 }, thesisProject: {

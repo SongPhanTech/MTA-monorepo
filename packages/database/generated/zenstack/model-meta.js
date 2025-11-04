@@ -15980,6 +15980,7 @@ const metadata = {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
                     isDataModel: true,
+                    isOptional: true,
                     attributes: [{ "name": "@relation", "args": [{ "name": "name", "value": "ScoreToRegistration" }, { "name": "fields", "value": [null] }, { "name": "references", "value": [null] }] }],
                     backLink: 'studentThesisRegistration',
                     isRelationOwner: true,
@@ -15987,6 +15988,7 @@ const metadata = {
                 }, studentSubjectScoreId: {
                     name: "studentSubjectScoreId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'studentSubjectScore',
                 }, thesisProject: {

@@ -23,4 +23,21 @@ const data = await prisma.lecturer.findMany({
     // },
 })
 
-console.log(data.length, data)
+const cls = await prisma.subjectClass.findMany({
+    where: {
+        lecturerId: {
+            not: null,
+        },
+        semester: { id: 'cmff4wak60029p401qhul7ld9' },
+    },
+    // orderBy: { userProfile: { firstName: 'asc' } },
+    // include: {
+    //     userProfile: {
+    //         include: { academicDegreeType: true, academicRankType: true, level: true, rank: true },
+    //     },
+    //     mainSubjectClasses: { include: { semester: true } },
+    //     organization: true,
+    // },
+})
+
+console.log(cls.length)

@@ -68880,7 +68880,7 @@ export namespace Prisma {
     export interface Prisma__StudentThesisRegistrationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
         readonly [Symbol.toStringTag]: "PrismaPromise";
         student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
-        studentSubjectScore<T extends StudentSubjectScoreDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentSubjectScoreDefaultArgs<ExtArgs>>): Prisma__StudentSubjectScoreClient<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
+        studentSubjectScore<T extends StudentThesisRegistration$studentSubjectScoreArgs<ExtArgs> = {}>(args?: Subset<T, StudentThesisRegistration$studentSubjectScoreArgs<ExtArgs>>): Prisma__StudentSubjectScoreClient<$Result.GetResult<Prisma.$StudentSubjectScorePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         thesisProject<T extends ThesisProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ThesisProjectDefaultArgs<ExtArgs>>): Prisma__ThesisProjectClient<$Result.GetResult<Prisma.$ThesisProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>;
         reviewedBy<T extends StudentThesisRegistration$reviewedByArgs<ExtArgs> = {}>(args?: Subset<T, StudentThesisRegistration$reviewedByArgs<ExtArgs>>): Prisma__LecturerClient<$Result.GetResult<Prisma.$LecturerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
         council<T extends StudentThesisRegistration$councilArgs<ExtArgs> = {}>(args?: Subset<T, StudentThesisRegistration$councilArgs<ExtArgs>>): Prisma__CouncilClient<$Result.GetResult<Prisma.$CouncilPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
@@ -250334,7 +250334,7 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
         studentId: string
-        studentSubjectScoreId: string
+        studentSubjectScoreId: string | null
         thesisProjectId: string
         registeredAt: Date
         motivation: string | null
@@ -250380,7 +250380,7 @@ export namespace Prisma {
         reviewedById?: boolean
         reviewNote?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
-        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentThesisRegistration$studentSubjectScoreArgs<ExtArgs>
         thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
         reviewedBy?: boolean | StudentThesisRegistration$reviewedByArgs<ExtArgs>
         council?: boolean | StudentThesisRegistration$councilArgs<ExtArgs>
@@ -250405,7 +250405,7 @@ export namespace Prisma {
         reviewedById?: boolean
         reviewNote?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
-        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentThesisRegistration$studentSubjectScoreArgs<ExtArgs>
         thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
         reviewedBy?: boolean | StudentThesisRegistration$reviewedByArgs<ExtArgs>
     }, ExtArgs["result"]["studentThesisRegistration"]>;
@@ -250429,7 +250429,7 @@ export namespace Prisma {
         reviewedById?: boolean
         reviewNote?: boolean
         student?: boolean | StudentDefaultArgs<ExtArgs>
-        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentThesisRegistration$studentSubjectScoreArgs<ExtArgs>
         thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
         reviewedBy?: boolean | StudentThesisRegistration$reviewedByArgs<ExtArgs>
     }, ExtArgs["result"]["studentThesisRegistration"]>;
@@ -250456,20 +250456,20 @@ export namespace Prisma {
     export type StudentThesisRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "active" | "description" | "deletedAt" | "createdAt" | "updatedAt" | "studentId" | "studentSubjectScoreId" | "thesisProjectId" | "registeredAt" | "motivation" | "experience" | "proposedIdeas" | "status" | "reviewedAt" | "reviewedById" | "reviewNote", ExtArgs["result"]["studentThesisRegistration"]>;
     export type StudentThesisRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         student?: boolean | StudentDefaultArgs<ExtArgs>
-        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentThesisRegistration$studentSubjectScoreArgs<ExtArgs>
         thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
         reviewedBy?: boolean | StudentThesisRegistration$reviewedByArgs<ExtArgs>
         council?: boolean | StudentThesisRegistration$councilArgs<ExtArgs>
     };
     export type StudentThesisRegistrationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         student?: boolean | StudentDefaultArgs<ExtArgs>
-        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentThesisRegistration$studentSubjectScoreArgs<ExtArgs>
         thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
         reviewedBy?: boolean | StudentThesisRegistration$reviewedByArgs<ExtArgs>
     };
     export type StudentThesisRegistrationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
         student?: boolean | StudentDefaultArgs<ExtArgs>
-        studentSubjectScore?: boolean | StudentSubjectScoreDefaultArgs<ExtArgs>
+        studentSubjectScore?: boolean | StudentThesisRegistration$studentSubjectScoreArgs<ExtArgs>
         thesisProject?: boolean | ThesisProjectDefaultArgs<ExtArgs>
         reviewedBy?: boolean | StudentThesisRegistration$reviewedByArgs<ExtArgs>
     };
@@ -250477,7 +250477,7 @@ export namespace Prisma {
         name: "StudentThesisRegistration"
         objects: {
             student: Prisma.$StudentPayload<ExtArgs>
-            studentSubjectScore: Prisma.$StudentSubjectScorePayload<ExtArgs>
+            studentSubjectScore: Prisma.$StudentSubjectScorePayload<ExtArgs> | null
             thesisProject: Prisma.$ThesisProjectPayload<ExtArgs>
             reviewedBy: Prisma.$LecturerPayload<ExtArgs> | null
             council: Prisma.$CouncilPayload<ExtArgs> | null
@@ -250491,7 +250491,7 @@ export namespace Prisma {
             createdAt: Date
             updatedAt: Date
             studentId: string
-            studentSubjectScoreId: string
+            studentSubjectScoreId: string | null
             thesisProjectId: string
             registeredAt: Date
             motivation: string | null
@@ -250884,6 +250884,24 @@ export namespace Prisma {
          * Limit how many StudentThesisRegistrations to delete.
          */
         limit?: number
+    };
+    /**
+     * StudentThesisRegistration.studentSubjectScore
+     */
+    export type StudentThesisRegistration$studentSubjectScoreArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+        /**
+         * Select specific fields to fetch from the StudentSubjectScore
+         */
+        select?: StudentSubjectScoreSelect<ExtArgs> | null
+        /**
+         * Omit specific fields from the StudentSubjectScore
+         */
+        omit?: StudentSubjectScoreOmit<ExtArgs> | null
+        /**
+         * Choose, which related nodes to fetch as well
+         */
+        include?: StudentSubjectScoreInclude<ExtArgs> | null
+        where?: StudentSubjectScoreWhereInput
     };
     /**
      * StudentThesisRegistration.reviewedBy
@@ -340224,7 +340242,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"StudentThesisRegistration"> | Date | string
         updatedAt?: DateTimeFilter<"StudentThesisRegistration"> | Date | string
         studentId?: StringFilter<"StudentThesisRegistration"> | string
-        studentSubjectScoreId?: StringFilter<"StudentThesisRegistration"> | string
+        studentSubjectScoreId?: StringNullableFilter<"StudentThesisRegistration"> | string | null
         thesisProjectId?: StringFilter<"StudentThesisRegistration"> | string
         registeredAt?: DateTimeFilter<"StudentThesisRegistration"> | Date | string
         motivation?: StringNullableFilter<"StudentThesisRegistration"> | string | null
@@ -340235,7 +340253,7 @@ export namespace Prisma {
         reviewedById?: StringNullableFilter<"StudentThesisRegistration"> | string | null
         reviewNote?: StringNullableFilter<"StudentThesisRegistration"> | string | null
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
-        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
+        studentSubjectScore?: XOR<StudentSubjectScoreNullableScalarRelationFilter, StudentSubjectScoreWhereInput> | null
         thesisProject?: XOR<ThesisProjectScalarRelationFilter, ThesisProjectWhereInput>
         reviewedBy?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         council?: XOR<CouncilNullableScalarRelationFilter, CouncilWhereInput> | null
@@ -340249,7 +340267,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         studentId?: SortOrder
-        studentSubjectScoreId?: SortOrder
+        studentSubjectScoreId?: SortOrderInput | SortOrder
         thesisProjectId?: SortOrder
         registeredAt?: SortOrder
         motivation?: SortOrderInput | SortOrder
@@ -340279,7 +340297,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"StudentThesisRegistration"> | Date | string
         updatedAt?: DateTimeFilter<"StudentThesisRegistration"> | Date | string
         studentId?: StringFilter<"StudentThesisRegistration"> | string
-        studentSubjectScoreId?: StringFilter<"StudentThesisRegistration"> | string
+        studentSubjectScoreId?: StringNullableFilter<"StudentThesisRegistration"> | string | null
         thesisProjectId?: StringFilter<"StudentThesisRegistration"> | string
         registeredAt?: DateTimeFilter<"StudentThesisRegistration"> | Date | string
         motivation?: StringNullableFilter<"StudentThesisRegistration"> | string | null
@@ -340290,7 +340308,7 @@ export namespace Prisma {
         reviewedById?: StringNullableFilter<"StudentThesisRegistration"> | string | null
         reviewNote?: StringNullableFilter<"StudentThesisRegistration"> | string | null
         student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
-        studentSubjectScore?: XOR<StudentSubjectScoreScalarRelationFilter, StudentSubjectScoreWhereInput>
+        studentSubjectScore?: XOR<StudentSubjectScoreNullableScalarRelationFilter, StudentSubjectScoreWhereInput> | null
         thesisProject?: XOR<ThesisProjectScalarRelationFilter, ThesisProjectWhereInput>
         reviewedBy?: XOR<LecturerNullableScalarRelationFilter, LecturerWhereInput> | null
         council?: XOR<CouncilNullableScalarRelationFilter, CouncilWhereInput> | null
@@ -340304,7 +340322,7 @@ export namespace Prisma {
         createdAt?: SortOrder
         updatedAt?: SortOrder
         studentId?: SortOrder
-        studentSubjectScoreId?: SortOrder
+        studentSubjectScoreId?: SortOrderInput | SortOrder
         thesisProjectId?: SortOrder
         registeredAt?: SortOrder
         motivation?: SortOrderInput | SortOrder
@@ -340330,7 +340348,7 @@ export namespace Prisma {
         createdAt?: DateTimeWithAggregatesFilter<"StudentThesisRegistration"> | Date | string
         updatedAt?: DateTimeWithAggregatesFilter<"StudentThesisRegistration"> | Date | string
         studentId?: StringWithAggregatesFilter<"StudentThesisRegistration"> | string
-        studentSubjectScoreId?: StringWithAggregatesFilter<"StudentThesisRegistration"> | string
+        studentSubjectScoreId?: StringNullableWithAggregatesFilter<"StudentThesisRegistration"> | string | null
         thesisProjectId?: StringWithAggregatesFilter<"StudentThesisRegistration"> | string
         registeredAt?: DateTimeWithAggregatesFilter<"StudentThesisRegistration"> | Date | string
         motivation?: StringNullableWithAggregatesFilter<"StudentThesisRegistration"> | string | null
@@ -367323,7 +367341,7 @@ export namespace Prisma {
         reviewedAt?: Date | string | null
         reviewNote?: string | null
         student: StudentCreateNestedOneWithoutThesisRegistrationsInput
-        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
         thesisProject: ThesisProjectCreateNestedOneWithoutRegistrationsInput
         reviewedBy?: LecturerCreateNestedOneWithoutReviewedThesisRegistrationsInput
         council?: CouncilCreateNestedOneWithoutStudentThesisRegistrationInput
@@ -367337,7 +367355,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         studentId: string
-        studentSubjectScoreId: string
+        studentSubjectScoreId?: string | null
         thesisProjectId: string
         registeredAt?: Date | string
         motivation?: string | null
@@ -367365,7 +367383,7 @@ export namespace Prisma {
         reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutThesisRegistrationsNestedInput
-        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentThesisRegistrationNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateOneWithoutStudentThesisRegistrationNestedInput
         thesisProject?: ThesisProjectUpdateOneRequiredWithoutRegistrationsNestedInput
         reviewedBy?: LecturerUpdateOneWithoutReviewedThesisRegistrationsNestedInput
         council?: CouncilUpdateOneWithoutStudentThesisRegistrationNestedInput
@@ -367379,7 +367397,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         studentId?: StringFieldUpdateOperationsInput | string
-        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjectId?: StringFieldUpdateOperationsInput | string
         registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
         motivation?: NullableStringFieldUpdateOperationsInput | string | null
@@ -367400,7 +367418,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         studentId: string
-        studentSubjectScoreId: string
+        studentSubjectScoreId?: string | null
         thesisProjectId: string
         registeredAt?: Date | string
         motivation?: string | null
@@ -367436,7 +367454,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         studentId?: StringFieldUpdateOperationsInput | string
-        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjectId?: StringFieldUpdateOperationsInput | string
         registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
         motivation?: NullableStringFieldUpdateOperationsInput | string | null
@@ -388335,6 +388353,10 @@ export namespace Prisma {
         in?: $Enums.StudentThesisRegistrationStatus[] | ListEnumStudentThesisRegistrationStatusFieldRefInput<$PrismaModel>
         notIn?: $Enums.StudentThesisRegistrationStatus[] | ListEnumStudentThesisRegistrationStatusFieldRefInput<$PrismaModel>
         not?: NestedEnumStudentThesisRegistrationStatusFilter<$PrismaModel> | $Enums.StudentThesisRegistrationStatus
+    };
+    export type StudentSubjectScoreNullableScalarRelationFilter = {
+        is?: StudentSubjectScoreWhereInput | null
+        isNot?: StudentSubjectScoreWhereInput | null
     };
     export type ThesisProjectScalarRelationFilter = {
         is?: ThesisProjectWhereInput
@@ -409623,10 +409645,12 @@ export namespace Prisma {
         connect?: StudentWhereUniqueInput
         update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutThesisRegistrationsInput, StudentUpdateWithoutThesisRegistrationsInput>, StudentUncheckedUpdateWithoutThesisRegistrationsInput>
     };
-    export type StudentSubjectScoreUpdateOneRequiredWithoutStudentThesisRegistrationNestedInput = {
+    export type StudentSubjectScoreUpdateOneWithoutStudentThesisRegistrationNestedInput = {
         create?: XOR<StudentSubjectScoreCreateWithoutStudentThesisRegistrationInput, StudentSubjectScoreUncheckedCreateWithoutStudentThesisRegistrationInput>
         connectOrCreate?: StudentSubjectScoreCreateOrConnectWithoutStudentThesisRegistrationInput
         upsert?: StudentSubjectScoreUpsertWithoutStudentThesisRegistrationInput
+        disconnect?: StudentSubjectScoreWhereInput | boolean
+        delete?: StudentSubjectScoreWhereInput | boolean
         connect?: StudentSubjectScoreWhereUniqueInput
         update?: XOR<XOR<StudentSubjectScoreUpdateToOneWithWhereWithoutStudentThesisRegistrationInput, StudentSubjectScoreUpdateWithoutStudentThesisRegistrationInput>, StudentSubjectScoreUncheckedUpdateWithoutStudentThesisRegistrationInput>
     };
@@ -460820,7 +460844,7 @@ export namespace Prisma {
         createdAt?: DateTimeFilter<"StudentThesisRegistration"> | Date | string
         updatedAt?: DateTimeFilter<"StudentThesisRegistration"> | Date | string
         studentId?: StringFilter<"StudentThesisRegistration"> | string
-        studentSubjectScoreId?: StringFilter<"StudentThesisRegistration"> | string
+        studentSubjectScoreId?: StringNullableFilter<"StudentThesisRegistration"> | string | null
         thesisProjectId?: StringFilter<"StudentThesisRegistration"> | string
         registeredAt?: DateTimeFilter<"StudentThesisRegistration"> | Date | string
         motivation?: StringNullableFilter<"StudentThesisRegistration"> | string | null
@@ -486079,7 +486103,7 @@ export namespace Prisma {
         status?: $Enums.StudentThesisRegistrationStatus
         reviewedAt?: Date | string | null
         reviewNote?: string | null
-        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
         thesisProject: ThesisProjectCreateNestedOneWithoutRegistrationsInput
         reviewedBy?: LecturerCreateNestedOneWithoutReviewedThesisRegistrationsInput
         council?: CouncilCreateNestedOneWithoutStudentThesisRegistrationInput
@@ -486092,7 +486116,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        studentSubjectScoreId: string
+        studentSubjectScoreId?: string | null
         thesisProjectId: string
         registeredAt?: Date | string
         motivation?: string | null
@@ -494116,7 +494140,7 @@ export namespace Prisma {
         reviewedAt?: Date | string | null
         reviewNote?: string | null
         student: StudentCreateNestedOneWithoutThesisRegistrationsInput
-        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
         thesisProject: ThesisProjectCreateNestedOneWithoutRegistrationsInput
         council?: CouncilCreateNestedOneWithoutStudentThesisRegistrationInput
     };
@@ -494129,7 +494153,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         studentId: string
-        studentSubjectScoreId: string
+        studentSubjectScoreId?: string | null
         thesisProjectId: string
         registeredAt?: Date | string
         motivation?: string | null
@@ -497938,7 +497962,7 @@ export namespace Prisma {
         reviewedAt?: Date | string | null
         reviewNote?: string | null
         student: StudentCreateNestedOneWithoutThesisRegistrationsInput
-        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
         reviewedBy?: LecturerCreateNestedOneWithoutReviewedThesisRegistrationsInput
         council?: CouncilCreateNestedOneWithoutStudentThesisRegistrationInput
     };
@@ -497951,7 +497975,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         studentId: string
-        studentSubjectScoreId: string
+        studentSubjectScoreId?: string | null
         registeredAt?: Date | string
         motivation?: string | null
         experience?: string | null
@@ -500572,7 +500596,7 @@ export namespace Prisma {
         reviewedAt?: Date | string | null
         reviewNote?: string | null
         student: StudentCreateNestedOneWithoutThesisRegistrationsInput
-        studentSubjectScore: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
+        studentSubjectScore?: StudentSubjectScoreCreateNestedOneWithoutStudentThesisRegistrationInput
         thesisProject: ThesisProjectCreateNestedOneWithoutRegistrationsInput
         reviewedBy?: LecturerCreateNestedOneWithoutReviewedThesisRegistrationsInput
     };
@@ -500585,7 +500609,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         studentId: string
-        studentSubjectScoreId: string
+        studentSubjectScoreId?: string | null
         thesisProjectId: string
         registeredAt?: Date | string
         motivation?: string | null
@@ -500741,7 +500765,7 @@ export namespace Prisma {
         reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutThesisRegistrationsNestedInput
-        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentThesisRegistrationNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateOneWithoutStudentThesisRegistrationNestedInput
         thesisProject?: ThesisProjectUpdateOneRequiredWithoutRegistrationsNestedInput
         reviewedBy?: LecturerUpdateOneWithoutReviewedThesisRegistrationsNestedInput
     };
@@ -500754,7 +500778,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         studentId?: StringFieldUpdateOperationsInput | string
-        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjectId?: StringFieldUpdateOperationsInput | string
         registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
         motivation?: NullableStringFieldUpdateOperationsInput | string | null
@@ -559148,7 +559172,7 @@ export namespace Prisma {
         deletedAt?: Date | string | null
         createdAt?: Date | string
         updatedAt?: Date | string
-        studentSubjectScoreId: string
+        studentSubjectScoreId?: string | null
         thesisProjectId: string
         registeredAt?: Date | string
         motivation?: string | null
@@ -560088,7 +560112,7 @@ export namespace Prisma {
         status?: EnumStudentThesisRegistrationStatusFieldUpdateOperationsInput | $Enums.StudentThesisRegistrationStatus
         reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
-        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentThesisRegistrationNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateOneWithoutStudentThesisRegistrationNestedInput
         thesisProject?: ThesisProjectUpdateOneRequiredWithoutRegistrationsNestedInput
         reviewedBy?: LecturerUpdateOneWithoutReviewedThesisRegistrationsNestedInput
         council?: CouncilUpdateOneWithoutStudentThesisRegistrationNestedInput
@@ -560101,7 +560125,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjectId?: StringFieldUpdateOperationsInput | string
         registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
         motivation?: NullableStringFieldUpdateOperationsInput | string | null
@@ -560121,7 +560145,7 @@ export namespace Prisma {
         deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjectId?: StringFieldUpdateOperationsInput | string
         registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
         motivation?: NullableStringFieldUpdateOperationsInput | string | null
@@ -561838,7 +561862,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         studentId: string
-        studentSubjectScoreId: string
+        studentSubjectScoreId?: string | null
         thesisProjectId: string
         registeredAt?: Date | string
         motivation?: string | null
@@ -562719,7 +562743,7 @@ export namespace Prisma {
         reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutThesisRegistrationsNestedInput
-        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentThesisRegistrationNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateOneWithoutStudentThesisRegistrationNestedInput
         thesisProject?: ThesisProjectUpdateOneRequiredWithoutRegistrationsNestedInput
         council?: CouncilUpdateOneWithoutStudentThesisRegistrationNestedInput
     };
@@ -562732,7 +562756,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         studentId?: StringFieldUpdateOperationsInput | string
-        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjectId?: StringFieldUpdateOperationsInput | string
         registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
         motivation?: NullableStringFieldUpdateOperationsInput | string | null
@@ -562752,7 +562776,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         studentId?: StringFieldUpdateOperationsInput | string
-        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: NullableStringFieldUpdateOperationsInput | string | null
         thesisProjectId?: StringFieldUpdateOperationsInput | string
         registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
         motivation?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563378,7 +563402,7 @@ export namespace Prisma {
         createdAt?: Date | string
         updatedAt?: Date | string
         studentId: string
-        studentSubjectScoreId: string
+        studentSubjectScoreId?: string | null
         registeredAt?: Date | string
         motivation?: string | null
         experience?: string | null
@@ -563453,7 +563477,7 @@ export namespace Prisma {
         reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
         reviewNote?: NullableStringFieldUpdateOperationsInput | string | null
         student?: StudentUpdateOneRequiredWithoutThesisRegistrationsNestedInput
-        studentSubjectScore?: StudentSubjectScoreUpdateOneRequiredWithoutStudentThesisRegistrationNestedInput
+        studentSubjectScore?: StudentSubjectScoreUpdateOneWithoutStudentThesisRegistrationNestedInput
         reviewedBy?: LecturerUpdateOneWithoutReviewedThesisRegistrationsNestedInput
         council?: CouncilUpdateOneWithoutStudentThesisRegistrationNestedInput
     };
@@ -563466,7 +563490,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         studentId?: StringFieldUpdateOperationsInput | string
-        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: NullableStringFieldUpdateOperationsInput | string | null
         registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
         motivation?: NullableStringFieldUpdateOperationsInput | string | null
         experience?: NullableStringFieldUpdateOperationsInput | string | null
@@ -563486,7 +563510,7 @@ export namespace Prisma {
         createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
         updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
         studentId?: StringFieldUpdateOperationsInput | string
-        studentSubjectScoreId?: StringFieldUpdateOperationsInput | string
+        studentSubjectScoreId?: NullableStringFieldUpdateOperationsInput | string | null
         registeredAt?: DateTimeFieldUpdateOperationsInput | Date | string
         motivation?: NullableStringFieldUpdateOperationsInput | string | null
         experience?: NullableStringFieldUpdateOperationsInput | string | null

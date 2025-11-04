@@ -4677,8 +4677,8 @@ model StudentThesisRegistration {
   updatedAt             DateTime                        @default(now()) @updatedAt()
   student               Student                         @relation(fields: [studentId], references: [id])
   studentId             String
-  studentSubjectScore   StudentSubjectScore             @relation("ScoreToRegistration", fields: [studentSubjectScoreId], references: [id])
-  studentSubjectScoreId String
+  studentSubjectScore   StudentSubjectScore?            @relation("ScoreToRegistration", fields: [studentSubjectScoreId], references: [id])
+  studentSubjectScoreId String?
   thesisProject         ThesisProject                   @relation(fields: [thesisProjectId], references: [id])
   thesisProjectId       String
   registeredAt          DateTime                        @default(now())
