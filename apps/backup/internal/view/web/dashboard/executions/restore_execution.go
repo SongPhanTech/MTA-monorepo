@@ -125,7 +125,7 @@ func restoreExecutionForm(
 
 			component.SelectControl(component.SelectControlParams{
 				Name:     "backup_to",
-				Label:    "Backup to",
+				Label:    "Sao lưu vào",
 				Required: true,
 				HelpText: "Bạn có thể khôi phục bản sao lưu vào một cơ sở dữ liệu hiện có hoặc bất kỳ cơ sở dữ liệu nào khác bằng cách sử dụng chuỗi kết nối.",
 				Children: []nodx.Node{
