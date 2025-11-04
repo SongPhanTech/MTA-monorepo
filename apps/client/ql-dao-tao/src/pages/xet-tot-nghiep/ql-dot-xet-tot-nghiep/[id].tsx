@@ -1,3 +1,4 @@
+import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
@@ -13,7 +14,9 @@ import DefaultLayout from '@layouts/default-layout'
 import { ApplicationStatus, GraduationSessionStatus } from '@workspace/db/client'
 import {
     useCountStudentGraduationApplication,
+    useFindManyFixedClass,
     useFindManyStudentGraduationApplication,
+    useFindManyTrainingCourse,
     useFindUniqueGraduationSession,
     useUpdateManyStudentGraduationApplication,
     useUpdateStudentGraduationApplication,
@@ -21,7 +24,7 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import type { GraduationCheckResult } from '@workspace/libs/api/schemas/graduationCheckResult'
-import { useGraduationCheck } from '@workspace/libs/api/training'
+import { graduationApplicationInit, useGraduationCheck } from '@workspace/libs/api/training'
 import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
 import type { TableRowSelection } from 'antd/es/table/interface'
@@ -51,6 +54,8 @@ export default function StudentGraduationApplication() {
         applicationDate: undefined,
         statusApplication: undefined,
     })
+    const [trainingCourseSelected, setTrainingCourseSelected] = useState<string>()
+    const [fixedClassSelected, setFixedClassSelected] = useState<string>()
 
     const where = useMemo(
         () => ({
@@ -123,15 +128,66 @@ export default function StudentGraduationApplication() {
         )
 
     const { data: initialValue } = useFindUniqueGraduationSession(
+        { where: { id: graduationSessionId } },
+        { enabled: !!graduationSessionId }
+    )
+
+    const { data: trainingCourseData = [] } = useFindManyTrainingCourse(
         {
             where: {
-                id: graduationSessionId,
+                trainingObjectTypeId: initialValue?.trainingObjectTypeId,
+                fixedClass: {
+                    some: {
+                        students: {
+                            some: {
+                                status: 'ENROLLED',
+                            },
+                        },
+                    },
+                },
             },
         },
         {
             enabled: !!graduationSessionId,
         }
     )
+
+    const { data: fixedClassData = [] } = useFindManyFixedClass(
+        {
+            where: {
+                trainingCourseId: trainingCourseSelected,
+                students: { some: { status: 'ENROLLED' } },
+            },
+        },
+        { enabled: !!graduationSessionId && !!trainingCourseSelected }
+    )
+
+    const handleInitApplication = async () => {
+        if (!trainingCourseSelected || !fixedClassSelected) {
+            message.error('Vui lòng chọn Khoá hoặc Lớp đào tạo')
+            return
+        }
+
+        showSpinner()
+        try {
+            const { status, data } = await graduationApplicationInit({
+                sessionId: graduationSessionId,
+                trainingCourseId: trainingCourseSelected,
+                fixedClassId: fixedClassSelected,
+            })
+
+            if (status === 200) {
+                message.success(data.message)
+            } else {
+                message.error(data.message)
+            }
+        } catch (error) {
+            message.error('Đã xảy ra lỗi, vui lòng thử lại')
+            console.error(error)
+        } finally {
+            hideSpinner()
+        }
+    }
 
     const data: Array<
         NonNullable<typeof studentGraduationApplicationData>[number] &
@@ -421,10 +477,46 @@ export default function StudentGraduationApplication() {
     }
 
     return (
-        <Row gutter={[16, 0]} className="mt-2">
+        <Row gutter={[16, 0]} className="mt-4">
             <Col span={24} className="!p-0">
                 <Flex vertical gap={16}>
                     <Col span={24}>
+                        <Flex align="center" justify="space-between" className="px-4">
+                            <h2 className="text-xl font-bold">{initialValue?.name}</h2>
+                            <div className="flex align-middle items-center gap-2">
+                                <div>Khoá</div>
+                                <Select
+                                    className="min-w-32"
+                                    value={trainingCourseSelected}
+                                    onChange={(value) => setTrainingCourseSelected(value)}
+                                    options={trainingCourseData.map((c) => {
+                                        return {
+                                            value: c.id,
+                                            label: c.name,
+                                        }
+                                    })}
+                                />
+                                <div>Lớp</div>
+                                <Select
+                                    className="min-w-32"
+                                    value={fixedClassSelected}
+                                    onChange={(value) => setFixedClassSelected(value)}
+                                    options={fixedClassData.map((c) => {
+                                        return {
+                                            value: c.id,
+                                            label: c.name,
+                                        }
+                                    })}
+                                />
+                                <Button
+                                    type="primary"
+                                    disabled={!trainingCourseSelected && !fixedClassSelected}
+                                    onClick={() => refetch()}
+                                >
+                                    Khởi tạo
+                                </Button>
+                            </div>
+                        </Flex>
                         <GraduationDecision sessionId={graduationSessionId} />
                     </Col>
                     <Flex>
@@ -432,7 +524,11 @@ export default function StudentGraduationApplication() {
                             <div className="bg-white rounded-lg shadow-sm p-4">
                                 <Row gutter={[16, 0]}>
                                     <Col span={24}>
-                                        <Row gutter={[16, 16]} align="top" justify="space-between">
+                                        <Row
+                                            gutter={[16, 16]}
+                                            align="middle"
+                                            justify="space-between"
+                                        >
                                             <Col span={24}>
                                                 <Flex justify="end" gap={4} className="ml-auto">
                                                     {/* <Button type="primary">

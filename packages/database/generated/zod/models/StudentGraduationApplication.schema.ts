@@ -7,6 +7,8 @@
 import { z } from 'zod';
 import { ApplicationStatus } from '../../zenstack/models';
 import { ApplicationStatusSchema } from '../enums/ApplicationStatus.schema';
+import { DecimalSchema } from '../common';
+import { Decimal } from 'decimal.js';
 const baseSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
@@ -17,6 +19,9 @@ const baseSchema = z.object({
     updatedAt: z.coerce.date().default(() => new Date()),
     applicationDate: z.coerce.date().default(() => new Date()),
     status: ApplicationStatusSchema,
+    graduation: z.boolean().nullish(),
+    gpa: DecimalSchema.nullish(),
+    reason: z.string().nullish(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -29,11 +34,17 @@ const baseSchemaWithoutDefaults = z.object({
     updatedAt: z.coerce.date(),
     applicationDate: z.coerce.date(),
     status: ApplicationStatusSchema,
+    graduation: z.boolean().nullish(),
+    gpa: DecimalSchema.nullish(),
+    reason: z.string().nullish(),
 }
 ).strict();
 const relationSchema = z.object({
     student: z.record(z.string(), z.unknown()),
     session: z.record(z.string(), z.unknown()),
+    rank: z.record(z.string(), z.unknown()).optional(),
+    trainingMajor: z.record(z.string(), z.unknown()).optional(),
+    diplomaType: z.record(z.string(), z.unknown()).optional(),
     applicationCheckResult: z.array(z.unknown()).optional(),
     gpaScore: z.array(z.unknown()).optional(),
     supplementaryScore: z.array(z.unknown()).optional(),
@@ -43,6 +54,9 @@ const relationSchema = z.object({
 const fkSchema = z.object({
     studentId: z.string(),
     sessionId: z.string(),
+    rankId: z.string().nullish(),
+    trainingMajorId: z.string().nullish(),
+    diplomaTypeId: z.string().nullish(),
 }
 );
 
@@ -78,7 +92,10 @@ export const StudentGraduationApplicationPrismaUpdateSchema = z.object({
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
     applicationDate: z.coerce.date(),
-    status: ApplicationStatusSchema
+    status: ApplicationStatusSchema,
+    graduation: z.boolean().nullish(),
+    gpa: DecimalSchema.nullish(),
+    reason: z.string().nullish()
 }).partial().passthrough();
 
 

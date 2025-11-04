@@ -3567,7 +3567,13 @@ exports.Prisma.StudentGraduationApplicationScalarFieldEnum = {
   studentId: 'studentId',
   sessionId: 'sessionId',
   applicationDate: 'applicationDate',
-  status: 'status'
+  status: 'status',
+  graduation: 'graduation',
+  gpa: 'gpa',
+  reason: 'reason',
+  rankId: 'rankId',
+  trainingMajorId: 'trainingMajorId',
+  diplomaTypeId: 'diplomaTypeId'
 };
 
 exports.Prisma.ApplicationCheckResultScalarFieldEnum = {
@@ -6282,7 +6288,11 @@ exports.Prisma.StudentGraduationApplicationOrderByRelevanceFieldEnum = {
   code: 'code',
   description: 'description',
   studentId: 'studentId',
-  sessionId: 'sessionId'
+  sessionId: 'sessionId',
+  reason: 'reason',
+  rankId: 'rankId',
+  trainingMajorId: 'trainingMajorId',
+  diplomaTypeId: 'diplomaTypeId'
 };
 
 exports.Prisma.ApplicationCheckResultOrderByRelevanceFieldEnum = {

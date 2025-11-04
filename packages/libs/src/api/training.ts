@@ -57,6 +57,9 @@ import type {
     GenExamRoomCode400,
     GenExamRoomCode404,
     GenExamRoomCodeResult,
+    GraduationApplicationInit200,
+    GraduationApplicationInit400,
+    GraduationApplicationInitBody,
     GraduationCheck200,
     GraduationCheck400,
     GraduationCheckBody,
@@ -3094,6 +3097,110 @@ export const useImportPhienBanCTDTSubject = <
     TContext
 > => {
     const mutationOptions = getImportPhienBanCTDTSubjectMutationOptions(options)
+
+    return useMutation(mutationOptions, queryClient)
+}
+
+export type graduationApplicationInitResponse200 = {
+    data: GraduationApplicationInit200
+    status: 200
+}
+
+export type graduationApplicationInitResponse400 = {
+    data: GraduationApplicationInit400
+    status: 400
+}
+
+export type graduationApplicationInitResponseComposite =
+    | graduationApplicationInitResponse200
+    | graduationApplicationInitResponse400
+
+export type graduationApplicationInitResponse = graduationApplicationInitResponseComposite & {
+    headers: Headers
+}
+
+export const getGraduationApplicationInitUrl = () => {
+    return '/api/graduation/application-init'
+}
+
+export const graduationApplicationInit = async (
+    graduationApplicationInitBody: GraduationApplicationInitBody,
+    options?: RequestInit
+): Promise<graduationApplicationInitResponse> => {
+    return customTrainingFetch<graduationApplicationInitResponse>(
+        getGraduationApplicationInitUrl(),
+        {
+            ...options,
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...options?.headers },
+            body: JSON.stringify(graduationApplicationInitBody),
+        }
+    )
+}
+
+export const getGraduationApplicationInitMutationOptions = <
+    TError = GraduationApplicationInit400,
+    TContext = unknown,
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof graduationApplicationInit>>,
+        TError,
+        { data: GraduationApplicationInitBody },
+        TContext
+    >
+    request?: SecondParameter<typeof customTrainingFetch>
+}): UseMutationOptions<
+    Awaited<ReturnType<typeof graduationApplicationInit>>,
+    TError,
+    { data: GraduationApplicationInitBody },
+    TContext
+> => {
+    const mutationKey = ['graduationApplicationInit']
+    const { mutation: mutationOptions, request: requestOptions } = options
+        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+            ? options
+            : { ...options, mutation: { ...options.mutation, mutationKey } }
+        : { mutation: { mutationKey }, request: undefined }
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof graduationApplicationInit>>,
+        { data: GraduationApplicationInitBody }
+    > = (props) => {
+        const { data } = props ?? {}
+
+        return graduationApplicationInit(data, requestOptions)
+    }
+
+    return { mutationFn, ...mutationOptions }
+}
+
+export type GraduationApplicationInitMutationResult = NonNullable<
+    Awaited<ReturnType<typeof graduationApplicationInit>>
+>
+export type GraduationApplicationInitMutationBody = GraduationApplicationInitBody
+export type GraduationApplicationInitMutationError = GraduationApplicationInit400
+
+export const useGraduationApplicationInit = <
+    TError = GraduationApplicationInit400,
+    TContext = unknown,
+>(
+    options?: {
+        mutation?: UseMutationOptions<
+            Awaited<ReturnType<typeof graduationApplicationInit>>,
+            TError,
+            { data: GraduationApplicationInitBody },
+            TContext
+        >
+        request?: SecondParameter<typeof customTrainingFetch>
+    },
+    queryClient?: QueryClient
+): UseMutationResult<
+    Awaited<ReturnType<typeof graduationApplicationInit>>,
+    TError,
+    { data: GraduationApplicationInitBody },
+    TContext
+> => {
+    const mutationOptions = getGraduationApplicationInitMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

@@ -14,23 +14,31 @@ type QueryFnOptions = {
   signal?: AbortController["signal"];
 };
 
+export type GetSessionQueryParams = {
+  appCode: string;
+};
+
 export type GetSessionError = Fetcher.ErrorWrapper<{
   status: 401;
   payload: Schemas.Unauthorized;
 }>;
 
-export type GetSessionVariables = CommonContext["fetcherOptions"];
+export type GetSessionVariables = {
+  queryParams: GetSessionQueryParams;
+} & CommonContext["fetcherOptions"];
 
 export const fetchGetSession = (
   variables: GetSessionVariables,
   signal?: AbortSignal,
 ) =>
-  commonFetch<Schemas.Session, GetSessionError, undefined, {}, {}, {}>({
-    url: "/api/auth/get-session",
-    method: "get",
-    ...variables,
-    signal,
-  });
+  commonFetch<
+    Schemas.Session,
+    GetSessionError,
+    undefined,
+    {},
+    GetSessionQueryParams,
+    {}
+  >({ url: "/api/auth/get-session", method: "get", ...variables, signal });
 
 export function getSessionQuery(variables: GetSessionVariables): {
   queryKey: reactQuery.QueryKey;
@@ -479,6 +487,7 @@ export type SqlTransactionRequestBody = {
     | "LecturerHistory"
     | "ResearchProject"
     | "StudentResearchRegistration"
+    | "ThesisSession"
     | "ThesisProject"
     | "DefenseSession"
     | "StudentThesisRegistration"
@@ -495,6 +504,7 @@ export type SqlTransactionRequestBody = {
     | "EvaluationPeriod"
     | "StandardCatalog"
     | "CriterionCatalog"
+    | "CriterionAssignment"
     | "RequirementCriterionCatalog"
     | "ScoreScaleCatalog"
     | "EvaluationStandard"
@@ -525,6 +535,7 @@ export type SqlTransactionRequestBody = {
     | "FillInBlankSlot"
     | "OrderingItem"
     | "Exam"
+    | "ExamRoomSlot"
     | "ExamRoom"
     | "TestStructureRule"
     | "ExamBank"

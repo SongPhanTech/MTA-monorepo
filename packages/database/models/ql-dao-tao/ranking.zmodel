@@ -57,6 +57,19 @@ model StudentGraduationApplication extends Base {
   applicationDate        DateTime                 @default(now())
   status                 ApplicationStatus        @default(SUBMITTED)
 
+  graduation             Boolean?
+  gpa                    Decimal?                 @db.Decimal(5, 2)
+  reason                 String?
+
+  rank                   AcademicRankingConvert?  @relation(fields: [rankId], references: [id])
+  rankId                 String?
+
+  trainingMajor          TrainingMajor?           @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId        String?
+
+  diplomaType            DiplomaType?             @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId          String?
+
   applicationCheckResult ApplicationCheckResult[]
   gpaScore               StudentSubjectScore[]    @relation("gpaScore")
   supplementaryScore     StudentSubjectScore[]    @relation("supplementaryScore")
@@ -122,25 +135,26 @@ enum RankingContext {
 
 /// Xếp loại học tập/Xếp loại tốt nghiệp
 model AcademicRankingConvert extends Base {
-  classification     String           // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
-  context            RankingContext   // Bối cảnh áp dụng: Học tập hay Tốt nghiệp
-  rankOrder          Int              // Thứ tự ưu tiên của xếp loại (1 là cao nhất)
+  classification               String           // Xếp loại: Xuất sắc; Giỏi; Khá; TBK; TB; Yếu
+  context                      RankingContext   // Bối cảnh áp dụng: Học tập hay Tốt nghiệp
+  rankOrder                    Int              // Thứ tự ưu tiên của xếp loại (1 là cao nhất)
 
   // dựa vào type yêu cầu người dùng nhập hệ 10 hoặc hệ 4
   // dựa vào type để xếp loại học lực theo hệ 10 hoặc hệ 4
-  baseScore          AcademicRankingBaseType
-  base10Min          Float?
-  base10Max          Float?
-  base4Min           Float?
-  base4Max           Float?
-  graduated          Boolean
+  baseScore                    AcademicRankingBaseType
+  base10Min                    Float?
+  base10Max                    Float?
+  base4Min                     Float?
+  base4Max                     Float?
+  graduated                    Boolean
 
-  trainingCourse     TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId   String
+  trainingCourse               TrainingCourse                 @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId             String
 
-  rankingCondition   RankingCondition[]
-  downgradeRules     GraduationRankDowngradeRule[]
-  graduationDecision GraduationDecision[]
+  rankingCondition             RankingCondition[]
+  downgradeRules               GraduationRankDowngradeRule[]
+  graduationDecision           GraduationDecision[]
+  studentGraduationApplication StudentGraduationApplication[]
 
   @@validate(!(baseScore == Base10 && (base10Min == null || base10Max == null)), message: "Xếp loại theo hệ 10 phải khai báo base10Min, base10Max")
   @@validate(!(baseScore == Base4 && (base4Min == null || base4Max == null)), message: "Xếp loại theo hệ 4 phải khai báo base4Min, base4Max")

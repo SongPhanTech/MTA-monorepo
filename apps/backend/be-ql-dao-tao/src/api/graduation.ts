@@ -13,6 +13,76 @@ import type { StudentDataContext } from '../types/student-context'
 
 const app = new OpenAPIHono({ strict: false })
 
+const graduationApplicationInit = createRoute({
+    operationId: 'graduationApplicationInit',
+    tags: ['Graduation'],
+    path: '/application-init',
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: z
+                        .object({
+                            sessionId: z.string(),
+                            trainingCourseId: z.string().optional(),
+                            fixedClassId: z.string().optional(),
+                        })
+                        .refine(
+                            (data) => data.trainingCourseId || data.fixedClassId,
+                            'Cần chọn Khoá hoặc Lớp quản lý'
+                        ),
+                },
+            },
+        },
+    },
+    responses: {
+        200: {
+            description: 'Graduation application initialized successfully',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+        400: {
+            description: 'Graduation application initialization failed',
+            content: {
+                'application/json': {
+                    schema: z.object({ message: z.string() }),
+                },
+            },
+        },
+    },
+})
+
+app.openapi(graduationApplicationInit, async (c) => {
+    const { sessionId, trainingCourseId, fixedClassId } = c.req.valid('json')
+
+    const session = await prisma.graduationSession.findUniqueOrThrow({
+        where: { id: sessionId },
+    })
+
+    const students = await prisma.student.findMany({
+        where: {
+            ...(trainingCourseId ? { fixedClass: { trainingCourseId } } : {}),
+            ...(fixedClassId ? { fixedClassId } : {}),
+        },
+    })
+
+    await prisma.studentGraduationApplication.createMany({
+        data: students.map((s) => {
+            return {
+                studentId: s.id,
+                sessionId: session.id,
+            }
+        }),
+        skipDuplicates: true,
+    })
+
+    return c.json({ message: `Đã tạo ${students.length} đơn xét tốt nghiệp` }, 200)
+})
+
 const GraduationCheckResult = z
     .object({
         applicationId: z.string(),
@@ -644,6 +714,17 @@ app.openapi(graduationCheck, async (c) => {
                 diplomaType: curriculumVersion.diplomaType,
             })
         }
+    }
+
+    for (const result of results) {
+        await prisma.studentGraduationApplication.update({
+            where: { id: result.applicationId },
+            data: {
+                graduation: result.graduation,
+                diplomaTypeId: result.diplomaType?.id,
+                trainingMajorId: result.trainingMajor?.id,
+            },
+        })
     }
 
     return c.json({ results }, 200)
