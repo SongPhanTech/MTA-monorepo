@@ -15,6 +15,7 @@ import {
 import {
   useCountStudent,
   useCreateManyInvitation,
+  useCreateStudentThesisRegistration,
   useCreateThesisProject,
   useFindManyDM_DonVi,
   useFindManyExpertProfile,
@@ -233,6 +234,8 @@ export default function PostgraduateProject() {
     }));
   };
   const { mutateAsync: createThesisProject } = useCreateThesisProject();
+  const { mutateAsync: createStudentThesisRegistration } =
+    useCreateStudentThesisRegistration();
   const { mutateAsync: updateThesisProject } = useUpdateThesisProject();
 
   const { data: subjectClass } = useFindManySubjectClass({
@@ -494,9 +497,47 @@ export default function PostgraduateProject() {
   const [countStudents, setCountStudents] = useState<number>(0);
   const [selectedStudents, setSelectedStudents] = useState<any[]>([]);
   const taodulieumau = async () => {
+    showSpinner();
     setNeedAllStudents(true);
+
+    const createPromises = allStudents?.map(async (student) => {
+      const payload = {
+        title: "",
+        summary: "",
+        titleEN: "",
+        studentId: student.id,
+        supervisorId: expertProfileData?.[0]?.id ?? "",
+        organizationId: sDm_Donvi?.[0]?.Id ?? "",
+        maxStudents: 1,
+        description: "Ngôn ngữ: Tiếng Việt - Luận án/Đề án: Luận án",
+      };
+
+      const response = await createThesisProject({
+        data: {
+          ...payload,
+        },
+      });
+      //Todo: Tạo điểm sinh viên xóa studentSubjectScoreId 
+      const payloadRegistration = {
+        thesisProjectId: response?.id ?? '',
+        studentId: student.id,
+        studentSubjectScoreId: '',
+      };
+      await createStudentThesisRegistration({
+        data: payloadRegistration,
+      });
+      return response;
+    });
+
+    try {
+      const results = await Promise.all(createPromises || []);
+     message.success("Tạo dữ liệu mẫu thành công");
+    } catch (error) {
+      message.error("Đã xảy ra lỗi trong lúc tạo dữ liệu mẫu");
+    } finally {
+      hideSpinner();
+    }
     
-    taodulieumau
     // await refetchStudents();
     // setCountStudents(countStudent || 0);
     // setSelectedStudents(students || []);
