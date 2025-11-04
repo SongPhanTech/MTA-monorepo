@@ -51,6 +51,7 @@ const relationSchema = z.object({
     rankingCondition: z.array(z.unknown()).optional(),
     downgradeRules: z.array(z.unknown()).optional(),
     graduationDecision: z.array(z.unknown()).optional(),
+    studentGraduationApplication: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({

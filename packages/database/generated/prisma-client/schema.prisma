@@ -3331,35 +3331,36 @@ model TrainingFieldOnTrainingObjectType {
 
 /// chuyên ngành đào tạo
 model TrainingMajor {
-  id                    String                              @id() @default(cuid())
-  code                  String?                             @unique()
-  active                Boolean                             @default(true)
-  description           String?                             @db.Text()
-  deletedAt             DateTime?
-  createdAt             DateTime                            @default(now())
-  updatedAt             DateTime                            @default(now()) @updatedAt()
-  name                  String
-  englishName           String?
-  summary               String
+  id                           String                              @id() @default(cuid())
+  code                         String?                             @unique()
+  active                       Boolean                             @default(true)
+  description                  String?                             @db.Text()
+  deletedAt                    DateTime?
+  createdAt                    DateTime                            @default(now())
+  updatedAt                    DateTime                            @default(now()) @updatedAt()
+  name                         String
+  englishName                  String?
+  summary                      String
   /// Số tín chỉ chuyên ngành
-  numberCreditsMajor    Int                                 @default(0)
+  numberCreditsMajor           Int                                 @default(0)
   /// Số tín chỉ bắt buộc
-  numberCreditsRequired Int                                 @default(0)
+  numberCreditsRequired        Int                                 @default(0)
   /// Số tín chỉ tự chọn
-  numberCreditsElective Int                                 @default(0)
-  organization          DM_DonVi                            @relation("organization", fields: [organizationId], references: [Id])
-  organizationId        String                              @db.Uuid()
-  secondOrganization    DM_DonVi?                           @relation("secondOrganization", fields: [secondOrganizationId], references: [Id])
-  secondOrganizationId  String?                             @db.Uuid()
-  thirdOrganization     DM_DonVi?                           @relation("thirdOrganization", fields: [thirdOrganizationId], references: [Id])
-  thirdOrganizationId   String?                             @db.Uuid()
-  trainingField         TrainingField                       @relation(fields: [trainingFieldId], references: [id])
-  trainingFieldId       String
-  trainingObjectTypes   TrainingMajorOnTrainingObjectType[]
-  curriculum            Curriculum[]
-  graduationDecision    GraduationDecision[]
-  expertProfile         ExpertProfile[]
-  surveyObjectTypes     SurveyObjectType[]
+  numberCreditsElective        Int                                 @default(0)
+  organization                 DM_DonVi                            @relation("organization", fields: [organizationId], references: [Id])
+  organizationId               String                              @db.Uuid()
+  secondOrganization           DM_DonVi?                           @relation("secondOrganization", fields: [secondOrganizationId], references: [Id])
+  secondOrganizationId         String?                             @db.Uuid()
+  thirdOrganization            DM_DonVi?                           @relation("thirdOrganization", fields: [thirdOrganizationId], references: [Id])
+  thirdOrganizationId          String?                             @db.Uuid()
+  trainingField                TrainingField                       @relation(fields: [trainingFieldId], references: [id])
+  trainingFieldId              String
+  trainingObjectTypes          TrainingMajorOnTrainingObjectType[]
+  curriculum                   Curriculum[]
+  graduationDecision           GraduationDecision[]
+  expertProfile                ExpertProfile[]
+  studentGraduationApplication StudentGraduationApplication[]
+  surveyObjectTypes            SurveyObjectType[]
 
   @@unique([trainingFieldId, name])
   @@schema("ql-dao-tao")
@@ -3498,18 +3499,19 @@ model Award {
 }
 
 model DiplomaType {
-  id                 String               @id() @default(cuid())
-  code               String?              @unique()
-  active             Boolean              @default(true)
-  description        String?              @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @default(now()) @updatedAt()
-  name               String               @unique()
-  englishName        String?
-  type               DiplomaTypeEnum
-  curriculumVersion  CurriculumVersion[]
-  graduationDecision GraduationDecision[]
+  id                           String                         @id() @default(cuid())
+  code                         String?                        @unique()
+  active                       Boolean                        @default(true)
+  description                  String?                        @db.Text()
+  deletedAt                    DateTime?
+  createdAt                    DateTime                       @default(now())
+  updatedAt                    DateTime                       @default(now()) @updatedAt()
+  name                         String                         @unique()
+  englishName                  String?
+  type                         DiplomaTypeEnum
+  curriculumVersion            CurriculumVersion[]
+  graduationDecision           GraduationDecision[]
+  studentGraduationApplication StudentGraduationApplication[]
 
   @@schema("ql-dao-tao")
 }
@@ -5418,6 +5420,15 @@ model StudentGraduationApplication {
   sessionId              String
   applicationDate        DateTime                 @default(now())
   status                 ApplicationStatus        @default(SUBMITTED)
+  graduation             Boolean?
+  gpa                    Decimal?                 @db.Decimal(5, 2)
+  reason                 String?
+  rank                   AcademicRankingConvert?  @relation(fields: [rankId], references: [id])
+  rankId                 String?
+  trainingMajor          TrainingMajor?           @relation(fields: [trainingMajorId], references: [id])
+  trainingMajorId        String?
+  diplomaType            DiplomaType?             @relation(fields: [diplomaTypeId], references: [id])
+  diplomaTypeId          String?
   applicationCheckResult ApplicationCheckResult[]
   gpaScore               StudentSubjectScore[]    @relation("gpaScore")
   supplementaryScore     StudentSubjectScore[]    @relation("supplementaryScore")
@@ -5481,27 +5492,28 @@ model GraduationDecision {
 
 /// Xếp loại học tập/Xếp loại tốt nghiệp
 model AcademicRankingConvert {
-  id                 String                        @id() @default(cuid())
-  code               String?                       @unique()
-  active             Boolean                       @default(true)
-  description        String?                       @db.Text()
-  deletedAt          DateTime?
-  createdAt          DateTime                      @default(now())
-  updatedAt          DateTime                      @default(now()) @updatedAt()
-  classification     String
-  context            RankingContext
-  rankOrder          Int
-  baseScore          AcademicRankingBaseType
-  base10Min          Float?
-  base10Max          Float?
-  base4Min           Float?
-  base4Max           Float?
-  graduated          Boolean
-  trainingCourse     TrainingCourse                @relation(fields: [trainingCourseId], references: [id])
-  trainingCourseId   String
-  rankingCondition   RankingCondition[]
-  downgradeRules     GraduationRankDowngradeRule[]
-  graduationDecision GraduationDecision[]
+  id                           String                         @id() @default(cuid())
+  code                         String?                        @unique()
+  active                       Boolean                        @default(true)
+  description                  String?                        @db.Text()
+  deletedAt                    DateTime?
+  createdAt                    DateTime                       @default(now())
+  updatedAt                    DateTime                       @default(now()) @updatedAt()
+  classification               String
+  context                      RankingContext
+  rankOrder                    Int
+  baseScore                    AcademicRankingBaseType
+  base10Min                    Float?
+  base10Max                    Float?
+  base4Min                     Float?
+  base4Max                     Float?
+  graduated                    Boolean
+  trainingCourse               TrainingCourse                 @relation(fields: [trainingCourseId], references: [id])
+  trainingCourseId             String
+  rankingCondition             RankingCondition[]
+  downgradeRules               GraduationRankDowngradeRule[]
+  graduationDecision           GraduationDecision[]
+  studentGraduationApplication StudentGraduationApplication[]
 
   @@unique([trainingCourseId, context, rankOrder])
   @@schema("ql-dao-tao")

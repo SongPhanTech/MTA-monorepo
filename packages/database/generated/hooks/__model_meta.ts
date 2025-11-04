@@ -11617,6 +11617,12 @@ const metadata: ModelMeta = {
                     isArray: true,
                     backLink: 'major',
                     isRelationOwner: true,
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'trainingMajor',
                 }, surveyObjectTypes: {
                     name: "surveyObjectTypes",
                     type: "SurveyObjectType",
@@ -12180,6 +12186,12 @@ const metadata: ModelMeta = {
                 }, graduationDecision: {
                     name: "graduationDecision",
                     type: "GraduationDecision",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'diplomaType',
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'diplomaType',
@@ -19920,6 +19932,60 @@ const metadata: ModelMeta = {
                     name: "status",
                     type: "ApplicationStatus",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, graduation: {
+                    name: "graduation",
+                    type: "Boolean",
+                    isOptional: true,
+                }, gpa: {
+                    name: "gpa",
+                    type: "Decimal",
+                    isOptional: true,
+                }, reason: {
+                    name: "reason",
+                    type: "String",
+                    isOptional: true,
+                }, rank: {
+                    name: "rank",
+                    type: "AcademicRankingConvert",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentGraduationApplication',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "rankId" },
+                }, rankId: {
+                    name: "rankId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'rank',
+                }, trainingMajor: {
+                    name: "trainingMajor",
+                    type: "TrainingMajor",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentGraduationApplication',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "trainingMajorId" },
+                }, trainingMajorId: {
+                    name: "trainingMajorId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'trainingMajor',
+                }, diplomaType: {
+                    name: "diplomaType",
+                    type: "DiplomaType",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'studentGraduationApplication',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "diplomaTypeId" },
+                }, diplomaTypeId: {
+                    name: "diplomaTypeId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'diplomaType',
                 }, applicationCheckResult: {
                     name: "applicationCheckResult",
                     type: "ApplicationCheckResult",
@@ -20287,6 +20353,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'finalRanking',
+                }, studentGraduationApplication: {
+                    name: "studentGraduationApplication",
+                    type: "StudentGraduationApplication",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'rank',
                 },
             }, uniqueConstraints: {
                 id: {

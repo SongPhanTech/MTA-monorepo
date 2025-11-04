@@ -328,7 +328,7 @@ export function useSuspenseCountStudentGraduationApplication<TArgs extends Prism
 }
 import type { ApplicationStatus } from '../zenstack/models';
 
-export function useCheckStudentGraduationApplication<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; studentId?: string; sessionId?: string; status?: ApplicationStatus }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckStudentGraduationApplication<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; code?: string; active?: boolean; description?: string; studentId?: string; sessionId?: string; status?: ApplicationStatus; graduation?: boolean; reason?: string; rankId?: string; trainingMajorId?: string; diplomaTypeId?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('StudentGraduationApplication', `${endpoint}/studentGraduationApplication/check`, args, options, fetch);
 }

@@ -46,6 +46,7 @@ const relationSchema = z.object({
     curriculum: z.array(z.unknown()).optional(),
     graduationDecision: z.array(z.unknown()).optional(),
     expertProfile: z.array(z.unknown()).optional(),
+    studentGraduationApplication: z.array(z.unknown()).optional(),
     surveyObjectTypes: z.array(z.unknown()).optional(),
 }
 );

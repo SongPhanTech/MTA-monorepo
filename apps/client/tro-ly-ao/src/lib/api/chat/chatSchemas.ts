@@ -13,12 +13,12 @@ export type BodyChungkingAndVectorizeDocumentChungkingAndVectorizeDocumentPost =
   };
 
 export type BodyFaqVectorizeFaqVectorizePost = {
-  id_document?: string;
+  topic_id?: string;
 };
 
 export type BodyHoiDapFaqHoiDapFaqPost = {
   prompt?: string;
-  type_data?: string;
+  topic_id?: string;
   conversation_id?: string;
 };
 
@@ -50,12 +50,28 @@ export type BodyOcrEndpointOcrPost = {
   file: Blob;
 };
 
+export type BodyRecommendByTopicIdRecommendByTopicIdPost = {
+  topic_id: string;
+};
+
+export type BodySyncDocumentMetadataSyncDocumentMetadataPost = {
+  id_document: string;
+  is_active: boolean;
+};
+
 export type BodyTimKiemTheoNguNghiaTimKiemTheoNguNghiaPost = {
   prompt?: string;
 };
 
 export type BodyTimKiemTheoTuKhoaTimKiemTheoTuKhoaPost = {
   prompt?: string;
+};
+
+export type BodyUploadFileUploadPost = {
+  /**
+   * @format binary
+   */
+  file: Blob;
 };
 
 export type BodyXoaBanGhiTrongDbFaqXoaBanGhiTrongDbFaqPost = {
