@@ -19,7 +19,7 @@ interface CustomTreeSelectProps {
 const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
     placeholder = 'Chọn học kỳ',
     style = { width: 200 },
-    dropdownStyle = { maxHeight: 400, overflow: 'auto' },
+    dropdownStyle = { maxHeight: 400, overflow: 'auto', width: 400 },
 }) => {
     const { id: semesterId, onSelect } = useSemesterStore()
 
@@ -42,7 +42,7 @@ const TreeSelectSemester: React.FC<CustomTreeSelectProps> = ({
                 children:
                     schoolYear.semesters.map((semester) => ({
                         value: semester.id,
-                        title: `${semester.name} - ${schoolYear?.name}`,
+                        title: `${semester.name}`,
                     })) || [],
             })) || []
         )
