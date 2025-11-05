@@ -1,7 +1,6 @@
 import { queryClient } from '@api/index'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
-import Select from '@components/commons/select'
 import useSpinner from '@hooks/spinner'
 import type { EvaluationCouncil } from '@workspace/db'
 import {
@@ -16,11 +15,10 @@ import { useDisclosure } from 'react-hook-disclosure-modal'
 export type PutEvaluationCouncilType = EvaluationCouncil
 const PutEvaluationCouncil = () => {
     const [form] = Form.useForm<PutEvaluationCouncilType>()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        evaluationPeriodId?: string
+        evaluationCouncilId?: string
+    }>({
         tag: 'PutEvaluationCouncil',
         onClose: form.resetFields,
     })
@@ -29,7 +27,7 @@ const PutEvaluationCouncil = () => {
     const { mutateAsync: createEvaluationCouncil } = useCreateEvaluationCouncil()
     const { mutateAsync: updateEvaluationCouncil } = useUpdateEvaluationCouncil()
     async function onOk(output?: PutEvaluationCouncilType) {
-        if (!output) return
+        if (!output || !input) return
         try {
             showSpinner()
             const data = {
@@ -38,11 +36,11 @@ const PutEvaluationCouncil = () => {
                 description: output.description,
                 periodId: output?.periodId,
             }
-            if (id) {
+            if (input.evaluationCouncilId) {
                 await updateEvaluationCouncil({
                     data,
                     where: {
-                        id,
+                        id: input.evaluationCouncilId,
                     },
                 })
                 message.success('Cập nhật thành công')
@@ -77,10 +75,10 @@ const PutEvaluationCouncil = () => {
 
     const { data: initialValue } = useFindUniqueEvaluationCouncil(
         {
-            where: { id },
+            where: { id: input?.evaluationCouncilId },
         },
         {
-            enabled: !!id,
+            enabled: !!input?.evaluationCouncilId,
         }
     )
 
@@ -100,7 +98,11 @@ const PutEvaluationCouncil = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa hội đồng đánh giá' : 'Thêm mới hội đồng đánh giá'}
+            title={
+                input?.evaluationCouncilId
+                    ? 'Chỉnh sửa hội đồng đánh giá'
+                    : 'Thêm mới hội đồng đánh giá'
+            }
             className="w-[600px]"
         >
             <Col span={24}>
@@ -112,17 +114,6 @@ const PutEvaluationCouncil = () => {
             <Col span={24}>
                 <FormItem form={form} name="name" label="Tên hội đồng đánh giá" required>
                     <Input placeholder="Nhập mã hội đồng đánh giá" />
-                </FormItem>
-            </Col>
-            <Col span={24}>
-                <FormItem form={form} name="periodId" label="Đợt đánh giá CTĐT" required>
-                    <Select
-                        placeholder="Chọn chủ đề khảo sát"
-                        options={periodData.map((item) => ({
-                            label: item.name,
-                            value: item.id,
-                        }))}
-                    />
                 </FormItem>
             </Col>
             <Col span={24}>
