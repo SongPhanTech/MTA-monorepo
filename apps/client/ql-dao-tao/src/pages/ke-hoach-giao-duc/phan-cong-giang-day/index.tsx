@@ -1618,49 +1618,53 @@ export default function PhanCongGiangDay({
                                 <p className="bg-green-200 h-4 w-4 rounded" />
                                 <span>Đã duyệt PCGD</span>
                             </p>
-                            <p className="flex gap-1 items-center">
-                                <Checkbox
-                                    disabled={khoaBoMon}
-                                    checked={countSubjectClassOfficial === countSubjectClass}
-                                    onChange={async (e) => {
-                                        try {
-                                            await sqlTransaction([
-                                                {
-                                                    model: 'SubjectClass',
-                                                    operation: 'updateMany',
-                                                    data: {
-                                                        where: {
-                                                            semesterId,
-                                                            approveLecturerAssignmentAt: {
-                                                                not: null,
-                                                            },
-                                                            trainingObjectTypeId,
-                                                            lecturerId: {
-                                                                not: null,
-                                                            },
-                                                            extraLecturerId: {
-                                                                not: null,
-                                                            },
-                                                            cancelled: false,
-                                                            active: true,
-                                                            deletedAt: null,
-                                                        },
+                            {!khoaBoMon && (
+                                <p className="flex gap-1 items-center">
+                                    <Checkbox
+                                        indeterminate={countSubjectClassOfficial > 0 && countSubjectClassOfficial < countSubjectClass}
+                                        checked={countSubjectClassOfficial === countSubjectClass}
+                                        onChange={async (e) => {
+                                            try {
+                                                await sqlTransaction([
+                                                    {
+                                                        model: 'SubjectClass',
+                                                        operation: 'updateMany',
                                                         data: {
-                                                            status: e.target.checked
-                                                                ? $Enums.SubjectClassStatus.OFFICIAL
-                                                                : $Enums.SubjectClassStatus.DRAFT,
+                                                            where: {
+                                                                semesterId,
+                                                                approveLecturerAssignmentAt: {
+                                                                    not: null,
+                                                                },
+                                                                trainingObjectTypeId,
+                                                                lecturerId: {
+                                                                    not: null,
+                                                                },
+                                                                extraLecturerId: {
+                                                                    not: null,
+                                                                },
+                                                                cancelled: false,
+                                                                active: true,
+                                                                deletedAt: null,
+                                                            },
+                                                            data: {
+                                                                status: e.target.checked
+                                                                    ? $Enums.SubjectClassStatus
+                                                                          .OFFICIAL
+                                                                    : $Enums.SubjectClassStatus
+                                                                          .DRAFT,
+                                                            },
                                                         },
                                                     },
-                                                },
-                                            ])
-                                            queryClient.invalidateQueries({
-                                                queryKey: ['zenstack', 'SubjectClass'],
-                                            })
-                                        } catch (error) {}
-                                    }}
-                                />
-                                <span>Đưa LMH vào giảng dạy</span>
-                            </p>
+                                                ])
+                                                queryClient.invalidateQueries({
+                                                    queryKey: ['zenstack', 'SubjectClass'],
+                                                })
+                                            } catch (error) {}
+                                        }}
+                                    />
+                                    <span>Đưa LMH vào giảng dạy</span>
+                                </p>
+                            )}
                         </Flex>
                         <FormItem form={form} name={'subjectClass'} hidden />
                         <TableCollapse
@@ -2073,7 +2077,11 @@ export default function PhanCongGiangDay({
                                                         value: e.id,
                                                         selectable: false,
                                                         children: e.rooms.map((room) => ({
-                                                            label: room.name,
+                                                            label: (
+                                                                <p className="text-primary">
+                                                                    {room.name}
+                                                                </p>
+                                                            ),
                                                             value: room.id,
                                                             selectable: true,
                                                         })),
