@@ -507,9 +507,9 @@ const NAVIGATION: NavigationType = {
                         description: 'Đợt xét tốt nghiệp',
                     },
                     {
-                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                        id: QL_DAO_TAO_PERMISSION.QL_DAO_TAO_XET_TOT_NGHIEP_QL_DOT_XET_LUAN_VAN,
                         label: 'Đợt xét luận văn',
-                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN,
+                        path: ROUTER_PATH.QL_DAO_TAO.XET_TOT_NGHIEP_QL_DOT_XET_LUAN_VAN,
                         description: 'Đợt xét luận văn',
                     },
                     {

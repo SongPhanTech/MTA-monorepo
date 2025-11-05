@@ -19,7 +19,9 @@ export default {
     "QL_TU_DANH_GIA_CTDT_HOI_DONG_DANH_GIA": "/ql-tu-danh-gia-ctdt/hoi-dong-danh-gia",
     "QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY_ID": "/ql-tu-danh-gia-ctdt/hoi-dong-thu-ky/[id]",
     "QL_TU_DANH_GIA_CTDT_HOI_DONG_THU_KY": "/ql-tu-danh-gia-ctdt/hoi-dong-thu-ky",
+    "QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI_ID": "/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi/[id]",
     "QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI": "/ql-tu-danh-gia-ctdt/phieu-danh-gia-tieu-chi",
+    "QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI_ID": "/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/[id]",
     "QL_TU_DANH_GIA_CTDT_PHIEU_PHAN_TICH_TIEU_CHI": "/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA_ID": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]",
     "QL_TU_DANH_GIA_CTDT_QL_DOT_DANH_GIA_ID_PHANCONG": "/ql-tu-danh-gia-ctdt/ql-dot-danh-gia/[id]/phancong",
@@ -128,9 +130,9 @@ export default {
     "TO_CHUC_THI_KY_THI": "/to-chuc-thi/ky-thi",
     "TO_CHUC_THI_LAP_DANH_SANH_THI": "/to-chuc-thi/lap-danh-sanh-thi",
     "XET_TOT_NGHIEP_PHU_LUC_VAN_BANG": "/xet-tot-nghiep/phu-luc-van-bang",
+    "XET_TOT_NGHIEP_QL_DOT_XET_LUAN_VAN": "/xet-tot-nghiep/ql-dot-xet-luan-van",
     "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP_ID": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep/[id]",
-    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep",
-    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_LUAN_VAN": "/xet-tot-nghiep/ql-dot-xet-luan-van"
+    "XET_TOT_NGHIEP_QL_DOT_XET_TOT_NGHIEP": "/xet-tot-nghiep/ql-dot-xet-tot-nghiep"
   },
   "QL_HO_SO": {
     "DANH_MUC_HO_SO_BAC_LUONG": "/danh-muc-ho-so/bac-luong",
