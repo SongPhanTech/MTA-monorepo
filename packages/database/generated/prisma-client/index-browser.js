@@ -1479,8 +1479,7 @@ exports.Prisma.StudentSubjectScoreScalarFieldEnum = {
   suspendedReason: 'suspendedReason',
   repeated: 'repeated',
   repeatedReason: 'repeatedReason',
-  isImproving: 'isImproving',
-  examId: 'examId'
+  isImproving: 'isImproving'
 };
 
 exports.Prisma.StudentSubjectScoreHistoryScalarFieldEnum = {
@@ -3371,20 +3370,8 @@ exports.Prisma.ExamScalarFieldEnum = {
   createdExamCode: 'createdExamCode',
   lockExamCode: 'lockExamCode',
   duration: 'duration',
+  session: 'session',
   subjectVersionId: 'subjectVersionId'
-};
-
-exports.Prisma.ExamRoomSlotScalarFieldEnum = {
-  id: 'id',
-  code: 'code',
-  active: 'active',
-  description: 'description',
-  deletedAt: 'deletedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  examId: 'examId',
-  roomId: 'roomId',
-  cap: 'cap'
 };
 
 exports.Prisma.ExamRoomScalarFieldEnum = {
@@ -3397,6 +3384,18 @@ exports.Prisma.ExamRoomScalarFieldEnum = {
   updatedAt: 'updatedAt',
   examId: 'examId',
   roomId: 'roomId',
+  capacity: 'capacity'
+};
+
+exports.Prisma.ExamListScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  active: 'active',
+  description: 'description',
+  deletedAt: 'deletedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  examRoomId: 'examRoomId',
   firstSupervisorId: 'firstSupervisorId',
   secondSupervisorId: 'secondSupervisorId',
   lockExamCode: 'lockExamCode',
@@ -3445,7 +3444,7 @@ exports.Prisma.ExamBankQuestionScalarFieldEnum = {
   order: 'order'
 };
 
-exports.Prisma.ExamSessionScalarFieldEnum = {
+exports.Prisma.ExamPaperScalarFieldEnum = {
   id: 'id',
   code: 'code',
   active: 'active',
@@ -3453,8 +3452,7 @@ exports.Prisma.ExamSessionScalarFieldEnum = {
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  examId: 'examId',
-  examRoomId: 'examRoomId',
+  examListId: 'examListId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examCode: 'examCode'
 };
@@ -5072,8 +5070,7 @@ exports.Prisma.StudentSubjectScoreOrderByRelevanceFieldEnum = {
   examPostponedReason: 'examPostponedReason',
   examBannedReason: 'examBannedReason',
   suspendedReason: 'suspendedReason',
-  repeatedReason: 'repeatedReason',
-  examId: 'examId'
+  repeatedReason: 'repeatedReason'
 };
 
 exports.Prisma.StudentSubjectScoreHistoryOrderByRelevanceFieldEnum = {
@@ -6177,7 +6174,7 @@ exports.Prisma.ExamOrderByRelevanceFieldEnum = {
   subjectVersionId: 'subjectVersionId'
 };
 
-exports.Prisma.ExamRoomSlotOrderByRelevanceFieldEnum = {
+exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
@@ -6185,12 +6182,11 @@ exports.Prisma.ExamRoomSlotOrderByRelevanceFieldEnum = {
   roomId: 'roomId'
 };
 
-exports.Prisma.ExamRoomOrderByRelevanceFieldEnum = {
+exports.Prisma.ExamListOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  examId: 'examId',
-  roomId: 'roomId',
+  examRoomId: 'examRoomId',
   firstSupervisorId: 'firstSupervisorId',
   secondSupervisorId: 'secondSupervisorId'
 };
@@ -6220,12 +6216,11 @@ exports.Prisma.ExamBankQuestionOrderByRelevanceFieldEnum = {
   questionId: 'questionId'
 };
 
-exports.Prisma.ExamSessionOrderByRelevanceFieldEnum = {
+exports.Prisma.ExamPaperOrderByRelevanceFieldEnum = {
   id: 'id',
   code: 'code',
   description: 'description',
-  examId: 'examId',
-  examRoomId: 'examRoomId',
+  examListId: 'examListId',
   studentSubjectScoreId: 'studentSubjectScoreId',
   examCode: 'examCode'
 };
@@ -7247,12 +7242,12 @@ exports.Prisma.ModelName = {
   FillInBlankSlot: 'FillInBlankSlot',
   OrderingItem: 'OrderingItem',
   Exam: 'Exam',
-  ExamRoomSlot: 'ExamRoomSlot',
   ExamRoom: 'ExamRoom',
+  ExamList: 'ExamList',
   TestStructureRule: 'TestStructureRule',
   ExamBank: 'ExamBank',
   ExamBankQuestion: 'ExamBankQuestion',
-  ExamSession: 'ExamSession',
+  ExamPaper: 'ExamPaper',
   Staff: 'Staff',
   StaffHistory: 'StaffHistory',
   Scholarship: 'Scholarship',

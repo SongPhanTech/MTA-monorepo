@@ -24,7 +24,7 @@ import type {
     TrainingTime,
 } from '@workspace/db/client'
 import {
-    useCountCurriculum,
+    useCountCurriculumVersion,
     useFindManyCurriculum,
     useFindManyDM_DonVi,
     useFindManyTrainingCourse,
@@ -221,7 +221,47 @@ export default function TrainingProgramCatalog() {
         skip: (currentPage - 1) * numberOfPages,
     })
 
-    const { data: count } = useCountCurriculum({ where: { ...where, deletedAt: null } })
+    const { data: count } = useCountCurriculumVersion({
+        where: {
+            ...(filters.name
+                ? {
+                      name: {
+                          contains: filters.name,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            ...(filters.code
+                ? {
+                      code: {
+                          contains: filters.code,
+                          mode: 'insensitive',
+                      },
+                  }
+                : {}),
+            trainingObjectTypeId,
+            ...(filters.trainingCourses
+                ? {
+                      fixedClasses: {
+                          some: {
+                              trainingCourseId: {
+                                  in: filters.trainingCourses,
+                              },
+                          },
+                      },
+                  }
+                : {}),
+            ...(filters.trainingTime
+                ? {
+                      trainingTimeId: {
+                          in: filters.trainingTime,
+                      },
+                  }
+                : {}),
+            deletedAt: null,
+            active: true,
+        },
+    })
     const { data: trainingCourseData = [] } = useFindManyTrainingCourse({
         orderBy: { name: 'asc' },
         where: {

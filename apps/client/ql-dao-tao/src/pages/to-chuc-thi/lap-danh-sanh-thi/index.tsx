@@ -12,11 +12,11 @@ interface TabItem {
 }
 
 export type keHoachThiStoreState = {
-    selectedSubjectClassId?: string
+    selectedExamId?: string
 }
 
 export const keHoachThiStore = new Store<keHoachThiStoreState>({
-    selectedSubjectClassId: undefined,
+    selectedExamId: undefined,
 })
 
 export default function LapDanhSachThiPage() {

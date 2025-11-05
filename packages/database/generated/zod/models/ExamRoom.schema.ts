@@ -13,9 +13,7 @@ const baseSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date().default(() => new Date()),
     updatedAt: z.coerce.date().default(() => new Date()),
-    lockExamCode: z.boolean().default(false),
-    start: z.number().nullish(),
-    end: z.number().nullish(),
+    capacity: z.number(),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -26,24 +24,18 @@ const baseSchemaWithoutDefaults = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    lockExamCode: z.boolean(),
-    start: z.number().nullish(),
-    end: z.number().nullish(),
+    capacity: z.number(),
 }
 ).strict();
 const relationSchema = z.object({
     exam: z.record(z.string(), z.unknown()),
-    room: z.record(z.string(), z.unknown()).optional(),
-    firstSupervisor: z.record(z.string(), z.unknown()).optional(),
-    secondSupervisor: z.record(z.string(), z.unknown()).optional(),
-    examSessions: z.array(z.unknown()).optional(),
+    room: z.record(z.string(), z.unknown()),
+    examList: z.array(z.unknown()).optional(),
 }
 );
 const fkSchema = z.object({
     examId: z.string(),
-    roomId: z.string().nullish(),
-    firstSupervisorId: z.string().nullish(),
-    secondSupervisorId: z.string().nullish(),
+    roomId: z.string(),
 }
 );
 
@@ -78,9 +70,7 @@ export const ExamRoomPrismaUpdateSchema = z.object({
     deletedAt: z.coerce.date().nullish(),
     createdAt: z.coerce.date(),
     updatedAt: z.coerce.date(),
-    lockExamCode: z.boolean(),
-    start: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
-    end: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    capacity: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
@@ -88,7 +78,7 @@ export const ExamRoomPrismaUpdateSchema = z.object({
  * `ExamRoom` schema for create operations excluding foreign keys and relations.
  */
 export const ExamRoomCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, lockExamCode: true
+    id: true, active: true, createdAt: true, updatedAt: true
 });
 
 

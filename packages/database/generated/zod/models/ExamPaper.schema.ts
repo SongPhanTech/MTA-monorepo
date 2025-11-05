@@ -28,42 +28,40 @@ const baseSchemaWithoutDefaults = z.object({
 }
 ).strict();
 const relationSchema = z.object({
-    exam: z.record(z.string(), z.unknown()),
-    examRoom: z.record(z.string(), z.unknown()),
+    examList: z.record(z.string(), z.unknown()).optional(),
     studentSubjectScore: z.record(z.string(), z.unknown()),
 }
 );
 const fkSchema = z.object({
-    examId: z.string(),
-    examRoomId: z.string(),
+    examListId: z.string().nullish(),
     studentSubjectScoreId: z.string(),
 }
 );
 
 /**
- * `ExamSession` schema excluding foreign keys and relations.
+ * `ExamPaper` schema excluding foreign keys and relations.
  */
-export const ExamSessionScalarSchema = baseSchema;
+export const ExamPaperScalarSchema = baseSchema;
 
 
 /**
- * `ExamSession` schema including all fields (scalar, foreign key, and relations) and validations.
+ * `ExamPaper` schema including all fields (scalar, foreign key, and relations) and validations.
  */
-export const ExamSessionSchema = ExamSessionScalarSchema.merge(fkSchema).merge(relationSchema.partial());
+export const ExamPaperSchema = ExamPaperScalarSchema.merge(fkSchema).merge(relationSchema.partial());
 
 
 /**
  * Schema used for validating Prisma create input. For internal use only.
  * @private
  */
-export const ExamSessionPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
+export const ExamPaperPrismaCreateSchema = baseSchemaWithoutDefaults.partial().passthrough();
 
 
 /**
  * Schema used for validating Prisma update input. For internal use only.
  * @private
  */
-export const ExamSessionPrismaUpdateSchema = z.object({
+export const ExamPaperPrismaUpdateSchema = z.object({
     id: z.string(),
     code: z.string().nullish(),
     active: z.boolean(),
@@ -76,27 +74,27 @@ export const ExamSessionPrismaUpdateSchema = z.object({
 
 
 /**
- * `ExamSession` schema for create operations excluding foreign keys and relations.
+ * `ExamPaper` schema for create operations excluding foreign keys and relations.
  */
-export const ExamSessionCreateScalarSchema = baseSchemaWithoutDefaults.partial({
+export const ExamPaperCreateScalarSchema = baseSchemaWithoutDefaults.partial({
     id: true, active: true, createdAt: true, updatedAt: true
 });
 
 
 /**
- * `ExamSession` schema for create operations including scalar fields, foreign key fields, and validations.
+ * `ExamPaper` schema for create operations including scalar fields, foreign key fields, and validations.
  */
-export const ExamSessionCreateSchema = ExamSessionCreateScalarSchema.merge(fkSchema);
+export const ExamPaperCreateSchema = ExamPaperCreateScalarSchema.merge(fkSchema);
 
 
 /**
- * `ExamSession` schema for update operations excluding foreign keys and relations.
+ * `ExamPaper` schema for update operations excluding foreign keys and relations.
  */
-export const ExamSessionUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
+export const ExamPaperUpdateScalarSchema = baseSchemaWithoutDefaults.partial();
 
 
 /**
- * `ExamSession` schema for update operations including scalar fields, foreign key fields, and validations.
+ * `ExamPaper` schema for update operations including scalar fields, foreign key fields, and validations.
  */
-export const ExamSessionUpdateSchema = ExamSessionUpdateScalarSchema.merge(fkSchema.partial());
+export const ExamPaperUpdateSchema = ExamPaperUpdateScalarSchema.merge(fkSchema.partial());
 

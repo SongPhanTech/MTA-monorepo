@@ -161,11 +161,8 @@ model StudentSubjectScore extends Base {
 
   isImproving                  Boolean                                    @default(false) // học cải thiện
 
-  /// kì thi
-  exam                         Exam?                                      @relation(fields: [examId], references: [id])
-  examId                       String?
   /// thí sinh trong kì thi
-  examSession                  ExamSession?
+  examPaper                    ExamPaper?
 
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")

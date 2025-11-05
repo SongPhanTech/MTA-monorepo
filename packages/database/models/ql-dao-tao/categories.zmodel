@@ -133,7 +133,6 @@ model Room extends Base {
   thesisProject  ThesisProject[]
   classSchedules ClassSchedule[]
   examRooms      ExamRoom[]
-  examRoomSlot   ExamRoomSlot[]
 
   @@schema("ql-dao-tao")
 }

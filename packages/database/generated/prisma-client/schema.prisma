@@ -2325,11 +2325,8 @@ model StudentSubjectScore {
   repeated                     Boolean                                    @default(false)
   repeatedReason               String?
   isImproving                  Boolean                                    @default(false)
-  /// kì thi
-  exam                         Exam?                                      @relation(fields: [examId], references: [id])
-  examId                       String?
   /// thí sinh trong kì thi
-  examSession                  ExamSession?
+  examPaper                    ExamPaper?
   graduationGpaScores          StudentGraduationApplication[]             @relation("gpaScore")
   graduationSupplementaryScore StudentGraduationApplication[]             @relation("supplementaryScore")
   certificates                 ArchivedCertificateOnStudentSubjectScore[]
@@ -3283,7 +3280,6 @@ model Room {
   thesisProject  ThesisProject[]
   classSchedules ClassSchedule[]
   examRooms      ExamRoom[]
-  examRoomSlot   ExamRoomSlot[]
 
   @@schema("ql-dao-tao")
 }
@@ -4022,8 +4018,8 @@ model Lecturer {
   evaluationSecretaryMember   EvaluationSecretaryMember[]
   survey                      Survey[]
   clusterSurvey               ClusterSurvey[]
-  examRoomsMain               ExamRoom[]                    @relation("FirstSupervisor")
-  examRoomsExtra              ExamRoom[]                    @relation("SecondSupervisor")
+  examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
+  examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
   criterionAssignments        CriterionAssignment[]
 
   @@schema("ql-dao-tao")
@@ -5116,77 +5112,73 @@ model OrderingItem {
 
 /// Kỳ thi
 model Exam {
-  id                  String                @id() @default(cuid())
-  code                String?               @unique()
-  active              Boolean               @default(true)
-  description         String?               @db.Text()
-  deletedAt           DateTime?
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @default(now()) @updatedAt()
-  status              ExamStatus            @default(DRAFT)
-  questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
-  questionBankId      String?
+  id                 String              @id() @default(cuid())
+  code               String?             @unique()
+  active             Boolean             @default(true)
+  description        String?             @db.Text()
+  deletedAt          DateTime?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @default(now()) @updatedAt()
+  status             ExamStatus          @default(DRAFT)
+  questionBank       QuestionBank?       @relation(fields: [questionBankId], references: [id])
+  questionBankId     String?
   /// khoá DS thi
-  lockExamSessions    Boolean               @default(false)
+  lockExamSessions   Boolean             @default(false)
   /// Đã đánh phách
-  createdExamCode     Boolean               @default(false)
-  lockExamCode        Boolean               @default(false)
+  createdExamCode    Boolean             @default(false)
+  lockExamCode       Boolean             @default(false)
   /// thời gian thi
-  duration            Int?
-  subjectVersionId    String
-  subjectVersion      SubjectVersion        @relation(fields: [subjectVersionId], references: [id])
+  duration           Int?
+  session            Int                 @default(1)
+  subjectVersionId   String
+  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
   /// Lớp môn học
-  subjectClass        SubjectClass[]
-  /// thí sinh
-  studentSubjectScore StudentSubjectScore[]
-  examRoomSlots       ExamRoomSlot[]
-  examBank            ExamBank[]
-  testStructureRules  TestStructureRule[]
-  examSessions        ExamSession[]
-  examRooms           ExamRoom[]
+  subjectClass       SubjectClass[]
+  examBank           ExamBank[]
+  testStructureRules TestStructureRule[]
+  examRooms          ExamRoom[]
 
   @@schema("khao-thi")
 }
 
-model ExamRoomSlot {
-  id          String    @id() @default(cuid())
-  code        String?   @unique()
-  active      Boolean   @default(true)
-  description String?   @db.Text()
+model ExamRoom {
+  id          String     @id() @default(cuid())
+  code        String?    @unique()
+  active      Boolean    @default(true)
+  description String?    @db.Text()
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt()
-  exam        Exam      @relation(fields: [examId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt()
+  exam        Exam       @relation(fields: [examId], references: [id])
   examId      String
-  room        Room      @relation(fields: [roomId], references: [id])
+  room        Room       @relation(fields: [roomId], references: [id])
   roomId      String
-  cap         Int
+  capacity    Int
+  examList    ExamList[]
 
   @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 
-/// Phòng thi cho kỳ thi
-model ExamRoom {
-  id                 String        @id() @default(cuid())
-  code               String?       @unique()
-  active             Boolean       @default(true)
-  description        String?       @db.Text()
+/// Danh sách thi trong phòng thi
+model ExamList {
+  id                 String      @id() @default(cuid())
+  code               String?     @unique()
+  active             Boolean     @default(true)
+  description        String?     @db.Text()
   deletedAt          DateTime?
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @default(now()) @updatedAt()
-  exam               Exam          @relation(fields: [examId], references: [id])
-  examId             String
-  room               Room?         @relation(fields: [roomId], references: [id])
-  roomId             String?
-  firstSupervisor    Lecturer?     @relation("FirstSupervisor", fields: [firstSupervisorId], references: [id])
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @default(now()) @updatedAt()
+  examRoom           ExamRoom?   @relation(fields: [examRoomId], references: [id])
+  examRoomId         String?
+  firstSupervisor    Lecturer?   @relation("FirstSupervisor", fields: [firstSupervisorId], references: [id])
   firstSupervisorId  String?
-  secondSupervisor   Lecturer?     @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
+  secondSupervisor   Lecturer?   @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
   secondSupervisorId String?
-  lockExamCode       Boolean       @default(false)
+  lockExamCode       Boolean     @default(false)
   start              Int?
   end                Int?
-  examSessions       ExamSession[]
+  examPapers         ExamPaper[]
 
   @@schema("khao-thi")
 }
@@ -5254,7 +5246,7 @@ model ExamBankQuestion {
 }
 
 /// Bài thi
-model ExamSession {
+model ExamPaper {
   id                    String              @id() @default(cuid())
   code                  String?             @unique()
   active                Boolean             @default(true)
@@ -5262,16 +5254,14 @@ model ExamSession {
   deletedAt             DateTime?
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @default(now()) @updatedAt()
-  exam                  Exam                @relation(fields: [examId], references: [id])
-  examId                String
-  examRoom              ExamRoom            @relation(fields: [examRoomId], references: [id])
-  examRoomId            String
+  examList              ExamList?           @relation(fields: [examListId], references: [id])
+  examListId            String?
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String              @unique()
   /// phách
   examCode              String?
 
-  @@unique([examCode, examRoomId])
+  @@unique([examCode, examListId])
   @@schema("khao-thi")
 }
 

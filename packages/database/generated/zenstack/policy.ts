@@ -3861,13 +3861,13 @@ const policy: PolicyDef = {
             },
 
         },
-        examRoomSlot: {
+        examRoom: {
             modelLevel: {
-                read: { guard: ExamRoomSlot_read, },
-                create: { guard: ExamRoomSlot_create, inputChecker: ExamRoomSlot_create_input, },
-                update: { guard: ExamRoomSlot_update, },
-                postUpdate: { guard: ExamRoomSlot_postUpdate, },
-                delete: { guard: ExamRoomSlot_delete, }
+                read: { guard: ExamRoom_read, },
+                create: { guard: ExamRoom_create, inputChecker: ExamRoom_create_input, },
+                update: { guard: ExamRoom_update, },
+                postUpdate: { guard: ExamRoom_postUpdate, },
+                delete: { guard: ExamRoom_delete, }
             },
             fieldLevel: {
                 read:
@@ -3881,13 +3881,13 @@ const policy: PolicyDef = {
             },
 
         },
-        examRoom: {
+        examList: {
             modelLevel: {
-                read: { guard: ExamRoom_read, },
-                create: { guard: ExamRoom_create, inputChecker: ExamRoom_create_input, },
-                update: { guard: ExamRoom_update, },
-                postUpdate: { guard: ExamRoom_postUpdate, },
-                delete: { guard: ExamRoom_delete, }
+                read: { guard: ExamList_read, },
+                create: { guard: ExamList_create, inputChecker: ExamList_create_input, },
+                update: { guard: ExamList_update, },
+                postUpdate: { guard: ExamList_postUpdate, },
+                delete: { guard: ExamList_delete, }
             },
             fieldLevel: {
                 read:
@@ -3961,13 +3961,13 @@ const policy: PolicyDef = {
             },
 
         },
-        examSession: {
+        examPaper: {
             modelLevel: {
-                read: { guard: ExamSession_read, },
-                create: { guard: ExamSession_create, inputChecker: ExamSession_create_input, },
-                update: { guard: ExamSession_update, },
-                postUpdate: { guard: ExamSession_postUpdate, },
-                delete: { guard: ExamSession_delete, }
+                read: { guard: ExamPaper_read, },
+                create: { guard: ExamPaper_create, inputChecker: ExamPaper_create_input, },
+                update: { guard: ExamPaper_update, },
+                postUpdate: { guard: ExamPaper_postUpdate, },
+                delete: { guard: ExamPaper_delete, }
             },
             fieldLevel: {
                 read:
@@ -5233,12 +5233,12 @@ const policy: PolicyDef = {
         fillInBlankSlot: { hasValidation: false },
         orderingItem: { hasValidation: false },
         exam: { hasValidation: false },
-        examRoomSlot: { hasValidation: false },
         examRoom: { hasValidation: false },
+        examList: { hasValidation: false },
         testStructureRule: { hasValidation: false },
         examBank: { hasValidation: false },
         examBankQuestion: { hasValidation: false },
-        examSession: { hasValidation: false },
+        examPaper: { hasValidation: false },
         staff: { hasValidation: false },
         staffHistory: { hasValidation: false },
         scholarship: { hasValidation: false },
@@ -17625,71 +17625,6 @@ function $check_Exam_delete(input: any, context: QueryContext): any {
     return false;
 }
 
-function ExamRoomSlot_read(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
-}
-
-function $check_ExamRoomSlot_read(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((input?.deletedAt != null)) { return false; }
-
-    if ((user != null)) { return true; }
-
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamRoomSlot_create(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamRoomSlot_create(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamRoomSlot_create_input(input: any, context: QueryContext): boolean {
-    const user: any = context.user ?? null;
-    return (user != null)
-}
-
-function ExamRoomSlot_update(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamRoomSlot_update(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
-function ExamRoomSlot_postUpdate(context: QueryContext, db: CrudContract): any {
-    return { AND: [] };
-}
-
-function $check_ExamRoomSlot_postUpdate(input: any, context: QueryContext): any {
-    return true;
-}
-
-function ExamRoomSlot_delete(context: QueryContext, db: CrudContract): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return { AND: [] }; } return { OR: [] };
-}
-
-function $check_ExamRoomSlot_delete(input: any, context: QueryContext): any {
-    const user: any = context.user ?? null;
-    if ((user != null)) { return true; }
-
-    return false;
-}
-
 function ExamRoom_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
@@ -17749,6 +17684,71 @@ function ExamRoom_delete(context: QueryContext, db: CrudContract): any {
 }
 
 function $check_ExamRoom_delete(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamList_read(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
+}
+
+function $check_ExamList_read(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((input?.deletedAt != null)) { return false; }
+
+    if ((user != null)) { return true; }
+
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamList_create(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamList_create(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamList_create_input(input: any, context: QueryContext): boolean {
+    const user: any = context.user ?? null;
+    return (user != null)
+}
+
+function ExamList_update(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamList_update(input: any, context: QueryContext): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return true; }
+
+    return false;
+}
+
+function ExamList_postUpdate(context: QueryContext, db: CrudContract): any {
+    return { AND: [] };
+}
+
+function $check_ExamList_postUpdate(input: any, context: QueryContext): any {
+    return true;
+}
+
+function ExamList_delete(context: QueryContext, db: CrudContract): any {
+    const user: any = context.user ?? null;
+    if ((user != null)) { return { AND: [] }; } return { OR: [] };
+}
+
+function $check_ExamList_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
@@ -17950,12 +17950,12 @@ function $check_ExamBankQuestion_delete(input: any, context: QueryContext): any 
     return false;
 }
 
-function ExamSession_read(context: QueryContext, db: CrudContract): any {
+function ExamPaper_read(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     return { AND: [{ NOT: { deletedAt: { not: { equals: null } } } }, { OR: [(user != null) ? { AND: [] } : { OR: [] }, (user != null) ? { AND: [] } : { OR: [] }] }] };
 }
 
-function $check_ExamSession_read(input: any, context: QueryContext): any {
+function $check_ExamPaper_read(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((input?.deletedAt != null)) { return false; }
 
@@ -17966,49 +17966,49 @@ function $check_ExamSession_read(input: any, context: QueryContext): any {
     return false;
 }
 
-function ExamSession_create(context: QueryContext, db: CrudContract): any {
+function ExamPaper_create(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ExamSession_create(input: any, context: QueryContext): any {
+function $check_ExamPaper_create(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ExamSession_create_input(input: any, context: QueryContext): boolean {
+function ExamPaper_create_input(input: any, context: QueryContext): boolean {
     const user: any = context.user ?? null;
     return (user != null)
 }
 
-function ExamSession_update(context: QueryContext, db: CrudContract): any {
+function ExamPaper_update(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ExamSession_update(input: any, context: QueryContext): any {
+function $check_ExamPaper_update(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 
     return false;
 }
 
-function ExamSession_postUpdate(context: QueryContext, db: CrudContract): any {
+function ExamPaper_postUpdate(context: QueryContext, db: CrudContract): any {
     return { AND: [] };
 }
 
-function $check_ExamSession_postUpdate(input: any, context: QueryContext): any {
+function $check_ExamPaper_postUpdate(input: any, context: QueryContext): any {
     return true;
 }
 
-function ExamSession_delete(context: QueryContext, db: CrudContract): any {
+function ExamPaper_delete(context: QueryContext, db: CrudContract): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return { AND: [] }; } return { OR: [] };
 }
 
-function $check_ExamSession_delete(input: any, context: QueryContext): any {
+function $check_ExamPaper_delete(input: any, context: QueryContext): any {
     const user: any = context.user ?? null;
     if ((user != null)) { return true; }
 

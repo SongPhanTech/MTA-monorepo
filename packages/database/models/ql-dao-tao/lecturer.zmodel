@@ -41,8 +41,8 @@ model Lecturer extends Base {
   evaluationSecretaryMember   EvaluationSecretaryMember[]
   survey                      Survey[]
   clusterSurvey               ClusterSurvey[]
-  examRoomsMain               ExamRoom[]                    @relation("FirstSupervisor")
-  examRoomsExtra              ExamRoom[]                    @relation("SecondSupervisor")
+  examRoomsMain               ExamList[]                    @relation("FirstSupervisor")
+  examRoomsExtra              ExamList[]                    @relation("SecondSupervisor")
   criterionAssignments        CriterionAssignment[]
 
   @@schema("ql-dao-tao")

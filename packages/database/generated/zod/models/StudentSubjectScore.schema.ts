@@ -87,8 +87,7 @@ const relationSchema = z.object({
     subjectClass: z.record(z.string(), z.unknown()).optional(),
     subjectVersion: z.record(z.string(), z.unknown()),
     student: z.record(z.string(), z.unknown()),
-    exam: z.record(z.string(), z.unknown()).optional(),
-    examSession: z.record(z.string(), z.unknown()).optional(),
+    examPaper: z.record(z.string(), z.unknown()).optional(),
     graduationGpaScores: z.array(z.unknown()).optional(),
     graduationSupplementaryScore: z.array(z.unknown()).optional(),
     certificates: z.array(z.unknown()).optional(),
@@ -101,7 +100,6 @@ const fkSchema = z.object({
     subjectClassId: z.string().nullish(),
     subjectVersionId: z.string(),
     studentId: z.string(),
-    examId: z.string().nullish(),
 }
 );
 

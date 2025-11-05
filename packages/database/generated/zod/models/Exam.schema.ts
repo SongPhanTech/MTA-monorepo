@@ -20,6 +20,7 @@ const baseSchema = z.object({
     createdExamCode: z.boolean().default(false),
     lockExamCode: z.boolean().default(false),
     duration: z.number().nullish(),
+    session: z.number().default(1),
 }
 ).strict();
 const baseSchemaWithoutDefaults = z.object({
@@ -35,17 +36,15 @@ const baseSchemaWithoutDefaults = z.object({
     createdExamCode: z.boolean(),
     lockExamCode: z.boolean(),
     duration: z.number().nullish(),
+    session: z.number(),
 }
 ).strict();
 const relationSchema = z.object({
     questionBank: z.record(z.string(), z.unknown()).optional(),
     subjectVersion: z.record(z.string(), z.unknown()),
     subjectClass: z.array(z.unknown()).optional(),
-    studentSubjectScore: z.array(z.unknown()).optional(),
-    examRoomSlots: z.array(z.unknown()).optional(),
     examBank: z.array(z.unknown()).optional(),
     testStructureRules: z.array(z.unknown()).optional(),
-    examSessions: z.array(z.unknown()).optional(),
     examRooms: z.array(z.unknown()).optional(),
 }
 );
@@ -90,7 +89,8 @@ export const ExamPrismaUpdateSchema = z.object({
     lockExamSessions: z.boolean(),
     createdExamCode: z.boolean(),
     lockExamCode: z.boolean(),
-    duration: z.union([z.number().nullish(), z.record(z.string(), z.unknown())])
+    duration: z.union([z.number().nullish(), z.record(z.string(), z.unknown())]),
+    session: z.union([z.number(), z.record(z.string(), z.unknown())])
 }).partial().passthrough();
 
 
@@ -98,7 +98,7 @@ export const ExamPrismaUpdateSchema = z.object({
  * `Exam` schema for create operations excluding foreign keys and relations.
  */
 export const ExamCreateScalarSchema = baseSchemaWithoutDefaults.partial({
-    id: true, active: true, createdAt: true, updatedAt: true, status: true, lockExamSessions: true, createdExamCode: true, lockExamCode: true
+    id: true, active: true, createdAt: true, updatedAt: true, status: true, lockExamSessions: true, createdExamCode: true, lockExamCode: true, session: true
 });
 
 

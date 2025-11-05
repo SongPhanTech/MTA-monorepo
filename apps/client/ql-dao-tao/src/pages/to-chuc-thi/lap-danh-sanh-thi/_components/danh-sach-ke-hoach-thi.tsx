@@ -249,12 +249,10 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         trainingObjectTypeId: trainingObjectTypeId,
                     },
                 })
-
                 if (res.status !== 200) {
                     message.error(res.data.message)
                     return
                 }
-
                 message.success('Tạo kế hoạch thi thành công')
                 refetchExams()
                 formButton.resetFields()
@@ -467,7 +465,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                                     return
                                 }
                                 keHoachThiStore.setState({
-                                    selectedSubjectClassId: record?.id,
+                                    selectedExamId: record?.id,
                                 })
                                 setActiveKey?.('2')
                             },
@@ -549,10 +547,8 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             },
                             {
                                 title: 'Trạng thái NĐ',
-                                dataIndex: 'scoreDeadLineStart',
                                 width: 80,
                                 align: 'center',
-                                type: 'date',
                                 render: (__, record) => {
                                     return record.subjectClass?.[0]?.enteredExamScore ? (
                                         'Đã nhập điểm thi'

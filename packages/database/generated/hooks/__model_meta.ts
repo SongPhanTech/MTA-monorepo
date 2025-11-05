@@ -7375,23 +7375,9 @@ const metadata: ModelMeta = {
                     name: "isImproving",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": false }] }],
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
-                    isDataModel: true,
-                    isOptional: true,
-                    backLink: 'studentSubjectScore',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examId" },
-                }, examId: {
-                    name: "examId",
-                    type: "String",
-                    isOptional: true,
-                    isForeignKey: true,
-                    relationField: 'exam',
-                }, examSession: {
-                    name: "examSession",
-                    type: "ExamSession",
+                }, examPaper: {
+                    name: "examPaper",
+                    type: "ExamPaper",
                     isDataModel: true,
                     isOptional: true,
                     backLink: 'studentSubjectScore',
@@ -11306,12 +11292,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'room',
-                }, examRoomSlot: {
-                    name: "examRoomSlot",
-                    type: "ExamRoomSlot",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'room',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -14342,13 +14322,13 @@ const metadata: ModelMeta = {
                     isRelationOwner: true,
                 }, examRoomsMain: {
                     name: "examRoomsMain",
-                    type: "ExamRoom",
+                    type: "ExamList",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'firstSupervisor',
                 }, examRoomsExtra: {
                     name: "examRoomsExtra",
-                    type: "ExamRoom",
+                    type: "ExamList",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'secondSupervisor',
@@ -18754,6 +18734,10 @@ const metadata: ModelMeta = {
                     name: "duration",
                     type: "Int",
                     isOptional: true,
+                }, session: {
+                    name: "session",
+                    type: "Int",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": 1 }] }],
                 }, subjectVersionId: {
                     name: "subjectVersionId",
                     type: "String",
@@ -18772,18 +18756,6 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'exam',
-                }, studentSubjectScore: {
-                    name: "studentSubjectScore",
-                    type: "StudentSubjectScore",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'exam',
-                }, examRoomSlots: {
-                    name: "examRoomSlots",
-                    type: "ExamRoomSlot",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'exam',
                 }, examBank: {
                     name: "examBank",
                     type: "ExamBank",
@@ -18793,12 +18765,6 @@ const metadata: ModelMeta = {
                 }, testStructureRules: {
                     name: "testStructureRules",
                     type: "TestStructureRule",
-                    isDataModel: true,
-                    isArray: true,
-                    backLink: 'exam',
-                }, examSessions: {
-                    name: "examSessions",
-                    type: "ExamSession",
                     isDataModel: true,
                     isArray: true,
                     backLink: 'exam',
@@ -18816,78 +18782,6 @@ const metadata: ModelMeta = {
                 }, code: {
                     name: "code",
                     fields: ["code"]
-                },
-            },
-        },
-        examRoomSlot: {
-            name: 'ExamRoomSlot', fields: {
-                id: {
-                    name: "id",
-                    type: "String",
-                    isId: true,
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, code: {
-                    name: "code",
-                    type: "String",
-                    isOptional: true,
-                }, active: {
-                    name: "active",
-                    type: "Boolean",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
-                }, description: {
-                    name: "description",
-                    type: "String",
-                    isOptional: true,
-                }, deletedAt: {
-                    name: "deletedAt",
-                    type: "DateTime",
-                    isOptional: true,
-                }, createdAt: {
-                    name: "createdAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
-                }, updatedAt: {
-                    name: "updatedAt",
-                    type: "DateTime",
-                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
-                    isDataModel: true,
-                    backLink: 'examRoomSlots',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examId" },
-                }, examId: {
-                    name: "examId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'exam',
-                }, room: {
-                    name: "room",
-                    type: "Room",
-                    isDataModel: true,
-                    backLink: 'examRoomSlot',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "roomId" },
-                }, roomId: {
-                    name: "roomId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'room',
-                }, cap: {
-                    name: "cap",
-                    type: "Int",
-                },
-            }, uniqueConstraints: {
-                id: {
-                    name: "id",
-                    fields: ["id"]
-                }, code: {
-                    name: "code",
-                    fields: ["code"]
-                }, examId_roomId: {
-                    name: "examId_roomId",
-                    fields: ["examId", "roomId"]
                 },
             },
         },
@@ -18938,16 +18832,82 @@ const metadata: ModelMeta = {
                     name: "room",
                     type: "Room",
                     isDataModel: true,
-                    isOptional: true,
                     backLink: 'examRooms',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "roomId" },
                 }, roomId: {
                     name: "roomId",
                     type: "String",
-                    isOptional: true,
                     isForeignKey: true,
                     relationField: 'room',
+                }, capacity: {
+                    name: "capacity",
+                    type: "Int",
+                }, examList: {
+                    name: "examList",
+                    type: "ExamList",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'examRoom',
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, code: {
+                    name: "code",
+                    fields: ["code"]
+                }, examId_roomId: {
+                    name: "examId_roomId",
+                    fields: ["examId", "roomId"]
+                },
+            },
+        },
+        examList: {
+            name: 'ExamList', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, code: {
+                    name: "code",
+                    type: "String",
+                    isOptional: true,
+                }, active: {
+                    name: "active",
+                    type: "Boolean",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, description: {
+                    name: "description",
+                    type: "String",
+                    isOptional: true,
+                }, deletedAt: {
+                    name: "deletedAt",
+                    type: "DateTime",
+                    isOptional: true,
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, updatedAt: {
+                    name: "updatedAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
+                }, examRoom: {
+                    name: "examRoom",
+                    type: "ExamRoom",
+                    isDataModel: true,
+                    isOptional: true,
+                    backLink: 'examList',
+                    isRelationOwner: true,
+                    foreignKeyMapping: { "id": "examRoomId" },
+                }, examRoomId: {
+                    name: "examRoomId",
+                    type: "String",
+                    isOptional: true,
+                    isForeignKey: true,
+                    relationField: 'examRoom',
                 }, firstSupervisor: {
                     name: "firstSupervisor",
                     type: "Lecturer",
@@ -18988,12 +18948,12 @@ const metadata: ModelMeta = {
                     name: "end",
                     type: "Int",
                     isOptional: true,
-                }, examSessions: {
-                    name: "examSessions",
-                    type: "ExamSession",
+                }, examPapers: {
+                    name: "examPapers",
+                    type: "ExamPaper",
                     isDataModel: true,
                     isArray: true,
-                    backLink: 'examRoom',
+                    backLink: 'examList',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -19245,8 +19205,8 @@ const metadata: ModelMeta = {
                 },
             },
         },
-        examSession: {
-            name: 'ExamSession', fields: {
+        examPaper: {
+            name: 'ExamPaper', fields: {
                 id: {
                     name: "id",
                     type: "String",
@@ -19276,35 +19236,25 @@ const metadata: ModelMeta = {
                     name: "updatedAt",
                     type: "DateTime",
                     attributes: [{ "name": "@updatedAt", "args": [] }, { "name": "@default", "args": [{ "name": "value" }] }],
-                }, exam: {
-                    name: "exam",
-                    type: "Exam",
+                }, examList: {
+                    name: "examList",
+                    type: "ExamList",
                     isDataModel: true,
-                    backLink: 'examSessions',
+                    isOptional: true,
+                    backLink: 'examPapers',
                     isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examId" },
-                }, examId: {
-                    name: "examId",
+                    foreignKeyMapping: { "id": "examListId" },
+                }, examListId: {
+                    name: "examListId",
                     type: "String",
+                    isOptional: true,
                     isForeignKey: true,
-                    relationField: 'exam',
-                }, examRoom: {
-                    name: "examRoom",
-                    type: "ExamRoom",
-                    isDataModel: true,
-                    backLink: 'examSessions',
-                    isRelationOwner: true,
-                    foreignKeyMapping: { "id": "examRoomId" },
-                }, examRoomId: {
-                    name: "examRoomId",
-                    type: "String",
-                    isForeignKey: true,
-                    relationField: 'examRoom',
+                    relationField: 'examList',
                 }, studentSubjectScore: {
                     name: "studentSubjectScore",
                     type: "StudentSubjectScore",
                     isDataModel: true,
-                    backLink: 'examSession',
+                    backLink: 'examPaper',
                     isRelationOwner: true,
                     foreignKeyMapping: { "id": "studentSubjectScoreId" },
                 }, studentSubjectScoreId: {
@@ -19327,9 +19277,9 @@ const metadata: ModelMeta = {
                 }, studentSubjectScoreId: {
                     name: "studentSubjectScoreId",
                     fields: ["studentSubjectScoreId"]
-                }, examCode_examRoomId: {
-                    name: "examCode_examRoomId",
-                    fields: ["examCode", "examRoomId"]
+                }, examCode_examListId: {
+                    name: "examCode_examListId",
+                    fields: ["examCode", "examListId"]
                 },
             },
         },

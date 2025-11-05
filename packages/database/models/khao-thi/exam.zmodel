@@ -190,22 +190,25 @@ model OrderingItem extends Base {
 
 /// Kỳ thi
 model Exam extends Base {
-  status              ExamStatus            @default(DRAFT)
-  questionBank        QuestionBank?         @relation(fields: [questionBankId], references: [id])
-  questionBankId      String?
+  status             ExamStatus          @default(DRAFT)
+  questionBank       QuestionBank?       @relation(fields: [questionBankId], references: [id])
+  questionBankId     String?
 
   /// khoá DS thi
   // giao diện đánh phách, nhập điểm theo phách chỉ query lockExamSessions=true
-  lockExamSessions    Boolean               @default(false)
+  lockExamSessions   Boolean             @default(false)
 
   /// Đã đánh phách
-  createdExamCode     Boolean               @default(false)
+  createdExamCode    Boolean             @default(false)
 
   // khoá phách
-  lockExamCode        Boolean               @default(false)
+  lockExamCode       Boolean             @default(false)
 
   /// thời gian thi
-  duration            Int?
+  duration           Int?
+
+  // Số ca thi
+  session            Int                 @default(1)
 
   // passScore          Float               @default(5) // Điểm đạt
   // maxScore           Float               @default(10) // Điểm tối đa
@@ -213,56 +216,53 @@ model Exam extends Base {
   // shuffleAnswers     Boolean             @default(true) // Xáo trộn đáp án
   // showResult         Boolean             @default(false) // Hiển thị kết quả ngay
 
-  subjectVersionId     String               // Môn thi
-  subjectVersion       SubjectVersion       @relation(fields: [subjectVersionId], references: [id])
+  subjectVersionId   String               // Môn thi
+  subjectVersion     SubjectVersion      @relation(fields: [subjectVersionId], references: [id])
 
   /// Lớp môn học
-  subjectClass        SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
-  /// thí sinh
-  studentSubjectScore StudentSubjectScore[]
+  subjectClass       SubjectClass[] // subjectClassStudent.subjectClassStudent (!examBanned) => thí sinh
 
-  examRoomSlots       ExamRoomSlot[]
-  examBank            ExamBank[]
-  testStructureRules  TestStructureRule[]
-  examSessions        ExamSession[]
-  examRooms           ExamRoom[]
+  examBank           ExamBank[]
+  testStructureRules TestStructureRule[]
+  examRooms          ExamRoom[]
 
   @@schema("khao-thi")
 }
 
-model ExamRoomSlot extends Base {
-  exam   Exam   @relation(fields: [examId], references: [id])
-  examId String
+// Phòng thi cho kỳ thi
+model ExamRoom extends Base {
+  exam     Exam       @relation(fields: [examId], references: [id])
+  examId   String
 
-  room   Room   @relation(fields: [roomId], references: [id])
-  roomId String
+  room     Room       @relation(fields: [roomId], references: [id])
+  roomId   String
 
-  cap    Int
+  capacity Int
+
+  examList ExamList[]
 
   @@unique([examId, roomId])
   @@schema("khao-thi")
 }
 
-/// Phòng thi cho kỳ thi
-model ExamRoom extends Base {
-  exam               Exam          @relation(fields: [examId], references: [id])
-  examId             String
-  room               Room?         @relation(fields: [roomId], references: [id])
-  roomId             String?
+/// Danh sách thi trong phòng thi
+model ExamList extends Base {
+  examRoom           ExamRoom?   @relation(fields: [examRoomId], references: [id])
+  examRoomId         String?
 
-  firstSupervisor    Lecturer?     @relation("FirstSupervisor", fields: [firstSupervisorId], references: [id])
+  firstSupervisor    Lecturer?   @relation("FirstSupervisor", fields: [firstSupervisorId], references: [id])
   firstSupervisorId  String?
 
-  secondSupervisor   Lecturer?     @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
+  secondSupervisor   Lecturer?   @relation("SecondSupervisor", fields: [secondSupervisorId], references: [id])
   secondSupervisorId String?
 
-  lockExamCode       Boolean       @default(false)
+  lockExamCode       Boolean     @default(false)
 
   start              Int?
   end                Int?
 
-  examSessions       ExamSession[]
-
+  // Bài thi trong phòng này
+  examPapers         ExamPaper[]
   // @@unique([examId, roomId])
   @@schema("khao-thi")
 }
@@ -296,7 +296,6 @@ model ExamBank extends Base {
 
   examCode  String
 
-  // examSession ExamSession[]
   questions ExamBankQuestion[] // Danh sách câu hỏi trong đề thi
 
   @@unique([examId, examCode])
@@ -317,12 +316,9 @@ model ExamBankQuestion extends Base {
 }
 
 /// Bài thi
-model ExamSession extends Base {
-  exam                  Exam                @relation(fields: [examId], references: [id])
-  examId                String
-
-  examRoom              ExamRoom            @relation(fields: [examRoomId], references: [id])
-  examRoomId            String
+model ExamPaper extends Base {
+  examList              ExamList?           @relation(fields: [examListId], references: [id])
+  examListId            String?
 
   studentSubjectScore   StudentSubjectScore @relation(fields: [studentSubjectScoreId], references: [id])
   studentSubjectScoreId String              @unique
@@ -337,7 +333,7 @@ model ExamSession extends Base {
 
   // answers               Answer[]              // Tất cả câu trả lời trong phiên này
 
-  @@unique([examCode, examRoomId])
+  @@unique([examCode, examListId])
 
   @@schema("khao-thi")
 }

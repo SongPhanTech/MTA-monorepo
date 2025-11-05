@@ -3,7 +3,7 @@ import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import { useStore } from '@tanstack/react-store'
 import type { Prisma } from '@workspace/db/client'
-import { useFindManyStudentSubjectScore } from '@workspace/db/hooks'
+import { useFindManyExamSession, useFindManyStudentSubjectScore } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { Button, Checkbox, Col, Flex, Form, Input, message, Row } from 'antd'
 import { useEffect, useMemo } from 'react'
@@ -39,27 +39,48 @@ interface StudentSubjectScoreFormType {
 export default function DanhSachSinhVien() {
     const [form] = Form.useForm<StudentSubjectScoreFormType>()
 
-    const { selectedSubjectClassId } = useStore(keHoachThiStore)
+    const { selectedExamId } = useStore(keHoachThiStore)
 
-    const { data = [], isLoading } = useFindManyStudentSubjectScore(
+    const { data = [], isLoading } = useFindManyExamSession(
         {
             where: {
-                subjectClassId: selectedSubjectClassId,
+                examId: selectedExamId,
             },
             include: {
-                student: {
+                studentSubjectScore: {
                     include: {
-                        userProfile: {
-                            select: {
-                                fullname: true,
-                                code: true,
-                                dateOfBirth: true,
+                        student: {
+                            include: {
+                                userProfile: {
+                                    select: {
+                                        fullname: true,
+                                        code: true,
+                                        dateOfBirth: true,
+                                    },
+                                },
+                                fixedClass: {
+                                    select: {
+                                        name: true,
+                                        trainingCourse: {
+                                            select: {
+                                                name: true,
+                                            },
+                                        },
+                                    },
+                                },
                             },
                         },
-                        fixedClass: {
+                        subjectClass: {
                             select: {
-                                name: true,
-                                trainingCourse: {
+                                code: true,
+                                room: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                        capacity: true,
+                                    },
+                                },
+                                subject: {
                                     select: {
                                         name: true,
                                     },
@@ -68,26 +89,10 @@ export default function DanhSachSinhVien() {
                         },
                     },
                 },
-                subjectClass: {
-                    select: {
-                        code: true,
-                        room: {
-                            select: {
-                                id: true,
-                                name: true,
-                                capacity: true,
-                            },
-                        },
-                        subject: {
-                            select: {
-                                name: true,
-                            },
-                        },
-                    },
-                },
+                examRoom:true
             },
         },
-        { enabled: !!selectedSubjectClassId }
+        { enabled: !!selectedExamId }
     )
 
     const { showSpinner, hideSpinner } = useSpinner()
@@ -97,14 +102,14 @@ export default function DanhSachSinhVien() {
     const groupedData = useMemo(() => {
         const grouped = data.reduce(
             (acc, item) => {
-                const roomId = item.subjectClass?.room?.id || ''
-                const roomName = item.subjectClass?.room?.name || ''
+                const roomId = item?.studentSubjectScore?.subjectClass?.room?.id || ''
+                const roomName = item?.studentSubjectScore?.subjectClass?.room?.name || ''
 
                 if (!acc[roomId]) {
                     acc[roomId] = {
                         id: roomId,
                         roomName: roomName,
-                        capacity: item.subjectClass?.room?.capacity,
+                        capacity: item?.examRoom?.capacity || 0,
                         students: [],
                     }
                 }
@@ -176,7 +181,7 @@ export default function DanhSachSinhVien() {
     }
 
     useEffect(() => {
-        if (selectedSubjectClassId && data.length > 0) {
+        if (selectedExamId && data.length > 0) {
             form.setFieldsValue({
                 list: data.reduce(
                     (acc, cur) => {
@@ -193,29 +198,12 @@ export default function DanhSachSinhVien() {
                 ),
             })
         }
-    }, [selectedSubjectClassId, data, form])
+    }, [selectedExamId, data, form])
 
     return (
         <Row gutter={16}>
             <Col span={24}>
                 <Row gutter={16} align="middle">
-                    <Col span={12}>
-                        <Flex align="start" gap={16}>
-                            <div className="bg-blue-50 p-1 rounded-md border border-blue-300">
-                                <span className="text-blue-700 font-semibold mr-2">Mã lớp:</span>
-                                <span className="text-base font-bold text-blue-600">
-                                    {data[0]?.subjectClass?.code || ''}
-                                </span>
-                            </div>
-                            <div className="bg-green-50 p-1 rounded-md border border-green-300">
-                                <span className="text-green-700 font-semibold mr-2">Tên lớp:</span>
-                                <span className="text-base font-bold text-green-600">
-                                    {data[0]?.subjectClass?.subject?.name || ''}
-                                </span>
-                            </div>
-                        </Flex>
-                    </Col>
-
                     <Col span={12}>
                         <Flex justify="end" align="center" gap={12}>
                             <Checkbox>Khóa nhập ĐQT</Checkbox>
