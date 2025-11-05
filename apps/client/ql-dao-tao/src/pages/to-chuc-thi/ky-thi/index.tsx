@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
