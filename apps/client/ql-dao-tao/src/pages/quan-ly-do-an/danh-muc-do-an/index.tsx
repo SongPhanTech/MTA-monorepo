@@ -243,22 +243,7 @@ export default function ThesisProject() {
                         : {}),
                 },
                 orderBy: [
-                    ...emptyObjectIf(
-                        [
-                            {
-                                currentStudents: filters.currentStudents,
-                            },
-                        ],
-                        !!filters.currentStudents
-                    ),
-                    ...emptyObjectIf(
-                        [
-                            {
-                                maxStudents: filters.maxStudents,
-                            },
-                        ],
-                        !!filters.maxStudents
-                    ),
+                    ...emptyObjectIf([{ maxStudents: filters.maxStudents }], !!filters.maxStudents),
                     { title: 'asc' },
                 ],
             },

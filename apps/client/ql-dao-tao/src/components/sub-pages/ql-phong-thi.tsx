@@ -4,7 +4,7 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { cn, formatDate } from '@lib/utils'
 import { useSession } from '@workspace/auth/react'
-import { useCountExamRoom, useFindManyExamRoom } from '@workspace/db/hooks'
+import { useCountExamRoom, useFindManyExamList } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { Col, Row } from 'antd'
@@ -41,26 +41,34 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
         }
     }, [filters, trainingObjectTypeId, semesterId])
 
-    const { data = [], refetch } = useFindManyExamRoom({
+    const { data = [], refetch } = useFindManyExamList({
         where,
         include: {
-            room: {
+            examPapers: {
                 include: {
-                    building: {
-                        include: {
-                            trainingLocation: true,
-                        },
-                    },
+                    studentSubjectScore: true,
                 },
             },
-            exam: {
+            examRoom: {
                 include: {
-                    subjectClass: {
+                    exam: {
                         include: {
-                            subject: true,
+                            subjectClass: {
+                                include: {
+                                    subject: true,
+                                },
+                            },
                         },
                     },
-                    studentSubjectScore: true,
+                    room: {
+                        include: {
+                            building: {
+                                include: {
+                                    trainingLocation: true,
+                                },
+                            },
+                        },
+                    },
                 },
             },
             _count: true,
@@ -71,6 +79,8 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
         take: numberOfPages,
         skip: (currentPage - 1) * numberOfPages,
     })
+
+    data[0].examRoom?.room.building?.trainingLocation?.name
 
     const { data: count } = useCountExamRoom({
         where: {
@@ -114,7 +124,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 width: 150,
                                 type: 'input',
                                 align: 'center',
-                                render: (_, record) => record?.room?.name || '',
+                                render: (_, record) => record?.examRoom.room.name || '',
                             },
                             {
                                 title: 'Địa chỉ',
@@ -123,7 +133,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) =>
-                                    `${record?.room?.building?.name} ${record?.room?.building?.trainingLocation?.name}`,
+                                    `${record?.examRoom?.room.building?.name} ${record?.examRoom?.room.building?.trainingLocation?.name}`,
                             },
                             {
                                 title: 'Môn học',
@@ -132,14 +142,16 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 type: 'input',
                                 align: 'center',
                                 render: (_, record) => {
-                                    return record?.exam?.subjectClass?.length ? (
+                                    return record?.examRoom?.exam?.subjectClass?.length ? (
                                         <TextTruncate
-                                            arr={record?.exam?.subjectClass.map((i: any) => {
-                                                return {
-                                                    key: i?.id,
-                                                    label: `${i?.subject?.name}`,
+                                            arr={record?.examRoom?.exam?.subjectClass.map(
+                                                (i: any) => {
+                                                    return {
+                                                        key: i?.id,
+                                                        label: `${i?.subject?.name}`,
+                                                    }
                                                 }
-                                            })}
+                                            )}
                                         />
                                     ) : (
                                         ''
@@ -160,7 +172,7 @@ export default function PhongThi({ selectedRowKeys, setSelectedRowKeys }: any) {
                                 width: 150,
                                 align: 'center',
                                 render: (_, record) =>
-                                    `${formatDate(record?.exam?.subjectClass[0]?.examDate) || ''}`,
+                                    `${formatDate(record?.examRoom?.exam?.subjectClass[0]?.examDate) || ''}`,
                             },
                             {
                                 title: 'Số thí sinh',

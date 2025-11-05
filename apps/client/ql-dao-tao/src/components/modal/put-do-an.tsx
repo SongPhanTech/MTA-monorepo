@@ -127,8 +127,8 @@ const PutThesisProject = () => {
                     : undefined,
                 projectEnd: thesisProject.projectEnd ? dayjs(thesisProject.projectEnd) : undefined,
             })
-            setSupervisorId(thesisProject.supervisorId)
-            setCoSupervisorId(thesisProject.coSupervisorId || '')
+            setSupervisorId(thesisProject.supervisorId || undefined)
+            setCoSupervisorId(thesisProject.coSupervisorId || undefined)
         }
     }, [thesisProject, form])
 
@@ -151,7 +151,6 @@ const PutThesisProject = () => {
             coSupervisorId: output.coSupervisorId,
             organizationId: output.organizationId,
             maxStudents: output.maxStudents,
-            currentStudents: output.currentStudents,
             registrationStart: output.registrationStart,
             registrationEnd: output.registrationEnd,
             projectStart: output.projectStart,

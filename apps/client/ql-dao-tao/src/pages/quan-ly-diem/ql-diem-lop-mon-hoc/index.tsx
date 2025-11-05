@@ -1,16 +1,16 @@
-import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 import FormItem from '@components/commons/form-item'
 import NhapDiem from '@components/sub-pages/nhap-diem'
-import NhapdiemPhach from '@components/sub-pages/nhap-diem-phach'
+import NhapDiemPhach from '@components/sub-pages/nhap-diem-phach'
 import PhongThi from '@components/sub-pages/ql-phong-thi'
 import SinhPhach from '@components/sub-pages/sinh-phach'
 import DefaultLayout from '@layouts/default-layout'
 import { formatDate } from '@lib/utils'
 import { Store, useStore } from '@tanstack/react-store'
 import { useFindUniqueSubjectClass, useUpdateSubjectClass } from '@workspace/db/hooks'
-import { Checkbox, Col, Form, Input, Row, Tabs, TabsProps } from 'antd'
+import { Checkbox, Col, Form, Input, Row, Tabs, type TabsProps } from 'antd'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import DanhSachLopMonHoc from '@/components/sub-pages/danh-sach-lop-mon-hoc'
 
 export type DiemLopMonHocProps = {
     role?: 'GV' | 'P2/P7' | 'P13'
@@ -146,13 +146,13 @@ export default function QuanLyDiemLopMonHoc({
                 {
                     label: 'Đánh phách',
                     key: '2',
-                    children: <SinhPhach examRoomId={''} />,
+                    children: <SinhPhach examListId={''} />,
                     disabled: !data,
                 },
                 {
                     label: 'Nhập điểm theo phách',
                     key: '3',
-                    children: <NhapdiemPhach examRoomId={''} />,
+                    children: <NhapDiemPhach examListId={''} />,
                     disabled: !data,
                 },
             ]

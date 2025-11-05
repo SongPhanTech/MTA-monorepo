@@ -3,9 +3,9 @@ import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import type { Prisma } from '@workspace/db/client'
-import { useFindManyExamRoom, useFindManyLecturer, useUpdateExamRoom } from '@workspace/db/hooks'
+import { useFindManyExamList, useFindManyLecturer, useUpdateExamList } from '@workspace/db/hooks'
 import { PERIOD } from '@workspace/ui'
-import { Button, Col, Flex, Form, Popconfirm, Row, message } from 'antd'
+import { Button, Col, Flex, Form, message, Popconfirm, Row } from 'antd'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
@@ -25,21 +25,35 @@ export default function DanhSachThiPage() {
 
     const [form] = Form.useForm()
 
-    const { data: examRoomData = [], refetch } = useFindManyExamRoom({
+    const { data: examListData = [], refetch } = useFindManyExamList({
         include: {
-            exam: {
+            examPapers: {
                 include: {
-                    subjectClass: {
-                        include: {
-                            subject: true,
-                        },
-                    },
                     studentSubjectScore: true,
                 },
             },
-            room: true,
+            examRoom: {
+                include: {
+                    room: true,
+                    exam: {
+                        include: {
+                            subjectClass: {
+                                include: {
+                                    subject: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
         },
-        orderBy: [{ examId: 'asc' }, { start: 'asc' }, { roomId: 'asc' }],
+        orderBy: [
+            {
+                examRoom: {
+                    exam: { createdAt: 'desc' },
+                },
+            },
+        ],
     })
 
     const { data: lecturerData = [] } = useFindManyLecturer({
@@ -48,13 +62,13 @@ export default function DanhSachThiPage() {
         },
     })
 
-    const { mutateAsync: updateExamRoom } = useUpdateExamRoom()
+    const { mutateAsync: updateExamList } = useUpdateExamList()
 
     useEffect(() => {
-        if (examRoomData.length > 0) {
+        if (examListData.length > 0) {
             const formValues: Record<string, any> = {}
 
-            for (const examRoom of examRoomData) {
+            for (const examRoom of examListData) {
                 formValues[examRoom.id] = {
                     start: examRoom.start,
                     end: examRoom.end,
@@ -65,7 +79,7 @@ export default function DanhSachThiPage() {
 
             form.setFieldsValue(formValues)
         }
-    }, [examRoomData, form])
+    }, [examListData, form])
 
     const onSubmit = async () => {
         try {
@@ -80,7 +94,7 @@ export default function DanhSachThiPage() {
 
             await Promise.all(
                 listObject.map((item) =>
-                    updateExamRoom({
+                    updateExamList({
                         where: { id: item.id },
                         data: {
                             start: item.start,
@@ -128,7 +142,7 @@ export default function DanhSachThiPage() {
                                 title: 'Môn học',
                                 width: 150,
                                 render: (_, record) => {
-                                    const subjectNames = record.exam?.subjectClass
+                                    const subjectNames = record.examRoom?.exam?.subjectClass
                                         ?.map(
                                             (sc: SubjectClassTypeWithRelation) => sc.subject?.name
                                         )
@@ -146,9 +160,10 @@ export default function DanhSachThiPage() {
                                 title: 'Mã lớp môn học',
                                 width: 150,
                                 render: (_, record) => {
-                                    const subjectClassCodes = record.exam?.subjectClass?.map(
-                                        (sc: SubjectClassTypeWithRelation) => sc.code
-                                    )
+                                    const subjectClassCodes =
+                                        record.examRoom.exam?.subjectClass?.map(
+                                            (sc: SubjectClassTypeWithRelation) => sc.code
+                                        )
 
                                     if (!subjectClassCodes || subjectClassCodes.length === 0)
                                         return '-'
@@ -159,14 +174,14 @@ export default function DanhSachThiPage() {
                                 title: 'Phòng thi',
                                 width: 120,
                                 align: 'center',
-                                render: (_, record) => record.room?.name || '-',
+                                render: (_, record) => record.examRoom.room?.name || '-',
                             },
                             {
                                 title: 'Số sinh viên',
                                 width: 100,
                                 align: 'center',
                                 render: (_, record) =>
-                                    record.exam?.studentSubjectScore?.length || 0,
+                                    record.examRoom.exam?.studentSubjectScore?.length || 0,
                             },
                             {
                                 title: 'Ngày tạo',
@@ -336,7 +351,7 @@ export default function DanhSachThiPage() {
                                 },
                             },
                         ]}
-                        data={examRoomData}
+                        data={examListData}
                         pagination={{
                             current: currentPage,
                             pageSize: numberOfPages,

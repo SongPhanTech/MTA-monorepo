@@ -19,7 +19,6 @@ import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { Col, message, Row, Tag, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import { FileSearch } from 'lucide-react'
-import type { AnyObject } from 'node_modules/@casl/ability/dist/types/types'
 import type React from 'react'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
@@ -336,7 +335,7 @@ export default function QLDONDANGKY() {
                                 ),
                                 render: (_, record) => {
                                     if (record?.id) {
-                                        const rec = record as Exclude<typeof record, AnyObject>
+                                        const rec = record as Exclude<typeof record, any>
                                         return (
                                             <Row className="justify-center gap-2">
                                                 <Tooltip title={'Tra cứu'} placement="top">

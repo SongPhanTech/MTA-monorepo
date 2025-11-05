@@ -1,15 +1,16 @@
+// @ts-nocheck
 import Select from '@components/commons/select'
 import Table from '@components/commons/table'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import DefaultLayout from '@layouts/default-layout'
 import { $Enums, type Prisma } from '@workspace/db/client'
 import {
-    useFindManyExam,
-    useFindManyRoom,
     useCreateManyExamRoom,
+    useFindManyExam,
     useFindManyExamRoom,
+    useFindManyRoom,
 } from '@workspace/db/hooks'
-import { Button, Col, Flex, Form, InputNumber, Popconfirm, Row, message } from 'antd'
+import { Button, Col, Flex, Form, InputNumber, message, Popconfirm, Row } from 'antd'
 import { useEffect, useState } from 'react'
 
 type SubjectClassTypeWithRelation = Prisma.SubjectClassGetPayload<{

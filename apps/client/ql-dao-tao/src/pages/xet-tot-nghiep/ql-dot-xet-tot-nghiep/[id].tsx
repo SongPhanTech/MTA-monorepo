@@ -29,6 +29,7 @@ import { ROUTER_PATH } from '@workspace/router'
 import { Button, Col, Flex, Modal, message, Row, Tag, Tooltip } from 'antd'
 import type { TableRowSelection } from 'antd/es/table/interface'
 import dayjs from 'dayjs'
+import Decimal from 'decimal.js'
 import { BookPlus, X } from 'lucide-react'
 import { useRouter } from 'next/router'
 import type React from 'react'
@@ -189,19 +190,17 @@ export default function StudentGraduationApplication() {
         }
     }
 
-    const data: Array<
-        NonNullable<typeof studentGraduationApplicationData>[number] &
-            Partial<Omit<(typeof graduationCheckResults)[number], 'applicationId'>>
-    > = useMemo(() => {
+    const data = useMemo(() => {
         if (!studentGraduationApplicationData) return []
 
         return studentGraduationApplicationData.map((item) => {
             const result = graduationCheckResults.find((r) => r.applicationId === item.id)
             return {
                 ...item,
+                graduation: item.graduation || undefined,
                 ...(result && {
-                    gpa: result.gpa,
-                    graduation: result.graduation,
+                    gpa: result.gpa ? new Decimal(result.gpa) : null,
+                    graduation: result.graduation || undefined,
                     rank: result.rank,
                     reason: result.reason,
                     trainingMajor: result.trainingMajor,
