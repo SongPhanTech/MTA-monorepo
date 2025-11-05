@@ -4,9 +4,11 @@ import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import { cn } from '@lib/utils'
-import { DiemLopMonHocProps, diemLopMonHocStore } from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
+import {
+    type DiemLopMonHocProps,
+    diemLopMonHocStore,
+} from '@pages/quan-ly-diem/ql-diem-lop-mon-hoc'
 import { useStore } from '@tanstack/react-store'
-import { useSession } from '@workspace/auth/react'
 import type { Prisma, SubjectVersion } from '@workspace/db/client'
 import {
     useCountSubjectClass,
@@ -20,7 +22,7 @@ import { Checkbox, Col, Flex, Form, Input, Row, Tooltip } from 'antd'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
-import { Key, useCallback, useMemo, useState } from 'react'
+import { type Key, useCallback, useMemo, useState } from 'react'
 
 export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
     const { can } = useAbility()
@@ -61,8 +63,7 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
 
     const { selectedSubjectClassId } = useStore(diemLopMonHocStore)
 
-    const { data: session } = useSession()
-    const profileId = session?.sDM_NhanVienId || ''
+    const profileId = window?.contextData?.userId
 
     const { data: fixedClasses = [] } = useFindManyFixedClass(
         {
@@ -215,11 +216,25 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
                   }
                 : {}),
 
-            ...(!canReadAll
+            ...(role === 'GV' && !canReadAll
                 ? {
-                      mainLecturer: {
-                          userProfileId: profileId,
-                      },
+                      OR: [
+                          {
+                              mainLecturer: {
+                                  userProfileId: profileId,
+                              },
+                          },
+                          {
+                              extraLecturer: {
+                                  userProfileId: profileId,
+                              },
+                          },
+                          {
+                              enterGradeLecturer: {
+                                  userProfileId: profileId,
+                              },
+                          },
+                      ],
                   } //Nếu không có quyền xem tất cả thì chỉ được xem lớp do mình giảng dạy
                 : {}),
             active: true,
@@ -227,7 +242,7 @@ export default function DanhSachLopMonHoc({ role = 'GV' }: DiemLopMonHocProps) {
             cancelled: false,
             status: 'OFFICIAL',
         } satisfies Prisma.SubjectClassWhereInput
-    }, [filters, semesterId, trainingObjectTypeId, profileId, canReadAll])
+    }, [filters, semesterId, trainingObjectTypeId, profileId, role, canReadAll])
 
     const { data: dataTable = [], refetch } = useFindManySubjectClass({
         where,

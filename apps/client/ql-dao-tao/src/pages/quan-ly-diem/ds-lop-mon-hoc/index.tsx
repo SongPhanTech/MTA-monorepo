@@ -350,8 +350,8 @@ export default function ClassSubject() {
                 classIds: selectedRowKeys as string[],
                 startPadding: values.startPadding,
                 endPadding: values.endPadding,
-                startDate: values.time?.[0]?.toISOString(),
-                endDate: values.time?.[1]?.toISOString(),
+                startDate: values.time?.[0]?.startOf('day').toISOString(),
+                endDate: values.time?.[1]?.endOf('day').toISOString(),
                 overwrite: values.overwrite,
                 trainingObjectTypeId,
                 semesterId,
@@ -499,7 +499,9 @@ export default function ClassSubject() {
                                                 <Form
                                                     className="max-w-56"
                                                     form={form}
-                                                    initialValues={{ isOverride: false }}
+                                                    initialValues={{
+                                                        isOverride: false,
+                                                    }}
                                                     onFinish={handleUpdateTime}
                                                 >
                                                     <FormItem

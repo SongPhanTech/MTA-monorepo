@@ -380,6 +380,11 @@ export default function NhapDiem({
                 isLockExamScore: true,
                 enteredScore: true,
                 enteredExamScore: true,
+                subject: {
+                    select: {
+                        onePoint: true,
+                    },
+                },
             },
         },
         {
@@ -440,7 +445,8 @@ export default function NhapDiem({
                 dataDetailSubjectClass?.scoreDeadline &&
                 dayjs().isBefore(dataDetailSubjectClass?.scoreDeadline) &&
                 !dataDetailSubjectClass?.isLockScore &&
-                !dataDetailSubjectClass?.isLockExamScore
+                !dataDetailSubjectClass?.isLockExamScore &&
+                !dataDetailSubjectClass?.subject.onePoint
             )
         }
         return !(
@@ -610,6 +616,14 @@ export default function NhapDiem({
                                 listForm[changedId]?.examBanned ||
                                 (numberScore && scoreToTakeExam && numberScore <= scoreToTakeExam)
                             const dataForCalc = dataTable.find((i) => i.id === changedId)
+                            const examScore = listForm[changedId].examScore ?? 0
+                            const attendanceScore = dataDetailSubjectClass?.subject.onePoint
+                                ? examScore
+                                : (listForm[changedId].attendanceScore ?? 0)
+                            const midtermScore = dataDetailSubjectClass?.subject.onePoint
+                                ? examScore
+                                : (listForm[changedId].midtermScore ?? 0)
+
                             const finalScore = calcFinalScore(
                                 {
                                     coef_1:
@@ -626,9 +640,9 @@ export default function NhapDiem({
                                             ?.scoreToPass ?? 4,
                                 },
                                 {
-                                    examScore: listForm[changedId].examScore ?? 0,
-                                    attendanceScore: listForm[changedId].attendanceScore ?? 0,
-                                    midtermScore: listForm[changedId].midtermScore ?? 0,
+                                    examScore,
+                                    attendanceScore,
+                                    midtermScore,
                                     awards:
                                         dataForCalc?.awards?.map?.((a) => ({
                                             archivedAward: {

@@ -31,7 +31,7 @@ import {
 } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
 import { exportFromTemplate } from '@workspace/libs/template-excel'
-import { useAbility, useOrgPermissions } from '@workspace/permissions/hooks'
+import { useAbility } from '@workspace/permissions/hooks'
 import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
 import { dayjs, useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
 import { cn } from '@workspace/ui/lib/utils'
@@ -514,10 +514,9 @@ export default function PhanCongGiangDay({
         }
     }
 
-    const orgId = useOrgPermissions()
-
+    const orgId = window.contextData?.organizationId
     const { data: manageOrgData = [] } = useFindManyDM_DonVi()
-    const treeData = buildOrgTree(manageOrgData, canXemTatCa ? '0' : orgId)
+    const treeData = buildOrgTree(manageOrgData, !khoaBoMon ? '0' : orgId)
 
     const { data: trainingLocationData = [] } = useFindManyTrainingLocation({
         orderBy: { name: 'asc' },
@@ -1621,7 +1620,10 @@ export default function PhanCongGiangDay({
                             {!khoaBoMon && (
                                 <p className="flex gap-1 items-center">
                                     <Checkbox
-                                        indeterminate={countSubjectClassOfficial > 0 && countSubjectClassOfficial < countSubjectClass}
+                                        indeterminate={
+                                            countSubjectClassOfficial > 0 &&
+                                            countSubjectClassOfficial < countSubjectClass
+                                        }
                                         checked={countSubjectClassOfficial === countSubjectClass}
                                         onChange={async (e) => {
                                             try {

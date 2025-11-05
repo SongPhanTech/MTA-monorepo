@@ -19,6 +19,7 @@ declare global {
         contextData: {
             userId: string
             userName: string
+            organizationId: string
         }
     }
 }

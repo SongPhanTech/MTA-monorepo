@@ -3,26 +3,27 @@ import DatePicker from '@components/commons/date-picker'
 import FormItem from '@components/commons/form-item'
 import PutFormModal from '@components/commons/put-modal'
 import Select from '@components/commons/select'
+import Table from '@components/commons/table'
+import TreeSelect from '@components/commons/tree-select'
+import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
+import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import type { SubjectClass } from '@workspace/db/client'
 import {
+    useFindManyBuilding,
     useFindManyLecturer,
-    useFindManyRoom,
     useFindManySemester,
     useFindManySubjectVersion,
     useFindManyTrainingLocation,
     useFindUniqueSubjectClass,
     useUpdateSubjectClass,
 } from '@workspace/db/hooks'
+import { PERIOD } from '@workspace/ui'
 import { Col, Form, InputNumber, message } from 'antd'
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useState } from 'react'
-import { useDisclosure } from 'react-hook-disclosure-modal'
 import 'dayjs/locale/vi'
-import Table from '@components/commons/table'
-import { SUBJECT_CLASS_SCHEDULE_TYPE } from '@constants/constants'
-import { useExamTypeOptions } from '@hooks/examType'
-import { PERIOD } from '@workspace/ui'
+import { useEffect, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 dayjs.locale('vi')
 
@@ -44,9 +45,8 @@ const PutOneSubjectClassModal = () => {
         tag: 'PutOneSubjectClassModal',
         onClose: form.resetFields,
     })
-    const { options, getExamTypeLabel } = useExamTypeOptions()
+    const { options } = useExamTypeOptions()
     const { showSpinner, hideSpinner } = useSpinner()
-    // const [enterGradeLecturerOptions, setEnterGradeLecturerOptions] = useState([])
     const [_dataSubmit, _setDataSubmit] = useState<(SubjectClass & { key: number })[]>([])
 
     const { mutateAsync: updateSubjectClass } = useUpdateSubjectClass()
@@ -108,7 +108,8 @@ const PutOneSubjectClassModal = () => {
 
     const handleChangeDate = () => {
         form.setFieldsValue({
-            scoreDeadline: form.getFieldValue('examDate').add(-10, 'day'),
+            scoreDeadLineStart: form.getFieldValue('examDate').add(-14, 'day'),
+            scoreDeadline: form.getFieldValue('examDate').add(-7, 'day'),
             examScoreDeadline: form.getFieldValue('examDate').add(10, 'day'),
         })
     }
@@ -126,12 +127,15 @@ const PutOneSubjectClassModal = () => {
 
     const trainingLocationId = Form.useWatch('trainingLocationId', form)
 
-    const { data: roomData = [] } = useFindManyRoom({
-        where: {
-            active: true,
-            trainingRoom: true,
-            building: {
-                trainingLocationId,
+    const { data: buildingData = [] } = useFindManyBuilding({
+        orderBy: { name: 'asc' },
+        where: { deletedAt: null, active: true, trainingLocationId },
+        include: {
+            rooms: {
+                where: {
+                    deletedAt: null,
+                    active: true,
+                },
             },
         },
     })
@@ -165,13 +169,6 @@ const PutOneSubjectClassModal = () => {
 
     const mainLecturerForm = Form.useWatch('lecturerId', form)
     const extraLecturerForm = Form.useWatch('extraLecturerId', form)
-    const enterGradeLecturerOptions = useMemo(() => {
-        const lecturers = lecturerData.find((lecturer) => lecturer.id === mainLecturerForm)
-        const enterGradeLecturer = lecturerData.find(
-            (lecturer) => lecturer.id === extraLecturerForm
-        )
-        return [lecturers, enterGradeLecturer]
-    }, [mainLecturerForm, extraLecturerForm, lecturerData])
 
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     useEffect(() => {
@@ -281,15 +278,26 @@ const PutOneSubjectClassModal = () => {
             </Col>
             <Col span={12}>
                 <FormItem form={form} name="roomId" label="Chọn phòng học">
-                    <Select
-                        placeholder="Chọn phòng học"
-                        options={roomData.map((item) => {
-                            return {
-                                label: item.name,
-                                value: item.id,
-                            }
-                        })}
+                    <TreeSelect
+                        treeData={buildingData.map((e) => ({
+                            label: e.name,
+                            value: e.id,
+                            selectable: false,
+                            children: e.rooms.map((room) => ({
+                                label: <p className="text-primary">{room.name}</p>,
+                                value: room.id,
+                                selectable: true,
+                            })),
+                        }))}
+                        showSearch
                         allowClear
+                        treeNodeFilterProp="title"
+                        multiple={false}
+                        showCheckedStrategy="SHOW_CHILD"
+                        dropdownStyle={{
+                            width: 400,
+                            maxHeight: 400,
+                        }}
                     />
                 </FormItem>
             </Col>
@@ -304,47 +312,26 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
                 <FormItem form={form} name="lecturerId" label="Giảng viên 1">
                     <Select
-                        options={lecturerData
-                            .filter(
-                                (lecturer) => lecturer?.id !== form.getFieldValue('extraLecturerId')
-                            )
-                            .map((i) => {
-                                return {
-                                    ...i,
-                                    value: i?.id,
-                                    label: [i?.code, i?.userProfile?.fullname]
-                                        .filter(Boolean)
-                                        .join(' - '),
-                                }
-                            })}
+                        options={lecturerData.map((i) => {
+                            return {
+                                ...i,
+                                value: i?.id,
+                                label: [i?.code, i?.userProfile?.fullname]
+                                    .filter(Boolean)
+                                    .join(' - '),
+                            }
+                        })}
                         placeholder="Chọn giảng viên 1"
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
                 <FormItem form={form} name="extraLecturerId" label="Giảng viên 2">
                     <Select
-                        options={lecturerData
-                            .filter((lecturer) => lecturer?.id !== form.getFieldValue('lecturerId'))
-                            .map((i) => {
-                                return {
-                                    value: i?.id,
-                                    label: [i?.code, i?.userProfile?.fullname]
-                                        .filter(Boolean)
-                                        .join(' - '),
-                                }
-                            })}
-                        placeholder="Chọn giảng viên"
-                    />
-                </FormItem>
-            </Col>
-            <Col span={12}>
-                <FormItem form={form} name="enterGradeLecturerId" label="Giảng viên chấm điểm">
-                    <Select
-                        options={enterGradeLecturerOptions.map((i) => {
+                        options={lecturerData.map((i) => {
                             return {
                                 value: i?.id,
                                 label: [i?.code, i?.userProfile?.fullname]
@@ -356,7 +343,22 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
+                <FormItem form={form} name="enterGradeLecturerId" label="Giảng viên chấm điểm">
+                    <Select
+                        options={lecturerData.map((i) => {
+                            return {
+                                value: i?.id,
+                                label: [i?.code, i?.userProfile?.fullname]
+                                    .filter(Boolean)
+                                    .join(' - '),
+                            }
+                        })}
+                        placeholder="Chọn giảng viên"
+                    />
+                </FormItem>
+            </Col>
+            <Col span={4}>
                 <FormItem form={form} name="lecturerAssignmentDeadline" label="Hạn PCGD">
                     <DatePicker
                         placeholder="DD/MM/YYYY"
@@ -368,7 +370,7 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={4}>
                 <FormItem form={form} name="examDate" label="Ngày thi">
                     <DatePicker
                         onChange={handleChangeDate}
@@ -381,32 +383,22 @@ const PutOneSubjectClassModal = () => {
                     />
                 </FormItem>
             </Col>
-
-            <Col span={12}>
-                <FormItem form={form} name="scoreDeadline" label="Hạn nhập điểm CC/TX">
-                    <DatePicker
-                        placeholder="DD/MM/YYYY"
-                        format={{
-                            format: 'DD/MM/YYYY',
-                            type: 'mask',
-                        }}
-                        className="w-full"
-                    />
+            <Col span={4}>
+                <FormItem form={form} name="scoreDeadLineStart" label="Hạn bắt đầu nhập điểm CC/TX">
+                    <DatePicker placeholder="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={4}>
+                <FormItem form={form} name="scoreDeadline" label="Hạn kết thúc nhập điểm CC/TX">
+                    <DatePicker placeholder="DD/MM/YYYY" className="w-full" />
+                </FormItem>
+            </Col>
+            <Col span={4}>
                 <FormItem form={form} name="examScoreDeadline" label="Hạn nhập điểm thi">
-                    <DatePicker
-                        placeholder="DD/MM/YYYY"
-                        format={{
-                            format: 'DD/MM/YYYY',
-                            type: 'mask',
-                        }}
-                        className="w-full"
-                    />
+                    <DatePicker placeholder="DD/MM/YYYY" className="w-full" />
                 </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={4}>
                 <FormItem form={form} name="examType" label="Hình thức thi">
                     <Select placeholder="Chọn hình thức thi" options={options} />
                 </FormItem>
