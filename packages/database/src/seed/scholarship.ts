@@ -3,8 +3,7 @@ import { CriteriaField, CriteriaOperator, PrismaClient } from '../../generated/p
 
 const prisma = new PrismaClient()
 
-// seed
-async function seedScholarshipCriteria() {
+export async function seedScholarshipCriteria() {
     console.log('Bắt đầu seed tiêu chí học bổng...')
 
     // --- Lấy ID của các khoá học Dân sự và Quân sự (giả sử đã có) ---
@@ -140,7 +139,7 @@ async function seedScholarshipCriteria() {
             rankOrder: 2,
             criteria: [
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 8.5 },
-                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.LTE, value: 8.99 }, // <= 8.99
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.LTE, value: 9 }, // <= 8.99
                 {
                     field: CriteriaField.COURSE_GRADE_LOWEST,
                     operator: CriteriaOperator.GTE,
@@ -164,7 +163,7 @@ async function seedScholarshipCriteria() {
             rankOrder: 3,
             criteria: [
                 { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.GTE, value: 8.0 },
-                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.LTE, value: 8.49 }, // <= 8.49
+                { field: CriteriaField.SEMESTER_GPA, operator: CriteriaOperator.LTE, value: 8.5 }, // <= 8.49
                 {
                     field: CriteriaField.COURSE_GRADE_LOWEST,
                     operator: CriteriaOperator.GTE,
@@ -220,6 +219,7 @@ async function seedScholarshipCriteria() {
         }))
 
         await prisma.scholarship.createMany({
+            skipDuplicates: true,
             data: scholarships.map(({ id, name, rankOrder }) => ({
                 id,
                 name,
@@ -230,6 +230,7 @@ async function seedScholarshipCriteria() {
         })
 
         await prisma.scholarshipCriteria.createMany({
+            skipDuplicates: true,
             data: scholarships.flatMap((scholarship) =>
                 scholarship.criteria.map((criterion) => ({
                     ...criterion,
@@ -241,7 +242,3 @@ async function seedScholarshipCriteria() {
 
     console.log('Seed tiêu chí học bổng hoàn tất.')
 }
-
-// Chạy hàm main
-await seedScholarshipCriteria()
-// end seed

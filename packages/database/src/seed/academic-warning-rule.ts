@@ -162,7 +162,7 @@ async function seedRulesForCourses(courses: TrainingCourse[], rules: any[]) {
 }
 
 // Hàm main để chạy seeder
-async function main() {
+export async function seedAcademicWarningRule() {
     console.log('Bắt đầu seed quy tắc Cảnh báo học tập...')
     try {
         // Lấy tất cả các khoá học dân sự và quân sự
@@ -186,4 +186,4 @@ async function main() {
 }
 
 // Chạy hàm main
-main()
+// seedAcademicWarningRule()

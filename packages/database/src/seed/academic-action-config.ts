@@ -214,7 +214,7 @@ const militaryActionDefs = [
 ]
 
 // Hàm main để chạy seeder
-export async function main() {
+export async function seedAcademicActionConfig() {
     console.log('Bắt đầu seed cấu hình Xử lý học tập...')
     try {
         const civilianCourses = await prisma.trainingCourse.findMany({
