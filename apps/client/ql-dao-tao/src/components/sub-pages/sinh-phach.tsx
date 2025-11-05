@@ -1,17 +1,17 @@
 import Table from '@components/commons/table'
 import ExportPhach from '@components/modal/export-exam-session'
-import { useFindUniqueExamRoom, useUpdateExamRoom } from '@workspace/db/hooks'
-import { useGenExamRoomCode } from '@workspace/libs/api/training'
+import { useFindUniqueExamList, useUpdateExamRoom } from '@workspace/db/hooks'
+import { useGenExamListCode } from '@workspace/libs/api/training'
 import { Button, Checkbox, Col, Flex, Modal, message } from 'antd'
 import { useRouter } from 'next/router'
 
-export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
+export default function SinhPhach({ examListId }: { examListId: string }) {
     const router = useRouter()
-    const { data: examRoom, refetch } = useFindUniqueExamRoom(
+    const { data: examRoom, refetch } = useFindUniqueExamList(
         {
-            where: { id: examRoomId },
+            where: { id: examListId },
             include: {
-                examSessions: {
+                examPapers: {
                     include: {
                         studentSubjectScore: {
                             include: {
@@ -37,7 +37,7 @@ export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
                 },
             },
         },
-        { enabled: !!examRoomId }
+        { enabled: !!examListId }
     )
     const handleSave = () => {
         Modal.confirm({
@@ -50,13 +50,11 @@ export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
             },
         })
     }
-    const { mutateAsync: genCode } = useGenExamRoomCode()
+    const { mutateAsync: genCode } = useGenExamListCode()
     const { mutateAsync: updateExamRoom } = useUpdateExamRoom()
     const handleGenCode = async () => {
         const res = await genCode({
-            data: {
-                examRoomId,
-            },
+            data: { examListId },
         })
         if (res?.status === 200) {
             message.success('Sinh phách thành công')
@@ -69,7 +67,7 @@ export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
                 <Flex justify="space-between" align="center">
                     <Checkbox checked={examRoom?.lockExamCode}>Khoá sinh phách</Checkbox>
                     <Flex justify="end" align="center">
-                        <ExportPhach data={examRoom?.examSessions || []} />
+                        <ExportPhach data={examRoom?.examPapers || []} />
                         <Button
                             type="primary"
                             className="ml-3"
@@ -115,7 +113,7 @@ export default function SinhPhach({ examRoomId }: { examRoomId: string }) {
                             render: (_, record: any) => record?.examCode || '',
                         },
                     ]}
-                    data={examRoom?.examSessions || []}
+                    data={examRoom?.examPapers || []}
                     pagination={false}
                 />
             </Col>

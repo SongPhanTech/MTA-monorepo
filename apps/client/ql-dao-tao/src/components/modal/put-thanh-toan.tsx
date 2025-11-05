@@ -119,13 +119,15 @@ const PutPaymentRecord = () => {
                         }) ?? []
                 ) ?? []
 
-            const dataSupervisorPayment = selectedThesisProjects?.map((thesisProject) => {
-                return {
-                    expertId: thesisProject.supervisor.id,
-                    amount: values.supervisor,
-                    thesisProjectId: thesisProject.id,
-                }
-            })
+            const dataSupervisorPayment = selectedThesisProjects
+                ?.filter((thesis) => thesis.supervisor)
+                .map((thesisProject) => {
+                    return {
+                        expertId: thesisProject.supervisor?.id as string,
+                        amount: values.supervisor,
+                        thesisProjectId: thesisProject.id,
+                    }
+                })
 
             showSpinner()
             await deletePaymentRecord({
@@ -141,10 +143,11 @@ const PutPaymentRecord = () => {
                 })
             }
             if (dataSupervisorPayment && dataSupervisorPayment.length > 0) {
+                const ids = dataSupervisorPayment.map((d) => d.expertId).filter(Boolean) as string[]
                 await deleteSupervisorPayment({
                     where: {
                         status: PaymentStatus.PENDING,
-                        expertId: { in: dataSupervisorPayment.map((d) => d.expertId) },
+                        expertId: { in: ids },
                         thesisProjectId: {
                             in: dataSupervisorPayment.map((d) => d.thesisProjectId),
                         },

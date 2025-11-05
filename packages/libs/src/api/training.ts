@@ -49,14 +49,10 @@ import type {
     ExportStudentResultSemesterJsonParams,
     FixedClassStudentCount400,
     FixedClassStudentCountParams,
-    GenExamCode,
-    GenExamCode400,
-    GenExamCode404,
-    GenExamCodeResult,
+    GenExamListCode400,
+    GenExamListCode404,
+    GenExamListCodeResult,
     GenExamRoomCode,
-    GenExamRoomCode400,
-    GenExamRoomCode404,
-    GenExamRoomCodeResult,
     GraduationApplicationInit200,
     GraduationApplicationInit400,
     GraduationApplicationInitBody,
@@ -7313,151 +7309,42 @@ export const useUnmergeExam = <TError = UnmergeExamBadResponse, TContext = unkno
 }
 
 /**
- * Sinh phách cho kỳ thi
- * @summary Sinh phách cho kỳ thi
+ * Sinh phách cho danh sách thi
+ * @summary Sinh phách cho danh sách thi
  */
-export type genExamCodeResponse200 = {
-    data: GenExamCodeResult
+export type genExamListCodeResponse200 = {
+    data: GenExamListCodeResult
     status: 200
 }
 
-export type genExamCodeResponse400 = {
-    data: GenExamCode400
+export type genExamListCodeResponse400 = {
+    data: GenExamListCode400
     status: 400
 }
 
-export type genExamCodeResponse404 = {
-    data: GenExamCode404
+export type genExamListCodeResponse404 = {
+    data: GenExamListCode404
     status: 404
 }
 
-export type genExamCodeResponseComposite =
-    | genExamCodeResponse200
-    | genExamCodeResponse400
-    | genExamCodeResponse404
+export type genExamListCodeResponseComposite =
+    | genExamListCodeResponse200
+    | genExamListCodeResponse400
+    | genExamListCodeResponse404
 
-export type genExamCodeResponse = genExamCodeResponseComposite & {
+export type genExamListCodeResponse = genExamListCodeResponseComposite & {
     headers: Headers
 }
 
-export const getGenExamCodeUrl = () => {
-    return '/api/exam-score/gen-exam-code'
+export const getGenExamListCodeUrl = () => {
+    return '/api/exam-score/gen-exam-list-code'
 }
 
-export const genExamCode = async (
-    genExamCode: GenExamCode,
-    options?: RequestInit
-): Promise<genExamCodeResponse> => {
-    return customTrainingFetch<genExamCodeResponse>(getGenExamCodeUrl(), {
-        ...options,
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...options?.headers },
-        body: JSON.stringify(genExamCode),
-    })
-}
-
-export const getGenExamCodeMutationOptions = <
-    TError = GenExamCode400 | GenExamCode404,
-    TContext = unknown,
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof genExamCode>>,
-        TError,
-        { data: GenExamCode },
-        TContext
-    >
-    request?: SecondParameter<typeof customTrainingFetch>
-}): UseMutationOptions<
-    Awaited<ReturnType<typeof genExamCode>>,
-    TError,
-    { data: GenExamCode },
-    TContext
-> => {
-    const mutationKey = ['genExamCode']
-    const { mutation: mutationOptions, request: requestOptions } = options
-        ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
-            ? options
-            : { ...options, mutation: { ...options.mutation, mutationKey } }
-        : { mutation: { mutationKey }, request: undefined }
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof genExamCode>>,
-        { data: GenExamCode }
-    > = (props) => {
-        const { data } = props ?? {}
-
-        return genExamCode(data, requestOptions)
-    }
-
-    return { mutationFn, ...mutationOptions }
-}
-
-export type GenExamCodeMutationResult = NonNullable<Awaited<ReturnType<typeof genExamCode>>>
-export type GenExamCodeMutationBody = GenExamCode
-export type GenExamCodeMutationError = GenExamCode400 | GenExamCode404
-
-/**
- * @summary Sinh phách cho kỳ thi
- */
-export const useGenExamCode = <TError = GenExamCode400 | GenExamCode404, TContext = unknown>(
-    options?: {
-        mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof genExamCode>>,
-            TError,
-            { data: GenExamCode },
-            TContext
-        >
-        request?: SecondParameter<typeof customTrainingFetch>
-    },
-    queryClient?: QueryClient
-): UseMutationResult<
-    Awaited<ReturnType<typeof genExamCode>>,
-    TError,
-    { data: GenExamCode },
-    TContext
-> => {
-    const mutationOptions = getGenExamCodeMutationOptions(options)
-
-    return useMutation(mutationOptions, queryClient)
-}
-
-/**
- * Sinh phách cho phòng thi
- * @summary Sinh phách cho phòng thi
- */
-export type genExamRoomCodeResponse200 = {
-    data: GenExamRoomCodeResult
-    status: 200
-}
-
-export type genExamRoomCodeResponse400 = {
-    data: GenExamRoomCode400
-    status: 400
-}
-
-export type genExamRoomCodeResponse404 = {
-    data: GenExamRoomCode404
-    status: 404
-}
-
-export type genExamRoomCodeResponseComposite =
-    | genExamRoomCodeResponse200
-    | genExamRoomCodeResponse400
-    | genExamRoomCodeResponse404
-
-export type genExamRoomCodeResponse = genExamRoomCodeResponseComposite & {
-    headers: Headers
-}
-
-export const getGenExamRoomCodeUrl = () => {
-    return '/api/exam-score/gen-exam-room-code'
-}
-
-export const genExamRoomCode = async (
+export const genExamListCode = async (
     genExamRoomCode: GenExamRoomCode,
     options?: RequestInit
-): Promise<genExamRoomCodeResponse> => {
-    return customTrainingFetch<genExamRoomCodeResponse>(getGenExamRoomCodeUrl(), {
+): Promise<genExamListCodeResponse> => {
+    return customTrainingFetch<genExamListCodeResponse>(getGenExamListCodeUrl(), {
         ...options,
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -7465,24 +7352,24 @@ export const genExamRoomCode = async (
     })
 }
 
-export const getGenExamRoomCodeMutationOptions = <
-    TError = GenExamRoomCode400 | GenExamRoomCode404,
+export const getGenExamListCodeMutationOptions = <
+    TError = GenExamListCode400 | GenExamListCode404,
     TContext = unknown,
 >(options?: {
     mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof genExamRoomCode>>,
+        Awaited<ReturnType<typeof genExamListCode>>,
         TError,
         { data: GenExamRoomCode },
         TContext
     >
     request?: SecondParameter<typeof customTrainingFetch>
 }): UseMutationOptions<
-    Awaited<ReturnType<typeof genExamRoomCode>>,
+    Awaited<ReturnType<typeof genExamListCode>>,
     TError,
     { data: GenExamRoomCode },
     TContext
 > => {
-    const mutationKey = ['genExamRoomCode']
+    const mutationKey = ['genExamListCode']
     const { mutation: mutationOptions, request: requestOptions } = options
         ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
             ? options
@@ -7490,31 +7377,31 @@ export const getGenExamRoomCodeMutationOptions = <
         : { mutation: { mutationKey }, request: undefined }
 
     const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof genExamRoomCode>>,
+        Awaited<ReturnType<typeof genExamListCode>>,
         { data: GenExamRoomCode }
     > = (props) => {
         const { data } = props ?? {}
 
-        return genExamRoomCode(data, requestOptions)
+        return genExamListCode(data, requestOptions)
     }
 
     return { mutationFn, ...mutationOptions }
 }
 
-export type GenExamRoomCodeMutationResult = NonNullable<Awaited<ReturnType<typeof genExamRoomCode>>>
-export type GenExamRoomCodeMutationBody = GenExamRoomCode
-export type GenExamRoomCodeMutationError = GenExamRoomCode400 | GenExamRoomCode404
+export type GenExamListCodeMutationResult = NonNullable<Awaited<ReturnType<typeof genExamListCode>>>
+export type GenExamListCodeMutationBody = GenExamRoomCode
+export type GenExamListCodeMutationError = GenExamListCode400 | GenExamListCode404
 
 /**
- * @summary Sinh phách cho phòng thi
+ * @summary Sinh phách cho danh sách thi
  */
-export const useGenExamRoomCode = <
-    TError = GenExamRoomCode400 | GenExamRoomCode404,
+export const useGenExamListCode = <
+    TError = GenExamListCode400 | GenExamListCode404,
     TContext = unknown,
 >(
     options?: {
         mutation?: UseMutationOptions<
-            Awaited<ReturnType<typeof genExamRoomCode>>,
+            Awaited<ReturnType<typeof genExamListCode>>,
             TError,
             { data: GenExamRoomCode },
             TContext
@@ -7523,12 +7410,12 @@ export const useGenExamRoomCode = <
     },
     queryClient?: QueryClient
 ): UseMutationResult<
-    Awaited<ReturnType<typeof genExamRoomCode>>,
+    Awaited<ReturnType<typeof genExamListCode>>,
     TError,
     { data: GenExamRoomCode },
     TContext
 > => {
-    const mutationOptions = getGenExamRoomCodeMutationOptions(options)
+    const mutationOptions = getGenExamListCodeMutationOptions(options)
 
     return useMutation(mutationOptions, queryClient)
 }

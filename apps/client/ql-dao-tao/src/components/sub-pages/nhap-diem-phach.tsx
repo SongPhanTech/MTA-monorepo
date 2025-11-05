@@ -1,42 +1,37 @@
 import Table from '@components/commons/table'
-import { useFindManyExamPaper } from '@workspace/db/hooks'
+import { useFindUniqueExamList } from '@workspace/db/hooks'
 import { useSaveExamScore } from '@workspace/libs/api/training'
 import { Button, Col, Flex, Form, InputNumber, Modal, message } from 'antd'
-import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
-export default function NhapdiemPhach({ examRoomId }: { examRoomId: string }) {
-    const router = useRouter()
+export default function NhapDiemPhach({ examListId }: { examListId: string }) {
     const [form] = Form.useForm<{ list: { score: number | null }[] }>()
-    const { data = [], refetch } = useFindManyExamPaper(
+    const { data: examList, refetch } = useFindUniqueExamList(
         {
-            where: {
-                examRoomId,
-            },
+            where: { id: examListId },
             include: {
-                exam: true,
-                studentSubjectScore: {
+                examPapers: {
                     include: {
-                        student: {
+                        studentSubjectScore: {
                             include: {
-                                userProfile: true,
+                                student: {
+                                    include: {
+                                        userProfile: true,
+                                    },
+                                },
                             },
                         },
                     },
+                    orderBy: { examCode: 'asc' },
                 },
             },
-            orderBy: {
-                examCode: 'asc',
-            },
         },
-        {
-            enabled: !!examRoomId,
-        }
+        { enabled: !!examListId }
     )
     const disabled = useMemo(() => {
-        const item = data[0]
-        return !(item?.exam?.lockExamCode || true)
-    }, [data])
+        return examList?.lockExamCode || true
+    }, [examList?.lockExamCode])
+
     const handleSave = () => {
         Modal.confirm({
             title: 'Xác nhận',
@@ -44,14 +39,14 @@ export default function NhapdiemPhach({ examRoomId }: { examRoomId: string }) {
             okText: 'Xác nhận',
             cancelText: 'Hủy',
             onOk: async () => {
-                hanldeGenCode()
+                handleGenCode()
             },
         })
     }
     const { mutateAsync: saveScore } = useSaveExamScore()
 
     // const listForm = Form.useWatch('list', form) || []
-    const hanldeGenCode = async () => {
+    const handleGenCode = async () => {
         const dataForm = form.getFieldsValue()
         const dataSubmit = Object.entries(dataForm.list).map(([key, value_]) => {
             return {
@@ -125,7 +120,7 @@ export default function NhapdiemPhach({ examRoomId }: { examRoomId: string }) {
                                     },
                                 },
                             ]}
-                            data={data}
+                            data={examList?.examPapers}
                             pagination={false}
                         />
                     </Form.Item>
