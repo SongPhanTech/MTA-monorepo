@@ -1,11 +1,10 @@
 import CriteriaEvaluationSubPage from '@components/sub-pages/tu-danh-gia-ctdt/criteria-evaluation'
-import DefaultLayout from '@layouts/default-layout'
-import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/[id]'
+import type { DataTabType } from '@pages/ql-tu-danh-gia-ctdt/phieu-phan-tich-tieu-chi/_components/criteria-analysis'
+import { evaluationPeriodStore } from '@pages/ql-tu-danh-gia-ctdt/ql-dot-danh-gia'
+import { useStore } from '@tanstack/react-store'
 import { useSession } from '@workspace/auth/react'
 import { useFindUniqueEvaluationPeriod } from '@workspace/db/hooks'
-import { ROUTER_PATH } from '@workspace/router'
 import { Col, Row, Tabs } from 'antd'
-import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
 export type PutRequirementCriterion = {
@@ -14,17 +13,16 @@ export type PutRequirementCriterion = {
     criteria: Record<string, any>
 }
 
-export default function CriteriaEvaluationFormDetailPage() {
-    const router = useRouter()
-    const id = router.query.id as string
-
+export default function CriteriaEvaluationWrite() {
     const { data: me } = useSession()
-    const idProfile = me?.sDM_NhanVienId || 'e59c23ff-d7ef-4b49-b175-c675c4caabbb'
+    const idProfile = me?.sDM_NhanVienId || 'ad3cd5ec-2dfd-4839-8aeb-85f5e535f3db'
+
+    const { selectedEvaluationPeriodId } = useStore(evaluationPeriodStore)
 
     const { data } = useFindUniqueEvaluationPeriod(
         {
             where: {
-                id,
+                id: selectedEvaluationPeriodId,
                 standards: {
                     some: {
                         criteria: {
@@ -103,7 +101,7 @@ export default function CriteriaEvaluationFormDetailPage() {
             },
         },
         {
-            enabled: !!idProfile && !!id,
+            enabled: !!idProfile && !!selectedEvaluationPeriodId,
         }
     )
 
@@ -129,9 +127,6 @@ export default function CriteriaEvaluationFormDetailPage() {
     return (
         <div className="h-full">
             <Row gutter={[8, 0]}>
-                <Col span={24} className="text-2xl font-bold mb-4 px-4">
-                    {data?.name}
-                </Col>
                 <Col span={24}>
                     <Tabs
                         className="h-[calc(100vh-200px)] overflow-y-auto"
@@ -146,26 +141,5 @@ export default function CriteriaEvaluationFormDetailPage() {
                 </Col>
             </Row>
         </div>
-    )
-}
-
-CriteriaEvaluationFormDetailPage.getLayout = function getLayout(page: React.ReactElement) {
-    return (
-        <DefaultLayout
-            breadcrumbList={[
-                {
-                    title: 'QL tự đánh giá CTĐT',
-                },
-                {
-                    title: 'Phiếu đánh giá tiêu chí',
-                    href: ROUTER_PATH.KHAO_THI.QL_TU_DANH_GIA_CTDT_PHIEU_DANH_GIA_TIEU_CHI,
-                },
-                {
-                    title: 'Chi tiết phiếu đánh giá tiêu chí',
-                },
-            ]}
-        >
-            {page}
-        </DefaultLayout>
     )
 }

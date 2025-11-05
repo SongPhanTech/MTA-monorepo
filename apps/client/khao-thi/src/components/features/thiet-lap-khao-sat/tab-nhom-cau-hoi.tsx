@@ -1,4 +1,3 @@
-import { EyeOutlined } from '@ant-design/icons'
 import Table from '@components/commons/table'
 import TextTruncate from '@components/commons/tex-truncate'
 import type { FilterProps } from '@components/commons/typeFilter'
@@ -6,6 +5,7 @@ import DeleteIcon from '@components/icons/delete'
 import EditIcon from '@components/icons/edit'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
+import { cn } from '@lib/utils'
 import {
     useCountSurveyQuestionGroup,
     useFindManySurveyQuestionGroup,
@@ -13,13 +13,13 @@ import {
     useUpdateSurveyQuestionGroup,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { KHAO_THI_PERMISSION, ROUTER_PATH } from '@workspace/router'
-import { Button, Col, Flex, message, Row, Tooltip } from 'antd'
+import { KHAO_THI_PERMISSION } from '@workspace/router'
+import { Button, Col, Flex, message, Row } from 'antd'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { useDisclosure } from 'react-hook-disclosure-modal'
 
-function TabNhomCauHoi() {
+function TabNhomCauHoi({selectedID,setSelectedID}:{selectedID:string, setSelectedID:React.Dispatch<React.SetStateAction<string>>}) {
     const { can } = useAbility()
     const [currentPage, setCurrentPage] = useState(1)
     const [numberOfPages, setNumberOfPages] = useState(DEFAULT_PAGINATE_SIZE)
@@ -129,14 +129,25 @@ function TabNhomCauHoi() {
                             setFilters(value)
                             setCurrentPage(1)
                         }}
-                        onRowClick={({ id }) => {
-                            router.push(
-                                ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT_ID.replace(
-                                    '[id]',
-                                    id
-                                )
-                            )
+                            onRow={(record) => {
+                            return {
+                                onClick: () => {
+                                    setSelectedID(record.id)
+                                },
+                                className: cn(
+                                    selectedID === record.id ? 'bg-orange-200' : ''
+                                ),
+                            }
                         }}
+                        // onRowClick={({ id }) => {
+                        //     setSelectedID(id)
+                        //     // router.push(
+                        //     //     ROUTER_PATH.KHAO_THI.THIET_LAP_KHAO_SAT_NHOM_CAU_HOI_KHAO_SAT_ID.replace(
+                        //     //         '[id]',
+                        //     //         id
+                        //     //     )
+                        //     // )
+                        // }}
                         columns={[
                             {
                                 title: 'STT',
@@ -187,7 +198,7 @@ function TabNhomCauHoi() {
                                 align: 'center',
                                 render: (_, { id, surveyQuestion }) => (
                                     <Row className="justify-center gap-2">
-                                        {can(
+                                        {/* {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_CAU_HOI_KHAO_SAT,
                                             'XEM'
                                         ) && (
@@ -206,7 +217,7 @@ function TabNhomCauHoi() {
                                                     }}
                                                 />
                                             </Tooltip>
-                                        )}
+                                        )} */}
                                         {can(
                                             KHAO_THI_PERMISSION.KHAO_THI_THIET_LAP_KHAO_SAT_THIET_LAP_CHUNG,
                                             'SUA'

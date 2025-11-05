@@ -377,7 +377,7 @@ export default function UpdateUserPage() {
                 path: 'avatar',
                 extension: file.name?.split('.').pop() ?? '',
             })
-
+        
             await fetch(resPresignedUrl.data.url, {
                 method: 'PUT',
                 body: file.originFileObj,
@@ -386,6 +386,18 @@ export default function UpdateUserPage() {
             form.setFieldsValue({
                 avatar: resPresignedUrl.data.fileName,
             })
+            // const formData = new FormData();
+            // formData.append("file", file?.originFileObj); 
+            // // const tenantCode = getCookie(c, 'x-tenantcode')
+            // const resPresignedUrl = await axios.post(`${process.env.NEXT_PUBLIC_API_UPLOAD_URL}/Files/UploadFile/6`, formData, {
+            //     headers: {
+            //         "Content-Type": "multipart/form-data",
+            //         "tenantCode": window.tenantCode || 'dev',
+            //     "appCode": process.env.NEXT_PUBLIC_APP_CODE
+            //     },
+            //     })
+            // console.log(resPresignedUrl,'123');
+            // return
         }
 
         try {

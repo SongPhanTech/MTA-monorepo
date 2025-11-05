@@ -19,11 +19,10 @@ export type PutEvaluationCouncilMemberType = EvaluationCouncilMember
 const PutEvaluationCouncilMember = () => {
     const [form] = Form.useForm<PutEvaluationCouncilMemberType>()
     const router = useRouter()
-    const {
-        isOpen,
-        onClose,
-        input: id,
-    } = useDisclosure<string>({
+    const { isOpen, onClose, input } = useDisclosure<{
+        evaluationCouncilId: string
+        evaluationCouncilMemberId?: string
+    }>({
         tag: 'PutEvaluationCouncilMember',
         onClose: form.resetFields,
     })
@@ -36,19 +35,19 @@ const PutEvaluationCouncilMember = () => {
     const { mutateAsync: createEvaluationCouncilMember } = useCreateEvaluationCouncilMember()
     const { mutateAsync: updateEvaluationCouncilMember } = useUpdateEvaluationCouncilMember()
     async function onOk(output?: PutEvaluationCouncilMemberType) {
-        if (!output) return
+        if (!output || !input) return
         try {
             showSpinner()
             const data = {
-                evaluationCouncilId: evaluationCouncilId,
+                evaluationCouncilId: input.evaluationCouncilId,
                 lecturerId: output.lecturerId,
                 role: output.role,
             }
-            if (id && evaluationCouncilId) {
+            if (input.evaluationCouncilMemberId && evaluationCouncilId) {
                 await updateEvaluationCouncilMember({
                     data,
                     where: {
-                        id,
+                        id: input.evaluationCouncilMemberId,
                     },
                 })
                 message.success('Cập nhật thành công')
@@ -101,10 +100,10 @@ const PutEvaluationCouncilMember = () => {
 
     const { data: initialValue } = useFindUniqueEvaluationCouncilMember(
         {
-            where: { id },
+            where: { id: input?.evaluationCouncilMemberId },
         },
         {
-            enabled: !!id,
+            enabled: !!input?.evaluationCouncilMemberId,
         }
     )
 
@@ -165,7 +164,11 @@ const PutEvaluationCouncilMember = () => {
             onFinish={onOk}
             onCancel={onClose}
             maskClosable={true}
-            title={id ? 'Chỉnh sửa hội đồng đánh giá' : 'Thêm mới hội đồng đánh giá'}
+            title={
+                input?.evaluationCouncilMemberId
+                    ? 'Chỉnh sửa hội đồng đánh giá'
+                    : 'Thêm mới hội đồng đánh giá'
+            }
             className="w-[600px]"
         >
             <Col span={24}>

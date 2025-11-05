@@ -179,6 +179,7 @@ export default function StudentGraduationApplication() {
 
             if (status === 200) {
                 message.success(data.message)
+                refetch()
             } else {
                 message.error(data.message)
             }
@@ -510,7 +511,7 @@ export default function StudentGraduationApplication() {
                                 <Button
                                     type="primary"
                                     disabled={!trainingCourseSelected && !fixedClassSelected}
-                                    onClick={() => refetch()}
+                                    onClick={() => handleInitApplication()}
                                 >
                                     Khởi tạo
                                 </Button>
