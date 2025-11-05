@@ -77,7 +77,7 @@ const PutSurveyModal = () => {
         },
         {
             answer: '2',
-            description: 'Khong hài lòng',
+            description: 'Không hài lòng',
             requireExplanation: false,
         },
         {
@@ -298,7 +298,7 @@ const PutSurveyModal = () => {
 
     const surveyTopicId = Form.useWatch('surveyTopicId', form)
     const isPublic = Form.useWatch('isPublic', form)
-
+     const anonymous = Form.useWatch('anonymous', form)
     // biome-ignore lint/correctness/useExhaustiveDependencies: <>
     const steps: StepItem[] = useMemo(() => {
         return [
@@ -313,7 +313,7 @@ const PutSurveyModal = () => {
                         </Col> */}
                         <Col span={24}>
                             <FormItem form={form} name="name" label="Tên khảo sát" required>
-                                <Input placeholder="Nhập tên đối tượng khảo sát" />
+                                <Input placeholder="Nhập tên khảo sát" />
                             </FormItem>
                         </Col>
                         <Col span={12}>
@@ -338,13 +338,13 @@ const PutSurveyModal = () => {
                             <FormItem
                                 form={form}
                                 name="surveyObjectTypes"
-                                label="Đối tượng khảo sát"
-                                required={input?.type !== 'multiple'}
+                                label="Đối tượng làm khảo sát"
+                                // required={((input?.type!=='multiple' && !anonymous)) }
                             >
                                 <Select
                                     mode="multiple"
                                     maxTagCount={'responsive'}
-                                    placeholder="Chọn đối tượng khảo sát"
+                                    placeholder="Chọn đối tượng làm khảo sát"
                                     options={surveyObjectTypesData.map((i: SurveyObjectType) => {
                                         return {
                                             value: i.id,

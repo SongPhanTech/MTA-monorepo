@@ -1,16 +1,16 @@
 .avatar-upload .ant-upload-select {
-    width: 72px;
-    height: 72px;
+    width: 100px;
+    height: 100px;
 }
 .avatar-upload .ant-upload-list-item,
 .ant-upload-list-item-container {
-    width: 72px;
-    height: 72px;
+    width: 100px;
+    height: 100px;
     padding: 0px;
 }
 .avatar-upload .ant-upload-list-item::before {
-    width: 72px;
-    height: 72px;
+    width: 100px;
+    height: 100px;
 }
 .form-userprofile .ant-col .ant-form-item-label {
     min-width: 200px;
