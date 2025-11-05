@@ -27,6 +27,11 @@ function Page() {
             label: 'Nhóm câu hỏi khảo sát',
             children: <TabNhomCauHoi />,
         },
+            {
+            key: '4',
+            label: 'Câu hỏi khảo sát',
+            children: <TabNhomCauHoi />,
+        },
     ]
     return <Tabs defaultActiveKey="1" items={items} onChange={onChange} type="card" />
 }

@@ -112,6 +112,14 @@ export default function CreateUserPage() {
     const { mutateAsync: createStaff } = useCreateStaff()
     const [fileList, setFileList] = useState<UploadFile[]>([])
     const router = useRouter()
+        function findLatestQuyetDinh(list: any[]) {
+    if (list.length === 0) return null
+    return list.reduce((latest, current) =>
+        new Date(current.ngayNhanQuyetDinh) > new Date(latest.ngayNhanQuyetDinh)
+        ? current
+        : latest
+    )
+    }
     const listTabs: itemType[] = [
         {
             title: 'Thông tin cơ bản',
@@ -426,6 +434,13 @@ export default function CreateUserPage() {
                 sEmail: values?.email || '',
             })
             if (res?.status === 200) {
+                    let rank=null
+                if(values.capBac?.length>0){
+                    if(values.capBac?.length===1){
+                        rank = values.capBac[0]
+                    }
+                   rank = findLatestQuyetDinh(values?.capBac)
+                }
                 const resProfile = await createUserProfile({
                     data: {
                         ...values,
@@ -454,7 +469,8 @@ export default function CreateUserPage() {
                         avatar: form.getFieldValue('avatar'),
                         fullname:
                             `${values.lastName.trim() || ''} ${values.firstName.trim() || ''}`.trim(),
-                        ...emptyObjectIf(
+                        rankId:rank?.capBacId ?? undefined,
+                            ...emptyObjectIf(
                             {
                                 hocVi: {
                                     createMany: {
@@ -554,6 +570,7 @@ export default function CreateUserPage() {
                                         })),
                                     },
                                 },
+
                             },
 
                             !!values.capBac

@@ -133,11 +133,7 @@ export default function UserProfilePageDs() {
         where,
         include: {
             gender: true,
-            capBac: {
-                include: {
-                    capBac: true,
-                },
-            },
+            rank: true,
         },
         orderBy: {
             createdAt: 'desc',
@@ -400,16 +396,9 @@ export default function UserProfilePageDs() {
                                 width: 120,
                                 type: 'input',
                                 dataIndex: 'capBac',
-                                render: (__, record) =>
-                                    record?.capBac?.length ? (
-                                        <ul>
-                                            {record?.capBac?.map((item: any) => (
-                                                <li>- {item?.capBac?.sTen}</li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        ''
-                                    ),
+                                render: (__, record) =>{
+                                   return record?.rank ? record?.rank?.sTen : ''
+                                }
                             },
                             {
                                 title: 'SĐT',

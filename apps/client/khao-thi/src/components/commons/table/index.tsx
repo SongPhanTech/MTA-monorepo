@@ -20,6 +20,7 @@ import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import type { ColumnTypeProps, FilterProps } from '../typeFilter'
 import FilterSelect from './filter-select'
+import { cn } from '@lib/utils'
 
 dayjs.locale('vi')
 
@@ -805,8 +806,9 @@ const Table = <T extends Record<string, unknown>>({
                     }
                 },
                 style: { cursor: 'pointer' },
-                className:
-                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : '',
+                className: cn(
+                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : ''
+                ),
                 ...rest.onRow?.(record),
             })}
         />

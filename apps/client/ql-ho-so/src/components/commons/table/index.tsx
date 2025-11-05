@@ -1,6 +1,7 @@
 import { FilterFilled } from '@ant-design/icons'
 import type { ColumnTypeProps, FilterProps } from '@components/modal/quan-ly-ho-so/type'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
+import { cn } from '@lib/utils'
 import {
     AutoComplete,
     Button,
@@ -864,7 +865,9 @@ const Table = <T extends Record<string, unknown>>({
                     }
                 },
                 style: { cursor: 'pointer' },
-                className: record.id === selectedRow ? 'bg-blue-100' : '',
+                className: cn(
+                    record.id && selectedRow && record.id === selectedRow ? 'bg-blue-200' : ''
+                ),
             })}
             {...rest}
         />

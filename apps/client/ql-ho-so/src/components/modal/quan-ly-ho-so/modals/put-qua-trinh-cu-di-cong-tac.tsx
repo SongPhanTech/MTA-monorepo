@@ -63,7 +63,7 @@ export default function PutQuaTrinhCuDiCongTacModal() {
             form={form}
             onFinish={onOk}
             onCancel={onClose}
-            title={isEdit ? 'Cập nhật cấp bậc' : 'Thêm mới cấp bậc'}
+            title={isEdit ? 'Cập nhật quá trình đi công tác' : 'Thêm mới quá trình đi công tác'}
             className="w-[40vw]"
             layout="vertical"
         >

@@ -20,7 +20,6 @@ import {
     useCountStudent,
     useFindManyCurriculumVersion,
     useFindManyFixedClass,
-    useFindManySemester,
     useFindManyStudent,
     useFindManyTrainingCourse,
     useFindManyTrainingField,
@@ -28,7 +27,7 @@ import {
     useUpdateStudent,
 } from '@workspace/db/hooks'
 import { useAbility } from '@workspace/permissions/hooks'
-import { QL_DAO_TAO_PERMISSION } from '@workspace/router'
+import { QL_HO_SO_PERMISSION } from '@workspace/router'
 import { useTrainingObjectTypeStore } from '@workspace/ui'
 import { Button, Col, Flex, Form, message, Row, Tag } from 'antd'
 import dayjs from 'dayjs'
@@ -337,73 +336,6 @@ export default function UserProfilePageDs() {
         }
     }
 
-    const { data: dataTable } = useFindManySemester(
-        {
-            where: {
-                subjectClasses: {
-                    some: {
-                        subjectClassStudent: {
-                            some: {
-                                studentId: student?.id,
-                            },
-                        },
-                    },
-                },
-            },
-            include: {
-                subjectClasses: {
-                    where: {
-                        subjectClassStudent: {
-                            some: {
-                                studentId: student?.id,
-                            },
-                        },
-                    },
-                    include: {
-                        subjectClassStudent: {
-                            where: {
-                                studentId: student?.id,
-                            },
-                            include: {
-                                subjectVersion: true,
-                                certificates: {
-                                    include: {
-                                        archivedCertificate: true,
-                                    },
-                                },
-                                awards: {
-                                    include: {
-                                        archivedAward: true,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-                trainingCoursesStart: {
-                    where: {
-                        id: student?.fixedClass?.trainingCourseId ?? undefined,
-                    },
-                    include: {
-                        scoreConverts: true,
-                    },
-                },
-                schoolYear: true,
-            },
-            orderBy: {
-                createdAt: 'asc',
-            },
-        },
-        { enabled: !!student?.id }
-    )
-
-    const { onOpen: onOpenPhuLucVanBang } = useDisclosure<{
-        dataTable: any
-        dataStudent: any
-    }>({
-        tag: 'ModalPrintToKQHT',
-    })
-
     return (
         <div>
             <Row gutter={[16, 0]}>
@@ -452,7 +384,7 @@ export default function UserProfilePageDs() {
                         <Col xs={12}>
                             <Flex justify="end" wrap="wrap" gap="8px" className="mt-1">
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                    QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
                                     'NHAP_EXCEL'
                                 ) && (
                                     <>
@@ -471,7 +403,7 @@ export default function UserProfilePageDs() {
                                     </>
                                 )}
                                 {can(
-                                    QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                    QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
                                     'THEM'
                                 ) && (
                                     <Button onClick={handleModal} type="primary">
@@ -684,7 +616,7 @@ export default function UserProfilePageDs() {
                                             />
                                         </Tooltip> */}
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                            QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
                                             'SUA'
                                         ) && (
                                             <EditIcon
@@ -695,7 +627,7 @@ export default function UserProfilePageDs() {
                                             />
                                         )}
                                         {can(
-                                            QL_DAO_TAO_PERMISSION.QL_DAO_TAO_QUAN_LY_HO_SO_QL_SINH_VIEN,
+                                            QL_HO_SO_PERMISSION.QL_HO_SO_QUAN_LY_HO_SO,
                                             'XOA'
                                         ) && (
                                             <DeleteIcon
