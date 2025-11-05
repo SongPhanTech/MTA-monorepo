@@ -163,6 +163,10 @@ const RoomSelector = ({ value = [], onChange, rooms }: RoomSelectorProps) => {
                             label: `${room.name}-${room.capacity}`,
                             value: room.id,
                         }))}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            setVisible(true)
+                        }}
                         placeholder="Chọn phòng thi"
                         maxTagCount="responsive"
                         open={false}

@@ -808,7 +808,7 @@ export default function PhanCongGiangDay({
                                     )}
                                 {khoaBoMon &&
                                     can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
                                         'SUA'
                                     ) && (
                                         <Button
@@ -826,7 +826,7 @@ export default function PhanCongGiangDay({
                                     )}
                                 {khoaBoMon &&
                                     can(
-                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KE_HOACH_GIAO_DUC_PHAN_CONG_GIANG_DAY,
+                                        QL_DAO_TAO_PERMISSION.QL_DAO_TAO_KHOA_BO_MON_PHAN_CONG_GIANG_DAY,
                                         'SUA'
                                     ) && (
                                         <Popover
