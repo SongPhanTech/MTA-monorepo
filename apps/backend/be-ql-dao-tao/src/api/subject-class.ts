@@ -398,7 +398,7 @@ app.openapi(openSubjectClass, async (c) => {
                         fc.graduated                      as graduated,
                         fc."trainingCourseId"             as training_course_id,
                         c."trainingMajorId"               as training_major_id,
-                        c."managementOrganizationId"      as management_organization_id,
+                        sub."managementOrganizationId"    as management_organization_id,
                         dv."sTen"                         as management_organization_name,
                         dv."sMa"                          as management_organization_code,
                         tc."trainingObjectTypeId"         as training_object_type_id,
@@ -414,7 +414,8 @@ app.openapi(openSubjectClass, async (c) => {
                         JOIN "ql-dao-tao"."TrainingCourse" tc ON fc."trainingCourseId" = tc."id"
                         JOIN "ql-dao-tao"."Semester" sem on tc."semesterStartId" = sem.id
                         JOIN "ql-dao-tao"."SchoolYear" schy on sem."schoolYearId" = schy.id
-                        LEFT JOIN "mta"."DM_DonVi" dv ON c."managementOrganizationId" = dv."Id"
+                        JOIN "ql-dao-tao"."Subject" sub on sv."subjectId" = sub.id
+                        LEFT JOIN "mta"."DM_DonVi" dv ON sub."managementOrganizationId" = dv."Id"
                 WHERE fc.active = TRUE
                 AND tbs."deletedAt" IS NULL
                 AND tbs."active" = TRUE
@@ -435,7 +436,7 @@ app.openapi(openSubjectClass, async (c) => {
                         cv.name,
                         sv.id,
                         c."trainingMajorId",
-                        c."managementOrganizationId",
+                        sub."managementOrganizationId",
                         tc."trainingObjectTypeId",
                         dv."sTen",
                         dv."sMa",

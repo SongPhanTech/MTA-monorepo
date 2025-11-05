@@ -16,6 +16,7 @@ import { Button, Col, Flex, Form, Input, message, Popconfirm, Row } from 'antd'
 import _ from 'lodash'
 import { Search } from 'lucide-react'
 import { useCallback, useState } from 'react'
+import { useDisclosure } from 'react-hook-disclosure-modal'
 
 type MonDaLapKeHoachForm = {
     searchText: string | null
@@ -120,6 +121,10 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
         { enabled: !!semesterId && !!trainingObjectTypeId }
     )
 
+    const { onOpen: openKhoiTaoMon } = useDisclosure({
+        tag: 'KhoiTaoMon',
+    })
+
     const { showSpinner, hideSpinner } = useSpinner()
 
     const { mutateAsync: deleteManyPlanTrainingSubject } = useDeleteManyPlanTrainingSubject()
@@ -144,7 +149,7 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
             }}
         >
             <Row align="top" justify="space-between">
-                <Col span={12}>
+                <Col span={10}>
                     <Form.Item className="m-0" name="searchText">
                         <Input
                             id="search"
@@ -164,7 +169,9 @@ export default function MonDaLapKeHoach({ hocLai = false }: { hocLai?: boolean }
                 </Col>
                 <Col span={12}>
                     <Flex justify="end" gap={4}>
-                        <Button type="default">Khởi tạo môn</Button>
+                        <Button onClick={openKhoiTaoMon} type="default">
+                            Khởi tạo môn
+                        </Button>
                         <Button
                             type="primary"
                             onClick={() =>

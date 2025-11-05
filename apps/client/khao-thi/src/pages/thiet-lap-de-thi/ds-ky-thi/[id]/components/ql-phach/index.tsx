@@ -3,7 +3,7 @@ import type { FilterProps } from '@components/commons/typeFilter'
 import { DEFAULT_PAGINATE_SIZE } from '@constants/constants'
 import useSpinner from '@hooks/spinner'
 import { ExamStatus } from '@workspace/db'
-import { useCountExamSession, useFindManyExamSession, useFindUniqueExam } from '@workspace/db/hooks'
+import { useCountExamPaper, useFindManyExamPaper, useFindUniqueExam } from '@workspace/db/hooks'
 import { Col, Flex, InputNumber, message, Row } from 'antd'
 import { useMemo, useState } from 'react'
 
@@ -37,7 +37,7 @@ export default function ManageExamCode({ id }: ExamFaxProps) {
         [id, filters.examCode]
     )
 
-    const { data = [], refetch } = useFindManyExamSession(
+    const { data = [], refetch } = useFindManyExamPaper(
         {
             where,
             include: {
@@ -49,7 +49,7 @@ export default function ManageExamCode({ id }: ExamFaxProps) {
         { enabled: !!id }
     )
 
-    const { data: count, refetch: refetchCount } = useCountExamSession({ where }, { enabled: !!id })
+    const { data: count, refetch: refetchCount } = useCountExamPaper({ where }, { enabled: !!id })
 
     const { data: initialValue } = useFindUniqueExam(
         {

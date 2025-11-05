@@ -189,7 +189,6 @@ export default function PhanCongGiangDay({
                           },
                       }
                     : {}),
-
                 ...(filters.lecturerId?.length === 1
                     ? {
                           ...(filters.lecturerId[0]

@@ -387,26 +387,22 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         >
                             <Button type="dashed">0. Tạo kế hoạch thi</Button>
                         </Popover>
-                        {exams.length > 0 && (
-                            <Button
-                                type="primary"
-                                className="bg-blue-500"
-                                onClick={handleMergeExam}
-                                disabled={selectedRowKeys.length < 2}
-                            >
-                                Ghép lớp
-                            </Button>
-                        )}
-                        {exams.length > 0 && (
-                            <Button
-                                type="primary"
-                                className="bg-orange-500"
-                                onClick={handleUnmergeExam}
-                                disabled={selectedRowKeys.length !== 1}
-                            >
-                                Tách lớp
-                            </Button>
-                        )}
+                        <Button
+                            type="primary"
+                            className="bg-blue-500"
+                            onClick={handleMergeExam}
+                            disabled={selectedRowKeys.length < 2}
+                        >
+                            Ghép lớp
+                        </Button>
+                        <Button
+                            type="primary"
+                            className="bg-orange-500"
+                            onClick={handleUnmergeExam}
+                            disabled={selectedRowKeys.length !== 1}
+                        >
+                            Tách lớp
+                        </Button>
                         <Button type="primary" onClick={handleSubmitExam}>
                             Lưu
                         </Button>

@@ -202,3 +202,4 @@ export {
     PutDeadlineScoreModal,
     PutThesisSession,
 }
+export * from './ke-hoach-dao-tao'
