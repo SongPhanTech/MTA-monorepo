@@ -63,6 +63,7 @@ app.openapi(createNewExamList, async (c) => {
             cancelled: false,
             deletedAt: null,
             enteredScore: true,
+            isLockExamScore: false,
             status: 'OFFICIAL',
             active: true,
             type: $Enums.SubjectClassType.NORMAL,
@@ -76,7 +77,6 @@ app.openapi(createNewExamList, async (c) => {
                     id: true,
                 },
             },
-            roomId: true,
         },
     })
 

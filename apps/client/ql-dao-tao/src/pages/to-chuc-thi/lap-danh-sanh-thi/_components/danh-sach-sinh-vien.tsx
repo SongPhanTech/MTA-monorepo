@@ -5,7 +5,7 @@ import { useStore } from '@tanstack/react-store'
 import type { Prisma } from '@workspace/db/client'
 import { useFindManyExamList } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
-import { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
+import type { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
 import { Button, Checkbox, Col, Flex, Form, Input, message, Row } from 'antd'
 import { useEffect } from 'react'
 import { keHoachThiStore } from '..'
@@ -14,22 +14,10 @@ interface Props {
     subjectClassId: string | null
 }
 
-type StudentType = Prisma.StudentGetPayload<{
-    include: {
-        userProfile: {
-            select: {
-                fullname: true
-            }
-        }
-    }
-}>
-
 interface StudentSubjectScoreFormType {
     list: Record<
         string,
         {
-            examBanned?: boolean
-            examBannedReason?: string
             examPostponed?: boolean
             examPostponedReason?: string
             description?: string
@@ -53,6 +41,7 @@ export default function DanhSachSinhVien() {
             },
             select: {
                 id: true,
+                start: true,
                 examRoom: {
                     select: {
                         room: {
@@ -127,6 +116,78 @@ export default function DanhSachSinhVien() {
 
     const listForm = Form.useWatch('list', form) || []
 
+    const handleLayDiemCCTX = async () => {
+        try {
+            showSpinner()
+
+            const resExam = await sqlTransaction([
+                {
+                    model: 'Exam' as const,
+                    operation: 'findUnique',
+                    data: {
+                        where: {
+                            id: selectedExamId,
+                        },
+                        select: {
+                            subjectClass: {
+                                select: {
+                                    subjectClassStudent: true,
+                                },
+                            },
+                            examRooms: {
+                                include: {
+                                    examList: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            ])
+            if (resExam.status !== 200 || !resExam.data) {
+                throw new Error('Lấy kế hoạch thi thất bại')
+            }
+            const exam = resExam.data[0] as Prisma.ExamGetPayload<{
+                select: {
+                    subjectClass: {
+                        select: {
+                            subjectClassStudent: true
+                        }
+                    }
+                    examRooms: {
+                        select: {
+                            capacity: true
+                            examList: true
+                        }
+                    }
+                }
+            }>
+            const res = await sqlTransaction([
+                {
+                    model: 'ExamPaper' as const,
+                    operation: 'deleteMany',
+                    data: {
+                        where: {
+                            examCode: null,
+                            examList: {
+                                examRoom: {
+                                    examId: selectedExamId,
+                                },
+                            },
+                        },
+                    },
+                },
+            ])
+            if (res.status !== 200) {
+                throw new Error('Lấy điểm thất bại')
+            }
+            message.success('Lấy điểm thành công')
+        } catch (error: any) {
+            message.error(error.message || 'Có lỗi xảy ra, vui lòng thử lại sau!')
+        } finally {
+            hideSpinner()
+        }
+    }
+
     const handleSaveExamDecision = async () => {
         try {
             showSpinner()
@@ -139,11 +200,7 @@ export default function DanhSachSinhVien() {
             })
 
             const filteredValues = valueListObject.filter(
-                (item) =>
-                    item.examPostponed ||
-                    item.examPostponedReason ||
-                    item.examBanned ||
-                    item.examBannedReason
+                (item) => item.examPostponed || item.examPostponedReason
             )
 
             const updateTransactions: SqlTransactionBodyItem[] = filteredValues.map((i) => ({
@@ -156,8 +213,6 @@ export default function DanhSachSinhVien() {
                     data: {
                         examPostponed: i.examPostponed ?? false,
                         examPostponedReason: i.examPostponed ? i.examPostponedReason || null : null,
-                        examBanned: i.examBanned ?? false,
-                        examBannedReason: i.examBanned ? i.examBannedReason || null : null,
                     },
                 },
             }))
@@ -184,9 +239,6 @@ export default function DanhSachSinhVien() {
                     .reduce(
                         (acc, cur) => {
                             acc[cur.id] = {
-                                examBanned: cur?.studentSubjectScore?.examBanned ?? false,
-                                examBannedReason:
-                                    cur?.studentSubjectScore?.examBannedReason ?? undefined,
                                 examPostponed: cur?.studentSubjectScore?.examPostponed ?? false,
                                 examPostponedReason:
                                     cur?.studentSubjectScore?.examPostponedReason ?? undefined,
@@ -204,17 +256,22 @@ export default function DanhSachSinhVien() {
         <Row gutter={16}>
             <Col span={24}>
                 <Row gutter={16} align="middle">
-                    <Col span={12}>
+                    <Col span={24}>
                         <Flex justify="end" align="center" gap={12}>
-                            <Checkbox>Khóa nhập ĐQT</Checkbox>
-                            <Checkbox>Khóa danh sách thi</Checkbox>
-                            <Button type="primary" onClick={handleSaveExamDecision}>
-                                Lưu cấm thi
+                            <Button type="primary" onClick={handleLayDiemCCTX}>
+                                1. Lấy điểm SV
                             </Button>
-                            <Button type="primary" onClick={handleSaveExamDecision}>
+                            <Button
+                                type="primary"
+                                className="bg-orange-500"
+                                onClick={handleSaveExamDecision}
+                            >
                                 Lưu hoãn thi
                             </Button>
-                            <Button type="primary">Phân phòng thi</Button>
+                            <Checkbox>Khóa nhập ĐQT</Checkbox>
+                            <Checkbox>Khóa danh sách thi</Checkbox>
+                            <Button type="primary">2. Phân phòng thi</Button>
+                            <Button type="dashed">Xuất DS thi</Button>
                         </Flex>
                     </Col>
                 </Row>
@@ -225,7 +282,7 @@ export default function DanhSachSinhVien() {
                         rowKey="id"
                         id="danh-sach-sinh-vien"
                         headerTitleKey={(record) =>
-                            `Phòng thi: ${record.examRoom?.room?.name}${record.examRoom?.capacity ? ` (Sức chứa: ${record.examRoom?.capacity})` : ''}`
+                            `Phòng thi: ${record.examRoom?.room?.name} - Ca ${record.start} ${record.examRoom?.capacity ? ` : ${record.examRoom?.capacity}` : ''}`
                         }
                         childrenFieldName="examPapers"
                         defaultExpandAll
@@ -296,18 +353,7 @@ export default function DanhSachSinhVien() {
                             {
                                 title: 'Lý do cấm thi',
                                 render: (_, record) => {
-                                    const examBanned = listForm[record.id]?.examBanned
-                                    return (
-                                        <Form.Item
-                                            name={['list', record.id, 'examBannedReason']}
-                                            className="m-0"
-                                        >
-                                            <Input
-                                                placeholder="Nhập lý do cấm thi"
-                                                disabled={!examBanned}
-                                            />
-                                        </Form.Item>
-                                    )
+                                    return record.examBannedReason
                                 },
                             },
                             {
@@ -315,16 +361,7 @@ export default function DanhSachSinhVien() {
                                 align: 'center',
                                 width: 80,
                                 render: (_, record) => {
-                                    return (
-                                        <Form.Item
-                                            className="w-full mb-0"
-                                            name={['list', record.id, 'examBanned']}
-                                            label=""
-                                            valuePropName="checked"
-                                        >
-                                            <Checkbox />
-                                        </Form.Item>
-                                    )
+                                    return <Checkbox checked={record.examBanned} />
                                 },
                             },
                             {

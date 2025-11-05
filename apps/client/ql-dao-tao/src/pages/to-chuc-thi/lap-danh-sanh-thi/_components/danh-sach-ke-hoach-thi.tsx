@@ -8,16 +8,30 @@ import type { FilterProps } from '@constants/type'
 import { useExamTypeOptions } from '@hooks/examType'
 import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
-import type { SubjectClass } from '@workspace/db/client'
+import { type SubjectClass } from '@workspace/db/client'
 import { useCountExam, useFindManyExam, useFindManyRoom } from '@workspace/db/hooks'
+import { sqlTransaction } from '@workspace/libs/api/model'
 import { useCreateExams, useMergeExam, useUnmergeExam } from '@workspace/libs/api/training'
+import { fastIsEqual } from '@workspace/libs/utils'
 import { useSemesterStore, useTrainingObjectTypeStore } from '@workspace/ui'
-import { Button, Checkbox, Col, Flex, Form, Input, message, Popover, Row, Switch } from 'antd'
+import { cn } from '@workspace/ui/lib/utils'
+import {
+    Button,
+    Checkbox,
+    Col,
+    Flex,
+    Form,
+    Input,
+    InputNumber,
+    message,
+    Popover,
+    Row,
+    Switch,
+} from 'antd'
 import type { TableRowSelection } from 'antd/lib/table/interface'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { keHoachThiStore } from '..'
-import { cn } from '@workspace/ui/lib/utils'
 
 interface Props {
     setActiveKey: (key: string) => void
@@ -28,6 +42,7 @@ type SubjectClassFormType = {
         string,
         {
             rooms?: Array<{ roomId: string; quantity: number }>
+            session: number
             isChanged?: boolean
         }
     >
@@ -55,6 +70,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const [form] = Form.useForm<SubjectClassFormType>()
+    const listChanges = Form.useWatch('list', form)
     const [formButton] = Form.useForm<ButtonFormType>()
 
     const { data: exams = [], refetch: refetchExams } = useFindManyExam({
@@ -110,6 +126,12 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     code: 'asc',
                 },
             },
+            examRooms: {
+                select: {
+                    roomId: true,
+                    capacity: true,
+                },
+            },
         },
         orderBy: {
             subjectVersionId: 'asc',
@@ -155,19 +177,19 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
         },
     })
 
-    useEffect(() => {
+    const resetField = () => {
         if (exams) {
             form.setFieldsValue({
                 list: exams.reduce(
                     (acc, exam) => {
                         acc[exam.id] = {
-                            rooms: exam.subjectClass
-                                .filter((sc) => !!sc.roomId)
-                                .map((sc) => ({
-                                    roomId: sc.roomId as string,
-                                    quantity: sc.room?.examCapacity || 0,
-                                })),
+                            rooms:
+                                exam.examRooms?.map((er) => ({
+                                    roomId: er.roomId,
+                                    quantity: er.capacity,
+                                })) || [],
                             isChanged: false,
+                            session: exam.session ?? 1,
                         }
                         return acc
                     },
@@ -175,7 +197,11 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                 ),
             })
         }
-    }, [exams, form])
+    }
+
+    useEffect(() => {
+        resetField()
+    }, [exams])
 
     const { mutateAsync: createExam } = useCreateExams()
     const { mutateAsync: mergeExam } = useMergeExam()
@@ -199,7 +225,8 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
             }
         },
         hideSelectAll: true,
-        columnWidth: 30,
+        columnWidth: 35,
+        columnTitle: 'Ghép/Tách',
     }
 
     const debouncedSearch = useCallback(
@@ -232,8 +259,83 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
         )
     }
 
-    const handleSubmitExam = () => {
+    const handleSubmitExam = async () => {
         const data = form.getFieldsValue()
+        try {
+            showSpinner()
+            if (trainingObjectTypeId && semesterId) {
+                const listChanges = Object.entries(data.list)
+                    .filter(([_, value]) => value.isChanged)
+                    .map(([key, value]) => ({
+                        examId: key,
+                        rooms: value.rooms ?? [],
+                        session: Array.from({ length: value.session }).map((_, index) => ({
+                            sessionNumber: index + 1,
+                        })),
+                    }))
+                const res = await sqlTransaction([
+                    {
+                        model: 'ExamList' as const,
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                examRoom: {
+                                    examId: {
+                                        in: listChanges.map(({ examId }) => examId),
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    {
+                        model: 'ExamRoom' as const,
+                        operation: 'deleteMany',
+                        data: {
+                            where: {
+                                examId: {
+                                    in: listChanges.map(({ examId }) => examId),
+                                },
+                            },
+                        },
+                    },
+                    ...listChanges.map(({ examId, rooms, session }) => ({
+                        model: 'Exam' as const,
+                        operation: 'update',
+                        data: {
+                            data: {
+                                examRooms: {
+                                    create: rooms.map((room) => ({
+                                        roomId: room.roomId,
+                                        capacity: room.quantity,
+                                        examList: {
+                                            create: session.map((s) => ({
+                                                start: s.sessionNumber,
+                                                end: s.sessionNumber,
+                                            })),
+                                        },
+                                    })),
+                                },
+                                session: session.length,
+                            },
+                            where: {
+                                id: examId,
+                            },
+                        },
+                    })),
+                ])
+                if (res.status !== 200) {
+                    throw new Error('Lưu kế hoạch thi thất bại')
+                }
+                message.success('Lưu kế hoạch thi thành công')
+                refetchExams()
+                formButton.resetFields()
+                setOpen(false)
+            }
+        } catch (error: any) {
+            message.error(error?.message || 'Tạo kế hoạch thi thất bại')
+        } finally {
+            hideSpinner()
+        }
     }
 
     const handleCreateExam = async () => {
@@ -406,7 +508,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                         <Button type="primary" onClick={handleSubmitExam}>
                             Lưu
                         </Button>
-                        <Button type="primary" danger>
+                        <Button type="primary" danger onClick={() => resetField()}>
                             Hủy
                         </Button>
                     </Flex>
@@ -414,7 +516,27 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
             </Col>
 
             <Col span={24}>
-                <Form form={form}>
+                <Form
+                    form={form}
+                    onValuesChange={(changedValue) => {
+                        const examId = Object.keys(changedValue.list)[0]
+                        form.setFieldsValue({
+                            list: {
+                                ...form.getFieldValue('list'),
+                                [examId]: {
+                                    ...form.getFieldValue('list')[examId],
+                                    isChanged: fastIsEqual(
+                                        {
+                                            ...form.getFieldValue('list')[examId],
+                                            ...changedValue.list[examId],
+                                        },
+                                        form.getFieldValue('list')[examId]
+                                    ),
+                                },
+                            },
+                        })
+                    }}
+                >
                     <Table
                         rowKey="id"
                         rowSelection={{
@@ -422,31 +544,32 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             ...rowSelection,
                         }}
                         onRow={(record) => ({
-                            onClick: () => {
-                                const selectedKeys = [...selectedRowKeys]
-                                if (
-                                    selectedSubjectId &&
-                                    record.subjectClass?.[0]?.subjectId !== selectedSubjectId
-                                ) {
-                                    return
-                                }
-                                const index = selectedKeys.indexOf(record.id)
-                                if (index >= 0) {
-                                    selectedKeys.splice(index, 1)
-                                } else {
-                                    selectedKeys.push(record.id)
-                                }
-                                setSelectedRowKeys(selectedKeys)
-                                setSelectedSubjectId(
-                                    selectedKeys.length > 0
-                                        ? record.subjectClass?.[0]?.subjectId
-                                        : undefined
-                                )
-                            },
+                            // onClick: () => {
+                            //     const selectedKeys = [...selectedRowKeys]
+                            //     if (
+                            //         selectedSubjectId &&
+                            //         record.subjectClass?.[0]?.subjectId !== selectedSubjectId
+                            //     ) {
+                            //         return
+                            //     }
+                            //     const index = selectedKeys.indexOf(record.id)
+                            //     if (index >= 0) {
+                            //         selectedKeys.splice(index, 1)
+                            //     } else {
+                            //         selectedKeys.push(record.id)
+                            //     }
+                            //     setSelectedRowKeys(selectedKeys)
+                            //     setSelectedSubjectId(
+                            //         selectedKeys.length > 0
+                            //             ? record.subjectClass?.[0]?.subjectId
+                            //             : undefined
+                            //     )
+                            // },
                             className: cn(
                                 record.subjectClass?.[0]?.subjectId !== selectedSubjectId &&
                                     selectedSubjectId !== undefined &&
-                                    'bg-yellow-100'
+                                    'bg-gray-400',
+                                listChanges?.[record.id]?.isChanged && 'bg-yellow-100'
                             ),
                             onDoubleClick: (e) => {
                                 const target = e.target as HTMLElement
@@ -519,7 +642,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Số SV',
                                 align: 'center',
-                                width: 30,
+                                width: 40,
                                 render: (_, record) =>
                                     record.subjectClass?.reduce(
                                         (
@@ -534,7 +657,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Hình thức thi',
                                 align: 'center',
-                                width: 60,
+                                width: 80,
                                 render: (_, record) => {
                                     const examType = record.subjectClass?.[0]?.subject?.examType
                                     return examType ? getExamTypeLabel(examType) : ''
@@ -557,7 +680,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Khóa nhập ĐQT',
                                 align: 'center',
-                                width: 70,
+                                width: 80,
                                 render: (_, record) => {
                                     const isLockScore = record.subjectClass
                                         ?.map?.((sc: SubjectClass) => sc.isLockScore)
@@ -578,7 +701,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Khóa DTS',
                                 align: 'center',
-                                width: 40,
+                                width: 50,
                                 render: (_, record) => {
                                     const lockExamSessions = record.lockExamSessions
                                     return <Checkbox checked={lockExamSessions} />
@@ -587,7 +710,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Đánh phách',
                                 align: 'center',
-                                width: 40,
+                                width: 60,
                                 render: (_, record) => {
                                     const createdExamCode = record.createdExamCode
                                     return <Checkbox checked={createdExamCode} />
@@ -596,7 +719,7 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Khóa phách',
                                 align: 'center',
-                                width: 40,
+                                width: 60,
                                 render: (_, record) => {
                                     const lockExamCode = record.lockExamCode
                                     return <Checkbox checked={lockExamCode} />
@@ -605,19 +728,50 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                             {
                                 title: 'Danh sách phòng',
                                 align: 'center',
-                                width: 170,
+                                width: 240,
+                                render: (_, record) => {
+                                    return (
+                                        <>
+                                            <Form.Item
+                                                className="m-0"
+                                                hidden
+                                                name={['list', record.id, 'isChanged']}
+                                            />
+                                            <Form.Item
+                                                className="m-0"
+                                                name={['list', record.id, 'rooms']}
+                                            >
+                                                <RoomSelector
+                                                    rooms={rooms.map((room) => ({
+                                                        id: room.id,
+                                                        capacity: room.examCapacity ?? 0,
+                                                        name: room.name,
+                                                    }))}
+                                                />
+                                            </Form.Item>
+                                        </>
+                                    )
+                                },
+                            },
+                            {
+                                title: 'Số ca thi',
+                                align: 'center',
+                                width: 50,
                                 render: (_, record) => {
                                     return (
                                         <Form.Item
                                             className="m-0"
-                                            name={['list', record.id, 'rooms']}
+                                            name={['list', record.id, 'session']}
                                         >
-                                            <RoomSelector
-                                                rooms={rooms.map((room) => ({
-                                                    id: room.id,
-                                                    capacity: room.examCapacity ?? 0,
-                                                    name: room.name,
-                                                }))}
+                                            <InputNumber
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                }}
+                                                className="w-full"
+                                                controls={false}
+                                                step={1}
+                                                max={6}
+                                                min={1}
                                             />
                                         </Form.Item>
                                     )

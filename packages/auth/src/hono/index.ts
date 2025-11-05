@@ -26,7 +26,6 @@ export const jwtAuth = (
     const JWKS = createRemoteJWKSet(new URL(jwksUri))
     return async (c, next) => {
         const token = getCookie(c, 'x-token')
-        console.log('[jwtAuth].getJwtFromRequest', token)
         if (!token) {
             return c.text('Unauthorized: No token provided', 401)
         }
@@ -35,8 +34,6 @@ export const jwtAuth = (
                 issuer,
                 audience,
             })
-            console.log('[jwtAuth].payload', payload)
-
             // Attach user info to context
             c.set('user', {
                 userName: payload.preferred_username || payload.name,
