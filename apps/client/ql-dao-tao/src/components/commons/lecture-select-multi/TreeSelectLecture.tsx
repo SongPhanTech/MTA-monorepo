@@ -30,18 +30,7 @@ function buildOrgAndLectureTree(
             title: item.name || 'Đơn vị không tên',
             value: item.id,
             selectable: false,
-            children: [
-                ...lecturers
-                    .filter((lecturer) => lecturer.organizationId === item.id)
-                    .map((lecturer) => ({
-                        title: lecturer.userProfile?.fullName || 'Giảng viên không tên',
-                        value: lecturer.id,
-                        selectable: true,
-                        children: [],
-                        icon: <UserIcon size={16} className="pb-1" />,
-                    })),
-                ...buildOrgAndLectureTree(list, lecturers, item.id),
-            ],
+            children: buildOrgAndLectureTree(list, lecturers, item.id),
         }))
 
     return [...organizationLecturers, ...children]
