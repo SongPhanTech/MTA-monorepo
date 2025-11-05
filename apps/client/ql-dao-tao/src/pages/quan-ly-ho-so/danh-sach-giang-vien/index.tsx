@@ -169,7 +169,7 @@ export default function UserProfilePageLecture() {
         [filters]
     )
 
-    const { data = [] } = useFindManyLecturer({
+    const { data = [], refetch } = useFindManyLecturer({
         where,
         include: {
             userProfile: {
@@ -253,6 +253,10 @@ export default function UserProfilePageLecture() {
                         </Button>
                         <ImportLecturerModal
                             visible={importModalVisible}
+                            onSuccess={() => {
+                                setImportModalVisible(false)
+                                refetch()
+                            }}
                             onCancel={() => setImportModalVisible(false)}
                         />
                         <ExportTemplateLecturer />
@@ -303,15 +307,31 @@ export default function UserProfilePageLecture() {
                                         : '',
                             },
                             {
+                                title: 'Ngày sinh',
+                                render: (__, record) =>
+                                    record.userProfile?.dateOfBirth
+                                        ? dayjs(record.userProfile.dateOfBirth).format('DD/MM/YYYY')
+                                        : '',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'dateOfBirth',
+                            },
+                            {
                                 title: 'CCCD/CMND',
                                 render: (__, record) =>
                                     record.userProfile ? `${record.userProfile.idCardNumber}` : '',
                                 align: 'center',
-                                width: 150,
+                                width: 120,
                                 dataIndex: 'idCardNumber',
                                 type: 'input',
                             },
-
+                            {
+                                title: 'SĐT',
+                                render: (__, record) => record.userProfile?.phoneNumber || '',
+                                align: 'center',
+                                width: 120,
+                                dataIndex: 'phoneNumber',
+                            },
                             {
                                 title: 'Đơn vị',
                                 dataIndex: 'organization',

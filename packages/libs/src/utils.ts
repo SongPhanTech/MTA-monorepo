@@ -1,5 +1,24 @@
 import type { Prisma, ScoreConvert, StudentSubjectScore } from '@workspace/db'
+import dayjs from 'dayjs'
 import Decimal from 'decimal.js'
+
+export function parseDate(date?: string): dayjs.Dayjs {
+    const dateFormats = [
+        // Year = 4 digits
+        'D/M/YYYY',
+        'DD/M/YYYY',
+        'D/MM/YYYY',
+        'DD/MM/YYYY',
+
+        // Year = 2 digits
+        'D/M/YY',
+        'DD/M/YY',
+        'D/MM/YY',
+        'DD/MM/YY',
+    ]
+
+    return dayjs(date, dateFormats, true)
+}
 
 type StudentSubjectScoreRelation = StudentSubjectScore & {
     finalScore: Decimal | null
