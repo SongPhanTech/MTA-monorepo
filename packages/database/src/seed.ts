@@ -4,20 +4,19 @@ import {
     ConfigKey,
     PrismaClient,
 } from '../generated/prisma-client'
+import { seedAcademicActionConfig } from './seed/academic-action-config'
 import {
     academicRankingGraduationCivilian,
     academicRankingGraduationMilitary,
     academicRankingStudying,
 } from './seed/academic-ranking-convert'
+import { seedAcademicWarningRule } from './seed/academic-warning-rule'
+import { seedScholarshipCriteria } from './seed/scholarship'
+import { seedSchoolYear } from './seed/schoolYear'
 import { scoreConversions } from './seed/score-convert'
 import { trainingData } from './seed/trainingData'
 
 const prisma = new PrismaClient()
-
-// TODO: run seed/scholarship.ts, seed/academic-action-config.ts, seed/academic-warning-rule.ts
-// import './seed/scholarship'
-// import './seed/academic-action-config'
-// import './seed/academic-warning-rule'
 
 async function main() {
     const configs: Record<
@@ -202,6 +201,29 @@ async function main() {
                 updatedAt: new Date('2025-04-03T12:58:42.507Z'),
             },
         ],
+    })
+
+    await seedSchoolYear()
+    const semester = await prisma.semester.findFirstOrThrow({
+        orderBy: { startDate: 'asc' },
+    })
+
+    await prisma.trainingCourse.create({
+        data: {
+            code: 'K59',
+            name: 'Khoá 59',
+            description: 'Khoá 59 Quân sự',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            semesterStartId: semester.id,
+            trainingObjectTypeId: '550e8402-e29b-41d4-a716-446655440000', // Quân sự
+            coef_1: 0.1,
+            coef_2: 0.3,
+            coef_3: 0.6,
+            scoreToPass: 4,
+            scoreToTakeExam: 4,
+            baseScore: 'Base10',
+        },
     })
 
     const trainingCourses = await prisma.trainingCourse.findMany({
@@ -592,6 +614,10 @@ async function main() {
             },
         },
     })
+
+    seedScholarshipCriteria()
+    seedAcademicActionConfig()
+    seedAcademicWarningRule()
 }
 
 main()
