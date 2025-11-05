@@ -1,9 +1,10 @@
-import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
 import { useFindManyDM_DonVi, useFindManyLecturer } from '@workspace/db/hooks'
 import { message, TreeSelect as TreeSelectAnt, type TreeSelectProps } from 'antd'
 import { UserIcon } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useMemo } from 'react'
+import type { TreeNodeType } from '@/utils/convertOrganizationToTree'
+
 // Hàm tạo cây đơn vị và giảng viên
 function buildOrgAndLectureTree(
     list: Array<{ id: string; name: string | null; parentId: string | null }>,
@@ -14,7 +15,16 @@ function buildOrgAndLectureTree(
     }>,
     parentId: string | null = null
 ): Array<TreeNodeType> {
-    return list
+    const organizationLecturers = lecturers
+        .filter((lecturer) => lecturer.organizationId === parentId)
+        .map((lecturer) => ({
+            title: lecturer.userProfile?.fullName || 'Giảng viên không tên',
+            value: lecturer.id,
+            selectable: true,
+            icon: <UserIcon size={16} className="pb-1" />,
+        }))
+
+    const children = list
         .filter((item) => (item.parentId ?? null) === parentId)
         .map((item) => ({
             title: item.name || 'Đơn vị không tên',
@@ -25,7 +35,7 @@ function buildOrgAndLectureTree(
                     .filter((lecturer) => lecturer.organizationId === item.id)
                     .map((lecturer) => ({
                         title: lecturer.userProfile?.fullName || 'Giảng viên không tên',
-                        value: `${lecturer.id}`,
+                        value: lecturer.id,
                         selectable: true,
                         children: [],
                         icon: <UserIcon size={16} className="pb-1" />,
@@ -33,6 +43,8 @@ function buildOrgAndLectureTree(
                 ...buildOrgAndLectureTree(list, lecturers, item.id),
             ],
         }))
+
+    return [...organizationLecturers, ...children]
 }
 
 // Define props for our custom component

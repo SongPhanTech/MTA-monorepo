@@ -1,3 +1,4 @@
+import { parseDate } from '@workspace/libs/utils'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { read, utils } from 'xlsx'
@@ -59,7 +60,15 @@ export const parseSheetLecturer = (file: ArrayBufferLike) => {
     const data = records
         .filter((row) => Number.isInteger(Number.parseFloat(row[cols.stt] || '')))
         .map((row) => {
-            const dateOfBirth = dayjs(row[cols.dateOfBirth], 'DD/MM/YYYY').startOf('day')
+            const dateOfBirth = parseDate(row[cols.dateOfBirth])
+
+            if (row[cols.dateOfBirth] && !dateOfBirth.isValid()) {
+                errors.push({
+                    sheetRef: sheetName,
+                    cellRef: `${cols.code}${row.__rowNum__ + 1}`,
+                    message: 'Ngày sinh không hợp lệ (ngày/tháng/năm)',
+                })
+            }
 
             if (!row[cols.code]) {
                 errors.push({

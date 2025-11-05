@@ -146,6 +146,17 @@ export const parseSheetSubject = (file: ArrayBufferLike): ParseSubjectResult => 
             continue
         }
 
+        // Validate đơn vị quản lý
+        const orgCode = row[cols.orgCode]?.trim()
+        if (!orgCode) {
+            errors.push({
+                sheetRef: sheetName,
+                cellRef: `${cols.name}${rowNumber}`,
+                message: 'ĐV phụ trách không được để trống',
+            })
+            continue
+        }
+
         // Parse các trường bắt buộc
         const credit = parseIntField(row[cols.credit])
         if (credit === undefined) {

@@ -347,6 +347,14 @@ export default function UpdateUserPage() {
     }, [search, listTabs.filter])
 
     const { showSpinner, hideSpinner } = useSpinner()
+    function findLatestQuyetDinh(list: any[]) {
+    if (list.length === 0) return null
+    return list.reduce((latest, current) =>
+        new Date(current.ngayNhanQuyetDinh) > new Date(latest.ngayNhanQuyetDinh)
+        ? current
+        : latest
+    )
+    }
 
     const handleSubmit = async ({
         genderId,
@@ -398,6 +406,13 @@ export default function UpdateUserPage() {
             }).catch((error) => {
                 console.log(error)
             })
+                 let rank=null
+                if(values.capBac?.length>0){
+                    if(values.capBac?.length===1){
+                        rank = values.capBac[0]
+                    }
+                   rank = findLatestQuyetDinh(values?.capBac)
+                }
             // if (res.status === 200) {
             let listTransaction: any = [
                 {
@@ -489,6 +504,7 @@ export default function UpdateUserPage() {
                                 ? dayjs(values.tenureDate).toISOString()
                                 : null,
                             avatar: form.getFieldValue('avatar'),
+                            rankId:rank?.capBacId ?? undefined ,
                             hocVi:
                                 values.hocVi && values.hocVi.length > 0
                                     ? {
@@ -947,11 +963,14 @@ export default function UpdateUserPage() {
                 ]
             }
 
-            await sqlTransaction(listTransaction)
-            queryClient.invalidateQueries({
+           const res= await sqlTransaction(listTransaction)
+           if(res?.status===200){
+                        queryClient.invalidateQueries({
                 queryKey: ['UserProfile'],
             })
             message.success('Cập nhật thành công')
+           }
+    
             // }
             // router.push(ROUTER_PATH.QL_HO_SO.QUAN_LY_HO_SO)
         } catch (error) {

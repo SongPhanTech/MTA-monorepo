@@ -9,6 +9,7 @@ import { useState } from 'react'
 const { Panel } = Collapse
 interface ImportStudentModalProps {
     visible: boolean
+    onSuccess: () => void
     onCancel: () => void
 }
 
