@@ -5,12 +5,6 @@ import { useMemo, useState } from 'react'
 import DanhSachKeHoachThi from './_components/danh-sach-ke-hoach-thi'
 import DanhSachSinhVien from './_components/danh-sach-sinh-vien'
 
-interface TabItem {
-    key: string
-    label: string
-    content: React.ReactNode
-}
-
 export type keHoachThiStoreState = {
     selectedExamId?: string
 }

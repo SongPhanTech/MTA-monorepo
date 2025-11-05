@@ -117,6 +117,12 @@ app.openapi(createNewExamList, async (c) => {
                 subjectVersionId: subjectId,
             })),
         })
+        for (const { classIds, examId } of groupedExams) {
+            await tx.subjectClass.updateMany({
+                where: { id: { in: classIds } },
+                data: { examId },
+            })
+        }
     })
 
     return c.json({ success: true, message: 'Lên danh sách thi thành công' })
