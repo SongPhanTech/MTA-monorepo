@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { prisma } from '..'
 import { $Enums, createId } from '@workspace/db'
+import { prisma } from '..'
 
 const app = new OpenAPIHono({ strict: false })
 
@@ -331,14 +331,6 @@ app.openapi(mergeExam, async (c) => {
             id: true,
             examId: true,
             subjectId: true,
-            subjectClassStudent: {
-                select: { id: true },
-                where: {
-                    examBanned: false,
-                    withdrew: false,
-                    exempted: false,
-                },
-            },
         },
     })
 
@@ -358,9 +350,6 @@ app.openapi(mergeExam, async (c) => {
     const newExamId = createId()
 
     const classIds = classes.map((cls) => cls.id)
-    const studentSubjectScoreIds = classes.flatMap((cls) =>
-        cls.subjectClassStudent.map((scs) => scs.id)
-    )
 
     await prisma.$transaction(async (tx) => {
         await tx.exam.create({
@@ -370,22 +359,6 @@ app.openapi(mergeExam, async (c) => {
             where: { id: { in: classIds } },
             data: { examId: newExamId },
         })
-        // await tx.$executeRawUnsafe(`
-        //     UPDATE "ql-dao-tao"."SubjectClass"
-        //     SET "examId" = '${newExamId}'
-        //     WHERE "id" IN (${classIds.map((id) => `'${id}'`).join(', ')});
-        // `)
-        if (studentSubjectScoreIds.length > 0) {
-            await tx.studentSubjectScore.updateMany({
-                where: { id: { in: studentSubjectScoreIds } },
-                data: { examId: newExamId },
-            })
-            // await tx.$executeRawUnsafe(`
-            //     UPDATE "ql-dao-tao"."StudentSubjectScore"
-            //     SET "examId" = '${newExamId}'
-            //     WHERE "id" IN (${studentSubjectScoreIds.map((id) => `'${id}'`).join(', ')});
-            // `)
-        }
         await tx.exam.deleteMany({
             where: { id: { in: examIds } },
         })
@@ -454,14 +427,6 @@ app.openapi(unmergeExam, async (c) => {
         select: {
             id: true,
             subjectId: true,
-            subjectClassStudent: {
-                select: { id: true },
-                where: {
-                    examBanned: false,
-                    withdrew: false,
-                    exempted: false,
-                },
-            },
         },
     })
 
@@ -480,42 +445,26 @@ app.openapi(unmergeExam, async (c) => {
     const newExams = classes.map((cls) => ({
         examId: createId(),
         classId: cls.id,
-        studentSubjectScoreIds: cls.subjectClassStudent.map((scs) => scs.id),
     }))
 
-    const newExamIds = newExams.map((e) => e.examId)
-
     await prisma.$transaction(async (tx) => {
-        await tx.exam.createMany({
-            data: newExamIds.map((id) => ({ id, subjectVersionId })),
+        await tx.subjectClass.updateMany({
+            where: { id: { in: classes.map((c) => c.id) } },
+            data: {
+                examId: null,
+            },
         })
-
-        await tx.$executeRawUnsafe(`
-            UPDATE "ql-dao-tao"."SubjectClass" AS c
-            SET "examId" = data."examId"
-            FROM (
-                VALUES
-                ${newExams.map(({ examId, classId }) => `('${classId}', '${examId}')`).join(',\n')}
-            ) AS data("classId", "examId")
-            WHERE c."id" = data."classId";
-        `)
-
-        const studentUpdates = newExams.flatMap(({ examId, studentSubjectScoreIds }) =>
-            studentSubjectScoreIds.map((id) => `('${id}', '${examId}')`)
-        )
-
-        if (studentUpdates.length > 0) {
-            await tx.$executeRawUnsafe(`
-                UPDATE "ql-dao-tao"."StudentSubjectScore" AS sss
-                SET "examId" = data."examId"
-                FROM (
-                    VALUES
-                    ${studentUpdates.join(',\n')}
-                ) AS data("id", "examId")
-                WHERE sss."id" = data."id";
-            `)
+        for (const { examId, classId } of newExams) {
+            await tx.exam.create({
+                data: {
+                    id: examId,
+                    subjectVersionId,
+                    subjectClass: {
+                        connect: { id: classId },
+                    },
+                },
+            })
         }
-
         await tx.exam.delete({
             where: { id: examId },
         })

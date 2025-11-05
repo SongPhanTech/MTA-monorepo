@@ -110,7 +110,6 @@ export default function DanhSachKeHoachThi({ setActiveKey }: Props) {
                     code: 'asc',
                 },
             },
-            studentSubjectScore: true,
         },
         orderBy: {
             subjectVersionId: 'asc',

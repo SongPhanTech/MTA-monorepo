@@ -3,10 +3,11 @@ import useSpinner from '@hooks/spinner'
 import { formatDate } from '@lib/utils'
 import { useStore } from '@tanstack/react-store'
 import type { Prisma } from '@workspace/db/client'
-import { useFindManyExamSession, useFindManyStudentSubjectScore } from '@workspace/db/hooks'
+import { useFindManyExamList } from '@workspace/db/hooks'
 import { sqlTransaction } from '@workspace/libs/api/model'
+import { SqlTransactionBodyItem } from '@workspace/libs/api/schemas/sqlTransactionBodyItem'
 import { Button, Checkbox, Col, Flex, Form, Input, message, Row } from 'antd'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { keHoachThiStore } from '..'
 
 interface Props {
@@ -41,27 +42,63 @@ export default function DanhSachSinhVien() {
 
     const { selectedExamId } = useStore(keHoachThiStore)
 
-    const { data = [], isLoading } = useFindManyExamSession(
+    const { data = [], isLoading } = useFindManyExamList(
         {
             where: {
-                examId: selectedExamId,
+                examRoom: {
+                    examId: selectedExamId,
+                    active: true,
+                    deletedAt: null,
+                },
             },
-            include: {
-                studentSubjectScore: {
+            select: {
+                id: true,
+                examRoom: {
+                    select: {
+                        room: {
+                            select: {
+                                name: true,
+                            },
+                        },
+                        capacity: true,
+                    },
+                },
+                examPapers: {
                     include: {
-                        student: {
+                        studentSubjectScore: {
                             include: {
-                                userProfile: {
-                                    select: {
-                                        fullname: true,
-                                        code: true,
-                                        dateOfBirth: true,
+                                student: {
+                                    include: {
+                                        userProfile: {
+                                            select: {
+                                                fullname: true,
+                                                code: true,
+                                                dateOfBirth: true,
+                                            },
+                                        },
+                                        fixedClass: {
+                                            select: {
+                                                name: true,
+                                                trainingCourse: {
+                                                    select: {
+                                                        name: true,
+                                                    },
+                                                },
+                                            },
+                                        },
                                     },
                                 },
-                                fixedClass: {
+                                subjectClass: {
                                     select: {
-                                        name: true,
-                                        trainingCourse: {
+                                        code: true,
+                                        room: {
+                                            select: {
+                                                id: true,
+                                                name: true,
+                                                capacity: true,
+                                            },
+                                        },
+                                        subject: {
                                             select: {
                                                 name: true,
                                             },
@@ -70,26 +107,17 @@ export default function DanhSachSinhVien() {
                                 },
                             },
                         },
-                        subjectClass: {
-                            select: {
-                                code: true,
-                                room: {
-                                    select: {
-                                        id: true,
-                                        name: true,
-                                        capacity: true,
-                                    },
-                                },
-                                subject: {
-                                    select: {
-                                        name: true,
-                                    },
+                    },
+                    orderBy: {
+                        studentSubjectScore: {
+                            student: {
+                                userProfile: {
+                                    firstName: 'asc',
                                 },
                             },
                         },
                     },
                 },
-                examRoom:true
             },
         },
         { enabled: !!selectedExamId }
@@ -98,38 +126,6 @@ export default function DanhSachSinhVien() {
     const { showSpinner, hideSpinner } = useSpinner()
 
     const listForm = Form.useWatch('list', form) || []
-
-    const groupedData = useMemo(() => {
-        const grouped = data.reduce(
-            (acc, item) => {
-                const roomId = item?.studentSubjectScore?.subjectClass?.room?.id || ''
-                const roomName = item?.studentSubjectScore?.subjectClass?.room?.name || ''
-
-                if (!acc[roomId]) {
-                    acc[roomId] = {
-                        id: roomId,
-                        roomName: roomName,
-                        capacity: item?.examRoom?.capacity || 0,
-                        students: [],
-                    }
-                }
-
-                acc[roomId].students.push(item)
-                return acc
-            },
-            {} as Record<string, any>
-        )
-
-        Object.values(grouped).forEach((room) => {
-            room.students.sort((a: StudentType, b: StudentType) => {
-                const nameA = a.userProfile?.fullname || ''
-                const nameB = b.userProfile?.fullname || ''
-                return nameA.toLowerCase().localeCompare(nameB.toLowerCase(), 'vi')
-            })
-        })
-
-        return Object.values(grouped)
-    }, [data])
 
     const handleSaveExamDecision = async () => {
         try {
@@ -150,7 +146,7 @@ export default function DanhSachSinhVien() {
                     item.examBannedReason
             )
 
-            const updateTransactions: any[] = filteredValues.map((i) => ({
+            const updateTransactions: SqlTransactionBodyItem[] = filteredValues.map((i) => ({
                 model: 'StudentSubjectScore',
                 operation: 'update',
                 data: {
@@ -183,19 +179,23 @@ export default function DanhSachSinhVien() {
     useEffect(() => {
         if (selectedExamId && data.length > 0) {
             form.setFieldsValue({
-                list: data.reduce(
-                    (acc, cur) => {
-                        acc[cur.id] = {
-                            examBanned: cur.examBanned ?? false,
-                            examBannedReason: cur.examBannedReason ?? undefined,
-                            examPostponed: cur.examPostponed ?? false,
-                            examPostponedReason: cur.examPostponedReason ?? undefined,
-                            description: cur.description ?? undefined,
-                        }
-                        return acc
-                    },
-                    {} as StudentSubjectScoreFormType['list']
-                ),
+                list: data
+                    .flatMap((e) => e.examPapers)
+                    .reduce(
+                        (acc, cur) => {
+                            acc[cur.id] = {
+                                examBanned: cur?.studentSubjectScore?.examBanned ?? false,
+                                examBannedReason:
+                                    cur?.studentSubjectScore?.examBannedReason ?? undefined,
+                                examPostponed: cur?.studentSubjectScore?.examPostponed ?? false,
+                                examPostponedReason:
+                                    cur?.studentSubjectScore?.examPostponedReason ?? undefined,
+                                description: cur?.studentSubjectScore?.description ?? undefined,
+                            }
+                            return acc
+                        },
+                        {} as StudentSubjectScoreFormType['list']
+                    ),
             })
         }
     }, [selectedExamId, data, form])
@@ -225,11 +225,11 @@ export default function DanhSachSinhVien() {
                         rowKey="id"
                         id="danh-sach-sinh-vien"
                         headerTitleKey={(record) =>
-                            `Phòng thi: ${record.roomName}${record.capacity ? ` (Sức chứa: ${record.capacity})` : ''}`
+                            `Phòng thi: ${record.examRoom?.room?.name}${record.examRoom?.capacity ? ` (Sức chứa: ${record.examRoom?.capacity})` : ''}`
                         }
-                        childrenFieldName="students"
+                        childrenFieldName="examPapers"
                         defaultExpandAll
-                        data={groupedData}
+                        data={data}
                         pagination={false}
                         loading={isLoading}
                         columns={[
@@ -237,7 +237,8 @@ export default function DanhSachSinhVien() {
                                 title: 'Mã sinh viên',
                                 align: 'center',
                                 width: 100,
-                                render: (_, record) => record.student?.code || '',
+                                render: (_, record) =>
+                                    record?.studentSubjectScore?.student?.code || '',
                             },
                             {
                                 title: 'Họ và tên',
@@ -246,7 +247,8 @@ export default function DanhSachSinhVien() {
                                 render: (_, record) => {
                                     return (
                                         <div className="text-left">
-                                            {record.student?.userProfile?.fullname || ''}
+                                            {record?.studentSubjectScore?.student?.userProfile
+                                                ?.fullname || ''}
                                         </div>
                                     )
                                 },
@@ -256,7 +258,9 @@ export default function DanhSachSinhVien() {
                                 width: 80,
                                 align: 'center',
                                 render: (_, record) => {
-                                    const dob = record.student?.userProfile?.dateOfBirth
+                                    const dob =
+                                        record?.studentSubjectScore?.student?.userProfile
+                                            ?.dateOfBirth
                                     return dob ? formatDate(dob) : undefined
                                 },
                             },
@@ -264,27 +268,30 @@ export default function DanhSachSinhVien() {
                                 title: 'Tên lớp',
                                 width: 280,
                                 render: (_, record) =>
-                                    `${record.student?.fixedClass?.name || ''}-${
-                                        record.student?.fixedClass?.trainingCourse?.name || ''
+                                    `${record?.studentSubjectScore?.student?.fixedClass?.name || ''}-${
+                                        record?.studentSubjectScore?.student?.fixedClass
+                                            ?.trainingCourse?.name || ''
                                     }`,
                             },
                             {
                                 title: 'Điểm CC',
                                 width: 70,
                                 align: 'center',
-                                render: (_, record) => record.attendanceScore || '',
+                                render: (_, record) =>
+                                    record?.studentSubjectScore?.attendanceScore || '',
                             },
                             {
                                 title: 'Điểm TX',
                                 align: 'center',
                                 width: 70,
-                                render: (_, record) => record.midtermScore || '',
+                                render: (_, record) =>
+                                    record?.studentSubjectScore?.midtermScore || '',
                             },
                             {
                                 title: 'Điểm thi',
                                 align: 'center',
                                 width: 70,
-                                render: (_, record) => record.examScore || '',
+                                render: (_, record) => record?.studentSubjectScore?.examScore || '',
                             },
                             {
                                 title: 'Lý do cấm thi',
