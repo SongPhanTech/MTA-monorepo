@@ -876,7 +876,7 @@ model SubjectClass extends BaseNoCode {
   isLockScore                 Boolean               @default(false)
   // khoá khi xuất phiếu điểm. (P13 có thể mở khoá)
   /// khoá điểm thi
-  isLockExamScore             Boolean               @default(true)
+  isLockExamScore             Boolean               @default(false)
 
   // P13 kiểm tra phiếu điểm và gửi
   scoreSubmitted              Boolean               @default(false)

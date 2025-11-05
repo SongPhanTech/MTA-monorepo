@@ -48,37 +48,38 @@ const KhoiTaoMon = () => {
             id: true,
         },
     })
+
     async function onOk(output?: KhoiTaoMonFormType) {
-        if (!output) return
+        if (!output || !planTraining?.id) return
         try {
             showSpinner()
             const res = await sqlTransaction(
                 Object.entries(output.subjectVersionIds).map(
-                    ([subjectVersionId, fixedClassIds]) => ({
-                        model: 'PlanTrainingSubject',
-                        operation: 'create',
-                        data: {
-                            subjectVersion: {
-                                connect: { id: subjectVersionId },
-                            },
-                            planTraining: {
-                                connect: {
-                                    id: planTraining?.id ?? '',
+                    ([subjectVersionId, fixedClassIds]) => {
+                        return {
+                            model: 'PlanTrainingSubject',
+                            operation: 'create',
+                            data: {
+                                data: {
+                                    subjectVersionId,
+                                    planTrainingId: planTraining.id,
+                                    fixedClasses: {
+                                        connect: fixedClassIds.map((id) => ({ id })),
+                                    },
                                 },
                             },
-                            fixedClasses: {
-                                connect: fixedClassIds.map((id) => ({ id })),
-                            },
-                        },
-                    })
+                        }
+                    }
                 )
             )
             if (res.status !== 200) {
                 message.error('Đã xảy ra lỗi, vui lòng kiểm tra lại')
                 return
             }
+
             queryClient.invalidateQueries({ queryKey: ['/api/subject-class/open-subject-class'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTraining'] })
+            queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingSubject'] })
             queryClient.invalidateQueries({ queryKey: ['zenstack', 'PlanTrainingDelay'] })
             message.success('Thêm mới thành công')
             onClose()
@@ -266,21 +267,28 @@ const KhoiTaoMon = () => {
                             title: 'Lớp QL',
                             align: 'center',
                             render: (__, record) => (
-                                <Form.Item
-                                    name={['subjectVersionIds', record.id]}
-                                    className="m-0"
-                                    required
-                                >
-                                    <TreeSelect
-                                        treeData={treeDataFixedClass}
-                                        className="w-full"
-                                        dropdownStyle={{
-                                            width: 400,
-                                        }}
-                                        multiple
-                                        placeholder="Chọn lớp quản lý"
-                                    />
-                                </Form.Item>
+                                // <Form.Item
+                                //     name={['subjectVersionIds', record.id]}
+                                //     className="m-0"
+                                //     required
+                                // >
+
+                                // </Form.Item>
+                                <TreeSelect
+                                    treeData={treeDataFixedClass}
+                                    className="w-full"
+                                    dropdownStyle={{
+                                        width: 400,
+                                    }}
+                                    onChange={(value) =>
+                                        form.setFieldValue('subjectVersionIds', {
+                                            ...subjectVersionIds,
+                                            [record.id]: value,
+                                        })
+                                    }
+                                    multiple
+                                    placeholder="Chọn lớp quản lý"
+                                />
                             ),
                         },
                         {
